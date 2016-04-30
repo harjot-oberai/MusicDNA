@@ -52,14 +52,26 @@
             android:layout_width="92dp"
             android:layout_height="92dp"
             android:layout_marginLeft="0dp"/>
+        <LinearLayout
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+            <TextView
+                android:id="@+id/selected_track_title"
+                android:paddingLeft="8dp"
+                android:layout_width="200dp"
+                android:text="Title"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:layout_height="wrap_content"/>
+            <com.example.harjot.musicstreamer.VisualizerView
+                android:layout_marginTop="5dp"
+                android:id="@+id/myvisualizerview"
+                android:layout_width="200dp"
+                android:layout_height="55dp" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/selected_track_title"
-            android:paddingLeft="8dp"
-            android:layout_marginLeft="20dp"
-            android:layout_width="200dp"
-            android:text="Title"
-            android:layout_height="wrap_content"/>
 
         <ImageView
             android:id="@+id/player_control"

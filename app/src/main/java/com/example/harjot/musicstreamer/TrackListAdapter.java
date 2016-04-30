@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.harjot.musicstreamer.Models.Track;
-import com.example.harjot.musicstreamer.imageLoader.ImageLoader;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -22,13 +21,11 @@ public class TrackListAdapter extends BaseAdapter {
 
     private List<Track> tracks;
     private Context context;
-    private ImageLoader imageLoader;
 
     public TrackListAdapter(Context ctx, List<Track> tracks) {
         super();
         context = ctx;
         this.tracks = tracks;
-        imageLoader = new ImageLoader(ctx);
     }
 
     @Override

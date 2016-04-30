@@ -3,6 +3,7 @@ package com.example.harjot.musicstreamer;
 import android.app.ProgressDialog;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.audiofx.Visualizer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView mSelectedTrackTitle;
     private ImageView mSelectedTrackImage;
 
+    VisualizerView mVisualizerView;
+    private Visualizer mVisualizer;
+
     EditText query;
     Button searchBtn;
 
@@ -50,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mVisualizerView = (VisualizerView) findViewById(R.id.myvisualizerview);
 
         mMediaPlayer = new MediaPlayer();
         mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -66,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
                 mPlayerControl.setImageResource(R.drawable.ic_play);
             }
         });
+
+        mVisualizer = new Visualizer(mMediaPlayer.getAudioSessionId());
 
         query = (EditText) findViewById(R.id.searchBox);
         searchBtn = (Button) findViewById(R.id.searchBtn);
@@ -119,6 +127,8 @@ public class MainActivity extends AppCompatActivity {
                 Track track = tracks.get(position);
                 mMediaPlayer.stop();
                 mMediaPlayer.reset();
+                mVisualizer.release();
+                setupVisualizerFxAndUI();
                 mSelectedTrackTitle.setText(track.getTitle());
                 Picasso.with(MainActivity.this).load(track.getArtworkURL()).resize(100,100).into(mSelectedTrackImage);
 
@@ -150,11 +160,24 @@ public class MainActivity extends AppCompatActivity {
 
     private void togglePlayPause() {
         if (mMediaPlayer.isPlaying()) {
+            mVisualizer.release();
             mMediaPlayer.pause();
             mPlayerControl.setImageResource(R.drawable.ic_play);
         } else {
+            setupVisualizerFxAndUI();
+            mVisualizer.setEnabled(true);
             mMediaPlayer.start();
             mPlayerControl.setImageResource(R.drawable.ic_pause);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (isFinishing() && mMediaPlayer != null) {
+            mVisualizer.release();
+            mMediaPlayer.release();
+            mMediaPlayer = null;
         }
     }
 
@@ -167,8 +190,26 @@ public class MainActivity extends AppCompatActivity {
                 mMediaPlayer.stop();
             }
             mMediaPlayer.release();
+            mVisualizer.release();
             mMediaPlayer = null;
         }
+    }
+
+    private void setupVisualizerFxAndUI() {
+        // Create the Visualizer object and attach it to our media player.
+        mVisualizer = new Visualizer(mMediaPlayer.getAudioSessionId());
+        mVisualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[1]);
+        mVisualizer.setDataCaptureListener(
+                new Visualizer.OnDataCaptureListener() {
+                    public void onWaveFormDataCapture(Visualizer visualizer,
+                                                      byte[] bytes, int samplingRate) {
+                        mVisualizerView.updateVisualizer(bytes);
+                    }
+
+                    public void onFftDataCapture(Visualizer visualizer,
+                                                 byte[] bytes, int samplingRate) {
+                    }
+                }, Visualizer.getMaxCaptureRate() / 2, true, false);
     }
 
 }

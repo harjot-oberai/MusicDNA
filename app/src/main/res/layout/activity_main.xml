@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="0dp"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.harjot.musicstreamer.MainActivity">
+    <LinearLayout
+        android:padding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/search">
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:id="@+id/searchBox"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="S"
+            android:id="@+id/searchBtn"
+            android:background="#EEE"/>
+    </LinearLayout>
+    <ListView
+        android:padding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/search"
+        android:layout_above="@+id/toolBar"
+        android:layout_marginTop="10dp"
+        android:id="@+id/trackList">
+    </ListView>
+
+    <android.support.v7.widget.Toolbar
+        android:background="#333333"
+        android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:id="@+id/toolBar"
+        android:padding="0dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true">
+
+        <ImageView
+            android:id="@+id/selected_track_image"
+            android:layout_width="92dp"
+            android:layout_height="92dp"
+            android:layout_marginLeft="0dp"/>
+
+        <TextView
+            android:id="@+id/selected_track_title"
+            android:paddingLeft="8dp"
+            android:layout_marginLeft="20dp"
+            android:layout_width="200dp"
+            android:text="Title"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:id="@+id/player_control"
+            android:layout_gravity="right"
+            android:layout_marginRight="8dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"/>
+
+    </android.support.v7.widget.Toolbar>
+
+</RelativeLayout>

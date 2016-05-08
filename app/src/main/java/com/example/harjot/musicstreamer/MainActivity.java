@@ -3,6 +3,7 @@ package com.example.harjot.musicstreamer;
 import android.app.ProgressDialog;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.audiofx.Equalizer;
 import android.media.audiofx.Visualizer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -141,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
                 toolBar.setVisibility(View.VISIBLE);
                 mSelectedTrackTitle.setText(track.getTitle());
                 durationInMilliSec = track.getDuration();
-                //Picasso.with(MainActivity.this).load(track.getArtworkURL()).resize(100,100).into(mSelectedTrackImage);
+                Picasso.with(MainActivity.this).load(track.getArtworkURL()).resize(100,100).into(mSelectedTrackImage);
 
                 if (mMediaPlayer.isPlaying()) {
                     mMediaPlayer.stop();
@@ -208,6 +209,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupVisualizerFxAndUI() {
         // Create the Visualizer object and attach it to our media player.
+        Equalizer mEqualizer = new Equalizer(0, mMediaPlayer.getAudioSessionId());
+        mEqualizer.setEnabled(true);
         mVisualizer = new Visualizer(mMediaPlayer.getAudioSessionId());
         mVisualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[1]);
         mVisualizer.setDataCaptureListener(
@@ -221,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
                                                  byte[] bytes, int samplingRate) {
                         mVisualizerView.updateVisualizer(bytes);
                     }
-                }, Visualizer.getMaxCaptureRate() / 2 , true, false);
+                }, Visualizer.getMaxCaptureRate() / 2 , false, true);
     }
 
     @Override

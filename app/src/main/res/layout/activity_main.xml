@@ -6,7 +6,7 @@
     android:paddingBottom="0dp"
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingTop="0dp"
     tools:context="com.example.harjot.musicstreamer.MainActivity">
     <LinearLayout
         android:padding="5dp"
@@ -32,54 +32,60 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/search"
-        android:layout_above="@+id/toolBar"
         android:layout_marginTop="10dp"
         android:id="@+id/trackList">
     </ListView>
 
-    <android.support.v7.widget.Toolbar
-        android:background="#333333"
+    <RelativeLayout
+        android:background="#000000"
         android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="match_parent"
         android:id="@+id/toolBar"
         android:padding="0dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true">
+        android:visibility="invisible">
 
-        <ImageView
+        <com.example.harjot.musicstreamer.VisualizerView
+            android:layout_marginTop="5dp"
+            android:id="@+id/myvisualizerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"/>
+        <!--<ImageView
             android:id="@+id/selected_track_image"
             android:layout_width="92dp"
             android:layout_height="92dp"
-            android:layout_marginLeft="0dp"/>
-        <LinearLayout
-            android:layout_width="220dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp">
-            <TextView
-                android:id="@+id/selected_track_title"
-                android:paddingLeft="8dp"
-                android:layout_width="200dp"
-                android:text="Title"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:layout_height="wrap_content"/>
-            <com.example.harjot.musicstreamer.VisualizerView
-                android:layout_marginTop="5dp"
-                android:id="@+id/myvisualizerview"
-                android:layout_width="200dp"
-                android:layout_height="55dp" />
-        </LinearLayout>
-
-
+            android:layout_centerInParent="true"/>-->
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/selected_track_image"
+            android:layout_width="92dp"
+            android:layout_height="92dp"
+            app:civ_border_width="0dp"
+            app:civ_border_color="#FF000000"
+            android:layout_centerInParent="true"
+            android:visibility="invisible"/>
+        <TextView
+            android:id="@+id/selected_track_title"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:textAlignment="center"
+            android:layout_width="match_parent"
+            android:text="Title"
+            android:textSize="20dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:layout_height="wrap_content"/>
         <ImageView
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
             android:id="@+id/player_control"
             android:layout_gravity="right"
             android:layout_marginRight="8dp"
             android:layout_width="48dp"
             android:layout_height="48dp"/>
 
-    </android.support.v7.widget.Toolbar>
+    </RelativeLayout>
 
 </RelativeLayout>

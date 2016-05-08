@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,12 +43,17 @@ public class MainActivity extends AppCompatActivity {
     private TextView mSelectedTrackTitle;
     private ImageView mSelectedTrackImage;
 
+    private RelativeLayout toolBar;
+
     VisualizerView mVisualizerView;
     private Visualizer mVisualizer;
 
+    public static int durationInMilliSec;
+
+    static long startTime = 0;
+
     EditText query;
     Button searchBtn;
-
 
 
     @Override
@@ -56,12 +62,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mVisualizerView = (VisualizerView) findViewById(R.id.myvisualizerview);
+        toolBar = (RelativeLayout) findViewById(R.id.toolBar);
 
         mMediaPlayer = new MediaPlayer();
         mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
+                startTime = System.currentTimeMillis();
                 togglePlayPause();
             }
         });
@@ -92,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                                 .addConverterFactory(GsonConverterFactory.create())
                                 .build();
                         StreamService ss = client.create(StreamService.class);
-                        Call<List<Track>> call = ss.getTracks(query.getText().toString(),75);
+                        Call<List<Track>> call = ss.getTracks(query.getText().toString(), 75);
                         call.enqueue(new Callback<List<Track>>() {
                             @Override
                             public void onResponse(Response<List<Track>> response) {
@@ -108,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
                                     //Handle errors
                                 }
                             }
+
                             @Override
                             public void onFailure(Throwable t) {
                                 dialog.dismiss();
@@ -118,8 +127,8 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
 
-        mSelectedTrackTitle = (TextView)findViewById(R.id.selected_track_title);
-        mSelectedTrackImage = (ImageView)findViewById(R.id.selected_track_image);
+        mSelectedTrackTitle = (TextView) findViewById(R.id.selected_track_title);
+        mSelectedTrackImage = (ImageView) findViewById(R.id.selected_track_image);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -129,8 +138,10 @@ public class MainActivity extends AppCompatActivity {
                 mMediaPlayer.reset();
                 mVisualizer.release();
                 setupVisualizerFxAndUI();
+                toolBar.setVisibility(View.VISIBLE);
                 mSelectedTrackTitle.setText(track.getTitle());
-                Picasso.with(MainActivity.this).load(track.getArtworkURL()).resize(100,100).into(mSelectedTrackImage);
+                durationInMilliSec = track.getDuration();
+                //Picasso.with(MainActivity.this).load(track.getArtworkURL()).resize(100,100).into(mSelectedTrackImage);
 
                 if (mMediaPlayer.isPlaying()) {
                     mMediaPlayer.stop();
@@ -147,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mPlayerControl = (ImageView)findViewById(R.id.player_control);
+        mPlayerControl = (ImageView) findViewById(R.id.player_control);
 
         mPlayerControl.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -208,8 +219,16 @@ public class MainActivity extends AppCompatActivity {
 
                     public void onFftDataCapture(Visualizer visualizer,
                                                  byte[] bytes, int samplingRate) {
+                        mVisualizerView.updateVisualizer(bytes);
                     }
-                }, Visualizer.getMaxCaptureRate() / 2, true, false);
+                }, Visualizer.getMaxCaptureRate() / 2 , true, false);
     }
 
+    @Override
+    public void onBackPressed() {
+        if (toolBar.getVisibility() == View.VISIBLE)
+            toolBar.setVisibility(View.INVISIBLE);
+        else
+            super.onBackPressed();
+    }
 }

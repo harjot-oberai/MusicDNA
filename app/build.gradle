@@ -29,4 +29,6 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.2.+'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'de.hdodenhof:circleimageview:2.0.0'
+    compile 'com.android.support:support-v4:23.2.1'
+    compile 'com.android.support:design:23.2.1'
 }

@@ -1,91 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="0dp"
-    android:paddingLeft="0dp"
-    android:paddingRight="0dp"
-    android:paddingTop="0dp"
-    tools:context="com.example.harjot.musicstreamer.MainActivity">
-    <LinearLayout
-        android:padding="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/search">
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="5"
-            android:id="@+id/searchBox"/>
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="S"
-            android:id="@+id/searchBtn"
-            android:background="#EEE"/>
-    </LinearLayout>
-    <ListView
-        android:padding="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/search"
-        android:layout_marginTop="10dp"
-        android:id="@+id/trackList">
-    </ListView>
+    android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:background="#000000"
-        android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar"
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabGravity="fill"
+            app:tabMode="fixed" />
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/toolBar"
-        android:padding="0dp"
-        android:visibility="invisible">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-        <com.example.harjot.musicstreamer.VisualizerView
-            android:layout_marginTop="5dp"
-            android:id="@+id/myvisualizerview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"/>
-        <!--<ImageView
-            android:id="@+id/selected_track_image"
-            android:layout_width="92dp"
-            android:layout_height="92dp"
-            android:layout_centerInParent="true"/>-->
-        <de.hdodenhof.circleimageview.CircleImageView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/selected_track_image"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            app:civ_border_width="0dp"
-            app:civ_border_color="#FF000000"
-            android:layout_centerInParent="true"
-            android:visibility="visible"/>
-        <TextView
-            android:id="@+id/selected_track_title"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="15dp"
-            android:textAlignment="center"
-            android:layout_width="match_parent"
-            android:text="Title"
-            android:textSize="20dp"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:layout_height="wrap_content"/>
-        <ImageView
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="10dp"
-            android:id="@+id/player_control"
-            android:layout_gravity="right"
-            android:layout_marginRight="8dp"
-            android:layout_width="48dp"
-            android:layout_height="48dp"/>
+    <FrameLayout
+        android:id="@+id/playerFragContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></FrameLayout>
 
-    </RelativeLayout>
-
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

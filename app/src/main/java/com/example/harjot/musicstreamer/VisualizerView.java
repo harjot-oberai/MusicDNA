@@ -15,10 +15,7 @@ import android.util.Pair;
 import android.view.View;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 public class VisualizerView extends View {
 
@@ -128,9 +125,7 @@ public class VisualizerView extends View {
 //        width = canvas.getWidth();
 //        height = canvas.getHeight();
 //        outerRadius = (float) (Math.min(width, height) * 0.44);
-//        normalizedPosition = ((float) (System.currentTimeMillis() - MainActivity.startTime)) / (float) (MainActivity.durationInMilliSec);
-//        //normalizedPosition = (float) (Math.PI - ((float) (360 * z) / (float) (MainActivity.durationInMilliSec)));
-//        //normalizedPosition = (float) (Math.PI - ((float) time / (float) (MainActivity.durationInMilliSec)));
+//        normalizedPosition = ((float) (System.currentTimeMillis() - StreamMusicFragment.startTime)) / (float) (StreamMusicFragment.durationInMilliSec);
 //        if (mBytes == null) {
 //            return;
 //        }
@@ -224,8 +219,9 @@ public class VisualizerView extends View {
         super.onDraw(canvas);
         width = canvas.getWidth();
         height = canvas.getHeight();
-        outerRadius = (float) (Math.min(width, height) * 0.50);
-        normalizedPosition = ((float) (System.currentTimeMillis() - MainActivity.startTime)) / (float) (MainActivity.durationInMilliSec);
+        outerRadius = (float) (Math.min(width, height) * 0.47);
+        PlayerFragment.totalPauseTime += (PlayerFragment.resumeTime - PlayerFragment.pauseTime);
+        normalizedPosition = ((float) (System.currentTimeMillis() - PlayerFragment.startTime)) / (float) (PlayerFragment.durationInMilliSec);
         if (mBytes == null) {
             return;
         }
@@ -286,7 +282,7 @@ public class VisualizerView extends View {
             y = (float) Math.cos(angle);
 
             // filtering low amplitude
-            if (volume < 0.44) {
+            if (volume < 0.39) {
                 continue;
             }
 
@@ -317,15 +313,15 @@ public class VisualizerView extends View {
             // setting color of the Paint
             mForePaint.setColor(Color.HSVToColor(hsv));
 
-            /*if (size > 6) {
-                mForePaint.setAlpha(2);
+            if (size > 10.0) {
+                mForePaint.setAlpha(9);
             } else {
                 //mForePaint.setAlpha(248);
-                mForePaint.setAlpha((int) (alpha * 900));
-            }*/
+                mForePaint.setAlpha((int) (alpha * 1000));
+            }
 
             // Setting alpha of the Paint
-            mForePaint.setAlpha((int) (alpha * 1000));
+            //mForePaint.setAlpha((int) (alpha * 1000));
 
             // Draw the circles at correct position
             canvas.drawCircle(midx + x, midy + y, size, mForePaint);

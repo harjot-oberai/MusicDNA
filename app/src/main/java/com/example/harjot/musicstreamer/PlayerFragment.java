@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.harjot.musicstreamer.Models.LocalTrack;
 import com.example.harjot.musicstreamer.Models.Track;
 import com.squareup.picasso.Picasso;
 
@@ -47,6 +48,7 @@ public class PlayerFragment extends Fragment {
     static boolean pauseClicked  = false;
 
     static Track track;
+    static LocalTrack localTrack;
 
     public PlayerFragment() {
         // Required empty public constructor
@@ -94,12 +96,20 @@ public class PlayerFragment extends Fragment {
         mController = (ImageView) view.findViewById(R.id.player_control);
 
         track = StreamMusicFragment.selectedTrack;
+        localTrack = LocalMusicFragment.selectedTrack;
 
         mMediaPlayer.stop();
         mMediaPlayer.reset();
-        durationInMilliSec = track.getDuration();
+        if(MainActivity.streamSelected){
+            durationInMilliSec = track.getDuration();
+            Picasso.with(getContext()).load(track.getArtworkURL()).resize(100,100).into(mSelectedTrackImage);
+            title.setText(track.getTitle());
+        }
+        else{
+            durationInMilliSec = (int) localTrack.getDuration();
+            title.setText(localTrack.getTitle());
+        }
 
-        Picasso.with(getContext()).load(track.getArtworkURL()).resize(100,100).into(mSelectedTrackImage);
 
         if (mMediaPlayer.isPlaying()) {
             mMediaPlayer.stop();
@@ -107,8 +117,14 @@ public class PlayerFragment extends Fragment {
         }
 
         try {
-            mMediaPlayer.setDataSource(track.getStreamURL() + "?client_id=" + Config.CLIENT_ID);
-            mMediaPlayer.prepareAsync();
+            if(MainActivity.streamSelected){
+                mMediaPlayer.setDataSource(track.getStreamURL() + "?client_id=" + Config.CLIENT_ID);
+                mMediaPlayer.prepareAsync();
+            }
+            else{
+                mMediaPlayer.setDataSource(localTrack.getPath());
+                mMediaPlayer.prepareAsync();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -116,13 +132,12 @@ public class PlayerFragment extends Fragment {
         mController.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!pauseClicked){
+                if (!pauseClicked) {
                     pauseClicked = true;
                 }
                 togglePlayPause();
             }
         });
-        title.setText(track.getTitle());
     }
 
     public static void setupVisualizerFxAndUI() {

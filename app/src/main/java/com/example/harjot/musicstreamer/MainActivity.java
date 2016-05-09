@@ -14,11 +14,14 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements StreamMusicFragment.OnTrackSelectedListener {
+public class MainActivity extends AppCompatActivity implements StreamMusicFragment.OnTrackSelectedListener,LocalMusicFragment.OnLocalTrackSelectedListener {
 
     static Toolbar toolbar;
     static TabLayout tabLayout;
     static ViewPager viewPager;
+
+    static boolean localSelected = false;
+    static boolean streamSelected = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +76,36 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
             }
         }
 
+    }
+
+    @Override
+    public void onLocalTrackSelected(int position) {
+        Fragment frag = getSupportFragmentManager().findFragmentByTag("player");
+        FragmentManager fm = getSupportFragmentManager();
+        PlayerFragment newFragment = new PlayerFragment();
+        if (frag == null) {
+            fm.beginTransaction()
+                    .add(R.id.playerFragContainer, newFragment, "player")
+                    .show(newFragment)
+                    .addToBackStack(null)
+                    .commit();
+        } else {
+            PlayerFragment.mMediaPlayer.stop();
+            PlayerFragment.mMediaPlayer.reset();
+            PlayerFragment.mVisualizer.release();
+            if (LocalMusicFragment.selectedTrack == PlayerFragment.localTrack) {
+                fm.beginTransaction()
+                        .show(frag)
+                        .commit();
+            } else {
+                fm.beginTransaction()
+                        .remove(frag)
+                        .add(R.id.playerFragContainer, newFragment, "player")
+                        .show(newFragment)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        }
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

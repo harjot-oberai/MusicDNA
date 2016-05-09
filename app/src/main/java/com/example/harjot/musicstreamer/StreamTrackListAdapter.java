@@ -17,12 +17,12 @@ import java.util.List;
 /**
  * Created by Harjot on 30-Apr-16.
  */
-public class TrackListAdapter extends BaseAdapter {
+public class StreamTrackListAdapter extends BaseAdapter {
 
     private List<Track> tracks;
     private Context context;
 
-    public TrackListAdapter(Context ctx, List<Track> tracks) {
+    public StreamTrackListAdapter(Context ctx, List<Track> tracks) {
         super();
         context = ctx;
         this.tracks = tracks;

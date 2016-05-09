@@ -1,8 +1,6 @@
 package com.example.harjot.musicstreamer;
 
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,28 +9,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.app.ProgressDialog;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.audiofx.Equalizer;
-import android.media.audiofx.Visualizer;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.harjot.musicstreamer.Interfaces.StreamService;
 import com.example.harjot.musicstreamer.Models.Track;
-import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +35,7 @@ import retrofit.Retrofit;
 public class StreamMusicFragment extends Fragment {
 
     private List<Track> tracks;
-    private TrackListAdapter adapter;
+    private StreamTrackListAdapter adapter;
 //
 //    private static MediaPlayer mMediaPlayer;
 //    private ImageView mPlayerControl;
@@ -121,7 +107,7 @@ public class StreamMusicFragment extends Fragment {
                                     // request successful (status code 200, 201)
                                     Log.d("RETRO", response.body() + "");
                                     tracks = response.body();
-                                    adapter = new TrackListAdapter(getActivity(), tracks);
+                                    adapter = new StreamTrackListAdapter(getActivity(), tracks);
                                     listView.setAdapter(adapter);
                                 } else {
                                     //request not successful (like 400,401,403 etc)
@@ -144,9 +130,10 @@ public class StreamMusicFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Track track = tracks.get(position);
                 selectedTrack = track;
-                Toast.makeText(getContext(), track.getTitle(), Toast.LENGTH_SHORT).show();
+                MainActivity.streamSelected = true;
+                MainActivity.localSelected = false;
+                //Toast.makeText(getContext(), track.getTitle(), Toast.LENGTH_SHORT).show();
                 mCallback.onTrackSelected(position);
-
             }
         });
         return view;

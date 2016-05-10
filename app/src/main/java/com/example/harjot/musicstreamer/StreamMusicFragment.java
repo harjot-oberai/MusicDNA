@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import android.app.ProgressDialog;
 import android.util.Log;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -92,6 +93,12 @@ public class StreamMusicFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         final ProgressDialog dialog = ProgressDialog.show(getActivity(), "", "loading...");
+
+                        InputMethodManager inputManager = (InputMethodManager)
+                                getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                        inputManager.hideSoftInputFromWindow(searchBtn.getWindowToken(),
+                                InputMethodManager.HIDE_NOT_ALWAYS);
 
                         Retrofit client = new Retrofit.Builder()
                                 .baseUrl(Config.API_URL)

@@ -312,9 +312,9 @@ public class VisualizerView extends View {
             // setting color of the Paint
             mForePaint.setColor(Color.HSVToColor(hsv));
 
-            if (size >= 8.0 && size < 11.0) {
+            if (size >= 10.0 && size < 17.0) {
                 mForePaint.setAlpha(9);
-            } else if (size >= 11.0) {
+            } else if (size >= 17.0) {
                 mForePaint.setAlpha(0);
             } else {
                 mForePaint.setAlpha((int) (alpha * 1000));

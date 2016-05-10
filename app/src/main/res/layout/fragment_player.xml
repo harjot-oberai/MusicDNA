@@ -13,60 +13,7 @@
         android:id="@+id/myvisualizerview"
         android:layout_width="370dp"
         android:layout_height="370dp"
-        android:layout_marginBottom="20dp"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@+id/musicControls"/>
-    <!--<ImageView
-        android:id="@+id/selected_track_image"
-        android:layout_width="92dp"
-        android:layout_height="92dp"
-        android:layout_centerInParent="true"/>-->
-    <LinearLayout
-        android:padding="5dp"
-        android:id="@+id/musicControls"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="#111"
-        android:layout_alignParentBottom="true">
-        <de.hdodenhof.circleimageview.CircleImageView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/selected_track_image"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            app:civ_border_width="0dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="5dp"
-            app:civ_border_color="#FF000000"
-            android:visibility="visible"
-            android:layout_below="@+id/myvisualizerview"
-            android:layout_alignParentStart="true" />
-        <LinearLayout
-            android:layout_marginTop="3dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/selected_track_title"
-                android:textAlignment="center"
-                android:layout_width="match_parent"
-                android:text="Title"
-                android:textSize="16dp"
-                android:layout_marginBottom="10dp"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/player_control"
-                android:layout_alignParentStart="true" />
-            <ImageView
-                android:id="@+id/player_control"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="5dp"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true" />
-        </LinearLayout>
-    </LinearLayout>
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

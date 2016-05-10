@@ -7,24 +7,33 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements StreamMusicFragment.OnTrackSelectedListener
-        ,LocalMusicFragment.OnLocalTrackSelectedListener
-        ,PlayerFragment.reloadCurrentInstanceListener{
+        , LocalMusicFragment.OnLocalTrackSelectedListener
+        , PlayerFragment.reloadCurrentInstanceListener {
 
     static Toolbar toolbar;
+    static Toolbar bottomPlayer;
     static TabLayout tabLayout;
     static ViewPager viewPager;
+
+    static ImageView selected_track_image;
+    static TextView selected_track_title;
+    static ImageView player_controller;
+
+    static ActionBar ab;
 
     static boolean localSelected = false;
     static boolean streamSelected = false;
@@ -34,10 +43,28 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ab = getSupportActionBar();
+
         requestPermissions();
+
+        selected_track_image = (ImageView) findViewById(R.id.selected_track_image_bp);
+        selected_track_title = (TextView) findViewById(R.id.selected_track_title_bp);
+        player_controller = (ImageView) findViewById(R.id.player_control_bp);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        bottomPlayer = (Toolbar) findViewById(R.id.bottomPlayer);
+        bottomPlayer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment frag = getSupportFragmentManager().findFragmentByTag("player");
+                FragmentManager fm = getSupportFragmentManager();
+                fm.beginTransaction()
+                        .show(frag)
+                        .commit();
+            }
+        });
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -57,6 +84,8 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
 
     public void onTrackSelected(int position) {
 
+        bottomPlayer.setVisibility(View.VISIBLE);
+
         Fragment frag = getSupportFragmentManager().findFragmentByTag("player");
         FragmentManager fm = getSupportFragmentManager();
         PlayerFragment newFragment = new PlayerFragment();
@@ -67,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
                     .addToBackStack(null)
                     .commit();
         } else {
-            if (StreamMusicFragment.selectedTrack.getTitle() == PlayerFragment.track.getTitle()) {
+            if (PlayerFragment.track != null && StreamMusicFragment.selectedTrack.getTitle() == PlayerFragment.track.getTitle()) {
                 fm.beginTransaction()
                         .show(frag)
                         .commit();
@@ -75,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
                 PlayerFragment.mMediaPlayer.stop();
                 PlayerFragment.mMediaPlayer.reset();
                 PlayerFragment.mVisualizer.release();
+                PlayerFragment.init();
                 fm.beginTransaction()
                         .remove(frag)
                         .add(R.id.playerFragContainer, newFragment, "player")
@@ -88,6 +118,9 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
 
     @Override
     public void onLocalTrackSelected(int position) {
+
+        bottomPlayer.setVisibility(View.VISIBLE);
+
         Fragment frag = getSupportFragmentManager().findFragmentByTag("player");
         FragmentManager fm = getSupportFragmentManager();
         PlayerFragment newFragment = new PlayerFragment();
@@ -97,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
                     .show(newFragment)
                     .commit();
         } else {
-            if (LocalMusicFragment.selectedTrack.getTitle() == PlayerFragment.localTrack.getTitle()) {
+            if (PlayerFragment.localTrack != null && LocalMusicFragment.selectedTrack.getTitle() == PlayerFragment.localTrack.getTitle()) {
                 fm.beginTransaction()
                         .show(frag)
                         .commit();
@@ -105,6 +138,7 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
                 PlayerFragment.mMediaPlayer.stop();
                 PlayerFragment.mMediaPlayer.reset();
                 PlayerFragment.mVisualizer.release();
+                PlayerFragment.init();
                 fm.beginTransaction()
                         .remove(frag)
                         .add(R.id.playerFragContainer, newFragment, "player")
@@ -118,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
     public void reloadCurrentInstance() {
         Fragment frag = getSupportFragmentManager().findFragmentByTag("player");
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.playerFragContainer,frag,"player")
+                .replace(R.id.playerFragContainer, frag, "player")
                 .show(frag)
                 .commit();
     }
@@ -164,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
                     .commit();
     }
 
-    public void requestPermissions(){
+    public void requestPermissions() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.INTERNET)
                 != PackageManager.PERMISSION_GRANTED) {

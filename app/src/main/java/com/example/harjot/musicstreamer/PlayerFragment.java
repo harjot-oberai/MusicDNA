@@ -32,9 +32,9 @@ public class PlayerFragment extends Fragment {
     public static MediaPlayer mMediaPlayer;
     public static Visualizer mVisualizer;
 
-    static ImageView mController;
-    private TextView mSelectedTrackTitle;
-    private ImageView mSelectedTrackImage;
+//    static ImageView mController;
+//    private TextView mSelectedTrackTitle;
+//    private ImageView mSelectedTrackImage;
 
     static boolean completed = false;
 
@@ -75,13 +75,16 @@ public class PlayerFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_player, container, false);
-        MainActivity.toolbar.setVisibility(View.INVISIBLE);
         return view;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+//        MainActivity.ab.setShowHideAnimationEnabled(false);
+//        MainActivity.ab.hide();
+
         mVisualizerView = (VisualizerView) view.findViewById(R.id.myvisualizerview);
         mMediaPlayer = new MediaPlayer();
         mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -99,15 +102,15 @@ public class PlayerFragment extends Fragment {
             @Override
             public void onCompletion(MediaPlayer mp) {
                 completed = true;
-                mController.setImageResource(R.drawable.ic_replay);
+                MainActivity.player_controller.setImageResource(R.drawable.ic_replay);
             }
         });
 
         mVisualizer = new Visualizer(mMediaPlayer.getAudioSessionId());
 
-        mSelectedTrackTitle = (TextView) view.findViewById(R.id.selected_track_title);
-        mSelectedTrackImage = (ImageView) view.findViewById(R.id.selected_track_image);
-        mController = (ImageView) view.findViewById(R.id.player_control);
+//        mSelectedTrackTitle = (TextView) view.findViewById(R.id.selected_track_title);
+//        mSelectedTrackImage = (ImageView) view.findViewById(R.id.selected_track_image);
+//        mController = (ImageView) view.findViewById(R.id.player_control);
 
         track = StreamMusicFragment.selectedTrack;
         localTrack = LocalMusicFragment.selectedTrack;
@@ -116,11 +119,12 @@ public class PlayerFragment extends Fragment {
         mMediaPlayer.reset();
         if (MainActivity.streamSelected) {
             durationInMilliSec = track.getDuration();
-            Picasso.with(getContext()).load(track.getArtworkURL()).resize(100, 100).into(mSelectedTrackImage);
-            mSelectedTrackTitle.setText(track.getTitle());
+            Picasso.with(getContext()).load(track.getArtworkURL()).resize(100, 100).into(MainActivity.selected_track_image);
+            MainActivity.selected_track_title.setText(track.getTitle());
         } else {
             durationInMilliSec = (int) localTrack.getDuration();
-            mSelectedTrackTitle.setText(localTrack.getTitle());
+            MainActivity.selected_track_image.setImageBitmap(LocalTrackListAdapter.getAlbumArt(localTrack.getPath()));
+            MainActivity.selected_track_title.setText(localTrack.getTitle());
         }
 
 
@@ -141,7 +145,7 @@ public class PlayerFragment extends Fragment {
             e.printStackTrace();
         }
 
-        mController.setOnClickListener(new View.OnClickListener() {
+        MainActivity.player_controller.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!pauseClicked) {
@@ -170,6 +174,8 @@ public class PlayerFragment extends Fragment {
                         mVisualizerView.updateVisualizer(bytes);
                     }
                 }, Visualizer.getMaxCaptureRate() / 2, false, true);
+
+
     }
 
     public interface reloadCurrentInstanceListener {
@@ -178,11 +184,11 @@ public class PlayerFragment extends Fragment {
 
     public static void togglePlayPause() {
         if (mMediaPlayer.isPlaying()) {
-            mVisualizer.release();
             mMediaPlayer.pause();
+            MainActivity.player_controller.setImageResource(R.drawable.ic_play);
+            mVisualizer.release();
             pauseTime = System.currentTimeMillis();
             totalElapsedTime += (pauseTime - startTime);
-            mController.setImageResource(R.drawable.ic_play);
         } else {
             if (pauseClicked) {
                 startTime = System.currentTimeMillis();
@@ -191,7 +197,7 @@ public class PlayerFragment extends Fragment {
                 setupVisualizerFxAndUI();
                 mVisualizer.setEnabled(true);
                 mMediaPlayer.start();
-                mController.setImageResource(R.drawable.ic_pause);
+                MainActivity.player_controller.setImageResource(R.drawable.ic_pause);
             } else {
                 mVisualizerView.clear();
                 startTime = System.currentTimeMillis();
@@ -199,9 +205,15 @@ public class PlayerFragment extends Fragment {
                 mMediaPlayer.seekTo(0);
                 mMediaPlayer.start();
                 completed = false;
-                mController.setImageResource(R.drawable.ic_pause);
+                MainActivity.player_controller.setImageResource(R.drawable.ic_pause);
             }
         }
+    }
+
+    public static void init(){
+        startTime = System.currentTimeMillis();
+        totalElapsedTime = 0;
+        pauseTime = 0;
     }
 
     @Override

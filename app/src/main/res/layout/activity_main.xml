@@ -34,6 +34,55 @@
     <FrameLayout
         android:id="@+id/playerFragContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></FrameLayout>
+        android:layout_height="match_parent">
+    </FrameLayout>
+
+    <android.support.v7.widget.Toolbar
+        android:background="#111"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginBottom="0dp"
+        android:id="@+id/bottomPlayer"
+        android:layout_gravity="center_horizontal|bottom"
+        android:visibility="invisible">
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/selected_track_image_bp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            app:civ_border_width="2dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="5dp"
+            app:civ_border_color="#FF000000"
+            android:visibility="visible"
+            android:layout_below="@+id/myvisualizerview"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:id="@+id/selected_track_title_bp"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:layout_width="200dp"
+            android:text="Title"
+            android:textSize="13dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="0dp"
+            android:ellipsize="end"
+            android:singleLine="false"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/player_control"
+            android:layout_alignParentStart="true" />
+
+        <ImageView
+            android:id="@+id/player_control_bp"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginBottom="5dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
+
+    </android.support.v7.widget.Toolbar>
 
 </android.support.design.widget.CoordinatorLayout>

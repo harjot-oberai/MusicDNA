@@ -59,7 +59,7 @@ public class LocalTrackListAdapter extends BaseAdapter {
         return v;
     }
 
-    private Bitmap getAlbumArt(String path){
+    public static Bitmap getAlbumArt(String path){
         android.media.MediaMetadataRetriever mmr = new MediaMetadataRetriever();
         mmr.setDataSource(path);
         Bitmap bitmap = null;

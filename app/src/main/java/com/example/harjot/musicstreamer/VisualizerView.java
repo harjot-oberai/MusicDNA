@@ -213,15 +213,14 @@ public class VisualizerView extends View {
 //        }
 //    }
 
-//  ***** DNA Visualizer using Fast Fourier transform (FFT) *****
+    //  ***** DNA Visualizer using Fast Fourier transform (FFT) *****
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         width = canvas.getWidth();
         height = canvas.getHeight();
         outerRadius = (float) (Math.min(width, height) * 0.47);
-        PlayerFragment.totalPauseTime += (PlayerFragment.resumeTime - PlayerFragment.pauseTime);
-        normalizedPosition = ((float) (System.currentTimeMillis() - PlayerFragment.startTime)) / (float) (PlayerFragment.durationInMilliSec);
+        normalizedPosition = ((float) ((System.currentTimeMillis() - PlayerFragment.startTime) + PlayerFragment.totalElapsedTime)) / (float) (PlayerFragment.durationInMilliSec);
         if (mBytes == null) {
             return;
         }
@@ -277,7 +276,7 @@ public class VisualizerView extends View {
 
             volume = ((float) amp);             // REDUNDANT :P
 
-            // converting polar to cartesian (distance calculated afterwards acts as radius for polo]ar co-ords)
+            // converting polar to cartesian (distance calculated afterwards acts as radius for polar co-ords)
             x = (float) Math.sin(angle);
             y = (float) Math.cos(angle);
 
@@ -313,10 +312,11 @@ public class VisualizerView extends View {
             // setting color of the Paint
             mForePaint.setColor(Color.HSVToColor(hsv));
 
-            if (size > 10.0) {
+            if (size >= 8.0 && size < 11.0) {
                 mForePaint.setAlpha(9);
+            } else if (size >= 11.0) {
+                mForePaint.setAlpha(0);
             } else {
-                //mForePaint.setAlpha(248);
                 mForePaint.setAlpha((int) (alpha * 1000));
             }
 
@@ -333,5 +333,8 @@ public class VisualizerView extends View {
         }
     }
 
-
+    public void clear() {
+        pts.clear();
+        ptPaint.clear();
+    }
 }

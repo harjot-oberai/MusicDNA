@@ -1,17 +1,20 @@
 package com.example.harjot.musicstreamer;
 
 
+import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.audiofx.Equalizer;
 import android.media.audiofx.Visualizer;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.harjot.musicstreamer.Models.LocalTrack;
 import com.example.harjot.musicstreamer.Models.Track;
@@ -26,32 +29,40 @@ import java.io.IOException;
 public class PlayerFragment extends Fragment {
 
     public static VisualizerView mVisualizerView;
-    TextView title;
-    static ImageView mController;
-
     public static MediaPlayer mMediaPlayer;
+    public static Visualizer mVisualizer;
 
+    static ImageView mController;
     private TextView mSelectedTrackTitle;
     private ImageView mSelectedTrackImage;
 
-    public static Visualizer mVisualizer;
+    static boolean completed = false;
 
     public static int durationInMilliSec;
+    static boolean pauseClicked = false;
 
     static long startTime = 0;
-
     static long pauseTime = 0;
-    static long resumeTime = 0;
-
-    static long totalPauseTime = 0;
-
-    static boolean pauseClicked  = false;
+    static long totalElapsedTime = 0;
 
     static Track track;
     static LocalTrack localTrack;
 
+    static reloadCurrentInstanceListener mCallback;
+
     public PlayerFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mCallback = (reloadCurrentInstanceListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnHeadlineSelectedListener");
+        }
     }
 
     @Override
@@ -78,6 +89,8 @@ public class PlayerFragment extends Fragment {
             @Override
             public void onPrepared(MediaPlayer mp) {
                 startTime = System.currentTimeMillis();
+                completed = false;
+                pauseClicked = false;
                 togglePlayPause();
             }
         });
@@ -85,13 +98,14 @@ public class PlayerFragment extends Fragment {
         mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                mController.setImageResource(R.drawable.ic_play);
+                completed = true;
+                mController.setImageResource(R.drawable.ic_replay);
             }
         });
 
         mVisualizer = new Visualizer(mMediaPlayer.getAudioSessionId());
 
-        title = (TextView) view.findViewById(R.id.selected_track_title);
+        mSelectedTrackTitle = (TextView) view.findViewById(R.id.selected_track_title);
         mSelectedTrackImage = (ImageView) view.findViewById(R.id.selected_track_image);
         mController = (ImageView) view.findViewById(R.id.player_control);
 
@@ -100,14 +114,13 @@ public class PlayerFragment extends Fragment {
 
         mMediaPlayer.stop();
         mMediaPlayer.reset();
-        if(MainActivity.streamSelected){
+        if (MainActivity.streamSelected) {
             durationInMilliSec = track.getDuration();
-            Picasso.with(getContext()).load(track.getArtworkURL()).resize(100,100).into(mSelectedTrackImage);
-            title.setText(track.getTitle());
-        }
-        else{
+            Picasso.with(getContext()).load(track.getArtworkURL()).resize(100, 100).into(mSelectedTrackImage);
+            mSelectedTrackTitle.setText(track.getTitle());
+        } else {
             durationInMilliSec = (int) localTrack.getDuration();
-            title.setText(localTrack.getTitle());
+            mSelectedTrackTitle.setText(localTrack.getTitle());
         }
 
 
@@ -117,11 +130,10 @@ public class PlayerFragment extends Fragment {
         }
 
         try {
-            if(MainActivity.streamSelected){
+            if (MainActivity.streamSelected) {
                 mMediaPlayer.setDataSource(track.getStreamURL() + "?client_id=" + Config.CLIENT_ID);
                 mMediaPlayer.prepareAsync();
-            }
-            else{
+            } else {
                 mMediaPlayer.setDataSource(localTrack.getPath());
                 mMediaPlayer.prepareAsync();
             }
@@ -160,20 +172,35 @@ public class PlayerFragment extends Fragment {
                 }, Visualizer.getMaxCaptureRate() / 2, false, true);
     }
 
+    public interface reloadCurrentInstanceListener {
+        void reloadCurrentInstance();
+    }
+
     public static void togglePlayPause() {
         if (mMediaPlayer.isPlaying()) {
-            pauseTime = System.currentTimeMillis();
             mVisualizer.release();
             mMediaPlayer.pause();
+            pauseTime = System.currentTimeMillis();
+            totalElapsedTime += (pauseTime - startTime);
             mController.setImageResource(R.drawable.ic_play);
         } else {
-            if(pauseClicked){
-                resumeTime = System.currentTimeMillis();
+            if (pauseClicked) {
+                startTime = System.currentTimeMillis();
             }
-            setupVisualizerFxAndUI();
-            mVisualizer.setEnabled(true);
-            mMediaPlayer.start();
-            mController.setImageResource(R.drawable.ic_pause);
+            if (!completed) {
+                setupVisualizerFxAndUI();
+                mVisualizer.setEnabled(true);
+                mMediaPlayer.start();
+                mController.setImageResource(R.drawable.ic_pause);
+            } else {
+                mVisualizerView.clear();
+                startTime = System.currentTimeMillis();
+                totalElapsedTime = 0;
+                mMediaPlayer.seekTo(0);
+                mMediaPlayer.start();
+                completed = false;
+                mController.setImageResource(R.drawable.ic_pause);
+            }
         }
     }
 

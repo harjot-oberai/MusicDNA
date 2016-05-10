@@ -1,10 +1,14 @@
 package com.example.harjot.musicstreamer;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,7 +18,9 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements StreamMusicFragment.OnTrackSelectedListener,LocalMusicFragment.OnLocalTrackSelectedListener {
+public class MainActivity extends AppCompatActivity implements StreamMusicFragment.OnTrackSelectedListener
+        ,LocalMusicFragment.OnLocalTrackSelectedListener
+        ,PlayerFragment.reloadCurrentInstanceListener{
 
     static Toolbar toolbar;
     static TabLayout tabLayout;
@@ -27,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        requestPermissions();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -59,14 +67,14 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
                     .addToBackStack(null)
                     .commit();
         } else {
-            PlayerFragment.mMediaPlayer.stop();
-            PlayerFragment.mMediaPlayer.reset();
-            PlayerFragment.mVisualizer.release();
-            if (StreamMusicFragment.selectedTrack == PlayerFragment.track) {
+            if (StreamMusicFragment.selectedTrack.getTitle() == PlayerFragment.track.getTitle()) {
                 fm.beginTransaction()
                         .show(frag)
                         .commit();
             } else {
+                PlayerFragment.mMediaPlayer.stop();
+                PlayerFragment.mMediaPlayer.reset();
+                PlayerFragment.mVisualizer.release();
                 fm.beginTransaction()
                         .remove(frag)
                         .add(R.id.playerFragContainer, newFragment, "player")
@@ -87,26 +95,34 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
             fm.beginTransaction()
                     .add(R.id.playerFragContainer, newFragment, "player")
                     .show(newFragment)
-                    .addToBackStack(null)
                     .commit();
         } else {
-            PlayerFragment.mMediaPlayer.stop();
-            PlayerFragment.mMediaPlayer.reset();
-            PlayerFragment.mVisualizer.release();
-            if (LocalMusicFragment.selectedTrack == PlayerFragment.localTrack) {
+            if (LocalMusicFragment.selectedTrack.getTitle() == PlayerFragment.localTrack.getTitle()) {
                 fm.beginTransaction()
                         .show(frag)
                         .commit();
             } else {
+                PlayerFragment.mMediaPlayer.stop();
+                PlayerFragment.mMediaPlayer.reset();
+                PlayerFragment.mVisualizer.release();
                 fm.beginTransaction()
                         .remove(frag)
                         .add(R.id.playerFragContainer, newFragment, "player")
                         .show(newFragment)
-                        .addToBackStack(null)
                         .commit();
             }
         }
     }
+
+    @Override
+    public void reloadCurrentInstance() {
+        Fragment frag = getSupportFragmentManager().findFragmentByTag("player");
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.playerFragContainer,frag,"player")
+                .show(frag)
+                .commit();
+    }
+
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
@@ -140,11 +156,87 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
     @Override
     public void onBackPressed() {
         Fragment frag = getSupportFragmentManager().findFragmentByTag("player");
-        if (frag == null)
+        if (frag == null || !frag.isVisible())
             super.onBackPressed();
         else
             getSupportFragmentManager().beginTransaction()
                     .hide(frag)
                     .commit();
+    }
+
+    public void requestPermissions(){
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.INTERNET)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.INTERNET)) {
+
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.INTERNET},
+                        0);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.RECORD_AUDIO)) {
+
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.RECORD_AUDIO},
+                        1);
+            }
+        }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.MODIFY_AUDIO_SETTINGS)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.MODIFY_AUDIO_SETTINGS)) {
+
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.MODIFY_AUDIO_SETTINGS},
+                        2);
+            }
+        }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        3);
+            }
+        }
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
+
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        4);
+            }
+        }
     }
 }

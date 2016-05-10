@@ -56,8 +56,8 @@ public class VisualizerView extends View {
 
     private void init() {
         mBytes = null;
-        mForePaint.setStrokeWidth(1f);
-        mForePaint.setAntiAlias(true);
+//        mForePaint.setStrokeWidth(1f);
+//        mForePaint.setAntiAlias(true);
         mForePaint.setColor(Color.rgb(0, 128, 255));
         mForePaint1.setStrokeWidth(1f);
         mForePaint1.setAntiAlias(true);

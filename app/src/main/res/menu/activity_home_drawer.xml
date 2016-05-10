@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_stream"
+            android:icon="@drawable/ic_stream"
+            android:title="Stream" />
+        <item
+            android:id="@+id/nav_local"
+            android:icon="@drawable/ic_local"
+            android:title="Local" />
+        <item
+            android:id="@+id/nav_random"
+            android:icon="@drawable/ic_random"
+            android:title="Random" />
+        <item
+            android:id="@+id/nav_my_music"
+            android:icon="@drawable/ic_my_music"
+            android:title="My Music" />
+    </group>
+
+    <item
+        android:id="@+id/nav_settings"
+        android:icon="@drawable/ic_settings"
+        android:title="Settings" />
+
+</menu>

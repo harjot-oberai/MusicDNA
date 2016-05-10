@@ -2,25 +2,30 @@ package com.example.harjot.musicstreamer;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class MainActivity extends AppCompatActivity implements StreamMusicFragment.OnTrackSelectedListener
+public class HomeActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener,
+            StreamMusicFragment.OnTrackSelectedListener
         , LocalMusicFragment.OnLocalTrackSelectedListener
         , PlayerFragment.reloadCurrentInstanceListener {
 
@@ -33,13 +38,7 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
     static TextView selected_track_title;
     static ImageView player_controller;
 
-    View playerContainer;
-
-    static View ab;
-
-    int playeState = 0; // 0 -> completely Hidden  1-> Completely Visible
-
-    boolean isPlayerVisible = false;
+    static ActionBar ab;
 
     static boolean localSelected = false;
     static boolean streamSelected = false;
@@ -47,11 +46,20 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_home);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        ab = findViewById(R.id.appBar);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
 
-        playerContainer = findViewById(R.id.playerFragContainer);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        ab = getSupportActionBar();
 
         requestPermissions();
 
@@ -59,8 +67,8 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
         selected_track_title = (TextView) findViewById(R.id.selected_track_title_bp);
         player_controller = (ImageView) findViewById(R.id.player_control_bp);
 
-//        toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         bottomPlayer = (Toolbar) findViewById(R.id.bottomPlayer);
         bottomPlayer.setOnClickListener(new View.OnClickListener() {
@@ -68,53 +76,24 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
             public void onClick(View v) {
                 android.app.Fragment frag = getFragmentManager().findFragmentByTag("player");
                 android.app.FragmentManager fm = getFragmentManager();
-                if (!isPlayerVisible) {
-                    isPlayerVisible = true;
-                    hideTabs();
-                    showPlayer();
-                    /*fm.beginTransaction()
-                            .setCustomAnimations(R.animator.slide_up,
-                                    R.animator.slide_down,
-                                    R.animator.slide_up,
-                                    R.animator.slide_down)
-                            .show(frag)
-                            .commit();*/
-                } else {
-                    isPlayerVisible = false;
-                    showTabs();
-                    hidePlayer();
-                    /*fm.beginTransaction()
-                            .setCustomAnimations(R.animator.slide_up,
-                                    R.animator.slide_down,
-                                    R.animator.slide_up,
-                                    R.animator.slide_down)
-                            .hide(frag)
-                            .commit();*/
-                }
+                fm.beginTransaction()
+                        .setCustomAnimations(R.animator.slide_up,
+                                R.animator.slide_down,
+                                R.animator.slide_up,
+                                R.animator.slide_down)
+                        .show(frag)
+                        .commit();
             }
         });
 
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
-
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
     }
 
-    private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new StreamMusicFragment(), "Stream");
-        adapter.addFragment(new LocalMusicFragment(), "Local");
-        viewPager.setAdapter(adapter);
-    }
 
     public void onTrackSelected(int position) {
 
         bottomPlayer.setVisibility(View.VISIBLE);
-        hideTabs();
-        isPlayerVisible = true;
 
         android.app.Fragment frag = getFragmentManager().findFragmentByTag("player");
         android.app.FragmentManager fm = getFragmentManager();
@@ -131,13 +110,13 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
                     .commit();
         } else {
             if (PlayerFragment.track != null && StreamMusicFragment.selectedTrack.getTitle() == PlayerFragment.track.getTitle()) {
-                /*fm.beginTransaction()
+                fm.beginTransaction()
                         .setCustomAnimations(R.animator.slide_up,
                                 R.animator.slide_down,
                                 R.animator.slide_up,
                                 R.animator.slide_down)
                         .show(frag)
-                        .commit();*/
+                        .commit();
             } else {
                 PlayerFragment.mMediaPlayer.stop();
                 PlayerFragment.mMediaPlayer.reset();
@@ -156,16 +135,12 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
             }
         }
 
-        showPlayer();
-
     }
 
     @Override
     public void onLocalTrackSelected(int position) {
 
         bottomPlayer.setVisibility(View.VISIBLE);
-        hideTabs();
-        isPlayerVisible = true;
 
         android.app.Fragment frag = getFragmentManager().findFragmentByTag("player");
         android.app.FragmentManager fm = getFragmentManager();
@@ -181,13 +156,13 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
                     .commit();
         } else {
             if (PlayerFragment.localTrack != null && LocalMusicFragment.selectedTrack.getTitle() == PlayerFragment.localTrack.getTitle()) {
-                /*fm.beginTransaction()
+                fm.beginTransaction()
                         .setCustomAnimations(R.animator.slide_up,
                                 R.animator.slide_down,
                                 R.animator.slide_up,
                                 R.animator.slide_down)
                         .show(frag)
-                        .commit();*/
+                        .commit();
             } else {
                 PlayerFragment.mMediaPlayer.stop();
                 PlayerFragment.mMediaPlayer.reset();
@@ -204,8 +179,6 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
                         .commit();
             }
         }
-
-        showPlayer();
     }
 
     @Override
@@ -217,61 +190,23 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
                 .commit();
     }
 
-
-    class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
-
-        public ViewPagerAdapter(FragmentManager manager) {
-            super(manager);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragmentList.size();
-        }
-
-        public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
-        }
-    }
-
     @Override
     public void onBackPressed() {
-//        android.app.Fragment frag = getFragmentManager().findFragmentByTag("player");
-//        if (frag == null || !frag.isVisible())
-//            super.onBackPressed();
-//        else {
-//            isPlayerVisible = false;
-//            showTabs();
-//            hidePlayer();
-//            /*getFragmentManager().beginTransaction()
-//                    .setCustomAnimations(R.animator.slide_up,
-//                            R.animator.slide_down,
-//                            R.animator.slide_up,
-//                            R.animator.slide_down)
-//                    .hide(frag)
-//                    .commit();*/
-//        }
-
-        if(isPlayerVisible){
-            hidePlayer();
-            showTabs();
-            isPlayerVisible = false;
-        }
-        else{
-            super.onBackPressed();
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            android.app.Fragment frag = getFragmentManager().findFragmentByTag("player");
+            if (frag == null || !frag.isVisible())
+                super.onBackPressed();
+            else
+                getFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.animator.slide_up,
+                                R.animator.slide_down,
+                                R.animator.slide_up,
+                                R.animator.slide_down)
+                        .hide(frag)
+                        .commit();
         }
     }
 
@@ -351,40 +286,50 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
         }
     }
 
-    public void hideTabs() {
-        ab.setVisibility(View.VISIBLE);
-        ab.setAlpha(1.0f);
-
-        ab.animate()
-                .translationX(-1 * ab.getWidth())
-                .alpha(0.0f);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.home, menu);
+        return true;
     }
 
-    public void showTabs() {
-        ab.setVisibility(View.VISIBLE);
-        ab.setAlpha(0.0f);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
 
-        ab.animate()
-                .translationX(0)
-                .alpha(1.0f);
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
-    public void hidePlayer(){
-        playerContainer.setVisibility(View.VISIBLE);
-        playerContainer.setAlpha(1.0f);
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
 
-        playerContainer.animate()
-                .translationX(playerContainer.getWidth())
-                .alpha(0.0f);
+        /*if (id == R.id.nav_camera) {
+            // Handle the camera action
+        } else if (id == R.id.nav_gallery) {
+
+        } else if (id == R.id.nav_slideshow) {
+
+        } else if (id == R.id.nav_manage) {
+
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_send) {
+
+        }*/
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
-
-    public void showPlayer(){
-        playerContainer.setVisibility(View.VISIBLE);
-        playerContainer.setAlpha(0.0f);
-
-        playerContainer.animate()
-                .translationX(0)
-                .alpha(1.0f);
-    }
-
 }

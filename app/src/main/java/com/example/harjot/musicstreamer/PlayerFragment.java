@@ -1,13 +1,14 @@
 package com.example.harjot.musicstreamer;
 
 
+import android.app.Fragment;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.audiofx.Equalizer;
 import android.media.audiofx.Visualizer;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+//import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,10 +32,6 @@ public class PlayerFragment extends Fragment {
     public static VisualizerView mVisualizerView;
     public static MediaPlayer mMediaPlayer;
     public static Visualizer mVisualizer;
-
-//    static ImageView mController;
-//    private TextView mSelectedTrackTitle;
-//    private ImageView mSelectedTrackImage;
 
     static boolean completed = false;
 
@@ -79,6 +76,18 @@ public class PlayerFragment extends Fragment {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        //mVisualizerView.onPauseMySurfaceView();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //mVisualizerView.onResumeMySurfaceView();
+    }
+
+    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -102,15 +111,12 @@ public class PlayerFragment extends Fragment {
             @Override
             public void onCompletion(MediaPlayer mp) {
                 completed = true;
+                mVisualizer.release();
                 MainActivity.player_controller.setImageResource(R.drawable.ic_replay);
             }
         });
 
         mVisualizer = new Visualizer(mMediaPlayer.getAudioSessionId());
-
-//        mSelectedTrackTitle = (TextView) view.findViewById(R.id.selected_track_title);
-//        mSelectedTrackImage = (ImageView) view.findViewById(R.id.selected_track_image);
-//        mController = (ImageView) view.findViewById(R.id.player_control);
 
         track = StreamMusicFragment.selectedTrack;
         localTrack = LocalMusicFragment.selectedTrack;
@@ -119,7 +125,7 @@ public class PlayerFragment extends Fragment {
         mMediaPlayer.reset();
         if (MainActivity.streamSelected) {
             durationInMilliSec = track.getDuration();
-            Picasso.with(getContext()).load(track.getArtworkURL()).resize(100, 100).into(MainActivity.selected_track_image);
+            Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(MainActivity.selected_track_image);
             MainActivity.selected_track_title.setText(track.getTitle());
         } else {
             durationInMilliSec = (int) localTrack.getDuration();
@@ -186,9 +192,9 @@ public class PlayerFragment extends Fragment {
         if (mMediaPlayer.isPlaying()) {
             mMediaPlayer.pause();
             MainActivity.player_controller.setImageResource(R.drawable.ic_play);
-            mVisualizer.release();
             pauseTime = System.currentTimeMillis();
             totalElapsedTime += (pauseTime - startTime);
+            mVisualizer.release();
         } else {
             if (pauseClicked) {
                 startTime = System.currentTimeMillis();
@@ -203,6 +209,8 @@ public class PlayerFragment extends Fragment {
                 startTime = System.currentTimeMillis();
                 totalElapsedTime = 0;
                 mMediaPlayer.seekTo(0);
+                setupVisualizerFxAndUI();
+                mVisualizer.setEnabled(true);
                 mMediaPlayer.start();
                 completed = false;
                 MainActivity.player_controller.setImageResource(R.drawable.ic_pause);

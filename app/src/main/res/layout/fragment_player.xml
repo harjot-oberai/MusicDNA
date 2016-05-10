@@ -1,4 +1,4 @@
-<RelativeLayout
+<com.example.harjot.musicstreamer.SlidingRelativeLayout
     android:background="#000000"
     android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar"
     android:layout_width="match_parent"
@@ -16,4 +16,4 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
-</RelativeLayout>
+</com.example.harjot.musicstreamer.SlidingRelativeLayout>

@@ -9,7 +9,7 @@
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:id="@+id/img"
-        android:background="#AAA"/>
+        android:background="#FFF"/>
 
     <LinearLayout
         android:layout_width="wrap_content"

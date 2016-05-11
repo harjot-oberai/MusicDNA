@@ -43,7 +43,7 @@
     <android.support.v7.widget.Toolbar
         android:background="#111"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="70dp"
         android:layout_marginBottom="0dp"
         android:id="@+id/bottomPlayer"
         android:layout_alignParentBottom="true"
@@ -51,11 +51,11 @@
         <de.hdodenhof.circleimageview.CircleImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/selected_track_image_bp"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
             app:civ_border_width="0dp"
             android:layout_marginLeft="0dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="8dp"
             app:civ_border_color="#FF000000"
             android:visibility="visible"
             android:layout_below="@+id/myvisualizerview"

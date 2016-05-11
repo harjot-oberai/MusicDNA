@@ -56,6 +56,9 @@ public class LocalTrackListAdapter extends BaseAdapter {
         if(img!=null){
             tr_img.setImageBitmap(img);
         }
+        else{
+            tr_img.setImageResource(R.drawable.ic_default);
+        }
         return v;
     }
 
@@ -70,11 +73,11 @@ public class LocalTrackListAdapter extends BaseAdapter {
         // convert the byte array to a bitmap
         if(data != null) {
             bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+            return bitmap;
         }
         else {
-
+            return null;
         }
-        return bitmap;
     }
 
 }

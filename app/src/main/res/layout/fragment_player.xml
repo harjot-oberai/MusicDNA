@@ -13,7 +13,44 @@
         android:id="@+id/myvisualizerview"
         android:layout_width="370dp"
         android:layout_height="420dp"
-        android:layout_centerVertical="true"
+        android:layout_above="@+id/progressBar"
         android:layout_centerHorizontal="true" />
+
+    <SeekBar
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:layout_above="@+id/bottomContainer"/>
+
+    <RelativeLayout
+        android:id="@+id/bottomContainer"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:padding="5dp">
+        <ImageView
+            android:background="#FFF"
+            android:id="@+id/previous"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="85dp"/>
+        <ImageView
+            android:background="#FFF"
+            android:id="@+id/controller"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerInParent="true"/>
+        <ImageView
+            android:background="#FFF"
+            android:id="@+id/next"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="85dp"/>
+    </RelativeLayout>
 
 </com.example.harjot.musicstreamer.SlidingRelativeLayout>

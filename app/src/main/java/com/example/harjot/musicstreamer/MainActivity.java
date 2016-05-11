@@ -2,6 +2,9 @@ package com.example.harjot.musicstreamer;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -9,10 +12,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,11 +36,13 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
     static TextView selected_track_title;
     static ImageView player_controller;
 
+    static float seekBarColor;
+
+    static byte[] mBytes;
+
     View playerContainer;
 
     static View ab;
-
-    int playeState = 0; // 0 -> completely Hidden  1-> Completely Visible
 
     boolean isPlayerVisible = false;
 
@@ -72,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
                     isPlayerVisible = true;
                     hideTabs();
                     showPlayer();
+                    moveBottomPlayerUP();
                     /*fm.beginTransaction()
                             .setCustomAnimations(R.animator.slide_up,
                                     R.animator.slide_down,
@@ -83,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
                     isPlayerVisible = false;
                     showTabs();
                     hidePlayer();
+                    moveBottomPlayerDown();
                     /*fm.beginTransaction()
                             .setCustomAnimations(R.animator.slide_up,
                                     R.animator.slide_down,
@@ -120,6 +127,8 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
         android.app.FragmentManager fm = getFragmentManager();
         PlayerFragment newFragment = new PlayerFragment();
         if (frag == null) {
+            showBottomPlayer();
+            moveBottomPlayerUP();
             fm.beginTransaction()
                     .setCustomAnimations(R.animator.slide_up,
                             R.animator.slide_down,
@@ -131,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
                     .commit();
         } else {
             if (PlayerFragment.track != null && StreamMusicFragment.selectedTrack.getTitle() == PlayerFragment.track.getTitle()) {
+                moveBottomPlayerUP();
                 /*fm.beginTransaction()
                         .setCustomAnimations(R.animator.slide_up,
                                 R.animator.slide_down,
@@ -139,6 +149,7 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
                         .show(frag)
                         .commit();*/
             } else {
+                moveBottomPlayerUP();
                 PlayerFragment.mMediaPlayer.stop();
                 PlayerFragment.mMediaPlayer.reset();
                 PlayerFragment.mVisualizer.release();
@@ -171,6 +182,8 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
         android.app.FragmentManager fm = getFragmentManager();
         PlayerFragment newFragment = new PlayerFragment();
         if (frag == null) {
+            showBottomPlayer();
+            moveBottomPlayerUP();
             fm.beginTransaction()
                     .setCustomAnimations(R.animator.slide_up,
                             R.animator.slide_down,
@@ -181,6 +194,7 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
                     .commit();
         } else {
             if (PlayerFragment.localTrack != null && LocalMusicFragment.selectedTrack.getTitle() == PlayerFragment.localTrack.getTitle()) {
+                moveBottomPlayerUP();
                 /*fm.beginTransaction()
                         .setCustomAnimations(R.animator.slide_up,
                                 R.animator.slide_down,
@@ -189,6 +203,7 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
                         .show(frag)
                         .commit();*/
             } else {
+                moveBottomPlayerUP();
                 PlayerFragment.mMediaPlayer.stop();
                 PlayerFragment.mMediaPlayer.reset();
                 PlayerFragment.mVisualizer.release();
@@ -265,12 +280,12 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
 //                    .commit();*/
 //        }
 
-        if(isPlayerVisible){
+        if (isPlayerVisible) {
             hidePlayer();
             showTabs();
+            moveBottomPlayerDown();
             isPlayerVisible = false;
-        }
-        else{
+        } else {
             super.onBackPressed();
         }
     }
@@ -356,35 +371,209 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
         ab.setAlpha(1.0f);
 
         ab.animate()
-                .translationX(-1 * ab.getWidth())
+                .translationY(-1 * ab.getHeight())
                 .alpha(0.0f);
     }
 
     public void showTabs() {
         ab.setVisibility(View.VISIBLE);
-        ab.setAlpha(0.0f);
+        ab.setAlpha(1.0f);
 
         ab.animate()
-                .translationX(0)
+                .translationY(0)
                 .alpha(1.0f);
     }
 
-    public void hidePlayer(){
+    public void hidePlayer() {
         playerContainer.setVisibility(View.VISIBLE);
         playerContainer.setAlpha(1.0f);
+        if (PlayerFragment.mVisualizerView != null)
+            PlayerFragment.mVisualizerView.setAlpha(0.0f);
 
         playerContainer.animate()
-                .translationX(playerContainer.getWidth())
-                .alpha(0.0f);
+                .translationY(playerContainer.getHeight())
+                .alpha(1.0f);
+
+        player_controller.setVisibility(View.VISIBLE);
+
+        player_controller.animate()
+                .alpha(1.0f);
+
+
     }
 
-    public void showPlayer(){
+    public void showPlayer() {
         playerContainer.setVisibility(View.VISIBLE);
-        playerContainer.setAlpha(0.0f);
+        playerContainer.setAlpha(1.0f);
+        if (PlayerFragment.mVisualizerView != null)
+            PlayerFragment.mVisualizerView.setAlpha(0.0f);
+
+        player_controller.setAlpha(1.0f);
+        player_controller.animate()
+                .alpha(0.0f)
+                .setDuration(300);
 
         playerContainer.animate()
-                .translationX(0)
+                .translationY(0)
+                .alpha(1.0f)
+                .setDuration(300);
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (PlayerFragment.mVisualizerView != null)
+                    PlayerFragment.mVisualizerView.setAlpha(1.0f);
+                player_controller.setVisibility(View.INVISIBLE);
+            }
+        }, 350);
+
+
+    }
+
+    public void showBottomPlayer() {
+        bottomPlayer.setTranslationY(-1 * bottomPlayer.getHeight());
+        bottomPlayer.setVisibility(View.VISIBLE);
+        bottomPlayer.setAlpha(0.0f);
+
+        bottomPlayer.animate()
+                .translationY(0)
                 .alpha(1.0f);
+
+    }
+
+    public void moveBottomPlayerUP() {
+        bottomPlayer.animate()
+                .translationY(-1 * (playerContainer.getHeight() - bottomPlayer.getHeight()))
+                .alpha(1.0f);
+    }
+
+    public void moveBottomPlayerDown() {
+        bottomPlayer.animate()
+                .translationY(0)
+                .alpha(1.0f);
+    }
+
+    public static void updateVisualizer(byte[] bytes) {
+        mBytes = bytes;
+        updatePoints();
+        PlayerFragment.mVisualizerView.updateVisualizer(bytes);
+    }
+
+    public static void updatePoints() {
+        VisualizerView.outerRadius = (float) (Math.min(VisualizerView.width, VisualizerView.height) * 0.47);
+        VisualizerView.normalizedPosition = ((float) ((System.currentTimeMillis() - PlayerFragment.startTime) + PlayerFragment.totalElapsedTime + PlayerFragment.deltaTime)) / (float) (PlayerFragment.durationInMilliSec);
+        if (mBytes == null) {
+            return;
+        }
+        VisualizerView.angle = (float) (Math.PI - VisualizerView.normalizedPosition * VisualizerView.TAU);
+        Log.d("ANGLE", VisualizerView.angle + "");
+        VisualizerView.color = 0;
+        VisualizerView.lnDataDistance = 0;
+        VisualizerView.distance = 0;
+        VisualizerView.size = 0;
+        VisualizerView.volume = 0;
+        VisualizerView.power = 0;
+
+        float x, y;
+
+        int midx = (int) (VisualizerView.width / 2);
+        int midy = (int) (VisualizerView.height / 2);
+
+        // calculate min and max amplitude for current byte array
+        float max = Integer.MIN_VALUE, min = Integer.MAX_VALUE;
+        for (int a = 16; a < (mBytes.length / 2); a++) {
+            Log.d("BYTE", mBytes[a] + "");
+            float amp = mBytes[(a * 2) + 0] * mBytes[(a * 2) + 0] + mBytes[(a * 2) + 1] * mBytes[(a * 2) + 1];
+            if (amp > max) {
+                max = amp;
+            }
+            if (amp < min) {
+                min = amp;
+            }
+        }
+
+        Log.d("MAXMIN", max + ":" + min);
+
+        /**
+         * Number Fishing is all that is used here to get the best looking DNA
+         * Number fishing is HOW YOU WIN AT LIFE. -- paullewis :)
+         * **/
+
+        for (int a = 16; a < (mBytes.length / 2); a++) {
+            Log.d("BYTE", mBytes[a] + "");
+            if (max <= 10.0) {
+                break;
+            }
+
+            // scale the amplitude to the range [0,1]
+            float amp = mBytes[(a * 2) + 0] * mBytes[(a * 2) + 0] + mBytes[(a * 2) + 1] * mBytes[(a * 2) + 1];
+            if (max != min)
+                amp = (amp - min) / (max - min);
+            else {
+                amp = 0;
+            }
+
+            VisualizerView.volume = ((float) amp);             // REDUNDANT :P
+
+            // converting polar to cartesian (distance calculated afterwards acts as radius for polar co-ords)
+            x = (float) Math.sin(VisualizerView.angle);
+            y = (float) Math.cos(VisualizerView.angle);
+
+            // filtering low amplitude
+            if (VisualizerView.volume < 0.39) {
+                continue;
+            }
+
+            // color ( value of hue inn HSV ) calculated based on current progress of the song or audio clip
+            VisualizerView.color = (float) (VisualizerView.normalizedPosition - 0.12 + Math.random() * 0.24);
+            VisualizerView.color = Math.round(VisualizerView.color * 360);
+            seekBarColor = (float) (VisualizerView.normalizedPosition);
+            seekBarColor = Math.round(seekBarColor * 360);
+
+            // calculating distance from center ( 'r' in polar coordinates)
+            VisualizerView.lnDataDistance = (float) ((Math.log(a - 4) / VisualizerView.LOG_MAX) - VisualizerView.BASE);
+            VisualizerView.distance = VisualizerView.lnDataDistance * VisualizerView.outerRadius;
+
+            // size of the circle to be rendered at the calculated position
+            VisualizerView.size = (float) (4.5 * VisualizerView.volume * VisualizerView.MAX_DOT_SIZE + Math.random() * 2);
+
+            // alpha also based on volume ( amplitude )
+            VisualizerView.alpha = (float) (VisualizerView.volume * 0.09);
+
+            // final cartesian coordinates for drawing on canvas
+            x = x * VisualizerView.distance;
+            y = y * VisualizerView.distance;
+
+
+            float[] hsv = new float[3];
+            hsv[0] = VisualizerView.color;
+            hsv[1] = (float) 0.8;
+            hsv[2] = (float) 0.5;
+
+            // setting color of the Paint
+            VisualizerView.mForePaint.setColor(Color.HSVToColor(hsv));
+
+            if (VisualizerView.size >= 15.0 && VisualizerView.size < 29.0) {
+                VisualizerView.mForePaint.setAlpha(15);
+            } else if (VisualizerView.size >= 29.0 && VisualizerView.size <= 60.0) {
+                VisualizerView.mForePaint.setAlpha(9);
+            } else if (VisualizerView.size > 60.0) {
+                VisualizerView.mForePaint.setAlpha(0);
+            } else {
+                VisualizerView.mForePaint.setAlpha((int) (VisualizerView.alpha * 1000));
+            }
+
+            // Setting alpha of the Paint
+            //mForePaint.setAlpha((int) (alpha * 1000));
+
+            // Draw the circles at correct position
+
+
+            // Add points and paint config to lists for redraw
+            VisualizerView.pts.add(Pair.create(midx + x, midy + y));
+            VisualizerView.ptPaint.add(Pair.create(VisualizerView.size, Pair.create(VisualizerView.mForePaint.getColor(), VisualizerView.mForePaint.getAlpha())));
+        }
     }
 
 }

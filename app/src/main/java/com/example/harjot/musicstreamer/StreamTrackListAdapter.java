@@ -53,9 +53,12 @@ public class StreamTrackListAdapter extends BaseAdapter {
         Track track = tracks.get(position);
         tr_title.setText(track.getTitle());
         try {
-            Picasso.with(context).load(track.getArtworkURL()).resize(100,100).into(tr_img);
+            if (track.getArtworkURL() != null)
+                Picasso.with(context).load(track.getArtworkURL()).resize(100, 100).into(tr_img);
+            else{
+                tr_img.setImageResource(R.drawable.ic_default);
+            }
             Log.d("URL", track.getArtworkURL());
-            //imageLoader.DisplayImage(track.getArtworkURL(), tr_img);
         } catch (Exception e) {
             Log.e("AdapterError", e.getMessage());
         }

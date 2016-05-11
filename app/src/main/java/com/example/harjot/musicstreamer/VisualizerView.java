@@ -19,6 +19,10 @@ import java.util.List;
 
 public class VisualizerView extends View {
 
+    double LOG_MAX = Math.log(64);
+    double TAU = Math.PI * 2;
+    double MAX_DOT_SIZE = 0.5;
+    double BASE = Math.log(4) / LOG_MAX;
     private byte[] mBytes;
     private float[] mPoints;
     private float[] mCirclePoints;
@@ -26,18 +30,11 @@ public class VisualizerView extends View {
     private Rect mRect = new Rect();
     private Paint mForePaint = new Paint();
     private Paint mForePaint1 = new Paint();
-
     private float width, height, angle, color, lnDataDistance, distance, size, volume, power, outerRadius, alpha;
     private int time;
     private float normalizedPosition;
-
     private List<Pair<Float, Float>> pts;
     private List<Pair<Float, Pair<Integer, Integer>>> ptPaint;
-
-    double LOG_MAX = Math.log(64);
-    double TAU = Math.PI * 2;
-    double MAX_DOT_SIZE = 0.5;
-    double BASE = Math.log(4) / LOG_MAX;
 
     public VisualizerView(Context context) {
         super(context);
@@ -64,17 +61,11 @@ public class VisualizerView extends View {
         mForePaint1.setColor(Color.rgb(255, 128, 0));
         pts = new ArrayList<>();
         ptPaint = new ArrayList<>();
-        /*ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
-        exec.scheduleAtFixedRate(new Runnable() {
-            public void run() {
-                invalidate();
-            }
-        }, 0, 10, TimeUnit.MILLISECONDS);*/
     }
 
     public void updateVisualizer(byte[] bytes) {
         mBytes = bytes;
-        postInvalidate();
+        invalidate();
     }
 
 //    ***** Wave visualizer using wWavelet Transform ******
@@ -266,6 +257,12 @@ public class VisualizerView extends View {
         for (int a = 16; a < (mBytes.length / 2); a++) {
             Log.d("BYTE", mBytes[a] + "");
 
+            if (max <= 3.0) {
+                break;
+            }
+
+            Log.d("MAX",max+"");
+
             // scale the amplitude to the range [0,1]
             float amp = mBytes[(a * 2) + 0] * mBytes[(a * 2) + 0] + mBytes[(a * 2) + 1] * mBytes[(a * 2) + 1];
             if (max != min)
@@ -312,9 +309,11 @@ public class VisualizerView extends View {
             // setting color of the Paint
             mForePaint.setColor(Color.HSVToColor(hsv));
 
-            if (size >= 10.0 && size < 17.0) {
+            if (size >= 15.0 && size < 29.0) {
+                mForePaint.setAlpha(15);
+            } else if (size >= 29.0 && size <= 60.0) {
                 mForePaint.setAlpha(9);
-            } else if (size >= 17.0) {
+            } else if (size > 60.0) {
                 mForePaint.setAlpha(0);
             } else {
                 mForePaint.setAlpha((int) (alpha * 1000));

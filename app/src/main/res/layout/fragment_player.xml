@@ -12,7 +12,7 @@
     <com.example.harjot.musicstreamer.VisualizerView
         android:id="@+id/myvisualizerview"
         android:layout_width="370dp"
-        android:layout_height="370dp"
+        android:layout_height="420dp"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 

@@ -78,25 +78,11 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
                     hideTabs();
                     showPlayer();
                     moveBottomPlayerUP();
-                    /*fm.beginTransaction()
-                            .setCustomAnimations(R.animator.slide_up,
-                                    R.animator.slide_down,
-                                    R.animator.slide_up,
-                                    R.animator.slide_down)
-                            .show(frag)
-                            .commit();*/
                 } else {
                     isPlayerVisible = false;
                     showTabs();
                     hidePlayer();
                     moveBottomPlayerDown();
-                    /*fm.beginTransaction()
-                            .setCustomAnimations(R.animator.slide_up,
-                                    R.animator.slide_down,
-                                    R.animator.slide_up,
-                                    R.animator.slide_down)
-                            .hide(frag)
-                            .commit();*/
                 }
             }
         });
@@ -139,15 +125,8 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
                     .addToBackStack(null)
                     .commit();
         } else {
-            if (PlayerFragment.track != null && StreamMusicFragment.selectedTrack.getTitle() == PlayerFragment.track.getTitle()) {
+            if (PlayerFragment.track != null && !PlayerFragment.localIsPlaying && StreamMusicFragment.selectedTrack.getTitle() == PlayerFragment.track.getTitle()) {
                 moveBottomPlayerUP();
-                /*fm.beginTransaction()
-                        .setCustomAnimations(R.animator.slide_up,
-                                R.animator.slide_down,
-                                R.animator.slide_up,
-                                R.animator.slide_down)
-                        .show(frag)
-                        .commit();*/
             } else {
                 moveBottomPlayerUP();
                 PlayerFragment.mMediaPlayer.stop();
@@ -168,6 +147,7 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
         }
 
         showPlayer();
+        PlayerFragment.localIsPlaying = false;
 
     }
 
@@ -193,15 +173,8 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
                     .show(newFragment)
                     .commit();
         } else {
-            if (PlayerFragment.localTrack != null && LocalMusicFragment.selectedTrack.getTitle() == PlayerFragment.localTrack.getTitle()) {
+            if (PlayerFragment.localTrack != null && PlayerFragment.localIsPlaying && LocalMusicFragment.selectedTrack.getTitle() == PlayerFragment.localTrack.getTitle()) {
                 moveBottomPlayerUP();
-                /*fm.beginTransaction()
-                        .setCustomAnimations(R.animator.slide_up,
-                                R.animator.slide_down,
-                                R.animator.slide_up,
-                                R.animator.slide_down)
-                        .show(frag)
-                        .commit();*/
             } else {
                 moveBottomPlayerUP();
                 PlayerFragment.mMediaPlayer.stop();
@@ -221,6 +194,7 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
         }
 
         showPlayer();
+        PlayerFragment.localIsPlaying = true;
     }
 
     @Override

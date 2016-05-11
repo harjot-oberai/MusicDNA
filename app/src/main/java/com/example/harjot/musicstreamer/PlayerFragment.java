@@ -48,6 +48,8 @@ public class PlayerFragment extends Fragment {
     static boolean pauseClicked = false;
     static boolean isTracking = false;
 
+    static boolean localIsPlaying = false;
+
     Timer t;
 
     static long startTime = 0;

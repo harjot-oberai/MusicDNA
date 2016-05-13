@@ -1,18 +1,67 @@
 <com.example.harjot.musicstreamer.SlidingRelativeLayout
-    android:background="#000000"
-    android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/toolBar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/toolBar"
-    android:padding="0dp"
-    android:visibility="visible"
+    android:background="#000000"
     android:clickable="true"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:padding="0dp"
+    android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar"
+    android:visibility="visible">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/smallPlayer"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="0dp"
+        android:background="#000"
+        android:visibility="visible">
+
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/selected_track_image_sp"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/myvisualizerview"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="8dp"
+            android:visibility="visible"
+            app:civ_border_color="#FF000000"
+            app:civ_border_width="0dp" />
+
+        <TextView
+            android:id="@+id/selected_track_title_sp"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/player_control"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="0dp"
+            android:ellipsize="end"
+            android:singleLine="false"
+            android:text="Title"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textSize="13dp" />
+
+        <ImageView
+            android:id="@+id/player_control_sp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="10dp"
+            android:visibility="visible"/>
+
+    </android.support.v7.widget.Toolbar>
 
     <com.example.harjot.musicstreamer.VisualizerView
         android:id="@+id/myvisualizerview"
         android:layout_width="370dp"
-        android:layout_height="420dp"
+        android:layout_height="390dp"
         android:layout_above="@+id/progressBar"
         android:layout_centerHorizontal="true" />
 
@@ -20,8 +69,8 @@
         android:id="@+id/progressBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:max="100"
-        android:layout_above="@+id/bottomContainer"/>
+        android:layout_above="@+id/bottomContainer"
+        android:max="100" />
 
     <RelativeLayout
         android:id="@+id/bottomContainer"
@@ -29,28 +78,30 @@
         android:layout_height="70dp"
         android:layout_alignParentBottom="true"
         android:padding="5dp">
+
         <ImageView
-            android:background="#FFF"
             android:id="@+id/previous"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_centerVertical="true"
+            android:src="@drawable/ic_skip_previous_white_48dp"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="85dp"/>
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="85dp" />
+
         <ImageView
-            android:background="#FFF"
             android:id="@+id/controller"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_centerInParent="true"/>
+            android:layout_centerInParent="true" />
+
         <ImageView
-            android:background="#FFF"
             android:id="@+id/next"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_centerVertical="true"
+            android:src="@drawable/ic_skip_next_white_48dp"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="85dp"/>
+            android:layout_centerVertical="true"
+            android:layout_marginRight="85dp" />
     </RelativeLayout>
 
 </com.example.harjot.musicstreamer.SlidingRelativeLayout>

@@ -1,8 +1,10 @@
 package com.example.harjot.musicstreamer;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.TabLayout;
@@ -24,13 +26,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements StreamMusicFragment.OnTrackSelectedListener
-        , LocalMusicFragment.OnLocalTrackSelectedListener
-        , PlayerFragment.reloadCurrentInstanceListener {
+        , LocalMusicFragment.OnLocalTrackSelectedListener {
 
     static Toolbar toolbar;
     static Toolbar bottomPlayer;
     static TabLayout tabLayout;
     static ViewPager viewPager;
+
+    static Activity main;
 
     static ImageView selected_track_image;
     static TextView selected_track_title;
@@ -53,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        main = this;
 
         ab = findViewById(R.id.appBar);
 
@@ -103,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
         viewPager.setAdapter(adapter);
     }
 
+    @Override
     public void onTrackSelected(int position) {
 
         bottomPlayer.setVisibility(View.VISIBLE);
@@ -197,15 +203,6 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
         PlayerFragment.localIsPlaying = true;
     }
 
-    @Override
-    public void reloadCurrentInstance() {
-        Fragment frag = getSupportFragmentManager().findFragmentByTag("player");
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.playerFragContainer, frag, "player")
-                .show(frag)
-                .commit();
-    }
-
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
@@ -238,22 +235,6 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
 
     @Override
     public void onBackPressed() {
-//        android.app.Fragment frag = getFragmentManager().findFragmentByTag("player");
-//        if (frag == null || !frag.isVisible())
-//            super.onBackPressed();
-//        else {
-//            isPlayerVisible = false;
-//            showTabs();
-//            hidePlayer();
-//            /*getFragmentManager().beginTransaction()
-//                    .setCustomAnimations(R.animator.slide_up,
-//                            R.animator.slide_down,
-//                            R.animator.slide_up,
-//                            R.animator.slide_down)
-//                    .hide(frag)
-//                    .commit();*/
-//        }
-
         if (isPlayerVisible) {
             hidePlayer();
             showTabs();
@@ -360,7 +341,6 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
 
     public void hidePlayer() {
         playerContainer.setVisibility(View.VISIBLE);
-        playerContainer.setAlpha(1.0f);
         if (PlayerFragment.mVisualizerView != null)
             PlayerFragment.mVisualizerView.setAlpha(0.0f);
 
@@ -378,7 +358,6 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
 
     public void showPlayer() {
         playerContainer.setVisibility(View.VISIBLE);
-        playerContainer.setAlpha(1.0f);
         if (PlayerFragment.mVisualizerView != null)
             PlayerFragment.mVisualizerView.setAlpha(0.0f);
 
@@ -389,7 +368,6 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
 
         playerContainer.animate()
                 .translationY(0)
-                .alpha(1.0f)
                 .setDuration(300);
 
         final Handler handler = new Handler();
@@ -431,28 +409,142 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
     public static void updateVisualizer(byte[] bytes) {
         mBytes = bytes;
         updatePoints();
-        PlayerFragment.mVisualizerView.updateVisualizer(bytes);
+        PlayerFragment.mVisualizerView.updateVisualizer(mBytes);
+//        new MyAsyncTask().execute();
     }
 
     public static void updatePoints() {
-        VisualizerView.outerRadius = (float) (Math.min(VisualizerView.width, VisualizerView.height) * 0.47);
-        VisualizerView.normalizedPosition = ((float) ((System.currentTimeMillis() - PlayerFragment.startTime) + PlayerFragment.totalElapsedTime + PlayerFragment.deltaTime)) / (float) (PlayerFragment.durationInMilliSec);
+//        VisualizerView.outerRadius = (float) (Math.min(VisualizerView.width, VisualizerView.height) * 0.47);
+//        VisualizerView.normalizedPosition = ((float) ((System.currentTimeMillis() - PlayerFragment.startTime) + PlayerFragment.totalElapsedTime + PlayerFragment.deltaTime)) / (float) (PlayerFragment.durationInMilliSec);
+//        if (mBytes == null) {
+//            return;
+//        }
+//        VisualizerView.angle = (float) (Math.PI - VisualizerView.normalizedPosition * VisualizerView.TAU);
+//        Log.d("ANGLE", VisualizerView.angle + "");
+//        VisualizerView.color = 0;
+//        VisualizerView.lnDataDistance = 0;
+//        VisualizerView.distance = 0;
+//        VisualizerView.size = 0;
+//        VisualizerView.volume = 0;
+//        VisualizerView.power = 0;
+//
+//        float x, y;
+//
+//        int midx = (int) (VisualizerView.width / 2);
+//        int midy = (int) (VisualizerView.height / 2);
+//
+//        // calculate min and max amplitude for current byte array
+//        float max = Integer.MIN_VALUE, min = Integer.MAX_VALUE;
+//        for (int a = 16; a < (mBytes.length / 2); a++) {
+//            Log.d("BYTE", mBytes[a] + "");
+//            float amp = mBytes[(a * 2) + 0] * mBytes[(a * 2) + 0] + mBytes[(a * 2) + 1] * mBytes[(a * 2) + 1];
+//            if (amp > max) {
+//                max = amp;
+//            }
+//            if (amp < min) {
+//                min = amp;
+//            }
+//        }
+//
+//        Log.d("MAXMIN", max + ":" + min);
+//
+//        /**
+//         * Number Fishing is all that is used here to get the best looking DNA
+//         * Number fishing is HOW YOU WIN AT LIFE. -- paullewis :)
+//         * **/
+//
+//        for (int a = 16; a < (mBytes.length / 2); a++) {
+//            Log.d("BYTE", mBytes[a] + "");
+//            if (max <= 10.0) {
+//                break;
+//            }
+//
+//            // scale the amplitude to the range [0,1]
+//            float amp = mBytes[(a * 2) + 0] * mBytes[(a * 2) + 0] + mBytes[(a * 2) + 1] * mBytes[(a * 2) + 1];
+//            if (max != min)
+//                amp = (amp - min) / (max - min);
+//            else {
+//                amp = 0;
+//            }
+//
+//            VisualizerView.volume = ((float) amp);             // REDUNDANT :P
+//
+//            // converting polar to cartesian (distance calculated afterwards acts as radius for polar co-ords)
+//            x = (float) Math.sin(VisualizerView.angle);
+//            y = (float) Math.cos(VisualizerView.angle);
+//
+//            // filtering low amplitude
+//            if (VisualizerView.volume < 0.39) {
+//                continue;
+//            }
+//
+//            // color ( value of hue inn HSV ) calculated based on current progress of the song or audio clip
+//            VisualizerView.color = (float) (VisualizerView.normalizedPosition - 0.12 + Math.random() * 0.24);
+//            VisualizerView.color = Math.round(VisualizerView.color * 360);
+//            seekBarColor = (float) (VisualizerView.normalizedPosition);
+//            seekBarColor = Math.round(seekBarColor * 360);
+//
+//            // calculating distance from center ( 'r' in polar coordinates)
+//            VisualizerView.lnDataDistance = (float) ((Math.log(a - 4) / VisualizerView.LOG_MAX) - VisualizerView.BASE);
+//            VisualizerView.distance = VisualizerView.lnDataDistance * VisualizerView.outerRadius;
+//
+//            // size of the circle to be rendered at the calculated position
+//            VisualizerView.size = (float) (4.5 * VisualizerView.volume * VisualizerView.MAX_DOT_SIZE + Math.random() * 2);
+//
+//            // alpha also based on volume ( amplitude )
+//            VisualizerView.alpha = (float) (VisualizerView.volume * 0.09);
+//
+//            // final cartesian coordinates for drawing on canvas
+//            x = x * VisualizerView.distance;
+//            y = y * VisualizerView.distance;
+//
+//
+//            float[] hsv = new float[3];
+//            hsv[0] = VisualizerView.color;
+//            hsv[1] = (float) 0.8;
+//            hsv[2] = (float) 0.5;
+//
+//            // setting color of the Paint
+//            VisualizerView.mForePaint.setColor(Color.HSVToColor(hsv));
+//
+//            if (VisualizerView.size >= 15.0 && VisualizerView.size < 29.0) {
+//                VisualizerView.mForePaint.setAlpha(15);
+//            } else if (VisualizerView.size >= 29.0 && VisualizerView.size <= 60.0) {
+//                VisualizerView.mForePaint.setAlpha(9);
+//            } else if (VisualizerView.size > 60.0) {
+//                VisualizerView.mForePaint.setAlpha(0);
+//            } else {
+//                VisualizerView.mForePaint.setAlpha((int) (VisualizerView.alpha * 1000));
+//            }
+//
+//            // Setting alpha of the Paint
+//            //mForePaint.setAlpha((int) (alpha * 1000));
+//
+//            // Draw the circles at correct position
+//
+//
+//            // Add points and paint config to lists for redraw
+//            VisualizerView.pts.add(Pair.create(midx + x, midy + y));
+//            VisualizerView.ptPaint.add(Pair.create(VisualizerView.size, Pair.create(VisualizerView.mForePaint.getColor(), VisualizerView.mForePaint.getAlpha())));
+//        }
+        PlayerFragment.mVisualizerView.outerRadius = (float) (Math.min(PlayerFragment.mVisualizerView.width, PlayerFragment.mVisualizerView.height) * 0.47);
+        PlayerFragment.mVisualizerView.normalizedPosition = ((float) ((System.currentTimeMillis() - PlayerFragment.startTime) + PlayerFragment.totalElapsedTime + PlayerFragment.deltaTime)) / (float) (PlayerFragment.durationInMilliSec);
         if (mBytes == null) {
             return;
         }
-        VisualizerView.angle = (float) (Math.PI - VisualizerView.normalizedPosition * VisualizerView.TAU);
-        Log.d("ANGLE", VisualizerView.angle + "");
-        VisualizerView.color = 0;
-        VisualizerView.lnDataDistance = 0;
-        VisualizerView.distance = 0;
-        VisualizerView.size = 0;
-        VisualizerView.volume = 0;
-        VisualizerView.power = 0;
+        PlayerFragment.mVisualizerView.angle = (float) (Math.PI - PlayerFragment.mVisualizerView.normalizedPosition * PlayerFragment.mVisualizerView.TAU);
+        Log.d("ANGLE", PlayerFragment.mVisualizerView.angle + "");
+        PlayerFragment.mVisualizerView.color = 0;
+        PlayerFragment.mVisualizerView.lnDataDistance = 0;
+        PlayerFragment.mVisualizerView.distance = 0;
+        PlayerFragment.mVisualizerView.size = 0;
+        PlayerFragment.mVisualizerView.volume = 0;
+        PlayerFragment.mVisualizerView.power = 0;
 
         float x, y;
 
-        int midx = (int) (VisualizerView.width / 2);
-        int midy = (int) (VisualizerView.height / 2);
+        int midx = (int) (PlayerFragment.mVisualizerView.width / 2);
+        int midy = (int) (PlayerFragment.mVisualizerView.height / 2);
 
         // calculate min and max amplitude for current byte array
         float max = Integer.MIN_VALUE, min = Integer.MAX_VALUE;
@@ -488,54 +580,54 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
                 amp = 0;
             }
 
-            VisualizerView.volume = ((float) amp);             // REDUNDANT :P
+            PlayerFragment.mVisualizerView.volume = ((float) amp);             // REDUNDANT :P
 
             // converting polar to cartesian (distance calculated afterwards acts as radius for polar co-ords)
-            x = (float) Math.sin(VisualizerView.angle);
-            y = (float) Math.cos(VisualizerView.angle);
+            x = (float) Math.sin(PlayerFragment.mVisualizerView.angle);
+            y = (float) Math.cos(PlayerFragment.mVisualizerView.angle);
 
             // filtering low amplitude
-            if (VisualizerView.volume < 0.39) {
+            if (PlayerFragment.mVisualizerView.volume < 0.39) {
                 continue;
             }
 
             // color ( value of hue inn HSV ) calculated based on current progress of the song or audio clip
-            VisualizerView.color = (float) (VisualizerView.normalizedPosition - 0.12 + Math.random() * 0.24);
-            VisualizerView.color = Math.round(VisualizerView.color * 360);
-            seekBarColor = (float) (VisualizerView.normalizedPosition);
+            PlayerFragment.mVisualizerView.color = (float) (PlayerFragment.mVisualizerView.normalizedPosition - 0.12 + Math.random() * 0.24);
+            PlayerFragment.mVisualizerView.color = Math.round(PlayerFragment.mVisualizerView.color * 360);
+            seekBarColor = (float) (PlayerFragment.mVisualizerView.normalizedPosition);
             seekBarColor = Math.round(seekBarColor * 360);
 
             // calculating distance from center ( 'r' in polar coordinates)
-            VisualizerView.lnDataDistance = (float) ((Math.log(a - 4) / VisualizerView.LOG_MAX) - VisualizerView.BASE);
-            VisualizerView.distance = VisualizerView.lnDataDistance * VisualizerView.outerRadius;
+            PlayerFragment.mVisualizerView.lnDataDistance = (float) ((Math.log(a - 4) / PlayerFragment.mVisualizerView.LOG_MAX) - PlayerFragment.mVisualizerView.BASE);
+            PlayerFragment.mVisualizerView.distance = PlayerFragment.mVisualizerView.lnDataDistance * PlayerFragment.mVisualizerView.outerRadius;
 
             // size of the circle to be rendered at the calculated position
-            VisualizerView.size = (float) (4.5 * VisualizerView.volume * VisualizerView.MAX_DOT_SIZE + Math.random() * 2);
+            PlayerFragment.mVisualizerView.size = (float) (4.5 * PlayerFragment.mVisualizerView.volume * PlayerFragment.mVisualizerView.MAX_DOT_SIZE + Math.random() * 2);
 
             // alpha also based on volume ( amplitude )
-            VisualizerView.alpha = (float) (VisualizerView.volume * 0.09);
+            PlayerFragment.mVisualizerView.alpha = (float) (PlayerFragment.mVisualizerView.volume * 0.09);
 
             // final cartesian coordinates for drawing on canvas
-            x = x * VisualizerView.distance;
-            y = y * VisualizerView.distance;
+            x = x * PlayerFragment.mVisualizerView.distance;
+            y = y * PlayerFragment.mVisualizerView.distance;
 
 
             float[] hsv = new float[3];
-            hsv[0] = VisualizerView.color;
+            hsv[0] = PlayerFragment.mVisualizerView.color;
             hsv[1] = (float) 0.8;
             hsv[2] = (float) 0.5;
 
             // setting color of the Paint
-            VisualizerView.mForePaint.setColor(Color.HSVToColor(hsv));
+            PlayerFragment.mVisualizerView.mForePaint.setColor(Color.HSVToColor(hsv));
 
-            if (VisualizerView.size >= 15.0 && VisualizerView.size < 29.0) {
-                VisualizerView.mForePaint.setAlpha(15);
-            } else if (VisualizerView.size >= 29.0 && VisualizerView.size <= 60.0) {
-                VisualizerView.mForePaint.setAlpha(9);
-            } else if (VisualizerView.size > 60.0) {
-                VisualizerView.mForePaint.setAlpha(0);
+            if (PlayerFragment.mVisualizerView.size >= 15.0 && PlayerFragment.mVisualizerView.size < 29.0) {
+                PlayerFragment.mVisualizerView.mForePaint.setAlpha(15);
+            } else if (PlayerFragment.mVisualizerView.size >= 29.0 && PlayerFragment.mVisualizerView.size <= 60.0) {
+                PlayerFragment.mVisualizerView.mForePaint.setAlpha(9);
+            } else if (PlayerFragment.mVisualizerView.size > 60.0) {
+                PlayerFragment.mVisualizerView.mForePaint.setAlpha(0);
             } else {
-                VisualizerView.mForePaint.setAlpha((int) (VisualizerView.alpha * 1000));
+                PlayerFragment.mVisualizerView.mForePaint.setAlpha((int) (PlayerFragment.mVisualizerView.alpha * 1000));
             }
 
             // Setting alpha of the Paint
@@ -545,8 +637,23 @@ public class MainActivity extends AppCompatActivity implements StreamMusicFragme
 
 
             // Add points and paint config to lists for redraw
-            VisualizerView.pts.add(Pair.create(midx + x, midy + y));
-            VisualizerView.ptPaint.add(Pair.create(VisualizerView.size, Pair.create(VisualizerView.mForePaint.getColor(), VisualizerView.mForePaint.getAlpha())));
+            PlayerFragment.mVisualizerView.pts.add(Pair.create(midx + x, midy + y));
+            PlayerFragment.mVisualizerView.ptPaint.add(Pair.create(PlayerFragment.mVisualizerView.size, Pair.create(PlayerFragment.mVisualizerView.mForePaint.getColor(), PlayerFragment.mVisualizerView.mForePaint.getAlpha())));
+        }
+    }
+
+    public static class MyAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            updatePoints();
+            main.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    PlayerFragment.mVisualizerView.updateVisualizer(mBytes);
+                }
+            });
+            return null;
         }
     }
 

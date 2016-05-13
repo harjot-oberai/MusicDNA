@@ -12,11 +12,14 @@ import android.media.MediaPlayer;
 import android.media.audiofx.Equalizer;
 import android.media.audiofx.Visualizer;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.example.harjot.musicstreamer.Models.LocalTrack;
 import com.example.harjot.musicstreamer.Models.Track;
@@ -42,6 +45,12 @@ public class PlayerFragment extends Fragment {
     public static ImageView nextTrackController;
     public static ImageView previousTrackController;
 
+    static ImageView selected_track_image;
+    static TextView selected_track_title;
+    static ImageView player_controller;
+
+    static Toolbar smallPlayer;
+
     public static SeekBar progressBar;
     public static int durationInMilliSec;
     static boolean completed = false;
@@ -58,7 +67,7 @@ public class PlayerFragment extends Fragment {
     static long deltaTime = 0;
     static Track track;
     static LocalTrack localTrack;
-    static reloadCurrentInstanceListener mCallback;
+    static onSmallPlayerTouchedListener mCallback;
     long startTrack;
     long endTrack;
 
@@ -82,7 +91,7 @@ public class PlayerFragment extends Fragment {
                     public void onFftDataCapture(Visualizer visualizer,
                                                  byte[] bytes, int samplingRate) {
 //                        mVisualizerView.updateVisualizer(bytes);
-                        MainActivity.updateVisualizer(bytes);
+                        HomeActivity.updateVisualizer(bytes);
                     }
                 }, Visualizer.getMaxCaptureRate() / 2, false, true);
 
@@ -92,8 +101,12 @@ public class PlayerFragment extends Fragment {
     public static void togglePlayPause() {
         if (mMediaPlayer.isPlaying()) {
             mMediaPlayer.pause();
-            MainActivity.player_controller.setImageResource(R.drawable.ic_play);
-            mainTrackController.setImageResource(R.drawable.ic_play);
+            if (HomeActivity.isPlayerVisible) {
+                mainTrackController.setImageResource(R.drawable.ic_play_arrow_white_48dp);
+            } else {
+                player_controller.setImageResource(R.drawable.ic_play_arrow_white_48dp);
+                mainTrackController.setImageResource(R.drawable.ic_play_arrow_white_48dp);
+            }
             pauseTime = System.currentTimeMillis();
             totalElapsedTime += (pauseTime - startTime);
             mVisualizer.release();
@@ -105,8 +118,12 @@ public class PlayerFragment extends Fragment {
                 setupVisualizerFxAndUI();
                 mVisualizer.setEnabled(true);
                 mMediaPlayer.start();
-                MainActivity.player_controller.setImageResource(R.drawable.ic_pause);
-                mainTrackController.setImageResource(R.drawable.ic_pause);
+                if (HomeActivity.isPlayerVisible) {
+                    mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
+                } else {
+                    mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
+                    player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
+                }
             } else {
                 mVisualizerView.clear();
                 startTime = System.currentTimeMillis();
@@ -116,8 +133,12 @@ public class PlayerFragment extends Fragment {
                 mVisualizer.setEnabled(true);
                 mMediaPlayer.start();
                 completed = false;
-                MainActivity.player_controller.setImageResource(R.drawable.ic_pause);
-                mainTrackController.setImageResource(R.drawable.ic_pause);
+                if (HomeActivity.isPlayerVisible) {
+                    mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
+                } else {
+                    mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
+                    player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
+                }
             }
         }
     }
@@ -132,7 +153,8 @@ public class PlayerFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            mCallback = (reloadCurrentInstanceListener) context;
+            mCallback = (onSmallPlayerTouchedListener) context;
+            Log.d("Attached", "TRUE");
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnHeadlineSelectedListener");
@@ -168,12 +190,15 @@ public class PlayerFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-//        MainActivity.ab.setShowHideAnimationEnabled(false);
-//        MainActivity.ab.hide();
-
         mainTrackController = (ImageView) view.findViewById(R.id.controller);
         nextTrackController = (ImageView) view.findViewById(R.id.next);
         previousTrackController = (ImageView) view.findViewById(R.id.previous);
+
+        selected_track_image = (ImageView) view.findViewById(R.id.selected_track_image_sp);
+        selected_track_title = (TextView) view.findViewById(R.id.selected_track_title_sp);
+        player_controller = (ImageView) view.findViewById(R.id.player_control_sp);
+
+        smallPlayer = (Toolbar) view.findViewById(R.id.smallPlayer);
 
         mVisualizerView = (VisualizerView) view.findViewById(R.id.myvisualizerview);
         mMediaPlayer = new MediaPlayer();
@@ -193,35 +218,46 @@ public class PlayerFragment extends Fragment {
             public void onCompletion(MediaPlayer mp) {
                 completed = true;
                 mVisualizer.release();
-                MainActivity.player_controller.setImageResource(R.drawable.ic_replay);
-                mainTrackController.setImageResource(R.drawable.ic_replay);
+                if (HomeActivity.isPlayerVisible) {
+                    mainTrackController.setImageResource(R.drawable.ic_replay_white_48dp);
+                } else {
+                    player_controller.setImageResource(R.drawable.ic_replay_white_48dp);
+                    mainTrackController.setImageResource(R.drawable.ic_replay_white_48dp);
+                }
+            }
+        });
+
+        smallPlayer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallback.onSmallPlayerTouched();
             }
         });
 
         mVisualizer = new Visualizer(mMediaPlayer.getAudioSessionId());
 
-        track = StreamMusicFragment.selectedTrack;
-        localTrack = LocalMusicFragment.selectedTrack;
+        track = HomeActivity.selectedTrack;
+        localTrack = HomeActivity.localSelectedTrack;
 
         mMediaPlayer.stop();
         mMediaPlayer.reset();
-        if (MainActivity.streamSelected) {
+        if (HomeActivity.streamSelected) {
             durationInMilliSec = track.getDuration();
-            if(track.getArtworkURL()!=null)
-                Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(MainActivity.selected_track_image);
-            else{
-                MainActivity.selected_track_image.setImageResource(R.drawable.ic_default);
+            if (track.getArtworkURL() != null)
+                Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(selected_track_image);
+            else {
+                selected_track_image.setImageResource(R.drawable.ic_default);
             }
-            MainActivity.selected_track_title.setText(track.getTitle());
+            selected_track_title.setText(track.getTitle());
         } else {
             durationInMilliSec = (int) localTrack.getDuration();
             Bitmap temp = LocalTrackListAdapter.getAlbumArt(localTrack.getPath());
-            if(temp!=null)
-                MainActivity.selected_track_image.setImageBitmap(temp);
-            else{
-                MainActivity.selected_track_image.setImageResource(R.drawable.ic_default);
+            if (temp != null)
+                selected_track_image.setImageBitmap(temp);
+            else {
+                selected_track_image.setImageResource(R.drawable.ic_default);
             }
-            MainActivity.selected_track_title.setText(localTrack.getTitle());
+            selected_track_title.setText(localTrack.getTitle());
         }
 
 
@@ -231,7 +267,7 @@ public class PlayerFragment extends Fragment {
         }
 
         try {
-            if (MainActivity.streamSelected) {
+            if (HomeActivity.streamSelected) {
                 mMediaPlayer.setDataSource(track.getStreamURL() + "?client_id=" + Config.CLIENT_ID);
                 mMediaPlayer.prepareAsync();
             } else {
@@ -242,13 +278,16 @@ public class PlayerFragment extends Fragment {
             e.printStackTrace();
         }
 
-        MainActivity.player_controller.setOnClickListener(new View.OnClickListener() {
+        player_controller.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!pauseClicked) {
                     pauseClicked = true;
                 }
-                togglePlayPause();
+                if (!HomeActivity.isPlayerVisible)
+                    togglePlayPause();
+                else
+                    mCallback.onSmallPlayerTouched();
             }
         });
 
@@ -270,12 +309,12 @@ public class PlayerFragment extends Fragment {
         t.scheduleAtFixedRate(
                 new TimerTask() {
                     public void run() {
-                        if (!PlayerFragment.isTracking && mMediaPlayer!=null && mMediaPlayer.isPlaying() && getActivity()!=null) {
+                        if (!PlayerFragment.isTracking && mMediaPlayer != null && getActivity() != null) {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     float[] hsv = new float[3];
-                                    hsv[0] = MainActivity.seekBarColor;
+                                    hsv[0] = HomeActivity.seekBarColor;
                                     hsv[1] = (float) 0.8;
                                     hsv[2] = (float) 0.5;
                                     progressBar.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(Color.HSVToColor(hsv), PorterDuff.Mode.SRC_IN));
@@ -284,9 +323,10 @@ public class PlayerFragment extends Fragment {
                             PlayerFragment.progressBar.setProgress(mMediaPlayer.getCurrentPosition());
                         }
                     }
-                }, 0, 10);
+                }, 0, 50);
 
         progressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
@@ -294,18 +334,21 @@ public class PlayerFragment extends Fragment {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
+                Log.d("TOUCHED", "START");
                 startTrack = System.currentTimeMillis();
                 isTracking = true;
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                Log.d("TOUCHED", "STOPPED");
                 endTrack = System.currentTimeMillis();
                 deltaTime += (endTrack - startTrack);
                 mMediaPlayer.seekTo(seekBar.getProgress());
                 mMediaPlayer.start();
                 isTracking = false;
             }
+
         });
 
     }
@@ -323,8 +366,8 @@ public class PlayerFragment extends Fragment {
         }
     }
 
-    public interface reloadCurrentInstanceListener {
-        void reloadCurrentInstance();
+    public interface onSmallPlayerTouchedListener {
+        void onSmallPlayerTouched();
     }
 
 }

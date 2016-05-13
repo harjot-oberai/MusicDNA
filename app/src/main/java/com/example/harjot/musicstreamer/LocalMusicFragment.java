@@ -12,16 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 
 import com.example.harjot.musicstreamer.Models.LocalTrack;
 
-import java.io.File;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -42,7 +37,7 @@ public class LocalMusicFragment extends Fragment {
     }
 
     public interface OnLocalTrackSelectedListener {
-         void onLocalTrackSelected(int position);
+        void onLocalTrackSelected(int position);
     }
 
     @Override

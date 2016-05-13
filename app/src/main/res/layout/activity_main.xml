@@ -41,50 +41,50 @@
     </FrameLayout>
 
     <android.support.v7.widget.Toolbar
-        android:background="#111"
+        android:id="@+id/bottomPlayer"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:layout_marginBottom="0dp"
-        android:id="@+id/bottomPlayer"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="0dp"
+        android:background="#111"
         android:visibility="invisible">
-        <de.hdodenhof.circleimageview.CircleImageView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/selected_track_image_bp"
             android:layout_width="54dp"
             android:layout_height="54dp"
-            app:civ_border_width="0dp"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/myvisualizerview"
             android:layout_marginLeft="0dp"
             android:layout_marginTop="8dp"
-            app:civ_border_color="#FF000000"
             android:visibility="visible"
-            android:layout_below="@+id/myvisualizerview"
-            android:layout_alignParentStart="true" />
+            app:civ_border_color="#FF000000"
+            app:civ_border_width="0dp" />
 
         <TextView
             android:id="@+id/selected_track_title_bp"
-            android:textAlignment="center"
-            android:textColor="#FFFFFF"
             android:layout_width="200dp"
-            android:text="Title"
-            android:textSize="13dp"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/player_control"
+            android:layout_alignParentStart="true"
             android:layout_marginLeft="35dp"
             android:layout_marginTop="0dp"
             android:ellipsize="end"
             android:singleLine="false"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/player_control"
-            android:layout_alignParentStart="true" />
+            android:text="Title"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textSize="13dp" />
 
         <ImageView
             android:id="@+id/player_control_bp"
-            android:layout_gravity="right|center_vertical"
-            android:layout_marginBottom="5dp"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_marginRight="10dp"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="10dp" />
 
     </android.support.v7.widget.Toolbar>
 

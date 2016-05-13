@@ -4,25 +4,34 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_stream"
-            android:icon="@drawable/ic_stream"
-            android:title="Stream" />
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Stream Music"
+            android:checked="true"/>
         <item
             android:id="@+id/nav_local"
-            android:icon="@drawable/ic_local"
-            android:title="Local" />
+            android:icon="@drawable/ic_library_music_black_48dp"
+            android:title="Local Music" />
         <item
-            android:id="@+id/nav_random"
-            android:icon="@drawable/ic_random"
-            android:title="Random" />
+            android:id="@+id/nav_playlists"
+            android:icon="@drawable/ic_queue_music_black_48dp"
+            android:title="Playlists" />
         <item
-            android:id="@+id/nav_my_music"
-            android:icon="@drawable/ic_my_music"
-            android:title="My Music" />
+            android:id="@+id/nav_manage"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Settings" />
     </group>
 
-    <item
-        android:id="@+id/nav_settings"
-        android:icon="@drawable/ic_settings"
-        android:title="Settings" />
+    <item android:title="My Account">
+        <menu>
+            <item
+                android:id="@+id/nav_profile"
+                android:icon="@drawable/ic_person_outline_black_48dp"
+                android:title="My Profile" />
+            <item
+                android:id="@+id/nav_account_settings"
+                android:icon="@drawable/ic_settings_black_48dp"
+                android:title="Manage Account" />
+        </menu>
+    </item>
 
 </menu>

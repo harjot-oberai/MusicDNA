@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -41,9 +42,13 @@ public class PlayerFragment extends Fragment {
     public static MediaPlayer mMediaPlayer;
     public static Visualizer mVisualizer;
 
+    static CustomProgressBar cpb;
+
     public static ImageView mainTrackController;
     public static ImageView nextTrackController;
     public static ImageView previousTrackController;
+
+    static RelativeLayout bottomContainer;
 
     static ImageView selected_track_image;
     static TextView selected_track_title;
@@ -52,6 +57,8 @@ public class PlayerFragment extends Fragment {
     static Toolbar smallPlayer;
 
     public static SeekBar progressBar;
+//    public static SeekBar progressBar2;
+
     public static int durationInMilliSec;
     static boolean completed = false;
     static boolean pauseClicked = false;
@@ -200,7 +207,11 @@ public class PlayerFragment extends Fragment {
 
         smallPlayer = (Toolbar) view.findViewById(R.id.smallPlayer);
 
+        bottomContainer = (RelativeLayout) view.findViewById(R.id.bottomContainer);
+
         mVisualizerView = (VisualizerView) view.findViewById(R.id.myvisualizerview);
+        cpb = (CustomProgressBar) view.findViewById(R.id.customProgress);
+
         mMediaPlayer = new MediaPlayer();
         mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -302,8 +313,10 @@ public class PlayerFragment extends Fragment {
         });
 
         progressBar = (SeekBar) view.findViewById(R.id.progressBar);
+//        progressBar2 = (SeekBar) view.findViewById(R.id.progressBar2);
 
         progressBar.setMax(durationInMilliSec);
+//        progressBar2.setMax(durationInMilliSec);
 
         t = new Timer();
         t.scheduleAtFixedRate(
@@ -318,9 +331,12 @@ public class PlayerFragment extends Fragment {
                                     hsv[1] = (float) 0.8;
                                     hsv[2] = (float) 0.5;
                                     progressBar.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(Color.HSVToColor(hsv), PorterDuff.Mode.SRC_IN));
+//                                    progressBar2.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(Color.HSVToColor(hsv), PorterDuff.Mode.SRC_IN));
+                                    cpb.update();
                                 }
                             });
-                            PlayerFragment.progressBar.setProgress(mMediaPlayer.getCurrentPosition());
+                            progressBar.setProgress(mMediaPlayer.getCurrentPosition());
+//                            progressBar2.setProgress(mMediaPlayer.getCurrentPosition());
                         }
                     }
                 }, 0, 50);
@@ -350,6 +366,31 @@ public class PlayerFragment extends Fragment {
             }
 
         });
+//        progressBar2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+//
+//            @Override
+//            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+//
+//            }
+//
+//            @Override
+//            public void onStartTrackingTouch(SeekBar seekBar) {
+//                Log.d("TOUCHED", "START");
+//                startTrack = System.currentTimeMillis();
+//                isTracking = true;
+//            }
+//
+//            @Override
+//            public void onStopTrackingTouch(SeekBar seekBar) {
+//                Log.d("TOUCHED", "STOPPED");
+//                endTrack = System.currentTimeMillis();
+//                deltaTime += (endTrack - startTrack);
+//                mMediaPlayer.seekTo(seekBar.getProgress());
+//                mMediaPlayer.start();
+//                isTracking = false;
+//            }
+//
+//        });
 
     }
 

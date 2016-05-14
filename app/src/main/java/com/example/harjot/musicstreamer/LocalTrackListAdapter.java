@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.harjot.musicstreamer.Models.LocalTrack;
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -52,6 +55,7 @@ public class LocalTrackListAdapter extends BaseAdapter {
         ImageView tr_img = (ImageView) v.findViewById(R.id.img);
         LocalTrack track = localTracks.get(position);
         tr_title.setText(track.getTitle());
+//        Picasso.with(ctx).load(new File(track.getPath())).into(tr_img);
         Bitmap img = getAlbumArt(track.getPath());
         if(img!=null){
             tr_img.setImageBitmap(img);
@@ -68,9 +72,6 @@ public class LocalTrackListAdapter extends BaseAdapter {
         Bitmap bitmap = null;
 
         byte [] data = mmr.getEmbeddedPicture();
-        //coverart is an Imageview object
-
-        // convert the byte array to a bitmap
         if(data != null) {
             bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
             return bitmap;

@@ -19,24 +19,28 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Pair;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.ListView;
 
 import com.example.harjot.musicstreamer.Interfaces.StreamService;
 import com.example.harjot.musicstreamer.Models.LocalTrack;
 import com.example.harjot.musicstreamer.Models.Track;
+import com.example.harjot.musicstreamer.Models.UnifiedTrack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,20 +58,26 @@ public class HomeActivity extends AppCompatActivity
     public static List<LocalTrack> finalLocalSearchResultList = new ArrayList<>();
     public static List<Track> streamingTrackList = new ArrayList<>();
 
+    private List<UnifiedTrack> recentlyPlayed = new ArrayList<>();
+    private List<UnifiedTrack> favouriteTracks = new ArrayList<>();
+    private List<UnifiedTrack> queue = new ArrayList<>();
+    private Pair<String, List<UnifiedTrack>> tempPlaylist;
+    private List<Pair<String, List<UnifiedTrack>>> playlists;
+
     Context ctx;
 
     DrawerLayout drawer;
 
-    LocalTrackListAdapter adapter;
-    StreamTrackListAdapter sAdapter;
+    LocalTracksHorizontalAdapter adapter;
+    StreamTracksHorizontalAdapter sAdapter;
 
     Call<List<Track>> call;
 
     SearchView searchView;
     MenuItem searchItem;
 
-    ListView localListView;
-    ListView streamingListView;
+    RecyclerView streamingListView;
+    RecyclerView localListView;
 
     static Toolbar toolbar;
 
@@ -97,8 +107,6 @@ public class HomeActivity extends AppCompatActivity
         searchView.setQuery("", false);
         searchView.setIconified(true);
 
-        PlayerFragment.localIsPlaying = false;
-//        bottomPlayer.setVisibility(View.VISIBLE);
         hideTabs();
         isPlayerVisible = true;
 
@@ -138,6 +146,7 @@ public class HomeActivity extends AppCompatActivity
         }
 
         showPlayer();
+        PlayerFragment.localIsPlaying = false;
         PlayerFragment.track = streamingTrackList.get(position);
 
     }
@@ -148,8 +157,6 @@ public class HomeActivity extends AppCompatActivity
         searchView.setQuery("", false);
         searchView.setIconified(true);
 
-        PlayerFragment.localIsPlaying = true;
-//        bottomPlayer.setVisibility(View.VISIBLE);
         hideTabs();
         isPlayerVisible = true;
 
@@ -187,6 +194,7 @@ public class HomeActivity extends AppCompatActivity
         }
 
         showPlayer();
+        PlayerFragment.localIsPlaying = true;
         PlayerFragment.localTrack = localTrackList.get(position);
     }
 
@@ -226,69 +234,57 @@ public class HomeActivity extends AppCompatActivity
 
         getLocalSongs();
 
-        adapter = new LocalTrackListAdapter(finalLocalSearchResultList, this);
-
-        localListView = (ListView) findViewById(R.id.localMusicList_home);
+        adapter = new LocalTracksHorizontalAdapter(finalLocalSearchResultList);
+        localListView = (RecyclerView) findViewById(R.id.localMusicList_home);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        localListView.setLayoutManager(mLayoutManager);
+        localListView.setItemAnimator(new DefaultItemAnimator());
         localListView.setAdapter(adapter);
 
-        streamingListView = (ListView) findViewById(R.id.trackList_home);
-
-        localListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        localListView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), localListView, new ClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onClick(View view, int position) {
                 LocalTrack track = finalLocalSearchResultList.get(position);
                 localSelectedTrack = track;
                 streamSelected = false;
                 localSelected = true;
                 onLocalTrackSelected(position);
             }
-        });
 
-        streamingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
+
+        streamingListView = (RecyclerView) findViewById(R.id.trackList_home);
+
+        streamingListView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), localListView, new ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
                 Track track = streamingTrackList.get(position);
                 selectedTrack = track;
                 streamSelected = true;
                 localSelected = false;
                 onTrackSelected(position);
             }
-        });
 
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
 
         playerContainer = findViewById(R.id.playerFragContainer);
 
         requestPermissions();
-
-//        player_controller = (ImageView) findViewById(R.id.player_control_bp);
-
-//        bottomPlayer = (Toolbar) findViewById(R.id.bottomPlayer);
-//        bottomPlayer.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                android.app.Fragment frag = getFragmentManager().findFragmentByTag("player");
-//                android.app.FragmentManager fm = getFragmentManager();
-//                if (!isPlayerVisible) {
-//                    isPlayerVisible = true;
-//                    hideTabs();
-//                    showPlayer();
-//                    moveBottomPlayerUP();
-//                } else {
-//                    isPlayerVisible = false;
-//                    showTabs();
-//                    hidePlayer();
-//                    moveBottomPlayerDown();
-//                }
-//            }
-//        });
-
 
     }
 
     private void getLocalSongs() {
         ContentResolver musicResolver = this.getContentResolver();
         Uri musicUri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        Cursor musicCursor = musicResolver.query(musicUri, null, null, null, null);
+        Cursor musicCursor = musicResolver.query(musicUri, null, MediaStore.Audio.Media.DATA + " like ? ", new String[]{"%Music%"}, null);
 
         if (musicCursor != null && musicCursor.moveToFirst()) {
             //get columns
@@ -414,7 +410,7 @@ public class HomeActivity extends AppCompatActivity
                 finalLocalSearchResultList.add(lt);
             }
         }
-        ((BaseAdapter) localListView.getAdapter()).notifyDataSetChanged();
+        (localListView.getAdapter()).notifyDataSetChanged();
 
 
     }
@@ -429,7 +425,7 @@ public class HomeActivity extends AppCompatActivity
 
         /*Update the Streaming List*/
 
-        if (query != "") {
+        if (!query.equals("")) {
             Retrofit client = new Retrofit.Builder()
                     .baseUrl(Config.API_URL)
                     .addConverterFactory(GsonConverterFactory.create())
@@ -444,9 +440,12 @@ public class HomeActivity extends AppCompatActivity
                         // request successful (status code 200, 201)
                         Log.d("RETRO", response.body() + "");
                         streamingTrackList = response.body();
-                        sAdapter = new StreamTrackListAdapter(ctx, streamingTrackList);
+                        sAdapter = new StreamTracksHorizontalAdapter(streamingTrackList, ctx);
+                        LinearLayoutManager mLayoutManager = new LinearLayoutManager(ctx, LinearLayoutManager.HORIZONTAL, false);
+                        streamingListView.setLayoutManager(mLayoutManager);
+                        streamingListView.setItemAnimator(new DefaultItemAnimator());
                         streamingListView.setAdapter(sAdapter);
-                        ((BaseAdapter) streamingListView.getAdapter()).notifyDataSetChanged();
+                        (streamingListView.getAdapter()).notifyDataSetChanged();
                     } else {
                         //request not successful (like 400,401,403 etc)
                         //Handle errors
@@ -458,28 +457,9 @@ public class HomeActivity extends AppCompatActivity
                     Log.d("RETRO", t.getMessage());
                 }
             });
-//            try {
-//                Response<List<Track>> response = call.execute();
-//                if (response.isSuccess()) {
-//                    // request successful (status code 200, 201)
-//                    Log.d("RETRO", response.body() + "");
-//                    streamingTrackList = response.body();
-//                    sAdapter = new StreamTrackListAdapter(ctx, streamingTrackList);
-//                    streamingListView.setAdapter(sAdapter);
-//                    ((BaseAdapter) streamingListView.getAdapter()).notifyDataSetChanged();
-//                } else {
-//                    //request not successful (like 400,401,403 etc)
-//                    //Handle errors
-//                }
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
 
         } else {
-            streamingTrackList.clear();
-            sAdapter = new StreamTrackListAdapter(ctx, streamingTrackList);
-            streamingListView.setAdapter(sAdapter);
-            ((BaseAdapter) streamingListView.getAdapter()).notifyDataSetChanged();
+
         }
 
     }
@@ -585,6 +565,13 @@ public class HomeActivity extends AppCompatActivity
             PlayerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
+        if (PlayerFragment.cpb != null) {
+            PlayerFragment.cpb.setAlpha(0.0f);
+            PlayerFragment.cpb.setVisibility(View.VISIBLE);
+            PlayerFragment.cpb.animate()
+                    .alpha(1.0f);
+        }
+
         playerContainer.setVisibility(View.VISIBLE);
 
         playerContainer.animate()
@@ -595,6 +582,11 @@ public class HomeActivity extends AppCompatActivity
 
         PlayerFragment.player_controller.animate()
                 .alpha(1.0f);
+//        if (PlayerFragment.progressBar2 != null) {
+//            PlayerFragment.progressBar2.setVisibility(View.VISIBLE);
+//            PlayerFragment.progressBar2.animate()
+//                    .alpha(1.0f);
+//        }
 
 
     }
@@ -614,6 +606,27 @@ public class HomeActivity extends AppCompatActivity
             PlayerFragment.player_controller.animate()
                     .alpha(0.0f);
         }
+
+        if (PlayerFragment.cpb != null) {
+            PlayerFragment.cpb.animate()
+                    .alpha(0.0f)
+                    .withEndAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            PlayerFragment.cpb.setVisibility(View.INVISIBLE);
+                        }
+                    });
+        }
+//        if (PlayerFragment.progressBar2 != null) {
+//            PlayerFragment.progressBar2.animate()
+//                    .alpha(0.0f)
+//                    .withEndAction(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            PlayerFragment.progressBar2.setVisibility(View.GONE);
+//                        }
+//                    });
+//        }
 
         playerContainer.animate()
                 .setDuration(300)
@@ -917,4 +930,66 @@ public class HomeActivity extends AppCompatActivity
                 call.cancel();
         }
     }
+
+    public int dpToPx(int dp) {
+        DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
+        int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+        return px;
+    }
+
+    public int pxToDp(int px) {
+        DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
+        int dp = Math.round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+        return dp;
+    }
+
+    public interface ClickListener {
+        void onClick(View view, int position);
+
+        void onLongClick(View view, int position);
+    }
+
+    public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
+
+        private GestureDetector gestureDetector;
+        private HomeActivity.ClickListener clickListener;
+
+        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final HomeActivity.ClickListener clickListener) {
+            this.clickListener = clickListener;
+            gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onSingleTapUp(MotionEvent e) {
+                    return true;
+                }
+
+                @Override
+                public void onLongPress(MotionEvent e) {
+                    View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
+                    if (child != null && clickListener != null) {
+                        clickListener.onLongClick(child, recyclerView.getChildPosition(child));
+                    }
+                }
+            });
+        }
+
+        @Override
+        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+
+            View child = rv.findChildViewUnder(e.getX(), e.getY());
+            if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
+                clickListener.onClick(child, rv.getChildPosition(child));
+            }
+            return false;
+        }
+
+        @Override
+        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+        }
+
+        @Override
+        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+        }
+    }
+
 }

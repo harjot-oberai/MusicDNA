@@ -4,82 +4,67 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F1F1F1"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.harjot.musicstreamer.HomeActivity"
     tools:showIn="@layout/app_bar_home">
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/localRecyclerContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:background="#FFF">
 
-        <ListView
+        <TextView
+            android:id="@+id/localRecyclerLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:text="Local"
+            android:textColor="#000"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/localMusicList_home"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"></ListView>
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/localRecyclerLabel"
+            android:padding="5dp"></android.support.v7.widget.RecyclerView>
+    </RelativeLayout>
 
-        <ListView
+    <RelativeLayout
+        android:id="@+id/streamRecyclerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/localRecyclerContainer"
+        android:layout_marginTop="5dp"
+        android:background="#FFF">
+
+        <TextView
+            android:id="@+id/streamRecyclerLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:text="SoundCloud"
+            android:textColor="#000"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/trackList_home"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/streamRecyclerLabel"
             android:layout_marginTop="10dp"
-            android:layout_weight="1"
-            android:padding="5dp"></ListView>
-    </LinearLayout>
+            android:padding="5dp"></android.support.v7.widget.RecyclerView>
+    </RelativeLayout>
 
     <FrameLayout
         android:id="@+id/playerFragContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </FrameLayout>
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/bottomPlayer"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="0dp"
-        android:background="#111"
-        android:visibility="invisible">
-
-        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/selected_track_image_bp"
-            android:layout_width="54dp"
-            android:layout_height="54dp"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/myvisualizerview"
-            android:layout_marginLeft="0dp"
-            android:layout_marginTop="8dp"
-            android:visibility="visible"
-            app:civ_border_color="#FF000000"
-            app:civ_border_width="0dp" />
-
-        <TextView
-            android:id="@+id/selected_track_title_bp"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/player_control"
-            android:layout_alignParentStart="true"
-            android:layout_marginLeft="35dp"
-            android:layout_marginTop="0dp"
-            android:ellipsize="end"
-            android:singleLine="false"
-            android:text="Title"
-            android:textAlignment="center"
-            android:textColor="#FFFFFF"
-            android:textSize="13dp" />
-
-        <ImageView
-            android:id="@+id/player_control_bp"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="right|center_vertical"
-            android:layout_marginBottom="5dp"
-            android:layout_marginRight="10dp" />
-
-    </android.support.v7.widget.Toolbar>
+        android:layout_height="match_parent"></FrameLayout>
 
 </RelativeLayout>

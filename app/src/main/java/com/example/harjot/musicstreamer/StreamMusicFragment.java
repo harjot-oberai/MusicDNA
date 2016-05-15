@@ -4,7 +4,9 @@ package com.example.harjot.musicstreamer;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -19,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.harjot.musicstreamer.Interfaces.StreamService;
 import com.example.harjot.musicstreamer.Models.Track;
+import com.example.harjot.musicstreamer.Models.UnifiedTrack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +59,7 @@ public class StreamMusicFragment extends Fragment {
 
     EditText query;
     Button searchBtn;
-    ListView listView;
+    static ListView listView;
 
     public StreamMusicFragment() {
         // Required empty public constructor
@@ -135,14 +138,49 @@ public class StreamMusicFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Track track = tracks.get(position);
+                Track track = HomeActivity.streamingTrackList.get(position);
+                if (HomeActivity.queue.getQueue().size() == 0) {
+                    HomeActivity.queue.getQueue().add(new UnifiedTrack(false, null, track));
+                } else if (HomeActivity.queueCurrentIndex == HomeActivity.queue.getQueue().size() - 1) {
+                    HomeActivity.queue.getQueue().add(new UnifiedTrack(false, null, track));
+                } else if (HomeActivity.isReloaded) {
+                    HomeActivity.queueCurrentIndex = HomeActivity.queue.getQueue().size();
+                    HomeActivity.queue.getQueue().add(new UnifiedTrack(false, null, track));
+                } else {
+                    HomeActivity.queue.getQueue().add(++HomeActivity.queueCurrentIndex, new UnifiedTrack(false, null, track));
+                }
                 selectedTrack = track;
-                MainActivity.streamSelected = true;
-                MainActivity.localSelected = false;
-                //Toast.makeText(getContext(), track.getTitle(), Toast.LENGTH_SHORT).show();
+                HomeActivity.streamSelected = true;
+                HomeActivity.localSelected = false;
+                HomeActivity.queueCall = false;
+                HomeActivity.isReloaded = false;
                 mCallback.onTrackSelected(position);
             }
         });
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                PopupMenu popup = new PopupMenu(HomeActivity.ctx, view);
+                popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
+
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (item.getTitle().equals("Add to Playlist")) {
+                            HomeActivity.showAddToPlaylistDialog(new UnifiedTrack(false, null, HomeActivity.streamingTrackList.get(position)));
+                            HomeActivity.pAdapter.notifyDataSetChanged();
+                        }
+                        if (item.getTitle().equals("Add to Queue")) {
+                            HomeActivity.queue.getQueue().add(new UnifiedTrack(false, null, HomeActivity.streamingTrackList.get(position)));
+                        }
+                        return true;
+                    }
+                });
+                popup.show();
+                return false;
+            }
+        });
+
         return view;
     }
 

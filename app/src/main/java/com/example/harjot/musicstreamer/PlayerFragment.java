@@ -30,8 +30,6 @@ import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-//import android.support.v4.app.Fragment;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -57,7 +55,6 @@ public class PlayerFragment extends Fragment {
     static Toolbar smallPlayer;
 
     public static SeekBar progressBar;
-//    public static SeekBar progressBar2;
 
     public static int durationInMilliSec;
     static boolean completed = false;
@@ -74,7 +71,12 @@ public class PlayerFragment extends Fragment {
     static long deltaTime = 0;
     static Track track;
     static LocalTrack localTrack;
+
     static onSmallPlayerTouchedListener mCallback;
+    static onCompleteListener mCallback2;
+    static onPreviousTrackListener mCallback3;
+
+
     long startTrack;
     long endTrack;
 
@@ -116,7 +118,8 @@ public class PlayerFragment extends Fragment {
             }
             pauseTime = System.currentTimeMillis();
             totalElapsedTime += (pauseTime - startTime);
-            mVisualizer.release();
+
+            mVisualizer.setEnabled(false);
         } else {
             if (pauseClicked) {
                 startTime = System.currentTimeMillis();
@@ -161,6 +164,8 @@ public class PlayerFragment extends Fragment {
         super.onAttach(context);
         try {
             mCallback = (onSmallPlayerTouchedListener) context;
+            mCallback2 = (onCompleteListener) context;
+            mCallback3 = (onPreviousTrackListener) context;
             Log.d("Attached", "TRUE");
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
@@ -191,6 +196,14 @@ public class PlayerFragment extends Fragment {
     public void onResume() {
         super.onResume();
         //mVisualizerView.onResumeMySurfaceView();
+    }
+
+    public interface onCompleteListener {
+        public void onComplete();
+    }
+
+    public interface onPreviousTrackListener {
+        public void onPreviousTrack();
     }
 
     @Override
@@ -235,6 +248,9 @@ public class PlayerFragment extends Fragment {
                     player_controller.setImageResource(R.drawable.ic_replay_white_48dp);
                     mainTrackController.setImageResource(R.drawable.ic_replay_white_48dp);
                 }
+                mCallback2.onComplete();
+                completed = false;
+
             }
         });
 
@@ -250,6 +266,7 @@ public class PlayerFragment extends Fragment {
         track = HomeActivity.selectedTrack;
         localTrack = HomeActivity.localSelectedTrack;
 
+        mMediaPlayer.pause();
         mMediaPlayer.stop();
         mMediaPlayer.reset();
         if (HomeActivity.streamSelected) {
@@ -273,6 +290,7 @@ public class PlayerFragment extends Fragment {
 
 
         if (mMediaPlayer.isPlaying()) {
+            mMediaPlayer.pause();
             mMediaPlayer.stop();
             mMediaPlayer.reset();
         }
@@ -312,17 +330,31 @@ public class PlayerFragment extends Fragment {
             }
         });
 
+        nextTrackController.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mMediaPlayer.pause();
+                mCallback2.onComplete();
+            }
+        });
+
+        previousTrackController.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mMediaPlayer.pause();
+                mCallback3.onPreviousTrack();
+            }
+        });
+
         progressBar = (SeekBar) view.findViewById(R.id.progressBar);
-//        progressBar2 = (SeekBar) view.findViewById(R.id.progressBar2);
 
         progressBar.setMax(durationInMilliSec);
-//        progressBar2.setMax(durationInMilliSec);
 
         t = new Timer();
         t.scheduleAtFixedRate(
                 new TimerTask() {
                     public void run() {
-                        if (!PlayerFragment.isTracking && mMediaPlayer != null && getActivity() != null) {
+                        if (!PlayerFragment.isTracking && mMediaPlayer != null && mMediaPlayer.isPlaying() && getActivity() != null) {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -331,12 +363,10 @@ public class PlayerFragment extends Fragment {
                                     hsv[1] = (float) 0.8;
                                     hsv[2] = (float) 0.5;
                                     progressBar.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(Color.HSVToColor(hsv), PorterDuff.Mode.SRC_IN));
-//                                    progressBar2.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(Color.HSVToColor(hsv), PorterDuff.Mode.SRC_IN));
                                     cpb.update();
                                 }
                             });
                             progressBar.setProgress(mMediaPlayer.getCurrentPosition());
-//                            progressBar2.setProgress(mMediaPlayer.getCurrentPosition());
                         }
                     }
                 }, 0, 50);
@@ -366,31 +396,6 @@ public class PlayerFragment extends Fragment {
             }
 
         });
-//        progressBar2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-//
-//            @Override
-//            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-//
-//            }
-//
-//            @Override
-//            public void onStartTrackingTouch(SeekBar seekBar) {
-//                Log.d("TOUCHED", "START");
-//                startTrack = System.currentTimeMillis();
-//                isTracking = true;
-//            }
-//
-//            @Override
-//            public void onStopTrackingTouch(SeekBar seekBar) {
-//                Log.d("TOUCHED", "STOPPED");
-//                endTrack = System.currentTimeMillis();
-//                deltaTime += (endTrack - startTrack);
-//                mMediaPlayer.seekTo(seekBar.getProgress());
-//                mMediaPlayer.start();
-//                isTracking = false;
-//            }
-//
-//        });
 
     }
 
@@ -409,6 +414,167 @@ public class PlayerFragment extends Fragment {
 
     public interface onSmallPlayerTouchedListener {
         void onSmallPlayerTouched();
+    }
+
+    public void refresh() {
+
+        totalElapsedTime = 0;
+        startTime = 0;
+        pauseTime = 0;
+        deltaTime = 0;
+
+        mVisualizerView.clear();
+
+        if (mMediaPlayer.isPlaying()) {
+            mMediaPlayer.pause();
+            mMediaPlayer.stop();
+            mMediaPlayer.reset();
+        }
+
+        mMediaPlayer = new MediaPlayer();
+        mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                startTime = System.currentTimeMillis();
+                completed = false;
+                pauseClicked = false;
+                togglePlayPause();
+            }
+        });
+
+        mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                completed = true;
+                mVisualizer.release();
+                if (HomeActivity.isPlayerVisible) {
+                    mainTrackController.setImageResource(R.drawable.ic_replay_white_48dp);
+                } else {
+                    player_controller.setImageResource(R.drawable.ic_replay_white_48dp);
+                    mainTrackController.setImageResource(R.drawable.ic_replay_white_48dp);
+                }
+                mCallback2.onComplete();
+
+            }
+        });
+
+        smallPlayer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallback.onSmallPlayerTouched();
+            }
+        });
+
+        mVisualizer = new Visualizer(mMediaPlayer.getAudioSessionId());
+
+        track = HomeActivity.selectedTrack;
+        localTrack = HomeActivity.localSelectedTrack;
+
+        if (HomeActivity.streamSelected) {
+            durationInMilliSec = track.getDuration();
+            if (track.getArtworkURL() != null)
+                Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(selected_track_image);
+            else {
+                selected_track_image.setImageResource(R.drawable.ic_default);
+            }
+            selected_track_title.setText(track.getTitle());
+        } else {
+            durationInMilliSec = (int) localTrack.getDuration();
+            Bitmap temp = LocalTrackListAdapter.getAlbumArt(localTrack.getPath());
+            if (temp != null)
+                selected_track_image.setImageBitmap(temp);
+            else {
+                selected_track_image.setImageResource(R.drawable.ic_default);
+            }
+            selected_track_title.setText(localTrack.getTitle());
+        }
+
+        try {
+            if (HomeActivity.streamSelected) {
+                mMediaPlayer.setDataSource(track.getStreamURL() + "?client_id=" + Config.CLIENT_ID);
+                mMediaPlayer.prepareAsync();
+            } else {
+                mMediaPlayer.setDataSource(localTrack.getPath());
+                mMediaPlayer.prepareAsync();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        player_controller.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!pauseClicked) {
+                    pauseClicked = true;
+                }
+                if (!HomeActivity.isPlayerVisible)
+                    togglePlayPause();
+                else
+                    mCallback.onSmallPlayerTouched();
+            }
+        });
+
+        mainTrackController.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!pauseClicked) {
+                    pauseClicked = true;
+                }
+                togglePlayPause();
+            }
+        });
+
+//        progressBar = (SeekBar) view.findViewById(R.id.progressBar);
+
+        progressBar.setMax(durationInMilliSec);
+
+        t = new Timer();
+        t.scheduleAtFixedRate(
+                new TimerTask() {
+                    public void run() {
+                        if (!PlayerFragment.isTracking && mMediaPlayer != null && mMediaPlayer.isPlaying() && getActivity() != null) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    float[] hsv = new float[3];
+                                    hsv[0] = HomeActivity.seekBarColor;
+                                    hsv[1] = (float) 0.8;
+                                    hsv[2] = (float) 0.5;
+                                    progressBar.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(Color.HSVToColor(hsv), PorterDuff.Mode.SRC_IN));
+                                    cpb.update();
+                                }
+                            });
+                            progressBar.setProgress(mMediaPlayer.getCurrentPosition());
+                        }
+                    }
+                }, 0, 50);
+
+        progressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                Log.d("TOUCHED", "START");
+                startTrack = System.currentTimeMillis();
+                isTracking = true;
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                Log.d("TOUCHED", "STOPPED");
+                endTrack = System.currentTimeMillis();
+                deltaTime += (endTrack - startTrack);
+                mMediaPlayer.seekTo(seekBar.getProgress());
+                mMediaPlayer.start();
+                isTracking = false;
+            }
+
+        });
     }
 
 }

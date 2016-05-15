@@ -9,62 +9,144 @@
     tools:context="com.example.harjot.musicstreamer.HomeActivity"
     tools:showIn="@layout/app_bar_home">
 
-    <RelativeLayout
-        android:id="@+id/localRecyclerContainer"
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#FFF">
+        android:layout_above="@+id/bottomMargin"
+        android:layout_alignParentTop="true"
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/localRecyclerLabel"
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
-            android:text="Local"
-            android:textColor="#000"
-            android:textSize="20dp"
-            android:textStyle="bold" />
+            android:layout_height="match_parent"
+            android:padding="5dp">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/localMusicList_home"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/localRecyclerLabel"
-            android:padding="5dp"></android.support.v7.widget.RecyclerView>
-    </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/localRecyclerContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFF">
 
-    <RelativeLayout
-        android:id="@+id/streamRecyclerContainer"
+                <TextView
+                    android:id="@+id/localRecyclerLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Local"
+                    android:textColor="#000"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/localMusicList_home"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/localRecyclerLabel"
+                    android:padding="5dp"></android.support.v7.widget.RecyclerView>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/streamRecyclerContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/localRecyclerContainer"
+                android:layout_marginTop="5dp"
+                android:background="#FFF">
+
+                <TextView
+                    android:id="@+id/streamRecyclerLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:text="SoundCloud"
+                    android:textColor="#000"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/trackList_home"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/streamRecyclerLabel"
+                    android:layout_marginTop="10dp"
+                    android:padding="5dp"></android.support.v7.widget.RecyclerView>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_below="@+id/streamRecyclerContainer"
+                android:id="@+id/recentsRecyclerContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="#FFF">
+
+                <TextView
+                    android:id="@+id/recentsRecyclerLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Recently Played"
+                    android:textColor="#000"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recentsMusicList_home"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/recentsRecyclerLabel"
+                    android:padding="5dp"></android.support.v7.widget.RecyclerView>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/playlistRecyclerContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/recentsRecyclerContainer"
+                android:layout_marginTop="5dp"
+                android:background="#FFF">
+
+                <TextView
+                    android:id="@+id/playListRecyclerLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Playlists"
+                    android:textColor="#000"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/playlist_home"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/playListRecyclerLabel"
+                    android:layout_marginTop="10dp"
+                    android:padding="5dp"></android.support.v7.widget.RecyclerView>
+            </RelativeLayout>
+
+        </RelativeLayout>
+    </ScrollView>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/localRecyclerContainer"
-        android:layout_marginTop="5dp"
-        android:background="#FFF">
-
-        <TextView
-            android:id="@+id/streamRecyclerLabel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
-            android:text="SoundCloud"
-            android:textColor="#000"
-            android:textSize="20dp"
-            android:textStyle="bold" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/trackList_home"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/streamRecyclerLabel"
-            android:layout_marginTop="10dp"
-            android:padding="5dp"></android.support.v7.widget.RecyclerView>
-    </RelativeLayout>
+        android:id="@+id/bottomMargin"
+        android:orientation="horizontal"
+        android:layout_height="70dp"
+        android:background="#F1F1F1"
+        android:layout_alignParentBottom="true"></LinearLayout>
 
     <FrameLayout
         android:id="@+id/playerFragContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"></FrameLayout>
-
 </RelativeLayout>
+
+

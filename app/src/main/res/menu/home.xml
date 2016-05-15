@@ -15,5 +15,10 @@
         android:orderInCategory="200"
         android:title="@string/action_settings"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_queue"
+        android:orderInCategory="300"
+        android:title="@string/action_settings"
+        app:showAsAction="never"/>
 
 </menu>

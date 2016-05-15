@@ -8,13 +8,17 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.PopupMenu;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.harjot.musicstreamer.Models.LocalTrack;
+import com.example.harjot.musicstreamer.Models.UnifiedTrack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,12 +29,10 @@ import java.util.List;
  */
 public class LocalMusicFragment extends Fragment {
 
-    private LocalTrackListAdapter adapter;
-    private List<LocalTrack> songsList = new ArrayList<>();
-
-    public static LocalTrack selectedTrack;
-
+    static LocalTrackListAdapter adapter;
     OnLocalTrackSelectedListener mCallback;
+
+    static ListView lv;
 
     public LocalMusicFragment() {
         // Required empty public constructor
@@ -62,47 +64,54 @@ public class LocalMusicFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ContentResolver musicResolver = getActivity().getContentResolver();
-        Uri musicUri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        Cursor musicCursor = musicResolver.query(musicUri, null, null, null, null);
+        adapter = new LocalTrackListAdapter(HomeActivity.finalLocalSearchResultList, getContext());
 
-        if (musicCursor != null && musicCursor.moveToFirst()) {
-            //get columns
-            int titleColumn = musicCursor.getColumnIndex
-                    (android.provider.MediaStore.Audio.Media.TITLE);
-            int idColumn = musicCursor.getColumnIndex
-                    (android.provider.MediaStore.Audio.Media._ID);
-            int artistColumn = musicCursor.getColumnIndex
-                    (android.provider.MediaStore.Audio.Media.ARTIST);
-            int pathColumn = musicCursor.getColumnIndex
-                    (android.provider.MediaStore.Audio.Media.DATA);
-            int durationColumn = musicCursor.getColumnIndex
-                    (MediaStore.Audio.Media.DURATION);
-            //add songs to list
-            do {
-                long thisId = musicCursor.getLong(idColumn);
-                String thisTitle = musicCursor.getString(titleColumn);
-                String thisArtist = musicCursor.getString(artistColumn);
-                String path = musicCursor.getString(pathColumn);
-                long duration = musicCursor.getLong(durationColumn);
-                songsList.add(new LocalTrack(thisId, thisTitle, thisArtist, path, duration));
-            }
-            while (musicCursor.moveToNext());
-        }
-
-        adapter = new LocalTrackListAdapter(songsList, getContext());
-
-        ListView lv = (ListView) view.findViewById(R.id.localMusicList);
+        lv = (ListView) view.findViewById(R.id.localMusicList);
         lv.setAdapter(adapter);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                LocalTrack track = songsList.get(position);
-                selectedTrack = track;
-                MainActivity.streamSelected = false;
-                MainActivity.localSelected = true;
+                LocalTrack track = HomeActivity.finalLocalSearchResultList.get(position);
+                if (HomeActivity.queue.getQueue().size() == 0) {
+                    HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
+                } else if (HomeActivity.queueCurrentIndex == HomeActivity.queue.getQueue().size() - 1) {
+                    HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
+                } else if (HomeActivity.isReloaded) {
+                    HomeActivity.queueCurrentIndex = HomeActivity.queue.getQueue().size();
+                    HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
+                } else {
+                    HomeActivity.queue.getQueue().add(++HomeActivity.queueCurrentIndex, new UnifiedTrack(true, track, null));
+                }
+                HomeActivity.localSelectedTrack = track;
+                HomeActivity.streamSelected = false;
+                HomeActivity.localSelected = true;
+                HomeActivity.queueCall = false;
+                HomeActivity.isReloaded = false;
                 mCallback.onLocalTrackSelected(position);
+            }
+        });
+
+        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, final View view, final int position, long id) {
+                PopupMenu popup = new PopupMenu(HomeActivity.ctx, view);
+                popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
+
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (item.getTitle().equals("Add to Playlist")) {
+                            HomeActivity.showAddToPlaylistDialog(new UnifiedTrack(true, HomeActivity.finalLocalSearchResultList.get(position), null));
+                            HomeActivity.pAdapter.notifyDataSetChanged();
+                        }
+                        if (item.getTitle().equals("Add to Queue")) {
+                            HomeActivity.queue.getQueue().add(new UnifiedTrack(true, HomeActivity.finalLocalSearchResultList.get(position), null));
+                        }
+                        return true;
+                    }
+                });
+                popup.show();
+                return false;
             }
         });
 

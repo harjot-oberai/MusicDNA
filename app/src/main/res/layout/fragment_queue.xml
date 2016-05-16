@@ -1,0 +1,22 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EEE"
+    tools:context="com.example.harjot.musicstreamer.QueueFragment">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/queueRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottomLinear"
+        android:padding="5dp"></android.support.v7.widget.RecyclerView>
+
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:id="@+id/bottomLinear"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:orientation="horizontal"></LinearLayout>
+
+</RelativeLayout>

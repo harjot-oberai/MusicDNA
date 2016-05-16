@@ -49,12 +49,14 @@ public class LocalTrackListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) HomeActivity.ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflater.inflate(R.layout.list_item, parent, false);
         TextView tr_title = (TextView) v.findViewById(R.id.title);
         ImageView tr_img = (ImageView) v.findViewById(R.id.img);
+        TextView artist = (TextView) v.findViewById(R.id.url);
         LocalTrack track = localTracks.get(position);
         tr_title.setText(track.getTitle());
+        artist.setText(track.getArtist());
 //        Picasso.with(ctx).load(new File(track.getPath())).into(tr_img);
         Bitmap img = getAlbumArt(track.getPath());
         if(img!=null){

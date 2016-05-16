@@ -29,12 +29,14 @@ import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Pair;
+import android.view.Display;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
@@ -44,6 +46,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.harjot.musicstreamer.Interfaces.StreamService;
 import com.example.harjot.musicstreamer.Models.AllPlaylists;
@@ -75,7 +78,8 @@ public class HomeActivity extends AppCompatActivity
         PlayerFragment.onCompleteListener,
         PlayerFragment.onPreviousTrackListener,
         LocalMusicFragment.OnLocalTrackSelectedListener,
-        StreamMusicFragment.OnTrackSelectedListener {
+        StreamMusicFragment.OnTrackSelectedListener,
+        QueueFragment.onQueueItemClickedListener {
 
     public static List<LocalTrack> localTrackList = new ArrayList<>();
     public static List<LocalTrack> finalLocalSearchResultList = new ArrayList<>();
@@ -119,6 +123,12 @@ public class HomeActivity extends AppCompatActivity
     RelativeLayout streamRecyclerContainer;
     RelativeLayout playlistRecyclerContainer;
 
+    TextView localViewAll;
+
+    TextView localNothingText, streamNothingText, recentsNothingText, playlistNothingText;
+
+    static int screen_width;
+    static int screen_height;
 
     static Toolbar toolbar;
 
@@ -135,6 +145,8 @@ public class HomeActivity extends AppCompatActivity
     Animation slideUp, slideDown;
 
     static boolean isPlayerVisible = false;
+    static boolean isLocalVisible = false;
+    static boolean isQueueVisible = false;
 
     static LocalTrack localSelectedTrack;
     static Track selectedTrack;
@@ -152,7 +164,7 @@ public class HomeActivity extends AppCompatActivity
             hideTabs();
             isPlayerVisible = true;
 
-            android.app.Fragment frag = getFragmentManager().findFragmentByTag("player");
+            PlayerFragment frag = (PlayerFragment) getFragmentManager().findFragmentByTag("player");
             android.app.FragmentManager fm = getFragmentManager();
             PlayerFragment newFragment = new PlayerFragment();
             if (frag == null) {
@@ -172,26 +184,11 @@ public class HomeActivity extends AppCompatActivity
                 if (PlayerFragment.track != null && !PlayerFragment.localIsPlaying && selectedTrack.getTitle() == PlayerFragment.track.getTitle()) {
 
                 } else {
-                    PlayerFragment.mMediaPlayer.stop();
-                    PlayerFragment.mMediaPlayer.reset();
-                    PlayerFragment.mVisualizer.release();
-                    PlayerFragment.init();
-                    fm.beginTransaction()
-                            .remove(frag)
-                            .setCustomAnimations(R.animator.slide_up,
-                                    R.animator.slide_down,
-                                    R.animator.slide_up,
-                                    R.animator.slide_down)
-                            .add(R.id.playerFragContainer, newFragment, "player")
-                            .show(newFragment)
-                            .addToBackStack(null)
-                            .commit();
+                    frag.refresh();
                 }
             }
-
             showPlayer();
             PlayerFragment.localIsPlaying = false;
-//            PlayerFragment.track = streamingTrackList.get(position);
             PlayerFragment.track = selectedTrack;
         } else {
             PlayerFragment frag = (PlayerFragment) getFragmentManager().findFragmentByTag("player");
@@ -199,6 +196,9 @@ public class HomeActivity extends AppCompatActivity
             PlayerFragment.track = queue.getQueue().get(queueCurrentIndex).getStreamTrack();
             frag.refresh();
         }
+
+        if (QueueFragment.qAdapter != null)
+            QueueFragment.qAdapter.notifyDataSetChanged();
 
         if (recentlyPlayed.getRecentlyPlayed().size() < 15) {
             UnifiedTrack track = new UnifiedTrack(false, null, PlayerFragment.track);
@@ -210,7 +210,8 @@ public class HomeActivity extends AppCompatActivity
             }
             if (!isRepeat) {
                 recentlyPlayed.addSong(track);
-                recentsRecyclerContainer.setVisibility(View.VISIBLE);
+                recentsRecycler.setVisibility(View.VISIBLE);
+                recentsNothingText.setVisibility(View.INVISIBLE);
                 rAdapter.notifyDataSetChanged();
             }
         }
@@ -226,7 +227,7 @@ public class HomeActivity extends AppCompatActivity
             hideTabs();
             isPlayerVisible = true;
 
-            android.app.Fragment frag = getFragmentManager().findFragmentByTag("player");
+            PlayerFragment frag = (PlayerFragment) getFragmentManager().findFragmentByTag("player");
             android.app.FragmentManager fm = getFragmentManager();
             PlayerFragment newFragment = new PlayerFragment();
             if (frag == null) {
@@ -245,32 +246,22 @@ public class HomeActivity extends AppCompatActivity
                 if (PlayerFragment.localTrack != null && PlayerFragment.localIsPlaying && localSelectedTrack.getTitle() == PlayerFragment.localTrack.getTitle()) {
 
                 } else {
-                    PlayerFragment.mMediaPlayer.stop();
-                    PlayerFragment.mMediaPlayer.reset();
-                    PlayerFragment.mVisualizer.release();
-                    PlayerFragment.init();
-                    fm.beginTransaction()
-                            .remove(frag)
-                            .setCustomAnimations(R.animator.slide_up,
-                                    R.animator.slide_down,
-                                    R.animator.slide_up,
-                                    R.animator.slide_down)
-                            .add(R.id.playerFragContainer, newFragment, "player")
-                            .show(newFragment)
-                            .commit();
+                    frag.refresh();
                 }
             }
 
             showPlayer();
             PlayerFragment.localIsPlaying = true;
-//            PlayerFragment.localTrack = localTrackList.get(position);
             PlayerFragment.localTrack = localSelectedTrack;
         } else {
             PlayerFragment frag = (PlayerFragment) getFragmentManager().findFragmentByTag("player");
             PlayerFragment.localIsPlaying = true;
-            PlayerFragment.localTrack = queue.getQueue().get(queueCurrentIndex).getLocalTrack();
+            PlayerFragment.localTrack = localSelectedTrack;
             frag.refresh();
         }
+
+        if (QueueFragment.qAdapter != null)
+            QueueFragment.qAdapter.notifyDataSetChanged();
 
         if (recentlyPlayed.getRecentlyPlayed().size() < 15) {
             UnifiedTrack track = new UnifiedTrack(true, PlayerFragment.localTrack, null);
@@ -282,7 +273,8 @@ public class HomeActivity extends AppCompatActivity
             }
             if (!isRepeat) {
                 recentlyPlayed.addSong(track);
-                recentsRecyclerContainer.setVisibility(View.VISIBLE);
+                recentsRecycler.setVisibility(View.VISIBLE);
+                recentsNothingText.setVisibility(View.INVISIBLE);
                 rAdapter.notifyDataSetChanged();
             }
         }
@@ -316,10 +308,28 @@ public class HomeActivity extends AppCompatActivity
 
         requestPermissions();
 
+        WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        screen_width = display.getWidth();
+        screen_height = display.getHeight();
+
         localRecyclerContainer = (RelativeLayout) findViewById(R.id.localRecyclerContainer);
         recentsRecyclerContainer = (RelativeLayout) findViewById(R.id.recentsRecyclerContainer);
         streamRecyclerContainer = (RelativeLayout) findViewById(R.id.streamRecyclerContainer);
         playlistRecyclerContainer = (RelativeLayout) findViewById(R.id.playlistRecyclerContainer);
+
+        localNothingText = (TextView) findViewById(R.id.localNothingText);
+        streamNothingText = (TextView) findViewById(R.id.streamNothingText);
+        recentsNothingText = (TextView) findViewById(R.id.recentsNothingText);
+        playlistNothingText = (TextView) findViewById(R.id.playlistNothingText);
+
+        localViewAll = (TextView) findViewById(R.id.localViewAll);
+        localViewAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFragment("local");
+            }
+        });
 
         try {
             allPlaylists = new ObjectPreferenceLoader(ctx, "AllPlayLists", AllPlaylists.class).load();
@@ -495,27 +505,35 @@ public class HomeActivity extends AppCompatActivity
         playerContainer = findViewById(R.id.playerFragContainer);
 
         if (finalLocalSearchResultList.size() == 0) {
-            localRecyclerContainer.setVisibility(View.GONE);
+            localListView.setVisibility(View.GONE);
+            localNothingText.setVisibility(View.VISIBLE);
         } else {
-            localRecyclerContainer.setVisibility(View.VISIBLE);
+            localListView.setVisibility(View.VISIBLE);
+            localNothingText.setVisibility(View.INVISIBLE);
         }
 
         if (recentlyPlayed.getRecentlyPlayed().size() == 0) {
-            recentsRecyclerContainer.setVisibility(View.GONE);
+            recentsRecycler.setVisibility(View.GONE);
+            recentsNothingText.setVisibility(View.VISIBLE);
         } else {
-            recentsRecyclerContainer.setVisibility(View.VISIBLE);
+            recentsRecycler.setVisibility(View.VISIBLE);
+            recentsNothingText.setVisibility(View.INVISIBLE);
         }
 
         if (streamingTrackList.size() == 0) {
-            streamRecyclerContainer.setVisibility(View.GONE);
+            streamingListView.setVisibility(View.GONE);
+            streamNothingText.setVisibility(View.VISIBLE);
         } else {
-            streamRecyclerContainer.setVisibility(View.VISIBLE);
+            streamingListView.setVisibility(View.VISIBLE);
+            streamNothingText.setVisibility(View.INVISIBLE);
         }
 
         if (allPlaylists.getPlaylists().size() == 0) {
-            playlistRecyclerContainer.setVisibility(View.GONE);
+            playlistsRecycler.setVisibility(View.GONE);
+            playlistNothingText.setVisibility(View.VISIBLE);
         } else {
-            playlistRecyclerContainer.setVisibility(View.VISIBLE);
+            playlistsRecycler.setVisibility(View.VISIBLE);
+            playlistNothingText.setVisibility(View.INVISIBLE);
         }
 
     }
@@ -562,6 +580,10 @@ public class HomeActivity extends AppCompatActivity
                 hidePlayer();
                 showTabs();
                 isPlayerVisible = false;
+            } else if (isLocalVisible) {
+                hideFragment("local");
+            } else if (isQueueVisible) {
+                hideFragment("queue");
             } else {
                 super.onBackPressed();
             }
@@ -588,6 +610,9 @@ public class HomeActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+        if (id == R.id.action_queue) {
+            showFragment("queue");
         }
 
         return super.onOptionsItemSelected(item);
@@ -620,8 +645,6 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        updateList(query.trim());
-        updateStreamingList(query.trim());
         hideKeyboard();
         return true;
     }
@@ -652,9 +675,11 @@ public class HomeActivity extends AppCompatActivity
         }
 
         if (finalLocalSearchResultList.size() == 0) {
-            localRecyclerContainer.setVisibility(View.GONE);
+            localListView.setVisibility(View.GONE);
+            localNothingText.setVisibility(View.VISIBLE);
         } else {
-            localRecyclerContainer.setVisibility(View.VISIBLE);
+            localListView.setVisibility(View.VISIBLE);
+            localNothingText.setVisibility(View.INVISIBLE);
         }
 
         (localListView.getAdapter()).notifyDataSetChanged();
@@ -675,6 +700,11 @@ public class HomeActivity extends AppCompatActivity
         /*Update the Streaming List*/
 
         if (!query.equals("")) {
+            /*streamingTrackList.clear();
+            if(sAdapter!=null){
+                streamingListView.getAdapter().notifyDataSetChanged();
+            }*/
+            startLoadingIndicator();
             Retrofit client = new Retrofit.Builder()
                     .baseUrl(Config.API_URL)
                     .addConverterFactory(GsonConverterFactory.create())
@@ -682,6 +712,7 @@ public class HomeActivity extends AppCompatActivity
             StreamService ss = client.create(StreamService.class);
             call = ss.getTracks(query, 75);
             call.enqueue(new Callback<List<Track>>() {
+
                 @Override
                 public void onResponse(Response<List<Track>> response) {
 
@@ -696,10 +727,12 @@ public class HomeActivity extends AppCompatActivity
                         streamingListView.setAdapter(sAdapter);
 
                         if (streamingTrackList.size() == 0) {
-                            streamRecyclerContainer.setVisibility(View.GONE);
+                            streamingListView.setVisibility(View.GONE);
                         } else {
-                            streamRecyclerContainer.setVisibility(View.VISIBLE);
+                            streamingListView.setVisibility(View.VISIBLE);
                         }
+
+                        stopLoadingIndicator();
 
                         (streamingListView.getAdapter()).notifyDataSetChanged();
                         if ((StreamMusicFragment.listView) != null)
@@ -707,6 +740,7 @@ public class HomeActivity extends AppCompatActivity
                     } else {
                         //request not successful (like 400,401,403 etc)
                         //Handle errors
+                        stopLoadingIndicator();
                     }
                 }
 
@@ -717,7 +751,7 @@ public class HomeActivity extends AppCompatActivity
             });
 
         } else {
-
+            stopLoadingIndicator();
         }
 
     }
@@ -1030,7 +1064,8 @@ public class HomeActivity extends AppCompatActivity
 //            VisualizerView.ptPaint.add(Pair.create(VisualizerView.size, Pair.create(VisualizerView.mForePaint.getColor(), VisualizerView.mForePaint.getAlpha())));
 //        }
         PlayerFragment.mVisualizerView.outerRadius = (float) (Math.min(PlayerFragment.mVisualizerView.width, PlayerFragment.mVisualizerView.height) * 0.42);
-        PlayerFragment.mVisualizerView.normalizedPosition = ((float) ((System.currentTimeMillis() - PlayerFragment.startTime) + PlayerFragment.totalElapsedTime + PlayerFragment.deltaTime)) / (float) (PlayerFragment.durationInMilliSec);
+//        PlayerFragment.mVisualizerView.normalizedPosition = ((float) ((System.currentTimeMillis() - PlayerFragment.startTime) + PlayerFragment.totalElapsedTime + PlayerFragment.deltaTime)) / (float) (PlayerFragment.durationInMilliSec);
+        PlayerFragment.mVisualizerView.normalizedPosition = ((float) (PlayerFragment.mMediaPlayer.getCurrentPosition()) / (float) (PlayerFragment.durationInMilliSec));
         if (mBytes == null) {
             return;
         }
@@ -1103,8 +1138,15 @@ public class HomeActivity extends AppCompatActivity
             PlayerFragment.mVisualizerView.lnDataDistance = (float) ((Math.log(a - 4) / PlayerFragment.mVisualizerView.LOG_MAX) - PlayerFragment.mVisualizerView.BASE);
             PlayerFragment.mVisualizerView.distance = PlayerFragment.mVisualizerView.lnDataDistance * PlayerFragment.mVisualizerView.outerRadius;
 
+
+            float ratio = (float) screen_height / (float) 1920;
+            float ratio2 = (float) screen_width / (float) 1080;
+            ratio = Math.min(ratio, ratio2);
+
+            Log.d("RATIO", ratio + "");
+
             // size of the circle to be rendered at the calculated position
-            PlayerFragment.mVisualizerView.size = (float) (4.5 * PlayerFragment.mVisualizerView.volume * PlayerFragment.mVisualizerView.MAX_DOT_SIZE + Math.random() * 2);
+            PlayerFragment.mVisualizerView.size = ratio * ((float) (4.5 * PlayerFragment.mVisualizerView.volume * PlayerFragment.mVisualizerView.MAX_DOT_SIZE + Math.random() * 2));
 
             // alpha also based on volume ( amplitude )
             PlayerFragment.mVisualizerView.alpha = (float) (PlayerFragment.mVisualizerView.volume * 0.09);
@@ -1146,6 +1188,7 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onComplete() {
+        Log.d("onCompleteCalled", "YES");
         queueCall = true;
         if (queueCurrentIndex < queue.getQueue().size() - 1) {
             queueCurrentIndex++;
@@ -1168,14 +1211,26 @@ public class HomeActivity extends AppCompatActivity
                 } else {
                     onTrackSelected(-1);
                 }
+            } else {
+                if (queue.getQueue().get(queueCurrentIndex).getType()) {
+                    localSelectedTrack = queue.getQueue().get(queueCurrentIndex).getLocalTrack();
+                    streamSelected = false;
+                    localSelected = true;
+                    onLocalTrackSelected(-1);
+                } else {
+                    selectedTrack = queue.getQueue().get(queueCurrentIndex).getStreamTrack();
+                    streamSelected = true;
+                    localSelected = false;
+                    onTrackSelected(-1);
+                }
             }
         }
     }
 
     @Override
     public void onPreviousTrack() {
-        queueCall = true;
         if (queueCurrentIndex > 0) {
+            queueCall = true;
             queueCurrentIndex--;
             if (queue.getQueue().get(queueCurrentIndex).getType()) {
                 localSelectedTrack = queue.getQueue().get(queueCurrentIndex).getLocalTrack();
@@ -1189,7 +1244,40 @@ public class HomeActivity extends AppCompatActivity
                 onTrackSelected(-1);
             }
         } else {
+            if (queue.getQueue().get(queueCurrentIndex).getType()) {
+                localSelectedTrack = queue.getQueue().get(queueCurrentIndex).getLocalTrack();
+                streamSelected = false;
+                localSelected = true;
+                onLocalTrackSelected(-1);
+            } else {
+                selectedTrack = queue.getQueue().get(queueCurrentIndex).getStreamTrack();
+                streamSelected = true;
+                localSelected = false;
+                onTrackSelected(-1);
+            }
+        }
+    }
 
+    @Override
+    public void onQueueItemClicked(int position) {
+        queueCurrentIndex = position;
+        UnifiedTrack ut = HomeActivity.queue.getQueue().get(position);
+        if (ut.getType()) {
+            LocalTrack track = ut.getLocalTrack();
+            localSelectedTrack = track;
+            streamSelected = false;
+            localSelected = true;
+            queueCall = false;
+            isReloaded = false;
+            onLocalTrackSelected(position);
+        } else {
+            Track track = ut.getStreamTrack();
+            selectedTrack = track;
+            streamSelected = true;
+            localSelected = false;
+            queueCall = false;
+            isReloaded = false;
+            onTrackSelected(position);
         }
     }
 
@@ -1363,6 +1451,82 @@ public class HomeActivity extends AppCompatActivity
                 Log.d("QUEUE", queue.getQueue().get(i).getLocalTrack().getTitle() + ":" + queue.getQueue().get(i).getStreamTrack());
             else
                 Log.d("QUEUE", queue.getQueue().get(i).getLocalTrack() + ":" + queue.getQueue().get(i).getStreamTrack().getTitle());
+        }
+    }
+
+    public void startLoadingIndicator() {
+        findViewById(R.id.loadingIndicator).setVisibility(View.VISIBLE);
+        streamingListView.setVisibility(View.INVISIBLE);
+        streamNothingText.setVisibility(View.INVISIBLE);
+    }
+
+    public void stopLoadingIndicator() {
+        findViewById(R.id.loadingIndicator).setVisibility(View.INVISIBLE);
+        streamingListView.setVisibility(View.VISIBLE);
+        if (streamingTrackList.size() == 0) {
+            streamNothingText.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void showFragment(String type) {
+        if (type.equals("local")) {
+            isLocalVisible = true;
+            android.app.FragmentManager fm = getFragmentManager();
+            LocalMusicFragment newFragment = new LocalMusicFragment();
+            LocalMusicFragment.mCallback = this;
+            fm.beginTransaction()
+                    .setCustomAnimations(R.animator.slide_up,
+                            R.animator.slide_down,
+                            R.animator.slide_up,
+                            R.animator.slide_down)
+                    .add(R.id.fragContainer, newFragment, "local")
+                    .show(newFragment)
+                    .addToBackStack(null)
+                    .commit();
+        } else if (type.equals("queue")) {
+            isQueueVisible = true;
+            android.app.FragmentManager fm = getFragmentManager();
+            QueueFragment newFragment = new QueueFragment();
+            QueueFragment.mCallback = this;
+            fm.beginTransaction()
+                    .setCustomAnimations(R.animator.slide_up,
+                            R.animator.slide_down,
+                            R.animator.slide_up,
+                            R.animator.slide_down)
+                    .add(R.id.fragContainer, newFragment, "queue")
+                    .show(newFragment)
+                    .addToBackStack(null)
+                    .commit();
+        }
+    }
+
+    public void hideFragment(String type) {
+        if (type.equals("local")) {
+            isLocalVisible = false;
+            android.app.FragmentManager fm = getFragmentManager();
+            android.app.Fragment frag = fm.findFragmentByTag("local");
+            if (frag != null) {
+                fm.beginTransaction()
+                        .setCustomAnimations(R.animator.slide_up,
+                                R.animator.slide_down,
+                                R.animator.slide_up,
+                                R.animator.slide_down)
+                        .hide(frag)
+                        .commit();
+            }
+        } else if (type.equals("queue")) {
+            isQueueVisible = false;
+            android.app.FragmentManager fm = getFragmentManager();
+            android.app.Fragment frag = fm.findFragmentByTag("queue");
+            if (frag != null) {
+                fm.beginTransaction()
+                        .setCustomAnimations(R.animator.slide_up,
+                                R.animator.slide_down,
+                                R.animator.slide_up,
+                                R.animator.slide_down)
+                        .hide(frag)
+                        .commit();
+            }
         }
     }
 

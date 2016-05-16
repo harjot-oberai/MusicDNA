@@ -1,13 +1,13 @@
 package com.example.harjot.musicstreamer;
 
 
+import android.app.Fragment;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,7 +30,8 @@ import java.util.List;
 public class LocalMusicFragment extends Fragment {
 
     static LocalTrackListAdapter adapter;
-    OnLocalTrackSelectedListener mCallback;
+    static OnLocalTrackSelectedListener mCallback;
+    Context ctx;
 
     static ListView lv;
 
@@ -51,6 +52,7 @@ public class LocalMusicFragment extends Fragment {
             throw new ClassCastException(context.toString()
                     + " must implement OnHeadlineSelectedListener");
         }
+        ctx = context;
     }
 
     @Override
@@ -64,7 +66,7 @@ public class LocalMusicFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        adapter = new LocalTrackListAdapter(HomeActivity.finalLocalSearchResultList, getContext());
+        adapter = new LocalTrackListAdapter(HomeActivity.finalLocalSearchResultList, HomeActivity.ctx);
 
         lv = (ListView) view.findViewById(R.id.localMusicList);
         lv.setAdapter(adapter);

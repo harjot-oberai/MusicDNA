@@ -2,10 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#EEE"
     tools:context="com.example.harjot.musicstreamer.LocalMusicFragment">
 
     <ListView
         android:id="@+id/localMusicList"
+        android:background="#FFF"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"></ListView>
 

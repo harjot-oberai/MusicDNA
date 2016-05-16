@@ -11,14 +11,15 @@
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="always"/>
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="200"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
-    <item
+        android:icon="@android:drawable/ic_menu_slideshow"
         android:id="@+id/action_queue"
+        android:orderInCategory="200"
+        android:title="Queue"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_settings"
         android:orderInCategory="300"
         android:title="@string/action_settings"
-        app:showAsAction="never"/>
+        app:showAsAction="never" />
 
 </menu>

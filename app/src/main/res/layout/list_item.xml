@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:background="#FFF"
     android:padding="10dp">
 
     <ImageView
@@ -22,13 +23,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Title"
-            android:textSize="15dp"
+            android:textSize="17dp"
             android:textColor="#000000"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize = "19dp"
+            android:textSize = "12dp"
+            android:layout_marginTop="5dp"
             android:id="@+id/url"
-            android:text=""/>
+            android:text="Artist"/>
     </LinearLayout>
 </LinearLayout>

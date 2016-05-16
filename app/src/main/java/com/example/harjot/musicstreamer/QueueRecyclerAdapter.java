@@ -78,7 +78,12 @@ public class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdap
             holder.artist.setText(lt.getArtist());
         } else {
             Track t = ut.getStreamTrack();
-            Picasso.with(ctx).load(t.getArtworkURL()).into(holder.art);
+            if(t.getArtworkURL()!=null){
+                Picasso.with(ctx).load(t.getArtworkURL()).into(holder.art);
+            }
+            else{
+                holder.art.setImageResource(R.drawable.ic_default);
+            }
             holder.title.setText(t.getTitle());
             holder.artist.setText("");
         }

@@ -1,4 +1,4 @@
-package com.example.harjot.musicstreamer;
+package com.sdsmdg.harjot.MusicDNA;
 
 import org.junit.Test;
 

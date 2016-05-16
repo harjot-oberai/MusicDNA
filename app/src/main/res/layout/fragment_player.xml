@@ -1,4 +1,4 @@
-<com.example.harjot.musicstreamer.SlidingRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.sdsmdg.harjot.MusicDNA.SlidingRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/toolBar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="70dp">
 
-        <com.example.harjot.musicstreamer.CustomProgressBar
+        <com.sdsmdg.harjot.MusicDNA.CustomProgressBar
             android:id="@+id/customProgress"
             android:layout_width="match_parent"
             android:layout_height="5dp"
@@ -67,7 +67,7 @@
         </android.support.v7.widget.Toolbar>
     </FrameLayout>
 
-    <com.example.harjot.musicstreamer.VisualizerView
+    <com.sdsmdg.harjot.MusicDNA.VisualizerView
         android:id="@+id/myvisualizerview"
         android:layout_width="370dp"
         android:layout_height="390dp"
@@ -113,4 +113,4 @@
             android:src="@drawable/ic_skip_next_white_48dp" />
     </RelativeLayout>
 
-</com.example.harjot.musicstreamer.SlidingRelativeLayout>
+</com.sdsmdg.harjot.MusicDNA.SlidingRelativeLayout>

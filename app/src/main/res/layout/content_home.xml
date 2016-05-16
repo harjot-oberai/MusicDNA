@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#F1F1F1"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.harjot.musicstreamer.HomeActivity"
+    tools:context="com.sdsmdg.harjot.MusicDNA.HomeActivity"
     tools:showIn="@layout/app_bar_home">
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"

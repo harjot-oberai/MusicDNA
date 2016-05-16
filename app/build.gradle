@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "com.example.harjot.musicstreamer"
+        applicationId "com.sdsmdg.harjot.MusicDNA"
         minSdkVersion 19
         targetSdkVersion 23
         versionCode 1

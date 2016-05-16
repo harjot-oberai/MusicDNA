@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EEE"
-    tools:context="com.example.harjot.musicstreamer.QueueFragment">
+    tools:context="com.sdsmdg.harjot.MusicDNA.QueueFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/queueRecycler"

@@ -123,7 +123,7 @@ public class HomeActivity extends AppCompatActivity
     RelativeLayout streamRecyclerContainer;
     RelativeLayout playlistRecyclerContainer;
 
-    TextView localViewAll;
+    TextView localViewAll, streamViewAll;
 
     TextView localNothingText, streamNothingText, recentsNothingText, playlistNothingText;
 
@@ -146,6 +146,7 @@ public class HomeActivity extends AppCompatActivity
 
     static boolean isPlayerVisible = false;
     static boolean isLocalVisible = false;
+    static boolean isStreamVisible = false;
     static boolean isQueueVisible = false;
 
     static LocalTrack localSelectedTrack;
@@ -330,6 +331,13 @@ public class HomeActivity extends AppCompatActivity
                 showFragment("local");
             }
         });
+        streamViewAll = (TextView) findViewById(R.id.streamViewAll);
+        streamViewAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFragment("stream");
+            }
+        });
 
         try {
             allPlaylists = new ObjectPreferenceLoader(ctx, "AllPlayLists", AllPlaylists.class).load();
@@ -448,7 +456,7 @@ public class HomeActivity extends AppCompatActivity
                             queue.getQueue().add(new UnifiedTrack(true, finalLocalSearchResultList.get(position), null));
                             logQueue();
                         }
-                        if(item.getTitle().equals("Play")){
+                        if (item.getTitle().equals("Play")) {
                             LocalTrack track = finalLocalSearchResultList.get(position);
                             if (queue.getQueue().size() == 0) {
                                 queueCurrentIndex = 0;
@@ -470,7 +478,7 @@ public class HomeActivity extends AppCompatActivity
                             isReloaded = false;
                             onLocalTrackSelected(position);
                         }
-                        if(item.getTitle().equals("Play Next")){
+                        if (item.getTitle().equals("Play Next")) {
                             LocalTrack track = finalLocalSearchResultList.get(position);
                             if (queue.getQueue().size() == 0) {
                                 queueCurrentIndex = 0;
@@ -548,7 +556,7 @@ public class HomeActivity extends AppCompatActivity
                             queue.getQueue().add(new UnifiedTrack(false, null, streamingTrackList.get(position)));
                             logQueue();
                         }
-                        if(item.getTitle().equals("Play")){
+                        if (item.getTitle().equals("Play")) {
                             Track track = streamingTrackList.get(position);
                             if (queue.getQueue().size() == 0) {
                                 queueCurrentIndex = 0;
@@ -570,7 +578,7 @@ public class HomeActivity extends AppCompatActivity
                             isReloaded = false;
                             onTrackSelected(position);
                         }
-                        if(item.getTitle().equals("Play Next")){
+                        if (item.getTitle().equals("Play Next")) {
                             Track track = streamingTrackList.get(position);
                             if (queue.getQueue().size() == 0) {
                                 queueCurrentIndex = 0;
@@ -686,6 +694,8 @@ public class HomeActivity extends AppCompatActivity
                 hideFragment("local");
             } else if (isQueueVisible) {
                 hideFragment("queue");
+            } else if (isStreamVisible) {
+                hideFragment("stream");
             } else {
                 super.onBackPressed();
             }
@@ -837,8 +847,8 @@ public class HomeActivity extends AppCompatActivity
                         stopLoadingIndicator();
 
                         (streamingListView.getAdapter()).notifyDataSetChanged();
-                        if ((StreamMusicFragment.listView) != null)
-                            ((BaseAdapter) StreamMusicFragment.listView.getAdapter()).notifyDataSetChanged();
+                        if ((StreamMusicFragment.lv) != null)
+                            ((BaseAdapter) StreamMusicFragment.lv.getAdapter()).notifyDataSetChanged();
                     } else {
                         //request not successful (like 400,401,403 etc)
                         //Handle errors
@@ -1599,6 +1609,20 @@ public class HomeActivity extends AppCompatActivity
                     .show(newFragment)
                     .addToBackStack(null)
                     .commit();
+        } else if (type.equals("stream")) {
+            isStreamVisible = true;
+            android.app.FragmentManager fm = getFragmentManager();
+            StreamMusicFragment newFragment = new StreamMusicFragment();
+            StreamMusicFragment.mCallback = this;
+            fm.beginTransaction()
+                    .setCustomAnimations(R.animator.slide_up,
+                            R.animator.slide_down,
+                            R.animator.slide_up,
+                            R.animator.slide_down)
+                    .add(R.id.fragContainer, newFragment, "stream")
+                    .show(newFragment)
+                    .addToBackStack(null)
+                    .commit();
         }
     }
 
@@ -1620,6 +1644,19 @@ public class HomeActivity extends AppCompatActivity
             isQueueVisible = false;
             android.app.FragmentManager fm = getFragmentManager();
             android.app.Fragment frag = fm.findFragmentByTag("queue");
+            if (frag != null) {
+                fm.beginTransaction()
+                        .setCustomAnimations(R.animator.slide_up,
+                                R.animator.slide_down,
+                                R.animator.slide_up,
+                                R.animator.slide_down)
+                        .hide(frag)
+                        .commit();
+            }
+        } else if (type.equals("stream")) {
+            isStreamVisible = false;
+            android.app.FragmentManager fm = getFragmentManager();
+            android.app.Fragment frag = fm.findFragmentByTag("stream");
             if (frag != null) {
                 fm.beginTransaction()
                         .setCustomAnimations(R.animator.slide_up,

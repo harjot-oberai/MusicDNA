@@ -97,22 +97,40 @@
                     app:indicator="BallPulse"
                     app:indicator_color="#3F334D" />
 
-                <TextView
-                    android:id="@+id/streamRecyclerLabel"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                <LinearLayout
+                    android:id="@+id/streamRecyclerLabelContainer"
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="10dp"
-                    android:text="SoundCloud"
-                    android:textColor="#000"
-                    android:textSize="20dp"
-                    android:textStyle="bold" />
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/streamRecyclerLabel"
+                        android:layout_width="0dp"
+                        android:layout_weight="10"
+                        android:layout_height="wrap_content"
+                        android:text="SoundCloud"
+                        android:textColor="#000"
+                        android:textSize="20dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/streamViewAll"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="2"
+                        android:text="View All"
+                        android:textSize="12dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/streamNothingText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/streamRecyclerLabel"
+                    android:layout_below="@+id/streamRecyclerLabelContainer"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="25dp"
                     android:layout_marginTop="25dp"
@@ -126,7 +144,7 @@
                     android:id="@+id/trackList_home"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/streamRecyclerLabel"
+                    android:layout_below="@+id/streamRecyclerLabelContainer"
                     android:layout_marginTop="10dp"
                     android:padding="5dp"></android.support.v7.widget.RecyclerView>
             </RelativeLayout>
@@ -214,6 +232,7 @@
             </RelativeLayout>
 
         </RelativeLayout>
+
     </ScrollView>
 
     <LinearLayout

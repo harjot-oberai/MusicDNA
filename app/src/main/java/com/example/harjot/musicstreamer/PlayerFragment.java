@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.harjot.musicstreamer.Models.LocalTrack;
 import com.example.harjot.musicstreamer.Models.Track;
@@ -267,6 +268,16 @@ public class PlayerFragment extends Fragment {
             }
         });
 
+        mMediaPlayer.setOnErrorListener(
+                new MediaPlayer.OnErrorListener() {
+                    @Override
+                    public boolean onError(MediaPlayer mp, int what, int extra) {
+                        Toast.makeText(HomeActivity.ctx, what + ":" + extra, Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                }
+        );
+
         smallPlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -359,7 +370,6 @@ public class PlayerFragment extends Fragment {
         });
 
         progressBar = (SeekBar) view.findViewById(R.id.progressBar);
-
         progressBar.setMax(durationInMilliSec);
 
         t = new Timer();
@@ -471,11 +481,15 @@ public class PlayerFragment extends Fragment {
             if (HomeActivity.streamSelected) {
                 isPrepared = false;
                 mMediaPlayer.reset();
+                progressBar.setProgress(0);
+                progressBar.setSecondaryProgress(0);
                 mMediaPlayer.setDataSource(track.getStreamURL() + "?client_id=" + Config.CLIENT_ID);
                 mMediaPlayer.prepareAsync();
             } else {
                 isPrepared = false;
                 mMediaPlayer.reset();
+                progressBar.setProgress(0);
+                progressBar.setSecondaryProgress(0);
                 mMediaPlayer.setDataSource(localTrack.getPath());
                 mMediaPlayer.prepareAsync();
             }

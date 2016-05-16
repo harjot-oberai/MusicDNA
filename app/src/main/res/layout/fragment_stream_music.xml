@@ -2,36 +2,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="0dp"
-    android:paddingLeft="0dp"
-    android:paddingRight="0dp"
-    android:paddingTop="0dp">
-    <LinearLayout
-        android:padding="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/search">
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="5"
-            android:id="@+id/searchBox"/>
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="S"
-            android:id="@+id/searchBtn"
-            android:background="#EEE"/>
-    </LinearLayout>
+    android:background="#EEE"
+    android:padding="5dp"
+    tools:context="com.example.harjot.musicstreamer.StreamMusicFragment">
     <ListView
-        android:padding="5dp"
+        android:id="@+id/trackList"
+        android:background="#FFF"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/search"
-        android:layout_marginTop="10dp"
-        android:id="@+id/trackList">
+        android:layout_height="wrap_content">
     </ListView>
 
 </RelativeLayout>

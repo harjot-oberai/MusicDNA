@@ -2,12 +2,8 @@ package com.example.harjot.musicstreamer;
 
 
 import android.app.Fragment;
-import android.content.ContentResolver;
 import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,9 +15,6 @@ import android.widget.ListView;
 
 import com.example.harjot.musicstreamer.Models.LocalTrack;
 import com.example.harjot.musicstreamer.Models.UnifiedTrack;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -66,9 +59,9 @@ public class LocalMusicFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        adapter = new LocalTrackListAdapter(HomeActivity.finalLocalSearchResultList, HomeActivity.ctx);
-
         lv = (ListView) view.findViewById(R.id.localMusicList);
+
+        adapter = new LocalTrackListAdapter(HomeActivity.finalLocalSearchResultList, HomeActivity.ctx);
         lv.setAdapter(adapter);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -76,10 +69,13 @@ public class LocalMusicFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 LocalTrack track = HomeActivity.finalLocalSearchResultList.get(position);
                 if (HomeActivity.queue.getQueue().size() == 0) {
+                    HomeActivity.queueCurrentIndex = 0;
                     HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
                 } else if (HomeActivity.queueCurrentIndex == HomeActivity.queue.getQueue().size() - 1) {
+                    HomeActivity.queueCurrentIndex++;
                     HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
                 } else if (HomeActivity.isReloaded) {
+                    HomeActivity.isReloaded = false;
                     HomeActivity.queueCurrentIndex = HomeActivity.queue.getQueue().size();
                     HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
                 } else {
@@ -107,11 +103,62 @@ public class LocalMusicFragment extends Fragment {
                             HomeActivity.pAdapter.notifyDataSetChanged();
                         }
                         if (item.getTitle().equals("Add to Queue")) {
+                            Log.d("QUEUE", "CALLED");
                             HomeActivity.queue.getQueue().add(new UnifiedTrack(true, HomeActivity.finalLocalSearchResultList.get(position), null));
+                        }
+                        if (item.getTitle().equals("Play")) {
+                            LocalTrack track = HomeActivity.finalLocalSearchResultList.get(position);
+                            if (HomeActivity.queue.getQueue().size() == 0) {
+                                HomeActivity.queueCurrentIndex = 0;
+                                HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
+                            } else if (HomeActivity.queueCurrentIndex == HomeActivity.queue.getQueue().size() - 1) {
+                                HomeActivity.queueCurrentIndex++;
+                                HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
+                            } else if (HomeActivity.isReloaded) {
+                                HomeActivity.isReloaded = false;
+                                HomeActivity.queueCurrentIndex = HomeActivity.queue.getQueue().size();
+                                HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
+                            } else {
+                                HomeActivity.queue.getQueue().add(++HomeActivity.queueCurrentIndex, new UnifiedTrack(true, track, null));
+                            }
+                            HomeActivity.localSelectedTrack = track;
+                            HomeActivity.streamSelected = false;
+                            HomeActivity.localSelected = true;
+                            HomeActivity.queueCall = false;
+                            HomeActivity.isReloaded = false;
+                            mCallback.onLocalTrackSelected(position);
+                        }
+                        if (item.getTitle().equals("Play Next")) {
+                            LocalTrack track = HomeActivity.finalLocalSearchResultList.get(position);
+                            if (HomeActivity.queue.getQueue().size() == 0) {
+                                HomeActivity.queueCurrentIndex = 0;
+                                HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
+                                HomeActivity.localSelectedTrack = track;
+                                HomeActivity.streamSelected = false;
+                                HomeActivity.localSelected = true;
+                                HomeActivity.queueCall = false;
+                                HomeActivity.isReloaded = false;
+                                mCallback.onLocalTrackSelected(position);
+                            } else if (HomeActivity.queueCurrentIndex == HomeActivity.queue.getQueue().size() - 1) {
+                                HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
+                            } else if (HomeActivity.isReloaded) {
+                                HomeActivity.isReloaded = false;
+                                HomeActivity.queueCurrentIndex = HomeActivity.queue.getQueue().size();
+                                HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
+                                HomeActivity.localSelectedTrack = track;
+                                HomeActivity.streamSelected = false;
+                                HomeActivity.localSelected = true;
+                                HomeActivity.queueCall = false;
+                                HomeActivity.isReloaded = false;
+                                mCallback.onLocalTrackSelected(position);
+                            } else {
+                                HomeActivity.queue.getQueue().add(HomeActivity.queueCurrentIndex + 1, new UnifiedTrack(true, track, null));
+                            }
                         }
                         return true;
                     }
                 });
+
                 popup.show();
                 return false;
             }

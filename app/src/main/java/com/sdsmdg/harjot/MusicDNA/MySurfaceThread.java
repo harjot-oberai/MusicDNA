@@ -30,9 +30,9 @@ public class MySurfaceThread extends Thread {
             try {
                 c = myThreadSurfaceHolder.lockCanvas(null);
                 synchronized (myThreadSurfaceHolder) {
-                    myThreadSurfaceView.onDraw(c);
+//                    myThreadSurfaceView.onDraw(c);
                 }
-                sleep(100);
+                sleep(10);
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

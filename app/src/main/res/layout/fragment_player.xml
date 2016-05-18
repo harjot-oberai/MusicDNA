@@ -74,6 +74,13 @@
         android:layout_above="@+id/progressBar"
         android:layout_centerHorizontal="true" />
 
+    <!--<com.sdsmdg.harjot.MusicDNA.OptimizedVisualizerView-->
+        <!--android:id="@+id/myvisualizerview"-->
+        <!--android:layout_width="370dp"-->
+        <!--android:layout_height="390dp"-->
+        <!--android:layout_above="@+id/progressBar"-->
+        <!--android:layout_centerHorizontal="true" />-->
+
     <SeekBar
         android:id="@+id/progressBar"
         android:layout_width="match_parent"

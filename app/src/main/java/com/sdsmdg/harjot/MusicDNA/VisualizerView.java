@@ -4,19 +4,32 @@ package com.sdsmdg.harjot.MusicDNA;
  * Created by Harjot on 01-May-16.
  */
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
+import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class VisualizerView extends View {
+
+//    boolean isRendering
+
+    Timer t;
+
+    static Activity act;
 
     static double LOG_MAX = Math.log(64);
     static double TAU = Math.PI * 2;
@@ -234,6 +247,7 @@ public class VisualizerView extends View {
             mForePaint.setAlpha(ptPaint.get(i).second.second);
             canvas.drawCircle(pts.get(i).first, pts.get(i).second, ptPaint.get(i).first, mForePaint);
         }
+
 //
 //        // calculate min and max amplitude for current byte array
 //        float max = Integer.MIN_VALUE, min = Integer.MAX_VALUE;

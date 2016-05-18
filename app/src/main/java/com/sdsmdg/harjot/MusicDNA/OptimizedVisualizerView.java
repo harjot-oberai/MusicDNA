@@ -214,7 +214,11 @@ public class OptimizedVisualizerView extends SurfaceView implements SurfaceHolde
     public void surfaceCreated(SurfaceHolder holder) {
         // TODO Auto-generated method stub
         thread.setRunning(true);
-        thread.start();
+        try {
+            thread.start();
+        }catch (Exception e){
+
+        }
     }
 
     @Override

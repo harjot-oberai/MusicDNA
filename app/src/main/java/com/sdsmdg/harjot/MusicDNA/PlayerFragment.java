@@ -38,6 +38,7 @@ import java.util.TimerTask;
 public class PlayerFragment extends Fragment {
 
     public static VisualizerView mVisualizerView;
+//    public static OptimizedVisualizerView mVisualizerView;
     public static MediaPlayer mMediaPlayer;
     public static Visualizer mVisualizer;
 

@@ -5,13 +5,18 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.MediaMetadataRetriever;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.sdsmdg.harjot.MusicDNA.Helpers.ItemTouchHelperAdapter;
+import com.sdsmdg.harjot.MusicDNA.Helpers.ItemTouchHelperViewHolder;
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.Models.Track;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
@@ -24,27 +29,50 @@ import java.util.List;
  */
 
 
-public class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdapter.MyViewHolder> {
+public class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdapter.MyViewHolder>
+        implements ItemTouchHelperAdapter {
 
     private List<UnifiedTrack> queue;
     Context ctx;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public interface OnDragStartListener {
+        void onDragStarted(RecyclerView.ViewHolder viewHolder);
+    }
+
+    private final OnDragStartListener mDragStartListener;
+
+    public class MyViewHolder extends RecyclerView.ViewHolder
+            implements ItemTouchHelperViewHolder {
 
         ImageView art;
         TextView title, artist;
+        View indicator;
+        ImageView holderImg;
 
         public MyViewHolder(View view) {
             super(view);
             art = (ImageView) view.findViewById(R.id.img);
             title = (TextView) view.findViewById(R.id.title);
             artist = (TextView) view.findViewById(R.id.url);
+            indicator = view.findViewById(R.id.currently_playing_indicator);
+            holderImg = (ImageView) view.findViewById(R.id.holderImage);
+        }
+
+        @Override
+        public void onItemSelected() {
+            itemView.setBackgroundColor(Color.LTGRAY);
+        }
+
+        @Override
+        public void onItemClear() {
+            itemView.setBackgroundColor(Color.WHITE);
         }
     }
 
-    public QueueRecyclerAdapter(List<UnifiedTrack> queue, Context ctx) {
+    public QueueRecyclerAdapter(List<UnifiedTrack> queue, Context ctx, OnDragStartListener listener) {
         this.queue = queue;
         this.ctx = ctx;
+        mDragStartListener = listener;
     }
 
     @Override
@@ -56,13 +84,14 @@ public class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdap
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, int position) {
 
-        if(HomeActivity.queueCurrentIndex == position){
+        if (HomeActivity.queueCurrentIndex == position && !HomeActivity.isReloaded) {
             holder.title.setTextColor(Color.RED);
-        }
-        else{
+            holder.indicator.setVisibility(View.VISIBLE);
+        } else {
             holder.title.setTextColor(Color.BLACK);
+            holder.indicator.setVisibility(View.INVISIBLE);
         }
 
         UnifiedTrack ut = queue.get(position);
@@ -78,20 +107,50 @@ public class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdap
             holder.artist.setText(lt.getArtist());
         } else {
             Track t = ut.getStreamTrack();
-            if(t.getArtworkURL()!=null){
+            if (t.getArtworkURL() != null) {
                 Picasso.with(ctx).load(t.getArtworkURL()).into(holder.art);
-            }
-            else{
+            } else {
                 holder.art.setImageResource(R.drawable.ic_default);
             }
             holder.title.setText(t.getTitle());
             holder.artist.setText("");
         }
+
+        holder.holderImg.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
+                    mDragStartListener.onDragStarted(holder);
+                }
+                return false;
+            }
+        });
+
     }
 
     @Override
     public int getItemCount() {
         return queue.size();
+    }
+
+    @Override
+    public void onItemMove(int fromPosition, int toPosition) {
+        UnifiedTrack prev = queue.remove(fromPosition);
+        queue.add(toPosition, prev);
+        notifyItemMoved(fromPosition, toPosition);
+        if (fromPosition == HomeActivity.queueCurrentIndex) {
+            HomeActivity.queueCurrentIndex = toPosition;
+        } else if (fromPosition > HomeActivity.queueCurrentIndex && toPosition == HomeActivity.queueCurrentIndex) {
+            HomeActivity.queueCurrentIndex++;
+        } else if (fromPosition < HomeActivity.queueCurrentIndex && toPosition == HomeActivity.queueCurrentIndex){
+            HomeActivity.queueCurrentIndex--;
+        }
+    }
+
+    @Override
+    public void onItemDismiss(int position) {
+        queue.remove(position);
+        notifyItemRemoved(position);
     }
 
     public static Bitmap getAlbumArt(String path) {

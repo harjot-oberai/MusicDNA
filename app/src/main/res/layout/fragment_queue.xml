@@ -3,20 +3,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EEE"
+    android:padding="3dp"
     tools:context="com.sdsmdg.harjot.MusicDNA.QueueFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/queueRecycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bottomLinear"
-        android:padding="5dp"></android.support.v7.widget.RecyclerView>
+        android:layout_above="@+id/bottomLinear">
+    </android.support.v7.widget.RecyclerView>
 
     <LinearLayout
-        android:layout_alignParentBottom="true"
         android:id="@+id/bottomLinear"
         android:layout_width="match_parent"
         android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
         android:orientation="horizontal"></LinearLayout>
 
 </RelativeLayout>

@@ -7,11 +7,14 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.sdsmdg.harjot.MusicDNA.Helpers.SimpleItemTouchHelperCallback;
 
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
@@ -20,17 +23,19 @@ import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class QueueFragment extends Fragment {
+public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDragStartListener{
 
     RecyclerView queueRecycler;
     static QueueRecyclerAdapter qAdapter;
 
+    static ItemTouchHelper mItemTouchHelper;
+
     static onQueueItemClickedListener mCallback;
 
     public interface onQueueItemClickedListener{
+
         public void onQueueItemClicked(int position);
     }
-
     public QueueFragment() {
         // Required empty public constructor
     }
@@ -58,14 +63,14 @@ public class QueueFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         queueRecycler = (RecyclerView) view.findViewById(R.id.queueRecycler);
 
-        qAdapter = new QueueRecyclerAdapter(HomeActivity.queue.getQueue(), HomeActivity.ctx);
+        qAdapter = new QueueRecyclerAdapter(HomeActivity.queue.getQueue(), HomeActivity.ctx , this);
         LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(HomeActivity.ctx, LinearLayoutManager.VERTICAL, false);
         queueRecycler.setLayoutManager(mLayoutManager2);
         queueRecycler.setItemAnimator(new DefaultItemAnimator());
         AlphaInAnimationAdapter alphaAdapter2 = new AlphaInAnimationAdapter(qAdapter);
         alphaAdapter2.setFirstOnly(false);
         ScaleInAnimationAdapter scaleAdapter2 = new ScaleInAnimationAdapter(alphaAdapter2);
-        scaleAdapter2.setFirstOnly(false);
+        scaleAdapter2.setFirstOnly(true);
         queueRecycler.setAdapter(scaleAdapter2);
 
         queueRecycler.addOnItemTouchListener(new ClickItemTouchListener(queueRecycler) {
@@ -86,6 +91,15 @@ public class QueueFragment extends Fragment {
             }
         });
 
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(qAdapter);
+        mItemTouchHelper = new ItemTouchHelper(callback);
+        mItemTouchHelper.attachToRecyclerView(queueRecycler);
+
+    }
+
+    @Override
+    public void onDragStarted(RecyclerView.ViewHolder viewHolder) {
+        mItemTouchHelper.startDrag(viewHolder);
     }
 
 }

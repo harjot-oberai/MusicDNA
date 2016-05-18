@@ -93,7 +93,7 @@ public class HomeActivity extends AppCompatActivity
 
     static boolean isReloaded = false;
 
-    static int queueCurrentIndex = 0;
+    public static int queueCurrentIndex = 0;
 
     static Context ctx;
 

@@ -5,11 +5,11 @@
     android:background="#EEE"
     android:padding="5dp"
     tools:context="com.sdsmdg.harjot.MusicDNA.StreamMusicFragment">
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/trackList"
         android:background="#FFF"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-    </ListView>
+    </android.support.v7.widget.RecyclerView>
 
 </RelativeLayout>

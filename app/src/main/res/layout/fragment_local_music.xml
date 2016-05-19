@@ -6,10 +6,10 @@
     android:padding="5dp"
     tools:context="com.sdsmdg.harjot.MusicDNA.LocalMusicFragment">
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/localMusicList"
         android:background="#FFF"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></ListView>
+        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
 
 </FrameLayout>

@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.media.MediaMetadataRetriever;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,6 +19,7 @@ import com.sdsmdg.harjot.MusicDNA.Helpers.ItemTouchHelperViewHolder;
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.Models.Track;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
+import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -34,6 +34,7 @@ public class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdap
 
     private List<UnifiedTrack> queue;
     Context ctx;
+    ImageLoader imgLoader;
 
     public interface OnDragStartListener {
         void onDragStarted(RecyclerView.ViewHolder viewHolder);
@@ -73,6 +74,7 @@ public class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdap
         this.queue = queue;
         this.ctx = ctx;
         mDragStartListener = listener;
+        imgLoader = new ImageLoader(HomeActivity.ctx);
     }
 
     @Override
@@ -97,21 +99,17 @@ public class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdap
         UnifiedTrack ut = queue.get(position);
         if (ut.getType()) {
             LocalTrack lt = ut.getLocalTrack();
-            Bitmap img = getAlbumArt(lt.getPath());
-            if (img != null) {
-                holder.art.setImageBitmap(img);
-            } else {
-                holder.art.setImageResource(R.drawable.ic_default);
-            }
+            imgLoader.DisplayImage(lt.getPath(), holder.art);
             holder.title.setText(lt.getTitle());
             holder.artist.setText(lt.getArtist());
         } else {
             Track t = ut.getStreamTrack();
-            if (t.getArtworkURL() != null) {
-                Picasso.with(ctx).load(t.getArtworkURL()).into(holder.art);
-            } else {
-                holder.art.setImageResource(R.drawable.ic_default);
-            }
+            Picasso.with(HomeActivity.ctx)
+                    .load(t.getArtworkURL())
+                    .resize(100, 100)
+                    .error(R.drawable.ic_default)
+                    .placeholder(R.drawable.ic_default)
+                    .into(holder.art);
             holder.title.setText(t.getTitle());
             holder.artist.setText("");
         }
@@ -142,7 +140,7 @@ public class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdap
             HomeActivity.queueCurrentIndex = toPosition;
         } else if (fromPosition > HomeActivity.queueCurrentIndex && toPosition == HomeActivity.queueCurrentIndex) {
             HomeActivity.queueCurrentIndex++;
-        } else if (fromPosition < HomeActivity.queueCurrentIndex && toPosition == HomeActivity.queueCurrentIndex){
+        } else if (fromPosition < HomeActivity.queueCurrentIndex && toPosition == HomeActivity.queueCurrentIndex) {
             HomeActivity.queueCurrentIndex--;
         }
     }

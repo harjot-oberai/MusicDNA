@@ -1,0 +1,17 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFF"
+    android:clickable="true"
+    android:padding="10dp"
+    tools:context="com.sdsmdg.harjot.MusicDNA.EqualizerFragment">
+
+    <com.db.chart.view.LineChartView
+        android:id="@+id/lineChart"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="200dp">
+    </com.db.chart.view.LineChartView>
+
+</RelativeLayout>

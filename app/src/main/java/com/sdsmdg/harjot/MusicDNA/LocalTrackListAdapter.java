@@ -1,82 +1,80 @@
 package com.sdsmdg.harjot.MusicDNA;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
+import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
 
 import java.util.List;
 
 /**
  * Created by Harjot on 09-May-16.
  */
-public class LocalTrackListAdapter extends BaseAdapter {
+public class LocalTrackListAdapter extends RecyclerView.Adapter<LocalTrackListAdapter.MyViewHolder> {
 
     private List<LocalTrack> localTracks;
-    private Context ctx;
+    ImageLoader imgLoader;
 
-    public LocalTrackListAdapter(List<LocalTrack> localTracks, Context ctx) {
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+
+        ImageView art;
+        TextView title, artist;
+
+        public MyViewHolder(View view) {
+            super(view);
+            art = (ImageView) view.findViewById(R.id.img_2);
+            title = (TextView) view.findViewById(R.id.title_2);
+            artist = (TextView) view.findViewById(R.id.url_2);
+        }
+    }
+
+    public LocalTrackListAdapter(List<LocalTrack> localTracks) {
         this.localTracks = localTracks;
-        this.ctx = ctx;
+        imgLoader = new ImageLoader(HomeActivity.ctx);
     }
 
     @Override
-    public int getCount() {
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.list_item_2, parent, false);
+
+        return new MyViewHolder(itemView);
+    }
+
+    @Override
+    public void onBindViewHolder(MyViewHolder holder, int position) {
+        LocalTrack track = localTracks.get(position);
+        holder.title.setText(track.getTitle());
+        holder.artist.setText(track.getArtist());
+        imgLoader.DisplayImage(track.getPath(), holder.art);
+        Log.d("ARTWORKURL",track.getPath()+":");
+    }
+
+    @Override
+    public int getItemCount() {
         return localTracks.size();
     }
 
-    @Override
-    public Object getItem(int position) {
-        return null;
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return 0;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) HomeActivity.ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflater.inflate(R.layout.list_item, parent, false);
-        TextView tr_title = (TextView) v.findViewById(R.id.title);
-        ImageView tr_img = (ImageView) v.findViewById(R.id.img);
-        TextView artist = (TextView) v.findViewById(R.id.url);
-        LocalTrack track = localTracks.get(position);
-        tr_title.setText(track.getTitle());
-        artist.setText(track.getArtist());
-//        Picasso.with(ctx).load(new File(track.getPath())).into(tr_img);
-        Bitmap img = getAlbumArt(track.getPath());
-        if(img!=null){
-            tr_img.setImageBitmap(img);
-        }
-        else{
-            tr_img.setImageResource(R.drawable.ic_default);
-        }
-        return v;
-    }
-
-    public static Bitmap getAlbumArt(String path){
+    public static Bitmap getAlbumArt(String path) {
         android.media.MediaMetadataRetriever mmr = new MediaMetadataRetriever();
         mmr.setDataSource(path);
         Bitmap bitmap = null;
 
-        byte [] data = mmr.getEmbeddedPicture();
-        if(data != null) {
+        byte[] data = mmr.getEmbeddedPicture();
+        if (data != null) {
             bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
             return bitmap;
-        }
-        else {
+        } else {
             return null;
         }
     }
-
 }

@@ -4,7 +4,10 @@ package com.sdsmdg.harjot.MusicDNA;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -26,7 +29,7 @@ public class StreamMusicFragment extends Fragment {
     static OnTrackSelectedListener mCallback;
     Context ctx;
 
-    static ListView lv;
+    static RecyclerView lv;
 
     public StreamMusicFragment() {
         // Required empty public constructor
@@ -58,14 +61,17 @@ public class StreamMusicFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        lv = (ListView) view.findViewById(R.id.trackList);
+        lv = (RecyclerView) view.findViewById(R.id.trackList);
 
         adapter = new StreamTrackListAdapter(HomeActivity.ctx, HomeActivity.streamingTrackList);
+        LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(HomeActivity.ctx, LinearLayoutManager.VERTICAL, false);
+        lv.setLayoutManager(mLayoutManager2);
+        lv.setItemAnimator(new DefaultItemAnimator());
         lv.setAdapter(adapter);
 
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lv.addOnItemTouchListener(new ClickItemTouchListener(lv) {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            boolean onClick(RecyclerView parent, View view, int position, long id) {
                 Track track = HomeActivity.streamingTrackList.get(position);
                 if (HomeActivity.queue.getQueue().size() == 0) {
                     HomeActivity.queueCurrentIndex = 0;
@@ -86,12 +92,11 @@ public class StreamMusicFragment extends Fragment {
                 HomeActivity.queueCall = false;
                 HomeActivity.isReloaded = false;
                 mCallback.onTrackSelected(position);
+                return true;
             }
-        });
 
-        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+            boolean onLongClick(RecyclerView parent, View view, final int position, long id) {
                 PopupMenu popup = new PopupMenu(HomeActivity.ctx, view);
                 popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
 
@@ -159,8 +164,14 @@ public class StreamMusicFragment extends Fragment {
                 });
 
                 popup.show();
-                return false;
+                return true;
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
             }
         });
+
     }
 }

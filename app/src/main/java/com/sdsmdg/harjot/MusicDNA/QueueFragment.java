@@ -67,11 +67,7 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
         LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(HomeActivity.ctx, LinearLayoutManager.VERTICAL, false);
         queueRecycler.setLayoutManager(mLayoutManager2);
         queueRecycler.setItemAnimator(new DefaultItemAnimator());
-        AlphaInAnimationAdapter alphaAdapter2 = new AlphaInAnimationAdapter(qAdapter);
-        alphaAdapter2.setFirstOnly(false);
-        ScaleInAnimationAdapter scaleAdapter2 = new ScaleInAnimationAdapter(alphaAdapter2);
-        scaleAdapter2.setFirstOnly(true);
-        queueRecycler.setAdapter(scaleAdapter2);
+        queueRecycler.setAdapter(qAdapter);
 
         queueRecycler.addOnItemTouchListener(new ClickItemTouchListener(queueRecycler) {
             @Override

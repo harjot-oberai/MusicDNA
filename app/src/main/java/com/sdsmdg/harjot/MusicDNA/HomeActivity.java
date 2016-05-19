@@ -39,7 +39,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -88,7 +87,6 @@ public class HomeActivity extends AppCompatActivity
     static Queue queue;
     Playlist tempPlaylist;
     static AllPlaylists allPlaylists;
-
     boolean loopEnabled = true;
 
     static boolean isReloaded = false;
@@ -152,6 +150,7 @@ public class HomeActivity extends AppCompatActivity
     static boolean isStreamVisible = false;
     static boolean isQueueVisible = false;
     static boolean isPlaylistVisible = false;
+    static boolean isEqualizerVisible = false;
 
     static LocalTrack localSelectedTrack;
     static Track selectedTrack;
@@ -314,6 +313,8 @@ public class HomeActivity extends AppCompatActivity
         requestPermissions();
 
         VisualizerView.act = this;
+
+        main = this;
 
         WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
@@ -926,6 +927,9 @@ public class HomeActivity extends AppCompatActivity
             } else if (isPlaylistVisible) {
                 hideFragment("playlist");
                 setTitle("Music DNA");
+            } else if (isEqualizerVisible) {
+                hideFragment("equalizer");
+                setTitle("Music DNA");
             } else {
                 super.onBackPressed();
             }
@@ -955,6 +959,9 @@ public class HomeActivity extends AppCompatActivity
         }
         if (id == R.id.action_queue) {
             showFragment("queue");
+        }
+        if (id == R.id.action_equalizer) {
+            showFragment("equalizer");
         }
 
         return super.onOptionsItemSelected(item);
@@ -1026,7 +1033,7 @@ public class HomeActivity extends AppCompatActivity
 
         (localListView.getAdapter()).notifyDataSetChanged();
         if ((LocalMusicFragment.lv) != null)
-            ((BaseAdapter) LocalMusicFragment.lv.getAdapter()).notifyDataSetChanged();
+            (LocalMusicFragment.lv.getAdapter()).notifyDataSetChanged();
 
 
     }
@@ -1078,7 +1085,7 @@ public class HomeActivity extends AppCompatActivity
 
                         (streamingListView.getAdapter()).notifyDataSetChanged();
                         if ((StreamMusicFragment.lv) != null)
-                            ((BaseAdapter) StreamMusicFragment.lv.getAdapter()).notifyDataSetChanged();
+                            (StreamMusicFragment.lv.getAdapter()).notifyDataSetChanged();
                     } else {
                         //request not successful (like 400,401,403 etc)
                         //Handle errors
@@ -1622,13 +1629,13 @@ public class HomeActivity extends AppCompatActivity
         @Override
         protected Void doInBackground(Void... params) {
             updatePoints();
-            main.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    PlayerFragment.mVisualizerView.updateVisualizer(mBytes);
-                }
-            });
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            PlayerFragment.mVisualizerView.updateVisualizer(mBytes);
         }
     }
 
@@ -1761,7 +1768,7 @@ public class HomeActivity extends AppCompatActivity
     }
 
     public void showFragment(String type) {
-        if (type.equals("local")) {
+        if (type.equals("local") && !isLocalVisible) {
             setTitle("Local");
             isLocalVisible = true;
             android.app.FragmentManager fm = getFragmentManager();
@@ -1776,7 +1783,7 @@ public class HomeActivity extends AppCompatActivity
                     .show(newFragment)
                     .addToBackStack(null)
                     .commit();
-        } else if (type.equals("queue")) {
+        } else if (type.equals("queue") && !isQueueVisible) {
             setTitle("Queue");
             isQueueVisible = true;
             android.app.FragmentManager fm = getFragmentManager();
@@ -1791,7 +1798,7 @@ public class HomeActivity extends AppCompatActivity
                     .show(newFragment)
                     .addToBackStack(null)
                     .commit();
-        } else if (type.equals("stream")) {
+        } else if (type.equals("stream") && !isStreamVisible) {
             setTitle("SoundCloud");
             isStreamVisible = true;
             android.app.FragmentManager fm = getFragmentManager();
@@ -1806,7 +1813,7 @@ public class HomeActivity extends AppCompatActivity
                     .show(newFragment)
                     .addToBackStack(null)
                     .commit();
-        } else if (type.equals("playlist")) {
+        } else if (type.equals("playlist") && !isPlaylistVisible) {
             setTitle(tempPlaylist.getPlaylistName());
             isPlaylistVisible = true;
             android.app.FragmentManager fm = getFragmentManager();
@@ -1821,6 +1828,21 @@ public class HomeActivity extends AppCompatActivity
                     .show(newFragment)
                     .addToBackStack(null)
                     .commit();
+        } else if (type.equals("equalizer") && !isEqualizerVisible) {
+            setTitle("Equalizer");
+            isEqualizerVisible = true;
+            android.app.FragmentManager fm = getFragmentManager();
+            EqualizerFragment newFragment = new EqualizerFragment();
+//            QueueFragment.mCallback = this;
+            fm.beginTransaction()
+                    .setCustomAnimations(R.animator.slide_up,
+                            R.animator.slide_down,
+                            R.animator.slide_up,
+                            R.animator.slide_down)
+                    .add(R.id.fragContainer, newFragment, "equalizer")
+                    .show(newFragment)
+                    .addToBackStack(null)
+                    .commit();
         }
     }
 
@@ -1831,11 +1853,7 @@ public class HomeActivity extends AppCompatActivity
             android.app.Fragment frag = fm.findFragmentByTag("local");
             if (frag != null) {
                 fm.beginTransaction()
-                        .setCustomAnimations(R.animator.slide_up,
-                                R.animator.slide_down,
-                                R.animator.slide_up,
-                                R.animator.slide_down)
-                        .hide(frag)
+                        .remove(frag)
                         .commit();
             }
         } else if (type.equals("queue")) {
@@ -1844,11 +1862,7 @@ public class HomeActivity extends AppCompatActivity
             android.app.Fragment frag = fm.findFragmentByTag("queue");
             if (frag != null) {
                 fm.beginTransaction()
-                        .setCustomAnimations(R.animator.slide_up,
-                                R.animator.slide_down,
-                                R.animator.slide_up,
-                                R.animator.slide_down)
-                        .hide(frag)
+                        .remove(frag)
                         .commit();
             }
         } else if (type.equals("stream")) {
@@ -1857,11 +1871,7 @@ public class HomeActivity extends AppCompatActivity
             android.app.Fragment frag = fm.findFragmentByTag("stream");
             if (frag != null) {
                 fm.beginTransaction()
-                        .setCustomAnimations(R.animator.slide_up,
-                                R.animator.slide_down,
-                                R.animator.slide_up,
-                                R.animator.slide_down)
-                        .hide(frag)
+                        .remove(frag)
                         .commit();
             }
         } else if (type.equals("playlist")) {
@@ -1870,11 +1880,16 @@ public class HomeActivity extends AppCompatActivity
             android.app.Fragment frag = fm.findFragmentByTag("playlist");
             if (frag != null) {
                 fm.beginTransaction()
-                        .setCustomAnimations(R.animator.slide_up,
-                                R.animator.slide_down,
-                                R.animator.slide_up,
-                                R.animator.slide_down)
-                        .hide(frag)
+                        .remove(frag)
+                        .commit();
+            }
+        } else if (type.equals("equalizer")) {
+            isEqualizerVisible = false;
+            android.app.FragmentManager fm = getFragmentManager();
+            android.app.Fragment frag = fm.findFragmentByTag("equalizer");
+            if (frag != null) {
+                fm.beginTransaction()
+                        .remove(frag)
                         .commit();
             }
         }

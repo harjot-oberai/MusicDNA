@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.MediaMetadataRetriever;
-import android.support.v7.graphics.Palette;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.sdsmdg.harjot.MusicDNA.LazyLoadingHelper.ImageDownloader;
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
 
 import java.util.List;
@@ -24,6 +24,7 @@ public class LocalTracksHorizontalAdapter extends RecyclerView.Adapter<LocalTrac
 
     private List<LocalTrack> localList;
     int def = 0x000000;
+    ImageDownloader imgSetter;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -42,6 +43,7 @@ public class LocalTracksHorizontalAdapter extends RecyclerView.Adapter<LocalTrac
 
     public LocalTracksHorizontalAdapter(List<LocalTrack> localList) {
         this.localList = localList;
+        imgSetter = new ImageDownloader();
     }
 
     @Override
@@ -56,31 +58,10 @@ public class LocalTracksHorizontalAdapter extends RecyclerView.Adapter<LocalTrac
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
         LocalTrack localTrack = localList.get(position);
-        Bitmap img = getAlbumArt(localTrack.getPath());
-        if (img != null) {
-            holder.art.setImageBitmap(img);
-            if (img != null && !img.isRecycled()) {
-                Palette palette = Palette.from(img).generate();
-                if (palette.getLightMutedColor(def) != 0) {
-                    holder.bottomHolder.setBackgroundColor(palette.getLightMutedColor(def));
-                } else {
-                    holder.bottomHolder.setBackgroundColor(Color.WHITE);
-                }
-//                Log.d("MUTED", palette.getLightMutedColor(def) + "");
-                if (palette.getDarkMutedColor(def) != 0) {
-                    holder.title.setTextColor(palette.getDarkMutedColor(def));
-                    holder.artist.setTextColor(palette.getDarkMutedColor(def));
-                } else {
-                    holder.title.setTextColor(Color.parseColor("#444444"));
-                    holder.artist.setTextColor(Color.parseColor("#777777"));
-                }
-            }
-        } else {
-            holder.art.setImageResource(R.drawable.ic_default);
-            holder.bottomHolder.setBackgroundColor(Color.WHITE);
-            holder.title.setTextColor(Color.parseColor("#444444"));
-            holder.artist.setTextColor(Color.parseColor("#777777"));
-        }
+        imgSetter.download(localTrack.getPath(), holder.art);
+        holder.bottomHolder.setBackgroundColor(Color.WHITE);
+        holder.title.setTextColor(Color.parseColor("#444444"));
+        holder.artist.setTextColor(Color.parseColor("#777777"));
         holder.title.setText(localTrack.getTitle());
         holder.artist.setText(localTrack.getArtist());
 

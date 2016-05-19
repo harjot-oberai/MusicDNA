@@ -9,24 +9,16 @@
     android:padding="10dp">
 
     <ImageView
-        android:id="@+id/holderImage"
-        android:background="#555"
-        android:layout_width="20dp"
-        android:layout_height="44dp"
-        android:layout_centerVertical="true"/>
-
-    <ImageView
-        android:layout_toRightOf="@+id/holderImage"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="2dp"
         android:layout_width="56dp"
         android:layout_height="56dp"
-        android:id="@+id/img"
+        android:id="@+id/img_2"
         android:background="#FFF"/>
 
     <LinearLayout
-        android:id="@+id/row_item_holder"
-        android:layout_toRightOf="@+id/img"
-        android:layout_toLeftOf="@+id/currently_playing_indicator"
+        android:id="@+id/row_item_holder_2"
+        android:layout_toRightOf="@+id/img_2"
+        android:layout_toLeftOf="@+id/currently_playing_indicator_2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -34,7 +26,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="2dp">
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/title_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
@@ -49,13 +41,13 @@
             android:singleLine="true"
             android:textSize = "11dp"
             android:layout_marginTop="3dp"
-            android:id="@+id/url"
+            android:id="@+id/url_2"
             android:text="Artist"/>
     </LinearLayout>
     <com.wang.avi.AVLoadingIndicatorView
         android:layout_marginRight="10dp"
         android:layout_centerVertical="true"
-        android:id="@+id/currently_playing_indicator"
+        android:id="@+id/currently_playing_indicator_2"
         android:layout_alignParentRight="true"
         android:layout_width="32dp"
         android:layout_height="32dp"

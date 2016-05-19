@@ -9,19 +9,14 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
-import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 
 public class VisualizerView extends View {
 
@@ -72,7 +67,7 @@ public class VisualizerView extends View {
         mForePaint1.setColor(Color.rgb(255, 128, 0));
         pts = new ArrayList<>();
         ptPaint = new ArrayList<>();
-          // deprecated
+        // deprecated
     }
 
     public void updateVisualizer(byte[] bytes) {
@@ -242,10 +237,12 @@ public class VisualizerView extends View {
 //        int midy = (int) (height / 2);
 //
         // Redraw previous points
-        for (int i = 0; i < pts.size(); i++) {
-            mForePaint.setColor(ptPaint.get(i).second.first);
-            mForePaint.setAlpha(ptPaint.get(i).second.second);
-            canvas.drawCircle(pts.get(i).first, pts.get(i).second, ptPaint.get(i).first, mForePaint);
+        if (HomeActivity.isPlayerVisible) {
+            for (int i = 0; i < pts.size(); i++) {
+                mForePaint.setColor(ptPaint.get(i).second.first);
+                mForePaint.setAlpha(ptPaint.get(i).second.second);
+                canvas.drawCircle(pts.get(i).first, pts.get(i).second, ptPaint.get(i).first, mForePaint);
+            }
         }
 
 //

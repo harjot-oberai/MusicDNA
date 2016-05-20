@@ -11,7 +11,7 @@
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="always"/>
     <item
-        android:icon="@android:drawable/ic_menu_slideshow"
+        android:icon="@drawable/ic_queue_music_white_48dp"
         android:id="@+id/action_queue"
         android:orderInCategory="200"
         android:title="Queue"

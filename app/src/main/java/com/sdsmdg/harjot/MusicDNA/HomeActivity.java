@@ -44,6 +44,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sdsmdg.harjot.MusicDNA.Interfaces.StreamService;
 import com.sdsmdg.harjot.MusicDNA.Models.AllPlaylists;
@@ -78,20 +79,23 @@ public class HomeActivity extends AppCompatActivity
         LocalMusicFragment.OnLocalTrackSelectedListener,
         StreamMusicFragment.OnTrackSelectedListener,
         QueueFragment.onQueueItemClickedListener,
-        ViewPlaylistFragment.onPLaylistItemClickedListener {
+        ViewPlaylistFragment.onPLaylistItemClickedListener,
+        FavouritesFragment.onFavouriteItemClickedListener {
 
     public static List<LocalTrack> localTrackList = new ArrayList<>();
     public static List<LocalTrack> finalLocalSearchResultList = new ArrayList<>();
     public static List<Track> streamingTrackList = new ArrayList<>();
 
     RecentlyPlayed recentlyPlayed;
-    Favourite favouriteTracks;
+    static Favourite favouriteTracks;
     static Queue queue;
     static Playlist tempPlaylist;
     static AllPlaylists allPlaylists;
 
     static boolean repeatEnabled = false;
     static boolean shuffleEnabled = false;
+
+    static boolean isFavourite = false;
 
     static boolean isReloaded = false;
 
@@ -155,6 +159,7 @@ public class HomeActivity extends AppCompatActivity
     static boolean isQueueVisible = false;
     static boolean isPlaylistVisible = false;
     static boolean isEqualizerVisible = false;
+    static boolean isFavouriteVisible = false;
 
     static LocalTrack localSelectedTrack;
     static Track selectedTrack;
@@ -195,6 +200,18 @@ public class HomeActivity extends AppCompatActivity
                     frag.refresh();
                 }
             }
+            int flag = 0;
+            for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
+                UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
+                if (!ut.getType() && ut.getStreamTrack().getTitle().equals(selectedTrack.getTitle())) {
+                    flag = 1;
+                    isFavourite = true;
+                    break;
+                }
+            }
+            if (flag == 0) {
+                isFavourite = false;
+            }
             showPlayer();
             PlayerFragment.localIsPlaying = false;
             PlayerFragment.track = selectedTrack;
@@ -202,6 +219,18 @@ public class HomeActivity extends AppCompatActivity
             PlayerFragment frag = (PlayerFragment) getFragmentManager().findFragmentByTag("player");
             PlayerFragment.localIsPlaying = false;
             PlayerFragment.track = selectedTrack;
+            int flag = 0;
+            for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
+                UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
+                if (!ut.getType() && ut.getStreamTrack().getTitle().equals(selectedTrack.getTitle())) {
+                    flag = 1;
+                    isFavourite = true;
+                    break;
+                }
+            }
+            if (flag == 0) {
+                isFavourite = false;
+            }
             frag.refresh();
         }
 
@@ -258,13 +287,41 @@ public class HomeActivity extends AppCompatActivity
                 }
             }
 
+            int flag = 0;
+            for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
+                UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
+                if (ut.getType() && ut.getLocalTrack().getTitle().equals(localSelectedTrack.getTitle())) {
+                    flag = 1;
+                    isFavourite = true;
+                    break;
+                }
+            }
+            if (flag == 0) {
+                isFavourite = false;
+            }
+
             showPlayer();
             PlayerFragment.localIsPlaying = true;
             PlayerFragment.localTrack = localSelectedTrack;
+
         } else {
             PlayerFragment frag = (PlayerFragment) getFragmentManager().findFragmentByTag("player");
             PlayerFragment.localIsPlaying = true;
             PlayerFragment.localTrack = localSelectedTrack;
+
+            int flag = 0;
+            for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
+                UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
+                if (ut.getType() && ut.getLocalTrack().getTitle().equals(localSelectedTrack.getTitle())) {
+                    flag = 1;
+                    isFavourite = true;
+                    break;
+                }
+            }
+            if (flag == 0) {
+                isFavourite = false;
+            }
+
             frag.refresh();
         }
 
@@ -292,6 +349,7 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestPermissions();
 
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         ctx = this;
@@ -313,8 +371,6 @@ public class HomeActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         getSupportActionBar().setShowHideAnimationEnabled(true);
-
-        requestPermissions();
 
         VisualizerView.act = this;
 
@@ -934,6 +990,9 @@ public class HomeActivity extends AppCompatActivity
             } else if (isEqualizerVisible) {
                 hideFragment("equalizer");
                 setTitle("Music DNA");
+            } else if (isFavouriteVisible) {
+                hideFragment("favourite");
+                setTitle("Music DNA");
             } else {
                 super.onBackPressed();
             }
@@ -977,19 +1036,21 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        /*if (id == R.id.nav_camera) {
+        if (id == R.id.nav_stream) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_local) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_playlists) {
 
+        } else if (id == R.id.nav_fav) {
+            showFragment("favourite");
         } else if (id == R.id.nav_manage) {
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_profile) {
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_account_settings) {
 
-        }*/
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -1659,6 +1720,19 @@ public class HomeActivity extends AppCompatActivity
         UnifiedTrack ut = HomeActivity.tempPlaylist.getSongList().get(position);
         if (ut.getType()) {
             LocalTrack track = ut.getLocalTrack();
+            if (queue.getQueue().size() == 0) {
+                queueCurrentIndex = 0;
+                queue.getQueue().add(new UnifiedTrack(true, track, null));
+            } else if (queueCurrentIndex == queue.getQueue().size() - 1) {
+                queueCurrentIndex++;
+                queue.getQueue().add(new UnifiedTrack(true, track, null));
+            } else if (isReloaded) {
+                isReloaded = false;
+                queueCurrentIndex = queue.getQueue().size();
+                queue.getQueue().add(new UnifiedTrack(true, track, null));
+            } else {
+                queue.getQueue().add(++queueCurrentIndex, new UnifiedTrack(true, track, null));
+            }
             localSelectedTrack = track;
             streamSelected = false;
             localSelected = true;
@@ -1667,6 +1741,67 @@ public class HomeActivity extends AppCompatActivity
             onLocalTrackSelected(position);
         } else {
             Track track = ut.getStreamTrack();
+            if (queue.getQueue().size() == 0) {
+                queueCurrentIndex = 0;
+                queue.getQueue().add(new UnifiedTrack(false, null, track));
+            } else if (queueCurrentIndex == queue.getQueue().size() - 1) {
+                queueCurrentIndex++;
+                queue.getQueue().add(new UnifiedTrack(false, null, track));
+            } else if (isReloaded) {
+                isReloaded = false;
+                queueCurrentIndex = queue.getQueue().size();
+                queue.getQueue().add(new UnifiedTrack(false, null, track));
+            } else {
+                queue.getQueue().add(++queueCurrentIndex, new UnifiedTrack(false, null, track));
+            }
+            selectedTrack = track;
+            streamSelected = true;
+            localSelected = false;
+            queueCall = false;
+            isReloaded = false;
+            onTrackSelected(position);
+        }
+    }
+
+    @Override
+    public void onFavouriteItemClicked(int position) {
+        UnifiedTrack ut = HomeActivity.favouriteTracks.getFavourite().get(position);
+        if (ut.getType()) {
+            LocalTrack track = ut.getLocalTrack();
+            if (queue.getQueue().size() == 0) {
+                queueCurrentIndex = 0;
+                queue.getQueue().add(new UnifiedTrack(true, track, null));
+            } else if (queueCurrentIndex == queue.getQueue().size() - 1) {
+                queueCurrentIndex++;
+                queue.getQueue().add(new UnifiedTrack(true, track, null));
+            } else if (isReloaded) {
+                isReloaded = false;
+                queueCurrentIndex = queue.getQueue().size();
+                queue.getQueue().add(new UnifiedTrack(true, track, null));
+            } else {
+                queue.getQueue().add(++queueCurrentIndex, new UnifiedTrack(true, track, null));
+            }
+            localSelectedTrack = track;
+            streamSelected = false;
+            localSelected = true;
+            queueCall = false;
+            isReloaded = false;
+            onLocalTrackSelected(position);
+        } else {
+            Track track = ut.getStreamTrack();
+            if (queue.getQueue().size() == 0) {
+                queueCurrentIndex = 0;
+                queue.getQueue().add(new UnifiedTrack(false, null, track));
+            } else if (queueCurrentIndex == queue.getQueue().size() - 1) {
+                queueCurrentIndex++;
+                queue.getQueue().add(new UnifiedTrack(false, null, track));
+            } else if (isReloaded) {
+                isReloaded = false;
+                queueCurrentIndex = queue.getQueue().size();
+                queue.getQueue().add(new UnifiedTrack(false, null, track));
+            } else {
+                queue.getQueue().add(++queueCurrentIndex, new UnifiedTrack(false, null, track));
+            }
             selectedTrack = track;
             streamSelected = true;
             localSelected = false;
@@ -1895,6 +2030,21 @@ public class HomeActivity extends AppCompatActivity
                     .show(newFragment)
                     .addToBackStack(null)
                     .commit();
+        } else if (type.equals("favourite") && !isFavouriteVisible) {
+            setTitle("Favourites");
+            isFavouriteVisible = true;
+            android.app.FragmentManager fm = getFragmentManager();
+            FavouritesFragment newFragment = new FavouritesFragment();
+            FavouritesFragment.mCallback = this;
+            fm.beginTransaction()
+                    .setCustomAnimations(R.animator.slide_up,
+                            R.animator.slide_down,
+                            R.animator.slide_up,
+                            R.animator.slide_down)
+                    .add(R.id.fragContainer, newFragment, "favourite")
+                    .show(newFragment)
+                    .addToBackStack(null)
+                    .commit();
         }
     }
 
@@ -1939,6 +2089,15 @@ public class HomeActivity extends AppCompatActivity
             isEqualizerVisible = false;
             android.app.FragmentManager fm = getFragmentManager();
             android.app.Fragment frag = fm.findFragmentByTag("equalizer");
+            if (frag != null) {
+                fm.beginTransaction()
+                        .remove(frag)
+                        .commit();
+            }
+        } else if (type.equals("favourite")) {
+            isFavouriteVisible = false;
+            android.app.FragmentManager fm = getFragmentManager();
+            android.app.Fragment frag = fm.findFragmentByTag("favourite");
             if (frag != null) {
                 fm.beginTransaction()
                         .remove(frag)

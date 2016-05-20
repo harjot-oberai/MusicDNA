@@ -1,5 +1,6 @@
 package com.sdsmdg.harjot.MusicDNA.Models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,6 +8,10 @@ import java.util.List;
  */
 public class Favourite {
     private List<UnifiedTrack> favourite;
+
+    public Favourite() {
+        favourite = new ArrayList<>();
+    }
 
     public List<UnifiedTrack> getFavourite() {
         return favourite;

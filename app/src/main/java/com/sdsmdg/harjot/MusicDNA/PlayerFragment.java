@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.Models.Track;
+import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -251,15 +252,25 @@ public class PlayerFragment extends Fragment {
         isFav = false;
 
         favouriteIcon = (ImageView) view.findViewById(R.id.fav_icon);
+        if (HomeActivity.isFavourite) {
+            favouriteIcon.setImageResource(R.drawable.ic_heart_filled);
+            isFav = true;
+        } else {
+            favouriteIcon.setImageResource(R.drawable.ic_heart_out);
+            isFav = false;
+        }
+
         favouriteIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isFav) {
                     favouriteIcon.setImageResource(R.drawable.ic_heart_out);
                     isFav = false;
+                    removeFromfavourite();
                 } else {
                     favouriteIcon.setImageResource(R.drawable.ic_heart_filled);
                     isFav = true;
+                    addToFavourite();
                 }
             }
         });
@@ -475,6 +486,43 @@ public class PlayerFragment extends Fragment {
 
     }
 
+    public void addToFavourite() {
+
+        UnifiedTrack ut;
+
+        if (HomeActivity.localSelected)
+            ut = new UnifiedTrack(true, localTrack, null);
+        else
+            ut = new UnifiedTrack(false, null, track);
+
+        HomeActivity.favouriteTracks.getFavourite().add(ut);
+    }
+
+    public void removeFromfavourite() {
+
+        UnifiedTrack ut;
+
+        if (HomeActivity.localSelected)
+            ut = new UnifiedTrack(true, localTrack, null);
+        else
+            ut = new UnifiedTrack(false, null, track);
+
+        for (int i = 0; i < HomeActivity.favouriteTracks.getFavourite().size(); i++) {
+            UnifiedTrack ut1 = HomeActivity.favouriteTracks.getFavourite().get(i);
+            if (ut.getType() && ut1.getType()) {
+                if (ut.getLocalTrack().getTitle().equals(ut1.getLocalTrack().getTitle())) {
+                    HomeActivity.favouriteTracks.getFavourite().remove(i);
+                    break;
+                }
+            } else if (!ut.getType() && !ut1.getType()) {
+                if (ut.getStreamTrack().getTitle().equals(ut1.getStreamTrack().getTitle())) {
+                    HomeActivity.favouriteTracks.getFavourite().remove(i);
+                    break;
+                }
+            }
+        }
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroy();
@@ -496,7 +544,41 @@ public class PlayerFragment extends Fragment {
 
         mVisualizerView.clear();
 
+        repeatIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!HomeActivity.repeatEnabled) {
+                    HomeActivity.repeatEnabled = true;
+                    repeatIcon.setImageResource(R.drawable.ic_repeat_red_48dp);
+                } else {
+                    HomeActivity.repeatEnabled = false;
+                    repeatIcon.setImageResource(R.drawable.ic_repeat_white_48dp);
+                }
+            }
+        });
+
+        shuffleIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!HomeActivity.shuffleEnabled) {
+                    HomeActivity.shuffleEnabled = true;
+                    shuffleIcon.setImageResource(R.drawable.ic_shuffle_red_48dp);
+                } else {
+                    HomeActivity.shuffleEnabled = false;
+                    shuffleIcon.setImageResource(R.drawable.ic_shuffle_white_48dp);
+                }
+            }
+        });
+
         isFav = false;
+
+        if (HomeActivity.isFavourite) {
+            favouriteIcon.setImageResource(R.drawable.ic_heart_filled);
+            isFav = true;
+        } else {
+            favouriteIcon.setImageResource(R.drawable.ic_heart_out);
+            isFav = false;
+        }
 
         favouriteIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -504,9 +586,11 @@ public class PlayerFragment extends Fragment {
                 if (isFav) {
                     favouriteIcon.setImageResource(R.drawable.ic_heart_out);
                     isFav = false;
+                    removeFromfavourite();
                 } else {
                     favouriteIcon.setImageResource(R.drawable.ic_heart_filled);
                     isFav = true;
+                    addToFavourite();
                 }
             }
         });

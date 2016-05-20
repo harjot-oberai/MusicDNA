@@ -1,10 +1,6 @@
 package com.sdsmdg.harjot.MusicDNA;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.media.MediaMetadataRetriever;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -25,15 +21,11 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 /**
- * Created by Harjot on 16-May-16.
+ * Created by Harjot on 20-May-16.
  */
+public class FavouriteTrackAdapter extends RecyclerView.Adapter<FavouriteTrackAdapter.MyViewHolder> implements ItemTouchHelperAdapter {
 
-
-public class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdapter.MyViewHolder>
-        implements ItemTouchHelperAdapter {
-
-    private List<UnifiedTrack> queue;
-    Context ctx;
+    private List<UnifiedTrack> favouriteList;
     ImageLoader imgLoader;
 
     public interface OnDragStartListener {
@@ -41,6 +33,12 @@ public class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdap
     }
 
     private final OnDragStartListener mDragStartListener;
+
+    public FavouriteTrackAdapter(List<UnifiedTrack> favouriteList, OnDragStartListener mDragStartListener) {
+        this.mDragStartListener = mDragStartListener;
+        this.favouriteList = favouriteList;
+        imgLoader = new ImageLoader(HomeActivity.ctx);
+    }
 
     public class MyViewHolder extends RecyclerView.ViewHolder
             implements ItemTouchHelperViewHolder {
@@ -70,13 +68,6 @@ public class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdap
         }
     }
 
-    public QueueRecyclerAdapter(List<UnifiedTrack> queue, Context ctx, OnDragStartListener listener) {
-        this.queue = queue;
-        this.ctx = ctx;
-        mDragStartListener = listener;
-        imgLoader = new ImageLoader(HomeActivity.ctx);
-    }
-
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
@@ -87,16 +78,7 @@ public class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdap
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-
-        if (HomeActivity.queueCurrentIndex == position && !HomeActivity.isReloaded) {
-            holder.title.setTextColor(Color.RED);
-            holder.indicator.setVisibility(View.VISIBLE);
-        } else {
-            holder.title.setTextColor(Color.BLACK);
-            holder.indicator.setVisibility(View.INVISIBLE);
-        }
-
-        UnifiedTrack ut = queue.get(position);
+        UnifiedTrack ut = favouriteList.get(position);
         if (ut.getType()) {
             LocalTrack lt = ut.getLocalTrack();
             imgLoader.DisplayImage(lt.getPath(), holder.art);
@@ -123,31 +105,23 @@ public class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdap
                 return false;
             }
         });
-
     }
 
     @Override
     public int getItemCount() {
-        return queue.size();
+        return favouriteList.size();
     }
 
     @Override
     public void onItemMove(int fromPosition, int toPosition) {
-        UnifiedTrack prev = queue.remove(fromPosition);
-        queue.add(toPosition, prev);
+        UnifiedTrack prev = favouriteList.remove(fromPosition);
+        favouriteList.add(toPosition, prev);
         notifyItemMoved(fromPosition, toPosition);
-        if (fromPosition == HomeActivity.queueCurrentIndex) {
-            HomeActivity.queueCurrentIndex = toPosition;
-        } else if (fromPosition > HomeActivity.queueCurrentIndex && toPosition == HomeActivity.queueCurrentIndex) {
-            HomeActivity.queueCurrentIndex++;
-        } else if (fromPosition < HomeActivity.queueCurrentIndex && toPosition == HomeActivity.queueCurrentIndex) {
-            HomeActivity.queueCurrentIndex--;
-        }
     }
 
     @Override
     public void onItemDismiss(int position) {
-        queue.remove(position);
+        favouriteList.remove(position);
         notifyItemRemoved(position);
     }
 

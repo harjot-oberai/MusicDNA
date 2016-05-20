@@ -184,6 +184,18 @@ public class HomeActivity extends AppCompatActivity
                 PlayerFragment.mCallback = this;
                 PlayerFragment.mCallback2 = this;
                 PlayerFragment.mCallback3 = this;
+                int flag = 0;
+                for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
+                    UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
+                    if (!ut.getType() && ut.getStreamTrack().getTitle().equals(selectedTrack.getTitle())) {
+                        flag = 1;
+                        isFavourite = true;
+                        break;
+                    }
+                }
+                if (flag == 0) {
+                    isFavourite = false;
+                }
                 fm.beginTransaction()
                         .setCustomAnimations(R.animator.slide_up,
                                 R.animator.slide_down,
@@ -197,20 +209,20 @@ public class HomeActivity extends AppCompatActivity
                 if (PlayerFragment.track != null && !PlayerFragment.localIsPlaying && selectedTrack.getTitle() == PlayerFragment.track.getTitle()) {
 
                 } else {
+                    int flag = 0;
+                    for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
+                        UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
+                        if (!ut.getType() && ut.getStreamTrack().getTitle().equals(selectedTrack.getTitle())) {
+                            flag = 1;
+                            isFavourite = true;
+                            break;
+                        }
+                    }
+                    if (flag == 0) {
+                        isFavourite = false;
+                    }
                     frag.refresh();
                 }
-            }
-            int flag = 0;
-            for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
-                UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
-                if (!ut.getType() && ut.getStreamTrack().getTitle().equals(selectedTrack.getTitle())) {
-                    flag = 1;
-                    isFavourite = true;
-                    break;
-                }
-            }
-            if (flag == 0) {
-                isFavourite = false;
             }
             showPlayer();
             PlayerFragment.localIsPlaying = false;
@@ -271,6 +283,18 @@ public class HomeActivity extends AppCompatActivity
                 PlayerFragment.mCallback = this;
                 PlayerFragment.mCallback2 = this;
                 PlayerFragment.mCallback3 = this;
+                int flag = 0;
+                for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
+                    UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
+                    if (ut.getType() && ut.getLocalTrack().getTitle().equals(localSelectedTrack.getTitle())) {
+                        flag = 1;
+                        isFavourite = true;
+                        break;
+                    }
+                }
+                if (flag == 0) {
+                    isFavourite = false;
+                }
                 fm.beginTransaction()
                         .setCustomAnimations(R.animator.slide_up,
                                 R.animator.slide_down,
@@ -283,21 +307,20 @@ public class HomeActivity extends AppCompatActivity
                 if (PlayerFragment.localTrack != null && PlayerFragment.localIsPlaying && localSelectedTrack.getTitle() == PlayerFragment.localTrack.getTitle()) {
 
                 } else {
+                    int flag = 0;
+                    for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
+                        UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
+                        if (ut.getType() && ut.getLocalTrack().getTitle().equals(localSelectedTrack.getTitle())) {
+                            flag = 1;
+                            isFavourite = true;
+                            break;
+                        }
+                    }
+                    if (flag == 0) {
+                        isFavourite = false;
+                    }
                     frag.refresh();
                 }
-            }
-
-            int flag = 0;
-            for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
-                UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
-                if (ut.getType() && ut.getLocalTrack().getTitle().equals(localSelectedTrack.getTitle())) {
-                    flag = 1;
-                    isFavourite = true;
-                    break;
-                }
-            }
-            if (flag == 0) {
-                isFavourite = false;
             }
 
             showPlayer();

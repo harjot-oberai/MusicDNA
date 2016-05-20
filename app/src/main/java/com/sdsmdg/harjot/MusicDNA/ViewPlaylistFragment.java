@@ -4,6 +4,7 @@ package com.sdsmdg.harjot.MusicDNA;
 import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,10 +23,12 @@ public class ViewPlaylistFragment extends Fragment implements PlaylistTrackAdapt
 
     RecyclerView playlistRecyler;
     static PlaylistTrackAdapter plAdapter;
+    FloatingActionButton playAll;
 
     static ItemTouchHelper mItemTouchHelper;
 
     static onPLaylistItemClickedListener mCallback;
+    static onPlaylistPlayAllListener mCallback2;
 
     @Override
     public void onDragStarted(RecyclerView.ViewHolder viewHolder) {
@@ -34,6 +37,10 @@ public class ViewPlaylistFragment extends Fragment implements PlaylistTrackAdapt
 
     public interface onPLaylistItemClickedListener {
         public void onPLaylistItemClicked(int position);
+    }
+
+    public interface onPlaylistPlayAllListener{
+        public void onPlaylistPLayAll();
     }
 
     public ViewPlaylistFragment() {
@@ -45,6 +52,7 @@ public class ViewPlaylistFragment extends Fragment implements PlaylistTrackAdapt
         super.onAttach(context);
         try {
             mCallback = (onPLaylistItemClickedListener) context;
+            mCallback2 = (onPlaylistPlayAllListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnHeadlineSelectedListener");
@@ -84,6 +92,17 @@ public class ViewPlaylistFragment extends Fragment implements PlaylistTrackAdapt
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
+            }
+        });
+
+        playAll = (FloatingActionButton) view.findViewById(R.id.play_all_fab);
+
+        playAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HomeActivity.queue.setQueue(HomeActivity.tempPlaylist.getSongList());
+                HomeActivity.queueCurrentIndex = 0;
+                mCallback2.onPlaylistPLayAll();
             }
         });
 

@@ -80,7 +80,8 @@ public class HomeActivity extends AppCompatActivity
         StreamMusicFragment.OnTrackSelectedListener,
         QueueFragment.onQueueItemClickedListener,
         ViewPlaylistFragment.onPLaylistItemClickedListener,
-        FavouritesFragment.onFavouriteItemClickedListener {
+        FavouritesFragment.onFavouriteItemClickedListener,
+        ViewPlaylistFragment.onPlaylistPlayAllListener {
 
     public static List<LocalTrack> localTrackList = new ArrayList<>();
     public static List<LocalTrack> finalLocalSearchResultList = new ArrayList<>();
@@ -1834,6 +1835,13 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    public void onPlaylistPLayAll() {
+        onQueueItemClicked(0);
+        hideFragment("playlist");
+        showFragment("queue");
+    }
+
     public static class MyAsyncTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -2029,6 +2037,7 @@ public class HomeActivity extends AppCompatActivity
             android.app.FragmentManager fm = getFragmentManager();
             ViewPlaylistFragment newFragment = new ViewPlaylistFragment();
             ViewPlaylistFragment.mCallback = this;
+            ViewPlaylistFragment.mCallback2 = this;
             fm.beginTransaction()
                     .setCustomAnimations(R.animator.slide_up,
                             R.animator.slide_down,

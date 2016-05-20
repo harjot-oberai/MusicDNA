@@ -15,7 +15,7 @@
             android:id="@+id/customProgress"
             android:layout_width="match_parent"
             android:layout_height="5dp"
-            android:visibility="invisible"/>
+            android:visibility="invisible" />
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/smallPlayer"
@@ -59,9 +59,9 @@
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="right|center_vertical"
-                android:layout_marginTop="2dp"
                 android:layout_marginBottom="5dp"
                 android:layout_marginRight="17dp"
+                android:layout_marginTop="2dp"
                 android:visibility="visible" />
 
         </android.support.v7.widget.Toolbar>
@@ -71,22 +71,48 @@
         android:id="@+id/myvisualizerview"
         android:layout_width="370dp"
         android:layout_height="390dp"
-        android:layout_above="@+id/progressBar"
+        android:layout_above="@+id/seekBarContainer"
         android:layout_centerHorizontal="true" />
 
-    <!--<com.sdsmdg.harjot.MusicDNA.OptimizedVisualizerView-->
-        <!--android:id="@+id/myvisualizerview"-->
-        <!--android:layout_width="370dp"-->
-        <!--android:layout_height="390dp"-->
-        <!--android:layout_above="@+id/progressBar"-->
-        <!--android:layout_centerHorizontal="true" />-->
-
-    <SeekBar
-        android:id="@+id/progressBar"
+    <RelativeLayout
+        android:id="@+id/seekBarContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/bottomContainer"
-        android:max="100" />
+        android:padding="2dp">
+
+        <ImageView
+            android:id="@+id/repeat_icon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:src="@drawable/ic_repeat_white_48dp" />
+
+        <SeekBar
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_toEndOf="@+id/repeat_icon"
+            android:layout_toStartOf="@+id/shuffle_icon" />
+
+        <ImageView
+            android:id="@+id/shuffle_icon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:src="@drawable/ic_shuffle_white_48dp" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/bottomContainer"
@@ -102,13 +128,17 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="85dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
             android:src="@drawable/ic_skip_previous_white_48dp" />
 
         <ImageView
             android:id="@+id/controller"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_centerInParent="true" />
+            android:layout_centerInParent="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true" />
 
         <ImageView
             android:id="@+id/next"
@@ -117,7 +147,20 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="85dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
             android:src="@drawable/ic_skip_next_white_48dp" />
+
+        <ImageView
+            android:id="@+id/fav_icon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:src="@drawable/ic_heart_out" />
     </RelativeLayout>
 
 </com.sdsmdg.harjot.MusicDNA.SlidingRelativeLayout>

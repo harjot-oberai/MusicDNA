@@ -38,7 +38,7 @@ import java.util.TimerTask;
 public class PlayerFragment extends Fragment {
 
     public static VisualizerView mVisualizerView;
-//    public static OptimizedVisualizerView mVisualizerView;
+    //    public static OptimizedVisualizerView mVisualizerView;
     public static MediaPlayer mMediaPlayer;
     public static Visualizer mVisualizer;
 
@@ -46,9 +46,15 @@ public class PlayerFragment extends Fragment {
 
     static CustomProgressBar cpb;
 
+    public static ImageView repeatIcon;
+    public static ImageView shuffleIcon;
+
     public static ImageView mainTrackController;
     public static ImageView nextTrackController;
     public static ImageView previousTrackController;
+    public static ImageView favouriteIcon;
+
+    boolean isFav = false;
 
     static RelativeLayout bottomContainer;
 
@@ -93,20 +99,22 @@ public class PlayerFragment extends Fragment {
         Equalizer mEqualizer = new Equalizer(0, mMediaPlayer.getAudioSessionId());
         mEqualizer.setEnabled(true);
         mVisualizer = new Visualizer(mMediaPlayer.getAudioSessionId());
-        mVisualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[1]);
-        mVisualizer.setDataCaptureListener(
-                new Visualizer.OnDataCaptureListener() {
-                    public void onWaveFormDataCapture(Visualizer visualizer,
-                                                      byte[] bytes, int samplingRate) {
-//                        mVisualizerView.updateVisualizer(bytes);
-                    }
+        try {
+            mVisualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[1]);
+            mVisualizer.setDataCaptureListener(
+                    new Visualizer.OnDataCaptureListener() {
+                        public void onWaveFormDataCapture(Visualizer visualizer,
+                                                          byte[] bytes, int samplingRate) {
+                        }
 
-                    public void onFftDataCapture(Visualizer visualizer,
-                                                 byte[] bytes, int samplingRate) {
-//                        mVisualizerView.updateVisualizer(bytes);
-                        HomeActivity.updateVisualizer(bytes);
-                    }
-                }, Visualizer.getMaxCaptureRate() / 2, false, true);
+                        public void onFftDataCapture(Visualizer visualizer,
+                                                     byte[] bytes, int samplingRate) {
+                            HomeActivity.updateVisualizer(bytes);
+                        }
+                    }, Visualizer.getMaxCaptureRate() / 2, false, true);
+        } catch (Exception e) {
+            Log.d("VisualizerException", e.getMessage() + ":");
+        }
 
 
     }
@@ -208,9 +216,53 @@ public class PlayerFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        repeatIcon = (ImageView) view.findViewById(R.id.repeat_icon);
+        repeatIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!HomeActivity.repeatEnabled) {
+                    HomeActivity.repeatEnabled = true;
+                    repeatIcon.setImageResource(R.drawable.ic_repeat_red_48dp);
+                } else {
+                    HomeActivity.repeatEnabled = false;
+                    repeatIcon.setImageResource(R.drawable.ic_repeat_white_48dp);
+                }
+            }
+        });
+
+        shuffleIcon = (ImageView) view.findViewById(R.id.shuffle_icon);
+        shuffleIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!HomeActivity.shuffleEnabled) {
+                    HomeActivity.shuffleEnabled = true;
+                    shuffleIcon.setImageResource(R.drawable.ic_shuffle_red_48dp);
+                } else {
+                    HomeActivity.shuffleEnabled = false;
+                    shuffleIcon.setImageResource(R.drawable.ic_shuffle_white_48dp);
+                }
+            }
+        });
+
         mainTrackController = (ImageView) view.findViewById(R.id.controller);
         nextTrackController = (ImageView) view.findViewById(R.id.next);
         previousTrackController = (ImageView) view.findViewById(R.id.previous);
+
+        isFav = false;
+
+        favouriteIcon = (ImageView) view.findViewById(R.id.fav_icon);
+        favouriteIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isFav) {
+                    favouriteIcon.setImageResource(R.drawable.ic_heart_out);
+                    isFav = false;
+                } else {
+                    favouriteIcon.setImageResource(R.drawable.ic_heart_filled);
+                    isFav = true;
+                }
+            }
+        });
 
         selected_track_image = (ImageView) view.findViewById(R.id.selected_track_image_sp);
         selected_track_title = (TextView) view.findViewById(R.id.selected_track_title_sp);
@@ -251,7 +303,6 @@ public class PlayerFragment extends Fragment {
                 completed = false;
                 isPrepared = false;
                 mMediaPlayer.stop();
-//                mMediaPlayer.reset();
                 mVisualizer.release();
                 mCallback2.onComplete();
 
@@ -354,7 +405,6 @@ public class PlayerFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 mMediaPlayer.stop();
-//                mMediaPlayer.reset();
                 mVisualizer.release();
                 mCallback2.onComplete();
             }
@@ -364,7 +414,6 @@ public class PlayerFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 mMediaPlayer.stop();
-//                mMediaPlayer.reset();
                 mVisualizer.release();
                 mCallback3.onPreviousTrack();
             }
@@ -446,6 +495,21 @@ public class PlayerFragment extends Fragment {
     public void refresh() {
 
         mVisualizerView.clear();
+
+        isFav = false;
+
+        favouriteIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isFav) {
+                    favouriteIcon.setImageResource(R.drawable.ic_heart_out);
+                    isFav = false;
+                } else {
+                    favouriteIcon.setImageResource(R.drawable.ic_heart_filled);
+                    isFav = true;
+                }
+            }
+        });
 
         smallPlayer.setOnClickListener(new View.OnClickListener() {
             @Override

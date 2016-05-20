@@ -57,6 +57,7 @@ import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import bz.tsung.android.objectify.NoSuchPreferenceFoundException;
 import bz.tsung.android.objectify.ObjectPreferenceLoader;
@@ -76,7 +77,8 @@ public class HomeActivity extends AppCompatActivity
         PlayerFragment.onPreviousTrackListener,
         LocalMusicFragment.OnLocalTrackSelectedListener,
         StreamMusicFragment.OnTrackSelectedListener,
-        QueueFragment.onQueueItemClickedListener {
+        QueueFragment.onQueueItemClickedListener,
+        ViewPlaylistFragment.onPLaylistItemClickedListener {
 
     public static List<LocalTrack> localTrackList = new ArrayList<>();
     public static List<LocalTrack> finalLocalSearchResultList = new ArrayList<>();
@@ -85,9 +87,11 @@ public class HomeActivity extends AppCompatActivity
     RecentlyPlayed recentlyPlayed;
     Favourite favouriteTracks;
     static Queue queue;
-    Playlist tempPlaylist;
+    static Playlist tempPlaylist;
     static AllPlaylists allPlaylists;
-    boolean loopEnabled = true;
+
+    static boolean repeatEnabled = false;
+    static boolean shuffleEnabled = false;
 
     static boolean isReloaded = false;
 
@@ -597,10 +601,10 @@ public class HomeActivity extends AppCompatActivity
             @Override
             boolean onClick(RecyclerView parent, View view, final int position, long id) {
                 tempPlaylist = allPlaylists.getPlaylists().get(position);
-                queue.setQueue(tempPlaylist.getSongList());
+//                queue.setQueue(tempPlaylist.getSongList());
                 showFragment("playlist");
-                queueCurrentIndex = 0;
-                onQueueItemClicked(0);
+//                queueCurrentIndex = 0;
+//                onQueueItemClicked(0);
                 return true;
             }
 
@@ -1473,7 +1477,7 @@ public class HomeActivity extends AppCompatActivity
             y = (float) Math.cos(PlayerFragment.mVisualizerView.angle);
 
             // filtering low amplitude
-            if (PlayerFragment.mVisualizerView.volume < 0.39) {
+            if (PlayerFragment.mVisualizerView.volume < 0.83) {
                 continue;
             }
 
@@ -1535,26 +1539,10 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onComplete() {
-        Log.d("onCompleteCalled", "YES");
         queueCall = true;
-        if (queueCurrentIndex < queue.getQueue().size() - 1) {
-            queueCurrentIndex++;
-            if (queue.getQueue().get(queueCurrentIndex).getType()) {
-                localSelectedTrack = queue.getQueue().get(queueCurrentIndex).getLocalTrack();
-                streamSelected = false;
-                localSelected = true;
-                onLocalTrackSelected(-1);
-            } else {
-                selectedTrack = queue.getQueue().get(queueCurrentIndex).getStreamTrack();
-                streamSelected = true;
-                localSelected = false;
-                onTrackSelected(-1);
-            }
-        } else {
-            if (loopEnabled) {
-                queueCurrentIndex = 0;
-                onQueueItemClicked(0);
-            } else {
+        if (!shuffleEnabled) {
+            if (queueCurrentIndex < queue.getQueue().size() - 1) {
+                queueCurrentIndex++;
                 if (queue.getQueue().get(queueCurrentIndex).getType()) {
                     localSelectedTrack = queue.getQueue().get(queueCurrentIndex).getLocalTrack();
                     streamSelected = false;
@@ -1566,15 +1554,24 @@ public class HomeActivity extends AppCompatActivity
                     localSelected = false;
                     onTrackSelected(-1);
                 }
+            } else {
+                if (repeatEnabled) {
+                    queueCurrentIndex = 0;
+                    onQueueItemClicked(0);
+                } else {
+                    PlayerFragment.mMediaPlayer.stop();
+                }
             }
-        }
-    }
-
-    @Override
-    public void onPreviousTrack() {
-        if (queueCurrentIndex > 0) {
-            queueCall = true;
-            queueCurrentIndex--;
+        } else {
+            Random r = new Random();
+            int x;
+            while (true) {
+                x = r.nextInt(queue.getQueue().size());
+                if (x != queueCurrentIndex) {
+                    break;
+                }
+            }
+            queueCurrentIndex = x;
             if (queue.getQueue().get(queueCurrentIndex).getType()) {
                 localSelectedTrack = queue.getQueue().get(queueCurrentIndex).getLocalTrack();
                 streamSelected = false;
@@ -1586,7 +1583,40 @@ public class HomeActivity extends AppCompatActivity
                 localSelected = false;
                 onTrackSelected(-1);
             }
+        }
+
+    }
+
+    @Override
+    public void onPreviousTrack() {
+        if (!shuffleEnabled) {
+            if (queueCurrentIndex > 0) {
+                queueCall = true;
+                queueCurrentIndex--;
+                if (queue.getQueue().get(queueCurrentIndex).getType()) {
+                    localSelectedTrack = queue.getQueue().get(queueCurrentIndex).getLocalTrack();
+                    streamSelected = false;
+                    localSelected = true;
+                    onLocalTrackSelected(-1);
+                } else {
+                    selectedTrack = queue.getQueue().get(queueCurrentIndex).getStreamTrack();
+                    streamSelected = true;
+                    localSelected = false;
+                    onTrackSelected(-1);
+                }
+            } else {
+                PlayerFragment.mMediaPlayer.stop();
+            }
         } else {
+            Random r = new Random();
+            int x;
+            while (true) {
+                x = r.nextInt(queue.getQueue().size());
+                if (x != queueCurrentIndex) {
+                    break;
+                }
+            }
+            queueCurrentIndex = x;
             if (queue.getQueue().get(queueCurrentIndex).getType()) {
                 localSelectedTrack = queue.getQueue().get(queueCurrentIndex).getLocalTrack();
                 streamSelected = false;
@@ -1605,6 +1635,28 @@ public class HomeActivity extends AppCompatActivity
     public void onQueueItemClicked(int position) {
         queueCurrentIndex = position;
         UnifiedTrack ut = HomeActivity.queue.getQueue().get(position);
+        if (ut.getType()) {
+            LocalTrack track = ut.getLocalTrack();
+            localSelectedTrack = track;
+            streamSelected = false;
+            localSelected = true;
+            queueCall = false;
+            isReloaded = false;
+            onLocalTrackSelected(position);
+        } else {
+            Track track = ut.getStreamTrack();
+            selectedTrack = track;
+            streamSelected = true;
+            localSelected = false;
+            queueCall = false;
+            isReloaded = false;
+            onTrackSelected(position);
+        }
+    }
+
+    @Override
+    public void onPLaylistItemClicked(int position) {
+        UnifiedTrack ut = HomeActivity.tempPlaylist.getSongList().get(position);
         if (ut.getType()) {
             LocalTrack track = ut.getLocalTrack();
             localSelectedTrack = track;
@@ -1817,8 +1869,8 @@ public class HomeActivity extends AppCompatActivity
             setTitle(tempPlaylist.getPlaylistName());
             isPlaylistVisible = true;
             android.app.FragmentManager fm = getFragmentManager();
-            QueueFragment newFragment = new QueueFragment();
-            QueueFragment.mCallback = this;
+            ViewPlaylistFragment newFragment = new ViewPlaylistFragment();
+            ViewPlaylistFragment.mCallback = this;
             fm.beginTransaction()
                     .setCustomAnimations(R.animator.slide_up,
                             R.animator.slide_down,

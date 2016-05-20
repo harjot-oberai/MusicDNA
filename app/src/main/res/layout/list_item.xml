@@ -10,7 +10,7 @@
 
     <ImageView
         android:id="@+id/holderImage"
-        android:background="#555"
+        android:src="@drawable/handle"
         android:layout_width="20dp"
         android:layout_height="44dp"
         android:layout_centerVertical="true"/>

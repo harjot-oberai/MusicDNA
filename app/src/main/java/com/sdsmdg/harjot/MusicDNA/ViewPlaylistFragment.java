@@ -1,42 +1,42 @@
 package com.sdsmdg.harjot.MusicDNA;
 
 
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.sdsmdg.harjot.MusicDNA.Helpers.SimpleItemTouchHelperCallback;
 
-import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
-import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
-
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDragStartListener {
+public class ViewPlaylistFragment extends Fragment implements PlaylistTrackAdapter.OnDragStartListener {
 
-    RecyclerView queueRecycler;
-    static QueueRecyclerAdapter qAdapter;
+    RecyclerView playlistRecyler;
+    static PlaylistTrackAdapter plAdapter;
 
     static ItemTouchHelper mItemTouchHelper;
 
-    static onQueueItemClickedListener mCallback;
+    static onPLaylistItemClickedListener mCallback;
 
-    public interface onQueueItemClickedListener {
-        public void onQueueItemClicked(int position);
+    @Override
+    public void onDragStarted(RecyclerView.ViewHolder viewHolder) {
+        mItemTouchHelper.startDrag(viewHolder);
     }
 
-    public QueueFragment() {
+    public interface onPLaylistItemClickedListener {
+        public void onPLaylistItemClicked(int position);
+    }
+
+    public ViewPlaylistFragment() {
         // Required empty public constructor
     }
 
@@ -44,7 +44,7 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            mCallback = (onQueueItemClickedListener) context;
+            mCallback = (onPLaylistItemClickedListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnHeadlineSelectedListener");
@@ -55,30 +55,30 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_queue, container, false);
+        return inflater.inflate(R.layout.fragment_view_playlist, container, false);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        queueRecycler = (RecyclerView) view.findViewById(R.id.queueRecycler);
+        playlistRecyler = (RecyclerView) view.findViewById(R.id.view_playlist_recycler);
 
-        qAdapter = new QueueRecyclerAdapter(HomeActivity.queue.getQueue(), HomeActivity.ctx, this);
+        plAdapter = new PlaylistTrackAdapter(HomeActivity.tempPlaylist.getSongList(), this);
         LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(HomeActivity.ctx, LinearLayoutManager.VERTICAL, false);
-        queueRecycler.setLayoutManager(mLayoutManager2);
-        queueRecycler.setItemAnimator(new DefaultItemAnimator());
-        queueRecycler.setAdapter(qAdapter);
+        playlistRecyler.setLayoutManager(mLayoutManager2);
+        playlistRecyler.setItemAnimator(new DefaultItemAnimator());
+        playlistRecyler.setAdapter(plAdapter);
 
-        queueRecycler.addOnItemTouchListener(new ClickItemTouchListener(queueRecycler) {
+        playlistRecyler.addOnItemTouchListener(new ClickItemTouchListener(playlistRecyler) {
             @Override
             boolean onClick(RecyclerView parent, View view, int position, long id) {
-                mCallback.onQueueItemClicked(position);
+                mCallback.onPLaylistItemClicked(position);
                 return true;
             }
 
             @Override
             boolean onLongClick(RecyclerView parent, View view, int position, long id) {
-                return false;
+                return true;
             }
 
             @Override
@@ -87,15 +87,9 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
             }
         });
 
-        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(qAdapter);
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(plAdapter);
         mItemTouchHelper = new ItemTouchHelper(callback);
-        mItemTouchHelper.attachToRecyclerView(queueRecycler);
+        mItemTouchHelper.attachToRecyclerView(playlistRecyler);
 
     }
-
-    @Override
-    public void onDragStarted(RecyclerView.ViewHolder viewHolder) {
-        mItemTouchHelper.startDrag(viewHolder);
-    }
-
 }

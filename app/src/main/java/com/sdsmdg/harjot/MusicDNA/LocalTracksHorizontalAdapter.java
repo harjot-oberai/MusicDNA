@@ -12,8 +12,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.LazyLoadingHelper.ImageDownloader;
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
+import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class LocalTracksHorizontalAdapter extends RecyclerView.Adapter<LocalTrac
 
     private List<LocalTrack> localList;
     int def = 0x000000;
-    ImageDownloader imgSetter;
+    ImageLoader imgLoader;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -43,7 +43,7 @@ public class LocalTracksHorizontalAdapter extends RecyclerView.Adapter<LocalTrac
 
     public LocalTracksHorizontalAdapter(List<LocalTrack> localList) {
         this.localList = localList;
-        imgSetter = new ImageDownloader();
+        imgLoader = new ImageLoader(HomeActivity.ctx);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class LocalTracksHorizontalAdapter extends RecyclerView.Adapter<LocalTrac
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
         LocalTrack localTrack = localList.get(position);
-        imgSetter.download(localTrack.getPath(), holder.art);
+        imgLoader.DisplayImage(localTrack.getPath(), holder.art);
         holder.bottomHolder.setBackgroundColor(Color.WHITE);
         holder.title.setTextColor(Color.parseColor("#444444"));
         holder.artist.setTextColor(Color.parseColor("#777777"));

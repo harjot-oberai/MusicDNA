@@ -4,6 +4,7 @@ package com.sdsmdg.harjot.MusicDNA;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,10 +31,17 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
 
     static ItemTouchHelper mItemTouchHelper;
 
+    FloatingActionButton saveQueue;
+
     static onQueueItemClickedListener mCallback;
+    static  onQueueSaveListener mCallback2;
 
     public interface onQueueItemClickedListener {
         public void onQueueItemClicked(int position);
+    }
+
+    public interface onQueueSaveListener{
+        public void onQueueSave();
     }
 
     public QueueFragment() {
@@ -84,6 +92,14 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
+            }
+        });
+
+        saveQueue = (FloatingActionButton) view.findViewById(R.id.save_queue);
+        saveQueue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallback2.onQueueSave();
             }
         });
 

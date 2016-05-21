@@ -82,7 +82,8 @@ public class HomeActivity extends AppCompatActivity
         ViewPlaylistFragment.onPLaylistItemClickedListener,
         FavouritesFragment.onFavouriteItemClickedListener,
         ViewPlaylistFragment.onPlaylistPlayAllListener,
-FavouritesFragment.onFavouritePlayAllListener{
+        FavouritesFragment.onFavouritePlayAllListener,
+        QueueFragment.onQueueSaveListener {
 
     public static List<LocalTrack> localTrackList = new ArrayList<>();
     public static List<LocalTrack> finalLocalSearchResultList = new ArrayList<>();
@@ -1850,6 +1851,11 @@ FavouritesFragment.onFavouritePlayAllListener{
         showFragment("queue");
     }
 
+    @Override
+    public void onQueueSave() {
+        showSaveQueueDialog();
+    }
+
     public static class MyAsyncTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -1969,6 +1975,37 @@ FavouritesFragment.onFavouritePlayAllListener{
         dialog.show();
     }
 
+    public void showSaveQueueDialog() {
+        final Dialog dialog = new Dialog(ctx);
+        dialog.setContentView(R.layout.add_to_playlist_dialog);
+        dialog.setTitle("Save Queue");
+
+        ListView lv = (ListView) dialog.findViewById(R.id.playlist_list);
+        lv.setVisibility(View.GONE);
+
+        // set the custom dialog components - text, image and button
+        final EditText text = (EditText) dialog.findViewById(R.id.new_playlist_name);
+        ImageView image = (ImageView) dialog.findViewById(R.id.confirm_button);
+        // if button is clicked, close the custom dialog
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (text.getText().toString().trim().equals("")) {
+                    text.setError("Enter Playlist Name!");
+                } else {
+                    Playlist pl = new Playlist(text.getText().toString());
+                    pl.setSongList(queue.getQueue());
+                    allPlaylists.addPlaylist(pl);
+                    playlistsRecycler.setVisibility(View.VISIBLE);
+                    playlistNothingText.setVisibility(View.INVISIBLE);
+                    pAdapter.notifyDataSetChanged();
+                    dialog.dismiss();
+                }
+            }
+        });
+        dialog.show();
+    }
+
     public void logQueue() {
         Log.d("QUEUE", "ENTERED");
         for (int i = 0; i < queue.getQueue().size(); i++) {
@@ -2015,6 +2052,7 @@ FavouritesFragment.onFavouritePlayAllListener{
             android.app.FragmentManager fm = getFragmentManager();
             QueueFragment newFragment = new QueueFragment();
             QueueFragment.mCallback = this;
+            QueueFragment.mCallback2 = this;
             fm.beginTransaction()
                     .setCustomAnimations(R.animator.slide_up,
                             R.animator.slide_down,
@@ -2060,7 +2098,6 @@ FavouritesFragment.onFavouritePlayAllListener{
             isEqualizerVisible = true;
             android.app.FragmentManager fm = getFragmentManager();
             EqualizerFragment newFragment = new EqualizerFragment();
-//            QueueFragment.mCallback = this;
             fm.beginTransaction()
                     .setCustomAnimations(R.animator.slide_up,
                             R.animator.slide_down,

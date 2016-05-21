@@ -9,6 +9,10 @@ public class Playlist {
     private List<UnifiedTrack> songList;
     private String playlistName;
 
+    public Playlist(String name){
+        playlistName = name;
+    }
+
     public Playlist(List<UnifiedTrack> songList, String playlistName) {
         this.songList = songList;
         this.playlistName = playlistName;

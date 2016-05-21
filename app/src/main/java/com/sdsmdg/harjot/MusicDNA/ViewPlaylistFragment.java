@@ -39,7 +39,7 @@ public class ViewPlaylistFragment extends Fragment implements PlaylistTrackAdapt
         public void onPLaylistItemClicked(int position);
     }
 
-    public interface onPlaylistPlayAllListener{
+    public interface onPlaylistPlayAllListener {
         public void onPlaylistPLayAll();
     }
 
@@ -111,4 +111,5 @@ public class ViewPlaylistFragment extends Fragment implements PlaylistTrackAdapt
         mItemTouchHelper.attachToRecyclerView(playlistRecyler);
 
     }
+
 }

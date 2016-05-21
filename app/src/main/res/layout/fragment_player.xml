@@ -62,8 +62,9 @@
                 android:layout_marginBottom="5dp"
                 android:layout_marginRight="17dp"
                 android:layout_marginTop="2dp"
-                android:visibility="visible" />
-
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:visibility="visible"/>
         </android.support.v7.widget.Toolbar>
     </FrameLayout>
 

@@ -4,6 +4,7 @@ package com.sdsmdg.harjot.MusicDNA;
 import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,9 +28,16 @@ public class FavouritesFragment extends Fragment implements FavouriteTrackAdapte
     static ItemTouchHelper mItemTouchHelper;
 
     static onFavouriteItemClickedListener mCallback;
+    static onFavouritePlayAllListener mCallback2;
+
+    FloatingActionButton playAll;
 
     public interface onFavouriteItemClickedListener {
         public void onFavouriteItemClicked(int position);
+    }
+
+    public interface onFavouritePlayAllListener{
+        public void onFavouritePlayAll();
     }
 
     public FavouritesFragment() {
@@ -41,6 +49,7 @@ public class FavouritesFragment extends Fragment implements FavouriteTrackAdapte
         super.onAttach(context);
         try {
             mCallback = (onFavouriteItemClickedListener) context;
+            mCallback2 = (onFavouritePlayAllListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnHeadlineSelectedListener");
@@ -73,6 +82,16 @@ public class FavouritesFragment extends Fragment implements FavouriteTrackAdapte
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
+            }
+        });
+
+        playAll = (FloatingActionButton) view.findViewById(R.id.fav_play_all_fab);
+        playAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HomeActivity.queue.setQueue(HomeActivity.favouriteTracks.getFavourite());
+                HomeActivity.queueCurrentIndex = 0;
+                mCallback2.onFavouritePlayAll();
             }
         });
 

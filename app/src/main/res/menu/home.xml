@@ -17,13 +17,8 @@
         android:title="Queue"
         app:showAsAction="always"/>
     <item
-        android:id="@+id/action_equalizer"
-        android:orderInCategory="300"
-        android:title="Equalizer"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_settings"
-        android:orderInCategory="400"
+        android:orderInCategory="300"
         android:title="@string/action_settings"
         app:showAsAction="never" />
 

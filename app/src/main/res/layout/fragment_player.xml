@@ -123,6 +123,17 @@
         android:padding="5dp">
 
         <ImageView
+            android:id="@+id/equalizer_icon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:src="@drawable/ic_equalizer_white_48dp" />
+
+        <ImageView
             android:id="@+id/previous"
             android:layout_width="40dp"
             android:layout_height="40dp"

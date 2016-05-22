@@ -2,16 +2,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFF"
+    android:background="#000"
     android:clickable="true"
     android:padding="10dp"
     tools:context="com.sdsmdg.harjot.MusicDNA.EqualizerFragment">
 
     <com.db.chart.view.LineChartView
         android:id="@+id/lineChart"
-        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
-        android:layout_height="200dp">
-    </com.db.chart.view.LineChartView>
+        android:layout_height="200dp"
+        android:layout_alignParentTop="true"></com.db.chart.view.LineChartView>
+
+    <LinearLayout
+        android:id="@+id/equalizerContainer"
+        android:layout_above="@+id/bottomLinear4"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/lineChart"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"></LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bottomLinear4"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:orientation="horizontal"></LinearLayout>
 
 </RelativeLayout>

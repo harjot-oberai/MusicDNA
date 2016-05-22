@@ -42,6 +42,7 @@ public class PlayerFragment extends Fragment {
     //    public static OptimizedVisualizerView mVisualizerView;
     public static MediaPlayer mMediaPlayer;
     public static Visualizer mVisualizer;
+    public static Equalizer mEqualizer;
 
     static boolean isPrepared = false;
 
@@ -50,6 +51,7 @@ public class PlayerFragment extends Fragment {
     public static ImageView repeatIcon;
     public static ImageView shuffleIcon;
 
+    public static ImageView equalizerIcon;
     public static ImageView mainTrackController;
     public static ImageView nextTrackController;
     public static ImageView previousTrackController;
@@ -86,6 +88,7 @@ public class PlayerFragment extends Fragment {
     static onSmallPlayerTouchedListener mCallback;
     static onCompleteListener mCallback2;
     static onPreviousTrackListener mCallback3;
+    static onEqualizerClickedListener mCallback4;
 
 
     long startTrack;
@@ -97,7 +100,7 @@ public class PlayerFragment extends Fragment {
 
     public static void setupVisualizerFxAndUI() {
         // Create the Visualizer object and attach it to our media player.
-        Equalizer mEqualizer = new Equalizer(0, mMediaPlayer.getAudioSessionId());
+        mEqualizer = new Equalizer(0, mMediaPlayer.getAudioSessionId());
         mEqualizer.setEnabled(true);
         mVisualizer = new Visualizer(mMediaPlayer.getAudioSessionId());
         try {
@@ -173,6 +176,7 @@ public class PlayerFragment extends Fragment {
             mCallback = (onSmallPlayerTouchedListener) context;
             mCallback2 = (onCompleteListener) context;
             mCallback3 = (onPreviousTrackListener) context;
+            mCallback4 = (onEqualizerClickedListener) context;
             Log.d("Attached", "TRUE");
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
@@ -213,6 +217,10 @@ public class PlayerFragment extends Fragment {
         public void onPreviousTrack();
     }
 
+    public interface onEqualizerClickedListener {
+        public void onEqualizerClicked();
+    }
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -242,6 +250,14 @@ public class PlayerFragment extends Fragment {
                     HomeActivity.shuffleEnabled = false;
                     shuffleIcon.setImageResource(R.drawable.ic_shuffle_white_48dp);
                 }
+            }
+        });
+
+        equalizerIcon = (ImageView) view.findViewById(R.id.equalizer_icon);
+        equalizerIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallback4.onEqualizerClicked();
             }
         });
 
@@ -567,6 +583,13 @@ public class PlayerFragment extends Fragment {
                     HomeActivity.shuffleEnabled = false;
                     shuffleIcon.setImageResource(R.drawable.ic_shuffle_white_48dp);
                 }
+            }
+        });
+
+        equalizerIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallback4.onEqualizerClicked();
             }
         });
 

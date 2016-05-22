@@ -83,7 +83,8 @@ public class HomeActivity extends AppCompatActivity
         FavouritesFragment.onFavouriteItemClickedListener,
         ViewPlaylistFragment.onPlaylistPlayAllListener,
         FavouritesFragment.onFavouritePlayAllListener,
-        QueueFragment.onQueueSaveListener {
+        QueueFragment.onQueueSaveListener,
+        PlayerFragment.onEqualizerClickedListener {
 
     public static List<LocalTrack> localTrackList = new ArrayList<>();
     public static List<LocalTrack> finalLocalSearchResultList = new ArrayList<>();
@@ -187,6 +188,7 @@ public class HomeActivity extends AppCompatActivity
                 PlayerFragment.mCallback = this;
                 PlayerFragment.mCallback2 = this;
                 PlayerFragment.mCallback3 = this;
+                PlayerFragment.mCallback4 = this;
                 int flag = 0;
                 for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
                     UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
@@ -286,6 +288,7 @@ public class HomeActivity extends AppCompatActivity
                 PlayerFragment.mCallback = this;
                 PlayerFragment.mCallback2 = this;
                 PlayerFragment.mCallback3 = this;
+                PlayerFragment.mCallback4 = this;
                 int flag = 0;
                 for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
                     UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
@@ -997,30 +1000,35 @@ public class HomeActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            if (isPlayerVisible) {
-                hidePlayer();
-                showTabs();
-                isPlayerVisible = false;
-            } else if (isLocalVisible) {
-                hideFragment("local");
-                setTitle("Music DNA");
-            } else if (isQueueVisible) {
-                hideFragment("queue");
-                setTitle("Music DNA");
-            } else if (isStreamVisible) {
-                hideFragment("stream");
-                setTitle("Music DNA");
-            } else if (isPlaylistVisible) {
-                hideFragment("playlist");
-                setTitle("Music DNA");
-            } else if (isEqualizerVisible) {
-                hideFragment("equalizer");
-                setTitle("Music DNA");
-            } else if (isFavouriteVisible) {
-                hideFragment("favourite");
-                setTitle("Music DNA");
+
+            if (isEqualizerVisible) {
+                showPlayer();
             } else {
-                super.onBackPressed();
+                if (isPlayerVisible) {
+                    hidePlayer();
+                    showTabs();
+                    isPlayerVisible = false;
+                } else if (isLocalVisible) {
+                    hideFragment("local");
+                    setTitle("Music DNA");
+                } else if (isQueueVisible) {
+                    hideFragment("queue");
+                    setTitle("Music DNA");
+                } else if (isStreamVisible) {
+                    hideFragment("stream");
+                    setTitle("Music DNA");
+                } else if (isPlaylistVisible) {
+                    hideFragment("playlist");
+                    setTitle("Music DNA");
+                } else if (isEqualizerVisible) {
+                    hideFragment("equalizer");
+                    setTitle("Music DNA");
+                } else if (isFavouriteVisible) {
+                    hideFragment("favourite");
+                    setTitle("Music DNA");
+                } else {
+                    super.onBackPressed();
+                }
             }
         }
     }
@@ -1049,10 +1057,6 @@ public class HomeActivity extends AppCompatActivity
         if (id == R.id.action_queue) {
             showFragment("queue");
         }
-        if (id == R.id.action_equalizer) {
-            showFragment("equalizer");
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -1273,27 +1277,61 @@ public class HomeActivity extends AppCompatActivity
     }
 
     public void hideTabs() {
-//        toolbar.setAlpha(1.0f);
-//
-//        toolbar.animate()
-//                .translationY(-1 * toolbar.getHeight())
-//                .alpha(0.0f);
-//
-//        toolbar.setVisibility(View.GONE);
-//        getSupportActionBar().hide();
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getSupportActionBar().hide();
+            }
+        }, 270);
+
     }
 
     public void showTabs() {
-//        toolbar.setVisibility(View.VISIBLE);
-//        toolbar.setAlpha(1.0f);
-//
-//        toolbar.animate()
-//                .translationY(0)
-//                .alpha(1.0f);
-//        getSupportActionBar().show();
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getSupportActionBar().show();
+            }
+        }, 30);
     }
 
     public void hidePlayer() {
+
+        if (PlayerFragment.mVisualizerView != null)
+            PlayerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+
+        isPlayerVisible = false;
+
+        if (PlayerFragment.cpb != null) {
+            PlayerFragment.cpb.setAlpha(0.0f);
+            PlayerFragment.cpb.setVisibility(View.VISIBLE);
+            PlayerFragment.cpb.animate()
+                    .alpha(1.0f);
+        }
+
+        playerContainer.setVisibility(View.VISIBLE);
+
+        playerContainer.animate()
+                .translationY(playerContainer.getHeight() - PlayerFragment.smallPlayer.getHeight() - getSupportActionBar().getHeight());
+
+        PlayerFragment.player_controller.setAlpha(0.0f);
+        PlayerFragment.player_controller.setImageDrawable(PlayerFragment.mainTrackController.getDrawable());
+
+        PlayerFragment.player_controller.animate()
+                .alpha(1.0f);
+//        if (PlayerFragment.progressBar2 != null) {
+//            PlayerFragment.progressBar2.setVisibility(View.VISIBLE);
+//            PlayerFragment.progressBar2.animate()
+//                    .alpha(1.0f);
+//        }
+
+
+    }
+
+    public void hidePlayer2() {
 
         if (PlayerFragment.mVisualizerView != null)
             PlayerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
@@ -1305,6 +1343,8 @@ public class HomeActivity extends AppCompatActivity
             PlayerFragment.cpb.animate()
                     .alpha(1.0f);
         }
+
+        isPlayerVisible = false;
 
         playerContainer.setVisibility(View.VISIBLE);
 
@@ -1330,6 +1370,16 @@ public class HomeActivity extends AppCompatActivity
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         searchView.setQuery("", false);
         searchView.setIconified(true);
+
+        isPlayerVisible = true;
+        isEqualizerVisible = false;
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                hideFragment("equalizer");
+            }
+        }, 350);
 
         playerContainer.setVisibility(View.VISIBLE);
         if (PlayerFragment.mVisualizerView != null)
@@ -1366,8 +1416,8 @@ public class HomeActivity extends AppCompatActivity
                 .setDuration(300)
                 .translationY(0);
 
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+        final Handler handler2 = new Handler();
+        handler2.postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (PlayerFragment.mVisualizerView != null)
@@ -1856,6 +1906,13 @@ public class HomeActivity extends AppCompatActivity
         showSaveQueueDialog();
     }
 
+    @Override
+    public void onEqualizerClicked() {
+        hideAllFrags();
+        hidePlayer2();
+        showFragment("equalizer");
+    }
+
     public static class MyAsyncTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -2031,6 +2088,9 @@ public class HomeActivity extends AppCompatActivity
     }
 
     public void showFragment(String type) {
+
+        hideAllFrags();
+
         if (type.equals("local") && !isLocalVisible) {
             setTitle("Local");
             isLocalVisible = true;
@@ -2184,4 +2244,15 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
+    public void hideAllFrags() {
+        hideFragment("local");
+        hideFragment("queue");
+        hideFragment("stream");
+        hideFragment("playlist");
+        hideFragment("equalizer");
+        hideFragment("favourite");
+
+        setTitle("Music DNA");
+
+    }
 }

@@ -2,12 +2,13 @@
     android:id="@+id/toolBar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="@drawable/player_back"
     android:clickable="true"
     android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar"
     android:visibility="visible">
 
     <FrameLayout
+        android:id="@+id/topContainer"
         android:layout_width="match_parent"
         android:layout_height="70dp">
 
@@ -70,8 +71,9 @@
 
     <com.sdsmdg.harjot.MusicDNA.VisualizerView
         android:id="@+id/myvisualizerview"
-        android:layout_width="370dp"
-        android:layout_height="390dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/topContainer"
         android:layout_above="@+id/seekBarContainer"
         android:layout_centerHorizontal="true" />
 

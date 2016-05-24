@@ -7,11 +7,11 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ActionMenuView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -20,13 +20,6 @@ import com.db.chart.model.LineSet;
 import com.db.chart.view.AxisController;
 import com.db.chart.view.ChartView;
 import com.db.chart.view.LineChartView;
-import com.db.chart.view.animation.Animation;
-import com.db.chart.view.animation.easing.BounceEase;
-import com.db.chart.view.animation.easing.CubicEase;
-import com.db.chart.view.animation.easing.ElasticEase;
-import com.db.chart.view.animation.easing.ExpoEase;
-import com.db.chart.view.animation.easing.LinearEase;
-import com.db.chart.view.animation.easing.SineEase;
 
 
 /**
@@ -39,8 +32,14 @@ public class EqualizerFragment extends Fragment {
     Paint paint;
     float[] points;
 
+    int y;
+
+    static short reverbPreset = -1, bassStrength = -1;
+
     short numberOfFrequencyBands;
     LinearLayout mLinearLayout;
+
+    AnalogController bassController, reverbController;
 
     public EqualizerFragment() {
         // Required empty public constructor
@@ -61,7 +60,44 @@ public class EqualizerFragment extends Fragment {
         paint = new Paint();
         dataset = new LineSet();
 
+        bassController = (AnalogController) view.findViewById(R.id.controllerBass);
+        reverbController = (AnalogController) view.findViewById(R.id.controller3D);
+
+        bassController.setLabel("BASS");
+        reverbController.setLabel("3D");
+
+        int x = (int) ((PlayerFragment.bassBoost.getRoundedStrength() * 19) / 1000);
+        if (x == 0) {
+            bassController.setProgress(1);
+        } else {
+            bassController.setProgress(x);
+        }
+
+        if (y == 0) {
+            reverbController.setProgress(1);
+        } else {
+            reverbController.setProgress(y);
+        }
+
+        bassController.setOnProgressChangedListener(new AnalogController.onProgressChangedListener() {
+            @Override
+            public void onProgressChanged(int progress) {
+                bassStrength = (short) (((float) 1000 / 19) * (progress));
+                PlayerFragment.bassBoost.setStrength(bassStrength);
+            }
+        });
+
+        reverbController.setOnProgressChangedListener(new AnalogController.onProgressChangedListener() {
+            @Override
+            public void onProgressChanged(int progress) {
+                reverbPreset = (short) ((progress * 6) / 19);
+                PlayerFragment.presetReverb.setPreset(reverbPreset);
+                y = progress;
+            }
+        });
+
         mLinearLayout = (LinearLayout) view.findViewById(R.id.equalizerContainer);
+        mLinearLayout.setOrientation(LinearLayout.VERTICAL);
 
         TextView equalizerHeading = new TextView(HomeActivity.ctx);
         equalizerHeading.setText("Equalizer");
@@ -117,6 +153,7 @@ public class EqualizerFragment extends Fragment {
             SeekBar seekBar = new SeekBar(HomeActivity.ctx);
             seekBar.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(Color.parseColor("#FFA036"), PorterDuff.Mode.SRC_IN));
             seekBar.setId(i);
+//            seekBar.setRotation(270);
             seekBar.setLayoutParams(layoutParams);
             seekBar.setMax(upperEqualizerBandLevel - lowerEqualizerBandLevel);
 
@@ -149,22 +186,24 @@ public class EqualizerFragment extends Fragment {
             seekBarRowLayout.addView(seekBar);
             seekBarRowLayout.addView(upperEqualizerBandLevelTextView);
 
+//            seekBarRowLayout.setRotation(270);
+
             mLinearLayout.addView(seekBarRowLayout);
         }
 
-        paint.setColor(Color.parseColor("#BBBBBB"));
+        paint.setColor(Color.parseColor("#555555"));
+        paint.setStrokeWidth(2 * HomeActivity.ratio);
 
         dataset.setColor(Color.parseColor("#FFA036"));
-
         dataset.setSmooth(true);
 
         chart.setXAxis(false);
         chart.setYAxis(false);
 
         chart.setYLabels(AxisController.LabelPosition.NONE);
-        chart.setGrid(ChartView.GridType.HORIZONTAL, paint);
+        chart.setGrid(ChartView.GridType.HORIZONTAL, 7, 1, paint);
 
-        chart.setAxisBorderValues(-500, 3500);
+        chart.setAxisBorderValues(-300, 3300);
 
 //        Animation anim = new Animation();
 //        anim.setDuration(500);

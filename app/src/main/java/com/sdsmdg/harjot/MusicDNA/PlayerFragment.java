@@ -9,7 +9,9 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.audiofx.BassBoost;
 import android.media.audiofx.Equalizer;
+import android.media.audiofx.PresetReverb;
 import android.media.audiofx.Visualizer;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -43,6 +45,8 @@ public class PlayerFragment extends Fragment {
     public static MediaPlayer mMediaPlayer;
     public static Visualizer mVisualizer;
     public static Equalizer mEqualizer;
+    public static BassBoost bassBoost;
+    public static PresetReverb presetReverb;
 
     static boolean isPrepared = false;
 
@@ -102,6 +106,29 @@ public class PlayerFragment extends Fragment {
         // Create the Visualizer object and attach it to our media player.
         mEqualizer = new Equalizer(0, mMediaPlayer.getAudioSessionId());
         mEqualizer.setEnabled(true);
+        mMediaPlayer.setAuxEffectSendLevel(1.0f);
+
+        bassBoost = new BassBoost(0, mMediaPlayer.getAudioSessionId());
+        bassBoost.setEnabled(true);
+        BassBoost.Settings bassBoostSettingTemp = bassBoost.getProperties();
+        BassBoost.Settings bassBoostSetting = new BassBoost.Settings(bassBoostSettingTemp.toString());
+        if (EqualizerFragment.bassStrength == -1) {
+            bassBoostSetting.strength = (1000 / 19);
+        } else {
+            bassBoostSetting.strength = EqualizerFragment.bassStrength;
+        }
+        bassBoost.setProperties(bassBoostSetting);
+        mMediaPlayer.setAuxEffectSendLevel(1.0f);
+
+        presetReverb = new PresetReverb(0, mMediaPlayer.getAudioSessionId());
+        if (EqualizerFragment.reverbPreset == -1) {
+            presetReverb.setPreset(PresetReverb.PRESET_NONE);
+        } else {
+            presetReverb.setPreset(EqualizerFragment.reverbPreset);
+        }
+        presetReverb.setEnabled(true);
+        mMediaPlayer.setAuxEffectSendLevel(1.0f);
+
         mVisualizer = new Visualizer(mMediaPlayer.getAudioSessionId());
         try {
             mVisualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[1]);

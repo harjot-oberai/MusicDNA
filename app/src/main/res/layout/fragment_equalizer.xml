@@ -7,26 +7,57 @@
     android:padding="10dp"
     tools:context="com.sdsmdg.harjot.MusicDNA.EqualizerFragment">
 
-    <com.db.chart.view.LineChartView
-        android:id="@+id/lineChart"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_alignParentTop="true"></com.db.chart.view.LineChartView>
-
     <LinearLayout
-        android:id="@+id/equalizerContainer"
-        android:layout_above="@+id/bottomLinear4"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/lineChart"
-        android:layout_marginTop="10dp"
-        android:orientation="vertical"></LinearLayout>
+        android:layout_above="@+id/bottomLinear4"
+        android:orientation="vertical">
+
+        <com.db.chart.view.LineChartView
+            android:id="@+id/lineChart"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_above="@+id/equalizerContainer"
+            android:layout_alignParentTop="true"
+            android:layout_weight="4"></com.db.chart.view.LineChartView>
+
+        <LinearLayout
+            android:id="@+id/equalizerContainer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="7"
+            android:orientation="horizontal"></LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bassContainer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:background="#777777"
+            android:orientation="horizontal">
+
+            <com.sdsmdg.harjot.MusicDNA.AnalogController
+                android:id="@+id/controllerBass"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#000000" />
+
+            <com.sdsmdg.harjot.MusicDNA.AnalogController
+                android:id="@+id/controller3D"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#000000" />
+        </LinearLayout>
+    </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/bottomLinear4"
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
         android:orientation="horizontal"></LinearLayout>
 
 </RelativeLayout>

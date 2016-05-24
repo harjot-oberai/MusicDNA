@@ -90,6 +90,8 @@ public class HomeActivity extends AppCompatActivity
     public static List<LocalTrack> finalLocalSearchResultList = new ArrayList<>();
     public static List<Track> streamingTrackList = new ArrayList<>();
 
+    static float ratio, ratio2;
+
     RecentlyPlayed recentlyPlayed;
     static Favourite favouriteTracks;
     static Queue queue;
@@ -164,6 +166,7 @@ public class HomeActivity extends AppCompatActivity
     static boolean isPlaylistVisible = false;
     static boolean isEqualizerVisible = false;
     static boolean isFavouriteVisible = false;
+    static boolean isAnalogVisible = false;
 
     static LocalTrack localSelectedTrack;
     static Track selectedTrack;
@@ -409,6 +412,10 @@ public class HomeActivity extends AppCompatActivity
         Display display = wm.getDefaultDisplay();
         screen_width = display.getWidth();
         screen_height = display.getHeight();
+
+        ratio = (float) screen_height / (float) 1920;
+        ratio2 = (float) screen_width / (float) 1080;
+        ratio = Math.min(ratio, ratio2);
 
         localRecyclerContainer = (RelativeLayout) findViewById(R.id.localRecyclerContainer);
         recentsRecyclerContainer = (RelativeLayout) findViewById(R.id.recentsRecyclerContainer);
@@ -1026,6 +1033,9 @@ public class HomeActivity extends AppCompatActivity
                 } else if (isFavouriteVisible) {
                     hideFragment("favourite");
                     setTitle("Music DNA");
+                } else if (isAnalogVisible) {
+                    hideFragment("analog");
+                    setTitle("Music DNA");
                 } else {
                     super.onBackPressed();
                 }
@@ -1056,6 +1066,9 @@ public class HomeActivity extends AppCompatActivity
         }
         if (id == R.id.action_queue) {
             showFragment("queue");
+        }
+        if(id == R.id.action_analog){
+            showFragment("analog");
         }
         return super.onOptionsItemSelected(item);
     }
@@ -1614,7 +1627,7 @@ public class HomeActivity extends AppCompatActivity
             y = (float) Math.cos(PlayerFragment.mVisualizerView.angle);
 
             // filtering low amplitude
-            if (PlayerFragment.mVisualizerView.volume < 0.83) {
+            if (PlayerFragment.mVisualizerView.volume < 0.77) {
                 continue;
             }
 
@@ -1628,10 +1641,6 @@ public class HomeActivity extends AppCompatActivity
             PlayerFragment.mVisualizerView.lnDataDistance = (float) ((Math.log(a - 4) / PlayerFragment.mVisualizerView.LOG_MAX) - PlayerFragment.mVisualizerView.BASE);
             PlayerFragment.mVisualizerView.distance = PlayerFragment.mVisualizerView.lnDataDistance * PlayerFragment.mVisualizerView.outerRadius;
 
-
-            float ratio = (float) screen_height / (float) 1920;
-            float ratio2 = (float) screen_width / (float) 1080;
-            ratio = Math.min(ratio, ratio2);
 
             // size of the circle to be rendered at the calculated position
             PlayerFragment.mVisualizerView.size = ratio * ((float) (4.5 * PlayerFragment.mVisualizerView.volume * PlayerFragment.mVisualizerView.MAX_DOT_SIZE + Math.random() * 2));
@@ -2183,6 +2192,20 @@ public class HomeActivity extends AppCompatActivity
                     .show(newFragment)
                     .addToBackStack(null)
                     .commit();
+        } else if (type.equals("analog") && !isAnalogVisible) {
+            setTitle("Analog");
+            isAnalogVisible = true;
+            android.app.FragmentManager fm = getFragmentManager();
+            AnalogControllerFragment newFragment = new AnalogControllerFragment();
+            fm.beginTransaction()
+                    .setCustomAnimations(R.animator.slide_up,
+                            R.animator.slide_down,
+                            R.animator.slide_up,
+                            R.animator.slide_down)
+                    .add(R.id.fragContainer, newFragment, "analog")
+                    .show(newFragment)
+                    .addToBackStack(null)
+                    .commit();
         }
     }
 
@@ -2236,6 +2259,15 @@ public class HomeActivity extends AppCompatActivity
             isFavouriteVisible = false;
             android.app.FragmentManager fm = getFragmentManager();
             android.app.Fragment frag = fm.findFragmentByTag("favourite");
+            if (frag != null) {
+                fm.beginTransaction()
+                        .remove(frag)
+                        .commit();
+            }
+        } else if (type.equals("analog")) {
+            isAnalogVisible = false;
+            android.app.FragmentManager fm = getFragmentManager();
+            android.app.Fragment frag = fm.findFragmentByTag("analog");
             if (frag != null) {
                 fm.beginTransaction()
                         .remove(frag)

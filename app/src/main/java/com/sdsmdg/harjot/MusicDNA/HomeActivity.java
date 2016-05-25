@@ -1,13 +1,19 @@
 package com.sdsmdg.harjot.MusicDNA;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -40,10 +46,12 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -86,7 +94,10 @@ public class HomeActivity extends AppCompatActivity
         FavouritesFragment.onFavouritePlayAllListener,
         QueueFragment.onQueueSaveListener,
         PlayerFragment.onEqualizerClickedListener,
-        PlayerFragment.onQueueClickListener {
+        PlayerFragment.onQueueClickListener,
+        PlayerFragment.onPreparedLsitener,
+        PlayerFragment.onPlayPauseListener {
+
 
     public static List<LocalTrack> localTrackList = new ArrayList<>();
     public static List<LocalTrack> finalLocalSearchResultList = new ArrayList<>();
@@ -114,6 +125,9 @@ public class HomeActivity extends AppCompatActivity
     static boolean queueCall = false;
 
     DrawerLayout drawer;
+
+    NotificationManager notificationManager;
+    Notification notification;
 
     LocalTracksHorizontalAdapter adapter;
     StreamTracksHorizontalAdapter sAdapter;
@@ -191,6 +205,8 @@ public class HomeActivity extends AppCompatActivity
                 PlayerFragment.mCallback3 = this;
                 PlayerFragment.mCallback4 = this;
                 PlayerFragment.mCallback5 = this;
+                PlayerFragment.mCallback6 = this;
+                PlayerFragment.mCallback7 = this;
                 int flag = 0;
                 for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
                     UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
@@ -303,6 +319,8 @@ public class HomeActivity extends AppCompatActivity
                 PlayerFragment.mCallback3 = this;
                 PlayerFragment.mCallback4 = this;
                 PlayerFragment.mCallback5 = this;
+                PlayerFragment.mCallback6 = this;
+                PlayerFragment.mCallback7 = this;
                 int flag = 0;
                 for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
                     UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
@@ -2009,6 +2027,16 @@ public class HomeActivity extends AppCompatActivity
         showFragment("queue");
     }
 
+    @Override
+    public void onPrepared() {
+        showNotification();
+    }
+
+    @Override
+    public void onPlayPause() {
+        updatePlayPauseIcon();
+    }
+
     public static class MyAsyncTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -2375,4 +2403,50 @@ public class HomeActivity extends AppCompatActivity
         setTitle("Music DNA");
 
     }
+
+    public void showNotification() {
+        String ns = Context.NOTIFICATION_SERVICE;
+        notificationManager = (NotificationManager) getSystemService(ns);
+
+        notification = new Notification(R.drawable.ic_play_arrow_white_48dp, null, System.currentTimeMillis());
+
+        RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.notification_view);
+        Intent notificationIntent = new Intent(this, HomeActivity.class);
+        PendingIntent pendingNotificationIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+
+        notification.contentView = notificationView;
+        notification.contentIntent = pendingNotificationIntent;
+        notification.flags |= Notification.FLAG_NO_CLEAR;
+
+        notificationView.setImageViewBitmap(R.id.image_in_notification, ((BitmapDrawable) PlayerFragment.selected_track_image.getDrawable()).getBitmap());
+
+        Intent switchIntent = new Intent("com.sdsmdg.harjot.MusicDNA.ACTION_PLAY_PAUSE");
+        PendingIntent pendingSwitchIntent = PendingIntent.getBroadcast(this, 100, switchIntent, 0);
+        notificationView.setOnClickPendingIntent(R.id.btn_pause_play_in_notification, pendingSwitchIntent);
+
+        try {
+            if (PlayerFragment.mMediaPlayer.isPlaying()) {
+                notificationView.setImageViewResource(R.id.btn_pause_play_in_notification, R.drawable.ic_pause_white_48dp);
+            } else {
+                notificationView.setImageViewResource(R.id.btn_pause_play_in_notification, R.drawable.ic_play_arrow_white_48dp);
+            }
+        } catch (Exception e) {
+
+        }
+
+        Intent switchIntent2 = new Intent("com.sdsmdg.harjot.MusicDNA.ACTION_NEXT");
+        PendingIntent pendingSwitchIntent2 = PendingIntent.getBroadcast(this, 100, switchIntent2, 0);
+        notificationView.setOnClickPendingIntent(R.id.btn_next_in_notification, pendingSwitchIntent2);
+
+        Intent switchIntent3 = new Intent("com.sdsmdg.harjot.MusicDNA.ACTION_PREVIOUS");
+        PendingIntent pendingSwitchIntent3 = PendingIntent.getBroadcast(this, 100, switchIntent3, 0);
+        notificationView.setOnClickPendingIntent(R.id.btn_prev_in_notification, pendingSwitchIntent3);
+
+        notificationManager.notify(1, notification);
+    }
+
+    public void updatePlayPauseIcon() {
+        showNotification();
+    }
+
 }

@@ -91,6 +91,8 @@ public class PlayerFragment extends Fragment {
     static onPreviousTrackListener mCallback3;
     static onEqualizerClickedListener mCallback4;
     static onQueueClickListener mCallback5;
+    static onPreparedLsitener mCallback6;
+    static onPlayPauseListener mCallback7;
 
 
     long startTrack;
@@ -156,6 +158,7 @@ public class PlayerFragment extends Fragment {
                 mainTrackController.setImageResource(R.drawable.ic_play_arrow_white_48dp);
             }
             mVisualizer.setEnabled(false);
+            mCallback7.onPlayPause();
         } else {
             if (!completed) {
                 setupVisualizerFxAndUI();
@@ -167,6 +170,7 @@ public class PlayerFragment extends Fragment {
                     player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
                 }
                 mMediaPlayer.start();
+                mCallback7.onPlayPause();
             } else {
                 mVisualizerView.clear();
                 mMediaPlayer.seekTo(0);
@@ -194,6 +198,8 @@ public class PlayerFragment extends Fragment {
             mCallback3 = (onPreviousTrackListener) context;
             mCallback4 = (onEqualizerClickedListener) context;
             mCallback5 = (onQueueClickListener) context;
+            mCallback6 = (onPreparedLsitener) context;
+            mCallback7 = (onPlayPauseListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnHeadlineSelectedListener");
@@ -239,6 +245,14 @@ public class PlayerFragment extends Fragment {
 
     public interface onQueueClickListener {
         public void onQueueClicked();
+    }
+
+    public interface onPreparedLsitener {
+        public void onPrepared();
+    }
+
+    public interface onPlayPauseListener {
+        public void onPlayPause();
     }
 
     @Override
@@ -330,6 +344,7 @@ public class PlayerFragment extends Fragment {
                 completed = false;
                 pauseClicked = false;
                 isPrepared = true;
+                mCallback6.onPrepared();
                 togglePlayPause();
                 togglePlayPause();
                 togglePlayPause();

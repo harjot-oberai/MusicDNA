@@ -32,7 +32,7 @@ public class EqualizerFragment extends Fragment {
     Paint paint;
     float[] points;
 
-    int y;
+    static int y;
 
     static short reverbPreset = -1, bassStrength = -1;
 
@@ -48,7 +48,6 @@ public class EqualizerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_equalizer, container, false);
     }
 
@@ -104,8 +103,6 @@ public class EqualizerFragment extends Fragment {
         equalizerHeading.setTextSize(20);
         equalizerHeading.setGravity(Gravity.CENTER_HORIZONTAL);
 
-//        mLinearLayout.addView(equalizerHeading);
-
         numberOfFrequencyBands = PlayerFragment.mEqualizer.getNumberOfBands();
 
         points = new float[numberOfFrequencyBands];
@@ -153,7 +150,6 @@ public class EqualizerFragment extends Fragment {
             SeekBar seekBar = new SeekBar(HomeActivity.ctx);
             seekBar.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(Color.parseColor("#FFA036"), PorterDuff.Mode.SRC_IN));
             seekBar.setId(i);
-//            seekBar.setRotation(270);
             seekBar.setLayoutParams(layoutParams);
             seekBar.setMax(upperEqualizerBandLevel - lowerEqualizerBandLevel);
 
@@ -186,8 +182,6 @@ public class EqualizerFragment extends Fragment {
             seekBarRowLayout.addView(seekBar);
             seekBarRowLayout.addView(upperEqualizerBandLevelTextView);
 
-//            seekBarRowLayout.setRotation(270);
-
             mLinearLayout.addView(seekBarRowLayout);
         }
 
@@ -204,11 +198,6 @@ public class EqualizerFragment extends Fragment {
         chart.setGrid(ChartView.GridType.HORIZONTAL, 7, 1, paint);
 
         chart.setAxisBorderValues(-300, 3300);
-
-//        Animation anim = new Animation();
-//        anim.setDuration(500);
-//        anim.setEasing(new ExpoEase());
-//        anim.setAlpha(1);
 
         chart.addData(dataset);
         chart.show();

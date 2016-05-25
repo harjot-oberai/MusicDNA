@@ -61,12 +61,12 @@ public class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdap
 
         @Override
         public void onItemSelected() {
-            itemView.setBackgroundColor(Color.LTGRAY);
+            itemView.setBackgroundColor(Color.parseColor("#333333"));
         }
 
         @Override
         public void onItemClear() {
-            itemView.setBackgroundColor(Color.WHITE);
+            itemView.setBackgroundColor(Color.BLACK);
         }
     }
 
@@ -80,7 +80,7 @@ public class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdap
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_item, parent, false);
+                .inflate(R.layout.list_item_3, parent, false);
 
         return new MyViewHolder(itemView);
     }
@@ -89,10 +89,10 @@ public class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdap
     public void onBindViewHolder(final MyViewHolder holder, int position) {
 
         if (HomeActivity.queueCurrentIndex == position && !HomeActivity.isReloaded) {
-            holder.title.setTextColor(Color.RED);
+            holder.title.setTextColor(Color.parseColor("#FFA036"));
             holder.indicator.setVisibility(View.VISIBLE);
         } else {
-            holder.title.setTextColor(Color.BLACK);
+            holder.title.setTextColor(Color.WHITE);
             holder.indicator.setVisibility(View.INVISIBLE);
         }
 

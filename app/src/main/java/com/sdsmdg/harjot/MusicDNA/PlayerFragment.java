@@ -41,7 +41,6 @@ import java.util.TimerTask;
 public class PlayerFragment extends Fragment {
 
     public static VisualizerView mVisualizerView;
-    //    public static OptimizedVisualizerView mVisualizerView;
     public static MediaPlayer mMediaPlayer;
     public static Visualizer mVisualizer;
     public static Equalizer mEqualizer;
@@ -82,17 +81,16 @@ public class PlayerFragment extends Fragment {
 
     Timer t;
 
-    static long startTime = 0;
-    static long pauseTime = 0;
-    static long totalElapsedTime = 0;
-    static long deltaTime = 0;
     static Track track;
     static LocalTrack localTrack;
+
+    static boolean isRefreshed = false;
 
     static onSmallPlayerTouchedListener mCallback;
     static onCompleteListener mCallback2;
     static onPreviousTrackListener mCallback3;
     static onEqualizerClickedListener mCallback4;
+    static onQueueClickListener mCallback5;
 
 
     long startTrack;
@@ -103,7 +101,6 @@ public class PlayerFragment extends Fragment {
     }
 
     public static void setupVisualizerFxAndUI() {
-        // Create the Visualizer object and attach it to our media player.
         mEqualizer = new Equalizer(0, mMediaPlayer.getAudioSessionId());
         mEqualizer.setEnabled(true);
         mMediaPlayer.setAuxEffectSendLevel(1.0f);
@@ -130,6 +127,7 @@ public class PlayerFragment extends Fragment {
         mMediaPlayer.setAuxEffectSendLevel(1.0f);
 
         mVisualizer = new Visualizer(mMediaPlayer.getAudioSessionId());
+
         try {
             mVisualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[1]);
             mVisualizer.setDataCaptureListener(
@@ -144,10 +142,8 @@ public class PlayerFragment extends Fragment {
                         }
                     }, Visualizer.getMaxCaptureRate() / 2, false, true);
         } catch (Exception e) {
-            Log.d("VisualizerException", e.getMessage() + ":");
+//            Log.d("VisualizerException", e.getMessage() + ":");
         }
-
-
     }
 
     public static void togglePlayPause() {
@@ -173,8 +169,6 @@ public class PlayerFragment extends Fragment {
                 mMediaPlayer.start();
             } else {
                 mVisualizerView.clear();
-                startTime = System.currentTimeMillis();
-                totalElapsedTime = 0;
                 mMediaPlayer.seekTo(0);
                 setupVisualizerFxAndUI();
                 mVisualizer.setEnabled(true);
@@ -190,11 +184,6 @@ public class PlayerFragment extends Fragment {
         }
     }
 
-    public static void init() {
-        startTime = System.currentTimeMillis();
-        totalElapsedTime = 0;
-        pauseTime = 0;
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -204,7 +193,7 @@ public class PlayerFragment extends Fragment {
             mCallback2 = (onCompleteListener) context;
             mCallback3 = (onPreviousTrackListener) context;
             mCallback4 = (onEqualizerClickedListener) context;
-            Log.d("Attached", "TRUE");
+            mCallback5 = (onQueueClickListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnHeadlineSelectedListener");
@@ -246,6 +235,10 @@ public class PlayerFragment extends Fragment {
 
     public interface onEqualizerClickedListener {
         public void onEqualizerClicked();
+    }
+
+    public interface onQueueClickListener {
+        public void onQueueClicked();
     }
 
     @Override
@@ -337,7 +330,8 @@ public class PlayerFragment extends Fragment {
                 completed = false;
                 pauseClicked = false;
                 isPrepared = true;
-                Log.d("QUEUEINDEX", HomeActivity.queueCurrentIndex + "");
+                togglePlayPause();
+                togglePlayPause();
                 togglePlayPause();
             }
         });
@@ -346,8 +340,6 @@ public class PlayerFragment extends Fragment {
             @Override
             public void onCompletion(MediaPlayer mp) {
                 completed = true;
-                Log.d("COMPLETED", "YES");
-                mVisualizer.release();
                 if (HomeActivity.isPlayerVisible) {
                     mainTrackController.setImageResource(R.drawable.ic_replay_white_48dp);
                 } else {
@@ -357,7 +349,6 @@ public class PlayerFragment extends Fragment {
                 completed = false;
                 isPrepared = false;
                 mMediaPlayer.stop();
-                mVisualizer.release();
                 mCallback2.onComplete();
 
             }
@@ -391,7 +382,6 @@ public class PlayerFragment extends Fragment {
             }
         });
 
-        mVisualizer = new Visualizer(mMediaPlayer.getAudioSessionId());
 
         track = HomeActivity.selectedTrack;
         localTrack = HomeActivity.localSelectedTrack;
@@ -441,7 +431,7 @@ public class PlayerFragment extends Fragment {
                 if (!HomeActivity.isPlayerVisible)
                     togglePlayPause();
                 else
-                    mCallback.onSmallPlayerTouched();
+                    mCallback5.onQueueClicked();
             }
         });
 
@@ -459,7 +449,6 @@ public class PlayerFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 mMediaPlayer.stop();
-                mVisualizer.release();
                 mCallback2.onComplete();
             }
         });
@@ -468,7 +457,6 @@ public class PlayerFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 mMediaPlayer.stop();
-                mVisualizer.release();
                 mCallback3.onPreviousTrack();
             }
         });
@@ -510,16 +498,13 @@ public class PlayerFragment extends Fragment {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                Log.d("TOUCHED", "START");
                 startTrack = System.currentTimeMillis();
                 isTracking = true;
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                Log.d("TOUCHED", "STOPPED");
                 endTrack = System.currentTimeMillis();
-                deltaTime += (endTrack - startTrack);
                 mMediaPlayer.seekTo(seekBar.getProgress());
                 mMediaPlayer.start();
                 isTracking = false;
@@ -585,40 +570,20 @@ public class PlayerFragment extends Fragment {
 
     public void refresh() {
 
+        isRefreshed = true;
+
         mVisualizerView.clear();
+        pauseClicked = false;
+        completed = false;
+        isTracking = false;
 
-        repeatIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!HomeActivity.repeatEnabled) {
-                    HomeActivity.repeatEnabled = true;
-                    repeatIcon.setImageResource(R.drawable.ic_repeat_red_48dp);
-                } else {
-                    HomeActivity.repeatEnabled = false;
-                    repeatIcon.setImageResource(R.drawable.ic_repeat_white_48dp);
-                }
-            }
-        });
-
-        shuffleIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!HomeActivity.shuffleEnabled) {
-                    HomeActivity.shuffleEnabled = true;
-                    shuffleIcon.setImageResource(R.drawable.ic_shuffle_red_48dp);
-                } else {
-                    HomeActivity.shuffleEnabled = false;
-                    shuffleIcon.setImageResource(R.drawable.ic_shuffle_white_48dp);
-                }
-            }
-        });
-
-        equalizerIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCallback4.onEqualizerClicked();
-            }
-        });
+        if (HomeActivity.isPlayerVisible) {
+            player_controller.setVisibility(View.VISIBLE);
+            player_controller.setImageResource(R.drawable.ic_queue_music_white_48dp);
+        } else {
+            player_controller.setVisibility(View.VISIBLE);
+            player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
+        }
 
         isFav = false;
 
@@ -630,29 +595,6 @@ public class PlayerFragment extends Fragment {
             isFav = false;
         }
 
-        favouriteIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isFav) {
-                    favouriteIcon.setImageResource(R.drawable.ic_heart_out);
-                    isFav = false;
-                    removeFromfavourite();
-                } else {
-                    favouriteIcon.setImageResource(R.drawable.ic_heart_filled);
-                    isFav = true;
-                    addToFavourite();
-                }
-            }
-        });
-
-        smallPlayer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCallback.onSmallPlayerTouched();
-            }
-        });
-
-        mVisualizer.release();
 
         track = HomeActivity.selectedTrack;
         localTrack = HomeActivity.localSelectedTrack;
@@ -692,35 +634,14 @@ public class PlayerFragment extends Fragment {
                 mMediaPlayer.setDataSource(localTrack.getPath());
                 mMediaPlayer.prepareAsync();
             }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        player_controller.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!pauseClicked) {
-                    pauseClicked = true;
-                }
-                if (!HomeActivity.isPlayerVisible)
-                    togglePlayPause();
-                else
-                    mCallback.onSmallPlayerTouched();
-            }
-        });
-
-        mainTrackController.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!pauseClicked) {
-                    pauseClicked = true;
-                }
-                togglePlayPause();
-            }
-        });
-
         progressBar.setMax(durationInMilliSec);
 
+        t.cancel();
         t = new Timer();
         t.scheduleAtFixedRate(
                 new TimerTask() {
@@ -751,16 +672,13 @@ public class PlayerFragment extends Fragment {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                Log.d("TOUCHED", "START");
                 startTrack = System.currentTimeMillis();
                 isTracking = true;
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                Log.d("TOUCHED", "STOPPED");
                 endTrack = System.currentTimeMillis();
-                deltaTime += (endTrack - startTrack);
                 mMediaPlayer.seekTo(seekBar.getProgress());
                 mMediaPlayer.start();
                 isTracking = false;

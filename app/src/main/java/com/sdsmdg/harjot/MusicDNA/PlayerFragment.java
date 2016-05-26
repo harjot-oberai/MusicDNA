@@ -402,7 +402,11 @@ public class PlayerFragment extends Fragment {
         localTrack = HomeActivity.localSelectedTrack;
 
         if (HomeActivity.streamSelected) {
-            durationInMilliSec = track.getDuration();
+            try {
+                durationInMilliSec = track.getDuration();
+            } catch (Exception e) {
+
+            }
             if (track.getArtworkURL() != null)
                 Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(selected_track_image);
             else {
@@ -410,7 +414,11 @@ public class PlayerFragment extends Fragment {
             }
             selected_track_title.setText(track.getTitle());
         } else {
-            durationInMilliSec = (int) localTrack.getDuration();
+            try {
+                durationInMilliSec = (int) localTrack.getDuration();
+            } catch (Exception e) {
+
+            }
             Bitmap temp = LocalTrackListAdapter.getAlbumArt(localTrack.getPath());
             if (temp != null)
                 selected_track_image.setImageBitmap(temp);

@@ -227,7 +227,7 @@ public class HomeActivity extends AppCompatActivity
                         .add(R.id.playerFragContainer, newFragment, "player")
                         .show(newFragment)
                         .addToBackStack(null)
-                        .commit();
+                        .commitAllowingStateLoss();
             } else {
                 if (PlayerFragment.track != null && !PlayerFragment.localIsPlaying && selectedTrack.getTitle() == PlayerFragment.track.getTitle()) {
 
@@ -340,7 +340,7 @@ public class HomeActivity extends AppCompatActivity
                                 R.animator.slide_down)
                         .add(R.id.playerFragContainer, newFragment, "player")
                         .show(newFragment)
-                        .commit();
+                        .commitAllowingStateLoss();
             } else {
                 if (PlayerFragment.localTrack != null && PlayerFragment.localIsPlaying && localSelectedTrack.getTitle() == PlayerFragment.localTrack.getTitle()) {
 
@@ -2230,7 +2230,7 @@ public class HomeActivity extends AppCompatActivity
                     .add(R.id.fragContainer, newFragment, "local")
                     .show(newFragment)
                     .addToBackStack(null)
-                    .commit();
+                    .commitAllowingStateLoss();
         } else if (type.equals("queue") && !isQueueVisible) {
             setTitle("Queue");
             isQueueVisible = true;
@@ -2246,7 +2246,7 @@ public class HomeActivity extends AppCompatActivity
                     .add(R.id.fragContainer, newFragment, "queue")
                     .show(newFragment)
                     .addToBackStack(null)
-                    .commit();
+                    .commitAllowingStateLoss();
         } else if (type.equals("stream") && !isStreamVisible) {
             setTitle("SoundCloud");
             isStreamVisible = true;
@@ -2261,7 +2261,7 @@ public class HomeActivity extends AppCompatActivity
                     .add(R.id.fragContainer, newFragment, "stream")
                     .show(newFragment)
                     .addToBackStack(null)
-                    .commit();
+                    .commitAllowingStateLoss();
         } else if (type.equals("playlist") && !isPlaylistVisible) {
             setTitle(tempPlaylist.getPlaylistName());
             isPlaylistVisible = true;
@@ -2277,7 +2277,7 @@ public class HomeActivity extends AppCompatActivity
                     .add(R.id.fragContainer, newFragment, "playlist")
                     .show(newFragment)
                     .addToBackStack(null)
-                    .commit();
+                    .commitAllowingStateLoss();
         } else if (type.equals("equalizer") && !isEqualizerVisible) {
             setTitle("Equalizer");
             isEqualizerVisible = true;
@@ -2291,7 +2291,7 @@ public class HomeActivity extends AppCompatActivity
                     .add(R.id.fragContainer, newFragment, "equalizer")
                     .show(newFragment)
                     .addToBackStack(null)
-                    .commit();
+                    .commitAllowingStateLoss();
         } else if (type.equals("favourite") && !isFavouriteVisible) {
             setTitle("Favourites");
             isFavouriteVisible = true;
@@ -2307,7 +2307,7 @@ public class HomeActivity extends AppCompatActivity
                     .add(R.id.fragContainer, newFragment, "favourite")
                     .show(newFragment)
                     .addToBackStack(null)
-                    .commit();
+                    .commitAllowingStateLoss();
         } else if (type.equals("analog") && !isAnalogVisible) {
             setTitle("Analog");
             isAnalogVisible = true;
@@ -2321,7 +2321,7 @@ public class HomeActivity extends AppCompatActivity
                     .add(R.id.fragContainer, newFragment, "analog")
                     .show(newFragment)
                     .addToBackStack(null)
-                    .commit();
+                    .commitAllowingStateLoss();
         }
     }
 
@@ -2333,7 +2333,7 @@ public class HomeActivity extends AppCompatActivity
             if (frag != null) {
                 fm.beginTransaction()
                         .remove(frag)
-                        .commit();
+                        .commitAllowingStateLoss();
             }
         } else if (type.equals("queue")) {
             isQueueVisible = false;
@@ -2342,7 +2342,7 @@ public class HomeActivity extends AppCompatActivity
             if (frag != null) {
                 fm.beginTransaction()
                         .remove(frag)
-                        .commit();
+                        .commitAllowingStateLoss();
             }
         } else if (type.equals("stream")) {
             isStreamVisible = false;
@@ -2351,7 +2351,7 @@ public class HomeActivity extends AppCompatActivity
             if (frag != null) {
                 fm.beginTransaction()
                         .remove(frag)
-                        .commit();
+                        .commitAllowingStateLoss();
             }
         } else if (type.equals("playlist")) {
             isPlaylistVisible = false;
@@ -2360,7 +2360,7 @@ public class HomeActivity extends AppCompatActivity
             if (frag != null) {
                 fm.beginTransaction()
                         .remove(frag)
-                        .commit();
+                        .commitAllowingStateLoss();
             }
         } else if (type.equals("equalizer")) {
             isEqualizerVisible = false;
@@ -2369,7 +2369,7 @@ public class HomeActivity extends AppCompatActivity
             if (frag != null) {
                 fm.beginTransaction()
                         .remove(frag)
-                        .commit();
+                        .commitAllowingStateLoss();
             }
         } else if (type.equals("favourite")) {
             isFavouriteVisible = false;
@@ -2378,7 +2378,7 @@ public class HomeActivity extends AppCompatActivity
             if (frag != null) {
                 fm.beginTransaction()
                         .remove(frag)
-                        .commit();
+                        .commitAllowingStateLoss();
             }
         } else if (type.equals("analog")) {
             isAnalogVisible = false;
@@ -2387,7 +2387,7 @@ public class HomeActivity extends AppCompatActivity
             if (frag != null) {
                 fm.beginTransaction()
                         .remove(frag)
-                        .commit();
+                        .commitAllowingStateLoss();
             }
         }
     }

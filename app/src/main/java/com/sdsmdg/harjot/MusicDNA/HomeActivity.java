@@ -1072,7 +1072,7 @@ public class HomeActivity extends AppCompatActivity
                     hideFragment("analog");
                     setTitle("Music DNA");
                 } else {
-                    super.onBackPressed();
+                    startActivity(new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME));
                 }
             }
         }
@@ -2405,20 +2405,38 @@ public class HomeActivity extends AppCompatActivity
     }
 
     public void showNotification() {
+
+        Notification notification;
+
         String ns = Context.NOTIFICATION_SERVICE;
         notificationManager = (NotificationManager) getSystemService(ns);
-
-        notification = new Notification(R.drawable.ic_play_arrow_white_48dp, null, System.currentTimeMillis());
 
         RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.notification_view);
         Intent notificationIntent = new Intent(this, HomeActivity.class);
         PendingIntent pendingNotificationIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 
-        notification.contentView = notificationView;
+        Notification.Builder builder = new Notification.Builder(this);
+        notification = builder.setContentTitle("MusicDNA")
+                .setContentText("Slide down on note to expand")
+                .setSmallIcon(R.drawable.ic_default)
+                .setContentTitle("Title")
+                .setContentText("Artist")
+                .setLargeIcon(((BitmapDrawable) PlayerFragment.selected_track_image.getDrawable()).getBitmap())
+                .build();
+
+        notification.bigContentView = notificationView;
         notification.contentIntent = pendingNotificationIntent;
         notification.flags |= Notification.FLAG_NO_CLEAR;
 
         notificationView.setImageViewBitmap(R.id.image_in_notification, ((BitmapDrawable) PlayerFragment.selected_track_image.getDrawable()).getBitmap());
+        if (PlayerFragment.localIsPlaying) {
+            notificationView.setTextViewText(R.id.title_in_notification, PlayerFragment.localTrack.getTitle());
+            notificationView.setTextViewText(R.id.artist_in_notification, PlayerFragment.localTrack.getArtist());
+        } else {
+            notificationView.setTextViewText(R.id.title_in_notification, PlayerFragment.track.getTitle());
+            notificationView.setTextViewText(R.id.artist_in_notification, "");
+        }
+
 
         Intent switchIntent = new Intent("com.sdsmdg.harjot.MusicDNA.ACTION_PLAY_PAUSE");
         PendingIntent pendingSwitchIntent = PendingIntent.getBroadcast(this, 100, switchIntent, 0);
@@ -2443,6 +2461,7 @@ public class HomeActivity extends AppCompatActivity
         notificationView.setOnClickPendingIntent(R.id.btn_prev_in_notification, pendingSwitchIntent3);
 
         notificationManager.notify(1, notification);
+
     }
 
     public void updatePlayPauseIcon() {

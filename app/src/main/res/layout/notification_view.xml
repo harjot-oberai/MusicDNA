@@ -1,27 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="120dp">
+    android:layout_height="110dp">
 
     <ImageView
         android:id="@+id/image_in_notification"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"/>
+        android:scaleType="fitXY" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_height="match_parent"
         android:layout_toRightOf="@id/image_in_notification">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:padding="5dp"
+            android:layout_marginLeft="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/title_in_notification"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:singleLine="true"
+                android:text="Title"
+                android:textColor="#FFFFFF"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/artist_in_notification"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="Artist"
+                android:textColor="#AAAAAA"
+                android:textSize="11dp" />
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/btn_prev_in_notification"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
             android:layout_margin="10dp"
             android:src="@drawable/ic_skip_previous_white_48dp" />
 
@@ -29,17 +58,17 @@
             android:id="@+id/btn_pause_play_in_notification"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:layout_centerInParent="true"
-            android:layout_centerVertical="true"
-            android:layout_margin="10dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="5dp"
             android:src="@drawable/ic_pause_white_48dp" />
 
         <ImageView
             android:id="@+id/btn_next_in_notification"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
             android:layout_margin="10dp"
             android:src="@drawable/ic_skip_next_white_48dp" />
     </RelativeLayout>

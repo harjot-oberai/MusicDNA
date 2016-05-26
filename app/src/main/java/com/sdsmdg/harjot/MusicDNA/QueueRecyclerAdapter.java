@@ -148,6 +148,9 @@ public class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdap
     @Override
     public void onItemDismiss(int position) {
         queue.remove(position);
+        if (position < HomeActivity.queueCurrentIndex) {
+            HomeActivity.queueCurrentIndex--;
+        }
         notifyItemRemoved(position);
     }
 

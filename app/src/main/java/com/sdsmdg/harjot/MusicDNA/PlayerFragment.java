@@ -345,6 +345,13 @@ public class PlayerFragment extends Fragment {
                 pauseClicked = false;
                 isPrepared = true;
                 mCallback6.onPrepared();
+                if (HomeActivity.isPlayerVisible) {
+                    player_controller.setVisibility(View.VISIBLE);
+                    player_controller.setImageResource(R.drawable.ic_queue_music_white_48dp);
+                } else {
+                    player_controller.setVisibility(View.VISIBLE);
+                    player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
+                }
                 togglePlayPause();
                 togglePlayPause();
                 togglePlayPause();

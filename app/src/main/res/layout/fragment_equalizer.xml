@@ -10,7 +10,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bottomLinear4"
         android:orientation="vertical">
 
         <com.db.chart.view.LineChartView
@@ -51,13 +50,5 @@
                 android:background="#000000" />
         </LinearLayout>
     </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/bottomLinear4"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal"></LinearLayout>
 
 </RelativeLayout>

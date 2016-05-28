@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/tools"
+    android:id="@+id/item_card"
+    android:layout_width="104dp"
+    android:layout_height="143dp"
+    android:layout_margin="5dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:longClickable="true"
+    android:padding="5dp"
+    android:elevation="1dp"
+    android:fadingEdgeLength="1dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!--<ImageView-->
+            <!--android:id="@+id/backImage"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="91dp"-->
+            <!--android:scaleType="fitXY"-->
+            <!--android:layout_gravity="top" />-->
+
+        <LinearLayout
+            android:id="@+id/custom_image_holder"
+            android:layout_width="match_parent"
+            android:layout_height="104dp"
+            android:layout_gravity="top"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/image1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="#DDD"
+                        android:scaleType="fitXY" />
+
+                    <ImageView
+                        android:id="@+id/image2"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="#DDD"
+                        android:scaleType="fitXY" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/image3"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="#DDD"
+                        android:scaleType="fitXY" />
+
+                    <ImageView
+                        android:id="@+id/image4"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="#DDD"
+                        android:scaleType="fitXY" />
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/playlist_bottomHolder"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/custom_image_holder"
+            android:layout_gravity="bottom"
+            android:background="#FFF"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/playlist_card_title"
+                android:layout_width="match_parent"
+                android:layout_height="19dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="Title"
+                android:textColor="#444"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/playlist_num_songs"
+                android:layout_width="match_parent"
+                android:layout_height="11dp"
+                android:layout_below="@+id/playlist_card_title"
+                android:layout_marginTop="-3dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="Artist"
+                android:textColor="#777"
+                android:textSize="10sp" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

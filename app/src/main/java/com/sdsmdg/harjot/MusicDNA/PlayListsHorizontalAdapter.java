@@ -9,6 +9,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.sdsmdg.harjot.MusicDNA.Models.Playlist;
+import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
+import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
 
 import java.util.List;
 
@@ -18,30 +20,35 @@ import java.util.List;
 public class PlayListsHorizontalAdapter extends RecyclerView.Adapter<PlayListsHorizontalAdapter.MyViewHolder> {
 
     List<Playlist> playlists;
+    ImageLoader imgLoader;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView playlistBack;
+        ImageView img[] = new ImageView[4];
         TextView playlistName, playlistSize;
         RelativeLayout bottomHolder;
 
         public MyViewHolder(View view) {
             super(view);
-            playlistBack = (ImageView) view.findViewById(R.id.backImage);
-            playlistName = (TextView) view.findViewById(R.id.card_title);
-            playlistSize = (TextView) view.findViewById(R.id.card_artist);
-            bottomHolder = (RelativeLayout) view.findViewById(R.id.bottomHolder);
+            img[0] = (ImageView) itemView.findViewById(R.id.image1);
+            img[1] = (ImageView) itemView.findViewById(R.id.image2);
+            img[2] = (ImageView) itemView.findViewById(R.id.image3);
+            img[3] = (ImageView) itemView.findViewById(R.id.image4);
+            playlistName = (TextView) view.findViewById(R.id.playlist_card_title);
+            playlistSize = (TextView) view.findViewById(R.id.playlist_num_songs);
+            bottomHolder = (RelativeLayout) view.findViewById(R.id.playlist_bottomHolder);
         }
     }
 
     public PlayListsHorizontalAdapter(List<Playlist> playlists) {
         this.playlists = playlists;
+        imgLoader = new ImageLoader(HomeActivity.ctx);
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_card_layout, parent, false);
+                .inflate(R.layout.playlist_card_holder, parent, false);
 
         return new MyViewHolder(itemView);
     }
@@ -50,7 +57,27 @@ public class PlayListsHorizontalAdapter extends RecyclerView.Adapter<PlayListsHo
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
         Playlist pl = playlists.get(position);
-        holder.playlistBack.setImageResource(R.drawable.ic_play_arrow_black_48dp);
+        List<UnifiedTrack> list = pl.getSongList();
+
+        if (list.size() >= 4) {
+            for (int i = 0; i < 4; i++) {
+                if (list.get(i).getType()) {
+                    imgLoader.DisplayImage(list.get(i).getLocalTrack().getPath(), holder.img[i]);
+                } else {
+                    imgLoader.DisplayImage(list.get(i).getStreamTrack().getArtworkURL(), holder.img[i]);
+                }
+            }
+        } else {
+            int sz = list.size();
+            for (int i = 0; i < sz; i++) {
+                if (list.get(i).getType()) {
+                    imgLoader.DisplayImage(list.get(i).getLocalTrack().getPath(), holder.img[i]);
+                } else {
+                    imgLoader.DisplayImage(list.get(i).getStreamTrack().getArtworkURL(), holder.img[i]);
+                }
+            }
+        }
+
         holder.playlistName.setText(pl.getPlaylistName());
         holder.playlistSize.setText(String.valueOf(pl.getSongList().size()));
 

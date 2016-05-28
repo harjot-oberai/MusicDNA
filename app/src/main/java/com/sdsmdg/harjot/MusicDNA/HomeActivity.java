@@ -96,7 +96,8 @@ public class HomeActivity extends AppCompatActivity
         PlayerFragment.onEqualizerClickedListener,
         PlayerFragment.onQueueClickListener,
         PlayerFragment.onPreparedLsitener,
-        PlayerFragment.onPlayPauseListener {
+        PlayerFragment.onPlayPauseListener,
+        PlayListFragment.onPLaylistTouchedListener {
 
 
     public static List<LocalTrack> localTrackList = new ArrayList<>();
@@ -123,6 +124,13 @@ public class HomeActivity extends AppCompatActivity
     static Context ctx;
 
     static boolean queueCall = false;
+
+    static float max_max = Float.MIN_VALUE;
+    static float min_min = Float.MAX_VALUE;
+    static float avg_max = 0;
+    static float avg_min = 0;
+    static float avg = 0;
+    static int k = 0;
 
     DrawerLayout drawer;
 
@@ -179,6 +187,7 @@ public class HomeActivity extends AppCompatActivity
     static boolean isEqualizerVisible = false;
     static boolean isFavouriteVisible = false;
     static boolean isAnalogVisible = false;
+    static boolean isAllPlaylistVisible = false;
 
     static LocalTrack localSelectedTrack;
     static Track selectedTrack;
@@ -1071,6 +1080,9 @@ public class HomeActivity extends AppCompatActivity
                 } else if (isAnalogVisible) {
                     hideFragment("analog");
                     setTitle("Music DNA");
+                } else if (isAllPlaylistVisible) {
+                    hideFragment("allPlaylists");
+                    setTitle("Music DNA");
                 } else {
                     startActivity(new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME));
                 }
@@ -1119,7 +1131,7 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_local) {
 
         } else if (id == R.id.nav_playlists) {
-
+            showFragment("allPlaylists");
         } else if (id == R.id.nav_fav) {
             showFragment("favourite");
         } else if (id == R.id.nav_manage) {
@@ -1696,6 +1708,21 @@ public class HomeActivity extends AppCompatActivity
 
         Log.d("MAXMIN", max + ":" + min);
 
+        if (max > max_max) {
+            max_max = max;
+        }
+        if (min < min_min) {
+            min_min = min;
+        }
+
+        avg = ((avg * k) + ((max + min) / ((float) 2))) / ((float) (k + 1));
+
+        avg_max = ((avg_max * k) + (max)) / ((float) (k + 1));
+
+        avg_min = ((avg_min * k) + (min)) / ((float) (k + 1));
+
+        k++;
+
         /**
          * Number Fishing is all that is used here to get the best looking DNA
          * Number fishing is HOW YOU WIN AT LIFE. -- paullewis :)
@@ -1780,6 +1807,17 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onComplete() {
+
+        Log.d("FULLSONGMAXMIN", max_max + ":" + min_min);
+        Toast.makeText(HomeActivity.this, max_max + " : " + min_min, Toast.LENGTH_LONG).show();
+        Toast.makeText(HomeActivity.this, avg_max + " : " + avg + " : " + avg_min, Toast.LENGTH_LONG).show();
+        max_max = Float.MIN_VALUE;
+        min_min = Float.MAX_VALUE;
+        avg = 0;
+        avg_max = 0;
+        avg_min = 0;
+        k = 0;
+
         queueCall = true;
         if (!shuffleEnabled) {
             if (queueCurrentIndex < queue.getQueue().size() - 1) {
@@ -2035,6 +2073,12 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onPlayPause() {
         updatePlayPauseIcon();
+    }
+
+    @Override
+    public void onPlaylistTouched(int pos) {
+        tempPlaylist = allPlaylists.getPlaylists().get(pos);
+        showFragment("playlist");
     }
 
     public static class MyAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -2322,6 +2366,21 @@ public class HomeActivity extends AppCompatActivity
                     .show(newFragment)
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
+        } else if (type.equals("allPlaylists") && !isAllPlaylistVisible) {
+            setTitle("All Playlists");
+            isAllPlaylistVisible = true;
+            android.app.FragmentManager fm = getFragmentManager();
+            PlayListFragment newFragment = new PlayListFragment();
+            PlayListFragment.mCallback = this;
+            fm.beginTransaction()
+                    .setCustomAnimations(R.animator.slide_up,
+                            R.animator.slide_down,
+                            R.animator.slide_up,
+                            R.animator.slide_down)
+                    .add(R.id.fragContainer, newFragment, "allPlaylists")
+                    .show(newFragment)
+                    .addToBackStack(null)
+                    .commitAllowingStateLoss();
         }
     }
 
@@ -2389,6 +2448,15 @@ public class HomeActivity extends AppCompatActivity
                         .remove(frag)
                         .commitAllowingStateLoss();
             }
+        } else if (type.equals("allPlaylists")) {
+            isAllPlaylistVisible = false;
+            android.app.FragmentManager fm = getFragmentManager();
+            android.app.Fragment frag = fm.findFragmentByTag("allPlaylists");
+            if (frag != null) {
+                fm.beginTransaction()
+                        .remove(frag)
+                        .commitAllowingStateLoss();
+            }
         }
     }
 
@@ -2424,6 +2492,7 @@ public class HomeActivity extends AppCompatActivity
                 .setLargeIcon(((BitmapDrawable) PlayerFragment.selected_track_image.getDrawable()).getBitmap())
                 .build();
 
+        notification.priority = Notification.PRIORITY_MAX;
         notification.bigContentView = notificationView;
         notification.contentIntent = pendingNotificationIntent;
         notification.flags |= Notification.FLAG_NO_CLEAR;

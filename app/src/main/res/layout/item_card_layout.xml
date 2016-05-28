@@ -3,7 +3,7 @@
     xmlns:card_view="http://schemas.android.com/tools"
     android:id="@+id/item_card"
     android:layout_width="104dp"
-    android:layout_height="130dp"
+    android:layout_height="143dp"
     android:layout_margin="5dp"
     android:clickable="true"
     android:focusable="true"
@@ -20,7 +20,7 @@
         <ImageView
             android:id="@+id/backImage"
             android:layout_width="match_parent"
-            android:layout_height="91dp"
+            android:layout_height="104dp"
             android:scaleType="fitXY"
             android:layout_gravity="top" />
 

@@ -48,6 +48,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -64,6 +65,7 @@ import com.sdsmdg.harjot.MusicDNA.Models.Queue;
 import com.sdsmdg.harjot.MusicDNA.Models.RecentlyPlayed;
 import com.sdsmdg.harjot.MusicDNA.Models.Track;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
+import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +73,7 @@ import java.util.Random;
 
 import bz.tsung.android.objectify.NoSuchPreferenceFoundException;
 import bz.tsung.android.objectify.ObjectPreferenceLoader;
+import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import retrofit.Call;
@@ -105,6 +108,14 @@ public class HomeActivity extends AppCompatActivity
     public static List<Track> streamingTrackList = new ArrayList<>();
 
     static float ratio, ratio2;
+
+    Toolbar spHome;
+    ImageView playerControllerHome;
+    FrameLayout bottomToolbar;
+    CircleImageView spImgHome;
+    TextView spTitleHome;
+
+    ImageLoader imgLoader;
 
     RecentlyPlayed recentlyPlayed;
     static Favourite favouriteTracks;
@@ -196,6 +207,8 @@ public class HomeActivity extends AppCompatActivity
     static boolean streamSelected = false;
 
     public void onTrackSelected(int position) {
+
+        HideBottomFakeToolbar();
 
         if (!queueCall) {
             hideKeyboard();
@@ -310,6 +323,8 @@ public class HomeActivity extends AppCompatActivity
     }
 
     public void onLocalTrackSelected(int position) {
+
+        HideBottomFakeToolbar();
 
         if (!queueCall) {
             hideKeyboard();
@@ -432,6 +447,8 @@ public class HomeActivity extends AppCompatActivity
         requestPermissions();
         super.onCreate(savedInstanceState);
 
+        imgLoader = new ImageLoader(this);
+
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         ctx = this;
 
@@ -466,6 +483,34 @@ public class HomeActivity extends AppCompatActivity
         ratio2 = (float) screen_width / (float) 1080;
         ratio = Math.min(ratio, ratio2);
 
+        bottomToolbar = (FrameLayout) findViewById(R.id.bottomMargin);
+        spHome = (Toolbar) findViewById(R.id.smallPlayer_home);
+        playerControllerHome = (ImageView) findViewById(R.id.player_control_sp_home);
+        spImgHome = (CircleImageView) findViewById(R.id.selected_track_image_sp_home);
+        spTitleHome = (TextView) findViewById(R.id.selected_track_title_sp_home);
+
+        playerControllerHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (queue != null && queue.getQueue().size() > 0) {
+                    onQueueItemClicked(queueCurrentIndex);
+                    bottomToolbar.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
+        playerControllerHome.setImageResource(R.drawable.ic_play_arrow_white_48dp);
+
+        spHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (queue != null && queue.getQueue().size() > 0) {
+                    onQueueItemClicked(queueCurrentIndex);
+                    bottomToolbar.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
         localRecyclerContainer = (RelativeLayout) findViewById(R.id.localRecyclerContainer);
         recentsRecyclerContainer = (RelativeLayout) findViewById(R.id.recentsRecyclerContainer);
         streamRecyclerContainer = (RelativeLayout) findViewById(R.id.streamRecyclerContainer);
@@ -497,7 +542,7 @@ public class HomeActivity extends AppCompatActivity
             favouriteTracks = new ObjectPreferenceLoader(ctx, "Favourites", Favourite.class).load();
             recentlyPlayed = new ObjectPreferenceLoader(ctx, "RecentlyPlayed", RecentlyPlayed.class).load();
             isReloaded = new ObjectPreferenceLoader(ctx, "isReloaded", Boolean.class).load();
-//            queueCurrentIndex = new ObjectPreferenceLoader(ctx, "queueCurrentIndex", Integer.class).load();
+            queueCurrentIndex = new ObjectPreferenceLoader(ctx, "queueCurrentIndex", Integer.class).load();
         } catch (NoSuchPreferenceFoundException e) {
             e.printStackTrace();
         }
@@ -512,8 +557,6 @@ public class HomeActivity extends AppCompatActivity
 
         if (queue == null) {
             queue = new Queue();
-        } else if (queueCurrentIndex != -1) {
-//            onQueueItemClicked(queueCurrentIndex);
         }
 
         if (favouriteTracks == null) {
@@ -522,6 +565,15 @@ public class HomeActivity extends AppCompatActivity
 
         if (recentlyPlayed == null) {
             recentlyPlayed = new RecentlyPlayed();
+        }
+
+        UnifiedTrack utHome = queue.getQueue().get(queueCurrentIndex);
+        if (utHome.getType()) {
+            imgLoader.DisplayImage(utHome.getLocalTrack().getPath(), spImgHome);
+            spTitleHome.setText(utHome.getLocalTrack().getTitle());
+        } else {
+            imgLoader.DisplayImage(utHome.getStreamTrack().getArtworkURL(), spImgHome);
+            spTitleHome.setText(utHome.getStreamTrack().getTitle());
         }
 
         getLocalSongs();
@@ -1008,7 +1060,6 @@ public class HomeActivity extends AppCompatActivity
             playlistNothingText.setVisibility(View.INVISIBLE);
         }
 
-
     }
 
     private void getLocalSongs() {
@@ -1049,11 +1100,13 @@ public class HomeActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-
             if (isEqualizerVisible) {
                 showPlayer2();
             } else if (isQueueVisible) {
-                showPlayer3();
+                if (isPlayerVisible)
+                    showPlayer3();
+                else
+                    hideFragment("queue");
             } else {
                 if (isPlayerVisible) {
                     hidePlayer();
@@ -1112,7 +1165,7 @@ public class HomeActivity extends AppCompatActivity
             return true;
         }
         if (id == R.id.action_queue) {
-//            showFragment("queue");
+            showFragment("queue");
         }
         if (id == R.id.action_analog) {
             showFragment("analog");
@@ -1441,7 +1494,7 @@ public class HomeActivity extends AppCompatActivity
 
         isPlayerVisible = true;
         isEqualizerVisible = false;
-        isQueueVisible = false;
+
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -1467,6 +1520,10 @@ public class HomeActivity extends AppCompatActivity
                         @Override
                         public void run() {
                             PlayerFragment.cpb.setVisibility(View.INVISIBLE);
+                            if (isQueueVisible) {
+                                hideFragment("queue");
+                            }
+                            isQueueVisible = false;
                         }
                     });
         }
@@ -1912,6 +1969,12 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onQueueItemClicked(int position) {
+
+        if (isPlayerVisible)
+            showPlayer3();
+        else
+            showPlayer();
+
         queueCurrentIndex = position;
         UnifiedTrack ut = HomeActivity.queue.getQueue().get(position);
         if (ut.getType()) {
@@ -1931,8 +1994,6 @@ public class HomeActivity extends AppCompatActivity
             isReloaded = false;
             onTrackSelected(position);
         }
-
-        showPlayer3();
 
     }
 
@@ -2535,6 +2596,10 @@ public class HomeActivity extends AppCompatActivity
 
     public void updatePlayPauseIcon() {
         showNotification();
+    }
+
+    public void HideBottomFakeToolbar() {
+        bottomToolbar.setVerticalScrollbarPosition(View.INVISIBLE);
     }
 
 }

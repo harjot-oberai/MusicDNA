@@ -235,13 +235,77 @@
 
     </ScrollView>
 
-    <LinearLayout
+    <!--<LinearLayout-->
+        <!--android:id="@+id/bottomMargin"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="70dp"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:background="#F1F1F1"-->
+        <!--android:orientation="horizontal"></LinearLayout>-->
+
+    <FrameLayout
         android:id="@+id/bottomMargin"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:background="#000"
         android:layout_alignParentBottom="true"
-        android:background="#F1F1F1"
-        android:orientation="horizontal"></LinearLayout>
+        android:layout_height="70dp">
+
+        <com.sdsmdg.harjot.MusicDNA.CustomProgressBar
+            android:id="@+id/customProgress"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:visibility="invisible" />
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/smallPlayer_home"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="0dp"
+            android:visibility="visible">
+
+            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/selected_track_image_sp_home"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/myvisualizerview"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="10dp"
+                android:visibility="visible"
+                app:civ_border_color="#FF000000"
+                app:civ_border_width="0dp" />
+
+            <TextView
+                android:id="@+id/selected_track_title_sp_home"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/player_control"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="35dp"
+                android:layout_marginTop="2dp"
+                android:ellipsize="end"
+                android:singleLine="false"
+                android:text="Title"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:textSize="13dp" />
+
+            <ImageView
+                android:id="@+id/player_control_sp_home"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="17dp"
+                android:layout_marginTop="2dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:visibility="visible"/>
+        </android.support.v7.widget.Toolbar>
+    </FrameLayout>
 
     <FrameLayout
         android:id="@+id/fragContainer"

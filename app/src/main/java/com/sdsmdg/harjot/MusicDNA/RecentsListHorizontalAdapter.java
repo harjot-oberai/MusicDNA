@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.Models.Track;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
+import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -30,6 +31,7 @@ public class RecentsListHorizontalAdapter extends RecyclerView.Adapter<RecentsLi
     private List<UnifiedTrack> recentslyPlayed;
     int def = 0x000000;
     Context ctx;
+    ImageLoader imgLoader;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -46,9 +48,10 @@ public class RecentsListHorizontalAdapter extends RecyclerView.Adapter<RecentsLi
         }
     }
 
-    public RecentsListHorizontalAdapter(List<UnifiedTrack> recentslyPlayed, Context xtx) {
+    public RecentsListHorizontalAdapter(List<UnifiedTrack> recentslyPlayed, Context ctx) {
         this.recentslyPlayed = recentslyPlayed;
         this.ctx = ctx;
+        imgLoader = new ImageLoader(HomeActivity.ctx);
     }
 
     @Override
@@ -62,49 +65,23 @@ public class RecentsListHorizontalAdapter extends RecyclerView.Adapter<RecentsLi
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
-        if (recentslyPlayed.get(position).getType()) {
-            LocalTrack localTrack = recentslyPlayed.get(position).getLocalTrack();
-            Bitmap img = getAlbumArt(localTrack.getPath());
-            if (img != null) {
-                holder.art.setImageBitmap(img);
-                if (img != null && !img.isRecycled()) {
-                    Palette palette = Palette.from(img).generate();
-                    if (palette.getLightMutedColor(def) != 0) {
-                        holder.bottomHolder.setBackgroundColor(palette.getLightMutedColor(def));
-                    } else {
-                        holder.bottomHolder.setBackgroundColor(Color.WHITE);
-                    }
-                    if (palette.getDarkMutedColor(def) != 0) {
-                        holder.title.setTextColor(palette.getDarkMutedColor(def));
-                        holder.artist.setTextColor(palette.getDarkMutedColor(def));
-                    } else {
-                        holder.title.setTextColor(Color.parseColor("#444444"));
-                        holder.artist.setTextColor(Color.parseColor("#777777"));
-                    }
-                }
-            } else {
-                holder.art.setImageResource(R.drawable.ic_default);
-                holder.bottomHolder.setBackgroundColor(Color.WHITE);
-                holder.title.setTextColor(Color.parseColor("#444444"));
-                holder.artist.setTextColor(Color.parseColor("#777777"));
-            }
-            holder.title.setText(localTrack.getTitle());
-            holder.artist.setText(localTrack.getArtist());
+        UnifiedTrack ut = recentslyPlayed.get(position);
+        if (ut.getType()) {
+            LocalTrack lt = ut.getLocalTrack();
+            imgLoader.DisplayImage(lt.getPath(), holder.art);
+            holder.title.setText(lt.getTitle());
+            holder.artist.setText(lt.getArtist());
         } else {
-            Track track = recentslyPlayed.get(position).getStreamTrack();
-            try {
-                if (track.getArtworkURL() != null)
-                    Picasso.with(ctx).load(track.getArtworkURL()).into(holder.art);
-                else {
-                    holder.art.setImageResource(R.drawable.ic_default);
-                }
-            } catch (Exception e) {
-                Log.e("AdapterError", e.getMessage());
-            }
-            holder.title.setText(track.getTitle());
+            Track t = ut.getStreamTrack();
+            Picasso.with(HomeActivity.ctx)
+                    .load(t.getArtworkURL())
+                    .resize(100, 100)
+                    .error(R.drawable.ic_default)
+                    .placeholder(R.drawable.ic_default)
+                    .into(holder.art);
+            holder.title.setText(t.getTitle());
             holder.artist.setText("");
         }
-
     }
 
     @Override

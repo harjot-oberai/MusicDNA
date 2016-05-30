@@ -158,6 +158,10 @@ public class LocalMusicFragment extends Fragment {
                                 HomeActivity.queue.getQueue().add(HomeActivity.queueCurrentIndex + 1, new UnifiedTrack(true, track, null));
                             }
                         }
+                        if (item.getTitle().equals("Add to Favourites")) {
+                            UnifiedTrack ut = new UnifiedTrack(true, HomeActivity.finalLocalSearchResultList.get(position), null);
+                            HomeActivity.addToFavourites(ut);
+                        }
                         return true;
                     }
                 });

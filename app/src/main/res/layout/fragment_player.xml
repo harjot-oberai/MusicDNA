@@ -24,7 +24,7 @@
             android:layout_height="70dp"
             android:layout_alignParentTop="true"
             android:layout_marginBottom="0dp"
-            android:visibility="visible">
+            android:visibility="invisible">
 
             <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/selected_track_image_sp"
@@ -73,7 +73,6 @@
         android:id="@+id/myvisualizerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/topContainer"
         android:layout_above="@+id/seekBarContainer"
         android:layout_centerHorizontal="true" />
 

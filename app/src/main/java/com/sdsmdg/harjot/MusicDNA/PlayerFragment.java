@@ -153,6 +153,8 @@ public class PlayerFragment extends Fragment {
             mMediaPlayer.pause();
             if (HomeActivity.isPlayerVisible) {
                 mainTrackController.setImageResource(R.drawable.ic_play_arrow_white_48dp);
+                player_controller.setImageResource(R.drawable.ic_queue_music_white_48dp);
+                HomeActivity.playerControllerAB.setImageResource(R.drawable.ic_queue_music_white_48dp);
             } else {
                 player_controller.setImageResource(R.drawable.ic_play_arrow_white_48dp);
                 mainTrackController.setImageResource(R.drawable.ic_play_arrow_white_48dp);
@@ -165,6 +167,8 @@ public class PlayerFragment extends Fragment {
                 mVisualizer.setEnabled(true);
                 if (HomeActivity.isPlayerVisible) {
                     mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
+                    player_controller.setImageResource(R.drawable.ic_queue_music_white_48dp);
+                    HomeActivity.playerControllerAB.setImageResource(R.drawable.ic_queue_music_white_48dp);
                 } else {
                     mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
                     player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
@@ -316,7 +320,7 @@ public class PlayerFragment extends Fragment {
                 if (isFav) {
                     favouriteIcon.setImageResource(R.drawable.ic_heart_out);
                     isFav = false;
-                    removeFromfavourite();
+                    removeFromFavourite();
                 } else {
                     favouriteIcon.setImageResource(R.drawable.ic_heart_filled);
                     isFav = true;
@@ -348,6 +352,7 @@ public class PlayerFragment extends Fragment {
                 if (HomeActivity.isPlayerVisible) {
                     player_controller.setVisibility(View.VISIBLE);
                     player_controller.setImageResource(R.drawable.ic_queue_music_white_48dp);
+                    HomeActivity.playerControllerAB.setImageResource(R.drawable.ic_queue_music_white_48dp);
                 } else {
                     player_controller.setVisibility(View.VISIBLE);
                     player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
@@ -414,11 +419,14 @@ public class PlayerFragment extends Fragment {
             } catch (Exception e) {
 
             }
-            if (track.getArtworkURL() != null)
+            if (track.getArtworkURL() != null) {
                 Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(selected_track_image);
-            else {
+                Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(HomeActivity.spImgAB);
+            } else {
                 selected_track_image.setImageResource(R.drawable.ic_default);
+                HomeActivity.spImgAB.setImageResource(R.drawable.ic_default);
             }
+            HomeActivity.spTitleAB.setText(track.getTitle());
             selected_track_title.setText(track.getTitle());
         } else {
             try {
@@ -427,11 +435,14 @@ public class PlayerFragment extends Fragment {
 
             }
             Bitmap temp = LocalTrackListAdapter.getAlbumArt(localTrack.getPath());
-            if (temp != null)
+            if (temp != null) {
+                HomeActivity.spImgAB.setImageBitmap(temp);
                 selected_track_image.setImageBitmap(temp);
-            else {
+            } else {
+                HomeActivity.spImgAB.setImageResource(R.drawable.ic_default);
                 selected_track_image.setImageResource(R.drawable.ic_default);
             }
+            HomeActivity.spTitleAB.setText(localTrack.getTitle());
             selected_track_title.setText(localTrack.getTitle());
         }
 
@@ -453,6 +464,19 @@ public class PlayerFragment extends Fragment {
         }
 
         player_controller.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!pauseClicked) {
+                    pauseClicked = true;
+                }
+                if (!HomeActivity.isPlayerVisible)
+                    togglePlayPause();
+                else
+                    mCallback5.onQueueClicked();
+            }
+        });
+
+        HomeActivity.playerControllerAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!pauseClicked) {
@@ -544,7 +568,7 @@ public class PlayerFragment extends Fragment {
 
     }
 
-    public void addToFavourite() {
+    public static void addToFavourite() {
 
         UnifiedTrack ut;
 
@@ -556,7 +580,7 @@ public class PlayerFragment extends Fragment {
         HomeActivity.favouriteTracks.getFavourite().add(ut);
     }
 
-    public void removeFromfavourite() {
+    public static void removeFromFavourite() {
 
         UnifiedTrack ut;
 
@@ -610,6 +634,7 @@ public class PlayerFragment extends Fragment {
         if (HomeActivity.isPlayerVisible) {
             player_controller.setVisibility(View.VISIBLE);
             player_controller.setImageResource(R.drawable.ic_queue_music_white_48dp);
+            HomeActivity.playerControllerAB.setImageResource(R.drawable.ic_queue_music_white_48dp);
         } else {
             player_controller.setVisibility(View.VISIBLE);
             player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
@@ -631,20 +656,26 @@ public class PlayerFragment extends Fragment {
 
         if (HomeActivity.streamSelected) {
             durationInMilliSec = track.getDuration();
-            if (track.getArtworkURL() != null)
+            if (track.getArtworkURL() != null) {
                 Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(selected_track_image);
-            else {
+                Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(HomeActivity.spImgAB);
+            } else {
                 selected_track_image.setImageResource(R.drawable.ic_default);
+                HomeActivity.spImgAB.setImageResource(R.drawable.ic_default);
             }
+            HomeActivity.spTitleAB.setText(track.getTitle());
             selected_track_title.setText(track.getTitle());
         } else {
             durationInMilliSec = (int) localTrack.getDuration();
             Bitmap temp = LocalTrackListAdapter.getAlbumArt(localTrack.getPath());
-            if (temp != null)
+            if (temp != null) {
+                HomeActivity.spImgAB.setImageBitmap(temp);
                 selected_track_image.setImageBitmap(temp);
-            else {
+            } else {
+                HomeActivity.spImgAB.setImageResource(R.drawable.ic_default);
                 selected_track_image.setImageResource(R.drawable.ic_default);
             }
+            HomeActivity.spTitleAB.setText(localTrack.getTitle());
             selected_track_title.setText(localTrack.getTitle());
         }
 

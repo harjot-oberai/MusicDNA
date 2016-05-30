@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/play"
         android:icon="@android:drawable/ic_menu_search"
-        android:title="Play"/>
+        android:title="Play" />
     <item
         android:id="@+id/play_next"
         android:icon="@android:drawable/ic_menu_add"
-        android:title="Play Next"/>
+        android:title="Play Next" />
     <item
         android:id="@+id/add_to_queue"
         android:icon="@android:drawable/ic_menu_edit"
-        android:title="Add to Queue"/>
+        android:title="Add to Queue" />
     <item
         android:id="@+id/add_to_playlist"
         android:icon="@android:drawable/ic_menu_edit"
-        android:title="Add to Playlist"/>
+        android:title="Add to Playlist" />
+    <item
+        android:id="@+id/add_to_favourites"
+        android:icon="@android:drawable/ic_menu_edit"
+        android:title="Add to Favourites" />
 
 </menu>

@@ -25,7 +25,7 @@ import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
  */
 public class StreamMusicFragment extends Fragment {
 
-    private StreamTrackListAdapter adapter;
+    public static StreamTrackListAdapter adapter;
     static OnTrackSelectedListener mCallback;
     Context ctx;
 
@@ -158,6 +158,10 @@ public class StreamMusicFragment extends Fragment {
                             } else {
                                 HomeActivity.queue.getQueue().add(HomeActivity.queueCurrentIndex + 1, new UnifiedTrack(false, null, track));
                             }
+                        }
+                        if (item.getTitle().equals("Add to Favourites")) {
+                            UnifiedTrack ut = new UnifiedTrack(false, null, HomeActivity.streamingTrackList.get(position));
+                            HomeActivity.addToFavourites(ut);
                         }
                         return true;
                     }

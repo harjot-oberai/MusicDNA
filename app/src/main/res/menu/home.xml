@@ -11,12 +11,6 @@
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="always"/>
     <item
-        android:icon="@drawable/ic_queue_music_white_48dp"
-        android:id="@+id/action_queue"
-        android:orderInCategory="200"
-        android:title="Queue"
-        app:showAsAction="always"/>
-    <item
         android:id="@+id/action_analog"
         android:orderInCategory="300"
         android:title="Analog"

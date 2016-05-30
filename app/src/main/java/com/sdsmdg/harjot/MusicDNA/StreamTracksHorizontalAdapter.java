@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.sdsmdg.harjot.MusicDNA.Models.Track;
+import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class StreamTracksHorizontalAdapter extends RecyclerView.Adapter<StreamTr
 
     List<Track> streamList;
     Context ctx;
+    ImageLoader imgLoader;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView art;
@@ -40,6 +42,7 @@ public class StreamTracksHorizontalAdapter extends RecyclerView.Adapter<StreamTr
     public StreamTracksHorizontalAdapter(List<Track> streamList, Context ctx) {
         this.streamList = streamList;
         this.ctx = ctx;
+        imgLoader = new ImageLoader(HomeActivity.ctx);
     }
 
     @Override
@@ -55,9 +58,11 @@ public class StreamTracksHorizontalAdapter extends RecyclerView.Adapter<StreamTr
 
         Track track = streamList.get(position);
         try {
-            if (track.getArtworkURL() != null)
+            if (track.getArtworkURL() != null) {
+                Log.d("ARTWORK_URL", track.getArtworkURL());
                 Picasso.with(ctx).load(track.getArtworkURL()).into(holder.art);
-            else{
+//                imgLoader.DisplayImage(track.getArtworkURL(), holder.art);
+            } else {
                 holder.art.setImageResource(R.drawable.ic_default);
             }
 

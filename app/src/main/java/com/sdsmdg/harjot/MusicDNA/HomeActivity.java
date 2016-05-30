@@ -2,6 +2,7 @@ package com.sdsmdg.harjot.MusicDNA;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.Notification;
@@ -16,9 +17,11 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -44,6 +47,8 @@ import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.AnticipateOvershootInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -100,7 +105,8 @@ public class HomeActivity extends AppCompatActivity
         PlayerFragment.onQueueClickListener,
         PlayerFragment.onPreparedLsitener,
         PlayerFragment.onPlayPauseListener,
-        PlayListFragment.onPLaylistTouchedListener {
+        PlayListFragment.onPLaylistTouchedListener,
+        PlayListFragment.onPlaylistMenuPlayAllListener {
 
 
     public static List<LocalTrack> localTrackList = new ArrayList<>();
@@ -109,11 +115,17 @@ public class HomeActivity extends AppCompatActivity
 
     static float ratio, ratio2;
 
+    AppBarLayout appBarLayout;
+
     Toolbar spHome;
     ImageView playerControllerHome;
     FrameLayout bottomToolbar;
     CircleImageView spImgHome;
     TextView spTitleHome;
+
+    static ImageView playerControllerAB;
+    static CircleImageView spImgAB;
+    static TextView spTitleAB;
 
     ImageLoader imgLoader;
 
@@ -145,8 +157,7 @@ public class HomeActivity extends AppCompatActivity
 
     DrawerLayout drawer;
 
-    NotificationManager notificationManager;
-    Notification notification;
+    static NotificationManager notificationManager;
 
     LocalTracksHorizontalAdapter adapter;
     StreamTracksHorizontalAdapter sAdapter;
@@ -179,6 +190,7 @@ public class HomeActivity extends AppCompatActivity
     static int screen_height;
 
     static Toolbar toolbar;
+    static Toolbar spToolbar;
 
     static Activity main;
 
@@ -212,6 +224,7 @@ public class HomeActivity extends AppCompatActivity
 
         if (!queueCall) {
             hideKeyboard();
+
             searchView.setQuery("", false);
             searchView.setIconified(true);
 
@@ -328,6 +341,7 @@ public class HomeActivity extends AppCompatActivity
 
         if (!queueCall) {
             hideKeyboard();
+
             searchView.setQuery("", false);
             searchView.setIconified(true);
 
@@ -422,10 +436,16 @@ public class HomeActivity extends AppCompatActivity
                     break;
                 }
             }
-            recentlyPlayed.addSong(track);
+            recentlyPlayed.getRecentlyPlayed().add(0, track);
             recentsRecycler.setVisibility(View.VISIBLE);
             recentsNothingText.setVisibility(View.INVISIBLE);
-            rAdapter.notifyDataSetChanged();
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    rAdapter.notifyDataSetChanged();
+                }
+            }, 320);
         } else {
             UnifiedTrack track = new UnifiedTrack(true, PlayerFragment.localTrack, null);
             for (int i = 0; i < recentlyPlayed.getRecentlyPlayed().size(); i++) {
@@ -437,16 +457,20 @@ public class HomeActivity extends AppCompatActivity
             recentlyPlayed.getRecentlyPlayed().add(0, track);
             if (recentlyPlayed.getRecentlyPlayed().size() > 15)
                 recentlyPlayed.getRecentlyPlayed().remove(15);
-            rAdapter.notifyDataSetChanged();
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    rAdapter.notifyDataSetChanged();
+                }
+            }, 320);
         }
 
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        requestPermissions();
         super.onCreate(savedInstanceState);
-
         imgLoader = new ImageLoader(this);
 
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
@@ -459,6 +483,8 @@ public class HomeActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        spToolbar = (Toolbar) findViewById(R.id.smallPlayer_AB);
+
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -470,8 +496,8 @@ public class HomeActivity extends AppCompatActivity
 
         getSupportActionBar().setShowHideAnimationEnabled(true);
 
+        appBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
         VisualizerView.act = this;
-
         main = this;
 
         WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
@@ -482,6 +508,10 @@ public class HomeActivity extends AppCompatActivity
         ratio = (float) screen_height / (float) 1920;
         ratio2 = (float) screen_width / (float) 1080;
         ratio = Math.min(ratio, ratio2);
+
+        playerControllerAB = (ImageView) findViewById(R.id.player_control_sp_AB);
+        spImgAB = (CircleImageView) findViewById(R.id.selected_track_image_sp_AB);
+        spTitleAB = (TextView) findViewById(R.id.selected_track_title_sp_AB);
 
         bottomToolbar = (FrameLayout) findViewById(R.id.bottomMargin);
         spHome = (Toolbar) findViewById(R.id.smallPlayer_home);
@@ -567,13 +597,17 @@ public class HomeActivity extends AppCompatActivity
             recentlyPlayed = new RecentlyPlayed();
         }
 
-        UnifiedTrack utHome = queue.getQueue().get(queueCurrentIndex);
-        if (utHome.getType()) {
-            imgLoader.DisplayImage(utHome.getLocalTrack().getPath(), spImgHome);
-            spTitleHome.setText(utHome.getLocalTrack().getTitle());
+        if (queue != null && queue.getQueue().size() != 0) {
+            UnifiedTrack utHome = queue.getQueue().get(queueCurrentIndex);
+            if (utHome.getType()) {
+                imgLoader.DisplayImage(utHome.getLocalTrack().getPath(), spImgHome);
+                spTitleHome.setText(utHome.getLocalTrack().getTitle());
+            } else {
+                imgLoader.DisplayImage(utHome.getStreamTrack().getArtworkURL(), spImgHome);
+                spTitleHome.setText(utHome.getStreamTrack().getTitle());
+            }
         } else {
-            imgLoader.DisplayImage(utHome.getStreamTrack().getArtworkURL(), spImgHome);
-            spTitleHome.setText(utHome.getStreamTrack().getTitle());
+            bottomToolbar.setVisibility(View.INVISIBLE);
         }
 
         getLocalSongs();
@@ -757,6 +791,9 @@ public class HomeActivity extends AppCompatActivity
                                 }
                             }
                         }
+                        if (item.getTitle().equals("Add to Favourites")) {
+                            addToFavourites(ut);
+                        }
                         return true;
                     }
                 });
@@ -786,15 +823,34 @@ public class HomeActivity extends AppCompatActivity
             @Override
             boolean onClick(RecyclerView parent, View view, final int position, long id) {
                 tempPlaylist = allPlaylists.getPlaylists().get(position);
-//                queue.setQueue(tempPlaylist.getSongList());
                 showFragment("playlist");
-//                queueCurrentIndex = 0;
-//                onQueueItemClicked(0);
                 return true;
             }
 
             @Override
             boolean onLongClick(RecyclerView parent, View view, final int position, long id) {
+                PopupMenu popup = new PopupMenu(ctx, view);
+                popup.getMenuInflater().inflate(R.menu.playlist_popup, popup.getMenu());
+
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (item.getTitle().equals("Play")) {
+                            tempPlaylist = allPlaylists.getPlaylists().get(position);
+                            queue.setQueue(tempPlaylist.getSongList());
+                            queueCurrentIndex = 0;
+                            onPlaylistPLayAll();
+                        } else if (item.getTitle().equals("Delete")) {
+                            allPlaylists.getPlaylists().remove(position);
+                            if (PlayListFragment.vpAdapter != null) {
+                                PlayListFragment.vpAdapter.notifyItemRemoved(position);
+                            }
+                            pAdapter.notifyItemRemoved(position);
+                        }
+                        return true;
+                    }
+                });
+                popup.show();
                 return true;
             }
 
@@ -906,6 +962,10 @@ public class HomeActivity extends AppCompatActivity
                                 queue.getQueue().add(queueCurrentIndex + 1, new UnifiedTrack(true, track, null));
                             }
                         }
+                        if (item.getTitle().equals("Add to Favourites")) {
+                            UnifiedTrack ut = new UnifiedTrack(true, finalLocalSearchResultList.get(position), null);
+                            addToFavourites(ut);
+                        }
                         return true;
                     }
                 });
@@ -1012,6 +1072,10 @@ public class HomeActivity extends AppCompatActivity
                             } else {
                                 queue.getQueue().add(queueCurrentIndex + 1, new UnifiedTrack(false, null, track));
                             }
+                        }
+                        if (item.getTitle().equals("Add to Favourites")) {
+                            UnifiedTrack ut = new UnifiedTrack(false, null, streamingTrackList.get(position));
+                            addToFavourites(ut);
                         }
                         return true;
                     }
@@ -1164,9 +1228,6 @@ public class HomeActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             return true;
         }
-        if (id == R.id.action_queue) {
-            showFragment("queue");
-        }
         if (id == R.id.action_analog) {
             showFragment("analog");
         }
@@ -1274,7 +1335,6 @@ public class HomeActivity extends AppCompatActivity
                 public void onResponse(Response<List<Track>> response) {
 
                     if (response.isSuccess()) {
-                        // request successful (status code 200, 201)
                         Log.d("RETRO", response.body() + "");
                         streamingTrackList = response.body();
                         sAdapter = new StreamTracksHorizontalAdapter(streamingTrackList, ctx);
@@ -1290,13 +1350,11 @@ public class HomeActivity extends AppCompatActivity
                         }
 
                         stopLoadingIndicator();
-
                         (streamingListView.getAdapter()).notifyDataSetChanged();
-                        if ((StreamMusicFragment.lv) != null)
-                            (StreamMusicFragment.lv.getAdapter()).notifyDataSetChanged();
+
+                        if (StreamMusicFragment.adapter != null)
+                            StreamMusicFragment.adapter.notifyDataSetChanged();
                     } else {
-                        //request not successful (like 400,401,403 etc)
-                        //Handle errors
                         stopLoadingIndicator();
                     }
                 }
@@ -1313,101 +1371,69 @@ public class HomeActivity extends AppCompatActivity
 
     }
 
-    public void requestPermissions() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.INTERNET)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.INTERNET)) {
-
-                // Show an expanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
-            } else {
-
-                // No explanation needed, we can request the permission.
-
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.INTERNET},
-                        0);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
-        }
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.RECORD_AUDIO)
-                != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.RECORD_AUDIO)) {
-
-            } else {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.RECORD_AUDIO},
-                        1);
-            }
-        }
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.MODIFY_AUDIO_SETTINGS)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.MODIFY_AUDIO_SETTINGS)) {
-
-            } else {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.MODIFY_AUDIO_SETTINGS},
-                        2);
-            }
-        }
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            } else {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        3);
-            }
-        }
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
-
-            } else {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                        4);
-            }
-        }
-    }
-
     public void hideTabs() {
-        final Handler handler = new Handler();
+        /*appBarLayout.animate()
+                .translationY(-1 * appBarLayout.getHeight())
+                .setDuration(300);*/
+        /*final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 getSupportActionBar().hide();
             }
-        }, 270);
+        }, 270);*/
+
+        toolbar.animate()
+                .setDuration(300)
+                .translationY(-1 * toolbar.getHeight())
+                .alpha(0.0f)
+                .withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        toolbar.setVisibility(View.INVISIBLE);
+                    }
+                });
+
+        spToolbar.setVisibility(View.VISIBLE);
+        spToolbar.setAlpha(0.0f);
+        spToolbar.setY(spToolbar.getHeight());
+        spToolbar.animate()
+                .setDuration(300)
+                .translationY(0)
+                .alpha(1.0f);
 
     }
 
     public void showTabs() {
-        final Handler handler = new Handler();
+        /*appBarLayout.animate()
+                .translationY(0)
+                .setDuration(300);*/
+        /*final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 getSupportActionBar().show();
             }
-        }, 30);
+        }, 30);*/
+
+        spToolbar.animate()
+                .setDuration(300)
+                .translationY(spToolbar.getHeight())
+                .alpha(0.0f)
+                .withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        spToolbar.setVisibility(View.INVISIBLE);
+                    }
+                });
+
+        toolbar.setVisibility(View.VISIBLE);
+        toolbar.setAlpha(0.0f);
+        toolbar.animate()
+                .setDuration(300)
+                .translationY(0)
+                .alpha(1.0f);
+
     }
 
     public void hidePlayer() {
@@ -1424,24 +1450,23 @@ public class HomeActivity extends AppCompatActivity
             PlayerFragment.cpb.animate()
                     .alpha(1.0f);
         }
+        if (PlayerFragment.smallPlayer != null) {
+            PlayerFragment.smallPlayer.setAlpha(0.0f);
+            PlayerFragment.smallPlayer.setVisibility(View.VISIBLE);
+            PlayerFragment.smallPlayer.animate()
+                    .alpha(1.0f);
+        }
 
         playerContainer.setVisibility(View.VISIBLE);
 
         playerContainer.animate()
-                .translationY(playerContainer.getHeight() - PlayerFragment.smallPlayer.getHeight() - getSupportActionBar().getHeight());
+                .translationY(playerContainer.getHeight() - PlayerFragment.smallPlayer.getHeight());
 
         PlayerFragment.player_controller.setAlpha(0.0f);
         PlayerFragment.player_controller.setImageDrawable(PlayerFragment.mainTrackController.getDrawable());
 
         PlayerFragment.player_controller.animate()
                 .alpha(1.0f);
-//        if (PlayerFragment.progressBar2 != null) {
-//            PlayerFragment.progressBar2.setVisibility(View.VISIBLE);
-//            PlayerFragment.progressBar2.animate()
-//                    .alpha(1.0f);
-//        }
-
-
     }
 
     public void hidePlayer2() {
@@ -1510,6 +1535,7 @@ public class HomeActivity extends AppCompatActivity
         if (PlayerFragment.player_controller != null) {
             PlayerFragment.player_controller.setAlpha(1.0f);
             PlayerFragment.player_controller.animate()
+                    .setDuration(300)
                     .alpha(0.0f);
         }
 
@@ -1519,7 +1545,6 @@ public class HomeActivity extends AppCompatActivity
                     .withEndAction(new Runnable() {
                         @Override
                         public void run() {
-                            PlayerFragment.cpb.setVisibility(View.INVISIBLE);
                             if (isQueueVisible) {
                                 hideFragment("queue");
                             }
@@ -1527,8 +1552,13 @@ public class HomeActivity extends AppCompatActivity
                         }
                     });
         }
+        if (PlayerFragment.smallPlayer != null) {
+            PlayerFragment.smallPlayer.animate()
+                    .alpha(0.0f);
+        }
 
         playerContainer.animate()
+                .setInterpolator(new DecelerateInterpolator())
                 .setDuration(300)
                 .translationY(0);
 
@@ -1806,7 +1836,7 @@ public class HomeActivity extends AppCompatActivity
             y = (float) Math.cos(PlayerFragment.mVisualizerView.angle);
 
             // filtering low amplitude
-            if (PlayerFragment.mVisualizerView.volume < 0.77) {
+            if (PlayerFragment.mVisualizerView.volume < 0.87) {
                 continue;
             }
 
@@ -2102,9 +2132,11 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onFavouritePlayAll() {
-        onQueueItemClicked(0);
-        hideFragment("favourite");
-        showFragment("queue");
+        if (queue.getQueue().size() > 0) {
+            onQueueItemClicked(0);
+            hideFragment("favourite");
+            showFragment("queue");
+        }
     }
 
     @Override
@@ -2142,6 +2174,11 @@ public class HomeActivity extends AppCompatActivity
         showFragment("playlist");
     }
 
+    @Override
+    public void onPlaylistMenuPLayAll(int position) {
+        onPlaylistPLayAll();
+    }
+
     public static class MyAsyncTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -2167,6 +2204,16 @@ public class HomeActivity extends AppCompatActivity
         new ObjectPreferenceLoader(ctx, "queueCurrentIndex", Integer.class).save(queueCurrentIndex);
         new ObjectPreferenceLoader(ctx, "isReloaded", Boolean.class).save(true);
         new ObjectPreferenceLoader(ctx, "queueCurrentIndex", Integer.class).save(queueCurrentIndex);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     @Override
@@ -2433,6 +2480,7 @@ public class HomeActivity extends AppCompatActivity
             android.app.FragmentManager fm = getFragmentManager();
             PlayListFragment newFragment = new PlayListFragment();
             PlayListFragment.mCallback = this;
+            PlayListFragment.mCallback2 = this;
             fm.beginTransaction()
                     .setCustomAnimations(R.animator.slide_up,
                             R.animator.slide_down,
@@ -2535,7 +2583,7 @@ public class HomeActivity extends AppCompatActivity
 
     public void showNotification() {
 
-        Notification notification;
+        /*Notification notification;
 
         String ns = Context.NOTIFICATION_SERVICE;
         notificationManager = (NotificationManager) getSystemService(ns);
@@ -2543,30 +2591,6 @@ public class HomeActivity extends AppCompatActivity
         RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.notification_view);
         Intent notificationIntent = new Intent(this, HomeActivity.class);
         PendingIntent pendingNotificationIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-
-        Notification.Builder builder = new Notification.Builder(this);
-        notification = builder.setContentTitle("MusicDNA")
-                .setContentText("Slide down on note to expand")
-                .setSmallIcon(R.drawable.ic_default)
-                .setContentTitle("Title")
-                .setContentText("Artist")
-                .setLargeIcon(((BitmapDrawable) PlayerFragment.selected_track_image.getDrawable()).getBitmap())
-                .build();
-
-        notification.priority = Notification.PRIORITY_MAX;
-        notification.bigContentView = notificationView;
-        notification.contentIntent = pendingNotificationIntent;
-        notification.flags |= Notification.FLAG_NO_CLEAR;
-
-        notificationView.setImageViewBitmap(R.id.image_in_notification, ((BitmapDrawable) PlayerFragment.selected_track_image.getDrawable()).getBitmap());
-        if (PlayerFragment.localIsPlaying) {
-            notificationView.setTextViewText(R.id.title_in_notification, PlayerFragment.localTrack.getTitle());
-            notificationView.setTextViewText(R.id.artist_in_notification, PlayerFragment.localTrack.getArtist());
-        } else {
-            notificationView.setTextViewText(R.id.title_in_notification, PlayerFragment.track.getTitle());
-            notificationView.setTextViewText(R.id.artist_in_notification, "");
-        }
-
 
         Intent switchIntent = new Intent("com.sdsmdg.harjot.MusicDNA.ACTION_PLAY_PAUSE");
         PendingIntent pendingSwitchIntent = PendingIntent.getBroadcast(this, 100, switchIntent, 0);
@@ -2588,9 +2612,35 @@ public class HomeActivity extends AppCompatActivity
 
         Intent switchIntent3 = new Intent("com.sdsmdg.harjot.MusicDNA.ACTION_PREVIOUS");
         PendingIntent pendingSwitchIntent3 = PendingIntent.getBroadcast(this, 100, switchIntent3, 0);
-        notificationView.setOnClickPendingIntent(R.id.btn_prev_in_notification, pendingSwitchIntent3);
+        notificationView.setOnClickPendingIntent(R.id.btn_prev_in_notification, pendingSwitchIntent3);*/
 
-        notificationManager.notify(1, notification);
+        /*Notification.Builder builder = new Notification.Builder(this);
+        notification = builder.setContentTitle("MusicDNA")
+                .setContentText("Slide down on note to expand")
+                .setSmallIcon(R.drawable.ic_default)
+                .setContentTitle("Title")
+                .setContentText("Artist")
+                .addAction(R.drawable.ic_skip_previous_white_48dp,"Prev",pendingSwitchIntent3)
+                .addAction(R.drawable.ic_play_arrow_white_48dp,"Play",pendingSwitchIntent)
+                .addAction(R.drawable.ic_skip_next_white_48dp,"Next",pendingSwitchIntent2)
+                .setLargeIcon(((BitmapDrawable) PlayerFragment.selected_track_image.getDrawable()).getBitmap())
+                .build();*/
+
+        /*notification.priority = Notification.PRIORITY_MAX;
+        notification.bigContentView = notificationView;
+        notification.contentIntent = pendingNotificationIntent;
+        notification.flags |= Notification.FLAG_NO_CLEAR;*/
+
+        /*notificationView.setImageViewBitmap(R.id.image_in_notification, ((BitmapDrawable) PlayerFragment.selected_track_image.getDrawable()).getBitmap());
+        if (PlayerFragment.localIsPlaying) {
+            notificationView.setTextViewText(R.id.title_in_notification, PlayerFragment.localTrack.getTitle());
+            notificationView.setTextViewText(R.id.artist_in_notification, PlayerFragment.localTrack.getArtist());
+        } else {
+            notificationView.setTextViewText(R.id.title_in_notification, PlayerFragment.track.getTitle());
+            notificationView.setTextViewText(R.id.artist_in_notification, "");
+        }*/
+
+//        notificationManager.notify(1, notification);
 
     }
 
@@ -2599,7 +2649,29 @@ public class HomeActivity extends AppCompatActivity
     }
 
     public void HideBottomFakeToolbar() {
-        bottomToolbar.setVerticalScrollbarPosition(View.INVISIBLE);
+        bottomToolbar.setVisibility(View.INVISIBLE);
+    }
+
+    public static void addToFavourites(UnifiedTrack ut) {
+        boolean isRepeat = false;
+        for (int i = 0; i < HomeActivity.favouriteTracks.getFavourite().size(); i++) {
+            UnifiedTrack ut1 = HomeActivity.favouriteTracks.getFavourite().get(i);
+            if (ut.getType() && ut1.getType()) {
+                if (ut.getLocalTrack().getTitle().equals(ut1.getLocalTrack().getTitle())) {
+                    isRepeat = true;
+                    break;
+                }
+            } else if (!ut.getType() && !ut1.getType()) {
+                if (ut.getStreamTrack().getTitle().equals(ut1.getStreamTrack().getTitle())) {
+                    isRepeat = true;
+                    break;
+                }
+            }
+        }
+
+        if (!isRepeat)
+            favouriteTracks.getFavourite().add(ut);
+
     }
 
 }

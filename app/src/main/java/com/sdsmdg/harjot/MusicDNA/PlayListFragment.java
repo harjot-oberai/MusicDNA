@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -18,9 +20,10 @@ import android.view.ViewGroup;
 public class PlayListFragment extends Fragment {
 
     RecyclerView allPlaylistRecycler;
-    ViewAllPlaylistsRecyclerAdapter vpAdapter;
+    static ViewAllPlaylistsRecyclerAdapter vpAdapter;
 
     static onPLaylistTouchedListener mCallback;
+    static onPlaylistMenuPlayAllListener mCallback2;
 
     public PlayListFragment() {
         // Required empty public constructor
@@ -31,14 +34,19 @@ public class PlayListFragment extends Fragment {
         super.onAttach(context);
         try {
             mCallback = (onPLaylistTouchedListener) context;
+            mCallback2 = (onPlaylistMenuPlayAllListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnHeadlineSelectedListener");
         }
     }
 
-    public interface onPLaylistTouchedListener{
+    public interface onPLaylistTouchedListener {
         public void onPlaylistTouched(int pos);
+    }
+
+    public interface onPlaylistMenuPlayAllListener {
+        public void onPlaylistMenuPLayAll(int position);
     }
 
     @Override
@@ -67,7 +75,29 @@ public class PlayListFragment extends Fragment {
             }
 
             @Override
-            boolean onLongClick(RecyclerView parent, View view, int position, long id) {
+            boolean onLongClick(RecyclerView parent, View view, final int position, long id) {
+                PopupMenu popup = new PopupMenu(HomeActivity.ctx, view);
+                popup.getMenuInflater().inflate(R.menu.playlist_popup, popup.getMenu());
+
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (item.getTitle().equals("Play")) {
+                            HomeActivity.tempPlaylist = HomeActivity.allPlaylists.getPlaylists().get(position);
+                            HomeActivity.queue.setQueue(HomeActivity.tempPlaylist.getSongList());
+                            HomeActivity.queueCurrentIndex = 0;
+                            mCallback2.onPlaylistMenuPLayAll(position);
+                        } else if (item.getTitle().equals("Delete")) {
+                            HomeActivity.allPlaylists.getPlaylists().remove(position);
+                            if (PlayListFragment.vpAdapter != null) {
+                                PlayListFragment.vpAdapter.notifyItemRemoved(position);
+                            }
+                            HomeActivity.pAdapter.notifyItemRemoved(position);
+                        }
+                        return true;
+                    }
+                });
+                popup.show();
                 return true;
             }
 

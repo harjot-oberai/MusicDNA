@@ -86,6 +86,11 @@ public class FavouritesFragment extends Fragment implements FavouriteTrackAdapte
         });
 
         playAll = (FloatingActionButton) view.findViewById(R.id.fav_play_all_fab);
+        if(HomeActivity.favouriteTracks.getFavourite().size() == 0){
+            playAll.setVisibility(View.INVISIBLE);
+        } else {
+            playAll.setVisibility(View.VISIBLE);
+        }
         playAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

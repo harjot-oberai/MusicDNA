@@ -1109,10 +1109,10 @@ public class HomeActivity extends AppCompatActivity
         }
 
         if (streamingTrackList.size() == 0) {
-            streamingListView.setVisibility(View.GONE);
+            streamRecyclerContainer.setVisibility(View.GONE);
             streamNothingText.setVisibility(View.VISIBLE);
         } else {
-            streamingListView.setVisibility(View.VISIBLE);
+            streamRecyclerContainer.setVisibility(View.VISIBLE);
             streamNothingText.setVisibility(View.INVISIBLE);
         }
 
@@ -1322,6 +1322,7 @@ public class HomeActivity extends AppCompatActivity
             if(sAdapter!=null){
                 streamingListView.getAdapter().notifyDataSetChanged();
             }*/
+            streamRecyclerContainer.setVisibility(View.VISIBLE);
             startLoadingIndicator();
             Retrofit client = new Retrofit.Builder()
                     .baseUrl(Config.API_URL)
@@ -1344,9 +1345,9 @@ public class HomeActivity extends AppCompatActivity
                         streamingListView.setAdapter(sAdapter);
 
                         if (streamingTrackList.size() == 0) {
-                            streamingListView.setVisibility(View.GONE);
+                            streamRecyclerContainer.setVisibility(View.GONE);
                         } else {
-                            streamingListView.setVisibility(View.VISIBLE);
+                            streamRecyclerContainer.setVisibility(View.VISIBLE);
                         }
 
                         stopLoadingIndicator();

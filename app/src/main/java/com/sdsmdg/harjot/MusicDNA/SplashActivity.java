@@ -3,12 +3,21 @@ package com.sdsmdg.harjot.MusicDNA;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
+import android.graphics.Typeface;
+import android.graphics.drawable.PaintDrawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RectShape;
 import android.os.Build;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class SplashActivity extends AppCompatActivity {
@@ -23,6 +32,14 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Regular.ttf");
+        TextView tx = (TextView) findViewById(R.id.splash_text);
+        tx.setTypeface(tf);
+
+        TextView tx2 = (TextView) findViewById(R.id.text_soundcloud);
+        tx2.setTypeface(tf);
+
         if (Build.VERSION.SDK_INT >= 23) {
             requestPermissions();
         } else {
@@ -65,7 +82,7 @@ public class SplashActivity extends AppCompatActivity {
                                 startActivity(i);
                                 finish();
                             }
-                        }, 2000);
+                        }, 3000);
                     }
                 } else {
                 }

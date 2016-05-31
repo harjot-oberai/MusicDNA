@@ -3,7 +3,60 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#888"
+    android:background="#000"
     tools:context="com.sdsmdg.harjot.MusicDNA.SplashActivity">
+
+    <ImageView
+        android:id="@+id/back_splash"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ImageView
+        android:id="@+id/splash_img"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/splash_text"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/splash_img2" />
+
+    <TextView
+        android:id="@+id/splash_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/rel_splash"
+        android:layout_centerHorizontal="true"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="48dp"
+        android:typeface="sans"
+        android:text="Music DNA"
+        android:textSize="48dp" />
+
+    <RelativeLayout
+        android:id="@+id/rel_splash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:padding="5dp">
+
+        <ImageView
+            android:id="@+id/soundcloud_icon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/soundcloud" />
+
+        <TextView
+            android:id="@+id/text_soundcloud"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/soundcloud_icon"
+            android:typeface="sans"
+            android:text="SOUNDCLOUD"
+            android:textColor="#FFFFFF"
+            android:textSize="20dp" />
+    </RelativeLayout>
 
 </RelativeLayout>

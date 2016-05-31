@@ -1558,7 +1558,6 @@ public class HomeActivity extends AppCompatActivity
         }
 
         playerContainer.animate()
-                .setInterpolator(new DecelerateInterpolator())
                 .setDuration(300)
                 .translationY(0);
 
@@ -1574,7 +1573,6 @@ public class HomeActivity extends AppCompatActivity
                 }
             }
         }, 400);
-
 
     }
 

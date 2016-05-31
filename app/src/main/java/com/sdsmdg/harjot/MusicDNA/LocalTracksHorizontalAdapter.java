@@ -49,7 +49,7 @@ public class LocalTracksHorizontalAdapter extends RecyclerView.Adapter<LocalTrac
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_card_layout, parent, false);
+                .inflate(R.layout.item_card_layout2, parent, false);
 
         return new MyViewHolder(itemView);
     }
@@ -59,7 +59,6 @@ public class LocalTracksHorizontalAdapter extends RecyclerView.Adapter<LocalTrac
 
         LocalTrack localTrack = localList.get(position);
         imgLoader.DisplayImage(localTrack.getPath(), holder.art);
-        holder.bottomHolder.setBackgroundColor(Color.WHITE);
         holder.title.setTextColor(Color.parseColor("#444444"));
         holder.artist.setTextColor(Color.parseColor("#777777"));
         holder.title.setText(localTrack.getTitle());

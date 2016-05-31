@@ -57,7 +57,7 @@ public class RecentsListHorizontalAdapter extends RecyclerView.Adapter<RecentsLi
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_card_layout, parent, false);
+                .inflate(R.layout.item_card_layout2, parent, false);
 
         return new MyViewHolder(itemView);
     }
@@ -89,18 +89,5 @@ public class RecentsListHorizontalAdapter extends RecyclerView.Adapter<RecentsLi
         return recentslyPlayed.size();
     }
 
-    public static Bitmap getAlbumArt(String path) {
-        android.media.MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-        mmr.setDataSource(path);
-        Bitmap bitmap = null;
-
-        byte[] data = mmr.getEmbeddedPicture();
-        if (data != null) {
-            bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-            return bitmap;
-        } else {
-            return null;
-        }
-    }
 
 }

@@ -48,7 +48,7 @@ public class StreamTracksHorizontalAdapter extends RecyclerView.Adapter<StreamTr
     @Override
     public StreamTracksHorizontalAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_card_layout, parent, false);
+                .inflate(R.layout.item_card_layout2, parent, false);
 
         return new MyViewHolder(itemView);
     }
@@ -60,8 +60,11 @@ public class StreamTracksHorizontalAdapter extends RecyclerView.Adapter<StreamTr
         try {
             if (track.getArtworkURL() != null) {
                 Log.d("ARTWORK_URL", track.getArtworkURL());
-                Picasso.with(ctx).load(track.getArtworkURL()).into(holder.art);
-//                imgLoader.DisplayImage(track.getArtworkURL(), holder.art);
+                Picasso.with(ctx)
+                        .load(track.getArtworkURL())
+                        .error(R.drawable.ic_default)
+                        .placeholder(R.drawable.ic_default)
+                        .into(holder.art);
             } else {
                 holder.art.setImageResource(R.drawable.ic_default);
             }

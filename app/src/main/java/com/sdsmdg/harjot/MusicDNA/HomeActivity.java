@@ -12,6 +12,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -211,6 +212,8 @@ public class HomeActivity extends AppCompatActivity
     static boolean isFavouriteVisible = false;
     static boolean isAnalogVisible = false;
     static boolean isAllPlaylistVisible = false;
+
+    Button recentBtn, playlistBtn, favBtn;
 
     static LocalTrack localSelectedTrack;
     static Track selectedTrack;
@@ -505,6 +508,80 @@ public class HomeActivity extends AppCompatActivity
         screen_width = display.getWidth();
         screen_height = display.getHeight();
 
+        recentBtn = (Button) findViewById(R.id.recent_btn);
+        playlistBtn = (Button) findViewById(R.id.playlist_btn);
+        favBtn = (Button) findViewById(R.id.fav_btn);
+
+        recentBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Build.VERSION.SDK_INT >= 21)
+                    recentBtn.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#3F334D")));
+                else
+                    recentBtn.setBackgroundColor(Color.parseColor("#3F334D"));
+                recentBtn.setTextColor(Color.WHITE);
+
+                if (Build.VERSION.SDK_INT >= 21)
+                    playlistBtn.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
+                else
+                    playlistBtn.setBackgroundColor(Color.WHITE);
+                playlistBtn.setTextColor(Color.parseColor("#3F334D"));
+
+                if (Build.VERSION.SDK_INT >= 21)
+                    favBtn.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
+                else
+                    favBtn.setBackgroundColor(Color.WHITE);
+                favBtn.setTextColor(Color.parseColor("#3F334D"));
+
+            }
+        });
+
+        playlistBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Build.VERSION.SDK_INT >= 21)
+                    playlistBtn.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#3F334D")));
+                else
+                    playlistBtn.setBackgroundColor(Color.parseColor("#3F334D"));
+                playlistBtn.setTextColor(Color.WHITE);
+
+                if (Build.VERSION.SDK_INT >= 21)
+                    recentBtn.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
+                else
+                    recentBtn.setBackgroundColor(Color.WHITE);
+                recentBtn.setTextColor(Color.parseColor("#3F334D"));
+
+                if (Build.VERSION.SDK_INT >= 21)
+                    favBtn.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
+                else
+                    favBtn.setBackgroundColor(Color.WHITE);
+                favBtn.setTextColor(Color.parseColor("#3F334D"));
+            }
+        });
+
+        favBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Build.VERSION.SDK_INT >= 21)
+                    favBtn.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#3F334D")));
+                else
+                    favBtn.setBackgroundColor(Color.parseColor("#3F334D"));
+                favBtn.setTextColor(Color.WHITE);
+
+                if (Build.VERSION.SDK_INT >= 21)
+                    recentBtn.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
+                else
+                    recentBtn.setBackgroundColor(Color.WHITE);
+                recentBtn.setTextColor(Color.parseColor("#3F334D"));
+
+                if (Build.VERSION.SDK_INT >= 21)
+                    playlistBtn.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
+                else
+                    playlistBtn.setBackgroundColor(Color.WHITE);
+                playlistBtn.setTextColor(Color.parseColor("#3F334D"));
+            }
+        });
+
         ratio = (float) screen_height / (float) 1920;
         ratio2 = (float) screen_width / (float) 1080;
         ratio = Math.min(ratio, ratio2);
@@ -627,49 +704,69 @@ public class HomeActivity extends AppCompatActivity
             @Override
             boolean onClick(RecyclerView parent, View view, final int position, long id) {
                 UnifiedTrack ut = recentlyPlayed.getRecentlyPlayed().get(position);
-                if (ut.getType()) {
-                    LocalTrack track = ut.getLocalTrack();
-                    if (queue.getQueue().size() == 0) {
-                        queueCurrentIndex = 0;
-                        queue.getQueue().add(new UnifiedTrack(true, track, null));
-                    } else if (queueCurrentIndex == queue.getQueue().size() - 1) {
-                        queueCurrentIndex++;
-                        queue.getQueue().add(new UnifiedTrack(true, track, null));
-                    } else if (isReloaded) {
-                        isReloaded = false;
-                        queueCurrentIndex = queue.getQueue().size();
-                        queue.getQueue().add(new UnifiedTrack(true, track, null));
-                    } else {
-                        queue.getQueue().add(++queueCurrentIndex, new UnifiedTrack(true, track, null));
+                boolean isRepeat = false;
+                int pos = 0;
+                for (int i = 0; i < queue.getQueue().size(); i++) {
+                    UnifiedTrack ut1 = queue.getQueue().get(i);
+                    if (ut1.getType() && ut.getType() && ut1.getLocalTrack().getTitle().equals(ut.getLocalTrack().getTitle())) {
+                        isRepeat = true;
+                        pos = i;
+                        break;
                     }
-                    localSelectedTrack = track;
-                    streamSelected = false;
-                    localSelected = true;
-                    queueCall = false;
-                    isReloaded = false;
-                    onLocalTrackSelected(position);
-                } else {
-                    Track track = ut.getStreamTrack();
-                    if (queue.getQueue().size() == 0) {
-                        queueCurrentIndex = 0;
-                        queue.getQueue().add(new UnifiedTrack(false, null, track));
-                    } else if (queueCurrentIndex == queue.getQueue().size() - 1) {
-                        queueCurrentIndex++;
-                        queue.getQueue().add(new UnifiedTrack(false, null, track));
-                    } else if (isReloaded) {
-                        isReloaded = false;
-                        queueCurrentIndex = queue.getQueue().size();
-                        queue.getQueue().add(new UnifiedTrack(false, null, track));
-                    } else {
-                        queue.getQueue().add(++queueCurrentIndex, new UnifiedTrack(false, null, track));
+                    if (!ut1.getType() && !ut.getType() && ut1.getStreamTrack().getTitle().equals(ut.getStreamTrack().getTitle())) {
+                        isRepeat = true;
+                        pos = i;
+                        break;
                     }
-                    selectedTrack = track;
-                    streamSelected = true;
-                    localSelected = false;
-                    queueCall = false;
-                    isReloaded = false;
-                    onTrackSelected(position);
                 }
+                if (!isRepeat && isReloaded) {
+                    if (ut.getType()) {
+                        LocalTrack track = ut.getLocalTrack();
+                        if (queue.getQueue().size() == 0) {
+                            queueCurrentIndex = 0;
+                            queue.getQueue().add(new UnifiedTrack(true, track, null));
+                        } else if (queueCurrentIndex == queue.getQueue().size() - 1) {
+                            queueCurrentIndex++;
+                            queue.getQueue().add(new UnifiedTrack(true, track, null));
+                        } else if (isReloaded) {
+                            isReloaded = false;
+                            queueCurrentIndex = queue.getQueue().size();
+                            queue.getQueue().add(new UnifiedTrack(true, track, null));
+                        } else {
+                            queue.getQueue().add(++queueCurrentIndex, new UnifiedTrack(true, track, null));
+                        }
+                        localSelectedTrack = track;
+                        streamSelected = false;
+                        localSelected = true;
+                        queueCall = false;
+                        isReloaded = false;
+                        onLocalTrackSelected(position);
+                    } else {
+                        Track track = ut.getStreamTrack();
+                        if (queue.getQueue().size() == 0) {
+                            queueCurrentIndex = 0;
+                            queue.getQueue().add(new UnifiedTrack(false, null, track));
+                        } else if (queueCurrentIndex == queue.getQueue().size() - 1) {
+                            queueCurrentIndex++;
+                            queue.getQueue().add(new UnifiedTrack(false, null, track));
+                        } else if (isReloaded) {
+                            isReloaded = false;
+                            queueCurrentIndex = queue.getQueue().size();
+                            queue.getQueue().add(new UnifiedTrack(false, null, track));
+                        } else {
+                            queue.getQueue().add(++queueCurrentIndex, new UnifiedTrack(false, null, track));
+                        }
+                        selectedTrack = track;
+                        streamSelected = true;
+                        localSelected = false;
+                        queueCall = false;
+                        isReloaded = false;
+                        onTrackSelected(position);
+                    }
+                } else {
+                    onQueueItemClicked(pos);
+                }
+
                 return true;
             }
 
@@ -692,48 +789,67 @@ public class HomeActivity extends AppCompatActivity
                             logQueue();
                         }
                         if (item.getTitle().equals("Play")) {
-                            if (ut.getType()) {
-                                LocalTrack track = ut.getLocalTrack();
-                                if (queue.getQueue().size() == 0) {
-                                    queueCurrentIndex = 0;
-                                    queue.getQueue().add(new UnifiedTrack(true, track, null));
-                                } else if (queueCurrentIndex == queue.getQueue().size() - 1) {
-                                    queueCurrentIndex++;
-                                    queue.getQueue().add(new UnifiedTrack(true, track, null));
-                                } else if (isReloaded) {
-                                    isReloaded = false;
-                                    queueCurrentIndex = queue.getQueue().size();
-                                    queue.getQueue().add(new UnifiedTrack(true, track, null));
-                                } else {
-                                    queue.getQueue().add(++queueCurrentIndex, new UnifiedTrack(true, track, null));
+                            boolean isRepeat = false;
+                            int pos = 0;
+                            for (int i = 0; i < queue.getQueue().size(); i++) {
+                                UnifiedTrack ut1 = queue.getQueue().get(i);
+                                if (ut1.getType() && ut.getType() && ut1.getLocalTrack().getTitle().equals(ut.getLocalTrack().getTitle())) {
+                                    isRepeat = true;
+                                    pos = i;
+                                    break;
                                 }
-                                localSelectedTrack = track;
-                                streamSelected = false;
-                                localSelected = true;
-                                queueCall = false;
-                                isReloaded = false;
-                                onLocalTrackSelected(position);
+                                if (!ut1.getType() && !ut.getType() && ut1.getStreamTrack().getTitle().equals(ut.getStreamTrack().getTitle())) {
+                                    isRepeat = true;
+                                    pos = i;
+                                    break;
+                                }
+                            }
+                            if (!isRepeat && isReloaded) {
+                                if (ut.getType()) {
+                                    LocalTrack track = ut.getLocalTrack();
+                                    if (queue.getQueue().size() == 0) {
+                                        queueCurrentIndex = 0;
+                                        queue.getQueue().add(new UnifiedTrack(true, track, null));
+                                    } else if (queueCurrentIndex == queue.getQueue().size() - 1) {
+                                        queueCurrentIndex++;
+                                        queue.getQueue().add(new UnifiedTrack(true, track, null));
+                                    } else if (isReloaded) {
+                                        isReloaded = false;
+                                        queueCurrentIndex = queue.getQueue().size();
+                                        queue.getQueue().add(new UnifiedTrack(true, track, null));
+                                    } else {
+                                        queue.getQueue().add(++queueCurrentIndex, new UnifiedTrack(true, track, null));
+                                    }
+                                    localSelectedTrack = track;
+                                    streamSelected = false;
+                                    localSelected = true;
+                                    queueCall = false;
+                                    isReloaded = false;
+                                    onLocalTrackSelected(position);
+                                } else {
+                                    Track track = ut.getStreamTrack();
+                                    if (queue.getQueue().size() == 0) {
+                                        queueCurrentIndex = 0;
+                                        queue.getQueue().add(new UnifiedTrack(false, null, track));
+                                    } else if (queueCurrentIndex == queue.getQueue().size() - 1) {
+                                        queueCurrentIndex++;
+                                        queue.getQueue().add(new UnifiedTrack(false, null, track));
+                                    } else if (isReloaded) {
+                                        isReloaded = false;
+                                        queueCurrentIndex = queue.getQueue().size();
+                                        queue.getQueue().add(new UnifiedTrack(false, null, track));
+                                    } else {
+                                        queue.getQueue().add(++queueCurrentIndex, new UnifiedTrack(false, null, track));
+                                    }
+                                    selectedTrack = track;
+                                    streamSelected = true;
+                                    localSelected = false;
+                                    queueCall = false;
+                                    isReloaded = false;
+                                    onTrackSelected(position);
+                                }
                             } else {
-                                Track track = ut.getStreamTrack();
-                                if (queue.getQueue().size() == 0) {
-                                    queueCurrentIndex = 0;
-                                    queue.getQueue().add(new UnifiedTrack(false, null, track));
-                                } else if (queueCurrentIndex == queue.getQueue().size() - 1) {
-                                    queueCurrentIndex++;
-                                    queue.getQueue().add(new UnifiedTrack(false, null, track));
-                                } else if (isReloaded) {
-                                    isReloaded = false;
-                                    queueCurrentIndex = queue.getQueue().size();
-                                    queue.getQueue().add(new UnifiedTrack(false, null, track));
-                                } else {
-                                    queue.getQueue().add(++queueCurrentIndex, new UnifiedTrack(false, null, track));
-                                }
-                                selectedTrack = track;
-                                streamSelected = true;
-                                localSelected = false;
-                                queueCall = false;
-                                isReloaded = false;
-                                onTrackSelected(position);
+                                onQueueItemClicked(pos);
                             }
                         }
                         if (item.getTitle().equals("Play Next")) {
@@ -1240,10 +1356,11 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_stream) {
-            // Handle the camera action
+        if (id == R.id.nav_home) {
+            hideAllFrags();
+            hideFragment("allPlaylists");
         } else if (id == R.id.nav_local) {
-
+            showFragment("local");
         } else if (id == R.id.nav_playlists) {
             showFragment("allPlaylists");
         } else if (id == R.id.nav_fav) {

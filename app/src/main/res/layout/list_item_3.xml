@@ -1,39 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
-    android:background="#000"
     android:layout_margin="1dp"
+    android:background="#000"
+    android:orientation="horizontal"
     android:padding="10dp">
 
     <ImageView
         android:id="@+id/holderImage"
-        android:tint="#FFA036"
-        android:src="@drawable/handle"
         android:layout_width="10dp"
         android:layout_height="22dp"
-        android:layout_centerVertical="true"/>
+        android:layout_centerVertical="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/handle"
+        android:tint="#FFA036" />
 
     <ImageView
-        android:layout_toRightOf="@+id/holderImage"
-        android:layout_marginLeft="10dp"
+        android:id="@+id/img"
         android:layout_width="56dp"
         android:layout_height="56dp"
-        android:id="@+id/img"
-        android:background="#FFF"/>
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/holderImage"
+        android:background="#FFF" />
 
     <LinearLayout
         android:id="@+id/row_item_holder"
-        android:layout_toRightOf="@+id/img"
-        android:layout_toLeftOf="@+id/currently_playing_indicator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_marginLeft="14dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="2dp">
+        android:layout_marginTop="2dp"
+        android:layout_toLeftOf="@+id/currently_playing_indicator"
+        android:layout_toRightOf="@+id/img"
+        android:orientation="vertical">
+
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
@@ -41,28 +43,30 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:text="Title"
-            android:textSize="14dp"
-            android:textColor="#FFFFFF"/>
+            android:textColor="#FFFFFF"
+            android:textSize="14dp" />
+
         <TextView
+            android:id="@+id/url"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
             android:ellipsize="end"
             android:singleLine="true"
-            android:textSize = "11dp"
+            android:text="Artist"
             android:textColor="#BBBBBB"
-            android:layout_marginTop="3dp"
-            android:id="@+id/url"
-            android:text="Artist"/>
+            android:textSize="11dp" />
     </LinearLayout>
+
     <com.wang.avi.AVLoadingIndicatorView
-        android:layout_marginRight="10dp"
-        android:layout_centerVertical="true"
         android:id="@+id/currently_playing_indicator"
-        android:layout_alignParentRight="true"
         android:layout_width="32dp"
         android:layout_height="32dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        android:visibility="invisible"
         app:indicator="LineScale"
-        app:indicator_color="#FFA036"
-        android:visibility="invisible"/>
+        app:indicator_color="#FFA036" />
 
 </RelativeLayout>

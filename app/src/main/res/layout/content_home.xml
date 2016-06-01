@@ -157,20 +157,71 @@
                     android:padding="5dp"></android.support.v7.widget.RecyclerView>
             </RelativeLayout>
 
-            <View
+            <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="1dp"-->
+            <!--android:layout_below="@+id/streamRecyclerContainer"-->
+            <!--android:layout_marginLeft="10dp"-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:layout_marginTop="3dp"-->
+            <!--android:background="@android:color/darker_gray" />-->
+
+            <LinearLayout
+                android:id="@+id/buttonContainer"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@+id/streamRecyclerContainer"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="3dp"
-                android:background="@android:color/darker_gray" />
+                android:layout_height="wrap_content"
+                android:layout_below="@id/streamRecyclerContainer"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="6dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"></LinearLayout>
+
+                <Button
+                    android:id="@+id/recent_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:backgroundTint="#FFFFFF"
+                    android:stateListAnimator="@null"
+                    android:text="Recent"
+                    android:textColor="#3F334D"/>
+
+                <Button
+                    android:id="@+id/playlist_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:backgroundTint="#FFFFFF"
+                    android:stateListAnimator="@null"
+                    android:text="Playlists"
+                    android:textColor="#3F334D" />
+
+                <Button
+                    android:id="@+id/fav_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:backgroundTint="#FFFFFF"
+                    android:stateListAnimator="@null"
+                    android:text="Favourites"
+                    android:textColor="#3F334D" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"></LinearLayout>
+            </LinearLayout>
 
             <RelativeLayout
                 android:id="@+id/recentsRecyclerContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/streamRecyclerContainer"
+                android:layout_below="@+id/buttonContainer"
                 android:layout_marginLeft="-6dp"
                 android:layout_marginRight="-6dp"
                 android:layout_marginTop="6dp">
@@ -261,14 +312,6 @@
 
     </ScrollView>
 
-    <!--<LinearLayout-->
-    <!--android:id="@+id/bottomMargin"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="70dp"-->
-    <!--android:layout_alignParentBottom="true"-->
-    <!--android:background="#F1F1F1"-->
-    <!--android:orientation="horizontal"></LinearLayout>-->
-
     <FrameLayout
         android:id="@+id/bottomMargin"
         android:layout_width="match_parent"
@@ -336,8 +379,7 @@
     <FrameLayout
         android:id="@+id/fragContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </FrameLayout>
+        android:layout_height="match_parent"></FrameLayout>
 
     <FrameLayout
         android:id="@+id/playerFragContainer"

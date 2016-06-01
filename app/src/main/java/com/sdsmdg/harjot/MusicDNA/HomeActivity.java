@@ -2500,7 +2500,6 @@ public class HomeActivity extends AppCompatActivity
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
         } else if (type.equals("queue") && !isQueueVisible) {
-            setTitle("Queue");
             isQueueVisible = true;
             android.app.FragmentManager fm = getFragmentManager();
             QueueFragment newFragment = new QueueFragment();
@@ -2547,7 +2546,6 @@ public class HomeActivity extends AppCompatActivity
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
         } else if (type.equals("equalizer") && !isEqualizerVisible) {
-            setTitle("Equalizer");
             isEqualizerVisible = true;
             android.app.FragmentManager fm = getFragmentManager();
             EqualizerFragment newFragment = new EqualizerFragment();

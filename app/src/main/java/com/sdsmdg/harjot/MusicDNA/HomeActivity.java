@@ -1952,7 +1952,7 @@ public class HomeActivity extends AppCompatActivity
             y = (float) Math.cos(PlayerFragment.mVisualizerView.angle);
 
             // filtering low amplitude
-            if (PlayerFragment.mVisualizerView.volume < 0.87) {
+            if (PlayerFragment.mVisualizerView.volume < 0.85) {
                 continue;
             }
 

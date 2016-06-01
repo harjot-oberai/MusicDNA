@@ -1981,7 +1981,7 @@ public class HomeActivity extends AppCompatActivity
             float[] hsv = new float[3];
             hsv[0] = PlayerFragment.mVisualizerView.color;
             hsv[1] = (float) 0.8;
-            hsv[2] = (float) 0.5;
+            hsv[2] = (float) 0.72;
 
             // setting color of the Paint
             PlayerFragment.mVisualizerView.mForePaint.setColor(Color.HSVToColor(hsv));
@@ -1991,7 +1991,7 @@ public class HomeActivity extends AppCompatActivity
             } else if (PlayerFragment.mVisualizerView.size >= 29.0 && PlayerFragment.mVisualizerView.size <= 60.0) {
                 PlayerFragment.mVisualizerView.mForePaint.setAlpha(9);
             } else if (PlayerFragment.mVisualizerView.size > 60.0) {
-                PlayerFragment.mVisualizerView.mForePaint.setAlpha(0);
+                PlayerFragment.mVisualizerView.mForePaint.setAlpha(3);
             } else {
                 PlayerFragment.mVisualizerView.mForePaint.setAlpha((int) (PlayerFragment.mVisualizerView.alpha * 1000));
             }

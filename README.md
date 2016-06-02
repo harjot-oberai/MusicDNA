@@ -14,8 +14,8 @@ The Player also packs a **Powerful Equalizer with** ***BassBoost and Reverb*** e
 ## The Player - *In Action*
 
 Video Demo : [http://sendvid.com/b2hhc1pi](http://sendvid.com/b2hhc1pi)<br>
-The video's length was cut short due to ADB screenrecord's limit of 3:00 min. 
-
+The video's length was cut short due to ADB screenrecord's limit of 3:00 min. <br>
+Credits for combining audio and video [Piyush Mehrotra](https://github.com/hm98)
 
 <img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/dna1.jpg" width = "300">
 <img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/dna2.jpg" width = "300">

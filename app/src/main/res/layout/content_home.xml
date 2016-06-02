@@ -313,6 +313,11 @@
     </ScrollView>
 
     <FrameLayout
+        android:id="@+id/fragContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></FrameLayout>
+
+    <FrameLayout
         android:id="@+id/bottomMargin"
         android:layout_width="match_parent"
         android:layout_height="70dp"
@@ -375,11 +380,6 @@
                 android:visibility="visible" />
         </android.support.v7.widget.Toolbar>
     </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/fragContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"></FrameLayout>
 
     <FrameLayout
         android:id="@+id/playerFragContainer"

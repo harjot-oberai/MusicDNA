@@ -52,6 +52,7 @@ import android.view.animation.AnticipateOvershootInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -63,9 +64,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sdsmdg.harjot.MusicDNA.Interfaces.StreamService;
+import com.sdsmdg.harjot.MusicDNA.Models.AllDNAModels;
+import com.sdsmdg.harjot.MusicDNA.Models.AllMusicFolders;
 import com.sdsmdg.harjot.MusicDNA.Models.AllPlaylists;
+import com.sdsmdg.harjot.MusicDNA.Models.DNAModel;
 import com.sdsmdg.harjot.MusicDNA.Models.Favourite;
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
+import com.sdsmdg.harjot.MusicDNA.Models.MusicFolder;
 import com.sdsmdg.harjot.MusicDNA.Models.Playlist;
 import com.sdsmdg.harjot.MusicDNA.Models.Queue;
 import com.sdsmdg.harjot.MusicDNA.Models.RecentlyPlayed;
@@ -73,6 +78,7 @@ import com.sdsmdg.harjot.MusicDNA.Models.Track;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -107,7 +113,10 @@ public class HomeActivity extends AppCompatActivity
         PlayerFragment.onPreparedLsitener,
         PlayerFragment.onPlayPauseListener,
         PlayListFragment.onPLaylistTouchedListener,
-        PlayListFragment.onPlaylistMenuPlayAllListener {
+        PlayListFragment.onPlaylistMenuPlayAllListener,
+        FolderFragment.onFolderClickedListener,
+        FolderContentFragment.onFolderContentPlayAllListener,
+        FolderContentFragment.onFolderContentItemClickListener {
 
 
     public static List<LocalTrack> localTrackList = new ArrayList<>();
@@ -135,6 +144,11 @@ public class HomeActivity extends AppCompatActivity
     static Queue queue;
     static Playlist tempPlaylist;
     static AllPlaylists allPlaylists;
+    static AllDNAModels allDNAs;
+    static AllMusicFolders allMusicFolders;
+
+    static List<LocalTrack> tempFolderContent;
+    static MusicFolder tempMusicFolder;
 
     static boolean repeatEnabled = false;
     static boolean shuffleEnabled = false;
@@ -145,9 +159,11 @@ public class HomeActivity extends AppCompatActivity
 
     public static int queueCurrentIndex = 0;
 
-    static Context ctx;
+    public static Context ctx;
 
     static boolean queueCall = false;
+
+    static boolean isDNAavailable = false;
 
     static float max_max = Float.MIN_VALUE;
     static float min_min = Float.MAX_VALUE;
@@ -212,6 +228,8 @@ public class HomeActivity extends AppCompatActivity
     static boolean isFavouriteVisible = false;
     static boolean isAnalogVisible = false;
     static boolean isAllPlaylistVisible = false;
+    static boolean isAllFolderVisible = false;
+    static boolean isFolderContentVisible = false;
 
     Button recentBtn, playlistBtn, favBtn;
 
@@ -589,6 +607,7 @@ public class HomeActivity extends AppCompatActivity
         playerControllerAB = (ImageView) findViewById(R.id.player_control_sp_AB);
         spImgAB = (CircleImageView) findViewById(R.id.selected_track_image_sp_AB);
         spTitleAB = (TextView) findViewById(R.id.selected_track_title_sp_AB);
+        spTitleAB.setSelected(true);
 
         bottomToolbar = (FrameLayout) findViewById(R.id.bottomMargin);
         spHome = (Toolbar) findViewById(R.id.smallPlayer_home);
@@ -650,6 +669,8 @@ public class HomeActivity extends AppCompatActivity
             recentlyPlayed = new ObjectPreferenceLoader(ctx, "RecentlyPlayed", RecentlyPlayed.class).load();
             isReloaded = new ObjectPreferenceLoader(ctx, "isReloaded", Boolean.class).load();
             queueCurrentIndex = new ObjectPreferenceLoader(ctx, "queueCurrentIndex", Integer.class).load();
+//            allDNAs = new ObjectPreferenceLoader(ctx, "allDNAs", AllDNAModels.class).load();
+            allMusicFolders = new ObjectPreferenceLoader(ctx, "allMusicFolders", AllMusicFolders.class).load();
         } catch (NoSuchPreferenceFoundException e) {
             e.printStackTrace();
         }
@@ -672,6 +693,13 @@ public class HomeActivity extends AppCompatActivity
 
         if (recentlyPlayed == null) {
             recentlyPlayed = new RecentlyPlayed();
+        }
+        if (allDNAs == null) {
+            allDNAs = new AllDNAModels();
+        }
+        if (allMusicFolders == null) {
+            allMusicFolders = new AllMusicFolders();
+            MusicFolder mf = new MusicFolder("Music", null);
         }
 
         if (queue != null && queue.getQueue().size() != 0) {
@@ -1243,9 +1271,9 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void getLocalSongs() {
+
         ContentResolver musicResolver = this.getContentResolver();
         Uri musicUri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-//        Cursor musicCursor = musicResolver.query(musicUri, null, MediaStore.Audio.Media.DATA + " like ? ", new String[]{"%Music%"}, null);
         Cursor musicCursor = musicResolver.query(musicUri, null, null, null, null);
 
         if (musicCursor != null && musicCursor.moveToFirst()) {
@@ -1267,11 +1295,38 @@ public class HomeActivity extends AppCompatActivity
                 String thisArtist = musicCursor.getString(artistColumn);
                 String path = musicCursor.getString(pathColumn);
                 long duration = musicCursor.getLong(durationColumn);
-                localTrackList.add(new LocalTrack(thisId, thisTitle, thisArtist, path, duration));
-                finalLocalSearchResultList.add(new LocalTrack(thisId, thisTitle, thisArtist, path, duration));
+                if (duration > 10000) {
+                    LocalTrack lt = new LocalTrack(thisId, thisTitle, thisArtist, path, duration);
+                    localTrackList.add(lt);
+                    finalLocalSearchResultList.add(lt);
+
+                    File f = new File(path);
+                    String dirName = f.getParentFile().getName();
+                    if (getFolder(dirName) == null) {
+                        Toast.makeText(HomeActivity.this, dirName, Toast.LENGTH_SHORT).show();
+                        MusicFolder mf = new MusicFolder(dirName);
+                        mf.getLocalTracks().add(lt);
+                        allMusicFolders.getMusicFolders().add(mf);
+                    } else {
+                        getFolder(dirName).getLocalTracks().add(lt);
+                    }
+                }
+
             }
             while (musicCursor.moveToNext());
         }
+    }
+
+    public MusicFolder getFolder(String folderName) {
+        MusicFolder mf = null;
+        for (int i = 0; i < allMusicFolders.getMusicFolders().size(); i++) {
+            MusicFolder mf1 = allMusicFolders.getMusicFolders().get(i);
+            if (mf1.getFolderName().equals(folderName)) {
+                mf = mf1;
+                break;
+            }
+        }
+        return mf;
     }
 
     @Override
@@ -1315,6 +1370,12 @@ public class HomeActivity extends AppCompatActivity
                     setTitle("Music DNA");
                 } else if (isAllPlaylistVisible) {
                     hideFragment("allPlaylists");
+                    setTitle("Music DNA");
+                } else if (isFolderContentVisible) {
+                    hideFragment("folderContent");
+                    setTitle("Music DNA");
+                } else if (isAllFolderVisible) {
+                    hideFragment("allFolders");
                     setTitle("Music DNA");
                 } else {
                     startActivity(new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME));
@@ -1365,6 +1426,8 @@ public class HomeActivity extends AppCompatActivity
             showFragment("allPlaylists");
         } else if (id == R.id.nav_fav) {
             showFragment("favourite");
+        } else if (id == R.id.nav_folder) {
+            showFragment("allFolders");
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_profile) {
@@ -2008,6 +2071,33 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
+    public static void updatePoints2() {
+
+    }
+
+    public boolean checkInDNAmodels(LocalTrack lt, Track t) {
+
+        boolean isRepeat = false;
+        if (t == null) {
+            for (int i = 0; i < allDNAs.getAllDNAs().size(); i++) {
+                DNAModel dm = allDNAs.getAllDNAs().get(i);
+                if (dm.getType() && lt.getTitle().equals(dm.getTitle())) {
+                    isRepeat = true;
+                    break;
+                }
+            }
+        } else {
+            for (int i = 0; i < allDNAs.getAllDNAs().size(); i++) {
+                DNAModel dm = allDNAs.getAllDNAs().get(i);
+                if (!dm.getType() && t.getTitle().equals(dm.getTitle())) {
+                    isRepeat = true;
+                    break;
+                }
+            }
+        }
+        return isRepeat;
+    }
+
     @Override
     public void onComplete() {
 
@@ -2291,8 +2381,31 @@ public class HomeActivity extends AppCompatActivity
     }
 
     @Override
-    public void onPlaylistMenuPLayAll(int position) {
+    public void onPlaylistMenuPLayAll() {
         onPlaylistPLayAll();
+    }
+
+    @Override
+    public void onFolderClicked(int pos) {
+        tempMusicFolder = allMusicFolders.getMusicFolders().get(pos);
+        tempFolderContent = tempMusicFolder.getLocalTracks();
+        showFragment("folderContent");
+    }
+
+    @Override
+    public void onFolderContentPlayAll() {
+        List<UnifiedTrack> lut = new ArrayList<>();
+        for (int i = 0; i < tempFolderContent.size(); i++) {
+            lut.add(new UnifiedTrack(true, tempFolderContent.get(i), null));
+        }
+        queue.setQueue(lut);
+        queueCurrentIndex = 0;
+        onPlaylistMenuPLayAll();
+    }
+
+    @Override
+    public void onFolderContentItemClick(int position) {
+        onLocalTrackSelected(position);
     }
 
     public static class MyAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -2319,7 +2432,9 @@ public class HomeActivity extends AppCompatActivity
         new ObjectPreferenceLoader(ctx, "Favourites", Favourite.class).save(favouriteTracks);
         new ObjectPreferenceLoader(ctx, "queueCurrentIndex", Integer.class).save(queueCurrentIndex);
         new ObjectPreferenceLoader(ctx, "isReloaded", Boolean.class).save(true);
-        new ObjectPreferenceLoader(ctx, "queueCurrentIndex", Integer.class).save(queueCurrentIndex);
+//        new ObjectPreferenceLoader(ctx, "allDNAs", AllDNAModels.class).save(allDNAs);
+        new ObjectPreferenceLoader(ctx, "musicFolders", AllMusicFolders.class).save(allMusicFolders);
+
     }
 
     @Override
@@ -2604,6 +2719,37 @@ public class HomeActivity extends AppCompatActivity
                     .show(newFragment)
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
+        } else if (type.equals("folderContent") && !isAllPlaylistVisible) {
+            setTitle(tempMusicFolder.getFolderName());
+            isFolderContentVisible = true;
+            android.app.FragmentManager fm = getFragmentManager();
+            FolderContentFragment.mCallback = this;
+            FolderContentFragment.mCallback2 = this;
+            FolderContentFragment newFragment = new FolderContentFragment();
+            fm.beginTransaction()
+                    .setCustomAnimations(R.animator.slide_up,
+                            R.animator.slide_down,
+                            R.animator.slide_up,
+                            R.animator.slide_down)
+                    .add(R.id.fragContainer, newFragment, "folderContent")
+                    .show(newFragment)
+                    .addToBackStack(null)
+                    .commitAllowingStateLoss();
+        } else if (type.equals("allFolders") && !isAllPlaylistVisible) {
+            setTitle("Folders");
+            isAllFolderVisible = true;
+            android.app.FragmentManager fm = getFragmentManager();
+            FolderFragment newFragment = new FolderFragment();
+            FolderFragment.mCallback = this;
+            fm.beginTransaction()
+                    .setCustomAnimations(R.animator.slide_up,
+                            R.animator.slide_down,
+                            R.animator.slide_up,
+                            R.animator.slide_down)
+                    .add(R.id.fragContainer, newFragment, "allFolders")
+                    .show(newFragment)
+                    .addToBackStack(null)
+                    .commitAllowingStateLoss();
         }
     }
 
@@ -2680,6 +2826,24 @@ public class HomeActivity extends AppCompatActivity
                         .remove(frag)
                         .commitAllowingStateLoss();
             }
+        } else if (type.equals("folderContent")) {
+            isFolderContentVisible = false;
+            android.app.FragmentManager fm = getFragmentManager();
+            android.app.Fragment frag = fm.findFragmentByTag("folderContent");
+            if (frag != null) {
+                fm.beginTransaction()
+                        .remove(frag)
+                        .commitAllowingStateLoss();
+            }
+        } else if (type.equals("allFolders")) {
+            isAllFolderVisible = false;
+            android.app.FragmentManager fm = getFragmentManager();
+            android.app.Fragment frag = fm.findFragmentByTag("allFolders");
+            if (frag != null) {
+                fm.beginTransaction()
+                        .remove(frag)
+                        .commitAllowingStateLoss();
+            }
         }
     }
 
@@ -2690,6 +2854,8 @@ public class HomeActivity extends AppCompatActivity
         hideFragment("playlist");
         hideFragment("equalizer");
         hideFragment("favourite");
+        hideFragment("folderContent");
+        hideFragment("allFolders");
 
         setTitle("Music DNA");
 

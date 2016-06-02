@@ -42,6 +42,11 @@ public class VisualizerView extends View {
     public static List<Pair<Float, Float>> pts;
     public static List<Pair<Float, Pair<Integer, Integer>>> ptPaint;
 
+    public static List<Pair<Float, Float>> pts2;
+    public static List<Pair<Float, Pair<Integer, Integer>>> ptPaint2;
+
+    boolean prevDrawn = false;
+
     public VisualizerView(Context context) {
         super(context);
         init();
@@ -67,11 +72,9 @@ public class VisualizerView extends View {
         mForePaint1.setColor(Color.rgb(255, 128, 0));
         pts = new ArrayList<>();
         ptPaint = new ArrayList<>();
-        // deprecated
     }
 
     public void updateVisualizer(byte[] bytes) {
-        //mBytes = bytes;
         invalidate();
     }
 
@@ -236,6 +239,18 @@ public class VisualizerView extends View {
 //        int midx = (int) (width / 2);
 //        int midy = (int) (height / 2);
 //
+
+        /*if (HomeActivity.isPlayerVisible) {
+            if (!prevDrawn && pts2 != null && ptPaint2 != null) {
+                for (int i = 0; i < pts2.size(); i++) {
+                    mForePaint1.setColor(Color.GRAY);
+                    mForePaint1.setAlpha(ptPaint2.get(i).second.second);
+                    canvas.drawCircle(pts2.get(i).first, pts2.get(i).second, ptPaint2.get(i).first, mForePaint1);
+                }
+                prevDrawn = true;
+            }
+        }*/
+
         // Redraw previous points
         if (HomeActivity.isPlayerVisible) {
             for (int i = 0; i < pts.size(); i++) {
@@ -344,5 +359,9 @@ public class VisualizerView extends View {
     public void clear() {
         pts.clear();
         ptPaint.clear();
+
+//        pts2 = null;
+//        ptPaint2 = null;
+
     }
 }

@@ -25,6 +25,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.sdsmdg.harjot.MusicDNA.Models.DNAModel;
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.Models.Track;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
@@ -373,6 +374,16 @@ public class PlayerFragment extends Fragment {
                     player_controller.setImageResource(R.drawable.ic_replay_white_48dp);
                     mainTrackController.setImageResource(R.drawable.ic_replay_white_48dp);
                 }
+                /*if (HomeActivity.localSelected) {
+                    DNAModel dnaModel = new DNAModel(true, localTrack.getTitle(), mVisualizerView.pts, mVisualizerView.ptPaint);
+                    HomeActivity.allDNAs.getAllDNAs().add(dnaModel);
+                } else {
+                    DNAModel dnaModel = new DNAModel(false, track.getTitle(), mVisualizerView.pts, mVisualizerView.ptPaint);
+                    HomeActivity.allDNAs.getAllDNAs().add(dnaModel);
+                }*/
+
+                //Toast.makeText(HomeActivity.ctx, "SAVED", Toast.LENGTH_SHORT).show();
+
                 completed = false;
                 isPrepared = false;
                 mMediaPlayer.stop();

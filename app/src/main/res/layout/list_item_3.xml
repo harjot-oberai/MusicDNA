@@ -5,6 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_margin="1dp"
     android:background="#000"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:longClickable="true"
     android:orientation="horizontal"
     android:padding="10dp">
 

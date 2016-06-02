@@ -20,6 +20,10 @@
             android:icon="@drawable/ic_heart_out_black"
             android:title="Favourites" />
         <item
+            android:id="@+id/nav_folder"
+            android:icon="@android:drawable/stat_notify_sdcard_prepare"
+            android:title="Folders" />
+        <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"
             android:title="Settings" />

@@ -46,7 +46,7 @@ public class PlayListFragment extends Fragment {
     }
 
     public interface onPlaylistMenuPlayAllListener {
-        public void onPlaylistMenuPLayAll(int position);
+        public void onPlaylistMenuPLayAll();
     }
 
     @Override
@@ -86,7 +86,7 @@ public class PlayListFragment extends Fragment {
                             HomeActivity.tempPlaylist = HomeActivity.allPlaylists.getPlaylists().get(position);
                             HomeActivity.queue.setQueue(HomeActivity.tempPlaylist.getSongList());
                             HomeActivity.queueCurrentIndex = 0;
-                            mCallback2.onPlaylistMenuPLayAll(position);
+                            mCallback2.onPlaylistMenuPLayAll();
                         } else if (item.getTitle().equals("Delete")) {
                             HomeActivity.allPlaylists.getPlaylists().remove(position);
                             if (PlayListFragment.vpAdapter != null) {

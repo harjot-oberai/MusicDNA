@@ -12,6 +12,11 @@ The Player allows users to play both **local music** as well as Stream Music dir
 The Player also packs a **Powerful Equalizer with** ***BassBoost and Reverb*** effects
 
 ## The Player - *In Action*
+
+Video Demo : [http://sendvid.com/b2hhc1pi](http://sendvid.com/b2hhc1pi)<br>
+The video's length was cut short due to ADB screenrecord's limit of 3:00 min. 
+
+
 <img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/dna1.jpg" width = "300">
 <img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/dna2.jpg" width = "300">
 <img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/home.jpg" width = "300">

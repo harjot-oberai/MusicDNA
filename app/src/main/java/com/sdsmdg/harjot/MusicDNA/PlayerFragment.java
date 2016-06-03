@@ -65,9 +65,9 @@ public class PlayerFragment extends Fragment {
 
     static RelativeLayout bottomContainer;
 
-    static ImageView selected_track_image;
-    static TextView selected_track_title;
-    static ImageView player_controller;
+    public static ImageView selected_track_image;
+    public static TextView selected_track_title;
+    public static ImageView player_controller;
 
     static Toolbar smallPlayer;
 
@@ -78,22 +78,24 @@ public class PlayerFragment extends Fragment {
     static boolean pauseClicked = false;
     static boolean isTracking = false;
 
-    static boolean localIsPlaying = false;
+    public static boolean localIsPlaying = false;
 
     Timer t;
 
-    static Track track;
-    static LocalTrack localTrack;
+    public static Track track;
+    public static LocalTrack localTrack;
 
     static boolean isRefreshed = false;
 
-    static onSmallPlayerTouchedListener mCallback;
-    static onCompleteListener mCallback2;
-    static onPreviousTrackListener mCallback3;
-    static onEqualizerClickedListener mCallback4;
-    static onQueueClickListener mCallback5;
-    static onPreparedLsitener mCallback6;
-    static onPlayPauseListener mCallback7;
+    public static onSmallPlayerTouchedListener mCallback;
+    public static onCompleteListener mCallback2;
+    public static onPreviousTrackListener mCallback3;
+    public static onEqualizerClickedListener mCallback4;
+    public static onQueueClickListener mCallback5;
+    public static onPreparedLsitener mCallback6;
+    public static onPlayPauseListener mCallback7;
+
+    public static boolean isStart = true;
 
 
     long startTrack;
@@ -161,7 +163,8 @@ public class PlayerFragment extends Fragment {
                 mainTrackController.setImageResource(R.drawable.ic_play_arrow_white_48dp);
             }
             mVisualizer.setEnabled(false);
-            mCallback7.onPlayPause();
+            if(!isStart)
+                mCallback7.onPlayPause();
         } else {
             if (!completed) {
                 setupVisualizerFxAndUI();
@@ -175,7 +178,8 @@ public class PlayerFragment extends Fragment {
                     player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
                 }
                 mMediaPlayer.start();
-                mCallback7.onPlayPause();
+                if(!isStart)
+                    mCallback7.onPlayPause();
             } else {
                 mVisualizerView.clear();
                 mMediaPlayer.seekTo(0);
@@ -204,7 +208,6 @@ public class PlayerFragment extends Fragment {
             mCallback4 = (onEqualizerClickedListener) context;
             mCallback5 = (onQueueClickListener) context;
             mCallback6 = (onPreparedLsitener) context;
-            mCallback7 = (onPlayPauseListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnHeadlineSelectedListener");

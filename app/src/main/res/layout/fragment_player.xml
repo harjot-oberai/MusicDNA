@@ -65,7 +65,7 @@
                 android:layout_marginTop="2dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
-                android:visibility="visible"/>
+                android:visibility="visible" />
         </android.support.v7.widget.Toolbar>
     </FrameLayout>
 
@@ -75,6 +75,18 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/seekBarContainer"
         android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:id="@+id/toggleSaveDNA"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_above="@+id/seekBarContainer"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:src="@drawable/ic_download" />
 
     <RelativeLayout
         android:id="@+id/seekBarContainer"

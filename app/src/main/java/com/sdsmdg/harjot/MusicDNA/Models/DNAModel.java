@@ -9,13 +9,15 @@ import java.util.List;
  */
 public class DNAModel {
     private boolean type;
-    private String title;
+    private LocalTrack localTrack;
+    private Track track;
     private List<Pair<Float, Float>> pts;
     private List<Pair<Float, Pair<Integer, Integer>>> ptPaint;
 
-    public DNAModel(Boolean type, String title, List<Pair<Float, Float>> pts, List<Pair<Float, Pair<Integer, Integer>>> ptPaint) {
+    public DNAModel(boolean type, LocalTrack localTrack, Track track, List<Pair<Float, Float>> pts, List<Pair<Float, Pair<Integer, Integer>>> ptPaint) {
         this.type = type;
-        this.title = title;
+        this.localTrack = localTrack;
+        this.track = track;
         this.pts = pts;
         this.ptPaint = ptPaint;
     }
@@ -26,14 +28,6 @@ public class DNAModel {
 
     public void setType(boolean type) {
         this.type = type;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public List<Pair<Float, Float>> getPts() {
@@ -50,5 +44,21 @@ public class DNAModel {
 
     public void setPtPaint(List<Pair<Float, Pair<Integer, Integer>>> ptPaint) {
         this.ptPaint = ptPaint;
+    }
+
+    public LocalTrack getLocalTrack() {
+        return localTrack;
+    }
+
+    public void setLocalTrack(LocalTrack localTrack) {
+        this.localTrack = localTrack;
+    }
+
+    public Track getTrack() {
+        return track;
+    }
+
+    public void setTrack(Track track) {
+        this.track = track;
     }
 }

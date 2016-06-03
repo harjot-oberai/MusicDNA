@@ -24,6 +24,10 @@
             android:icon="@android:drawable/stat_notify_sdcard_prepare"
             android:title="Folders" />
         <item
+            android:id="@+id/nav_view"
+            android:icon="@android:drawable/ic_menu_save"
+            android:title="Saved DNA" />
+        <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"
             android:title="Settings" />

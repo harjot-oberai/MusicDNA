@@ -16,6 +16,7 @@ import android.media.audiofx.Visualizer;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,11 +28,15 @@ import android.widget.Toast;
 
 import com.sdsmdg.harjot.MusicDNA.Models.DNAModel;
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
+import com.sdsmdg.harjot.MusicDNA.Models.SavedDNA;
 import com.sdsmdg.harjot.MusicDNA.Models.Track;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -60,6 +65,8 @@ public class PlayerFragment extends Fragment {
     public static ImageView nextTrackController;
     public static ImageView previousTrackController;
     public static ImageView favouriteIcon;
+
+    public static ImageView saveDNAToggle;
 
     boolean isFav = false;
 
@@ -163,7 +170,7 @@ public class PlayerFragment extends Fragment {
                 mainTrackController.setImageResource(R.drawable.ic_play_arrow_white_48dp);
             }
             mVisualizer.setEnabled(false);
-            if(!isStart)
+            if (!isStart && mCallback7 != null)
                 mCallback7.onPlayPause();
         } else {
             if (!completed) {
@@ -178,7 +185,7 @@ public class PlayerFragment extends Fragment {
                     player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
                 }
                 mMediaPlayer.start();
-                if(!isStart)
+                if (!isStart && mCallback7 != null)
                     mCallback7.onPlayPause();
             } else {
                 mVisualizerView.clear();
@@ -303,6 +310,26 @@ public class PlayerFragment extends Fragment {
             }
         });
 
+        saveDNAToggle = (ImageView) view.findViewById(R.id.toggleSaveDNA);
+        if (HomeActivity.isSaveDNAEnabled) {
+            saveDNAToggle.setImageResource(R.drawable.ic_download_red);
+        } else {
+            saveDNAToggle.setImageResource(R.drawable.ic_download);
+        }
+
+        saveDNAToggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (HomeActivity.isSaveDNAEnabled) {
+                    HomeActivity.isSaveDNAEnabled = false;
+                    saveDNAToggle.setImageResource(R.drawable.ic_download);
+                } else {
+                    HomeActivity.isSaveDNAEnabled = true;
+                    saveDNAToggle.setImageResource(R.drawable.ic_download_red);
+                }
+            }
+        });
+
         mainTrackController = (ImageView) view.findViewById(R.id.controller);
         nextTrackController = (ImageView) view.findViewById(R.id.next);
         previousTrackController = (ImageView) view.findViewById(R.id.previous);
@@ -377,15 +404,35 @@ public class PlayerFragment extends Fragment {
                     player_controller.setImageResource(R.drawable.ic_replay_white_48dp);
                     mainTrackController.setImageResource(R.drawable.ic_replay_white_48dp);
                 }
-                /*if (HomeActivity.localSelected) {
-                    DNAModel dnaModel = new DNAModel(true, localTrack.getTitle(), mVisualizerView.pts, mVisualizerView.ptPaint);
-                    HomeActivity.allDNAs.getAllDNAs().add(dnaModel);
-                } else {
-                    DNAModel dnaModel = new DNAModel(false, track.getTitle(), mVisualizerView.pts, mVisualizerView.ptPaint);
-                    HomeActivity.allDNAs.getAllDNAs().add(dnaModel);
-                }*/
 
-                //Toast.makeText(HomeActivity.ctx, "SAVED", Toast.LENGTH_SHORT).show();
+                if (HomeActivity.isSaveDNAEnabled) {
+                    Toast.makeText(HomeActivity.ctx, "SAVING...", Toast.LENGTH_SHORT).show();
+                    mVisualizerView.setVisibility(View.VISIBLE);
+                    mVisualizerView.setDrawingCacheEnabled(true);
+                    Bitmap dna = Bitmap.createBitmap(mVisualizerView.getDrawingCache());
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    dna.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    byte[] byteArray = stream.toByteArray();
+                    mVisualizerView.setDrawingCacheEnabled(false);
+                    if (!HomeActivity.isPlayerVisible) {
+                        mVisualizerView.setVisibility(View.INVISIBLE);
+                    }
+                    List<Pair<Float, Float>> pts = new ArrayList<Pair<Float, Float>>();
+                    List<Pair<Float, Pair<Integer, Integer>>> ptPaint = new ArrayList<Pair<Float, Pair<Integer, Integer>>>();
+                    for (int i = 0; i < VisualizerView.pts.size(); i++) {
+                        pts.add(VisualizerView.pts.get(i));
+                        ptPaint.add(VisualizerView.ptPaint.get(i));
+                    }
+                    if (localIsPlaying) {
+                        DNAModel model = new DNAModel(true, localTrack, null, pts, ptPaint);
+                        SavedDNA sDna = new SavedDNA(localTrack.getTitle(), byteArray, model);
+                        HomeActivity.savedDNAs.getSavedDNAs().add(sDna);
+                    } else {
+                        DNAModel model = new DNAModel(false, null, track, pts, ptPaint);
+                        SavedDNA sDna = new SavedDNA(track.getTitle(), byteArray, model);
+                        HomeActivity.savedDNAs.getSavedDNAs().add(sDna);
+                    }
+                }
 
                 completed = false;
                 isPrepared = false;
@@ -662,6 +709,12 @@ public class PlayerFragment extends Fragment {
         } else {
             favouriteIcon.setImageResource(R.drawable.ic_heart_out);
             isFav = false;
+        }
+
+        if (HomeActivity.isSaveDNAEnabled) {
+            saveDNAToggle.setImageResource(R.drawable.ic_download_red);
+        } else {
+            saveDNAToggle.setImageResource(R.drawable.ic_download);
         }
 
 

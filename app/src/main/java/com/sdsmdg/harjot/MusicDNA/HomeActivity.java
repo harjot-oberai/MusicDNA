@@ -67,6 +67,7 @@ import com.sdsmdg.harjot.MusicDNA.Interfaces.StreamService;
 import com.sdsmdg.harjot.MusicDNA.Models.AllDNAModels;
 import com.sdsmdg.harjot.MusicDNA.Models.AllMusicFolders;
 import com.sdsmdg.harjot.MusicDNA.Models.AllPlaylists;
+import com.sdsmdg.harjot.MusicDNA.Models.AllSavedDNA;
 import com.sdsmdg.harjot.MusicDNA.Models.DNAModel;
 import com.sdsmdg.harjot.MusicDNA.Models.Favourite;
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
@@ -74,6 +75,7 @@ import com.sdsmdg.harjot.MusicDNA.Models.MusicFolder;
 import com.sdsmdg.harjot.MusicDNA.Models.Playlist;
 import com.sdsmdg.harjot.MusicDNA.Models.Queue;
 import com.sdsmdg.harjot.MusicDNA.Models.RecentlyPlayed;
+import com.sdsmdg.harjot.MusicDNA.Models.SavedDNA;
 import com.sdsmdg.harjot.MusicDNA.Models.Track;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.NotificationManager.Constants;
@@ -148,6 +150,9 @@ public class HomeActivity extends AppCompatActivity
     static AllDNAModels allDNAs;
     static AllMusicFolders allMusicFolders;
 
+    static AllSavedDNA savedDNAs;
+    static SavedDNA tempSavedDNA;
+
     static List<LocalTrack> tempFolderContent;
     static MusicFolder tempMusicFolder;
 
@@ -159,6 +164,8 @@ public class HomeActivity extends AppCompatActivity
     static boolean isReloaded = false;
 
     public static int queueCurrentIndex = 0;
+
+    public static boolean isSaveDNAEnabled = true;
 
     public static Context ctx;
 
@@ -231,6 +238,8 @@ public class HomeActivity extends AppCompatActivity
     static boolean isAllPlaylistVisible = false;
     static boolean isAllFolderVisible = false;
     static boolean isFolderContentVisible = false;
+    static boolean isAllSavedDnaVisisble = false;
+    static boolean isSavedDNAVisible = false;
 
     boolean isNotificationVisible = false;
 
@@ -664,15 +673,15 @@ public class HomeActivity extends AppCompatActivity
         });
 
         try {
+            savedDNAs = new ObjectPreferenceLoader(ctx, "savedDNAs", AllSavedDNA.class).load();
             allPlaylists = new ObjectPreferenceLoader(ctx, "AllPlayLists", AllPlaylists.class).load();
             queue = new ObjectPreferenceLoader(ctx, "Queue", Queue.class).load();
             favouriteTracks = new ObjectPreferenceLoader(ctx, "Favourites", Favourite.class).load();
             recentlyPlayed = new ObjectPreferenceLoader(ctx, "RecentlyPlayed", RecentlyPlayed.class).load();
             isReloaded = new ObjectPreferenceLoader(ctx, "isReloaded", Boolean.class).load();
             queueCurrentIndex = new ObjectPreferenceLoader(ctx, "queueCurrentIndex", Integer.class).load();
-//            allDNAs = new ObjectPreferenceLoader(ctx, "allDNAs", AllDNAModels.class).load();
-            allMusicFolders = new ObjectPreferenceLoader(ctx, "allMusicFolders", AllMusicFolders.class).load();
         } catch (NoSuchPreferenceFoundException e) {
+            Toast.makeText(HomeActivity.this, e.getMessage() + "::", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
 
@@ -700,7 +709,10 @@ public class HomeActivity extends AppCompatActivity
         }
         if (allMusicFolders == null) {
             allMusicFolders = new AllMusicFolders();
-            MusicFolder mf = new MusicFolder("Music", null);
+        }
+        if (savedDNAs == null) {
+            Toast.makeText(HomeActivity.this, "null!", Toast.LENGTH_SHORT).show();
+            savedDNAs = new AllSavedDNA();
         }
 
         if (queue != null && queue.getQueue().size() != 0) {
@@ -1378,6 +1390,12 @@ public class HomeActivity extends AppCompatActivity
                 } else if (isAllFolderVisible) {
                     hideFragment("allFolders");
                     setTitle("Music DNA");
+                } else if (isAllSavedDnaVisisble) {
+                    hideFragment("allSavedDNAs");
+                    setTitle("Music DNA");
+                } else if (isSavedDNAVisible) {
+                    hideFragment("savedDNA");
+                    setTitle("Music DNA");
                 } else {
                     startActivity(new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME));
                 }
@@ -1429,6 +1447,8 @@ public class HomeActivity extends AppCompatActivity
             showFragment("favourite");
         } else if (id == R.id.nav_folder) {
             showFragment("allFolders");
+        } else if (id == R.id.nav_view) {
+            showFragment("allSavedDNAs");
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_profile) {
@@ -1572,7 +1592,7 @@ public class HomeActivity extends AppCompatActivity
                 .withEndAction(new Runnable() {
                     @Override
                     public void run() {
-                        toolbar.setVisibility(View.INVISIBLE);
+                        toolbar.setVisibility(View.GONE);
                     }
                 });
 
@@ -1605,7 +1625,7 @@ public class HomeActivity extends AppCompatActivity
                 .withEndAction(new Runnable() {
                     @Override
                     public void run() {
-                        spToolbar.setVisibility(View.INVISIBLE);
+                        spToolbar.setVisibility(View.GONE);
                     }
                 });
 
@@ -1642,7 +1662,15 @@ public class HomeActivity extends AppCompatActivity
         playerContainer.setVisibility(View.VISIBLE);
 
         playerContainer.animate()
-                .translationY(playerContainer.getHeight() - PlayerFragment.smallPlayer.getHeight());
+                .translationY(playerContainer.getHeight() - PlayerFragment.smallPlayer.getHeight())
+                .withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (isAllSavedDnaVisisble) {
+                            ViewSavedDNA.mVisualizerView2.setVisibility(View.VISIBLE);
+                        }
+                    }
+                });
 
         PlayerFragment.player_controller.setAlpha(0.0f);
         PlayerFragment.player_controller.setImageDrawable(PlayerFragment.mainTrackController.getDrawable());
@@ -1694,6 +1722,10 @@ public class HomeActivity extends AppCompatActivity
     }
 
     public void showPlayer() {
+
+        if (isAllSavedDnaVisisble) {
+            ViewSavedDNA.mVisualizerView2.setVisibility(View.INVISIBLE);
+        }
 
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         searchView.setQuery("", false);
@@ -2082,18 +2114,18 @@ public class HomeActivity extends AppCompatActivity
         if (t == null) {
             for (int i = 0; i < allDNAs.getAllDNAs().size(); i++) {
                 DNAModel dm = allDNAs.getAllDNAs().get(i);
-                if (dm.getType() && lt.getTitle().equals(dm.getTitle())) {
-                    isRepeat = true;
-                    break;
-                }
+//                if (dm.getType() && lt.getTitle().equals(dm.getTitle())) {
+//                    isRepeat = true;
+//                    break;
+//                }
             }
         } else {
             for (int i = 0; i < allDNAs.getAllDNAs().size(); i++) {
                 DNAModel dm = allDNAs.getAllDNAs().get(i);
-                if (!dm.getType() && t.getTitle().equals(dm.getTitle())) {
-                    isRepeat = true;
-                    break;
-                }
+//                if (!dm.getType() && t.getTitle().equals(dm.getTitle())) {
+//                    isRepeat = true;
+//                    break;
+//                }
             }
         }
         return isRepeat;
@@ -2422,15 +2454,13 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
+        new ObjectPreferenceLoader(ctx, "savedDNAs", AllSavedDNA.class).save(savedDNAs);
         new ObjectPreferenceLoader(ctx, "AllPlayLists", AllPlaylists.class).save(allPlaylists);
         new ObjectPreferenceLoader(ctx, "Queue", Queue.class).save(queue);
         new ObjectPreferenceLoader(ctx, "RecentlyPlayed", RecentlyPlayed.class).save(recentlyPlayed);
         new ObjectPreferenceLoader(ctx, "Favourites", Favourite.class).save(favouriteTracks);
         new ObjectPreferenceLoader(ctx, "queueCurrentIndex", Integer.class).save(queueCurrentIndex);
         new ObjectPreferenceLoader(ctx, "isReloaded", Boolean.class).save(true);
-//        new ObjectPreferenceLoader(ctx, "allDNAs", AllDNAModels.class).save(allDNAs);
-        new ObjectPreferenceLoader(ctx, "musicFolders", AllMusicFolders.class).save(allMusicFolders);
-
     }
 
     @Override
@@ -2715,7 +2745,7 @@ public class HomeActivity extends AppCompatActivity
                     .show(newFragment)
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
-        } else if (type.equals("folderContent") && !isAllPlaylistVisible) {
+        } else if (type.equals("folderContent") && !isFolderContentVisible) {
             setTitle(tempMusicFolder.getFolderName());
             isFolderContentVisible = true;
             android.app.FragmentManager fm = getFragmentManager();
@@ -2731,7 +2761,7 @@ public class HomeActivity extends AppCompatActivity
                     .show(newFragment)
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
-        } else if (type.equals("allFolders") && !isAllPlaylistVisible) {
+        } else if (type.equals("allFolders") && !isAllFolderVisible) {
             setTitle("Folders");
             isAllFolderVisible = true;
             android.app.FragmentManager fm = getFragmentManager();
@@ -2743,6 +2773,20 @@ public class HomeActivity extends AppCompatActivity
                             R.animator.slide_up,
                             R.animator.slide_down)
                     .add(R.id.fragContainer, newFragment, "allFolders")
+                    .show(newFragment)
+                    .addToBackStack(null)
+                    .commitAllowingStateLoss();
+        } else if (type.equals("allSavedDNAs") && !isAllSavedDnaVisisble) {
+            setTitle("Saved DNAs");
+            isAllSavedDnaVisisble = true;
+            android.app.FragmentManager fm = getFragmentManager();
+            ViewSavedDNA newFragment = new ViewSavedDNA();
+            fm.beginTransaction()
+                    .setCustomAnimations(R.animator.slide_up,
+                            R.animator.slide_down,
+                            R.animator.slide_up,
+                            R.animator.slide_down)
+                    .add(R.id.fragContainer, newFragment, "allSavedDNAs")
                     .show(newFragment)
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
@@ -2840,6 +2884,15 @@ public class HomeActivity extends AppCompatActivity
                         .remove(frag)
                         .commitAllowingStateLoss();
             }
+        } else if (type.equals("allSavedDNAs")) {
+            isAllSavedDnaVisisble = false;
+            android.app.FragmentManager fm = getFragmentManager();
+            android.app.Fragment frag = fm.findFragmentByTag("allSavedDNAs");
+            if (frag != null) {
+                fm.beginTransaction()
+                        .remove(frag)
+                        .commitAllowingStateLoss();
+            }
         }
     }
 
@@ -2852,6 +2905,8 @@ public class HomeActivity extends AppCompatActivity
         hideFragment("favourite");
         hideFragment("folderContent");
         hideFragment("allFolders");
+        hideFragment("savedDNA");
+        hideFragment("allSavedDNAs");
 
         setTitle("Music DNA");
 
@@ -2859,12 +2914,14 @@ public class HomeActivity extends AppCompatActivity
 
     public void showNotification() {
 
-        if (!isNotificationVisible) {
-            Toast.makeText(HomeActivity.this, "Starting", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, MediaPlayerService.class);
-            intent.setAction(Constants.ACTION_PLAY);
-            startService(intent);
-            isNotificationVisible = true;
+        if (Build.VERSION.SDK_INT >= 21) {
+            if (!isNotificationVisible) {
+                Toast.makeText(HomeActivity.this, "Starting", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, MediaPlayerService.class);
+                intent.setAction(Constants.ACTION_PLAY);
+                startService(intent);
+                isNotificationVisible = true;
+            }
         }
 
 

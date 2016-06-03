@@ -23,7 +23,6 @@ import java.util.List;
 public class LocalTracksHorizontalAdapter extends RecyclerView.Adapter<LocalTracksHorizontalAdapter.MyViewHolder> {
 
     private List<LocalTrack> localList;
-    int def = 0x000000;
     ImageLoader imgLoader;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

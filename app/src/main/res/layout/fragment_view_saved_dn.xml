@@ -11,14 +11,44 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/saved_dna_recycler"
-        android:background="#000000"/>
+        android:background="#000000" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/saved_dna_recycler"
+        android:layout_marginBottom="10dp"
+        android:padding="2dp">
+
+        <ImageView
+            android:id="@+id/save_to_storage_icon"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_alignParentLeft="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:src="@drawable/ic_save_to_storage" />
+
+        <ImageView
+            android:id="@+id/share_icon"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:src="@drawable/ic_share" />
+    </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:background="#FFF"
         android:id="@+id/saved_dna_recycler"
         android:layout_width="match_parent"
         android:layout_height="135dp"
         android:layout_above="@+id/bottomView"
+        android:background="#FFF"
         android:padding="1dp" />
 
     <View

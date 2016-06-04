@@ -2,6 +2,7 @@ package com.sdsmdg.harjot.MusicDNA;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,6 +54,12 @@ public class ViewSavedDnaRecyclerAdapter extends RecyclerView.Adapter<ViewSavedD
                     .into(holder.art);
             holder.title.setText(t.getTitle());
             holder.artist.setText("");
+        }
+
+        if (position == ViewSavedDNA.selectedDNA) {
+            holder.title.setTextColor(Color.parseColor("#DE1A1A"));
+        } else {
+            holder.title.setTextColor(Color.parseColor("#444444"));
         }
 
     }

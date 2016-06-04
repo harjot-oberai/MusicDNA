@@ -28,12 +28,14 @@ public class SplashActivity extends AppCompatActivity {
     boolean perm4 = false;
     boolean perm5 = false;
 
+    static Typeface tf;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Regular.ttf");
+        tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Regular.ttf");
         TextView tx = (TextView) findViewById(R.id.splash_text);
         tx.setTypeface(tf);
 

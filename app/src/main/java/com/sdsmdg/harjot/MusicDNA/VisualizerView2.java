@@ -19,6 +19,9 @@ public class VisualizerView2 extends View {
     public List<Pair<Float, Float>> pts;
     public List<Pair<Float, Pair<Integer, Integer>>> ptPaint;
     public Paint mForePaint = new Paint();
+    public Paint mTextPaint = new Paint();
+    boolean textEnabled = false;
+    String text;
 
 
     public void setPts(List<Pair<Float, Float>> pts) {
@@ -48,6 +51,10 @@ public class VisualizerView2 extends View {
         mForePaint.setStrokeWidth(1f);
         mForePaint.setAntiAlias(true);
         mForePaint.setColor(Color.rgb(0, 128, 255));
+        mTextPaint.setColor(Color.WHITE);
+        mTextPaint.setTextAlign(Paint.Align.CENTER);
+        mTextPaint.setTextSize(40.0f * HomeActivity.ratio);
+        mTextPaint.setTypeface(SplashActivity.tf);
         pts = new ArrayList<>();
         ptPaint = new ArrayList<>();
     }
@@ -60,9 +67,23 @@ public class VisualizerView2 extends View {
             mForePaint.setAlpha(ptPaint.get(i).second.second);
             canvas.drawCircle(pts.get(i).first, pts.get(i).second - (canvas.getHeight() / 5), ptPaint.get(i).first, mForePaint);
         }
+        if (textEnabled && HomeActivity.tempSavedDNA != null) {
+            canvas.drawText(text, canvas.getWidth() / 2, (canvas.getHeight() * 15) / 16, mTextPaint);
+        }
     }
 
     public void update() {
+        invalidate();
+    }
+
+    public void drawText(String str) {
+        textEnabled = true;
+        text = str;
+        invalidate();
+    }
+
+    public void dropText() {
+        textEnabled = false;
         invalidate();
     }
 

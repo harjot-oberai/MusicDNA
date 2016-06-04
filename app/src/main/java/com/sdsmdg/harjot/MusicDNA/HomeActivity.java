@@ -14,12 +14,14 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.design.widget.AppBarLayout;
@@ -83,6 +85,10 @@ import com.sdsmdg.harjot.MusicDNA.NotificationManager.MediaPlayerService;
 import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -2779,6 +2785,8 @@ public class HomeActivity extends AppCompatActivity
         } else if (type.equals("allSavedDNAs") && !isAllSavedDnaVisisble) {
             setTitle("Saved DNAs");
             isAllSavedDnaVisisble = true;
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+            getSupportActionBar().hide();
             android.app.FragmentManager fm = getFragmentManager();
             ViewSavedDNA newFragment = new ViewSavedDNA();
             fm.beginTransaction()
@@ -2886,6 +2894,8 @@ public class HomeActivity extends AppCompatActivity
             }
         } else if (type.equals("allSavedDNAs")) {
             isAllSavedDnaVisisble = false;
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+            getSupportActionBar().show();
             android.app.FragmentManager fm = getFragmentManager();
             android.app.Fragment frag = fm.findFragmentByTag("allSavedDNAs");
             if (frag != null) {
@@ -3016,4 +3026,25 @@ public class HomeActivity extends AppCompatActivity
 
     }
 
+    public static void saveBitmapAsImage(Bitmap bmp, String fileName) {
+        String path = Environment.getExternalStorageDirectory().toString() + "/SavedDNAs/";
+        File f = new File(path);
+        f.mkdirs();
+        OutputStream fOut = null;
+        File file = new File(path, fileName + ".png");
+        try {
+            fOut = new FileOutputStream(file);
+            Bitmap pictureBitmap = bmp;
+            pictureBitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+        } catch (FileNotFoundException e) {
+            Log.e("ERROR", e.getMessage());
+            e.printStackTrace();
+        }
+        try {
+            fOut.flush();
+            fOut.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

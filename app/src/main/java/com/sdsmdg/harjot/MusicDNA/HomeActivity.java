@@ -28,6 +28,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -125,7 +126,8 @@ public class HomeActivity extends AppCompatActivity
         PlayListFragment.onPlaylistMenuPlayAllListener,
         FolderFragment.onFolderClickedListener,
         FolderContentFragment.onFolderContentPlayAllListener,
-        FolderContentFragment.onFolderContentItemClickListener {
+        FolderContentFragment.onFolderContentItemClickListener,
+        ViewSavedDNA.onShareListener {
 
 
     public static List<LocalTrack> localTrackList = new ArrayList<>();
@@ -2442,6 +2444,11 @@ public class HomeActivity extends AppCompatActivity
         onLocalTrackSelected(position);
     }
 
+    @Override
+    public void onShare(Bitmap bmp, String fileName) {
+        shareBitmapAsImage(bmp, fileName);
+    }
+
     public static class MyAsyncTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -2467,6 +2474,9 @@ public class HomeActivity extends AppCompatActivity
         new ObjectPreferenceLoader(ctx, "Favourites", Favourite.class).save(favouriteTracks);
         new ObjectPreferenceLoader(ctx, "queueCurrentIndex", Integer.class).save(queueCurrentIndex);
         new ObjectPreferenceLoader(ctx, "isReloaded", Boolean.class).save(true);
+        File cachePath = new File(ctx.getCacheDir(), "images");
+        if (cachePath.exists())
+            deleteRecursive(cachePath);
     }
 
     @Override
@@ -2786,6 +2796,7 @@ public class HomeActivity extends AppCompatActivity
             setTitle("Saved DNAs");
             isAllSavedDnaVisisble = true;
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+            ViewSavedDNA.mCallback = this;
             getSupportActionBar().hide();
             android.app.FragmentManager fm = getFragmentManager();
             ViewSavedDNA newFragment = new ViewSavedDNA();
@@ -2934,70 +2945,6 @@ public class HomeActivity extends AppCompatActivity
             }
         }
 
-
-        /*Notification notification;
-
-        String ns = Context.NOTIFICATION_SERVICE;
-        notificationManager = (NotificationManager) getSystemService(ns);
-
-        RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.notification_view);
-        Intent notificationIntent = new Intent(this, HomeActivity.class);
-        PendingIntent pendingNotificationIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-
-        Intent switchIntent = new Intent("com.sdsmdg.harjot.MusicDNA.ACTION_PLAY_PAUSE");
-        PendingIntent pendingSwitchIntent = PendingIntent.getBroadcast(this, 100, switchIntent, 0);
-        notificationView.setOnClickPendingIntent(R.id.btn_pause_play_in_notification, pendingSwitchIntent);
-
-        try {
-            if (PlayerFragment.mMediaPlayer.isPlaying()) {
-                notificationView.setImageViewResource(R.id.btn_pause_play_in_notification, R.drawable.ic_pause_white_48dp);
-            } else {
-                notificationView.setImageViewResource(R.id.btn_pause_play_in_notification, R.drawable.ic_play_arrow_white_48dp);
-            }
-        } catch (Exception e) {
-
-        }
-
-        Intent switchIntent2 = new Intent("com.sdsmdg.harjot.MusicDNA.ACTION_NEXT");
-        PendingIntent pendingSwitchIntent2 = PendingIntent.getBroadcast(this, 100, switchIntent2, 0);
-        notificationView.setOnClickPendingIntent(R.id.btn_next_in_notification, pendingSwitchIntent2);
-
-        Intent switchIntent3 = new Intent("com.sdsmdg.harjot.MusicDNA.ACTION_PREVIOUS");
-        PendingIntent pendingSwitchIntent3 = PendingIntent.getBroadcast(this, 100, switchIntent3, 0);
-        notificationView.setOnClickPendingIntent(R.id.btn_prev_in_notification, pendingSwitchIntent3);
-
-        Notification.Builder builder = new Notification.Builder(this);
-        notification = builder.setContentTitle("MusicDNA")
-                .setContentText("Slide down on note to expand")
-                .setSmallIcon(R.drawable.ic_default)
-                .setContentTitle("Title")
-                .setContentText("Artist")
-                .addAction(R.drawable.ic_skip_previous_white_48dp, "Prev", pendingSwitchIntent3)
-                .addAction(R.drawable.ic_play_arrow_white_48dp, "Play", pendingSwitchIntent)
-                .addAction(R.drawable.ic_skip_next_white_48dp, "Next", pendingSwitchIntent2)
-                .setLargeIcon(((BitmapDrawable) PlayerFragment.selected_track_image.getDrawable()).getBitmap())
-                .build();
-
-        notification.priority = Notification.PRIORITY_MAX;
-        notification.bigContentView = notificationView;
-        notification.contentIntent = pendingNotificationIntent;
-        notification.flags |= Notification.FLAG_ONGOING_EVENT;
-
-        notificationView.setImageViewBitmap(R.id.image_in_notification, ((BitmapDrawable) PlayerFragment.selected_track_image.getDrawable()).getBitmap());
-        if (PlayerFragment.localIsPlaying) {
-            notificationView.setTextViewText(R.id.title_in_notification, PlayerFragment.localTrack.getTitle());
-            notificationView.setTextViewText(R.id.artist_in_notification, PlayerFragment.localTrack.getArtist());
-        } else {
-            notificationView.setTextViewText(R.id.title_in_notification, PlayerFragment.track.getTitle());
-            notificationView.setTextViewText(R.id.artist_in_notification, "");
-        }
-
-        notificationManager.notify(1, notification);*/
-
-    }
-
-    public void updatePlayPauseIcon() {
-        showNotification();
     }
 
     public void HideBottomFakeToolbar() {
@@ -3047,4 +2994,45 @@ public class HomeActivity extends AppCompatActivity
             e.printStackTrace();
         }
     }
+
+    public void shareBitmapAsImage(Bitmap bmp, String fileName) {
+        try {
+            File cachePath = new File(ctx.getCacheDir(), "images");
+            if (cachePath.exists())
+                deleteRecursive(cachePath);
+            cachePath.mkdirs(); // don't forget to make the directory
+            FileOutputStream stream = new FileOutputStream(cachePath + "/" + fileName + ".png"); // overwrites this image every time
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            stream.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        File imagePath = new File(ctx.getCacheDir(), "images");
+        File newFile = new File(imagePath, fileName + ".png");
+        Uri contentUri = FileProvider.getUriForFile(ctx, "com.sdsmdg.harjot.MusicDNA.fileprovider", newFile);
+
+        if (contentUri != null) {
+
+            Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // temp permission for receiving app to read this file
+            shareIntent.setDataAndType(contentUri, getContentResolver().getType(contentUri));
+            shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+            startActivity(Intent.createChooser(shareIntent, "Choose an app"));
+        }
+
+    }
+
+    public void deleteRecursive(File fileOrDirectory) {
+        if (fileOrDirectory.isDirectory())
+            for (File child : fileOrDirectory.listFiles())
+                deleteRecursive(child);
+
+        fileOrDirectory.delete();
+    }
+
 }

@@ -2,6 +2,8 @@ package com.sdsmdg.harjot.MusicDNA;
 
 
 import android.app.Dialog;
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -42,12 +44,29 @@ public class ViewSavedDNA extends Fragment {
 
     ImageView shareIcon, saveToStorageIcon;
 
+    static onShareListener mCallback;
+
     static int selectedDNA = 0;
 
     public ViewSavedDNA() {
         // Required empty public constructor
     }
 
+    public interface onShareListener {
+        void onShare(Bitmap bmp, String fileName);
+    }
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mCallback = (onShareListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnHeadlineSelectedListener");
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -140,7 +159,7 @@ public class ViewSavedDNA extends Fragment {
         shareIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                showDialog(1);
             }
         });
 
@@ -148,40 +167,69 @@ public class ViewSavedDNA extends Fragment {
             @Override
             public void onClick(View v) {
                 if (HomeActivity.tempSavedDNA != null) {
-                    showDialog();
+                    showDialog(0);
                 }
             }
         });
 
     }
 
-    public void showDialog() {
-        final Dialog dialog = new Dialog(HomeActivity.ctx);
-        dialog.setContentView(R.layout.save_image_dialog);
-        dialog.setTitle("Save as Image");
+    public void showDialog(int type) {
+        if (type == 0) {
+            final Dialog dialog = new Dialog(HomeActivity.ctx);
+            dialog.setContentView(R.layout.save_image_dialog);
+            dialog.setTitle("Save as Image");
 
-        // set the custom dialog components - text, image and button
-        final EditText text = (EditText) dialog.findViewById(R.id.save_image_filename_text);
-        text.setText(HomeActivity.tempSavedDNA.getName());
-        Button btn = (Button) dialog.findViewById(R.id.save_image_btn);
-        // if button is clicked, close the custom dialog
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (text.getText().toString().trim().equals("")) {
-                    text.setError("Enter Filename");
-                } else {
-                    mVisualizerView2.drawText(text.getText().toString());
-                    mVisualizerView2.setDrawingCacheEnabled(true);
-                    HomeActivity.saveBitmapAsImage(mVisualizerView2.getDrawingCache(), text.getText().toString());
-                    mVisualizerView2.dropText();
-                    mVisualizerView2.setDrawingCacheEnabled(false);
-                    dialog.dismiss();
+            // set the custom dialog components - text, image and button
+            final EditText text = (EditText) dialog.findViewById(R.id.save_image_filename_text);
+            text.setText(HomeActivity.tempSavedDNA.getName());
+            Button btn = (Button) dialog.findViewById(R.id.save_image_btn);
+            // if button is clicked, close the custom dialog
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (text.getText().toString().trim().equals("")) {
+                        text.setError("Enter Filename");
+                    } else {
+                        mVisualizerView2.drawText(text.getText().toString());
+                        mVisualizerView2.setDrawingCacheEnabled(true);
+                        HomeActivity.saveBitmapAsImage(mVisualizerView2.getDrawingCache(), text.getText().toString());
+                        mVisualizerView2.dropText();
+                        mVisualizerView2.setDrawingCacheEnabled(false);
+                        dialog.dismiss();
+                    }
                 }
-            }
-        });
+            });
 
-        dialog.show();
+            dialog.show();
+        } else if (type == 1) {
+            final Dialog dialog = new Dialog(HomeActivity.ctx);
+            dialog.setContentView(R.layout.save_image_dialog);
+            dialog.setTitle("Share as Image");
+
+            // set the custom dialog components - text, image and button
+            final EditText text = (EditText) dialog.findViewById(R.id.save_image_filename_text);
+            text.setText(HomeActivity.tempSavedDNA.getName());
+            Button btn = (Button) dialog.findViewById(R.id.save_image_btn);
+            btn.setText("SHARE");
+            // if button is clicked, close the custom dialog
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (text.getText().toString().trim().equals("")) {
+                        text.setError("Enter Filename");
+                    } else {
+                        mVisualizerView2.drawText(text.getText().toString());
+                        mVisualizerView2.setDrawingCacheEnabled(true);
+                        mCallback.onShare(mVisualizerView2.getDrawingCache(), text.getText().toString());
+                        mVisualizerView2.dropText();
+                        mVisualizerView2.setDrawingCacheEnabled(false);
+                        dialog.dismiss();
+                    }
+                }
+            });
+            dialog.show();
+        }
     }
 
 }

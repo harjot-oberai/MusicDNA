@@ -8,8 +8,8 @@ android {
         applicationId "com.sdsmdg.harjot.MusicDNA"
         minSdkVersion 19
         targetSdkVersion 23
-        versionCode 9
-        versionName "0.8.5"
+        versionCode 10
+        versionName "0.8.75"
     }
     buildTypes {
         release {

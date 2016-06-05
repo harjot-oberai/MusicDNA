@@ -11,6 +11,7 @@ import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
@@ -66,6 +67,7 @@ import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.sdsmdg.harjot.MusicDNA.Interfaces.StreamService;
 import com.sdsmdg.harjot.MusicDNA.Models.AllDNAModels;
 import com.sdsmdg.harjot.MusicDNA.Models.AllMusicFolders;
@@ -147,6 +149,8 @@ public class HomeActivity extends AppCompatActivity
     static ImageView playerControllerAB;
     static CircleImageView spImgAB;
     static TextView spTitleAB;
+
+    SharedPreferences mPrefs;
 
     ImageLoader imgLoader;
 
@@ -535,6 +539,8 @@ public class HomeActivity extends AppCompatActivity
 
         getSupportActionBar().setShowHideAnimationEnabled(true);
 
+        mPrefs = getPreferences(MODE_PRIVATE);
+
         appBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
         VisualizerView.act = this;
         main = this;
@@ -681,14 +687,23 @@ public class HomeActivity extends AppCompatActivity
         });
 
         try {
-            savedDNAs = new ObjectPreferenceLoader(ctx, "savedDNAs", AllSavedDNA.class).load();
-            allPlaylists = new ObjectPreferenceLoader(ctx, "AllPlayLists", AllPlaylists.class).load();
-            queue = new ObjectPreferenceLoader(ctx, "Queue", Queue.class).load();
-            favouriteTracks = new ObjectPreferenceLoader(ctx, "Favourites", Favourite.class).load();
-            recentlyPlayed = new ObjectPreferenceLoader(ctx, "RecentlyPlayed", RecentlyPlayed.class).load();
-            isReloaded = new ObjectPreferenceLoader(ctx, "isReloaded", Boolean.class).load();
-            queueCurrentIndex = new ObjectPreferenceLoader(ctx, "queueCurrentIndex", Integer.class).load();
-        } catch (NoSuchPreferenceFoundException e) {
+
+            Gson gson = new Gson();
+            String json = mPrefs.getString("savedDNAs", "");
+            savedDNAs = gson.fromJson(json, AllSavedDNA.class);
+            String json2 = mPrefs.getString("allPlaylists", "");
+            allPlaylists = gson.fromJson(json2, AllPlaylists.class);
+            String json3 = mPrefs.getString("queue", "");
+            queue = gson.fromJson(json3, Queue.class);
+            String json4 = mPrefs.getString("recentlyPlayed", "");
+            recentlyPlayed = gson.fromJson(json4, RecentlyPlayed.class);
+            String json5 = mPrefs.getString("favouriteTracks", "");
+            favouriteTracks = gson.fromJson(json5, Favourite.class);
+            String json6 = mPrefs.getString("queueCurrentIndex", "");
+            queueCurrentIndex = gson.fromJson(json6, Integer.class);
+            String json7 = mPrefs.getString("isReloaded", "");
+            isReloaded = gson.fromJson(json7, Boolean.class);
+        } catch (Exception e) {
             Toast.makeText(HomeActivity.this, e.getMessage() + "::", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
@@ -2467,13 +2482,26 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
-        new ObjectPreferenceLoader(ctx, "savedDNAs", AllSavedDNA.class).save(savedDNAs);
-        new ObjectPreferenceLoader(ctx, "AllPlayLists", AllPlaylists.class).save(allPlaylists);
-        new ObjectPreferenceLoader(ctx, "Queue", Queue.class).save(queue);
-        new ObjectPreferenceLoader(ctx, "RecentlyPlayed", RecentlyPlayed.class).save(recentlyPlayed);
-        new ObjectPreferenceLoader(ctx, "Favourites", Favourite.class).save(favouriteTracks);
-        new ObjectPreferenceLoader(ctx, "queueCurrentIndex", Integer.class).save(queueCurrentIndex);
-        new ObjectPreferenceLoader(ctx, "isReloaded", Boolean.class).save(true);
+
+        SharedPreferences.Editor prefsEditor = mPrefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(savedDNAs);
+        prefsEditor.putString("savedDNAs", json);
+        String json2 = gson.toJson(allPlaylists);
+        prefsEditor.putString("allPlaylists", json2);
+        String json3 = gson.toJson(queue);
+        prefsEditor.putString("queue", json3);
+        String json4 = gson.toJson(recentlyPlayed);
+        prefsEditor.putString("recentlyPlayed", json4);
+        String json5 = gson.toJson(favouriteTracks);
+        prefsEditor.putString("favouriteTracks", json5);
+        String json6 = gson.toJson(queueCurrentIndex);
+        prefsEditor.putString("queueCurrentIndex", json6);
+        isReloaded = true;
+        String json7 = gson.toJson(isReloaded);
+        prefsEditor.putString("isReloaded", json7);
+
+        prefsEditor.commit();
         File cachePath = new File(ctx.getCacheDir(), "images");
         if (cachePath.exists())
             deleteRecursive(cachePath);

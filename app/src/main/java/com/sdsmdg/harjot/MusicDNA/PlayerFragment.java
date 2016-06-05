@@ -407,13 +407,6 @@ public class PlayerFragment extends Fragment {
 
                 if (HomeActivity.isSaveDNAEnabled) {
                     Toast.makeText(HomeActivity.ctx, "SAVING...", Toast.LENGTH_SHORT).show();
-                    mVisualizerView.setVisibility(View.VISIBLE);
-                    mVisualizerView.setDrawingCacheEnabled(true);
-                    Bitmap dna = Bitmap.createBitmap(mVisualizerView.getDrawingCache());
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    dna.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                    byte[] byteArray = stream.toByteArray();
-                    mVisualizerView.setDrawingCacheEnabled(false);
                     if (!HomeActivity.isPlayerVisible) {
                         mVisualizerView.setVisibility(View.INVISIBLE);
                     }
@@ -425,11 +418,11 @@ public class PlayerFragment extends Fragment {
                     }
                     if (localIsPlaying) {
                         DNAModel model = new DNAModel(true, localTrack, null, pts, ptPaint);
-                        SavedDNA sDna = new SavedDNA(localTrack.getTitle(), byteArray, model);
+                        SavedDNA sDna = new SavedDNA(localTrack.getTitle(), model);
                         HomeActivity.savedDNAs.getSavedDNAs().add(sDna);
                     } else {
                         DNAModel model = new DNAModel(false, null, track, pts, ptPaint);
-                        SavedDNA sDna = new SavedDNA(track.getTitle(), byteArray, model);
+                        SavedDNA sDna = new SavedDNA(track.getTitle(), model);
                         HomeActivity.savedDNAs.getSavedDNAs().add(sDna);
                     }
                 }

@@ -40,4 +40,5 @@ dependencies {
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.diogobernardino:williamchart:2.2'
     compile 'tyrantgit:explosionfield:1.0.1'
+    compile 'com.google.code.gson:gson:2.5'
 }

@@ -7,12 +7,10 @@ import android.graphics.Bitmap;
  */
 public class SavedDNA {
     private String name;
-    private byte[] bytes;
     private DNAModel model;
 
-    public SavedDNA(String name, byte[] bytes, DNAModel model) {
+    public SavedDNA(String name, DNAModel model) {
         this.name = name;
-        this.bytes = bytes;
         this.model = model;
     }
 
@@ -22,14 +20,6 @@ public class SavedDNA {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public byte[] getBytes() {
-        return bytes;
-    }
-
-    public void setBytes(byte[] bytes) {
-        this.bytes = bytes;
     }
 
     public DNAModel getModel() {

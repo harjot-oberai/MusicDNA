@@ -208,7 +208,7 @@ public class EqualizerFragment extends Fragment {
 
                 @Override
                 public void onStartTrackingTouch(SeekBar seekBar) {
-
+                    presetSpinner.setSelection(0);
                 }
 
                 @Override
@@ -253,6 +253,7 @@ public class EqualizerFragment extends Fragment {
                 R.layout.spinner_item,
                 equalizerPresetNames);
         equalizerPresetSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        equalizerPresetNames.add("Custom");
 
         for (short i = 0; i < PlayerFragment.mEqualizer.getNumberOfPresets(); i++) {
             equalizerPresetNames.add(PlayerFragment.mEqualizer.getPresetName(i));
@@ -264,18 +265,23 @@ public class EqualizerFragment extends Fragment {
         presetSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                PlayerFragment.mEqualizer.usePreset((short) position);
+                if (position != 0) {
+                    PlayerFragment.mEqualizer.usePreset((short) (position - 1));
 
-                short numberOfFreqBands = PlayerFragment.mEqualizer.getNumberOfBands();
+                    short numberOfFreqBands = PlayerFragment.mEqualizer.getNumberOfBands();
 
-                final short lowerEqualizerBandLevel = PlayerFragment.mEqualizer.getBandLevelRange()[0];
+                    final short lowerEqualizerBandLevel = PlayerFragment.mEqualizer.getBandLevelRange()[0];
 
-                for (short i = 0; i < numberOfFreqBands; i++) {
-                    seekBarFinal[i].setProgress(PlayerFragment.mEqualizer.getBandLevel(i) - lowerEqualizerBandLevel);
-                    points[i] = PlayerFragment.mEqualizer.getBandLevel(i) - lowerEqualizerBandLevel;
-                    dataset.updateValues(points);
-                    chart.notifyDataUpdate();
+                    for (short i = 0; i < numberOfFreqBands; i++) {
+                        seekBarFinal[i].setProgress(PlayerFragment.mEqualizer.getBandLevel(i) - lowerEqualizerBandLevel);
+                        points[i] = PlayerFragment.mEqualizer.getBandLevel(i) - lowerEqualizerBandLevel;
+                        dataset.updateValues(points);
+                        chart.notifyDataUpdate();
+                    }
+                } else {
+
                 }
+
             }
 
             @Override

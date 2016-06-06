@@ -12,14 +12,19 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.db.chart.model.LineSet;
 import com.db.chart.view.AxisController;
 import com.db.chart.view.ChartView;
 import com.db.chart.view.LineChartView;
+
+import java.util.ArrayList;
 
 
 /**
@@ -39,7 +44,11 @@ public class EqualizerFragment extends Fragment {
     short numberOfFrequencyBands;
     LinearLayout mLinearLayout;
 
+    SeekBar[] seekBarFinal = new SeekBar[5];
+
     AnalogController bassController, reverbController;
+
+    Spinner presetSpinner;
 
     public EqualizerFragment() {
         // Required empty public constructor
@@ -54,6 +63,8 @@ public class EqualizerFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        presetSpinner = (Spinner) view.findViewById(R.id.equalizer_preset_spinner);
 
         chart = (LineChartView) view.findViewById(R.id.lineChart);
         paint = new Paint();
@@ -171,6 +182,7 @@ public class EqualizerFragment extends Fragment {
                     textView = (TextView) view.findViewById(R.id.textView5);
                     break;
             }
+            seekBarFinal[i] = seekBar;
             seekBar.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(Color.parseColor("#FFA036"), PorterDuff.Mode.SRC_IN));
             seekBar.setId(i);
 //            seekBar.setLayoutParams(layoutParams);
@@ -210,6 +222,9 @@ public class EqualizerFragment extends Fragment {
             seekBarRowLayout.addView(lowerEqualizerBandLevelTextView);
 
             mLinearLayout.addView(seekBarRowLayout);*/
+
+            equalizeSound();
+
         }
 
         paint.setColor(Color.parseColor("#555555"));
@@ -230,5 +245,43 @@ public class EqualizerFragment extends Fragment {
         chart.addData(dataset);
         chart.show();
 
+    }
+
+    public void equalizeSound() {
+        ArrayList<String> equalizerPresetNames = new ArrayList<>();
+        ArrayAdapter<String> equalizerPresetSpinnerAdapter = new ArrayAdapter<String>(HomeActivity.ctx,
+                R.layout.spinner_item,
+                equalizerPresetNames);
+        equalizerPresetSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        for (short i = 0; i < PlayerFragment.mEqualizer.getNumberOfPresets(); i++) {
+            equalizerPresetNames.add(PlayerFragment.mEqualizer.getPresetName(i));
+        }
+
+        presetSpinner.setAdapter(equalizerPresetSpinnerAdapter);
+        presetSpinner.setDropDownWidth((HomeActivity.screen_width * 3) / 4);
+
+        presetSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                PlayerFragment.mEqualizer.usePreset((short) position);
+
+                short numberOfFreqBands = PlayerFragment.mEqualizer.getNumberOfBands();
+
+                final short lowerEqualizerBandLevel = PlayerFragment.mEqualizer.getBandLevelRange()[0];
+
+                for (short i = 0; i < numberOfFreqBands; i++) {
+                    seekBarFinal[i].setProgress(PlayerFragment.mEqualizer.getBandLevel(i) - lowerEqualizerBandLevel);
+                    points[i] = PlayerFragment.mEqualizer.getBandLevel(i) - lowerEqualizerBandLevel;
+                    dataset.updateValues(points);
+                    chart.notifyDataUpdate();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 }

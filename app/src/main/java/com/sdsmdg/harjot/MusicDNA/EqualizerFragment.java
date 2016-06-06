@@ -96,7 +96,7 @@ public class EqualizerFragment extends Fragment {
         });
 
         mLinearLayout = (LinearLayout) view.findViewById(R.id.equalizerContainer);
-        mLinearLayout.setOrientation(LinearLayout.VERTICAL);
+//        mLinearLayout.setOrientation(LinearLayout.VERTICAL);
 
         TextView equalizerHeading = new TextView(HomeActivity.ctx);
         equalizerHeading.setText("Equalizer");
@@ -120,15 +120,15 @@ public class EqualizerFragment extends Fragment {
             frequencyHeaderTextView.setGravity(Gravity.CENTER_HORIZONTAL);
             frequencyHeaderTextView.setTextColor(Color.parseColor("#FFFFFF"));
             frequencyHeaderTextView.setText((PlayerFragment.mEqualizer.getCenterFreq(equalizerBandIndex) / 1000) + "Hz");
-            mLinearLayout.addView(frequencyHeaderTextView);
+//            mLinearLayout.addView(frequencyHeaderTextView);
 
             LinearLayout seekBarRowLayout = new LinearLayout(HomeActivity.ctx);
-            seekBarRowLayout.setOrientation(LinearLayout.HORIZONTAL);
+            seekBarRowLayout.setOrientation(LinearLayout.VERTICAL);
 
             TextView lowerEqualizerBandLevelTextView = new TextView(HomeActivity.ctx);
             lowerEqualizerBandLevelTextView.setLayoutParams(new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
+                    ViewGroup.LayoutParams.MATCH_PARENT
             ));
             lowerEqualizerBandLevelTextView.setTextColor(Color.parseColor("#FFFFFF"));
             lowerEqualizerBandLevelTextView.setText((lowerEqualizerBandLevel / 100) + "dB");
@@ -148,10 +148,37 @@ public class EqualizerFragment extends Fragment {
             layoutParams.weight = 1;
 
             SeekBar seekBar = new SeekBar(HomeActivity.ctx);
+            TextView textView = new TextView(HomeActivity.ctx);
+            switch (i) {
+                case 0:
+                    seekBar = (SeekBar) view.findViewById(R.id.seekBar1);
+                    textView = (TextView) view.findViewById(R.id.textView1);
+                    break;
+                case 1:
+                    seekBar = (SeekBar) view.findViewById(R.id.seekBar2);
+                    textView = (TextView) view.findViewById(R.id.textView2);
+                    break;
+                case 2:
+                    seekBar = (SeekBar) view.findViewById(R.id.seekBar3);
+                    textView = (TextView) view.findViewById(R.id.textView3);
+                    break;
+                case 3:
+                    seekBar = (SeekBar) view.findViewById(R.id.seekBar4);
+                    textView = (TextView) view.findViewById(R.id.textView4);
+                    break;
+                case 4:
+                    seekBar = (SeekBar) view.findViewById(R.id.seekBar5);
+                    textView = (TextView) view.findViewById(R.id.textView5);
+                    break;
+            }
             seekBar.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(Color.parseColor("#FFA036"), PorterDuff.Mode.SRC_IN));
             seekBar.setId(i);
-            seekBar.setLayoutParams(layoutParams);
+//            seekBar.setLayoutParams(layoutParams);
             seekBar.setMax(upperEqualizerBandLevel - lowerEqualizerBandLevel);
+
+            textView.setText(frequencyHeaderTextView.getText());
+            textView.setTextColor(Color.WHITE);
+            textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
             points[i] = PlayerFragment.mEqualizer.getBandLevel(equalizerBandIndex) - lowerEqualizerBandLevel;
 
@@ -178,24 +205,25 @@ public class EqualizerFragment extends Fragment {
                 }
             });
 
-            seekBarRowLayout.addView(lowerEqualizerBandLevelTextView);
+            /*seekBarRowLayout.addView(upperEqualizerBandLevelTextView);
             seekBarRowLayout.addView(seekBar);
-            seekBarRowLayout.addView(upperEqualizerBandLevelTextView);
+            seekBarRowLayout.addView(lowerEqualizerBandLevelTextView);
 
-            mLinearLayout.addView(seekBarRowLayout);
+            mLinearLayout.addView(seekBarRowLayout);*/
         }
 
         paint.setColor(Color.parseColor("#555555"));
-        paint.setStrokeWidth(2 * HomeActivity.ratio);
+        paint.setStrokeWidth((float) (1.33 * HomeActivity.ratio));
 
         dataset.setColor(Color.parseColor("#FFA036"));
         dataset.setSmooth(true);
+        dataset.setThickness(5);
 
         chart.setXAxis(false);
         chart.setYAxis(false);
 
         chart.setYLabels(AxisController.LabelPosition.NONE);
-        chart.setGrid(ChartView.GridType.HORIZONTAL, 7, 1, paint);
+        chart.setGrid(ChartView.GridType.FULL, 7, 10, paint);
 
         chart.setAxisBorderValues(-300, 3300);
 

@@ -15,7 +15,7 @@
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/save_queue"
         android:clickable="true"
-        app:backgroundTint="#111111"
+        app:backgroundTint="#333333"
         android:tint="#FFA036"
         app:borderWidth="0dp"
         app:elevation="6dp"

@@ -62,7 +62,7 @@ public class AnalogController extends View {
         circlePaint2.setStyle(Paint.Style.FILL);
         linePaint = new Paint();
         linePaint.setColor(Color.parseColor("#FFA036"));
-        linePaint.setStrokeWidth(7);
+        linePaint.setStrokeWidth(7 * HomeActivity.ratio);
         angle = "0.0";
         label = "Label";
     }

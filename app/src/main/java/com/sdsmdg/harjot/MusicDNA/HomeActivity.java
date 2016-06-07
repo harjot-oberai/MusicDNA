@@ -40,6 +40,8 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Pair;
@@ -183,7 +185,7 @@ public class HomeActivity extends AppCompatActivity
 
     static boolean queueCall = false;
 
-    static boolean isDNAavailable = false;
+    boolean wasMediaPlayerPlaying = false;
 
     static float max_max = Float.MIN_VALUE;
     static float min_min = Float.MAX_VALUE;
@@ -195,6 +197,8 @@ public class HomeActivity extends AppCompatActivity
     DrawerLayout drawer;
 
     static NotificationManager notificationManager;
+
+    PhoneStateListener phoneStateListener;
 
     LocalTracksHorizontalAdapter adapter;
     StreamTracksHorizontalAdapter sAdapter;
@@ -539,6 +543,39 @@ public class HomeActivity extends AppCompatActivity
 
         getSupportActionBar().setShowHideAnimationEnabled(true);
 
+        phoneStateListener = new PhoneStateListener() {
+            @Override
+            public void onCallStateChanged(int state, String incomingNumber) {
+                if (state == TelephonyManager.CALL_STATE_RINGING) {
+                    //Incoming call: Pause music
+                    if (PlayerFragment.mMediaPlayer != null && PlayerFragment.mMediaPlayer.isPlaying()) {
+                        wasMediaPlayerPlaying = true;
+                        PlayerFragment.togglePlayPause();
+                    } else {
+                        wasMediaPlayerPlaying = false;
+                    }
+                } else if (state == TelephonyManager.CALL_STATE_IDLE) {
+                    //Not in call: Play music
+                    if (PlayerFragment.mMediaPlayer != null && !PlayerFragment.mMediaPlayer.isPlaying() && wasMediaPlayerPlaying) {
+                        PlayerFragment.togglePlayPause();
+                    }
+                } else if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
+                    //A call is dialing, active or on hold
+                    if (PlayerFragment.mMediaPlayer != null && PlayerFragment.mMediaPlayer.isPlaying()) {
+                        wasMediaPlayerPlaying = true;
+                        PlayerFragment.togglePlayPause();
+                    } else {
+                        wasMediaPlayerPlaying = false;
+                    }
+                }
+                super.onCallStateChanged(state, incomingNumber);
+            }
+        };
+        TelephonyManager mgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+        if (mgr != null) {
+            mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+        }
+
         mPrefs = getPreferences(MODE_PRIVATE);
 
         appBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
@@ -550,7 +587,7 @@ public class HomeActivity extends AppCompatActivity
         screen_width = display.getWidth();
         screen_height = display.getHeight();
 
-        recentBtn = (Button) findViewById(R.id.recent_btn);
+        /*recentBtn = (Button) findViewById(R.id.recent_btn);
         playlistBtn = (Button) findViewById(R.id.playlist_btn);
         favBtn = (Button) findViewById(R.id.fav_btn);
 
@@ -622,7 +659,7 @@ public class HomeActivity extends AppCompatActivity
                     playlistBtn.setBackgroundColor(Color.WHITE);
                 playlistBtn.setTextColor(Color.parseColor("#3F334D"));
             }
-        });
+        });*/
 
         ratio = (float) screen_height / (float) 1920;
         ratio2 = (float) screen_width / (float) 1080;
@@ -2510,6 +2547,10 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        TelephonyManager mgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+        if (mgr != null) {
+            mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE);
+        }
     }
 
     @Override

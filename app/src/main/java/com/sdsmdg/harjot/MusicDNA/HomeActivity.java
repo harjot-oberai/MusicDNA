@@ -587,80 +587,6 @@ public class HomeActivity extends AppCompatActivity
         screen_width = display.getWidth();
         screen_height = display.getHeight();
 
-        /*recentBtn = (Button) findViewById(R.id.recent_btn);
-        playlistBtn = (Button) findViewById(R.id.playlist_btn);
-        favBtn = (Button) findViewById(R.id.fav_btn);
-
-        recentBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Build.VERSION.SDK_INT >= 21)
-                    recentBtn.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#3F334D")));
-                else
-                    recentBtn.setBackgroundColor(Color.parseColor("#3F334D"));
-                recentBtn.setTextColor(Color.WHITE);
-
-                if (Build.VERSION.SDK_INT >= 21)
-                    playlistBtn.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
-                else
-                    playlistBtn.setBackgroundColor(Color.WHITE);
-                playlistBtn.setTextColor(Color.parseColor("#3F334D"));
-
-                if (Build.VERSION.SDK_INT >= 21)
-                    favBtn.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
-                else
-                    favBtn.setBackgroundColor(Color.WHITE);
-                favBtn.setTextColor(Color.parseColor("#3F334D"));
-
-            }
-        });
-
-        playlistBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Build.VERSION.SDK_INT >= 21)
-                    playlistBtn.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#3F334D")));
-                else
-                    playlistBtn.setBackgroundColor(Color.parseColor("#3F334D"));
-                playlistBtn.setTextColor(Color.WHITE);
-
-                if (Build.VERSION.SDK_INT >= 21)
-                    recentBtn.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
-                else
-                    recentBtn.setBackgroundColor(Color.WHITE);
-                recentBtn.setTextColor(Color.parseColor("#3F334D"));
-
-                if (Build.VERSION.SDK_INT >= 21)
-                    favBtn.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
-                else
-                    favBtn.setBackgroundColor(Color.WHITE);
-                favBtn.setTextColor(Color.parseColor("#3F334D"));
-            }
-        });
-
-        favBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Build.VERSION.SDK_INT >= 21)
-                    favBtn.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#3F334D")));
-                else
-                    favBtn.setBackgroundColor(Color.parseColor("#3F334D"));
-                favBtn.setTextColor(Color.WHITE);
-
-                if (Build.VERSION.SDK_INT >= 21)
-                    recentBtn.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
-                else
-                    recentBtn.setBackgroundColor(Color.WHITE);
-                recentBtn.setTextColor(Color.parseColor("#3F334D"));
-
-                if (Build.VERSION.SDK_INT >= 21)
-                    playlistBtn.setBackgroundTintList(ColorStateList.valueOf(Color.WHITE));
-                else
-                    playlistBtn.setBackgroundColor(Color.WHITE);
-                playlistBtn.setTextColor(Color.parseColor("#3F334D"));
-            }
-        });*/
-
         ratio = (float) screen_height / (float) 1920;
         ratio2 = (float) screen_width / (float) 1080;
         ratio = Math.min(ratio, ratio2);
@@ -1117,7 +1043,7 @@ public class HomeActivity extends AppCompatActivity
             @Override
             boolean onLongClick(RecyclerView parent, View view, final int position, long id) {
                 PopupMenu popup = new PopupMenu(ctx, view);
-                popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
+                popup.getMenuInflater().inflate(R.menu.popup_local, popup.getMenu());
 
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
@@ -1182,6 +1108,9 @@ public class HomeActivity extends AppCompatActivity
                         if (item.getTitle().equals("Add to Favourites")) {
                             UnifiedTrack ut = new UnifiedTrack(true, finalLocalSearchResultList.get(position), null);
                             addToFavourites(ut);
+                        }
+                        if (item.getTitle().equals("Share")) {
+                            shareLocalSong(finalLocalSearchResultList.get(position).getPath());
                         }
                         return true;
                     }
@@ -3102,6 +3031,18 @@ public class HomeActivity extends AppCompatActivity
                 deleteRecursive(child);
 
         fileOrDirectory.delete();
+    }
+
+    public static void shareLocalSong(String path) {
+        Uri contentUri = Uri.parse("file:///" + path);
+
+        if (contentUri != null) {
+            Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.setType("audio/*");
+            shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+            main.startActivity(Intent.createChooser(shareIntent, "Choose an app"));
+        }
     }
 
 }

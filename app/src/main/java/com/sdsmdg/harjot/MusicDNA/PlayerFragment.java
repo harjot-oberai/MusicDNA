@@ -610,15 +610,14 @@ public class PlayerFragment extends Fragment {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                startTrack = System.currentTimeMillis();
                 isTracking = true;
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                endTrack = System.currentTimeMillis();
                 mMediaPlayer.seekTo(seekBar.getProgress());
-                mMediaPlayer.start();
+                if (mMediaPlayer.isPlaying())
+                    mMediaPlayer.start();
                 isTracking = false;
             }
 

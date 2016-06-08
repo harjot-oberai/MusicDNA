@@ -97,7 +97,7 @@ public class LocalMusicFragment extends Fragment {
             @Override
             boolean onLongClick(RecyclerView parent, View view, final int position, long id) {
                 PopupMenu popup = new PopupMenu(HomeActivity.ctx, view);
-                popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
+                popup.getMenuInflater().inflate(R.menu.popup_local, popup.getMenu());
 
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
@@ -161,6 +161,9 @@ public class LocalMusicFragment extends Fragment {
                         if (item.getTitle().equals("Add to Favourites")) {
                             UnifiedTrack ut = new UnifiedTrack(true, HomeActivity.finalLocalSearchResultList.get(position), null);
                             HomeActivity.addToFavourites(ut);
+                        }
+                        if (item.getTitle().equals("Share")) {
+                            HomeActivity.shareLocalSong(HomeActivity.finalLocalSearchResultList.get(position).getPath());
                         }
                         return true;
                     }

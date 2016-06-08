@@ -309,6 +309,7 @@ public class PlayerFragment extends Fragment {
                 mCallback4.onEqualizerClicked();
             }
         });
+        equalizerIcon.setVisibility(View.INVISIBLE);
 
         saveDNAToggle = (ImageView) view.findViewById(R.id.toggleSaveDNA);
         if (HomeActivity.isSaveDNAEnabled) {
@@ -391,6 +392,9 @@ public class PlayerFragment extends Fragment {
                 togglePlayPause();
                 togglePlayPause();
                 togglePlayPause();
+
+                equalizerIcon.setVisibility(View.VISIBLE);
+
             }
         });
 
@@ -710,6 +714,7 @@ public class PlayerFragment extends Fragment {
             saveDNAToggle.setImageResource(R.drawable.ic_download);
         }
 
+        equalizerIcon.setVisibility(View.INVISIBLE);
 
         track = HomeActivity.selectedTrack;
         localTrack = HomeActivity.localSelectedTrack;

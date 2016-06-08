@@ -233,7 +233,7 @@ public class HomeActivity extends AppCompatActivity
     static Toolbar toolbar;
     static Toolbar spToolbar;
 
-    static Activity main;
+    public static Activity main;
 
     static float seekBarColor;
 

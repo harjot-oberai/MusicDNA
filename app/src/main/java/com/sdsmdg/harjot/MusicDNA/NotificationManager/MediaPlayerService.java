@@ -82,7 +82,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
     private void buildNotification(Notification.Action action) {
 
         Notification.MediaStyle style = new Notification.MediaStyle();
-        style.setShowActionsInCompactView(0, 1, 2);
+        style.setShowActionsInCompactView(new int[]{1});
         style.setMediaSession(m_objMediaSession.getSessionToken());
 
         Intent intent = new Intent(getApplicationContext(), MediaPlayerService.class);
@@ -100,13 +100,13 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
         PendingIntent pendingNotificationIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 
         Notification notification = new Notification.Builder(this)
-                .setVisibility(Notification.VISIBILITY_PUBLIC)
+                .setStyle(style)
                 .setSmallIcon(R.drawable.ic_default)
+                .setVisibility(Notification.VISIBILITY_PUBLIC)
                 .setDeleteIntent(pendingIntent)
                 .addAction(generateAction(android.R.drawable.ic_media_previous, "Previous", Constants.ACTION_PREVIOUS))
                 .addAction(action)
                 .addAction(generateAction(android.R.drawable.ic_media_next, "Next", Constants.ACTION_NEXT))
-                .setStyle(style)
                 .setContentTitle(PlayerFragment.selected_track_title.getText())
                 .setContentText(artist)
                 .setLargeIcon(((BitmapDrawable) PlayerFragment.selected_track_image.getDrawable()).getBitmap())

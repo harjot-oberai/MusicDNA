@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.widget.ImageView;
 
+import com.sdsmdg.harjot.MusicDNA.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.R;
 
 import java.io.File;
@@ -45,9 +46,9 @@ public class ImageLoader {
     public void DisplayImage(String url, ImageView imageView) {
         imageViews.put(imageView, url);
         Bitmap bitmap = memoryCache.get(url);
-        if (bitmap != null)
+        if (bitmap != null) {
             imageView.setImageBitmap(bitmap);
-        else {
+        } else {
             queuePhoto(url, imageView);
             imageView.setImageResource(stub_id);
         }
@@ -153,13 +154,25 @@ public class ImageLoader {
         public void run() {
             if (imageViewReused(photoToLoad))
                 return;
-            Bitmap bmp = getBitmap(photoToLoad.url);
+            final Bitmap bmp = getBitmap(photoToLoad.url);
             memoryCache.put(photoToLoad.url, bmp);
-            if (imageViewReused(photoToLoad))
+            if (imageViewReused(photoToLoad)) {
                 return;
-            BitmapDisplayer bd = new BitmapDisplayer(bmp, photoToLoad);
-            Activity a = (Activity) photoToLoad.imageView.getContext();
-            a.runOnUiThread(bd);
+            }
+            Activity a = HomeActivity.main;
+            a.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (imageViewReused(photoToLoad)) {
+                        return;
+                    }
+                    if (bmp != null) {
+                        photoToLoad.imageView.setImageBitmap(bmp);
+                    } else {
+                        photoToLoad.imageView.setImageResource(stub_id);
+                    }
+                }
+            });
         }
     }
 
@@ -180,13 +193,16 @@ public class ImageLoader {
             photoToLoad = p;
         }
 
+        @Override
         public void run() {
-            if (imageViewReused(photoToLoad))
+            if (imageViewReused(photoToLoad)) {
                 return;
-            if (bitmap != null)
+            }
+            if (bitmap != null) {
                 photoToLoad.imageView.setImageBitmap(bitmap);
-            else
+            } else {
                 photoToLoad.imageView.setImageResource(stub_id);
+            }
         }
     }
 

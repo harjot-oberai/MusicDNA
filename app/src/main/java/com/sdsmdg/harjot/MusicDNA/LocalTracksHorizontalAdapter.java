@@ -62,40 +62,11 @@ public class LocalTracksHorizontalAdapter extends RecyclerView.Adapter<LocalTrac
         holder.artist.setTextColor(Color.parseColor("#777777"));
         holder.title.setText(localTrack.getTitle());
         holder.artist.setText(localTrack.getArtist());
-
     }
 
     @Override
     public int getItemCount() {
         return localList.size();
-    }
-
-    public static Bitmap getAlbumArt(String path) {
-        android.media.MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-        mmr.setDataSource(path);
-        Bitmap bitmap = null;
-
-        byte[] data = mmr.getEmbeddedPicture();
-        if (data != null) {
-            bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-            return bitmap;
-        } else {
-            return null;
-        }
-    }
-
-    int ContrastColor(Color color) {
-        int d = 0;
-
-        // Counting the perceptive luminance - human eye favors green color...
-        double a = 1 - (0.299 * color.RED + 0.587 * color.GREEN + 0.114 * color.BLUE) / 255;
-
-        if (a < 0.5)
-            d = 0; // bright colors - black font
-        else
-            d = 255; // dark colors - white font
-
-        return Color.rgb(d, d, d);
     }
 
 }

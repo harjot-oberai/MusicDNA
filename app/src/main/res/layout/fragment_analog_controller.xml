@@ -1,15 +1,24 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="#000000"
     android:clickable="true"
     tools:context="com.sdsmdg.harjot.MusicDNA.AnalogControllerFragment">
 
-    <com.sdsmdg.harjot.MusicDNA.CustomImageHolder
-        android:id="@+id/cih"
-        android:background="#000000"
+    <ImageView
+        android:src="@drawable/dna_splash"
+        android:layout_above="@+id/linearBottom"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
-</FrameLayout>
+    <com.sdsmdg.harjot.MusicDNA.CustomImageHolder
+        android:id="@+id/cih"
+        android:layout_above="@+id/linearBottom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <View
+        android:id="@+id/linearBottom"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"></View>
+</RelativeLayout>

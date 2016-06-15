@@ -2,7 +2,7 @@
     android:id="@+id/toolBar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/player_back"
+    android:background="#000"
     android:clickable="true"
     android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar"
     android:visibility="visible">

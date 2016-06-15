@@ -9,7 +9,9 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.MediaMetadata;
 import android.media.Rating;
+import android.media.session.PlaybackState;
 import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
@@ -32,6 +34,7 @@ import android.media.session.MediaSessionManager;
 import android.os.IBinder;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.sdsmdg.harjot.MusicDNA.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.PlayerFragment;
@@ -82,7 +85,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
     private void buildNotification(Notification.Action action) {
 
         Notification.MediaStyle style = new Notification.MediaStyle();
-        style.setShowActionsInCompactView(new int[]{1});
+        style.setShowActionsInCompactView(1);
         style.setMediaSession(m_objMediaSession.getSessionToken());
 
         Intent intent = new Intent(getApplicationContext(), MediaPlayerService.class);
@@ -114,9 +117,12 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
 
         notification.contentIntent = pendingNotificationIntent;
         notification.priority = Notification.PRIORITY_MAX;
+//        notification.flags |= Notification.FLAG_ONGOING_EVENT;
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(1, notification);
+
+//        updateMediaSession();
 
     }
 
@@ -180,22 +186,76 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    void updateMediaSession() {
+        m_objMediaSession.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS | MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);
+
+        MediaMetadata.Builder metadataBuilder = new MediaMetadata.Builder();
+        if (PlayerFragment.localIsPlaying) {
+            metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, PlayerFragment.localTrack.getTitle());
+            metadataBuilder.putString(MediaMetadata.METADATA_KEY_ARTIST, PlayerFragment.localTrack.getArtist());
+        } else {
+            metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, PlayerFragment.track.getTitle());
+            metadataBuilder.putString(MediaMetadata.METADATA_KEY_ARTIST, "");
+        }
+        if (((BitmapDrawable) PlayerFragment.selected_track_image.getDrawable()).getBitmap() != null) {
+
+            metadataBuilder.putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART, ((BitmapDrawable) PlayerFragment.selected_track_image.getDrawable()).getBitmap());
+        }
+
+        m_objMediaSession.setMetadata(metadataBuilder.build());
+        PlaybackState.Builder stateBuilder = new PlaybackState.Builder();
+        stateBuilder.setActions(PlaybackState.ACTION_PLAY | PlaybackState.ACTION_PLAY_PAUSE | PlaybackState.ACTION_PAUSE | PlaybackState.ACTION_REWIND | PlaybackState.ACTION_FAST_FORWARD);
+        stateBuilder.setState(!PlayerFragment.mMediaPlayer.isPlaying() ? PlaybackState.STATE_PAUSED : PlaybackState.STATE_PLAYING, PlaybackState.PLAYBACK_POSITION_UNKNOWN, 1.0f);
+        m_objMediaSession.setPlaybackState(stateBuilder.build());
+        m_objMediaSession.setActive(true);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void initMediaSessions() {
 
         PlayerFragment.mCallback7 = this;
         m_objMediaPlayer = PlayerFragment.mMediaPlayer;
         m_objMediaSessionManager = (MediaSessionManager) getSystemService(Context.MEDIA_SESSION_SERVICE);
         m_objMediaSession = new MediaSession(getApplicationContext(), "sample session");
-        m_objMediaController = new MediaController(getApplicationContext(), m_objMediaSession.getSessionToken());
+
+        m_objMediaSession.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS | MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);
+
+        /*MediaMetadata.Builder metadataBuilder = new MediaMetadata.Builder();
+        if (PlayerFragment.localIsPlaying) {
+            if (PlayerFragment.localTrack != null) {
+                metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, PlayerFragment.localTrack.getTitle());
+                metadataBuilder.putString(MediaMetadata.METADATA_KEY_ARTIST, PlayerFragment.localTrack.getArtist());
+            }
+        } else {
+            if (PlayerFragment.track != null) {
+                metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, PlayerFragment.track.getTitle());
+                metadataBuilder.putString(MediaMetadata.METADATA_KEY_ARTIST, "");
+            }
+        }
+        if (PlayerFragment.selected_track_image != null) {
+            if (((BitmapDrawable) PlayerFragment.selected_track_image.getDrawable()).getBitmap() != null) {
+                metadataBuilder.putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART, ((BitmapDrawable) PlayerFragment.selected_track_image.getDrawable()).getBitmap());
+            }
+        }
+
+
+        m_objMediaSession.setMetadata(metadataBuilder.build());
+        PlaybackState.Builder stateBuilder = new PlaybackState.Builder();
+        stateBuilder.setActions(PlaybackState.ACTION_PLAY | PlaybackState.ACTION_PLAY_PAUSE | PlaybackState.ACTION_PAUSE | PlaybackState.ACTION_FAST_FORWARD | PlaybackState.ACTION_REWIND);
+        stateBuilder.setState(!PlayerFragment.mMediaPlayer.isPlaying() ? PlaybackState.STATE_PAUSED : PlaybackState.STATE_PLAYING, PlaybackState.PLAYBACK_POSITION_UNKNOWN, 1.0f);
+        m_objMediaSession.setPlaybackState(stateBuilder.build());*/
+
         m_objMediaSession.setActive(true);
-        m_objMediaSession.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS);
-        m_objMediaSession.setCallback(new Callback() {
+        m_objMediaController = m_objMediaSession.getController();
+        m_objMediaSession.setCallback(new MediaSession.Callback() {
+
             @Override
             public void onPlay() {
                 super.onPlay();
-                Log.e(Constants.LOG_TAG, "onPlay");
-                if (!PlayerFragment.isStart)
+                Log.d(Constants.LOG_TAG, "onPlay");
+                if (!PlayerFragment.isStart) {
                     PlayerFragment.togglePlayPause();
+                }
                 PlayerFragment.isStart = false;
                 buildNotification(generateAction(android.R.drawable.ic_media_pause, "Pause", Constants.ACTION_PAUSE));
             }
@@ -203,7 +263,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
             @Override
             public void onPause() {
                 super.onPause();
-                Log.e(Constants.LOG_TAG, "onPause");
+                Log.d(Constants.LOG_TAG, "onPause");
                 PlayerFragment.togglePlayPause();
                 buildNotification(generateAction(android.R.drawable.ic_media_play, "Play", Constants.ACTION_PLAY));
             }
@@ -211,7 +271,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
             @Override
             public void onSkipToNext() {
                 super.onSkipToNext();
-                Log.e(Constants.LOG_TAG, "onSkipToNext");
+                Log.d(Constants.LOG_TAG, "onSkipToNext");
                 PlayerFragment.mCallback2.onComplete();
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -225,7 +285,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
             @Override
             public void onSkipToPrevious() {
                 super.onSkipToPrevious();
-                Log.e(Constants.LOG_TAG, "onSkipToPrevious");
+                Log.d(Constants.LOG_TAG, "onSkipToPrevious");
                 PlayerFragment.mCallback3.onPreviousTrack();
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -239,13 +299,29 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
             @Override
             public void onFastForward() {
                 super.onFastForward();
-                Log.e(Constants.LOG_TAG, "onFastForward");
+                Log.d(Constants.LOG_TAG, "onFastForward");
+                PlayerFragment.mCallback2.onComplete();
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        buildNotification(generateAction(android.R.drawable.ic_media_pause, "Pause", Constants.ACTION_PAUSE));
+                    }
+                }, 100);
             }
 
             @Override
             public void onRewind() {
                 super.onRewind();
-                Log.e(Constants.LOG_TAG, "onRewind");
+                Log.d(Constants.LOG_TAG, "onRewind");
+                PlayerFragment.mCallback3.onPreviousTrack();
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        buildNotification(generateAction(android.R.drawable.ic_media_pause, "Pause", Constants.ACTION_PAUSE));
+                    }
+                }, 100);
             }
 
             @Override
@@ -269,7 +345,6 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
                 super.onSetRating(rating);
             }
         });
-
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

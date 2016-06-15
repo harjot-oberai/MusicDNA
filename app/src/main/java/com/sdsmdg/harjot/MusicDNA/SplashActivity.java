@@ -28,23 +28,27 @@ public class SplashActivity extends AppCompatActivity {
     boolean perm4 = false;
     boolean perm5 = false;
 
+    CustomImageHolder cih;
+
     static Typeface tf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        cih = (CustomImageHolder) findViewById(R.id.splash_cih);
 
         tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Regular.ttf");
-        TextView tx = (TextView) findViewById(R.id.splash_text);
-        tx.setTypeface(tf);
+//        TextView tx = (TextView) findViewById(R.id.splash_text);
+//        tx.setTypeface(tf);
 
-        TextView tx2 = (TextView) findViewById(R.id.text_soundcloud);
-        tx2.setTypeface(tf);
+//        TextView tx2 = (TextView) findViewById(R.id.text_soundcloud);
+//        tx2.setTypeface(tf);
 
         if (Build.VERSION.SDK_INT >= 23) {
             requestPermissions();
         } else {
+            cih.start();
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
@@ -53,7 +57,7 @@ public class SplashActivity extends AppCompatActivity {
                     startActivity(i);
                     finish();
                 }
-            }, 3000);
+            }, 2300);
         }
     }
 
@@ -76,6 +80,7 @@ public class SplashActivity extends AppCompatActivity {
                     perm2 = true;
                     Toast.makeText(SplashActivity.this, "two", Toast.LENGTH_SHORT).show();
                     if (perm2 && perm4 && perm5) {
+                        cih.start();
                         final Handler handler = new Handler();
                         handler.postDelayed(new Runnable() {
                             @Override
@@ -84,7 +89,7 @@ public class SplashActivity extends AppCompatActivity {
                                 startActivity(i);
                                 finish();
                             }
-                        }, 3000);
+                        }, 2300);
                     }
                 } else {
                 }
@@ -212,6 +217,7 @@ public class SplashActivity extends AppCompatActivity {
         }
 
         if (perm2 && perm4 && perm5) {
+            cih.start();
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
@@ -220,7 +226,7 @@ public class SplashActivity extends AppCompatActivity {
                     startActivity(i);
                     finish();
                 }
-            }, 3000);
+            }, 2300);
         }
 
     }

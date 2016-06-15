@@ -2,6 +2,9 @@ package com.sdsmdg.harjot.MusicDNA;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
@@ -11,20 +14,32 @@ import android.view.View;
  */
 public class CustomImageHolder extends View {
 
-    Drawable d1, d2, d3, d4;
     int width, height;
-    boolean isReady = false;
+    int startAngle = 270, sweepAngle = 360;
+    Paint paint;
+    float radius;
+    int midX, midY;
+    boolean isStarted = false;
 
     public CustomImageHolder(Context context) {
         super(context);
+        init();
     }
 
     public CustomImageHolder(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init();
     }
 
     public CustomImageHolder(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init();
+    }
+
+    public void init() {
+        paint = new Paint();
+        paint.setColor(Color.BLACK);
+        paint.setStyle(Paint.Style.FILL);
     }
 
     @Override
@@ -32,65 +47,27 @@ public class CustomImageHolder extends View {
         super.onDraw(canvas);
         width = canvas.getWidth();
         height = canvas.getHeight();
+        radius = (float) width / (float) 2.0;
+        midX = width / 2;
+        midY = height / 2;
+        if (isStarted) {
+            RectF oval = new RectF();
+            oval.set(midX - radius, midY - radius, midX + radius, midY + radius);
+            canvas.drawArc(oval, startAngle, sweepAngle, true, paint);
 
-        Drawable d = getResources().getDrawable(R.drawable.ic_default);
-
-        int x = Math.min(width, height);
-
-        if (isReady) {
-            d1.setBounds(width / 2 - x / 2, height / 2 - x / 2, width / 2, height / 2);
-            d1.draw(canvas);
-
-            d2.setBounds(width / 2, height / 2 - x / 2, width / 2 + x / 2, height / 2);
-            d2.draw(canvas);
-
-            d3.setBounds(width / 2 - x / 2, height / 2, width / 2, height / 2 + x / 2);
-            d3.draw(canvas);
-
-            d4.setBounds(width / 2, height / 2, width / 2 + x / 2, height / 2 + x / 2);
-            d4.draw(canvas);
-        } else {
-            d.setBounds(width / 2 - x / 2, height / 2 - x / 2, width / 2, height / 2);
-            d.draw(canvas);
-
-            d.setBounds(width / 2, height / 2 - x / 2, width / 2 + x / 2, height / 2);
-            d.draw(canvas);
-
-            d.setBounds(width / 2 - x / 2, height / 2, width / 2, height / 2 + x / 2);
-            d.draw(canvas);
-
-            d.setBounds(width / 2, height / 2, width / 2 + x / 2, height / 2 + x / 2);
-            d.draw(canvas);
+            if (sweepAngle > 0) {
+                startAngle += 3;
+                if (startAngle > 359) {
+                    startAngle -= 360;
+                }
+                sweepAngle -= 3;
+                invalidate();
+            }
         }
-
-
     }
-
-    public void setDrawables(Drawable d1, Drawable d2, Drawable d3, Drawable d4) {
-        this.d1 = d1;
-        this.d2 = d2;
-        this.d3 = d3;
-        this.d4 = d4;
-
-        isReady = true;
-
+    public void start() {
+        isStarted = true;
         invalidate();
-
     }
 
-    public void setD1(Drawable d1) {
-        this.d1 = d1;
-    }
-
-    public void setD2(Drawable d2) {
-        this.d2 = d2;
-    }
-
-    public void setD3(Drawable d3) {
-        this.d3 = d3;
-    }
-
-    public void setD4(Drawable d4) {
-        this.d4 = d4;
-    }
 }

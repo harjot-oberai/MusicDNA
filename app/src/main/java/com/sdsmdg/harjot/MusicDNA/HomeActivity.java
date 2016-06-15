@@ -5,6 +5,8 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -137,6 +139,9 @@ public class HomeActivity extends AppCompatActivity
     public static List<LocalTrack> localTrackList = new ArrayList<>();
     public static List<LocalTrack> finalLocalSearchResultList = new ArrayList<>();
     public static List<Track> streamingTrackList = new ArrayList<>();
+
+    static float fftMax = 3000;
+    static float fftMin = 0;
 
     static float ratio, ratio2;
 
@@ -1562,6 +1567,20 @@ public class HomeActivity extends AppCompatActivity
 
     }
 
+    public void hideAppBarLayout(){
+        appBarLayout.animate()
+                .translationY(-1 * appBarLayout.getHeight())
+                .setDuration(300);
+        appBarLayout.setVisibility(View.GONE);
+    }
+
+    public void showAppBarLayout(){
+        appBarLayout.setVisibility(View.VISIBLE);
+        appBarLayout.animate()
+                .translationY(0)
+                .setDuration(300);
+    }
+
     public void hideTabs() {
         /*appBarLayout.animate()
                 .translationY(-1 * appBarLayout.getHeight())
@@ -1848,127 +1867,12 @@ public class HomeActivity extends AppCompatActivity
     }
 
     public static void updatePoints() {
-//        VisualizerView.outerRadius = (float) (Math.min(VisualizerView.width, VisualizerView.height) * 0.47);
-//        VisualizerView.normalizedPosition = ((float) ((System.currentTimeMillis() - PlayerFragment.startTime) + PlayerFragment.totalElapsedTime + PlayerFragment.deltaTime)) / (float) (PlayerFragment.durationInMilliSec);
-//        if (mBytes == null) {
-//            return;
-//        }
-//        VisualizerView.angle = (float) (Math.PI - VisualizerView.normalizedPosition * VisualizerView.TAU);
-//        Log.d("ANGLE", VisualizerView.angle + "");
-//        VisualizerView.color = 0;
-//        VisualizerView.lnDataDistance = 0;
-//        VisualizerView.distance = 0;
-//        VisualizerView.size = 0;
-//        VisualizerView.volume = 0;
-//        VisualizerView.power = 0;
-//
-//        float x, y;
-//
-//        int midx = (int) (VisualizerView.width / 2);
-//        int midy = (int) (VisualizerView.height / 2);
-//
-//        // calculate min and max amplitude for current byte array
-//        float max = Integer.MIN_VALUE, min = Integer.MAX_VALUE;
-//        for (int a = 16; a < (mBytes.length / 2); a++) {
-//            Log.d("BYTE", mBytes[a] + "");
-//            float amp = mBytes[(a * 2) + 0] * mBytes[(a * 2) + 0] + mBytes[(a * 2) + 1] * mBytes[(a * 2) + 1];
-//            if (amp > max) {
-//                max = amp;
-//            }
-//            if (amp < min) {
-//                min = amp;
-//            }
-//        }
-//
-//        Log.d("MAXMIN", max + ":" + min);
-//
-//        /**
-//         * Number Fishing is all that is used here to get the best looking DNA
-//         * Number fishing is HOW YOU WIN AT LIFE. -- paullewis :)
-//         * **/
-//
-//        for (int a = 16; a < (mBytes.length / 2); a++) {
-//            Log.d("BYTE", mBytes[a] + "");
-//            if (max <= 10.0) {
-//                break;
-//            }
-//
-//            // scale the amplitude to the range [0,1]
-//            float amp = mBytes[(a * 2) + 0] * mBytes[(a * 2) + 0] + mBytes[(a * 2) + 1] * mBytes[(a * 2) + 1];
-//            if (max != min)
-//                amp = (amp - min) / (max - min);
-//            else {
-//                amp = 0;
-//            }
-//
-//            VisualizerView.volume = ((float) amp);             // REDUNDANT :P
-//
-//            // converting polar to cartesian (distance calculated afterwards acts as radius for polar co-ords)
-//            x = (float) Math.sin(VisualizerView.angle);
-//            y = (float) Math.cos(VisualizerView.angle);
-//
-//            // filtering low amplitude
-//            if (VisualizerView.volume < 0.39) {
-//                continue;
-//            }
-//
-//            // color ( value of hue inn HSV ) calculated based on current progress of the song or audio clip
-//            VisualizerView.color = (float) (VisualizerView.normalizedPosition - 0.12 + Math.random() * 0.24);
-//            VisualizerView.color = Math.round(VisualizerView.color * 360);
-//            seekBarColor = (float) (VisualizerView.normalizedPosition);
-//            seekBarColor = Math.round(seekBarColor * 360);
-//
-//            // calculating distance from center ( 'r' in polar coordinates)
-//            VisualizerView.lnDataDistance = (float) ((Math.log(a - 4) / VisualizerView.LOG_MAX) - VisualizerView.BASE);
-//            VisualizerView.distance = VisualizerView.lnDataDistance * VisualizerView.outerRadius;
-//
-//            // size of the circle to be rendered at the calculated position
-//            VisualizerView.size = (float) (4.5 * VisualizerView.volume * VisualizerView.MAX_DOT_SIZE + Math.random() * 2);
-//
-//            // alpha also based on volume ( amplitude )
-//            VisualizerView.alpha = (float) (VisualizerView.volume * 0.09);
-//
-//            // final cartesian coordinates for drawing on canvas
-//            x = x * VisualizerView.distance;
-//            y = y * VisualizerView.distance;
-//
-//
-//            float[] hsv = new float[3];
-//            hsv[0] = VisualizerView.color;
-//            hsv[1] = (float) 0.8;
-//            hsv[2] = (float) 0.5;
-//
-//            // setting color of the Paint
-//            VisualizerView.mForePaint.setColor(Color.HSVToColor(hsv));
-//
-//            if (VisualizerView.size >= 15.0 && VisualizerView.size < 29.0) {
-//                VisualizerView.mForePaint.setAlpha(15);
-//            } else if (VisualizerView.size >= 29.0 && VisualizerView.size <= 60.0) {
-//                VisualizerView.mForePaint.setAlpha(9);
-//            } else if (VisualizerView.size > 60.0) {
-//                VisualizerView.mForePaint.setAlpha(0);
-//            } else {
-//                VisualizerView.mForePaint.setAlpha((int) (VisualizerView.alpha * 1000));
-//            }
-//
-//            // Setting alpha of the Paint
-//            //mForePaint.setAlpha((int) (alpha * 1000));
-//
-//            // Draw the circles at correct position
-//
-//
-//            // Add points and paint config to lists for redraw
-//            VisualizerView.pts.add(Pair.create(midx + x, midy + y));
-//            VisualizerView.ptPaint.add(Pair.create(VisualizerView.size, Pair.create(VisualizerView.mForePaint.getColor(), VisualizerView.mForePaint.getAlpha())));
-//        }
         PlayerFragment.mVisualizerView.outerRadius = (float) (Math.min(PlayerFragment.mVisualizerView.width, PlayerFragment.mVisualizerView.height) * 0.42);
-//        PlayerFragment.mVisualizerView.normalizedPosition = ((float) ((System.currentTimeMillis() - PlayerFragment.startTime) + PlayerFragment.totalElapsedTime + PlayerFragment.deltaTime)) / (float) (PlayerFragment.durationInMilliSec);
         PlayerFragment.mVisualizerView.normalizedPosition = ((float) (PlayerFragment.mMediaPlayer.getCurrentPosition()) / (float) (PlayerFragment.durationInMilliSec));
         if (mBytes == null) {
             return;
         }
         PlayerFragment.mVisualizerView.angle = (float) (Math.PI - PlayerFragment.mVisualizerView.normalizedPosition * PlayerFragment.mVisualizerView.TAU);
-        Log.d("ANGLE", PlayerFragment.mVisualizerView.angle + "");
         PlayerFragment.mVisualizerView.color = 0;
         PlayerFragment.mVisualizerView.lnDataDistance = 0;
         PlayerFragment.mVisualizerView.distance = 0;
@@ -2017,7 +1921,7 @@ public class HomeActivity extends AppCompatActivity
          * **/
 
         for (int a = 16; a < (mBytes.length / 2); a++) {
-            Log.d("BYTE", mBytes[a] + "");
+
             if (max <= 10.0) {
                 break;
             }
@@ -2030,14 +1934,23 @@ public class HomeActivity extends AppCompatActivity
                 amp = 0;
             }
 
-            PlayerFragment.mVisualizerView.volume = ((float) amp);             // REDUNDANT :P
+            /*amp = (amp - fftMin) / (fftMax - fftMin);
+            if (amp > 1) {
+                amp = 1;
+            } else if (amp < 0) {
+                amp = 0;
+            }*/
+
+            Log.d("AMP", amp + "");
+
+            PlayerFragment.mVisualizerView.volume = (amp);
 
             // converting polar to cartesian (distance calculated afterwards acts as radius for polar co-ords)
             x = (float) Math.sin(PlayerFragment.mVisualizerView.angle);
             y = (float) Math.cos(PlayerFragment.mVisualizerView.angle);
 
             // filtering low amplitude
-            if (PlayerFragment.mVisualizerView.volume < 0.85) {
+            if (PlayerFragment.mVisualizerView.volume < 0.77) {
                 continue;
             }
 
@@ -2071,8 +1984,8 @@ public class HomeActivity extends AppCompatActivity
             // setting color of the Paint
             PlayerFragment.mVisualizerView.mForePaint.setColor(Color.HSVToColor(hsv));
 
-            if (PlayerFragment.mVisualizerView.size >= 10.0 && PlayerFragment.mVisualizerView.size < 29.0) {
-                PlayerFragment.mVisualizerView.mForePaint.setAlpha(15);
+            if (PlayerFragment.mVisualizerView.size >= 8.0 && PlayerFragment.mVisualizerView.size < 29.0) {
+                PlayerFragment.mVisualizerView.mForePaint.setAlpha(80);
             } else if (PlayerFragment.mVisualizerView.size >= 29.0 && PlayerFragment.mVisualizerView.size <= 60.0) {
                 PlayerFragment.mVisualizerView.mForePaint.setAlpha(9);
             } else if (PlayerFragment.mVisualizerView.size > 60.0) {
@@ -2081,20 +1994,10 @@ public class HomeActivity extends AppCompatActivity
                 PlayerFragment.mVisualizerView.mForePaint.setAlpha((int) (PlayerFragment.mVisualizerView.alpha * 1000));
             }
 
-            // Setting alpha of the Paint
-            //mForePaint.setAlpha((int) (alpha * 1000));
-
-            // Draw the circles at correct position
-
-
             // Add points and paint config to lists for redraw
             PlayerFragment.mVisualizerView.pts.add(Pair.create(midx + x, midy + y));
             PlayerFragment.mVisualizerView.ptPaint.add(Pair.create(PlayerFragment.mVisualizerView.size, Pair.create(PlayerFragment.mVisualizerView.mForePaint.getColor(), PlayerFragment.mVisualizerView.mForePaint.getAlpha())));
         }
-    }
-
-    public static void updatePoints2() {
-
     }
 
     public boolean checkInDNAmodels(LocalTrack lt, Track t) {
@@ -2468,9 +2371,6 @@ public class HomeActivity extends AppCompatActivity
         prefsEditor.putString("isReloaded", json7);
 
         prefsEditor.commit();
-        File cachePath = new File(ctx.getCacheDir(), "images");
-        if (cachePath.exists())
-            deleteRecursive(cachePath);
     }
 
     @Override
@@ -2638,18 +2538,16 @@ public class HomeActivity extends AppCompatActivity
     public void showFragment(String type) {
 
         hideAllFrags();
-
         if (type.equals("local") && !isLocalVisible) {
             setTitle("Local");
             isLocalVisible = true;
-            android.app.FragmentManager fm = getFragmentManager();
-            LocalMusicFragment newFragment = new LocalMusicFragment();
-            LocalMusicFragment.mCallback = this;
+            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+            FullLocalMusicFragment newFragment = new FullLocalMusicFragment();
             fm.beginTransaction()
-                    .setCustomAnimations(R.animator.slide_up,
-                            R.animator.slide_down,
-                            R.animator.slide_up,
-                            R.animator.slide_down)
+//                    .setCustomAnimations(R.anim.slide_up,
+//                            R.anim.slide_down,
+//                            R.anim.slide_up,
+//                            R.anim.slide_down)
                     .add(R.id.fragContainer, newFragment, "local")
                     .show(newFragment)
                     .addToBackStack(null)
@@ -2813,8 +2711,8 @@ public class HomeActivity extends AppCompatActivity
     public void hideFragment(String type) {
         if (type.equals("local")) {
             isLocalVisible = false;
-            android.app.FragmentManager fm = getFragmentManager();
-            android.app.Fragment frag = fm.findFragmentByTag("local");
+            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+            android.support.v4.app.Fragment frag = fm.findFragmentByTag("local");
             if (frag != null) {
                 fm.beginTransaction()
                         .remove(frag)
@@ -3014,7 +2912,6 @@ public class HomeActivity extends AppCompatActivity
         Uri contentUri = FileProvider.getUriForFile(ctx, "com.sdsmdg.harjot.MusicDNA.fileprovider", newFile);
 
         if (contentUri != null) {
-
             Intent shareIntent = new Intent();
             shareIntent.setAction(Intent.ACTION_SEND);
             shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // temp permission for receiving app to read this file

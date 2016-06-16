@@ -21,3 +21,5 @@ Credits for combining audio and video [Piyush Mehrotra](https://github.com/hm98)
 <img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/dna2.jpg" width = "300">
 <img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/home.jpg" width = "300">
 <img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/equalizer.jpg" width = "300">
+<img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/album.jpg" width = "300">
+<img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/savedDNA.jpg" width = "300">

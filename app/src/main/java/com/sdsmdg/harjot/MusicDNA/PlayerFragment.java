@@ -164,7 +164,7 @@ public class PlayerFragment extends Fragment {
             if (HomeActivity.isPlayerVisible) {
                 mainTrackController.setImageResource(R.drawable.ic_play_arrow_white_48dp);
                 player_controller.setImageResource(R.drawable.ic_queue_music_white_48dp);
-                HomeActivity.playerControllerAB.setImageResource(R.drawable.ic_queue_music_white_48dp);
+//                HomeActivity.playerControllerAB.setImageResource(R.drawable.ic_queue_music_white_48dp);
             } else {
                 player_controller.setImageResource(R.drawable.ic_play_arrow_white_48dp);
                 mainTrackController.setImageResource(R.drawable.ic_play_arrow_white_48dp);
@@ -179,7 +179,7 @@ public class PlayerFragment extends Fragment {
                 if (HomeActivity.isPlayerVisible) {
                     mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
                     player_controller.setImageResource(R.drawable.ic_queue_music_white_48dp);
-                    HomeActivity.playerControllerAB.setImageResource(R.drawable.ic_queue_music_white_48dp);
+//                    HomeActivity.playerControllerAB.setImageResource(R.drawable.ic_queue_music_white_48dp);
                 } else {
                     mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
                     player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
@@ -384,7 +384,7 @@ public class PlayerFragment extends Fragment {
                 if (HomeActivity.isPlayerVisible) {
                     player_controller.setVisibility(View.VISIBLE);
                     player_controller.setImageResource(R.drawable.ic_queue_music_white_48dp);
-                    HomeActivity.playerControllerAB.setImageResource(R.drawable.ic_queue_music_white_48dp);
+//                    HomeActivity.playerControllerAB.setImageResource(R.drawable.ic_queue_music_white_48dp);
                 } else {
                     player_controller.setVisibility(View.VISIBLE);
                     player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
@@ -691,7 +691,7 @@ public class PlayerFragment extends Fragment {
         if (HomeActivity.isPlayerVisible) {
             player_controller.setVisibility(View.VISIBLE);
             player_controller.setImageResource(R.drawable.ic_queue_music_white_48dp);
-            HomeActivity.playerControllerAB.setImageResource(R.drawable.ic_queue_music_white_48dp);
+//            HomeActivity.playerControllerAB.setImageResource(R.drawable.ic_queue_music_white_48dp);
         } else {
             player_controller.setVisibility(View.VISIBLE);
             player_controller.setImageResource(R.drawable.ic_pause_white_48dp);

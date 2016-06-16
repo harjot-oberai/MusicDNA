@@ -33,7 +33,7 @@ public class AnalogControllerFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         cih = (CustomImageHolder) view.findViewById(R.id.cih);
 
-        cih.start();
+//        cih.start();
 
     }
 }

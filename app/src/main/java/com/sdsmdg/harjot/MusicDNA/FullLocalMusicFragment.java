@@ -46,9 +46,9 @@ public class FullLocalMusicFragment extends Fragment {
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         adapter = new MyPageAdapter(getChildFragmentManager());
-        adapter.addFragment(new LocalMusicFragment(), "Local");
-        adapter.addFragment(new AlbumFragment(),"Album");
-        adapter.addFragment(new ArtistFragment(),"Artist");
+        adapter.addFragment(new LocalMusicFragment(), "Songs");
+        adapter.addFragment(new AlbumFragment(), "Albums");
+        adapter.addFragment(new ArtistFragment(), "Artists");
 //        adapter.addFragment(new FolderContentFragment(),"folder");
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);

@@ -10,6 +10,8 @@ android {
         targetSdkVersion 23
         versionCode 12
         versionName "0.8.9"
+        renderscriptTargetApi 19
+        renderscriptSupportModeEnabled true
     }
     buildTypes {
         release {
@@ -42,4 +44,5 @@ dependencies {
     compile 'tyrantgit:explosionfield:1.0.1'
     compile 'com.google.code.gson:gson:2.5'
     compile 'com.h6ah4i.android.widget.verticalseekbar:verticalseekbar:0.7.0'
+    compile 'jp.wasabeef:blurry:2.0.2'
 }

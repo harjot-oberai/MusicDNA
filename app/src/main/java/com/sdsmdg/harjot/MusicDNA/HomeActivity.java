@@ -73,6 +73,8 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.sdsmdg.harjot.MusicDNA.Interfaces.StreamService;
+import com.sdsmdg.harjot.MusicDNA.LocalMusicFragments.AlbumFragment;
+import com.sdsmdg.harjot.MusicDNA.Models.Album;
 import com.sdsmdg.harjot.MusicDNA.Models.AllDNAModels;
 import com.sdsmdg.harjot.MusicDNA.Models.AllMusicFolders;
 import com.sdsmdg.harjot.MusicDNA.Models.AllPlaylists;
@@ -97,6 +99,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -133,12 +137,18 @@ public class HomeActivity extends AppCompatActivity
         FolderFragment.onFolderClickedListener,
         FolderContentFragment.onFolderContentPlayAllListener,
         FolderContentFragment.onFolderContentItemClickListener,
-        ViewSavedDNA.onShareListener {
+        ViewSavedDNA.onShareListener,
+        AlbumFragment.onAlbumClickListener,
+        ViewAlbumFragment.onAlbumSongClickListener,
+        ViewAlbumFragment.onAlbumPlayAllListener {
 
 
     public static List<LocalTrack> localTrackList = new ArrayList<>();
     public static List<LocalTrack> finalLocalSearchResultList = new ArrayList<>();
     public static List<Track> streamingTrackList = new ArrayList<>();
+    public static List<Album> albums = new ArrayList<>();
+
+    public static Album tempAlbum;
 
     static float fftMax = 3000;
     static float fftMin = 0;
@@ -261,6 +271,7 @@ public class HomeActivity extends AppCompatActivity
     static boolean isFolderContentVisible = false;
     static boolean isAllSavedDnaVisisble = false;
     static boolean isSavedDNAVisible = false;
+    static boolean isAlbumVisible = false;
 
     boolean isNotificationVisible = false;
 
@@ -340,6 +351,7 @@ public class HomeActivity extends AppCompatActivity
             PlayerFragment.localIsPlaying = false;
             PlayerFragment.track = selectedTrack;
         } else {
+
             PlayerFragment frag = (PlayerFragment) getFragmentManager().findFragmentByTag("player");
             PlayerFragment.localIsPlaying = false;
             PlayerFragment.track = selectedTrack;
@@ -597,6 +609,7 @@ public class HomeActivity extends AppCompatActivity
         ratio = Math.min(ratio, ratio2);
 
         playerControllerAB = (ImageView) findViewById(R.id.player_control_sp_AB);
+        playerControllerAB.setImageResource(R.drawable.ic_queue_music_white_48dp);
         spImgAB = (CircleImageView) findViewById(R.id.selected_track_image_sp_AB);
         spTitleAB = (TextView) findViewById(R.id.selected_track_title_sp_AB);
         spTitleAB.setSelected(true);
@@ -1291,6 +1304,8 @@ public class HomeActivity extends AppCompatActivity
                     (android.provider.MediaStore.Audio.Media._ID);
             int artistColumn = musicCursor.getColumnIndex
                     (android.provider.MediaStore.Audio.Media.ARTIST);
+            int albumColumn = musicCursor.getColumnIndex
+                    (MediaStore.Audio.Media.ALBUM);
             int pathColumn = musicCursor.getColumnIndex
                     (android.provider.MediaStore.Audio.Media.DATA);
             int durationColumn = musicCursor.getColumnIndex
@@ -1300,12 +1315,24 @@ public class HomeActivity extends AppCompatActivity
                 long thisId = musicCursor.getLong(idColumn);
                 String thisTitle = musicCursor.getString(titleColumn);
                 String thisArtist = musicCursor.getString(artistColumn);
+                String thisAlbum = musicCursor.getString(albumColumn);
                 String path = musicCursor.getString(pathColumn);
                 long duration = musicCursor.getLong(durationColumn);
                 if (duration > 10000) {
-                    LocalTrack lt = new LocalTrack(thisId, thisTitle, thisArtist, path, duration);
+                    LocalTrack lt = new LocalTrack(thisId, thisTitle, thisArtist, thisAlbum, path, duration);
                     localTrackList.add(lt);
                     finalLocalSearchResultList.add(lt);
+
+                    int pos = checkAlbum(thisAlbum);
+
+                    if (pos != -1) {
+                        albums.get(pos).getAlbumSongs().add(lt);
+                    } else {
+                        List<LocalTrack> llt = new ArrayList<>();
+                        llt.add(lt);
+                        Album ab = new Album(thisAlbum, llt);
+                        albums.add(ab);
+                    }
 
                     File f = new File(path);
                     String dirName = f.getParentFile().getName();
@@ -1322,6 +1349,21 @@ public class HomeActivity extends AppCompatActivity
             }
             while (musicCursor.moveToNext());
         }
+
+        Collections.sort(localTrackList, new localMusicComparator());
+        Collections.sort(finalLocalSearchResultList, new localMusicComparator());
+        Collections.sort(albums, new albumComparator());
+
+    }
+
+    public int checkAlbum(String album) {
+        for (int i = 0; i < albums.size(); i++) {
+            Album ab = albums.get(i);
+            if (ab.getName().equals(album)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     public MusicFolder getFolder(String folderName) {
@@ -1349,12 +1391,14 @@ public class HomeActivity extends AppCompatActivity
                     showPlayer3();
                 else
                     hideFragment("queue");
+            } else if (isPlayerVisible) {
+                hidePlayer();
+                showTabs();
+                isPlayerVisible = false;
+            } else if (isAlbumVisible) {
+                hideFragment("viewAlbum");
             } else {
-                if (isPlayerVisible) {
-                    hidePlayer();
-                    showTabs();
-                    isPlayerVisible = false;
-                } else if (isLocalVisible) {
+                if (isLocalVisible) {
                     hideFragment("local");
                     setTitle("Music DNA");
                 } else if (isQueueVisible) {
@@ -1567,14 +1611,14 @@ public class HomeActivity extends AppCompatActivity
 
     }
 
-    public void hideAppBarLayout(){
+    public void hideAppBarLayout() {
         appBarLayout.animate()
                 .translationY(-1 * appBarLayout.getHeight())
                 .setDuration(300);
         appBarLayout.setVisibility(View.GONE);
     }
 
-    public void showAppBarLayout(){
+    public void showAppBarLayout() {
         appBarLayout.setVisibility(View.VISIBLE);
         appBarLayout.animate()
                 .translationY(0)
@@ -1741,6 +1785,7 @@ public class HomeActivity extends AppCompatActivity
 
         isPlayerVisible = true;
         isEqualizerVisible = false;
+        isQueueVisible = false;
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -2000,29 +2045,6 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    public boolean checkInDNAmodels(LocalTrack lt, Track t) {
-
-        boolean isRepeat = false;
-        if (t == null) {
-            for (int i = 0; i < allDNAs.getAllDNAs().size(); i++) {
-                DNAModel dm = allDNAs.getAllDNAs().get(i);
-//                if (dm.getType() && lt.getTitle().equals(dm.getTitle())) {
-//                    isRepeat = true;
-//                    break;
-//                }
-            }
-        } else {
-            for (int i = 0; i < allDNAs.getAllDNAs().size(); i++) {
-                DNAModel dm = allDNAs.getAllDNAs().get(i);
-//                if (!dm.getType() && t.getTitle().equals(dm.getTitle())) {
-//                    isRepeat = true;
-//                    break;
-//                }
-            }
-        }
-        return isRepeat;
-    }
-
     @Override
     public void onComplete() {
 
@@ -2040,6 +2062,8 @@ public class HomeActivity extends AppCompatActivity
         if (!shuffleEnabled) {
             if (queueCurrentIndex < queue.getQueue().size() - 1) {
                 queueCurrentIndex++;
+                if (QueueFragment.qAdapter != null)
+                    QueueFragment.qAdapter.notifyDataSetChanged();
                 if (queue.getQueue().get(queueCurrentIndex).getType()) {
                     localSelectedTrack = queue.getQueue().get(queueCurrentIndex).getLocalTrack();
                     streamSelected = false;
@@ -2054,6 +2078,8 @@ public class HomeActivity extends AppCompatActivity
             } else {
                 if (repeatEnabled) {
                     queueCurrentIndex = 0;
+                    if (QueueFragment.qAdapter != null)
+                        QueueFragment.qAdapter.notifyDataSetChanged();
                     onQueueItemClicked(0);
                 } else {
                     PlayerFragment.mMediaPlayer.stop();
@@ -2069,6 +2095,8 @@ public class HomeActivity extends AppCompatActivity
                 }
             }
             queueCurrentIndex = x;
+            if (QueueFragment.qAdapter != null)
+                QueueFragment.qAdapter.notifyDataSetChanged();
             if (queue.getQueue().get(queueCurrentIndex).getType()) {
                 localSelectedTrack = queue.getQueue().get(queueCurrentIndex).getLocalTrack();
                 streamSelected = false;
@@ -2090,6 +2118,8 @@ public class HomeActivity extends AppCompatActivity
             if (queueCurrentIndex > 0) {
                 queueCall = true;
                 queueCurrentIndex--;
+                if (QueueFragment.qAdapter != null)
+                    QueueFragment.qAdapter.notifyDataSetChanged();
                 if (queue.getQueue().get(queueCurrentIndex).getType()) {
                     localSelectedTrack = queue.getQueue().get(queueCurrentIndex).getLocalTrack();
                     streamSelected = false;
@@ -2114,6 +2144,8 @@ public class HomeActivity extends AppCompatActivity
                 }
             }
             queueCurrentIndex = x;
+            if (QueueFragment.qAdapter != null)
+                QueueFragment.qAdapter.notifyDataSetChanged();
             if (queue.getQueue().get(queueCurrentIndex).getType()) {
                 localSelectedTrack = queue.getQueue().get(queueCurrentIndex).getLocalTrack();
                 streamSelected = false;
@@ -2333,6 +2365,22 @@ public class HomeActivity extends AppCompatActivity
         shareBitmapAsImage(bmp, fileName);
     }
 
+    @Override
+    public void onAlbumClick() {
+        showFragment("viewAlbum");
+    }
+
+    @Override
+    public void onAlbumSongClickListener() {
+        onLocalTrackSelected(-1);
+    }
+
+    @Override
+    public void onAlbumPlayAll() {
+        onQueueItemClicked(0);
+        showPlayer();
+    }
+
     public static class MyAsyncTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -2537,7 +2585,9 @@ public class HomeActivity extends AppCompatActivity
 
     public void showFragment(String type) {
 
-        hideAllFrags();
+        if (!type.equals("viewAlbum"))
+            hideAllFrags();
+
         if (type.equals("local") && !isLocalVisible) {
             setTitle("Local");
             isLocalVisible = true;
@@ -2705,12 +2755,26 @@ public class HomeActivity extends AppCompatActivity
                     .show(newFragment)
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
+        } else if (type.equals("viewAlbum") && !isAlbumVisible) {
+            setTitle(tempAlbum.getName());
+            isAlbumVisible = true;
+            AlbumFragment.mCallback = this;
+            ViewAlbumFragment.mCallback = this;
+            ViewAlbumFragment.mCallback2 = this;
+            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+            ViewAlbumFragment newFragment = new ViewAlbumFragment();
+            fm.beginTransaction()
+                    .add(R.id.fragContainer, newFragment, "viewAlbum")
+                    .show(newFragment)
+                    .addToBackStack(null)
+                    .commitAllowingStateLoss();
         }
     }
 
     public void hideFragment(String type) {
         if (type.equals("local")) {
             isLocalVisible = false;
+            setTitle("Music DNA");
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             android.support.v4.app.Fragment frag = fm.findFragmentByTag("local");
             if (frag != null) {
@@ -2729,6 +2793,7 @@ public class HomeActivity extends AppCompatActivity
             }
         } else if (type.equals("stream")) {
             isStreamVisible = false;
+            setTitle("Music DNA");
             android.app.FragmentManager fm = getFragmentManager();
             android.app.Fragment frag = fm.findFragmentByTag("stream");
             if (frag != null) {
@@ -2756,6 +2821,7 @@ public class HomeActivity extends AppCompatActivity
             }
         } else if (type.equals("favourite")) {
             isFavouriteVisible = false;
+            setTitle("Music DNA");
             android.app.FragmentManager fm = getFragmentManager();
             android.app.Fragment frag = fm.findFragmentByTag("favourite");
             if (frag != null) {
@@ -2765,6 +2831,7 @@ public class HomeActivity extends AppCompatActivity
             }
         } else if (type.equals("analog")) {
             isAnalogVisible = false;
+            setTitle("Music DNA");
             android.app.FragmentManager fm = getFragmentManager();
             android.app.Fragment frag = fm.findFragmentByTag("analog");
             if (frag != null) {
@@ -2774,6 +2841,7 @@ public class HomeActivity extends AppCompatActivity
             }
         } else if (type.equals("allPlaylists")) {
             isAllPlaylistVisible = false;
+            setTitle("Music DNA");
             android.app.FragmentManager fm = getFragmentManager();
             android.app.Fragment frag = fm.findFragmentByTag("allPlaylists");
             if (frag != null) {
@@ -2792,6 +2860,7 @@ public class HomeActivity extends AppCompatActivity
             }
         } else if (type.equals("allFolders")) {
             isAllFolderVisible = false;
+            setTitle("Music DNA");
             android.app.FragmentManager fm = getFragmentManager();
             android.app.Fragment frag = fm.findFragmentByTag("allFolders");
             if (frag != null) {
@@ -2801,10 +2870,21 @@ public class HomeActivity extends AppCompatActivity
             }
         } else if (type.equals("allSavedDNAs")) {
             isAllSavedDnaVisisble = false;
+            setTitle("Music DNA");
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
             getSupportActionBar().show();
             android.app.FragmentManager fm = getFragmentManager();
             android.app.Fragment frag = fm.findFragmentByTag("allSavedDNAs");
+            if (frag != null) {
+                fm.beginTransaction()
+                        .remove(frag)
+                        .commitAllowingStateLoss();
+            }
+        } else if (type.equals("viewAlbum")) {
+            isAlbumVisible = false;
+            setTitle("Local");
+            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+            android.support.v4.app.Fragment frag = fm.findFragmentByTag("viewAlbum");
             if (frag != null) {
                 fm.beginTransaction()
                         .remove(frag)
@@ -2822,8 +2902,8 @@ public class HomeActivity extends AppCompatActivity
         hideFragment("favourite");
         hideFragment("folderContent");
         hideFragment("allFolders");
-        hideFragment("savedDNA");
         hideFragment("allSavedDNAs");
+        hideFragment("viewAlbum");
 
         setTitle("Music DNA");
 
@@ -2940,6 +3020,39 @@ public class HomeActivity extends AppCompatActivity
             shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
             main.startActivity(Intent.createChooser(shareIntent, "Choose an app"));
         }
+    }
+
+    public class localMusicComparator implements Comparator<LocalTrack> {
+
+        @Override
+        public int compare(LocalTrack lhs, LocalTrack rhs) {
+            if (lhs.getTitle().toString().charAt(0) < rhs.getTitle().toString().charAt(0)) {
+                return -1;
+            } else {
+                return 1;
+            }
+        }
+    }
+
+    public class albumComparator implements Comparator<Album> {
+
+        @Override
+        public int compare(Album lhs, Album rhs) {
+            if (lhs.getName().toString().charAt(0) < rhs.getName().toString().charAt(0)) {
+                return -1;
+            } else {
+                return 1;
+            }
+        }
+    }
+
+    public static Pair<Integer, Integer> getTime(int millsec) {
+        int min, sec;
+        sec = millsec / 100;
+        min = sec / 60;
+        sec = sec % 60;
+        Pair<Integer, Integer> pair = Pair.create(min, sec);
+        return pair;
     }
 
 }

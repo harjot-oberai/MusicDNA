@@ -1,0 +1,83 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EEE"
+    android:clickable="true"
+    tools:context="com.sdsmdg.harjot.MusicDNA.ViewAlbumFragment">
+
+    <RelativeLayout
+        android:id="@+id/cover_container"
+        android:layout_width="match_parent"
+        android:layout_height="270dp">
+
+        <RelativeLayout
+            android:id="@+id/root"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/blurredView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/backAlbumCover"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/splash_img_2" />
+            </RelativeLayout>
+
+            <com.sdsmdg.harjot.MusicDNA.Blur.BlurringView
+                android:id="@+id/blurringView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
+
+
+        <ImageView
+            android:id="@+id/mainAlbumCover"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_centerInParent="true"
+            android:background="#444"
+            android:scaleType="fitXY" />
+
+        <TextView
+            android:id="@+id/album_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="5dp"
+            android:padding="5dp"
+            android:text="DETAILS  •  Duration"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF" />
+    </RelativeLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/play_all_from_album"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_above="@+id/album_songs_recycler"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="-25dp"
+        android:layout_marginRight="20dp"
+        android:clickable="true"
+        android:src="@drawable/ic_play_arrow_white_48dp"
+        app:backgroundTint="#111111"
+        app:borderWidth="0dp"
+        app:elevation="6dp"
+        app:pressedTranslationZ="9dp"
+        app:rippleColor="#888888" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/album_songs_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/cover_container"
+        android:padding="1dp"></android.support.v7.widget.RecyclerView>
+
+</RelativeLayout>

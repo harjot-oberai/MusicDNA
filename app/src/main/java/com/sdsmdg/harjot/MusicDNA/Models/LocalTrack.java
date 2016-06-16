@@ -7,8 +7,17 @@ public class LocalTrack {
     private long id;
     private String title;
     private String artist;
+    private String album;
     private String path;
     private long duration;
+
+    public String getAlbum() {
+        return album;
+    }
+
+    public void setAlbum(String album) {
+        this.album = album;
+    }
 
     public String getPath() {
         return path;
@@ -26,10 +35,11 @@ public class LocalTrack {
         this.duration = duration;
     }
 
-    public LocalTrack(long id, String title, String artist, String path, long duration) {
+    public LocalTrack(long id, String title, String artist, String album, String path, long duration) {
         this.id = id;
         this.title = title;
         this.artist = artist;
+        this.album = album;
         this.path = path;
         this.duration = duration;
 

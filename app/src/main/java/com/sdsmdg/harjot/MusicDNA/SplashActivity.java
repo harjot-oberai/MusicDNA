@@ -17,6 +17,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +30,8 @@ public class SplashActivity extends AppCompatActivity {
     boolean perm5 = false;
 
     CustomImageHolder cih;
+    RelativeLayout relSplash;
+    TextView tx;
 
     static Typeface tf;
 
@@ -39,16 +42,18 @@ public class SplashActivity extends AppCompatActivity {
         cih = (CustomImageHolder) findViewById(R.id.splash_cih);
 
         tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Regular.ttf");
-//        TextView tx = (TextView) findViewById(R.id.splash_text);
-//        tx.setTypeface(tf);
+        tx = (TextView) findViewById(R.id.splash_text);
+        tx.setTypeface(tf);
 
-//        TextView tx2 = (TextView) findViewById(R.id.text_soundcloud);
-//        tx2.setTypeface(tf);
+        TextView tx2 = (TextView) findViewById(R.id.text_soundcloud);
+        tx2.setTypeface(tf);
+
+        relSplash = (RelativeLayout) findViewById(R.id.rel_splash);
 
         if (Build.VERSION.SDK_INT >= 23) {
             requestPermissions();
         } else {
-            cih.start();
+            cih.start(tx,relSplash);
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
@@ -80,7 +85,7 @@ public class SplashActivity extends AppCompatActivity {
                     perm2 = true;
                     Toast.makeText(SplashActivity.this, "two", Toast.LENGTH_SHORT).show();
                     if (perm2 && perm4 && perm5) {
-                        cih.start();
+                        cih.start(tx,relSplash);
                         final Handler handler = new Handler();
                         handler.postDelayed(new Runnable() {
                             @Override
@@ -217,7 +222,7 @@ public class SplashActivity extends AppCompatActivity {
         }
 
         if (perm2 && perm4 && perm5) {
-            cih.start();
+            cih.start(tx,relSplash);
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override

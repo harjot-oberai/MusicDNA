@@ -220,6 +220,8 @@ public class HomeActivity extends AppCompatActivity
     static PlayListsHorizontalAdapter pAdapter;
     RecentsListHorizontalAdapter rAdapter;
 
+    NavigationView navigationView;
+
     Call<List<Track>> call;
 
     SearchView searchView;
@@ -555,8 +557,10 @@ public class HomeActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        navigationView.setCheckedItem(R.id.nav_home);
 
         getSupportActionBar().setShowHideAnimationEnabled(true);
 
@@ -2590,6 +2594,7 @@ public class HomeActivity extends AppCompatActivity
 
         if (type.equals("local") && !isLocalVisible) {
             setTitle("Local");
+            navigationView.setCheckedItem(R.id.nav_local);
             isLocalVisible = true;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             FullLocalMusicFragment newFragment = new FullLocalMusicFragment();
@@ -2663,6 +2668,7 @@ public class HomeActivity extends AppCompatActivity
                     .commitAllowingStateLoss();
         } else if (type.equals("favourite") && !isFavouriteVisible) {
             setTitle("Favourites");
+            navigationView.setCheckedItem(R.id.nav_fav);
             isFavouriteVisible = true;
             android.app.FragmentManager fm = getFragmentManager();
             FavouritesFragment newFragment = new FavouritesFragment();
@@ -2693,6 +2699,7 @@ public class HomeActivity extends AppCompatActivity
                     .commitAllowingStateLoss();
         } else if (type.equals("allPlaylists") && !isAllPlaylistVisible) {
             setTitle("All Playlists");
+            navigationView.setCheckedItem(R.id.nav_playlists);
             isAllPlaylistVisible = true;
             android.app.FragmentManager fm = getFragmentManager();
             PlayListFragment newFragment = new PlayListFragment();
@@ -2725,6 +2732,7 @@ public class HomeActivity extends AppCompatActivity
                     .commitAllowingStateLoss();
         } else if (type.equals("allFolders") && !isAllFolderVisible) {
             setTitle("Folders");
+            navigationView.setCheckedItem(R.id.nav_folder);
             isAllFolderVisible = true;
             android.app.FragmentManager fm = getFragmentManager();
             FolderFragment newFragment = new FolderFragment();
@@ -2740,6 +2748,7 @@ public class HomeActivity extends AppCompatActivity
                     .commitAllowingStateLoss();
         } else if (type.equals("allSavedDNAs") && !isAllSavedDnaVisisble) {
             setTitle("Saved DNAs");
+            navigationView.setCheckedItem(R.id.nav_view);
             isAllSavedDnaVisisble = true;
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             ViewSavedDNA.mCallback = this;
@@ -2775,6 +2784,7 @@ public class HomeActivity extends AppCompatActivity
         if (type.equals("local")) {
             isLocalVisible = false;
             setTitle("Music DNA");
+            navigationView.setCheckedItem(R.id.nav_home);
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             android.support.v4.app.Fragment frag = fm.findFragmentByTag("local");
             if (frag != null) {
@@ -2784,6 +2794,7 @@ public class HomeActivity extends AppCompatActivity
             }
         } else if (type.equals("queue")) {
             isQueueVisible = false;
+            navigationView.setCheckedItem(R.id.nav_home);
             android.app.FragmentManager fm = getFragmentManager();
             android.app.Fragment frag = fm.findFragmentByTag("queue");
             if (frag != null) {
@@ -2794,6 +2805,7 @@ public class HomeActivity extends AppCompatActivity
         } else if (type.equals("stream")) {
             isStreamVisible = false;
             setTitle("Music DNA");
+            navigationView.setCheckedItem(R.id.nav_home);
             android.app.FragmentManager fm = getFragmentManager();
             android.app.Fragment frag = fm.findFragmentByTag("stream");
             if (frag != null) {
@@ -2822,6 +2834,7 @@ public class HomeActivity extends AppCompatActivity
         } else if (type.equals("favourite")) {
             isFavouriteVisible = false;
             setTitle("Music DNA");
+            navigationView.setCheckedItem(R.id.nav_home);
             android.app.FragmentManager fm = getFragmentManager();
             android.app.Fragment frag = fm.findFragmentByTag("favourite");
             if (frag != null) {
@@ -2842,6 +2855,7 @@ public class HomeActivity extends AppCompatActivity
         } else if (type.equals("allPlaylists")) {
             isAllPlaylistVisible = false;
             setTitle("Music DNA");
+            navigationView.setCheckedItem(R.id.nav_home);
             android.app.FragmentManager fm = getFragmentManager();
             android.app.Fragment frag = fm.findFragmentByTag("allPlaylists");
             if (frag != null) {
@@ -2861,6 +2875,7 @@ public class HomeActivity extends AppCompatActivity
         } else if (type.equals("allFolders")) {
             isAllFolderVisible = false;
             setTitle("Music DNA");
+            navigationView.setCheckedItem(R.id.nav_home);
             android.app.FragmentManager fm = getFragmentManager();
             android.app.Fragment frag = fm.findFragmentByTag("allFolders");
             if (frag != null) {
@@ -2871,6 +2886,7 @@ public class HomeActivity extends AppCompatActivity
         } else if (type.equals("allSavedDNAs")) {
             isAllSavedDnaVisisble = false;
             setTitle("Music DNA");
+            navigationView.setCheckedItem(R.id.nav_home);
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
             getSupportActionBar().show();
             android.app.FragmentManager fm = getFragmentManager();
@@ -2904,6 +2920,8 @@ public class HomeActivity extends AppCompatActivity
         hideFragment("allFolders");
         hideFragment("allSavedDNAs");
         hideFragment("viewAlbum");
+
+        navigationView.setCheckedItem(R.id.nav_home);
 
         setTitle("Music DNA");
 

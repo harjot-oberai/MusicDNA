@@ -460,6 +460,21 @@ public class PlayerFragment extends Fragment {
                 }
         );
 
+        mMediaPlayer.setOnInfoListener(new MediaPlayer.OnInfoListener() {
+            @Override
+            public boolean onInfo(MediaPlayer mp, int what, int extra) {
+                switch (what) {
+                    case MediaPlayer.MEDIA_INFO_BUFFERING_START:
+//                        loadingDialog.setVisibility(View.VISIBLE);
+                        break;
+                    case MediaPlayer.MEDIA_INFO_BUFFERING_END:
+//                        loadingDialog.setVisibility(View.GONE);
+                        break;
+                }
+                return true;
+            }
+        });
+
         smallPlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

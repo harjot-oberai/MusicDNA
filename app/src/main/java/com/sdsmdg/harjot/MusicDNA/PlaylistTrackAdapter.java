@@ -35,7 +35,7 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
 
     private final OnDragStartListener mDragStartListener;
 
-    public PlaylistTrackAdapter(List<UnifiedTrack> songList , OnDragStartListener listener) {
+    public PlaylistTrackAdapter(List<UnifiedTrack> songList, OnDragStartListener listener) {
         this.songList = songList;
         mDragStartListener = listener;
         imgLoader = new ImageLoader(HomeActivity.ctx);
@@ -52,6 +52,16 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
     public void onItemDismiss(int position) {
         songList.remove(position);
         notifyItemRemoved(position);
+        if (songList.size() == 0) {
+            HomeActivity.main.onBackPressed();
+            HomeActivity.allPlaylists.getPlaylists().remove(HomeActivity.tempPlaylistNumber);
+            if (PlayListFragment.vpAdapter != null) {
+                PlayListFragment.vpAdapter.notifyItemRemoved(HomeActivity.tempPlaylistNumber);
+            }
+            if (HomeActivity.pAdapter != null) {
+                HomeActivity.pAdapter.notifyItemRemoved(HomeActivity.tempPlaylistNumber);
+            }
+        }
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder

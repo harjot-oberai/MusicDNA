@@ -9,7 +9,7 @@
             android:checked="true"/>
         <item
             android:id="@+id/nav_local"
-            android:icon="@drawable/ic_library_music_black_48dp"
+            android:icon="@drawable/local"
             android:title="Local Music" />
         <item
             android:id="@+id/nav_playlists"
@@ -17,33 +17,20 @@
             android:title="Playlists" />
         <item
             android:id="@+id/nav_fav"
-            android:icon="@drawable/ic_heart_out_black"
+            android:icon="@drawable/ic_heart_filled"
             android:title="Favourites" />
         <item
             android:id="@+id/nav_folder"
-            android:icon="@android:drawable/stat_notify_sdcard_prepare"
+            android:icon="@drawable/folder"
             android:title="Folders" />
         <item
             android:id="@+id/nav_view"
-            android:icon="@android:drawable/ic_menu_save"
+            android:icon="@drawable/save"
             android:title="Saved DNA" />
         <item
             android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/settings"
             android:title="Settings" />
     </group>
-
-    <item android:title="My Account">
-        <menu>
-            <item
-                android:id="@+id/nav_profile"
-                android:icon="@drawable/ic_person_outline_black_48dp"
-                android:title="My Profile" />
-            <item
-                android:id="@+id/nav_account_settings"
-                android:icon="@drawable/ic_settings_black_48dp"
-                android:title="Manage Account" />
-        </menu>
-    </item>
 
 </menu>

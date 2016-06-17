@@ -175,6 +175,7 @@ public class HomeActivity extends AppCompatActivity
     static Favourite favouriteTracks;
     static Queue queue;
     static Playlist tempPlaylist;
+    static int tempPlaylistNumber;
     static AllPlaylists allPlaylists;
     static AllDNAModels allDNAs;
     static AllMusicFolders allMusicFolders;
@@ -559,8 +560,8 @@ public class HomeActivity extends AppCompatActivity
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
         navigationView.setCheckedItem(R.id.nav_home);
+        navigationView.setItemIconTintList(null);
 
         getSupportActionBar().setShowHideAnimationEnabled(true);
 
@@ -987,6 +988,7 @@ public class HomeActivity extends AppCompatActivity
             @Override
             boolean onClick(RecyclerView parent, View view, final int position, long id) {
                 tempPlaylist = allPlaylists.getPlaylists().get(position);
+                tempPlaylistNumber = position;
                 showFragment("playlist");
                 return true;
             }
@@ -1001,6 +1003,7 @@ public class HomeActivity extends AppCompatActivity
                     public boolean onMenuItemClick(MenuItem item) {
                         if (item.getTitle().equals("Play")) {
                             tempPlaylist = allPlaylists.getPlaylists().get(position);
+                            tempPlaylistNumber = position;
                             queue.setQueue(tempPlaylist.getSongList());
                             queueCurrentIndex = 0;
                             onPlaylistPLayAll();
@@ -1495,10 +1498,6 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_view) {
             showFragment("allSavedDNAs");
         } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_profile) {
-
-        } else if (id == R.id.nav_account_settings) {
 
         }
 
@@ -2336,6 +2335,7 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onPlaylistTouched(int pos) {
         tempPlaylist = allPlaylists.getPlaylists().get(pos);
+        tempPlaylistNumber = pos;
         showFragment("playlist");
     }
 

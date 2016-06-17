@@ -12,17 +12,18 @@
 
     <ImageView
         android:id="@+id/holderImage"
-        android:layout_width="20dp"
-        android:layout_height="44dp"
+        android:layout_width="40dp"
+        android:layout_height="55dp"
         android:layout_centerVertical="true"
         android:scaleType="fitXY"
+        android:layout_marginLeft="-5dp"
         android:src="@drawable/handle" />
 
     <ImageView
         android:id="@+id/img"
         android:layout_width="56dp"
         android:layout_height="56dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="5dp"
         android:layout_toRightOf="@+id/holderImage"
         android:background="#FFF" />
 

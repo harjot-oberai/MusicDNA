@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="200dp"
     android:background="@drawable/side_nav_bar"
@@ -15,17 +15,8 @@
         android:id="@+id/imageView"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_gravity="center"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:src="@drawable/icon3" />
+        android:src="@drawable/icon3"
+        android:layout_marginBottom="25dp"
+        android:layout_centerHorizontal="true" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:layout_marginBottom="10dp"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="Music DNA"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
-
-</LinearLayout>
+</RelativeLayout>

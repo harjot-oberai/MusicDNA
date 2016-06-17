@@ -16,20 +16,21 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize">
+
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
-                app:popupTheme="@style/MyMaterialTheme.PopupOverlay" />
+                app:layout_scrollFlags="scroll|enterAlways" />
 
             <android.support.v7.widget.Toolbar
-                android:layout_gravity="top"
                 android:id="@+id/smallPlayer_AB"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="#000000"
-                android:visibility="invisible">
+                android:visibility="invisible"
+                app:layout_scrollFlags="scroll|enterAlways">
 
                 <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/selected_track_image_sp_AB"
@@ -70,7 +71,7 @@
                     android:layout_marginTop="2dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
-                    android:visibility="visible"/>
+                    android:visibility="visible" />
             </android.support.v7.widget.Toolbar>
         </FrameLayout>
 

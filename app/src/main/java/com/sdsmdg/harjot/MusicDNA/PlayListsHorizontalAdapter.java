@@ -79,7 +79,10 @@ public class PlayListsHorizontalAdapter extends RecyclerView.Adapter<PlayListsHo
         }
 
         holder.playlistName.setText(pl.getPlaylistName());
-        holder.playlistSize.setText(String.valueOf(pl.getSongList().size()));
+        if(pl.getSongList().size()>1)
+            holder.playlistSize.setText(String.valueOf(pl.getSongList().size()) + " Songs");
+        else
+            holder.playlistSize.setText(String.valueOf(pl.getSongList().size()) + " Song");
 
     }
 

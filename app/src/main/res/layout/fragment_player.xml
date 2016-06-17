@@ -1,4 +1,5 @@
 <com.sdsmdg.harjot.MusicDNA.SlidingRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/toolBar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -164,6 +165,16 @@
             android:layout_centerInParent="true"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true" />
+        <com.wang.avi.AVLoadingIndicatorView
+            android:background="#000000"
+            android:id="@+id/bufferingIndicator"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:visibility="invisible"
+            app:indicator="BallSpinFadeLoader"
+            android:clickable="true"
+            app:indicator_color="#FFFFFF" />
 
         <ImageView
             android:id="@+id/next"

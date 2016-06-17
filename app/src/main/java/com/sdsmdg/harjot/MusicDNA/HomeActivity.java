@@ -672,7 +672,6 @@ public class HomeActivity extends AppCompatActivity
         });
 
         try {
-
             Gson gson = new Gson();
             String json = mPrefs.getString("savedDNAs", "");
             savedDNAs = gson.fromJson(json, AllSavedDNA.class);
@@ -1296,6 +1295,8 @@ public class HomeActivity extends AppCompatActivity
 
     private void getLocalSongs() {
 
+        Toast.makeText(HomeActivity.this, "Getting", Toast.LENGTH_SHORT).show();
+
         ContentResolver musicResolver = this.getContentResolver();
         Uri musicUri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         Cursor musicCursor = musicResolver.query(musicUri, null, null, null, null);
@@ -1357,6 +1358,8 @@ public class HomeActivity extends AppCompatActivity
         Collections.sort(localTrackList, new localMusicComparator());
         Collections.sort(finalLocalSearchResultList, new localMusicComparator());
         Collections.sort(albums, new albumComparator());
+
+        Toast.makeText(HomeActivity.this, "GOT", Toast.LENGTH_SHORT).show();
 
     }
 

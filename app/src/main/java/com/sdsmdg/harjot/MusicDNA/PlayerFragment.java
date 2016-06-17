@@ -55,6 +55,8 @@ public class PlayerFragment extends Fragment {
 
     static boolean isPrepared = false;
 
+    View bufferingIndicator;
+
     static CustomProgressBar cpb;
 
     public static ImageView repeatIcon;
@@ -274,6 +276,8 @@ public class PlayerFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        bufferingIndicator = view.findViewById(R.id.bufferingIndicator);
+
         repeatIcon = (ImageView) view.findViewById(R.id.repeat_icon);
         repeatIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -392,7 +396,7 @@ public class PlayerFragment extends Fragment {
                 togglePlayPause();
                 togglePlayPause();
                 togglePlayPause();
-
+                bufferingIndicator.setVisibility(View.GONE);
                 equalizerIcon.setVisibility(View.VISIBLE);
 
             }
@@ -465,10 +469,10 @@ public class PlayerFragment extends Fragment {
             public boolean onInfo(MediaPlayer mp, int what, int extra) {
                 switch (what) {
                     case MediaPlayer.MEDIA_INFO_BUFFERING_START:
-//                        loadingDialog.setVisibility(View.VISIBLE);
+                        bufferingIndicator.setVisibility(View.VISIBLE);
                         break;
                     case MediaPlayer.MEDIA_INFO_BUFFERING_END:
-//                        loadingDialog.setVisibility(View.GONE);
+                        bufferingIndicator.setVisibility(View.GONE);
                         break;
                 }
                 return true;
@@ -532,6 +536,7 @@ public class PlayerFragment extends Fragment {
                 mMediaPlayer.setDataSource(localTrack.getPath());
                 mMediaPlayer.prepareAsync();
             }
+            bufferingIndicator.setVisibility(View.VISIBLE);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -774,7 +779,7 @@ public class PlayerFragment extends Fragment {
                 mMediaPlayer.setDataSource(localTrack.getPath());
                 mMediaPlayer.prepareAsync();
             }
-
+            bufferingIndicator.setVisibility(View.VISIBLE);
         } catch (IOException e) {
             e.printStackTrace();
         }

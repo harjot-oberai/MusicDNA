@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,61 +8,21 @@
     tools:context="com.sdsmdg.harjot.MusicDNA.SplashActivity">
 
     <ImageView
-        android:id="@+id/back_splash"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <!--android:layout_above="@+id/splash_text"-->
-    <ImageView
         android:id="@+id/splash_img"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:src="@drawable/splash_img_2" />
-    <com.sdsmdg.harjot.MusicDNA.CustomImageHolder
-        android:id="@+id/splash_cih"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true" />
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/icon2" />
 
-    <TextView
-        android:id="@+id/splash_text"
+    <com.wang.avi.AVLoadingIndicatorView
+        android:layout_below="@+id/splash_img"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="70dp"
+        android:id="@+id/avloadingIndicatorView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/rel_splash"
-        android:layout_centerHorizontal="true"
-        android:textColor="#FFFFFF"
-        android:layout_marginBottom="24dp"
-        android:typeface="sans"
-        android:text="Music DNA"
-        android:textSize="48dp" />
-
-    <RelativeLayout
-        android:id="@+id/rel_splash"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:padding="5dp">
-
-        <ImageView
-            android:id="@+id/soundcloud_icon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_centerVertical="true"
-            android:src="@drawable/soundcloud" />
-
-        <TextView
-            android:id="@+id/text_soundcloud"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@+id/soundcloud_icon"
-            android:typeface="sans"
-            android:text="SOUNDCLOUD"
-            android:textColor="#FFFFFF"
-            android:textSize="20dp" />
-    </RelativeLayout>
+        android:visibility="visible"
+        app:indicator="BallTrianglePath"
+        app:indicator_color="#FFA036" />
 
 </RelativeLayout>

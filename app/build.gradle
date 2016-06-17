@@ -8,8 +8,8 @@ android {
         applicationId "com.sdsmdg.harjot.MusicDNA"
         minSdkVersion 19
         targetSdkVersion 23
-        versionCode 12
-        versionName "0.8.9"
+        versionCode 13
+        versionName "0.9.0"
         renderscriptTargetApi 19
         renderscriptSupportModeEnabled true
     }

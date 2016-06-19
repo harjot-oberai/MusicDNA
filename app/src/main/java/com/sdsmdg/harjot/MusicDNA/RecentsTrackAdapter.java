@@ -22,11 +22,10 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 /**
- * Created by Harjot on 20-May-16.
+ * Created by Harjot on 19-Jun-16.
  */
-public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdapter.MyViewHolder>
+public class RecentsTrackAdapter extends RecyclerView.Adapter<RecentsTrackAdapter.MyViewHolder>
         implements ItemTouchHelperAdapter {
-
     private List<UnifiedTrack> songList;
     ImageLoader imgLoader;
 
@@ -36,7 +35,7 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
 
     private final OnDragStartListener mDragStartListener;
 
-    public PlaylistTrackAdapter(List<UnifiedTrack> songList, OnDragStartListener listener) {
+    public RecentsTrackAdapter(List<UnifiedTrack> songList, OnDragStartListener listener) {
         this.songList = songList;
         mDragStartListener = listener;
         imgLoader = new ImageLoader(HomeActivity.ctx);
@@ -53,15 +52,12 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
     public void onItemDismiss(int position) {
         songList.remove(position);
         notifyItemRemoved(position);
-        if (songList.size() == 0) {
-            HomeActivity.main.onBackPressed();
-            HomeActivity.allPlaylists.getPlaylists().remove(HomeActivity.tempPlaylistNumber);
-            if (PlayListFragment.vpAdapter != null) {
-                PlayListFragment.vpAdapter.notifyItemRemoved(HomeActivity.tempPlaylistNumber);
+        if (position < 10) {
+            HomeActivity.continuePlayingList.clear();
+            for (int i = 0; i < Math.min(10, HomeActivity.recentlyPlayed.getRecentlyPlayed().size()); i++) {
+                HomeActivity.continuePlayingList.add(HomeActivity.recentlyPlayed.getRecentlyPlayed().get(i));
             }
-            if (HomeActivity.pAdapter != null) {
-                HomeActivity.pAdapter.notifyItemRemoved(HomeActivity.tempPlaylistNumber);
-            }
+            HomeActivity.rAdapter.notifyDataSetChanged();
         }
     }
 
@@ -70,16 +66,12 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
 
         ImageView art;
         TextView title, artist;
-        View indicator;
-        ImageView holderImg;
 
         public MyViewHolder(View view) {
             super(view);
-            art = (ImageView) view.findViewById(R.id.img);
-            title = (TextView) view.findViewById(R.id.title);
-            artist = (TextView) view.findViewById(R.id.url);
-            indicator = view.findViewById(R.id.currently_playing_indicator);
-            holderImg = (ImageView) view.findViewById(R.id.holderImage);
+            art = (ImageView) view.findViewById(R.id.img_2);
+            title = (TextView) view.findViewById(R.id.title_2);
+            artist = (TextView) view.findViewById(R.id.url_2);
         }
 
         @Override
@@ -102,13 +94,13 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_item, parent, false);
+                .inflate(R.layout.list_item_2, parent, false);
 
         return new MyViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(final PlaylistTrackAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(final RecentsTrackAdapter.MyViewHolder holder, int position) {
         UnifiedTrack ut = songList.get(position);
         if (ut.getType()) {
             LocalTrack lt = ut.getLocalTrack();
@@ -126,21 +118,10 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
             holder.title.setText(t.getTitle());
             holder.artist.setText("");
         }
-
-        holder.holderImg.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
-                    mDragStartListener.onDragStarted(holder);
-                }
-                return false;
-            }
-        });
     }
 
     @Override
     public int getItemCount() {
         return songList.size();
     }
-
 }

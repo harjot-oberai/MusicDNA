@@ -30,8 +30,10 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
         final int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
-        if(viewHolder.getPosition() == HomeActivity.queueCurrentIndex){
+        if (viewHolder.getPosition() == HomeActivity.queueCurrentIndex && HomeActivity.isQueueVisible) {
             return makeMovementFlags(dragFlags, 0);
+        } else if (HomeActivity.isRecentVisible) {
+            return makeMovementFlags(0, swipeFlags);
         }
         return makeMovementFlags(dragFlags, swipeFlags);
     }

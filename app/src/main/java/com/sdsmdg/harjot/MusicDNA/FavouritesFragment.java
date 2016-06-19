@@ -12,6 +12,8 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.sdsmdg.harjot.MusicDNA.Helpers.SimpleItemTouchHelperCallback;
 
@@ -30,13 +32,15 @@ public class FavouritesFragment extends Fragment implements FavouriteTrackAdapte
     static onFavouriteItemClickedListener mCallback;
     static onFavouritePlayAllListener mCallback2;
 
+    LinearLayout noFavouriteContent;
+
     FloatingActionButton playAll;
 
     public interface onFavouriteItemClickedListener {
         public void onFavouriteItemClicked(int position);
     }
 
-    public interface onFavouritePlayAllListener{
+    public interface onFavouritePlayAllListener {
         public void onFavouritePlayAll();
     }
 
@@ -60,6 +64,19 @@ public class FavouritesFragment extends Fragment implements FavouriteTrackAdapte
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         favouriteRecycler = (RecyclerView) view.findViewById(R.id.favouriteRecycler);
+        noFavouriteContent = (LinearLayout) view.findViewById(R.id.noFavouriteContent);
+        playAll = (FloatingActionButton) view.findViewById(R.id.fav_play_all_fab);
+        ((TextView)view.findViewById(R.id.favNoContentText)).setTypeface(SplashActivity.tf2);
+
+        if (HomeActivity.favouriteTracks.getFavourite().size() == 0) {
+            favouriteRecycler.setVisibility(View.INVISIBLE);
+            playAll.setVisibility(View.INVISIBLE);
+            noFavouriteContent.setVisibility(View.VISIBLE);
+        } else {
+            favouriteRecycler.setVisibility(View.VISIBLE);
+            playAll.setVisibility(View.VISIBLE);
+            noFavouriteContent.setVisibility(View.INVISIBLE);
+        }
 
         fAdapter = new FavouriteTrackAdapter(HomeActivity.favouriteTracks.getFavourite(), this);
         LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(HomeActivity.ctx, LinearLayoutManager.VERTICAL, false);
@@ -85,8 +102,7 @@ public class FavouritesFragment extends Fragment implements FavouriteTrackAdapte
             }
         });
 
-        playAll = (FloatingActionButton) view.findViewById(R.id.fav_play_all_fab);
-        if(HomeActivity.favouriteTracks.getFavourite().size() == 0){
+        if (HomeActivity.favouriteTracks.getFavourite().size() == 0) {
             playAll.setVisibility(View.INVISIBLE);
         } else {
             playAll.setVisibility(View.VISIBLE);

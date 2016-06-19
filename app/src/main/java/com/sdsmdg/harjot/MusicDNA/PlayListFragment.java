@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 
 /**
@@ -21,6 +23,8 @@ public class PlayListFragment extends Fragment {
 
     RecyclerView allPlaylistRecycler;
     static ViewAllPlaylistsRecyclerAdapter vpAdapter;
+
+    LinearLayout noPlaylistContent;
 
     static onPLaylistTouchedListener mCallback;
     static onPlaylistMenuPlayAllListener mCallback2;
@@ -60,7 +64,19 @@ public class PlayListFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        noPlaylistContent = (LinearLayout) view.findViewById(R.id.noPlaylistContent);
+
         allPlaylistRecycler = (RecyclerView) view.findViewById(R.id.all_playlists_recycler);
+
+        ((TextView)view.findViewById(R.id.noPlaylistContentText)).setTypeface(SplashActivity.tf2);
+
+        if (HomeActivity.allPlaylists.getPlaylists().size() == 0) {
+            allPlaylistRecycler.setVisibility(View.INVISIBLE);
+            noPlaylistContent.setVisibility(View.VISIBLE);
+        } else {
+            allPlaylistRecycler.setVisibility(View.VISIBLE);
+            noPlaylistContent.setVisibility(View.INVISIBLE);
+        }
         vpAdapter = new ViewAllPlaylistsRecyclerAdapter(HomeActivity.allPlaylists.getPlaylists());
         LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(HomeActivity.ctx, LinearLayoutManager.VERTICAL, false);
         allPlaylistRecycler.setLayoutManager(mLayoutManager2);

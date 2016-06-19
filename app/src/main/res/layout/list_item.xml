@@ -3,71 +3,94 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="1dp"
     android:background="#FFF"
     android:foreground="?android:attr/selectableItemBackground"
-    android:longClickable="true"
-    android:orientation="horizontal"
-    android:padding="10dp">
-
-    <ImageView
-        android:id="@+id/holderImage"
-        android:layout_width="40dp"
-        android:layout_height="55dp"
-        android:layout_centerVertical="true"
-        android:scaleType="fitXY"
-        android:layout_marginLeft="-5dp"
-        android:src="@drawable/handle" />
-
-    <ImageView
-        android:id="@+id/img"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_marginLeft="5dp"
-        android:layout_toRightOf="@+id/holderImage"
-        android:background="#FFF" />
-
-    <LinearLayout
-        android:id="@+id/row_item_holder"
+    android:longClickable="true">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/relItemContainer"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="14dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="2dp"
-        android:layout_toLeftOf="@+id/currently_playing_indicator"
-        android:layout_toRightOf="@+id/img"
-        android:orientation="vertical">
+        android:background="#FFF"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:longClickable="true"
+        android:padding="10dp">
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:text="Title"
-            android:textColor="#000000"
-            android:textSize="14dp" />
+        <ImageView
+            android:id="@+id/holderImage"
+            android:layout_width="40dp"
+            android:layout_height="55dp"
+            android:layout_centerVertical="true"
+            android:scaleType="fitXY"
+            android:layout_marginLeft="-5dp"
+            android:src="@drawable/handle" />
 
-        <TextView
-            android:id="@+id/url"
-            android:layout_width="wrap_content"
+        <ImageView
+            android:id="@+id/img"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/holderImage"
+            android:background="#FFF" />
+
+        <LinearLayout
+            android:id="@+id/row_item_holder"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:text="Artist"
-            android:textSize="11dp" />
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="10dp"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/currently_playing_indicator"
+            android:layout_toRightOf="@+id/img"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="Title"
+                android:textColor="#000000"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/url"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="10dp"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text="Artist"
+                android:textSize="11dp" />
+        </LinearLayout>
+
+        <com.wang.avi.AVLoadingIndicatorView
+            android:id="@+id/currently_playing_indicator"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:visibility="invisible"
+            app:indicator="LineScale"
+            app:indicator_color="#3F334D" />
+
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relItemContainer"
+        android:orientation="horizontal">
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="5"></View>
+        <View
+            android:layout_width="0dp"
+            android:layout_weight="9"
+            android:layout_height="1dp"
+            android:background="#DDD"/>
     </LinearLayout>
-
-    <com.wang.avi.AVLoadingIndicatorView
-        android:id="@+id/currently_playing_indicator"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="10dp"
-        android:visibility="invisible"
-        app:indicator="LineScale"
-        app:indicator_color="#3F334D" />
-
 </RelativeLayout>

@@ -12,4 +12,35 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
 
+    <LinearLayout
+        android:id="@+id/noPlaylistContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="invisible">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5"
+            android:src="@drawable/no_content" />
+
+        <TextView
+            android:id="@+id/noPlaylistContentText"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:layout_weight="5"
+            android:gravity="top|center_horizontal"
+            android:text="No Playlists"
+            android:textSize="22dp" />
+
+    </LinearLayout>
+
 </RelativeLayout>

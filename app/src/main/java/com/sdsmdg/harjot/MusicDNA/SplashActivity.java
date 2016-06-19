@@ -16,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -33,6 +34,7 @@ public class SplashActivity extends AppCompatActivity {
     TextView tx;
 
     static Typeface tf;
+    static Typeface tf2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Regular.ttf");
+        tf2 = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Medium.ttf");
 //        tx = (TextView) findViewById(R.id.splash_text);
 //        tx.setTypeface(tf);
 //
@@ -57,6 +60,7 @@ public class SplashActivity extends AppCompatActivity {
                 public void run() {
                     Intent i = new Intent(SplashActivity.this, HomeActivity.class);
                     startActivity(i);
+                    Log.d("HOME", "Starting");
                     finish();
                 }
             }, 1500);

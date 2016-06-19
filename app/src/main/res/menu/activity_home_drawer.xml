@@ -4,9 +4,9 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
+            android:checked="true"
             android:icon="@drawable/web"
-            android:title="Home"
-            android:checked="true"/>
+            android:title="Home" />
         <item
             android:id="@+id/nav_local"
             android:icon="@drawable/local"
@@ -15,6 +15,10 @@
             android:id="@+id/nav_playlists"
             android:icon="@drawable/ic_queue_music_black_48dp"
             android:title="Playlists" />
+        <item
+            android:id="@+id/nav_recent"
+            android:icon="@drawable/nav_clock2"
+            android:title="Recently Played" />
         <item
             android:id="@+id/nav_fav"
             android:icon="@drawable/ic_heart_filled"

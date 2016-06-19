@@ -23,140 +23,6 @@
             android:layout_height="match_parent"
             android:padding="0dp">
 
-            <RelativeLayout
-                android:id="@+id/bannerContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp">
-
-                <RelativeLayout
-                    android:id="@+id/localBanner"
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/music_record3" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:alpha="0.8"
-                        android:background="#230C33" />
-
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="20dp"
-                        android:src="@drawable/ic_play_arrow_white_48dp" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="30dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Local"
-                            android:textColor="#FFFFFF"
-                            android:textSize="22dp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="Songs"
-                            android:textColor="#FFFFFF"
-                            android:textSize="14dp" />
-                    </LinearLayout>
-                </RelativeLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:layout_below="@+id/localBanner"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
-
-                    <RelativeLayout
-                        android:id="@+id/favbanner"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:paddingRight="5dp">
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:alpha="0.8"
-                            android:background="#D72638" />
-
-                        <ImageView
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:layout_alignParentTop="true"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="10dp"
-                            android:src="@drawable/ic_heart_out" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginBottom="10dp"
-                            android:text="Favourite"
-                            android:textAlignment="center"
-                            android:textColor="#FFFFFF"
-                            android:textSize="17dp"
-                            android:textStyle="bold" />
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/recentBanner"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:paddingLeft="5dp">
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:alpha="0.8"
-                            android:background="#0A0A1D" />
-
-                        <ImageView
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:layout_alignParentTop="true"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="10dp"
-                            android:src="@drawable/clock" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginBottom="10dp"
-                            android:text="Recent"
-                            android:textAlignment="center"
-                            android:textColor="#FFFFFF"
-                            android:textSize="17dp"
-                            android:textStyle="bold" />
-                    </RelativeLayout>
-                </LinearLayout>
-
-            </RelativeLayout>
-
 
             <RelativeLayout
                 android:id="@+id/localRecyclerContainer"
@@ -310,10 +176,9 @@
                 android:id="@+id/recentsRecyclerContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/bannerContainer"
                 android:layout_marginLeft="-6dp"
                 android:layout_marginRight="-6dp"
-                android:layout_marginTop="6dp">
+                android:layout_marginTop="0dp">
 
                 <TextView
                     android:id="@+id/recentsRecyclerLabel"
@@ -362,7 +227,7 @@
                 android:layout_below="@+id/recentsRecyclerContainer"
                 android:layout_marginLeft="-6dp"
                 android:layout_marginRight="-6dp"
-                android:layout_marginTop="6dp">
+                android:layout_marginTop="3dp">
 
 
                 <TextView
@@ -397,9 +262,247 @@
                     android:padding="5dp"></android.support.v7.widget.RecyclerView>
             </RelativeLayout>
 
+            <RelativeLayout
+                android:id="@+id/bannerContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/playlistRecyclerContainer"
+                android:padding="10dp">
+
+                <RelativeLayout
+                    android:id="@+id/localBanner"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/music_record3" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:alpha="0.8"
+                        android:background="#230C33" />
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="20dp"
+                        android:src="@drawable/ic_play_arrow_white_48dp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="30dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Local"
+                            android:textColor="#FFFFFF"
+                            android:textSize="22dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Songs"
+                            android:textColor="#FFFFFF"
+                            android:textSize="14dp" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearBanner1"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_below="@+id/localBanner"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:id="@+id/favbanner"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:paddingRight="5dp">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:alpha="0.8"
+                            android:background="#D72638" />
+
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="10dp"
+                            android:src="@drawable/ic_heart_out" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginBottom="10dp"
+                            android:text="Favourite"
+                            android:textAlignment="center"
+                            android:textColor="#FFFFFF"
+                            android:textSize="17dp"
+                            android:textStyle="bold" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/recentBanner"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:paddingLeft="5dp">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:alpha="0.8"
+                            android:background="#0A0A1D" />
+
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="10dp"
+                            android:src="@drawable/clock" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginBottom="10dp"
+                            android:text="Recent"
+                            android:textAlignment="center"
+                            android:textColor="#FFFFFF"
+                            android:textSize="17dp"
+                            android:textStyle="bold" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearBanner2"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_below="@+id/linearBanner1"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:id="@+id/folderBanner"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:paddingRight="5dp">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:alpha="0.8"
+                            android:background="#2E5077" />
+
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="10dp"
+                            android:src="@drawable/folder" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginBottom="10dp"
+                            android:text="Folders"
+                            android:textAlignment="center"
+                            android:textColor="#FFFFFF"
+                            android:textSize="17dp"
+                            android:textStyle="bold" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/savedDNABanner"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:paddingLeft="5dp">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:alpha="0.8"
+                            android:background="#869B4C" />
+
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="10dp"
+                            android:src="@drawable/floppy" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginBottom="10dp"
+                            android:text="Saved DNAs"
+                            android:textAlignment="center"
+                            android:textColor="#FFFFFF"
+                            android:textSize="17dp"
+                            android:textStyle="bold" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_below="@id/bannerContainer"
+                android:background="#EEE"></FrameLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_below="@+id/bannerContainer">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:text="\nMusic DNA\n© 2016"
+                    android:textAlignment="center" />
+            </RelativeLayout>
+
         </RelativeLayout>
 
     </ScrollView>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_above="@+id/bottomMargin"
+        android:background="@drawable/transparent_gradient"></FrameLayout>
 
     <FrameLayout
         android:id="@+id/fragContainer"

@@ -242,6 +242,8 @@ public class HomeActivity extends AppCompatActivity
     RelativeLayout localBanner;
     RelativeLayout favBanner;
     RelativeLayout recentBanner;
+    RelativeLayout folderBanner;
+    RelativeLayout savedDNABanner;
 
     TextView localViewAll, streamViewAll;
 
@@ -597,6 +599,8 @@ public class HomeActivity extends AppCompatActivity
         localBanner = (RelativeLayout) findViewById(R.id.localBanner);
         favBanner = (RelativeLayout) findViewById(R.id.favbanner);
         recentBanner = (RelativeLayout) findViewById(R.id.recentBanner);
+        folderBanner = (RelativeLayout) findViewById(R.id.folderBanner);
+        savedDNABanner = (RelativeLayout) findViewById(R.id.savedDNABanner);
 
         localBanner.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -614,6 +618,18 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 showFragment("recent");
+            }
+        });
+        folderBanner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFragment("allFolders");
+            }
+        });
+        savedDNABanner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFragment("allSavedDNAs");
             }
         });
 

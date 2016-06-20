@@ -10,7 +10,8 @@
     <RelativeLayout
         android:id="@+id/cover_container"
         android:layout_width="match_parent"
-        android:layout_height="270dp">
+        android:layout_height="270dp"
+        android:layout_marginTop="-12dp">
 
         <RelativeLayout
             android:id="@+id/root"
@@ -43,7 +44,8 @@
             android:layout_height="200dp"
             android:layout_centerInParent="true"
             android:background="#444"
-            android:scaleType="fitXY" />
+            android:scaleType="fitXY"
+            android:translationZ="6dp" />
 
         <TextView
             android:id="@+id/album_details"
@@ -77,7 +79,14 @@
         android:id="@+id/album_songs_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/bottomViewAlbum"
         android:layout_below="@+id/cover_container"
         android:padding="1dp"></android.support.v7.widget.RecyclerView>
+
+    <View
+        android:id="@+id/bottomViewAlbum"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"></View>
 
 </RelativeLayout>

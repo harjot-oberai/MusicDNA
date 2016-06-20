@@ -140,7 +140,9 @@ public class HomeActivity extends AppCompatActivity
         ViewSavedDNA.onShareListener,
         AlbumFragment.onAlbumClickListener,
         ViewAlbumFragment.onAlbumSongClickListener,
-        ViewAlbumFragment.onAlbumPlayAllListener {
+        ViewAlbumFragment.onAlbumPlayAllListener,
+        RecentsFragment.onRecentItemClickedListener,
+        RecentsFragment.onRepeatListener {
 
 
     public static List<LocalTrack> localTrackList = new ArrayList<>();
@@ -772,7 +774,7 @@ public class HomeActivity extends AppCompatActivity
         recentsRecycler.addOnItemTouchListener(new ClickItemTouchListener(recentsRecycler) {
             @Override
             boolean onClick(RecyclerView parent, View view, final int position, long id) {
-                UnifiedTrack ut = recentlyPlayed.getRecentlyPlayed().get(position);
+                UnifiedTrack ut = continuePlayingList.get(position);
                 boolean isRepeat = false;
                 int pos = 0;
                 for (int i = 0; i < queue.getQueue().size(); i++) {
@@ -841,7 +843,7 @@ public class HomeActivity extends AppCompatActivity
 
             @Override
             boolean onLongClick(RecyclerView parent, View view, final int position, long id) {
-                final UnifiedTrack ut = recentlyPlayed.getRecentlyPlayed().get(position);
+                final UnifiedTrack ut = continuePlayingList.get(position);
 
                 PopupMenu popup = new PopupMenu(ctx, view);
                 popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
@@ -923,7 +925,7 @@ public class HomeActivity extends AppCompatActivity
                         }
                         if (item.getTitle().equals("Play Next")) {
                             if (ut.getType()) {
-                                LocalTrack track = finalLocalSearchResultList.get(position);
+                                LocalTrack track = ut.getLocalTrack();
                                 if (queue.getQueue().size() == 0) {
                                     queueCurrentIndex = 0;
                                     queue.getQueue().add(new UnifiedTrack(true, track, null));
@@ -2435,6 +2437,20 @@ public class HomeActivity extends AppCompatActivity
         showPlayer();
     }
 
+    @Override
+    public void onRecentItemClicked(boolean isLocal) {
+        if (isLocal) {
+            onLocalTrackSelected(-1);
+        } else {
+            onTrackSelected(-1);
+        }
+    }
+
+    @Override
+    public void onRecent(int pos) {
+        onQueueItemClicked(pos);
+    }
+
     public static class MyAsyncTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -2830,6 +2846,8 @@ public class HomeActivity extends AppCompatActivity
         } else if (type.equals("recent") && !isRecentVisible) {
             setTitle("Recently Played");
             HomeActivity.isRecentVisible = true;
+            RecentsFragment.mCallback = this;
+            RecentsFragment.mCallback2 = this;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             RecentsFragment newFragment = new RecentsFragment();
             fm.beginTransaction()

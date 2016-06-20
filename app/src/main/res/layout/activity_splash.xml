@@ -14,15 +14,15 @@
         android:layout_centerInParent="true"
         android:src="@drawable/icon2" />
 
-    <com.wang.avi.AVLoadingIndicatorView
-        android:layout_below="@+id/splash_img"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="70dp"
-        android:id="@+id/avloadingIndicatorView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="visible"
-        app:indicator="BallTrianglePath"
-        app:indicator_color="#FFA036" />
+    <!--<com.wang.avi.AVLoadingIndicatorView-->
+        <!--android:layout_below="@+id/splash_img"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_marginTop="70dp"-->
+        <!--android:id="@+id/avloadingIndicatorView"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:visibility="visible"-->
+        <!--app:indicator="BallTrianglePath"-->
+        <!--app:indicator_color="#FFA036" />-->
 
 </RelativeLayout>

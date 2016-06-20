@@ -63,7 +63,7 @@ public class SplashActivity extends AppCompatActivity {
                     Log.d("HOME", "Starting");
                     finish();
                 }
-            }, 1500);
+            }, 1000);
         }
     }
 
@@ -94,7 +94,7 @@ public class SplashActivity extends AppCompatActivity {
                                 startActivity(i);
                                 finish();
                             }
-                        }, 1500);
+                        }, 1000);
                     }
                 } else {
                 }
@@ -230,9 +230,8 @@ public class SplashActivity extends AppCompatActivity {
                     startActivity(i);
                     finish();
                 }
-            }, 1500);
+            }, 1000);
         }
-
     }
 
 }

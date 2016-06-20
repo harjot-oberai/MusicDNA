@@ -3,6 +3,7 @@ package com.sdsmdg.harjot.MusicDNA;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,6 +21,8 @@ import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.Models.Track;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
 
+import java.util.Random;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,6 +36,8 @@ public class RecentsFragment extends Fragment implements RecentsTrackAdapter.OnD
 
     static onRecentItemClickedListener mCallback;
     static onRepeatListener mCallback2;
+
+    FloatingActionButton shuffleFab;
 
     public RecentsFragment() {
         // Required empty public constructor
@@ -294,6 +299,20 @@ public class RecentsFragment extends Fragment implements RecentsTrackAdapter.OnD
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
+            }
+        });
+
+        shuffleFab = (FloatingActionButton) view.findViewById(R.id.play_all_fab_recent);
+        shuffleFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HomeActivity.queue.getQueue().clear();
+                for (int i = 0; i < HomeActivity.recentlyPlayed.getRecentlyPlayed().size();i++) {
+                    HomeActivity.queue.getQueue().add(HomeActivity.recentlyPlayed.getRecentlyPlayed().get(i));
+                }
+                HomeActivity.shuffleEnabled = true;
+                Random r = new Random();
+                mCallback2.onRecent(r.nextInt(HomeActivity.queue.getQueue().size()));
             }
         });
 

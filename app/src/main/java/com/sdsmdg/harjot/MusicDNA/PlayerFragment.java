@@ -279,6 +279,11 @@ public class PlayerFragment extends Fragment {
         bufferingIndicator = view.findViewById(R.id.bufferingIndicator);
 
         repeatIcon = (ImageView) view.findViewById(R.id.repeat_icon);
+        if (HomeActivity.repeatEnabled) {
+            repeatIcon.setImageResource(R.drawable.ic_repeat_red_48dp);
+        } else {
+            repeatIcon.setImageResource(R.drawable.ic_repeat_white_48dp);
+        }
         repeatIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -293,6 +298,11 @@ public class PlayerFragment extends Fragment {
         });
 
         shuffleIcon = (ImageView) view.findViewById(R.id.shuffle_icon);
+        if (HomeActivity.shuffleEnabled) {
+            shuffleIcon.setImageResource(R.drawable.ic_shuffle_red_48dp);
+        } else {
+            shuffleIcon.setImageResource(R.drawable.ic_shuffle_white_48dp);
+        }
         shuffleIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -725,6 +735,18 @@ public class PlayerFragment extends Fragment {
         } else {
             favouriteIcon.setImageResource(R.drawable.ic_heart_out);
             isFav = false;
+        }
+
+        if (HomeActivity.repeatEnabled) {
+            repeatIcon.setImageResource(R.drawable.ic_repeat_red_48dp);
+        } else {
+            repeatIcon.setImageResource(R.drawable.ic_repeat_white_48dp);
+        }
+
+        if (HomeActivity.shuffleEnabled) {
+            shuffleIcon.setImageResource(R.drawable.ic_shuffle_red_48dp);
+        } else {
+            shuffleIcon.setImageResource(R.drawable.ic_shuffle_white_48dp);
         }
 
         if (HomeActivity.isSaveDNAEnabled) {

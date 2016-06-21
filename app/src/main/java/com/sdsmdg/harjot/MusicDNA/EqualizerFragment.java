@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -50,6 +51,8 @@ public class EqualizerFragment extends Fragment {
 
     Spinner presetSpinner;
 
+    static FrameLayout equalizerBlocker;
+
     public EqualizerFragment() {
         // Required empty public constructor
     }
@@ -65,6 +68,14 @@ public class EqualizerFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         presetSpinner = (Spinner) view.findViewById(R.id.equalizer_preset_spinner);
+
+        equalizerBlocker = (FrameLayout) view.findViewById(R.id.equalizerBlocker);
+
+        if (HomeActivity.isEqualizerEnabled) {
+            equalizerBlocker.setVisibility(View.GONE);
+        } else {
+            equalizerBlocker.setVisibility(View.VISIBLE);
+        }
 
         chart = (LineChartView) view.findViewById(R.id.lineChart);
         paint = new Paint();

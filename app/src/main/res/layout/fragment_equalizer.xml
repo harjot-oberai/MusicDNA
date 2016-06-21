@@ -22,10 +22,10 @@
 
         <Spinner
             android:id="@+id/equalizer_preset_spinner"
-            android:layout_marginLeft="9dp"
-            android:layout_marginRight="9dp"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginLeft="9dp"
+            android:layout_marginRight="9dp"
             android:layout_weight="1"
             android:background="#111"></Spinner>
 
@@ -218,5 +218,14 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/equalizerBlocker"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.7"
+        android:background="#000000"
+        android:clickable="true"
+        android:visibility="invisible"></FrameLayout>
 
 </RelativeLayout>

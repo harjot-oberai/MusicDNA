@@ -44,6 +44,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
@@ -65,12 +66,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.RemoteViews;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -175,6 +178,8 @@ public class HomeActivity extends AppCompatActivity
     static CircleImageView spImgAB;
     static TextView spTitleAB;
 
+    static SwitchCompat equalizerSwitch;
+
     SharedPreferences mPrefs;
 
     ImageLoader imgLoader;
@@ -264,6 +269,7 @@ public class HomeActivity extends AppCompatActivity
 
     static Toolbar toolbar;
     static Toolbar spToolbar;
+    static Toolbar equalizerToolbar;
 
     public static Activity main;
 
@@ -290,6 +296,8 @@ public class HomeActivity extends AppCompatActivity
     public static boolean isSavedDNAVisible = false;
     public static boolean isAlbumVisible = false;
     public static boolean isRecentVisible = false;
+
+    static boolean isEqualizerEnabled = false;
 
     boolean isNotificationVisible = false;
 
@@ -538,6 +546,24 @@ public class HomeActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         spToolbar = (Toolbar) findViewById(R.id.smallPlayer_AB);
+        equalizerToolbar = (Toolbar) findViewById(R.id.equalizerToolbar);
+        equalizerSwitch = (SwitchCompat) findViewById(R.id.equalizerSwitch);
+        equalizerSwitch.setChecked(false);
+
+        equalizerSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    isEqualizerEnabled = true;
+                    EqualizerFragment.equalizerBlocker.setVisibility(View.GONE);
+                    Toast.makeText(HomeActivity.this, "enabled", Toast.LENGTH_SHORT).show();
+                } else {
+                    isEqualizerEnabled = false;
+                    Toast.makeText(HomeActivity.this, "disabled", Toast.LENGTH_SHORT).show();
+                    EqualizerFragment.equalizerBlocker.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -673,7 +699,7 @@ public class HomeActivity extends AppCompatActivity
         streamRecyclerContainer = (RelativeLayout) findViewById(R.id.streamRecyclerContainer);
         playlistRecyclerContainer = (RelativeLayout) findViewById(R.id.playlistRecyclerContainer);
 
-        if(SplashActivity.tf2!=null){
+        if (SplashActivity.tf2 != null) {
             ((TextView) findViewById(R.id.playListRecyclerLabel)).setTypeface(SplashActivity.tf2);
             ((TextView) findViewById(R.id.recentsRecyclerLabel)).setTypeface(SplashActivity.tf2);
         }
@@ -1084,17 +1110,6 @@ public class HomeActivity extends AppCompatActivity
     }
 
     public void hideTabs() {
-        /*appBarLayout.animate()
-                .translationY(-1 * appBarLayout.getHeight())
-                .setDuration(300);*/
-        /*final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                getSupportActionBar().hide();
-            }
-        }, 270);*/
-
         toolbar.animate()
                 .setDuration(300)
                 .translationY(-1 * toolbar.getHeight())
@@ -1117,17 +1132,6 @@ public class HomeActivity extends AppCompatActivity
     }
 
     public void showTabs() {
-        /*appBarLayout.animate()
-                .translationY(0)
-                .setDuration(300);*/
-        /*final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                getSupportActionBar().show();
-            }
-        }, 30);*/
-
         spToolbar.animate()
                 .setDuration(300)
                 .translationY(spToolbar.getHeight())
@@ -1203,6 +1207,23 @@ public class HomeActivity extends AppCompatActivity
         handler2.postDelayed(new Runnable() {
             @Override
             public void run() {
+
+                spToolbar.animate()
+                        .alpha(0.0f)
+                        .translationX(spToolbar.getWidth())
+                        .withEndAction(new Runnable() {
+                            @Override
+                            public void run() {
+                                spToolbar.setVisibility(View.GONE);
+                            }
+                        });
+                equalizerToolbar.setVisibility(View.VISIBLE);
+                equalizerToolbar.setX(-1 * equalizerToolbar.getWidth());
+                equalizerToolbar.setAlpha(0.0f);
+                equalizerToolbar.animate()
+                        .alpha(1.0f)
+                        .translationX(0);
+
                 playerContainer.animate()
                         .setInterpolator(new AccelerateDecelerateInterpolator())
                         .translationX(playerContainer.getWidth());
@@ -1305,8 +1326,6 @@ public class HomeActivity extends AppCompatActivity
     }
 
     public void showPlayer2() {
-        searchView.setQuery("", false);
-        searchView.setIconified(true);
 
         isPlayerVisible = true;
         isEqualizerVisible = false;
@@ -1325,6 +1344,22 @@ public class HomeActivity extends AppCompatActivity
 
         playerContainer.animate()
                 .setDuration(300)
+                .translationX(0);
+
+        equalizerToolbar.animate()
+                .alpha(0.0f)
+                .translationX(-1 * equalizerToolbar.getWidth())
+                .withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        equalizerToolbar.setVisibility(View.GONE);
+                    }
+                });
+        spToolbar.setVisibility(View.VISIBLE);
+        spToolbar.setX(spToolbar.getWidth());
+        spToolbar.setAlpha(0.0f);
+        spToolbar.animate()
+                .alpha(1.0f)
                 .translationX(0);
 
         final Handler handler2 = new Handler();

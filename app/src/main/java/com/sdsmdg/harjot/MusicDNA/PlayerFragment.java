@@ -59,6 +59,10 @@ public class PlayerFragment extends Fragment {
 
     static CustomProgressBar cpb;
 
+    Pair<String, String> temp;
+
+    TextView currTime, totalTime;
+
     public static ImageView repeatIcon;
     public static ImageView shuffleIcon;
 
@@ -277,6 +281,8 @@ public class PlayerFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         bufferingIndicator = view.findViewById(R.id.bufferingIndicator);
+        currTime = (TextView) view.findViewById(R.id.currTime);
+        totalTime = (TextView) view.findViewById(R.id.totalTime);
 
         repeatIcon = (ImageView) view.findViewById(R.id.repeat_icon);
         if (HomeActivity.repeatEnabled) {
@@ -535,6 +541,8 @@ public class PlayerFragment extends Fragment {
             selected_track_title.setText(localTrack.getTitle());
         }
 
+        temp = getTime(durationInMilliSec);
+        totalTime.setText(temp.first + ":" + temp.second);
 
         try {
             if (HomeActivity.streamSelected) {
@@ -625,6 +633,13 @@ public class PlayerFragment extends Fragment {
                                 }
                             });
                             try {
+                                temp = getTime(mMediaPlayer.getCurrentPosition());
+                                HomeActivity.main.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        currTime.setText(temp.first + ":" + temp.second);
+                                    }
+                                });
                                 progressBar.setProgress(mMediaPlayer.getCurrentPosition());
                             } catch (Exception e) {
                                 Log.e("MEDIA", e.getMessage() + ":");
@@ -787,6 +802,9 @@ public class PlayerFragment extends Fragment {
             selected_track_title.setText(localTrack.getTitle());
         }
 
+        temp = getTime(durationInMilliSec);
+        totalTime.setText(temp.first + ":" + temp.second);
+
         try {
             if (HomeActivity.streamSelected) {
                 isPrepared = false;
@@ -827,7 +845,18 @@ public class PlayerFragment extends Fragment {
                                     cpb.update();
                                 }
                             });
-                            progressBar.setProgress(mMediaPlayer.getCurrentPosition());
+                            try {
+                                temp = getTime(mMediaPlayer.getCurrentPosition());
+                                HomeActivity.main.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        currTime.setText(temp.first + ":" + temp.second);
+                                    }
+                                });
+                                progressBar.setProgress(mMediaPlayer.getCurrentPosition());
+                            } catch (Exception e) {
+                                Log.e("MEDIA", e.getMessage() + ":");
+                            }
                         }
                     }
                 }, 0, 50);
@@ -854,6 +883,21 @@ public class PlayerFragment extends Fragment {
             }
 
         });
+    }
+
+    public Pair<String, String> getTime(int millsec) {
+        int min, sec;
+        sec = millsec / 1000;
+        min = sec / 60;
+        sec = sec % 60;
+        String minS, secS;
+        minS = String.valueOf(min);
+        secS = String.valueOf(sec);
+        if (sec < 10) {
+            secS = "0" + secS;
+        }
+        Pair<String, String> pair = Pair.create(minS, secS);
+        return pair;
     }
 
 }

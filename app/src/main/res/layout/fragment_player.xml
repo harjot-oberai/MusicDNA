@@ -82,12 +82,35 @@
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_above="@+id/seekBarContainer"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="10dp"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
         android:src="@drawable/ic_download" />
+
+    <ImageView
+        android:id="@+id/repeat_icon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_above="@+id/seekBarContainer"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="5dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:src="@drawable/ic_repeat_white_48dp" />
+
+    <ImageView
+        android:id="@+id/shuffle_icon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_above="@+id/seekBarContainer"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="5dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:src="@drawable/ic_shuffle_white_48dp" />
 
     <RelativeLayout
         android:id="@+id/seekBarContainer"
@@ -96,16 +119,14 @@
         android:layout_above="@+id/bottomContainer"
         android:padding="2dp">
 
-        <ImageView
-            android:id="@+id/repeat_icon"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+        <TextView
+            android:id="@+id/currTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:src="@drawable/ic_repeat_white_48dp" />
+            android:layout_marginLeft="10dp"
+            android:text="0:00" />
 
         <SeekBar
             android:id="@+id/progressBar"
@@ -114,19 +135,18 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="3dp"
             android:layout_marginRight="3dp"
-            android:layout_toEndOf="@+id/repeat_icon"
-            android:layout_toStartOf="@+id/shuffle_icon" />
+            android:layout_toEndOf="@+id/currTime"
+            android:layout_toStartOf="@+id/totalTime" />
 
-        <ImageView
-            android:id="@+id/shuffle_icon"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+        <TextView
+            android:id="@+id/totalTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="5dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:src="@drawable/ic_shuffle_white_48dp" />
+            android:layout_marginRight="10dp"
+            android:text="0:00" />
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -165,15 +185,16 @@
             android:layout_centerInParent="true"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true" />
+
         <com.wang.avi.AVLoadingIndicatorView
-            android:background="#000000"
             android:id="@+id/bufferingIndicator"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_centerInParent="true"
+            android:background="#000000"
+            android:clickable="true"
             android:visibility="invisible"
             app:indicator="BallSpinFadeLoader"
-            android:clickable="true"
             app:indicator_color="#FFFFFF" />
 
         <ImageView

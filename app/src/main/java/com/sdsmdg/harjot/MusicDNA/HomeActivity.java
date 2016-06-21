@@ -2558,15 +2558,6 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    public static Pair<Integer, Integer> getTime(int millsec) {
-        int min, sec;
-        sec = millsec / 100;
-        min = sec / 60;
-        sec = sec % 60;
-        Pair<Integer, Integer> pair = Pair.create(min, sec);
-        return pair;
-    }
-
     public class loadSavedData extends AsyncTask<String, Void, String> {
 
         @Override

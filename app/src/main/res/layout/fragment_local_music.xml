@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,8 +8,15 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/localMusicList"
-        android:background="#FFF"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottomMarginLocal"
+        android:background="#FFF"></android.support.v7.widget.RecyclerView>
 
-</FrameLayout>
+    <FrameLayout
+        android:id="@+id/bottomMarginLocal"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"></FrameLayout>
+
+</RelativeLayout>

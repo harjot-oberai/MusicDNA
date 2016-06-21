@@ -41,8 +41,13 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Regular.ttf");
-        tf2 = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Medium.ttf");
+        try {
+            tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Regular.ttf");
+            tf2 = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Medium.ttf");
+        } catch (Exception e) {
+            Log.d("TYPEFACE", e.getMessage() + ":");
+            Toast.makeText(SplashActivity.this, "typeface error", Toast.LENGTH_SHORT).show();
+        }
 //        tx = (TextView) findViewById(R.id.splash_text);
 //        tx.setTypeface(tf);
 //

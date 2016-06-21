@@ -673,8 +673,10 @@ public class HomeActivity extends AppCompatActivity
         streamRecyclerContainer = (RelativeLayout) findViewById(R.id.streamRecyclerContainer);
         playlistRecyclerContainer = (RelativeLayout) findViewById(R.id.playlistRecyclerContainer);
 
-        ((TextView) findViewById(R.id.playListRecyclerLabel)).setTypeface(SplashActivity.tf2);
-        ((TextView) findViewById(R.id.recentsRecyclerLabel)).setTypeface(SplashActivity.tf2);
+        if(SplashActivity.tf2!=null){
+            ((TextView) findViewById(R.id.playListRecyclerLabel)).setTypeface(SplashActivity.tf2);
+            ((TextView) findViewById(R.id.recentsRecyclerLabel)).setTypeface(SplashActivity.tf2);
+        }
 
         localNothingText = (TextView) findViewById(R.id.localNothingText);
         streamNothingText = (TextView) findViewById(R.id.streamNothingText);
@@ -704,29 +706,6 @@ public class HomeActivity extends AppCompatActivity
         progress.show();
 
         new loadSavedData().execute();
-
-
-        /*try {
-            Gson gson = new Gson();
-            String json = mPrefs.getString("savedDNAs", "");
-            savedDNAs = gson.fromJson(json, AllSavedDNA.class);
-            String json2 = mPrefs.getString("allPlaylists", "");
-            allPlaylists = gson.fromJson(json2, AllPlaylists.class);
-            String json3 = mPrefs.getString("queue", "");
-            queue = gson.fromJson(json3, Queue.class);
-            String json4 = mPrefs.getString("recentlyPlayed", "");
-            recentlyPlayed = gson.fromJson(json4, RecentlyPlayed.class);
-            String json5 = mPrefs.getString("favouriteTracks", "");
-            favouriteTracks = gson.fromJson(json5, Favourite.class);
-            String json6 = mPrefs.getString("queueCurrentIndex", "");
-            queueCurrentIndex = gson.fromJson(json6, Integer.class);
-            String json7 = mPrefs.getString("isReloaded", "");
-            isReloaded = gson.fromJson(json7, Boolean.class);
-        } catch (Exception e) {
-            Toast.makeText(HomeActivity.this, e.getMessage() + "::", Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }*/
-
 
     }
 

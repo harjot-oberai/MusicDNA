@@ -68,7 +68,8 @@ public class PlayListFragment extends Fragment {
 
         allPlaylistRecycler = (RecyclerView) view.findViewById(R.id.all_playlists_recycler);
 
-        ((TextView)view.findViewById(R.id.noPlaylistContentText)).setTypeface(SplashActivity.tf2);
+        if (SplashActivity.tf2 != null)
+            ((TextView)view.findViewById(R.id.noPlaylistContentText)).setTypeface(SplashActivity.tf2);
 
         if (HomeActivity.allPlaylists.getPlaylists().size() == 0) {
             allPlaylistRecycler.setVisibility(View.INVISIBLE);

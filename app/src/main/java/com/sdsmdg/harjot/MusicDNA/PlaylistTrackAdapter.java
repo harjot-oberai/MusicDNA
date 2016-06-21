@@ -47,6 +47,8 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
         UnifiedTrack prev = songList.remove(fromPosition);
         songList.add(toPosition, prev);
         notifyItemMoved(fromPosition, toPosition);
+        if (HomeActivity.pAdapter != null)
+            HomeActivity.pAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -63,6 +65,8 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
                 HomeActivity.pAdapter.notifyItemRemoved(HomeActivity.tempPlaylistNumber);
             }
         }
+        else if (HomeActivity.pAdapter != null)
+            HomeActivity.pAdapter.notifyDataSetChanged();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder

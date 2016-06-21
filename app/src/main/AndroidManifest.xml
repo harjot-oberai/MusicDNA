@@ -21,6 +21,7 @@
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
@@ -43,7 +44,9 @@
                 android:resource="@xml/filepaths" />
         </provider>
 
-        <activity android:name=".SplashActivity">
+        <activity
+            android:name=".SplashActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

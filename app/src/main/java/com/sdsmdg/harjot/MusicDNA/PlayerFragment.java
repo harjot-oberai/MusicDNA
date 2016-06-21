@@ -480,9 +480,11 @@ public class PlayerFragment extends Fragment {
                 switch (what) {
                     case MediaPlayer.MEDIA_INFO_BUFFERING_START:
                         bufferingIndicator.setVisibility(View.VISIBLE);
+                        isPrepared = false;
                         break;
                     case MediaPlayer.MEDIA_INFO_BUFFERING_END:
                         bufferingIndicator.setVisibility(View.GONE);
+                        isPrepared = true;
                         break;
                 }
                 return true;

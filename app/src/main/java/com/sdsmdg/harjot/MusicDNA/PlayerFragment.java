@@ -121,6 +121,9 @@ public class PlayerFragment extends Fragment {
     }
 
     public static void setupVisualizerFxAndUI() {
+
+        mVisualizer = new Visualizer(mMediaPlayer.getAudioSessionId());
+
         mEqualizer = new Equalizer(0, mMediaPlayer.getAudioSessionId());
         mEqualizer.setEnabled(true);
         mMediaPlayer.setAuxEffectSendLevel(1.0f);
@@ -129,24 +132,23 @@ public class PlayerFragment extends Fragment {
         bassBoost.setEnabled(true);
         BassBoost.Settings bassBoostSettingTemp = bassBoost.getProperties();
         BassBoost.Settings bassBoostSetting = new BassBoost.Settings(bassBoostSettingTemp.toString());
-        if (EqualizerFragment.bassStrength == -1) {
+        if (HomeActivity.bassStrength == -1) {
             bassBoostSetting.strength = (1000 / 19);
         } else {
-            bassBoostSetting.strength = EqualizerFragment.bassStrength;
+            bassBoostSetting.strength = HomeActivity.bassStrength;
         }
         bassBoost.setProperties(bassBoostSetting);
         mMediaPlayer.setAuxEffectSendLevel(1.0f);
 
         presetReverb = new PresetReverb(0, mMediaPlayer.getAudioSessionId());
-        if (EqualizerFragment.reverbPreset == -1) {
+        if (HomeActivity.reverbPreset == -1) {
             presetReverb.setPreset(PresetReverb.PRESET_NONE);
         } else {
-            presetReverb.setPreset(EqualizerFragment.reverbPreset);
+            presetReverb.setPreset(HomeActivity.reverbPreset);
         }
         presetReverb.setEnabled(true);
         mMediaPlayer.setAuxEffectSendLevel(1.0f);
 
-        mVisualizer = new Visualizer(mMediaPlayer.getAudioSessionId());
 
         try {
             mVisualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[1]);

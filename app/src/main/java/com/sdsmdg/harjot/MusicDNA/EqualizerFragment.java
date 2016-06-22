@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.db.chart.model.LineSet;
 import com.db.chart.view.AxisController;
@@ -38,9 +39,8 @@ public class EqualizerFragment extends Fragment {
     Paint paint;
     float[] points;
 
-    static int y;
 
-    static short reverbPreset = -1, bassStrength = -1;
+    boolean correctPosition = true;
 
     short numberOfFrequencyBands;
     LinearLayout mLinearLayout;
@@ -49,7 +49,7 @@ public class EqualizerFragment extends Fragment {
 
     AnalogController bassController, reverbController;
 
-    Spinner presetSpinner;
+    static Spinner presetSpinner;
 
     static FrameLayout equalizerBlocker;
 
@@ -87,33 +87,48 @@ public class EqualizerFragment extends Fragment {
         bassController.setLabel("BASS");
         reverbController.setLabel("3D");
 
-        int x = (int) ((PlayerFragment.bassBoost.getRoundedStrength() * 19) / 1000);
-        if (x == 0) {
-            bassController.setProgress(1);
-        } else {
-            bassController.setProgress(x);
-        }
+        if (!HomeActivity.isEqualizerReloaded) {
+            int x = (int) ((PlayerFragment.bassBoost.getRoundedStrength() * 19) / 1000);
+            if (x == 0) {
+                bassController.setProgress(1);
+            } else {
+                bassController.setProgress(x);
+            }
 
-        if (y == 0) {
-            reverbController.setProgress(1);
+            if (HomeActivity.y == 0) {
+                reverbController.setProgress(1);
+            } else {
+                reverbController.setProgress(HomeActivity.y);
+            }
         } else {
-            reverbController.setProgress(y);
+            int x = (int) ((HomeActivity.bassStrength * 19) / 1000);
+            if (x == 0) {
+                bassController.setProgress(1);
+            } else {
+                bassController.setProgress(x);
+            }
+
+            if (HomeActivity.y == 0) {
+                reverbController.setProgress(1);
+            } else {
+                reverbController.setProgress(HomeActivity.y);
+            }
         }
 
         bassController.setOnProgressChangedListener(new AnalogController.onProgressChangedListener() {
             @Override
             public void onProgressChanged(int progress) {
-                bassStrength = (short) (((float) 1000 / 19) * (progress));
-                PlayerFragment.bassBoost.setStrength(bassStrength);
+                HomeActivity.bassStrength = (short) (((float) 1000 / 19) * (progress));
+                PlayerFragment.bassBoost.setStrength(HomeActivity.bassStrength);
             }
         });
 
         reverbController.setOnProgressChangedListener(new AnalogController.onProgressChangedListener() {
             @Override
             public void onProgressChanged(int progress) {
-                reverbPreset = (short) ((progress * 6) / 19);
-                PlayerFragment.presetReverb.setPreset(reverbPreset);
-                y = progress;
+                HomeActivity.reverbPreset = (short) ((progress * 6) / 19);
+                PlayerFragment.presetReverb.setPreset(HomeActivity.reverbPreset);
+                HomeActivity.y = progress;
             }
         });
 
@@ -203,16 +218,23 @@ public class EqualizerFragment extends Fragment {
             textView.setTextColor(Color.WHITE);
             textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
-            points[i] = PlayerFragment.mEqualizer.getBandLevel(equalizerBandIndex) - lowerEqualizerBandLevel;
-
-            dataset.addPoint(frequencyHeaderTextView.getText().toString(), points[i]);
-
-            seekBar.setProgress(PlayerFragment.mEqualizer.getBandLevel(equalizerBandIndex) - lowerEqualizerBandLevel);
+            if (HomeActivity.isEqualizerReloaded) {
+                points[i] = HomeActivity.seekbarpos[i] - lowerEqualizerBandLevel;
+                dataset.addPoint(frequencyHeaderTextView.getText().toString(), points[i]);
+                seekBar.setProgress(HomeActivity.seekbarpos[i] - lowerEqualizerBandLevel);
+            } else {
+                points[i] = PlayerFragment.mEqualizer.getBandLevel(equalizerBandIndex) - lowerEqualizerBandLevel;
+                dataset.addPoint(frequencyHeaderTextView.getText().toString(), points[i]);
+                seekBar.setProgress(PlayerFragment.mEqualizer.getBandLevel(equalizerBandIndex) - lowerEqualizerBandLevel);
+                HomeActivity.seekbarpos[i] = PlayerFragment.mEqualizer.getBandLevel(equalizerBandIndex);
+                HomeActivity.isEqualizerReloaded = true;
+            }
             seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     PlayerFragment.mEqualizer.setBandLevel(equalizerBandIndex, (short) (progress + lowerEqualizerBandLevel));
                     points[seekBar.getId()] = PlayerFragment.mEqualizer.getBandLevel(equalizerBandIndex) - lowerEqualizerBandLevel;
+                    HomeActivity.seekbarpos[seekBar.getId()] = (progress + lowerEqualizerBandLevel);
                     dataset.updateValues(points);
                     chart.notifyDataUpdate();
                 }
@@ -220,6 +242,7 @@ public class EqualizerFragment extends Fragment {
                 @Override
                 public void onStartTrackingTouch(SeekBar seekBar) {
                     presetSpinner.setSelection(0);
+                    HomeActivity.presetPos = 0;
                 }
 
                 @Override
@@ -272,13 +295,18 @@ public class EqualizerFragment extends Fragment {
 
         presetSpinner.setAdapter(equalizerPresetSpinnerAdapter);
         presetSpinner.setDropDownWidth((HomeActivity.screen_width * 3) / 4);
+        if (HomeActivity.isEqualizerReloaded && HomeActivity.presetPos != 0) {
+            correctPosition = false;
+            presetSpinner.setSelection(HomeActivity.presetPos);
+        }
 
         presetSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position != 0) {
+                if (position != 0 && correctPosition) {
+                    Toast.makeText(HomeActivity.ctx, "called", Toast.LENGTH_SHORT).show();
                     PlayerFragment.mEqualizer.usePreset((short) (position - 1));
-
+                    HomeActivity.presetPos = position;
                     short numberOfFreqBands = PlayerFragment.mEqualizer.getNumberOfBands();
 
                     final short lowerEqualizerBandLevel = PlayerFragment.mEqualizer.getBandLevelRange()[0];
@@ -286,12 +314,15 @@ public class EqualizerFragment extends Fragment {
                     for (short i = 0; i < numberOfFreqBands; i++) {
                         seekBarFinal[i].setProgress(PlayerFragment.mEqualizer.getBandLevel(i) - lowerEqualizerBandLevel);
                         points[i] = PlayerFragment.mEqualizer.getBandLevel(i) - lowerEqualizerBandLevel;
+                        HomeActivity.seekbarpos[i] = PlayerFragment.mEqualizer.getBandLevel(i);
                         dataset.updateValues(points);
                         chart.notifyDataUpdate();
                     }
                 } else {
 
                 }
+
+                correctPosition = true;
 
             }
 

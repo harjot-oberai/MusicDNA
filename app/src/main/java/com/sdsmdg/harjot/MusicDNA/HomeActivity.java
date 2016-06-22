@@ -298,6 +298,10 @@ public class HomeActivity extends AppCompatActivity
     public static boolean isRecentVisible = false;
 
     static boolean isEqualizerEnabled = false;
+    static boolean isEqualizerReloaded = false;
+
+    static int[] seekbarpos = new int[5];
+    static int presetPos;
 
     boolean isNotificationVisible = false;
 
@@ -306,6 +310,9 @@ public class HomeActivity extends AppCompatActivity
 
     static boolean localSelected = false;
     static boolean streamSelected = false;
+
+    static short reverbPreset = -1, bassStrength = -1;
+    static int y = 0;
 
     public void onTrackSelected(int position) {
 
@@ -555,11 +562,24 @@ public class HomeActivity extends AppCompatActivity
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     isEqualizerEnabled = true;
+                    int pos = presetPos;
+                    if (pos != 0) {
+                        PlayerFragment.mEqualizer.usePreset((short) (pos - 1));
+                    } else {
+                        for (short i = 0; i < 5; i++) {
+                            PlayerFragment.mEqualizer.setBandLevel(i, (short) seekbarpos[i]);
+                        }
+                    }
+                    if (bassStrength != -1 && reverbPreset != -1) {
+                        PlayerFragment.bassBoost.setStrength(bassStrength);
+                        PlayerFragment.presetReverb.setPreset(reverbPreset);
+                    }
                     EqualizerFragment.equalizerBlocker.setVisibility(View.GONE);
-                    Toast.makeText(HomeActivity.this, "enabled", Toast.LENGTH_SHORT).show();
                 } else {
                     isEqualizerEnabled = false;
-                    Toast.makeText(HomeActivity.this, "disabled", Toast.LENGTH_SHORT).show();
+                    PlayerFragment.mEqualizer.usePreset((short) 0);
+                    PlayerFragment.bassBoost.setStrength((short) (((float) 1000 / 19) * (1)));
+                    PlayerFragment.presetReverb.setPreset((short) 0);
                     EqualizerFragment.equalizerBlocker.setVisibility(View.VISIBLE);
                 }
             }

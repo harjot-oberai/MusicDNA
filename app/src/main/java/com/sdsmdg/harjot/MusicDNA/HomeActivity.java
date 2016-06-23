@@ -2134,6 +2134,7 @@ public class HomeActivity extends AppCompatActivity
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
         } else if (type.equals("queue") && !isQueueVisible) {
+            hideAllFrags();
             isQueueVisible = true;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             QueueFragment newFragment = new QueueFragment();

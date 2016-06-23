@@ -2,6 +2,8 @@ package com.sdsmdg.harjot.MusicDNA;
 
 
 //import android.app.Fragment;
+
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -20,6 +22,8 @@ import android.widget.ListView;
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
 
+import java.util.Random;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,6 +35,8 @@ public class LocalMusicFragment extends Fragment {
     Context ctx;
 
     static RecyclerView lv;
+
+    static FloatingActionButton shuffleFab;
 
     public LocalMusicFragment() {
         // Required empty public constructor
@@ -62,6 +68,29 @@ public class LocalMusicFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        shuffleFab = (FloatingActionButton) view.findViewById(R.id.play_all_fab_local);
+        shuffleFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HomeActivity.queue.getQueue().clear();
+                for (int i = 0; i < HomeActivity.localTrackList.size(); i++) {
+                    UnifiedTrack ut = new UnifiedTrack(true, HomeActivity.localTrackList.get(i), null);
+                    HomeActivity.queue.getQueue().add(ut);
+                }
+                Random r = new Random();
+                HomeActivity.shuffleEnabled = true;
+                int tmp = r.nextInt(HomeActivity.queue.getQueue().size());
+                HomeActivity.queueCurrentIndex = tmp;
+                LocalTrack track = HomeActivity.localTrackList.get(tmp);
+                HomeActivity.localSelectedTrack = track;
+                HomeActivity.streamSelected = false;
+                HomeActivity.localSelected = true;
+                HomeActivity.queueCall = false;
+                HomeActivity.isReloaded = false;
+                mCallback.onLocalTrackSelected(-1);
+            }
+        });
         lv = (RecyclerView) view.findViewById(R.id.localMusicList);
         adapter = new LocalTrackListAdapter(HomeActivity.finalLocalSearchResultList);
         LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(HomeActivity.ctx, LinearLayoutManager.VERTICAL, false);
@@ -72,7 +101,7 @@ public class LocalMusicFragment extends Fragment {
         lv.addOnItemTouchListener(new ClickItemTouchListener(lv) {
             @Override
             boolean onClick(RecyclerView parent, View view, int position, long id) {
-                LocalTrack track = HomeActivity.finalLocalSearchResultList.get(position);
+                /*LocalTrack track = HomeActivity.finalLocalSearchResultList.get(position);
                 if (HomeActivity.queue.getQueue().size() == 0) {
                     HomeActivity.queueCurrentIndex = 0;
                     HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
@@ -91,7 +120,22 @@ public class LocalMusicFragment extends Fragment {
                 HomeActivity.localSelected = true;
                 HomeActivity.queueCall = false;
                 HomeActivity.isReloaded = false;
-                mCallback.onLocalTrackSelected(position);
+                mCallback.onLocalTrackSelected(position);*/
+
+                HomeActivity.queue.getQueue().clear();
+                for (int i = 0; i < HomeActivity.localTrackList.size(); i++) {
+                    UnifiedTrack ut = new UnifiedTrack(true, HomeActivity.localTrackList.get(i), null);
+                    HomeActivity.queue.getQueue().add(ut);
+                }
+                HomeActivity.queueCurrentIndex = position;
+                LocalTrack track = HomeActivity.localTrackList.get(position);
+                HomeActivity.localSelectedTrack = track;
+                HomeActivity.streamSelected = false;
+                HomeActivity.localSelected = true;
+                HomeActivity.queueCall = false;
+                HomeActivity.isReloaded = false;
+                mCallback.onLocalTrackSelected(-1);
+
                 return true;
             }
 
@@ -111,26 +155,19 @@ public class LocalMusicFragment extends Fragment {
                             HomeActivity.queue.getQueue().add(new UnifiedTrack(true, HomeActivity.finalLocalSearchResultList.get(position), null));
                         }
                         if (item.getTitle().equals("Play")) {
-                            LocalTrack track = HomeActivity.finalLocalSearchResultList.get(position);
-                            if (HomeActivity.queue.getQueue().size() == 0) {
-                                HomeActivity.queueCurrentIndex = 0;
-                                HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
-                            } else if (HomeActivity.queueCurrentIndex == HomeActivity.queue.getQueue().size() - 1) {
-                                HomeActivity.queueCurrentIndex++;
-                                HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
-                            } else if (HomeActivity.isReloaded) {
-                                HomeActivity.isReloaded = false;
-                                HomeActivity.queueCurrentIndex = HomeActivity.queue.getQueue().size();
-                                HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
-                            } else {
-                                HomeActivity.queue.getQueue().add(++HomeActivity.queueCurrentIndex, new UnifiedTrack(true, track, null));
+                            HomeActivity.queue.getQueue().clear();
+                            for (int i = 0; i < HomeActivity.localTrackList.size(); i++) {
+                                UnifiedTrack ut = new UnifiedTrack(true, HomeActivity.localTrackList.get(i), null);
+                                HomeActivity.queue.getQueue().add(ut);
                             }
+                            HomeActivity.queueCurrentIndex = position;
+                            LocalTrack track = HomeActivity.localTrackList.get(position);
                             HomeActivity.localSelectedTrack = track;
                             HomeActivity.streamSelected = false;
                             HomeActivity.localSelected = true;
                             HomeActivity.queueCall = false;
                             HomeActivity.isReloaded = false;
-                            mCallback.onLocalTrackSelected(position);
+                            mCallback.onLocalTrackSelected(-1);
                         }
                         if (item.getTitle().equals("Play Next")) {
                             LocalTrack track = HomeActivity.finalLocalSearchResultList.get(position);

@@ -34,13 +34,13 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
     FloatingActionButton saveQueue;
 
     static onQueueItemClickedListener mCallback;
-    static  onQueueSaveListener mCallback2;
+    static onQueueSaveListener mCallback2;
 
     public interface onQueueItemClickedListener {
         public void onQueueItemClicked(int position);
     }
 
-    public interface onQueueSaveListener{
+    public interface onQueueSaveListener {
         public void onQueueSave();
     }
 
@@ -76,6 +76,8 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
         queueRecycler.setLayoutManager(mLayoutManager2);
         queueRecycler.setItemAnimator(new DefaultItemAnimator());
         queueRecycler.setAdapter(qAdapter);
+
+        mLayoutManager2.scrollToPositionWithOffset(HomeActivity.queueCurrentIndex, 2);
 
         queueRecycler.addOnItemTouchListener(new ClickItemTouchListener(queueRecycler) {
             @Override

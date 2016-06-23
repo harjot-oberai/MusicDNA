@@ -1019,6 +1019,9 @@ public class HomeActivity extends AppCompatActivity
             hidePlayer();
         }
 
+        if (LocalMusicFragment.shuffleFab != null)
+            LocalMusicFragment.shuffleFab.setVisibility(View.INVISIBLE);
+
         /*Update the Local List*/
 
         localRecyclerContainer.setVisibility(View.VISIBLE);
@@ -1045,6 +1048,10 @@ public class HomeActivity extends AppCompatActivity
             (LocalMusicFragment.lv.getAdapter()).notifyDataSetChanged();
         if (query.equals("")) {
             localRecyclerContainer.setVisibility(View.GONE);
+        }
+        if (query.equals("") && isLocalVisible) {
+            if (LocalMusicFragment.shuffleFab != null)
+                LocalMusicFragment.shuffleFab.setVisibility(View.VISIBLE);
         }
 
     }
@@ -1676,33 +1683,38 @@ public class HomeActivity extends AppCompatActivity
     }
 
     @Override
-    public void onQueueItemClicked(int position) {
+    public void onQueueItemClicked(final int position) {
 
         if (isPlayerVisible)
             showPlayer3();
         else
             showPlayer();
 
-        queueCurrentIndex = position;
-        UnifiedTrack ut = HomeActivity.queue.getQueue().get(position);
-        if (ut.getType()) {
-            LocalTrack track = ut.getLocalTrack();
-            localSelectedTrack = track;
-            streamSelected = false;
-            localSelected = true;
-            queueCall = false;
-            isReloaded = false;
-            onLocalTrackSelected(position);
-        } else {
-            Track track = ut.getStreamTrack();
-            selectedTrack = track;
-            streamSelected = true;
-            localSelected = false;
-            queueCall = false;
-            isReloaded = false;
-            onTrackSelected(position);
-        }
-
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                queueCurrentIndex = position;
+                UnifiedTrack ut = HomeActivity.queue.getQueue().get(position);
+                if (ut.getType()) {
+                    LocalTrack track = ut.getLocalTrack();
+                    localSelectedTrack = track;
+                    streamSelected = false;
+                    localSelected = true;
+                    queueCall = false;
+                    isReloaded = false;
+                    onLocalTrackSelected(position);
+                } else {
+                    Track track = ut.getStreamTrack();
+                    selectedTrack = track;
+                    streamSelected = true;
+                    localSelected = false;
+                    queueCall = false;
+                    isReloaded = false;
+                    onTrackSelected(position);
+                }
+            }
+        }, 500);
     }
 
     @Override
@@ -1967,8 +1979,6 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onSmallPlayerTouched() {
-        android.app.Fragment frag = fragMan.findFragmentByTag("player");
-        android.app.FragmentManager fm = fragMan;
         if (!isPlayerVisible) {
             isPlayerVisible = true;
             hideTabs();

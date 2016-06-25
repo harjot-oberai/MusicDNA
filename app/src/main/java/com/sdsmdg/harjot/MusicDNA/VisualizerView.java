@@ -13,6 +13,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 
@@ -89,10 +90,12 @@ public class VisualizerView extends View {
 
         // Redraw previous points
         if (HomeActivity.isPlayerVisible) {
-            for (int i = 0; i < pts.size(); i++) {
-                mForePaint.setColor(ptPaint.get(i).second.first);
-                mForePaint.setAlpha(ptPaint.get(i).second.second);
-                canvas.drawCircle(pts.get(i).first, pts.get(i).second, ptPaint.get(i).first, mForePaint);
+            if (PlayerFragment.mVisualizerView != null && (PlayerFragment.mVisualizerView.getVisibility() == View.VISIBLE)) {
+                for (int i = 0; i < pts.size(); i++) {
+                    mForePaint.setColor(ptPaint.get(i).second.first);
+                    mForePaint.setAlpha(ptPaint.get(i).second.second);
+                    canvas.drawCircle(pts.get(i).first, pts.get(i).second, ptPaint.get(i).first, mForePaint);
+                }
             }
         }
     }

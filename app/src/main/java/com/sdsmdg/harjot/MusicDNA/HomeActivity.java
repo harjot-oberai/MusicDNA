@@ -1435,6 +1435,7 @@ public class HomeActivity extends AppCompatActivity
     }
 
     public static void updatePoints() {
+
         PlayerFragment.mVisualizerView.outerRadius = (float) (Math.min(PlayerFragment.mVisualizerView.width, PlayerFragment.mVisualizerView.height) * 0.42);
         PlayerFragment.mVisualizerView.normalizedPosition = ((float) (PlayerFragment.mMediaPlayer.getCurrentPosition()) / (float) (PlayerFragment.durationInMilliSec));
         if (mBytes == null) {
@@ -1928,13 +1929,18 @@ public class HomeActivity extends AppCompatActivity
         @Override
         protected Void doInBackground(Void... params) {
             updatePoints();
+            main.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    PlayerFragment.mVisualizerView.updateVisualizer(mBytes);
+                }
+            });
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            PlayerFragment.mVisualizerView.updateVisualizer(mBytes);
         }
     }
 

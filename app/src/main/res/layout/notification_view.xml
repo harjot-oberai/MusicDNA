@@ -21,9 +21,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:padding="5dp"
             android:layout_marginLeft="10dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="5dp">
 
             <TextView
                 android:id="@+id/title_in_notification"
@@ -69,8 +69,8 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
             android:layout_margin="10dp"
+            android:layout_alignParentRight="true"
             android:src="@drawable/ic_skip_next_white_48dp" />
     </RelativeLayout>
 

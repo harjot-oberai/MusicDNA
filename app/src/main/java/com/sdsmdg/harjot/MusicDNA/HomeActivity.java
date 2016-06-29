@@ -95,6 +95,7 @@ import com.sdsmdg.harjot.MusicDNA.Models.RecentlyPlayed;
 import com.sdsmdg.harjot.MusicDNA.Models.SavedDNA;
 import com.sdsmdg.harjot.MusicDNA.Models.Track;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
+import com.sdsmdg.harjot.MusicDNA.NotificationManager.AudioPlayerBroadcastReceiver;
 import com.sdsmdg.harjot.MusicDNA.NotificationManager.Constants;
 import com.sdsmdg.harjot.MusicDNA.NotificationManager.MediaPlayerService;
 import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
@@ -138,6 +139,7 @@ public class HomeActivity extends AppCompatActivity
         PlayerFragment.onEqualizerClickedListener,
         PlayerFragment.onQueueClickListener,
         PlayerFragment.onPreparedLsitener,
+        PlayerFragment.onPlayPauseListener,
         PlayListFragment.onPLaylistTouchedListener,
         PlayListFragment.onPlaylistMenuPlayAllListener,
         FolderFragment.onFolderClickedListener,
@@ -337,6 +339,8 @@ public class HomeActivity extends AppCompatActivity
                 PlayerFragment.mCallback4 = this;
                 PlayerFragment.mCallback5 = this;
                 PlayerFragment.mCallback6 = this;
+//                if(Build.VERSION.SDK_INT<21)
+                PlayerFragment.mCallback7 = this;
                 int flag = 0;
                 for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
                     UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
@@ -445,6 +449,8 @@ public class HomeActivity extends AppCompatActivity
                 PlayerFragment.mCallback4 = this;
                 PlayerFragment.mCallback5 = this;
                 PlayerFragment.mCallback6 = this;
+//                if(Build.VERSION.SDK_INT<21)
+                PlayerFragment.mCallback7 = this;
                 int flag = 0;
                 for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
                     UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
@@ -1554,7 +1560,7 @@ public class HomeActivity extends AppCompatActivity
             PlayerFragment.mVisualizerView.mForePaint.setColor(Color.HSVToColor(hsv));
 
             if (PlayerFragment.mVisualizerView.size >= 8.0 && PlayerFragment.mVisualizerView.size < 29.0) {
-                PlayerFragment.mVisualizerView.mForePaint.setAlpha(80);
+                PlayerFragment.mVisualizerView.mForePaint.setAlpha(17);
             } else if (PlayerFragment.mVisualizerView.size >= 29.0 && PlayerFragment.mVisualizerView.size <= 60.0) {
                 PlayerFragment.mVisualizerView.mForePaint.setAlpha(9);
             } else if (PlayerFragment.mVisualizerView.size > 60.0) {
@@ -1922,6 +1928,11 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onRecent(int pos) {
         onQueueItemClicked(pos);
+    }
+
+    @Override
+    public void onPlayPause() {
+        showNotification();
     }
 
     public static class MyAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -2503,8 +2514,84 @@ public class HomeActivity extends AppCompatActivity
                 startService(intent);
                 isNotificationVisible = true;
             }
+        } else {
+            setNotification();
         }
 
+    }
+
+    public void setNotification() {
+        Notification notification;
+        String ns = Context.NOTIFICATION_SERVICE;
+        notificationManager = (NotificationManager) getSystemService(ns);
+        RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.notification_view);
+        RemoteViews notificationViewSmall = new RemoteViews(getPackageName(), R.layout.notification_view_small);
+        Intent notificationIntent = new Intent(this, HomeActivity.class);
+        PendingIntent pendingNotificationIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+        Intent switchIntent = new Intent("com.sdsmdg.harjot.MusicDNA.ACTION_PLAY_PAUSE");
+        PendingIntent pendingSwitchIntent = PendingIntent.getBroadcast(this, 100, switchIntent, 0);
+        notificationView.setOnClickPendingIntent(R.id.btn_pause_play_in_notification, pendingSwitchIntent);
+        try {
+            if (PlayerFragment.mMediaPlayer.isPlaying()) {
+                notificationView.setImageViewResource(R.id.btn_pause_play_in_notification, R.drawable.ic_pause_white_48dp);
+            } else {
+                notificationView.setImageViewResource(R.id.btn_pause_play_in_notification, R.drawable.ic_play_arrow_white_48dp);
+            }
+        } catch (Exception e) {
+        }
+        Intent switchIntent2 = new Intent("com.sdsmdg.harjot.MusicDNA.ACTION_NEXT");
+        PendingIntent pendingSwitchIntent2 = PendingIntent.getBroadcast(this, 100, switchIntent2, 0);
+        notificationView.setOnClickPendingIntent(R.id.btn_next_in_notification, pendingSwitchIntent2);
+        Intent switchIntent3 = new Intent("com.sdsmdg.harjot.MusicDNA.ACTION_PREV");
+        PendingIntent pendingSwitchIntent3 = PendingIntent.getBroadcast(this, 100, switchIntent3, 0);
+        notificationView.setOnClickPendingIntent(R.id.btn_prev_in_notification, pendingSwitchIntent3);
+
+        notificationViewSmall.setOnClickPendingIntent(R.id.btn_pause_play_in_notification, pendingSwitchIntent);
+        try {
+            if (PlayerFragment.mMediaPlayer.isPlaying()) {
+                notificationViewSmall.setImageViewResource(R.id.btn_pause_play_in_notification, R.drawable.ic_pause_white_48dp);
+            } else {
+                notificationViewSmall.setImageViewResource(R.id.btn_pause_play_in_notification, R.drawable.ic_play_arrow_white_48dp);
+            }
+        } catch (Exception e) {
+        }
+        notificationViewSmall.setOnClickPendingIntent(R.id.btn_next_in_notification, pendingSwitchIntent2);
+        notificationViewSmall.setOnClickPendingIntent(R.id.btn_prev_in_notification, pendingSwitchIntent3);
+
+        Notification.Builder builder = new Notification.Builder(this);
+        notification = builder.setContentTitle("MusicDNA")
+                .setContentText("Slide down on note to expand")
+                .setSmallIcon(R.drawable.ic_default)
+                .setContentTitle("Title")
+                .setContentText("Artist")
+                .addAction(R.drawable.ic_skip_previous_white_48dp, "Prev", pendingSwitchIntent3)
+                .addAction(R.drawable.ic_play_arrow_white_48dp, "Play", pendingSwitchIntent)
+                .addAction(R.drawable.ic_skip_next_white_48dp, "Next", pendingSwitchIntent2)
+                .setLargeIcon(((BitmapDrawable) PlayerFragment.selected_track_image.getDrawable()).getBitmap())
+                .build();
+        notification.priority = Notification.PRIORITY_MAX;
+        notification.bigContentView = notificationView;
+        notification.contentView = notificationViewSmall;
+        notification.contentIntent = pendingNotificationIntent;
+        notification.flags |= Notification.FLAG_ONGOING_EVENT;
+        notificationView.setImageViewBitmap(R.id.image_in_notification, ((BitmapDrawable) PlayerFragment.selected_track_image.getDrawable()).getBitmap());
+        if (PlayerFragment.localIsPlaying) {
+            notificationView.setTextViewText(R.id.title_in_notification, PlayerFragment.localTrack.getTitle());
+            notificationView.setTextViewText(R.id.artist_in_notification, PlayerFragment.localTrack.getArtist());
+        } else {
+            notificationView.setTextViewText(R.id.title_in_notification, PlayerFragment.track.getTitle());
+            notificationView.setTextViewText(R.id.artist_in_notification, "");
+        }
+        notificationViewSmall.setImageViewBitmap(R.id.image_in_notification, ((BitmapDrawable) PlayerFragment.selected_track_image.getDrawable()).getBitmap());
+        if (PlayerFragment.localIsPlaying) {
+            notificationViewSmall.setTextViewText(R.id.title_in_notification, PlayerFragment.localTrack.getTitle());
+            notificationViewSmall.setTextViewText(R.id.artist_in_notification, PlayerFragment.localTrack.getArtist());
+        } else {
+            notificationViewSmall.setTextViewText(R.id.title_in_notification, PlayerFragment.track.getTitle());
+            notificationViewSmall.setTextViewText(R.id.artist_in_notification, "");
+        }
+        PlayerFragment.isStart = false;
+        notificationManager.notify(1, notification);
     }
 
     public void HideBottomFakeToolbar() {

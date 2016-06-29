@@ -90,7 +90,7 @@ public class PlayerFragment extends Fragment {
 
     public static int durationInMilliSec;
     static boolean completed = false;
-    static boolean pauseClicked = false;
+    public static boolean pauseClicked = false;
     static boolean isTracking = false;
 
     public static boolean localIsPlaying = false;

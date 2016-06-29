@@ -126,6 +126,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
+            android:textColor="#FFF"
             android:text="0:00" />
 
         <SeekBar
@@ -145,6 +146,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
+            android:textColor="#FFF"
             android:text="0:00" />
 
     </RelativeLayout>

@@ -77,40 +77,43 @@
         android:layout_above="@+id/seekBarContainer"
         android:layout_centerHorizontal="true" />
 
-    <ImageView
-        android:id="@+id/toggleSaveDNA"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
+    <RelativeLayout
+        android:id="@+id/toggleContainer"
         android:layout_above="@+id/seekBarContainer"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:clickable="true"
-        android:src="@drawable/ic_download" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/toggleSaveDNA"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:src="@drawable/ic_download" />
 
-    <ImageView
-        android:id="@+id/repeat_icon"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_above="@+id/seekBarContainer"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="5dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:clickable="true"
-        android:src="@drawable/ic_repeat_white_48dp" />
+        <ImageView
+            android:id="@+id/repeat_icon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="5dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:src="@drawable/ic_repeat_white_48dp" />
 
-    <ImageView
-        android:id="@+id/shuffle_icon"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_above="@+id/seekBarContainer"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginRight="5dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:clickable="true"
-        android:src="@drawable/ic_shuffle_white_48dp" />
+        <ImageView
+            android:id="@+id/shuffle_icon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="5dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:src="@drawable/ic_shuffle_white_48dp" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/seekBarContainer"

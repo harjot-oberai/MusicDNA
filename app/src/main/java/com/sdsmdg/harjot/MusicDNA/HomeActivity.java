@@ -36,6 +36,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -140,6 +141,7 @@ public class HomeActivity extends AppCompatActivity
         PlayerFragment.onQueueClickListener,
         PlayerFragment.onPreparedLsitener,
         PlayerFragment.onPlayPauseListener,
+        PlayerFragment.fullScreenListener,
         PlayListFragment.onPLaylistTouchedListener,
         PlayListFragment.onPlaylistMenuPlayAllListener,
         FolderFragment.onFolderClickedListener,
@@ -298,6 +300,7 @@ public class HomeActivity extends AppCompatActivity
     public static boolean isSavedDNAVisible = false;
     public static boolean isAlbumVisible = false;
     public static boolean isRecentVisible = false;
+    public static boolean isFullScreenEnabled = false;
 
     static boolean isEqualizerEnabled = false;
     static boolean isEqualizerReloaded = false;
@@ -339,8 +342,9 @@ public class HomeActivity extends AppCompatActivity
                 PlayerFragment.mCallback4 = this;
                 PlayerFragment.mCallback5 = this;
                 PlayerFragment.mCallback6 = this;
-//                if(Build.VERSION.SDK_INT<21)
-                PlayerFragment.mCallback7 = this;
+                PlayerFragment.mCallback8 = this;
+                if (Build.VERSION.SDK_INT < 21)
+                    PlayerFragment.mCallback7 = this;
                 int flag = 0;
                 for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
                     UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
@@ -449,8 +453,9 @@ public class HomeActivity extends AppCompatActivity
                 PlayerFragment.mCallback4 = this;
                 PlayerFragment.mCallback5 = this;
                 PlayerFragment.mCallback6 = this;
-//                if(Build.VERSION.SDK_INT<21)
-                PlayerFragment.mCallback7 = this;
+                PlayerFragment.mCallback8 = this;
+                if (Build.VERSION.SDK_INT < 21)
+                    PlayerFragment.mCallback7 = this;
                 int flag = 0;
                 for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
                     UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
@@ -1933,6 +1938,23 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onPlayPause() {
         showNotification();
+    }
+
+    @Override
+    public void onFullScreen() {
+        if (isFullScreenEnabled) {
+            View decorView = getWindow().getDecorView();
+            int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+            decorView.setSystemUiVisibility(uiOptions);
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.hide();
+        } else {
+            View decorView = getWindow().getDecorView();
+            int uiOptions = View.SYSTEM_UI_FLAG_VISIBLE;
+            decorView.setSystemUiVisibility(uiOptions);
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.show();
+        }
     }
 
     public static class MyAsyncTask extends AsyncTask<Void, Void, Void> {

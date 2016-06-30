@@ -16,6 +16,7 @@ import android.media.audiofx.Equalizer;
 import android.media.audiofx.PresetReverb;
 import android.media.audiofx.Visualizer;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.Pair;
@@ -79,6 +80,8 @@ public class PlayerFragment extends Fragment {
     boolean isFav = false;
 
     static RelativeLayout bottomContainer;
+    RelativeLayout seekBarContainer;
+    RelativeLayout toggleContainer;
 
     public static ImageView selected_track_image;
     public static TextView selected_track_title;
@@ -109,9 +112,9 @@ public class PlayerFragment extends Fragment {
     public static onQueueClickListener mCallback5;
     public static onPreparedLsitener mCallback6;
     public static onPlayPauseListener mCallback7;
+    public static fullScreenListener mCallback8;
 
     public static boolean isStart = true;
-
 
     long startTrack;
     long endTrack;
@@ -225,6 +228,7 @@ public class PlayerFragment extends Fragment {
             mCallback4 = (onEqualizerClickedListener) context;
             mCallback5 = (onQueueClickListener) context;
             mCallback6 = (onPreparedLsitener) context;
+            mCallback8 = (fullScreenListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnHeadlineSelectedListener");
@@ -278,6 +282,10 @@ public class PlayerFragment extends Fragment {
 
     public interface onPlayPauseListener {
         public void onPlayPause();
+    }
+
+    public interface fullScreenListener{
+        public void onFullScreen();
     }
 
     @Override
@@ -392,8 +400,33 @@ public class PlayerFragment extends Fragment {
         smallPlayer = (Toolbar) view.findViewById(R.id.smallPlayer);
 
         bottomContainer = (RelativeLayout) view.findViewById(R.id.bottomContainer);
+        seekBarContainer = (RelativeLayout) view.findViewById(R.id.seekBarContainer);
+        toggleContainer = (RelativeLayout) view.findViewById(R.id.toggleContainer);
 
         mVisualizerView = (VisualizerView) view.findViewById(R.id.myvisualizerview);
+
+        mVisualizerView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (HomeActivity.isFullScreenEnabled) {
+                    HomeActivity.isFullScreenEnabled = false;
+                    bottomContainer.setVisibility(View.VISIBLE);
+                    seekBarContainer.setVisibility(View.VISIBLE);
+                    toggleContainer.setVisibility(View.VISIBLE);
+                    HomeActivity.spToolbar.setVisibility(View.VISIBLE);
+                    mCallback8.onFullScreen();
+                } else {
+                    HomeActivity.isFullScreenEnabled = true;
+                    bottomContainer.setVisibility(View.INVISIBLE);
+                    seekBarContainer.setVisibility(View.INVISIBLE);
+                    toggleContainer.setVisibility(View.INVISIBLE);
+                    HomeActivity.spToolbar.setVisibility(View.INVISIBLE);
+                    mCallback8.onFullScreen();
+                }
+                return true;
+            }
+        });
+
         cpb = (CustomProgressBar) view.findViewById(R.id.customProgress);
 
         mMediaPlayer = new MediaPlayer();

@@ -6,6 +6,7 @@ package com.sdsmdg.harjot.MusicDNA;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -15,6 +16,7 @@ import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.Pair;
+import android.view.Display;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -47,6 +49,11 @@ public class VisualizerView extends View {
 
     public static List<Pair<Float, Float>> pts2;
     public static List<Pair<Float, Pair<Integer, Integer>>> ptPaint2;
+
+    int w = 1080, h = 1080;
+    Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+    Bitmap bmp = Bitmap.createBitmap(w, h, conf);
+    Canvas cacheCanvas = new Canvas(bmp);
 
     boolean prevDrawn = false;
 
@@ -92,15 +99,23 @@ public class VisualizerView extends View {
         if (HomeActivity.isPlayerVisible) {
             if (PlayerFragment.mVisualizerView != null && (PlayerFragment.mVisualizerView.getVisibility() == View.VISIBLE)) {
                 for (int i = 0; i < pts.size(); i++) {
+                    if (bmp != null)
+                        canvas.drawBitmap(bmp, 0, 0, null);
                     mForePaint.setColor(ptPaint.get(i).second.first);
                     mForePaint.setAlpha(ptPaint.get(i).second.second);
                     canvas.drawCircle(pts.get(i).first, pts.get(i).second, ptPaint.get(i).first, mForePaint);
+                    cacheCanvas.drawCircle(pts.get(i).first, pts.get(i).second, ptPaint.get(i).first, mForePaint);
+                    pts.clear();
+                    ptPaint.clear();
                 }
+                canvas.drawBitmap(bmp, 0, 0, null);
             }
         }
     }
 
     public void clear() {
+        bmp = Bitmap.createBitmap(w, h, conf);
+        cacheCanvas = new Canvas(bmp);
         pts.clear();
         ptPaint.clear();
     }

@@ -212,7 +212,7 @@ public class HomeActivity extends AppCompatActivity
 
     public static int queueCurrentIndex = 0;
 
-    public static boolean isSaveDNAEnabled = true;
+    public static boolean isSaveDNAEnabled = false;
 
     public static Context ctx;
 

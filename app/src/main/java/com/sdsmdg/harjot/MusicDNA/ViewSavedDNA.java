@@ -98,6 +98,7 @@ public class ViewSavedDNA extends Fragment {
                     HomeActivity.tempSavedDNA = dna;
                     mVisualizerView2.setPts(dna.getModel().getPts());
                     mVisualizerView2.setPtPaint(dna.getModel().getPtPaint());
+                    mVisualizerView2.setBmp(dna.getModel().getBmp());
                     mVisualizerView2.update();
                 }
             }

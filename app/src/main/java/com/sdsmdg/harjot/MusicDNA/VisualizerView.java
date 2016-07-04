@@ -50,10 +50,10 @@ public class VisualizerView extends View {
     public static List<Pair<Float, Float>> pts2;
     public static List<Pair<Float, Pair<Integer, Integer>>> ptPaint2;
 
-    int w = 1080, h = 1080;
-    Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-    Bitmap bmp = Bitmap.createBitmap(w, h, conf);
-    Canvas cacheCanvas = new Canvas(bmp);
+    static int w;
+    static int h;
+    static Bitmap.Config conf;
+    static Bitmap bmp;
 
     boolean prevDrawn = false;
 
@@ -82,6 +82,11 @@ public class VisualizerView extends View {
         mForePaint1.setColor(Color.rgb(255, 128, 0));
         pts = new ArrayList<>();
         ptPaint = new ArrayList<>();
+        w = HomeActivity.screen_width;
+        h = HomeActivity.screen_width;
+        conf = Bitmap.Config.ARGB_8888;
+        bmp = Bitmap.createBitmap(w, h, conf);
+        HomeActivity.cacheCanvas = new Canvas(bmp);
     }
 
     public void updateVisualizer(byte[] bytes) {
@@ -104,7 +109,7 @@ public class VisualizerView extends View {
                     mForePaint.setColor(ptPaint.get(i).second.first);
                     mForePaint.setAlpha(ptPaint.get(i).second.second);
                     canvas.drawCircle(pts.get(i).first, pts.get(i).second, ptPaint.get(i).first, mForePaint);
-                    cacheCanvas.drawCircle(pts.get(i).first, pts.get(i).second, ptPaint.get(i).first, mForePaint);
+//                    HomeActivity.cacheCanvas.drawCircle(pts.get(i).first, pts.get(i).second, ptPaint.get(i).first, mForePaint);
                     pts.clear();
                     ptPaint.clear();
                 }
@@ -115,7 +120,7 @@ public class VisualizerView extends View {
 
     public void clear() {
         bmp = Bitmap.createBitmap(w, h, conf);
-        cacheCanvas = new Canvas(bmp);
+        HomeActivity.cacheCanvas = new Canvas(bmp);
         pts.clear();
         ptPaint.clear();
     }

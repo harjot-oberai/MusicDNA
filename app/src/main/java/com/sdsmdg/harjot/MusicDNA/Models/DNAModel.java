@@ -1,5 +1,6 @@
 package com.sdsmdg.harjot.MusicDNA.Models;
 
+import android.graphics.Bitmap;
 import android.util.Pair;
 
 import java.util.List;
@@ -13,13 +14,15 @@ public class DNAModel {
     private Track track;
     private List<Pair<Float, Float>> pts;
     private List<Pair<Float, Pair<Integer, Integer>>> ptPaint;
+    private Bitmap bmp;
 
-    public DNAModel(boolean type, LocalTrack localTrack, Track track, List<Pair<Float, Float>> pts, List<Pair<Float, Pair<Integer, Integer>>> ptPaint) {
+    public DNAModel(boolean type, LocalTrack localTrack, Track track, List<Pair<Float, Float>> pts, List<Pair<Float, Pair<Integer, Integer>>> ptPaint, Bitmap bmp) {
         this.type = type;
         this.localTrack = localTrack;
         this.track = track;
         this.pts = pts;
         this.ptPaint = ptPaint;
+        this.bmp = bmp;
     }
 
     public boolean getType() {
@@ -60,5 +63,13 @@ public class DNAModel {
 
     public void setTrack(Track track) {
         this.track = track;
+    }
+
+    public Bitmap getBmp() {
+        return bmp;
+    }
+
+    public void setBmp(Bitmap bmp) {
+        this.bmp = bmp;
     }
 }

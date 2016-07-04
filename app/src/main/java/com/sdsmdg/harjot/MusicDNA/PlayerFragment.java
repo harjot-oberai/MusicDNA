@@ -284,7 +284,7 @@ public class PlayerFragment extends Fragment {
         public void onPlayPause();
     }
 
-    public interface fullScreenListener{
+    public interface fullScreenListener {
         public void onFullScreen();
     }
 
@@ -467,22 +467,23 @@ public class PlayerFragment extends Fragment {
                 }
 
                 if (HomeActivity.isSaveDNAEnabled) {
-                    Toast.makeText(HomeActivity.ctx, "SAVING...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HomeActivity.ctx, "SAVING..", Toast.LENGTH_SHORT).show();
                     if (!HomeActivity.isPlayerVisible) {
                         mVisualizerView.setVisibility(View.INVISIBLE);
                     }
                     List<Pair<Float, Float>> pts = new ArrayList<Pair<Float, Float>>();
                     List<Pair<Float, Pair<Integer, Integer>>> ptPaint = new ArrayList<Pair<Float, Pair<Integer, Integer>>>();
+                    Bitmap bmp = mVisualizerView.bmp;
                     for (int i = 0; i < VisualizerView.pts.size(); i++) {
                         pts.add(VisualizerView.pts.get(i));
                         ptPaint.add(VisualizerView.ptPaint.get(i));
                     }
                     if (localIsPlaying) {
-                        DNAModel model = new DNAModel(true, localTrack, null, pts, ptPaint);
+                        DNAModel model = new DNAModel(true, localTrack, null, pts, ptPaint, bmp);
                         SavedDNA sDna = new SavedDNA(localTrack.getTitle(), model);
                         HomeActivity.savedDNAs.getSavedDNAs().add(sDna);
                     } else {
-                        DNAModel model = new DNAModel(false, null, track, pts, ptPaint);
+                        DNAModel model = new DNAModel(false, null, track, pts, ptPaint, bmp);
                         SavedDNA sDna = new SavedDNA(track.getTitle(), model);
                         HomeActivity.savedDNAs.getSavedDNAs().add(sDna);
                     }

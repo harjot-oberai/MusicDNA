@@ -1,6 +1,7 @@
 package com.sdsmdg.harjot.MusicDNA;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -20,6 +21,7 @@ public class VisualizerView2 extends View {
 
     public List<Pair<Float, Float>> pts;
     public List<Pair<Float, Pair<Integer, Integer>>> ptPaint;
+    public Bitmap bmp;
     public Paint mForePaint = new Paint();
     public Paint mTextPaint = new Paint();
     boolean textEnabled = false;
@@ -32,6 +34,10 @@ public class VisualizerView2 extends View {
 
     public void setPtPaint(List<Pair<Float, Pair<Integer, Integer>>> ptPaint) {
         this.ptPaint = ptPaint;
+    }
+
+    public void setBmp(Bitmap bmp) {
+        this.bmp = bmp;
     }
 
     public VisualizerView2(Context context) {
@@ -65,11 +71,13 @@ public class VisualizerView2 extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        for (int i = 0; i < pts.size(); i++) {
+        if (bmp != null)
+            canvas.drawBitmap(bmp, 0, -1 * (canvas.getHeight() / 5), null);
+        /*for (int i = 0; i < pts.size(); i++) {
             mForePaint.setColor(ptPaint.get(i).second.first);
             mForePaint.setAlpha(ptPaint.get(i).second.second);
             canvas.drawCircle(pts.get(i).first, pts.get(i).second - (canvas.getHeight() / 5), ptPaint.get(i).first, mForePaint);
-        }
+        }*/
         if (textEnabled && HomeActivity.tempSavedDNA != null) {
             canvas.drawText(text, canvas.getWidth() / 2, (canvas.getHeight() * 15) / 16, mTextPaint);
         }

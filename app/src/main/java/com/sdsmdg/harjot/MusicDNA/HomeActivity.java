@@ -19,6 +19,7 @@ import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -160,6 +161,9 @@ public class HomeActivity extends AppCompatActivity
     public static List<Track> streamingTrackList = new ArrayList<>();
     public static List<Album> albums = new ArrayList<>();
     public static List<UnifiedTrack> continuePlayingList = new ArrayList<>();
+
+
+    static Canvas cacheCanvas;
 
     public static Album tempAlbum;
 
@@ -784,7 +788,7 @@ public class HomeActivity extends AppCompatActivity
             String json7 = mPrefs.getString("isReloaded", "");
             isReloaded = gson.fromJson(json7, Boolean.class);
         } catch (Exception e) {
-            Toast.makeText(HomeActivity.this, e.getMessage() + "::", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(HomeActivity.this, e.getMessage() + "::", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
 
@@ -1577,6 +1581,9 @@ public class HomeActivity extends AppCompatActivity
             // Add points and paint config to lists for redraw
             PlayerFragment.mVisualizerView.pts.add(Pair.create(midx + x, midy + y));
             PlayerFragment.mVisualizerView.ptPaint.add(Pair.create(PlayerFragment.mVisualizerView.size, Pair.create(PlayerFragment.mVisualizerView.mForePaint.getColor(), PlayerFragment.mVisualizerView.mForePaint.getAlpha())));
+
+            cacheCanvas.drawCircle(midx + x, midy + y, PlayerFragment.mVisualizerView.size, PlayerFragment.mVisualizerView.mForePaint);
+
         }
     }
 

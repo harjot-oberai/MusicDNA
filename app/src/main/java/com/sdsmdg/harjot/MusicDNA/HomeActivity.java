@@ -1444,9 +1444,9 @@ public class HomeActivity extends AppCompatActivity
 
     public static void updateVisualizer(byte[] bytes) {
         mBytes = bytes;
-        updatePoints();
-        PlayerFragment.mVisualizerView.updateVisualizer(mBytes);
-//        new MyAsyncTask().execute();
+//        updatePoints();
+//        PlayerFragment.mVisualizerView.updateVisualizer(mBytes);
+        new MyAsyncTask().execute();
     }
 
     public static void updatePoints() {
@@ -1534,7 +1534,7 @@ public class HomeActivity extends AppCompatActivity
             y = (float) Math.cos(PlayerFragment.mVisualizerView.angle);
 
             // filtering low amplitude
-            if (PlayerFragment.mVisualizerView.volume < 0.77) {
+            if (PlayerFragment.mVisualizerView.volume < 0.65) {
                 continue;
             }
 
@@ -2325,9 +2325,9 @@ public class HomeActivity extends AppCompatActivity
             setTitle("Saved DNAs");
             navigationView.setCheckedItem(R.id.nav_view);
             isAllSavedDnaVisisble = true;
-            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+//            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             ViewSavedDNA.mCallback = this;
-            getSupportActionBar().hide();
+//            getSupportActionBar().hide();
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             ViewSavedDNA newFragment = new ViewSavedDNA();
             fm.beginTransaction()
@@ -2482,8 +2482,8 @@ public class HomeActivity extends AppCompatActivity
             isAllSavedDnaVisisble = false;
             setTitle("Music DNA");
             navigationView.setCheckedItem(R.id.nav_home);
-            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-            getSupportActionBar().show();
+//            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+//            getSupportActionBar().show();
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             android.support.v4.app.Fragment frag = fm.findFragmentByTag("allSavedDNAs");
             if (frag != null) {

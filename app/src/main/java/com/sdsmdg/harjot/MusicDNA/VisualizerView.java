@@ -103,9 +103,9 @@ public class VisualizerView extends View {
         // Redraw previous points
         if (HomeActivity.isPlayerVisible) {
             if (PlayerFragment.mVisualizerView != null && (PlayerFragment.mVisualizerView.getVisibility() == View.VISIBLE)) {
+                if (bmp != null)
+                    canvas.drawBitmap(bmp, 0, 0, null);
                 for (int i = 0; i < pts.size(); i++) {
-                    if (bmp != null)
-                        canvas.drawBitmap(bmp, 0, 0, null);
                     mForePaint.setColor(ptPaint.get(i).second.first);
                     mForePaint.setAlpha(ptPaint.get(i).second.second);
                     canvas.drawCircle(pts.get(i).first, pts.get(i).second, ptPaint.get(i).first, mForePaint);

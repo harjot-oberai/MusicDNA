@@ -80,8 +80,8 @@ public class PlayerFragment extends Fragment {
     boolean isFav = false;
 
     static RelativeLayout bottomContainer;
-    RelativeLayout seekBarContainer;
-    RelativeLayout toggleContainer;
+    static RelativeLayout seekBarContainer;
+    static RelativeLayout toggleContainer;
 
     public static ImageView selected_track_image;
     public static TextView selected_track_title;

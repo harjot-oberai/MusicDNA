@@ -42,7 +42,7 @@ public class AlbumRecyclerAdapter extends RecyclerView.Adapter<AlbumRecyclerAdap
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Album ab = albumList.get(position);
         holder.title.setText(ab.getName());
-        if(ab.getAlbumSongs().size()>1)
+        if (ab.getAlbumSongs().size() > 1)
             holder.artist.setText(ab.getAlbumSongs().size() + " Songs");
         else
             holder.artist.setText(ab.getAlbumSongs().size() + " Song");

@@ -891,11 +891,18 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (!searchView.isIconified()) {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else if (isFullScreenEnabled) {
+            HomeActivity.isFullScreenEnabled = false;
+            PlayerFragment.bottomContainer.setVisibility(View.VISIBLE);
+            PlayerFragment.seekBarContainer.setVisibility(View.VISIBLE);
+            PlayerFragment.toggleContainer.setVisibility(View.VISIBLE);
+            HomeActivity.spToolbar.setVisibility(View.VISIBLE);
+            onFullScreen();
+        } else if (!searchView.isIconified()) {
             searchView.setQuery("", true);
             searchView.setIconified(true);
-        } else if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
         } else {
             if (isEqualizerVisible) {
                 showPlayer2();

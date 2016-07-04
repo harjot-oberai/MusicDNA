@@ -474,16 +474,19 @@ public class PlayerFragment extends Fragment {
                     List<Pair<Float, Float>> pts = new ArrayList<Pair<Float, Float>>();
                     List<Pair<Float, Pair<Integer, Integer>>> ptPaint = new ArrayList<Pair<Float, Pair<Integer, Integer>>>();
                     Bitmap bmp = mVisualizerView.bmp;
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    byte[] byteArray = stream.toByteArray();
                     for (int i = 0; i < VisualizerView.pts.size(); i++) {
                         pts.add(VisualizerView.pts.get(i));
                         ptPaint.add(VisualizerView.ptPaint.get(i));
                     }
                     if (localIsPlaying) {
-                        DNAModel model = new DNAModel(true, localTrack, null, pts, ptPaint, bmp);
+                        DNAModel model = new DNAModel(true, localTrack, null, pts, ptPaint, byteArray);
                         SavedDNA sDna = new SavedDNA(localTrack.getTitle(), model);
                         HomeActivity.savedDNAs.getSavedDNAs().add(sDna);
                     } else {
-                        DNAModel model = new DNAModel(false, null, track, pts, ptPaint, bmp);
+                        DNAModel model = new DNAModel(false, null, track, pts, ptPaint, byteArray);
                         SavedDNA sDna = new SavedDNA(track.getTitle(), model);
                         HomeActivity.savedDNAs.getSavedDNAs().add(sDna);
                     }

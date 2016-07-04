@@ -4,7 +4,7 @@ package com.sdsmdg.harjot.MusicDNA;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.os.Handler;
@@ -14,22 +14,15 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.Toast;
 
-import com.sdsmdg.harjot.MusicDNA.Models.Playlist;
 import com.sdsmdg.harjot.MusicDNA.Models.SavedDNA;
-import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.nio.ByteBuffer;
 
 
 /**
@@ -98,7 +91,9 @@ public class ViewSavedDNA extends Fragment {
                     HomeActivity.tempSavedDNA = dna;
                     mVisualizerView2.setPts(dna.getModel().getPts());
                     mVisualizerView2.setPtPaint(dna.getModel().getPtPaint());
-                    mVisualizerView2.setBmp(dna.getModel().getBmp());
+                    byte[] bArr = dna.getModel().getByteArray();
+                    Bitmap bmp = BitmapFactory.decodeByteArray(bArr, 0, bArr.length);
+                    mVisualizerView2.setBmp(bmp);
                     mVisualizerView2.update();
                 }
             }
@@ -115,6 +110,9 @@ public class ViewSavedDNA extends Fragment {
                 HomeActivity.tempSavedDNA = dna;
                 mVisualizerView2.setPts(dna.getModel().getPts());
                 mVisualizerView2.setPtPaint(dna.getModel().getPtPaint());
+                byte[] bArr = dna.getModel().getByteArray();
+                Bitmap bmp = BitmapFactory.decodeByteArray(bArr, 0, bArr.length);
+                mVisualizerView2.setBmp(bmp);
                 mVisualizerView2.update();
                 return true;
             }
@@ -136,6 +134,9 @@ public class ViewSavedDNA extends Fragment {
                             HomeActivity.tempSavedDNA = dna;
                             mVisualizerView2.setPts(dna.getModel().getPts());
                             mVisualizerView2.setPtPaint(dna.getModel().getPtPaint());
+                            byte[] bArr = dna.getModel().getByteArray();
+                            Bitmap bmp = BitmapFactory.decodeByteArray(bArr, 0, bArr.length);
+                            mVisualizerView2.setBmp(bmp);
                             mVisualizerView2.update();
                         } else if (item.getTitle().equals("Delete")) {
                             HomeActivity.savedDNAs.getSavedDNAs().remove(position);

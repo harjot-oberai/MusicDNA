@@ -21,9 +21,11 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -625,6 +627,43 @@ public class PlayerFragment extends Fragment {
                     togglePlayPause();
                 else
                     mCallback5.onQueueClicked();
+            }
+        });
+
+        HomeActivity.overflowMenuAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(HomeActivity.ctx, "clicked!", Toast.LENGTH_SHORT).show();
+                PopupMenu popMenu = new PopupMenu(HomeActivity.ctx, HomeActivity.overflowMenuAB);
+                popMenu.getMenuInflater().inflate(R.menu.player_overflow_menu, popMenu.getMenu());
+
+                popMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (item.getTitle().equals("Full Screen")) {
+                            if (HomeActivity.isFullScreenEnabled) {
+                                HomeActivity.isFullScreenEnabled = false;
+                                bottomContainer.setVisibility(View.VISIBLE);
+                                seekBarContainer.setVisibility(View.VISIBLE);
+                                toggleContainer.setVisibility(View.VISIBLE);
+                                HomeActivity.spToolbar.setVisibility(View.VISIBLE);
+                                mCallback8.onFullScreen();
+                            } else {
+                                HomeActivity.isFullScreenEnabled = true;
+                                bottomContainer.setVisibility(View.INVISIBLE);
+                                seekBarContainer.setVisibility(View.INVISIBLE);
+                                toggleContainer.setVisibility(View.INVISIBLE);
+                                HomeActivity.spToolbar.setVisibility(View.INVISIBLE);
+                                mCallback8.onFullScreen();
+                            }
+                        } else if (item.getTitle().equals("Settings")) {
+
+                        }
+                        return true;
+                    }
+                });
+
+                popMenu.show();
             }
         });
 

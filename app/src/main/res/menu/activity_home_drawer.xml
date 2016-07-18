@@ -32,7 +32,7 @@
             android:icon="@drawable/save"
             android:title="Saved DNA" />
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/nav_settings"
             android:icon="@drawable/settings"
             android:title="Settings" />
     </group>

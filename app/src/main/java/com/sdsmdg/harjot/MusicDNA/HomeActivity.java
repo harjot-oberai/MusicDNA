@@ -1,22 +1,14 @@
 package com.sdsmdg.harjot.MusicDNA;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -32,15 +24,12 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
@@ -60,14 +49,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.AnticipateOvershootInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -75,7 +58,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.RemoteViews;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -87,7 +69,6 @@ import com.sdsmdg.harjot.MusicDNA.Models.AllDNAModels;
 import com.sdsmdg.harjot.MusicDNA.Models.AllMusicFolders;
 import com.sdsmdg.harjot.MusicDNA.Models.AllPlaylists;
 import com.sdsmdg.harjot.MusicDNA.Models.AllSavedDNA;
-import com.sdsmdg.harjot.MusicDNA.Models.DNAModel;
 import com.sdsmdg.harjot.MusicDNA.Models.Favourite;
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.Models.MusicFolder;
@@ -97,7 +78,6 @@ import com.sdsmdg.harjot.MusicDNA.Models.RecentlyPlayed;
 import com.sdsmdg.harjot.MusicDNA.Models.SavedDNA;
 import com.sdsmdg.harjot.MusicDNA.Models.Track;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
-import com.sdsmdg.harjot.MusicDNA.NotificationManager.AudioPlayerBroadcastReceiver;
 import com.sdsmdg.harjot.MusicDNA.NotificationManager.Constants;
 import com.sdsmdg.harjot.MusicDNA.NotificationManager.MediaPlayerService;
 import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
@@ -113,11 +93,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
-import bz.tsung.android.objectify.NoSuchPreferenceFoundException;
-import bz.tsung.android.objectify.ObjectPreferenceLoader;
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
-import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.GsonConverterFactory;
@@ -183,6 +160,7 @@ public class HomeActivity extends AppCompatActivity
     TextView spTitleHome;
 
     static ImageView playerControllerAB;
+    static ImageView overflowMenuAB;
     static CircleImageView spImgAB;
     static TextView spTitleAB;
 
@@ -305,6 +283,7 @@ public class HomeActivity extends AppCompatActivity
     public static boolean isAlbumVisible = false;
     public static boolean isRecentVisible = false;
     public static boolean isFullScreenEnabled = false;
+    public static boolean isSettingsVisible = false;
 
     static boolean isEqualizerEnabled = false;
     static boolean isEqualizerReloaded = false;
@@ -660,6 +639,7 @@ public class HomeActivity extends AppCompatActivity
 
         playerControllerAB = (ImageView) findViewById(R.id.player_control_sp_AB);
         playerControllerAB.setImageResource(R.drawable.ic_queue_music_white_48dp);
+        overflowMenuAB = (ImageView) findViewById(R.id.menuIcon);
         spImgAB = (CircleImageView) findViewById(R.id.selected_track_image_sp_AB);
         spTitleAB = (TextView) findViewById(R.id.selected_track_title_sp_AB);
         spTitleAB.setSelected(true);
@@ -957,6 +937,9 @@ public class HomeActivity extends AppCompatActivity
                 } else if (isRecentVisible) {
                     hideFragment("recent");
                     setTitle("Music DNA");
+                } else if (isSettingsVisible) {
+                    hideFragment("settings");
+                    setTitle("Music DNA");
                 } else {
                     startActivity(new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME));
                 }
@@ -1012,8 +995,8 @@ public class HomeActivity extends AppCompatActivity
             showFragment("allFolders");
         } else if (id == R.id.nav_view) {
             showFragment("allSavedDNAs");
-        } else if (id == R.id.nav_manage) {
-
+        } else if (id == R.id.nav_settings) {
+            showFragment("settings");
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -2379,6 +2362,20 @@ public class HomeActivity extends AppCompatActivity
                     .show(newFragment)
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
+        } else if (type.equals("settings") && !isSettingsVisible) {
+            setTitle("Settings");
+            isSettingsVisible = true;
+            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+            SettingsFragment newFragment = new SettingsFragment();
+            fm.beginTransaction()
+                    .setCustomAnimations(R.anim.slide_up,
+                            R.anim.slide_down,
+                            R.anim.slide_up,
+                            R.anim.slide_down)
+                    .add(R.id.fragContainer, newFragment, "settings")
+                    .show(newFragment)
+                    .addToBackStack(null)
+                    .commitAllowingStateLoss();
         }
     }
 
@@ -2518,6 +2515,17 @@ public class HomeActivity extends AppCompatActivity
                         .remove(frag)
                         .commitAllowingStateLoss();
             }
+        } else if (type.equals("settings")) {
+            isSettingsVisible = false;
+            setTitle("Music DNA");
+            navigationView.setCheckedItem(R.id.nav_home);
+            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+            android.support.v4.app.Fragment frag = fm.findFragmentByTag("settings");
+            if (frag != null) {
+                fm.beginTransaction()
+                        .remove(frag)
+                        .commitAllowingStateLoss();
+            }
         }
     }
 
@@ -2533,6 +2541,7 @@ public class HomeActivity extends AppCompatActivity
         hideFragment("allSavedDNAs");
         hideFragment("viewAlbum");
         hideFragment("recent");
+        hideFragment("settings");
 
         navigationView.setCheckedItem(R.id.nav_home);
 

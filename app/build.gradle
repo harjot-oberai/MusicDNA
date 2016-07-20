@@ -45,4 +45,5 @@ dependencies {
     compile 'com.google.code.gson:gson:2.5'
     compile 'com.h6ah4i.android.widget.verticalseekbar:verticalseekbar:0.7.0'
     compile 'jp.wasabeef:blurry:2.0.2'
+    compile 'me.priyesh:chroma:1.0.2'
 }

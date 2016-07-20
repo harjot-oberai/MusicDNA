@@ -35,11 +35,6 @@ public class VisualizerView extends View {
     static double TAU = Math.PI * 2;
     static double MAX_DOT_SIZE = 0.5;
     static double BASE = Math.log(4) / LOG_MAX;
-    private byte[] mBytes;
-    private float[] mPoints;
-    private float[] mCirclePoints;
-    private float[] mCirclePoints1;
-    private Rect mRect = new Rect();
     public static Paint mForePaint = new Paint();
     public static Paint mForePaint1 = new Paint();
     public static float width, height, angle, color, lnDataDistance, distance, size, volume, power, outerRadius, alpha;
@@ -73,10 +68,10 @@ public class VisualizerView extends View {
     }
 
     private void init() {
-        mBytes = null;
         mForePaint.setStrokeWidth(1f);
         mForePaint.setAntiAlias(true);
         mForePaint.setColor(Color.rgb(0, 128, 255));
+        mForePaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OVER));
         mForePaint1.setStrokeWidth(1f);
         mForePaint1.setAntiAlias(true);
         mForePaint1.setColor(Color.rgb(255, 128, 0));

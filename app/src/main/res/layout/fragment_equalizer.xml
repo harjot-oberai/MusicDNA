@@ -62,7 +62,8 @@
                         android:layout_height="0dp"
                         android:layout_marginTop="20dp"
                         android:splitTrack="false"
-                        app:seekBarRotation="CW270" />
+                        app:seekBarRotation="CW270"
+                        android:thumb="@drawable/custom_equalizer_thumb"/>
                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
 
                 <TextView
@@ -90,7 +91,8 @@
                         android:layout_height="0dp"
                         android:layout_marginTop="20dp"
                         android:splitTrack="false"
-                        app:seekBarRotation="CW270" />
+                        app:seekBarRotation="CW270"
+                        android:thumb="@drawable/custom_equalizer_thumb" />
                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
 
                 <TextView
@@ -118,7 +120,8 @@
                         android:layout_height="0dp"
                         android:layout_marginTop="20dp"
                         android:splitTrack="false"
-                        app:seekBarRotation="CW270" />
+                        app:seekBarRotation="CW270"
+                        android:thumb="@drawable/custom_equalizer_thumb" />
                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
 
                 <TextView
@@ -146,7 +149,8 @@
                         android:layout_height="0dp"
                         android:layout_marginTop="20dp"
                         android:splitTrack="false"
-                        app:seekBarRotation="CW270" />
+                        app:seekBarRotation="CW270"
+                        android:thumb="@drawable/custom_equalizer_thumb" />
                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
 
                 <TextView
@@ -174,7 +178,8 @@
                         android:layout_height="0dp"
                         android:layout_marginTop="20dp"
                         android:splitTrack="false"
-                        app:seekBarRotation="CW270" />
+                        app:seekBarRotation="CW270"
+                        android:thumb="@drawable/custom_equalizer_thumb" />
                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
 
                 <TextView

@@ -51,7 +51,7 @@ public class AnalogController extends View {
         textPaint = new Paint();
         textPaint.setColor(Color.WHITE);
         textPaint.setStyle(Paint.Style.FILL);
-        textPaint.setTextSize(33);
+        textPaint.setTextSize(33 * HomeActivity.ratio);
         textPaint.setFakeBoldText(true);
         textPaint.setTextAlign(Paint.Align.CENTER);
         circlePaint = new Paint();

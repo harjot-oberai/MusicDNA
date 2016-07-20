@@ -45,6 +45,7 @@ public class FullLocalMusicFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         tabLayout = (TabLayout) view.findViewById(R.id.tabs);
+        tabLayout.setBackgroundColor(HomeActivity.themeColor);
         adapter = new MyPageAdapter(getChildFragmentManager());
         adapter.addFragment(new LocalMusicFragment(), "Songs");
         adapter.addFragment(new AlbumFragment(), "Albums");

@@ -29,8 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="#000000"
-                android:visibility="invisible"
-                app:layout_scrollFlags="scroll|enterAlways">
+                android:visibility="invisible">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -49,13 +48,16 @@
 
                     <TextView
                         android:id="@+id/selected_track_title_sp_AB"
-                        android:layout_width="200dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_toStartOf="@+id/player_control_sp_AB"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
                         android:layout_toEndOf="@+id/selected_track_image_sp_AB"
-                        android:ellipsize="end"
+                        android:ellipsize="marquee"
                         android:singleLine="true"
+                        android:fadingEdge="horizontal"
                         android:text="Title"
                         android:textAlignment="center"
                         android:textColor="#FFFFFF"
@@ -67,7 +69,7 @@
                         android:layout_height="24dp"
                         android:layout_centerVertical="true"
                         android:layout_marginBottom="3dp"
-                        android:layout_marginRight="24dp"
+                        android:layout_marginRight="12dp"
                         android:layout_marginTop="2dp"
                         android:layout_toLeftOf="@+id/menuIcon"
                         android:background="?attr/selectableItemBackgroundBorderless"
@@ -80,7 +82,7 @@
                         android:layout_height="24dp"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="24dp"
+                        android:layout_marginRight="12dp"
                         android:layout_marginTop="2dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:clickable="true"

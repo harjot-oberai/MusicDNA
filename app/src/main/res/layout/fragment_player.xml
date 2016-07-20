@@ -79,9 +79,10 @@
 
     <RelativeLayout
         android:id="@+id/toggleContainer"
-        android:layout_above="@+id/seekBarContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/seekBarContainer">
+
         <ImageView
             android:id="@+id/toggleSaveDNA"
             android:layout_width="36dp"
@@ -129,8 +130,8 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:textColor="#FFF"
-            android:text="0:00" />
+            android:text="0:00"
+            android:textColor="#FFF" />
 
         <SeekBar
             android:id="@+id/progressBar"
@@ -140,7 +141,8 @@
             android:layout_marginLeft="3dp"
             android:layout_marginRight="3dp"
             android:layout_toEndOf="@+id/currTime"
-            android:layout_toStartOf="@+id/totalTime" />
+            android:layout_toStartOf="@+id/totalTime"
+            android:thumb="@drawable/custom_progress_bar_thumb" />
 
         <TextView
             android:id="@+id/totalTime"
@@ -149,8 +151,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
-            android:textColor="#FFF"
-            android:text="0:00" />
+            android:text="0:00"
+            android:textColor="#FFF" />
 
     </RelativeLayout>
 

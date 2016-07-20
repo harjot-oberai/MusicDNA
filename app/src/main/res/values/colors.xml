@@ -5,6 +5,6 @@
     <!--<color name="colorAccent">#FF4081</color>-->
     <color name="colorPrimary">#000000</color>
     <color name="colorPrimaryDark">#000000</color>
-    <color name="colorAccent">#DDDDDD</color>
+    <color name="colorAccent">#555555</color>
     <color name="colorControlActivated">#FFA036</color>
 </resources>

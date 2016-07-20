@@ -161,7 +161,9 @@ public class ViewSavedDNA extends Fragment {
         shareIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog(1);
+                if (HomeActivity.tempSavedDNA != null) {
+                    showDialog(1);
+                }
             }
         });
 
@@ -186,6 +188,7 @@ public class ViewSavedDNA extends Fragment {
             final EditText text = (EditText) dialog.findViewById(R.id.save_image_filename_text);
             text.setText(HomeActivity.tempSavedDNA.getName());
             Button btn = (Button) dialog.findViewById(R.id.save_image_btn);
+            btn.setBackgroundColor(HomeActivity.themeColor);
             // if button is clicked, close the custom dialog
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -213,6 +216,7 @@ public class ViewSavedDNA extends Fragment {
             final EditText text = (EditText) dialog.findViewById(R.id.save_image_filename_text);
             text.setText(HomeActivity.tempSavedDNA.getName());
             Button btn = (Button) dialog.findViewById(R.id.save_image_btn);
+            btn.setBackgroundColor(HomeActivity.themeColor);
             btn.setText("SHARE");
             // if button is clicked, close the custom dialog
             btn.setOnClickListener(new View.OnClickListener() {

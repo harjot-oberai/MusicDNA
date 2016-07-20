@@ -257,6 +257,9 @@ public class HomeActivity extends AppCompatActivity
     static Toolbar spToolbar;
     static Toolbar equalizerToolbar;
 
+    static int themeColor = Color.parseColor("#000000");
+    static float minAudioStrength = 0.65f;
+
     public static Activity main;
 
     static float seekBarColor;
@@ -550,7 +553,6 @@ public class HomeActivity extends AppCompatActivity
         equalizerToolbar = (Toolbar) findViewById(R.id.equalizerToolbar);
         equalizerSwitch = (SwitchCompat) findViewById(R.id.equalizerSwitch);
         equalizerSwitch.setChecked(false);
-
         equalizerSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -1524,7 +1526,7 @@ public class HomeActivity extends AppCompatActivity
             y = (float) Math.cos(PlayerFragment.mVisualizerView.angle);
 
             // filtering low amplitude
-            if (PlayerFragment.mVisualizerView.volume < 0.65) {
+            if (PlayerFragment.mVisualizerView.volume < minAudioStrength) {
                 continue;
             }
 

@@ -3,6 +3,7 @@ package com.sdsmdg.harjot.MusicDNA;
 
 //import android.app.Fragment;
 
+import android.content.res.ColorStateList;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.content.Context;
@@ -70,6 +71,7 @@ public class LocalMusicFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         shuffleFab = (FloatingActionButton) view.findViewById(R.id.play_all_fab_local);
+        shuffleFab.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));
         shuffleFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

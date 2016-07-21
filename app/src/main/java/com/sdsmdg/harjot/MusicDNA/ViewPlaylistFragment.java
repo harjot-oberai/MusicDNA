@@ -2,6 +2,7 @@ package com.sdsmdg.harjot.MusicDNA;
 
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.design.widget.FloatingActionButton;
@@ -96,7 +97,7 @@ public class ViewPlaylistFragment extends Fragment implements PlaylistTrackAdapt
         });
 
         playAll = (FloatingActionButton) view.findViewById(R.id.play_all_fab);
-
+        playAll.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));
         playAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -2,6 +2,7 @@ package com.sdsmdg.harjot.MusicDNA;
 
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.design.widget.FloatingActionButton;
@@ -182,6 +183,7 @@ public class FolderContentFragment extends Fragment {
         });
 
         playAllFAB = (FloatingActionButton) view.findViewById(R.id.folder_play_all_fab);
+        playAllFAB.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));
         playAllFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

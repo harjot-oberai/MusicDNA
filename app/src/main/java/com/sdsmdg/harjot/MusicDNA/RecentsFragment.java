@@ -2,6 +2,7 @@ package com.sdsmdg.harjot.MusicDNA;
 
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -303,6 +304,7 @@ public class RecentsFragment extends Fragment implements RecentsTrackAdapter.OnD
         });
 
         shuffleFab = (FloatingActionButton) view.findViewById(R.id.play_all_fab_recent);
+        shuffleFab.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));
         shuffleFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

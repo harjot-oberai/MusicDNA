@@ -2,6 +2,7 @@ package com.sdsmdg.harjot.MusicDNA;
 
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -85,6 +86,7 @@ public class ViewAlbumFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         fab = (FloatingActionButton) view.findViewById(R.id.play_all_from_album);
+        fab.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));
         backCover = (ImageView) view.findViewById(R.id.backAlbumCover);
         mainCover = (ImageView) view.findViewById(R.id.mainAlbumCover);
         rv = (RecyclerView) view.findViewById(R.id.album_songs_recycler);

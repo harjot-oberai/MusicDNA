@@ -309,6 +309,13 @@ public class HomeActivity extends AppCompatActivity
 
         HideBottomFakeToolbar();
 
+        if (Build.VERSION.SDK_INT >= 21) {
+            Window window = ((Activity) (ctx)).getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(Color.parseColor("#000000"));
+        }
+
         if (!queueCall) {
             hideKeyboard();
 
@@ -419,6 +426,13 @@ public class HomeActivity extends AppCompatActivity
     public void onLocalTrackSelected(int position) {
 
         HideBottomFakeToolbar();
+
+        if (Build.VERSION.SDK_INT >= 21) {
+            Window window = ((Activity) (ctx)).getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(Color.parseColor("#000000"));
+        }
 
         if (!queueCall) {
             hideKeyboard();
@@ -1192,6 +1206,13 @@ public class HomeActivity extends AppCompatActivity
             PlayerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
+        if (Build.VERSION.SDK_INT >= 21) {
+            Window window = ((Activity) (ctx)).getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(themeColor);
+        }
+
         isPlayerVisible = false;
 
         if (PlayerFragment.cpb != null) {
@@ -1293,6 +1314,12 @@ public class HomeActivity extends AppCompatActivity
 
         if (isAllSavedDnaVisisble) {
             ViewSavedDNA.mVisualizerView2.setVisibility(View.INVISIBLE);
+        }
+        if (Build.VERSION.SDK_INT >= 21) {
+            Window window = ((Activity) (ctx)).getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(Color.parseColor("#000000"));
         }
 
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);

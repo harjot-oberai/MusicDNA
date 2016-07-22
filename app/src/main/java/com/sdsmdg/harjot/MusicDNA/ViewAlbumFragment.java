@@ -3,7 +3,10 @@ package com.sdsmdg.harjot.MusicDNA;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -220,7 +223,12 @@ public class ViewAlbumFragment extends Fragment {
         });
 
         imgLoader.DisplayImage(HomeActivity.tempAlbum.getAlbumSongs().get(0).getPath(), backCover);
-        imgLoader.DisplayImage(HomeActivity.tempAlbum.getAlbumSongs().get(0).getPath(), mainCover);
+//        imgLoader.DisplayImage(HomeActivity.tempAlbum.getAlbumSongs().get(0).getPath(), mainCover);
+        Bitmap bmp = getBitmap(HomeActivity.tempAlbum.getAlbumSongs().get(0).getPath());
+        if (bmp != null)
+            mainCover.setImageBitmap(bmp);
+        else
+            mainCover.setImageResource(R.drawable.ic_default);
 
         root = (ViewGroup) view.findViewById(R.id.root);
         blurredView = view.findViewById(R.id.blurredView);
@@ -239,5 +247,20 @@ public class ViewAlbumFragment extends Fragment {
             }
         }, 100);
 
+    }
+
+    public Bitmap getBitmap(String url) {
+        android.media.MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+        mmr.setDataSource(url);
+        Bitmap bitmap = null;
+
+        byte[] data = mmr.getEmbeddedPicture();
+
+        if (data != null) {
+            bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+            return bitmap;
+        } else {
+            return null;
+        }
     }
 }

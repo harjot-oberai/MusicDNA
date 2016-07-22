@@ -2035,6 +2035,8 @@ public class HomeActivity extends AppCompatActivity
         if (mgr != null) {
             mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE);
         }
+        notificationManager.cancel(1);
+        Toast.makeText(HomeActivity.this, "Removing notification", Toast.LENGTH_SHORT).show();
     }
 
     @Override

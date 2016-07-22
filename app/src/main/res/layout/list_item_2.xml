@@ -16,7 +16,7 @@
         android:layout_height="56dp"
         android:layout_marginLeft="2dp"
         android:background="#FFF"
-        android:scaleType="fitXY" />
+        android:scaleType="centerCrop" />
 
     <LinearLayout
         android:id="@+id/row_item_holder_2"

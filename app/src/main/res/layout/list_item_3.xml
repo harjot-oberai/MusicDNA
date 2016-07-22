@@ -26,7 +26,8 @@
         android:layout_height="56dp"
         android:layout_marginLeft="5dp"
         android:layout_toRightOf="@+id/holderImage"
-        android:background="#FFF" />
+        android:background="#FFF"
+        android:scaleType="centerCrop" />
 
     <LinearLayout
         android:id="@+id/row_item_holder"

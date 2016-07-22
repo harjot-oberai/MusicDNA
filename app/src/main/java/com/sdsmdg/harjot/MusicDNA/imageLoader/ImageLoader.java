@@ -89,17 +89,36 @@ public class ImageLoader {
                 return null;
             }
         } else {
-            android.media.MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-            mmr.setDataSource(url);
-            Bitmap bitmap = null;
 
-            byte[] data = mmr.getEmbeddedPicture();
-            if (data != null) {
-                bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-                return bitmap;
-            } else {
+            File f = fileCache.getFile(url);
+            Bitmap b = decodeFile(f);
+            if (b != null)
+                return b;
+
+            try {
+                android.media.MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+                mmr.setDataSource(url);
+                Bitmap bitmap = null;
+
+                byte[] data = mmr.getEmbeddedPicture();
+
+                if (data != null) {
+                    OutputStream os = new FileOutputStream(f);
+                    os.write(data);
+                    os.close();
+//                    bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                    bitmap = decodeFile(f);
+                    return bitmap;
+                } else {
+                    return null;
+                }
+            } catch (Throwable ex) {
+                ex.printStackTrace();
+                if (ex instanceof OutOfMemoryError)
+                    memoryCache.clear();
                 return null;
             }
+
         }
     }
 

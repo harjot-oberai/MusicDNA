@@ -64,11 +64,13 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.sdsmdg.harjot.MusicDNA.Interfaces.StreamService;
 import com.sdsmdg.harjot.MusicDNA.LocalMusicFragments.AlbumFragment;
+import com.sdsmdg.harjot.MusicDNA.LocalMusicFragments.ArtistFragment;
 import com.sdsmdg.harjot.MusicDNA.Models.Album;
 import com.sdsmdg.harjot.MusicDNA.Models.AllDNAModels;
 import com.sdsmdg.harjot.MusicDNA.Models.AllMusicFolders;
 import com.sdsmdg.harjot.MusicDNA.Models.AllPlaylists;
 import com.sdsmdg.harjot.MusicDNA.Models.AllSavedDNA;
+import com.sdsmdg.harjot.MusicDNA.Models.Artist;
 import com.sdsmdg.harjot.MusicDNA.Models.Favourite;
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.Models.MusicFolder;
@@ -129,6 +131,7 @@ public class HomeActivity extends AppCompatActivity
         AlbumFragment.onAlbumClickListener,
         ViewAlbumFragment.onAlbumSongClickListener,
         ViewAlbumFragment.onAlbumPlayAllListener,
+        ArtistFragment.onArtistClickListener,
         RecentsFragment.onRecentItemClickedListener,
         RecentsFragment.onRepeatListener {
 
@@ -137,6 +140,7 @@ public class HomeActivity extends AppCompatActivity
     public static List<LocalTrack> finalLocalSearchResultList = new ArrayList<>();
     public static List<Track> streamingTrackList = new ArrayList<>();
     public static List<Album> albums = new ArrayList<>();
+    public static List<Artist> artists = new ArrayList<>();
     public static List<UnifiedTrack> continuePlayingList = new ArrayList<>();
 
 
@@ -837,6 +841,16 @@ public class HomeActivity extends AppCompatActivity
                         albums.add(ab);
                     }
 
+                    pos = checkArtist(thisArtist);
+                    if (pos != -1) {
+                        artists.get(pos).getArtistSongs().add(lt);
+                    } else {
+                        List<LocalTrack> llt = new ArrayList<>();
+                        llt.add(lt);
+                        Artist ab = new Artist(thisArtist, llt);
+                        artists.add(ab);
+                    }
+
                     File f = new File(path);
                     String dirName = f.getParentFile().getName();
                     if (getFolder(dirName) == null) {
@@ -856,6 +870,7 @@ public class HomeActivity extends AppCompatActivity
         Collections.sort(localTrackList, new localMusicComparator());
         Collections.sort(finalLocalSearchResultList, new localMusicComparator());
         Collections.sort(albums, new albumComparator());
+        Collections.sort(artists, new artistComparator());
 
         Log.d("HOME", "GOT");
         Toast.makeText(HomeActivity.this, "GOT", Toast.LENGTH_SHORT).show();
@@ -866,6 +881,16 @@ public class HomeActivity extends AppCompatActivity
         for (int i = 0; i < albums.size(); i++) {
             Album ab = albums.get(i);
             if (ab.getName().equals(album)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int checkArtist(String artist) {
+        for (int i = 0; i < artists.size(); i++) {
+            Artist at = artists.get(i);
+            if (at.getName().equals(artist)) {
                 return i;
             }
         }
@@ -1983,6 +2008,11 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    public void onArtistClick() {
+        Toast.makeText(HomeActivity.this, "artist clicked", Toast.LENGTH_SHORT).show();
+    }
+
     public static class MyAsyncTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -2363,7 +2393,6 @@ public class HomeActivity extends AppCompatActivity
         } else if (type.equals("viewAlbum") && !isAlbumVisible) {
             setTitle(tempAlbum.getName());
             isAlbumVisible = true;
-            AlbumFragment.mCallback = this;
             ViewAlbumFragment.mCallback = this;
             ViewAlbumFragment.mCallback2 = this;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
@@ -2785,6 +2814,18 @@ public class HomeActivity extends AppCompatActivity
 
         @Override
         public int compare(Album lhs, Album rhs) {
+            if (lhs.getName().toString().charAt(0) < rhs.getName().toString().charAt(0)) {
+                return -1;
+            } else {
+                return 1;
+            }
+        }
+    }
+
+    public class artistComparator implements Comparator<Artist> {
+
+        @Override
+        public int compare(Artist lhs, Artist rhs) {
             if (lhs.getName().toString().charAt(0) < rhs.getName().toString().charAt(0)) {
                 return -1;
             } else {

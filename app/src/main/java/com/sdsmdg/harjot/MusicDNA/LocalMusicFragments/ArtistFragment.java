@@ -64,6 +64,7 @@ public class ArtistFragment extends Fragment {
         rv.addOnItemTouchListener(new ClickItemTouchListener(rv) {
             @Override
             boolean onClick(RecyclerView parent, View view, int position, long id) {
+                HomeActivity.tempArtist = HomeActivity.artists.get(position);
                 mCallback.onArtistClick();
                 return true;
             }

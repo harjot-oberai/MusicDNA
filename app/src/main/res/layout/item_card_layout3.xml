@@ -15,7 +15,7 @@
         android:layout_height="115dp"
         android:layout_centerHorizontal="true"
         android:layout_gravity="top"
-        android:scaleType="fitXY"/>
+        android:scaleType="centerCrop"/>
 
     <RelativeLayout
         android:id="@+id/bottomHolder"

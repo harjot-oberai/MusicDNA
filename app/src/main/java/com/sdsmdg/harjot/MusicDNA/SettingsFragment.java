@@ -27,7 +27,7 @@ import me.priyesh.chroma.ColorSelectListener;
 public class SettingsFragment extends Fragment {
 
     CardView densitycard, themeCard;
-    ImageView themeColorImg;
+    static ImageView themeColorImg;
     SeekBar densitySeekbar;
     TextView densityText;
 
@@ -50,7 +50,7 @@ public class SettingsFragment extends Fragment {
         densitySeekbar = (SeekBar) view.findViewById(R.id.density_seekbar);
         densityText = (TextView) view.findViewById(R.id.density_text);
         densitySeekbar.setMax(100);
-        densitySeekbar.setProgress(100 - (int)(HomeActivity.minAudioStrength * 100));
+        densitySeekbar.setProgress(100 - (int) (HomeActivity.minAudioStrength * 100));
         densityText.setText(String.valueOf(densitySeekbar.getProgress()));
         densitySeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -86,7 +86,7 @@ public class SettingsFragment extends Fragment {
                                 HomeActivity.toolbar.setBackgroundColor(color);
                                 themeColorImg.setBackgroundColor(color);
                                 if (Build.VERSION.SDK_INT >= 21) {
-                                    Window window = ((Activity)(HomeActivity.ctx)).getWindow();
+                                    Window window = ((Activity) (HomeActivity.ctx)).getWindow();
                                     window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                                     window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
                                     window.setStatusBarColor(color);

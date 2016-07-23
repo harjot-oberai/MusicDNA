@@ -39,7 +39,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="#333"
-                    android:scaleType="fitXY" />
+                    android:scaleType="centerCrop" />
 
                 <ImageView
                     android:id="@+id/image2"
@@ -47,7 +47,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="#333"
-                    android:scaleType="fitXY" />
+                    android:scaleType="centerCrop" />
             </LinearLayout>
         </RelativeLayout>
 
@@ -67,7 +67,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="#333"
-                    android:scaleType="fitXY" />
+                    android:scaleType="centerCrop" />
 
                 <ImageView
                     android:id="@+id/image4"
@@ -75,7 +75,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="#333"
-                    android:scaleType="fitXY" />
+                    android:scaleType="centerCrop" />
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>

@@ -132,6 +132,8 @@ public class HomeActivity extends AppCompatActivity
         ViewAlbumFragment.onAlbumSongClickListener,
         ViewAlbumFragment.onAlbumPlayAllListener,
         ArtistFragment.onArtistClickListener,
+        ViewArtistFragment.onArtistSongClickListener,
+        ViewArtistFragment.onArtistPlayAllListener,
         RecentsFragment.onRecentItemClickedListener,
         RecentsFragment.onRepeatListener {
 
@@ -147,6 +149,7 @@ public class HomeActivity extends AppCompatActivity
     static Canvas cacheCanvas;
 
     public static Album tempAlbum;
+    public static Artist tempArtist;
 
     private Dialog progress;
 
@@ -288,6 +291,7 @@ public class HomeActivity extends AppCompatActivity
     public static boolean isAllSavedDnaVisisble = false;
     public static boolean isSavedDNAVisible = false;
     public static boolean isAlbumVisible = false;
+    public static boolean isArtistVisible = false;
     public static boolean isRecentVisible = false;
     public static boolean isFullScreenEnabled = false;
     public static boolean isSettingsVisible = false;
@@ -938,6 +942,8 @@ public class HomeActivity extends AppCompatActivity
                 isPlayerVisible = false;
             } else if (isAlbumVisible) {
                 hideFragment("viewAlbum");
+            } else if (isArtistVisible) {
+                hideFragment("viewArtist");
             } else {
                 if (isLocalVisible) {
                     hideFragment("local");
@@ -2010,7 +2016,18 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onArtistClick() {
-        Toast.makeText(HomeActivity.this, "artist clicked", Toast.LENGTH_SHORT).show();
+        showFragment("viewArtist");
+    }
+
+    @Override
+    public void onArtistPlayAll() {
+        onQueueItemClicked(0);
+        showPlayer();
+    }
+
+    @Override
+    public void onArtistSongClick() {
+        onLocalTrackSelected(-1);
     }
 
     public static class MyAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -2222,7 +2239,7 @@ public class HomeActivity extends AppCompatActivity
 
     public void showFragment(String type) {
 
-        if (!type.equals("viewAlbum") && !type.equals("folderContent"))
+        if (!type.equals("viewAlbum") && !type.equals("folderContent") && !type.equals("viewArtist"))
             hideAllFrags();
 
         if (type.equals("local") && !isLocalVisible) {
@@ -2406,6 +2423,22 @@ public class HomeActivity extends AppCompatActivity
                     .show(newFragment)
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
+        } else if (type.equals("viewArtist") && !isArtistVisible) {
+            setTitle("Artist");
+            isArtistVisible = true;
+            ViewArtistFragment.mCallback = this;
+            ViewArtistFragment.mCallback2 = this;
+            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+            ViewArtistFragment newFragment = new ViewArtistFragment();
+            fm.beginTransaction()
+                    .setCustomAnimations(R.anim.slide_up,
+                            R.anim.slide_down,
+                            R.anim.slide_up,
+                            R.anim.slide_down)
+                    .add(R.id.fragContainer, newFragment, "viewArtist")
+                    .show(newFragment)
+                    .addToBackStack(null)
+                    .commitAllowingStateLoss();
         } else if (type.equals("recent") && !isRecentVisible) {
             setTitle("Recently Played");
             HomeActivity.isRecentVisible = true;
@@ -2565,6 +2598,16 @@ public class HomeActivity extends AppCompatActivity
                         .remove(frag)
                         .commitAllowingStateLoss();
             }
+        } else if (type.equals("viewArtist")) {
+            isArtistVisible = false;
+            setTitle("Local");
+            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+            android.support.v4.app.Fragment frag = fm.findFragmentByTag("viewArtist");
+            if (frag != null) {
+                fm.beginTransaction()
+                        .remove(frag)
+                        .commitAllowingStateLoss();
+            }
         } else if (type.equals("recent")) {
             isRecentVisible = false;
             setTitle("Music DNA");
@@ -2600,6 +2643,7 @@ public class HomeActivity extends AppCompatActivity
         hideFragment("allFolders");
         hideFragment("allSavedDNAs");
         hideFragment("viewAlbum");
+        hideFragment("viewArtist");
         hideFragment("recent");
         hideFragment("settings");
 
@@ -2849,6 +2893,16 @@ public class HomeActivity extends AppCompatActivity
             main.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+
+//                    HomeActivity.toolbar.setBackgroundColor(themeColor);
+//                    SettingsFragment.themeColorImg.setBackgroundColor(themeColor);
+//                    if (Build.VERSION.SDK_INT >= 21) {
+//                        Window window = ((Activity)(HomeActivity.ctx)).getWindow();
+//                        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//                        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//                        window.setStatusBarColor(themeColor);
+//                    }
+
                     if (allPlaylists == null) {
                         allPlaylists = new AllPlaylists();
                     }

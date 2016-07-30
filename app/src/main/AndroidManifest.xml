@@ -34,7 +34,7 @@
                 android:resource="@xml/searchable" />
         </activity>
 
-        <receiver android:name="com.sdsmdg.harjot.MusicDNA.NotificationManager.AudioPlayerBroadcastReceiver" >
+        <receiver android:name="com.sdsmdg.harjot.MusicDNA.NotificationManager.AudioPlayerBroadcastReceiver">
             <intent-filter>
                 <action android:name="com.sdsmdg.harjot.MusicDNA.ACTION_PLAY_PAUSE" />
                 <action android:name="com.sdsmdg.harjot.MusicDNA.ACTION_NEXT" />
@@ -62,7 +62,8 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".NotificationManager.MediaPlayerService" />
+        <service
+            android:name=".NotificationManager.MediaPlayerService" />
 
     </application>
 

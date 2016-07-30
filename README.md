@@ -17,9 +17,11 @@ Video Demo : [http://sendvid.com/b2hhc1pi](http://sendvid.com/b2hhc1pi)<br>
 The video's length was cut short due to ADB screenrecord's limit of 3:00 min. <br>
 Credits for combining audio and video [Piyush Mehrotra](https://github.com/hm98)
 
-<img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/dna1.jpg" width = "300">
-<img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/dna2.jpg" width = "300">
-<img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/home.jpg" width = "300">
-<img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/equalizer.jpg" width = "300">
-<img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/album.jpg" width = "300">
-<img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/savedDNA.jpg" width = "300">
+<img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/dna1.png" width = "300">
+<img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/dna2.png" width = "300">
+<img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/home.png" width = "300">
+<img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/home2.png" width = "300">
+<img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/equalizer.png" width = "300">
+<img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/album.png" width = "300">
+<img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/savedDNA.png" width = "300">
+<img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/settings.png" width = "300">

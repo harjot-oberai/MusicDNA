@@ -49,6 +49,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
     private MediaSession m_objMediaSession;
     private MediaController m_objMediaController;
     private MediaPlayer m_objMediaPlayer;
+    private NotificationManager notificationManager;
 
 
     @Override
@@ -119,7 +120,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
         notification.priority = Notification.PRIORITY_MAX;
 //        notification.flags |= Notification.FLAG_ONGOING_EVENT;
 
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(1, notification);
 
 //        updateMediaSession();
@@ -361,5 +362,15 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
         } else {
             buildNotification(generateAction(android.R.drawable.ic_media_play, "Play", Constants.ACTION_PLAY));
         }
+    }
+
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        super.onTaskRemoved(rootIntent);
+//        Log.d("NOTE","CLEAR");
+//        Toast.makeText(MediaPlayerService.this, "Cleared1", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(HomeActivity.ctx, "Cleared2", Toast.LENGTH_SHORT).show();
+//        ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancel(1);
+//        stopSelf();
     }
 }

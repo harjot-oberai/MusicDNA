@@ -84,6 +84,7 @@ public class SettingsFragment extends Fragment {
                             public void onColorSelected(int color) {
                                 HomeActivity.themeColor = color;
                                 HomeActivity.toolbar.setBackgroundColor(color);
+                                HomeActivity.fragmentToolbar.setBackgroundColor(color);
                                 themeColorImg.setBackgroundColor(color);
                                 if (Build.VERSION.SDK_INT >= 21) {
                                     Window window = ((Activity) (HomeActivity.ctx)).getWindow();

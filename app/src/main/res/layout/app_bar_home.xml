@@ -50,14 +50,14 @@
                         android:id="@+id/selected_track_title_sp_AB"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_toStartOf="@+id/player_control_sp_AB"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
                         android:layout_toEndOf="@+id/selected_track_image_sp_AB"
+                        android:layout_toStartOf="@+id/player_control_sp_AB"
                         android:ellipsize="marquee"
-                        android:singleLine="true"
                         android:fadingEdge="horizontal"
+                        android:singleLine="true"
                         android:text="Title"
                         android:textAlignment="center"
                         android:textColor="#FFFFFF"
@@ -121,6 +121,75 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="10dp" />
+                </RelativeLayout>
+            </android.support.v7.widget.Toolbar>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/queue_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="#000000"
+                android:visibility="invisible">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/queue_toolbar_back_button_img"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_centerVertical="true"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:src="@drawable/back2" />
+
+
+                    <TextView
+                        android:id="@+id/queue_toolbar_title"
+                        style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="12dp"
+                        android:layout_toRightOf="@+id/queue_toolbar_back_button_img"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:text="Queue"/>
+                </RelativeLayout>
+            </android.support.v7.widget.Toolbar>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/standard_fragment_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="#000000"
+                android:visibility="invisible">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/fragment_toolbar_back_button_img"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_centerVertical="true"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:src="@drawable/back2" />
+
+
+                    <TextView
+                        android:id="@+id/fragment_toolbar_title"
+                        style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="12dp"
+                        android:layout_toRightOf="@+id/fragment_toolbar_back_button_img"
+                        android:ellipsize="end"
+                        android:singleLine="true" />
                 </RelativeLayout>
             </android.support.v7.widget.Toolbar>
         </FrameLayout>

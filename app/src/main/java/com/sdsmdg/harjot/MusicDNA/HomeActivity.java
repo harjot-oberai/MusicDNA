@@ -78,6 +78,7 @@ import com.sdsmdg.harjot.MusicDNA.Models.Playlist;
 import com.sdsmdg.harjot.MusicDNA.Models.Queue;
 import com.sdsmdg.harjot.MusicDNA.Models.RecentlyPlayed;
 import com.sdsmdg.harjot.MusicDNA.Models.SavedDNA;
+import com.sdsmdg.harjot.MusicDNA.Models.Settings;
 import com.sdsmdg.harjot.MusicDNA.Models.Track;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.NotificationManager.Constants;
@@ -179,6 +180,7 @@ public class HomeActivity extends AppCompatActivity
 
     public static RecentlyPlayed recentlyPlayed;
     static Favourite favouriteTracks;
+    static Settings settings;
     static Queue queue;
     static Playlist tempPlaylist;
     static int tempPlaylistNumber;
@@ -272,7 +274,7 @@ public class HomeActivity extends AppCompatActivity
     TextView fragmentToolbarTitle;
 
     static int themeColor = Color.parseColor("#000000");
-    static float minAudioStrength = 0.65f;
+    static float minAudioStrength = 0.40f;
 
     public static Activity main;
 
@@ -302,6 +304,8 @@ public class HomeActivity extends AppCompatActivity
     public static boolean isRecentVisible = false;
     public static boolean isFullScreenEnabled = false;
     public static boolean isSettingsVisible = false;
+
+    public static boolean hasQueueEnded = false;
 
     static boolean isEqualizerEnabled = false;
     static boolean isEqualizerReloaded = false;
@@ -818,6 +822,8 @@ public class HomeActivity extends AppCompatActivity
             queueCurrentIndex = gson.fromJson(json6, Integer.class);
             String json7 = mPrefs.getString("isReloaded", "");
             isReloaded = gson.fromJson(json7, Boolean.class);
+            String json8 = mPrefs.getString("settings", "");
+            settings = gson.fromJson(json8, Settings.class);
         } catch (Exception e) {
 //            Toast.makeText(HomeActivity.this, e.getMessage() + "::", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
@@ -1711,13 +1717,27 @@ public class HomeActivity extends AppCompatActivity
                         QueueFragment.qAdapter.notifyDataSetChanged();
                     onQueueItemClicked(0);
                 } else {
-                    PlayerFragment.mMediaPlayer.stop();
+                    if (!hasQueueEnded) {
+                        PlayerFragment.mMediaPlayer.stop();
+                        hasQueueEnded = true;
+                    } else {
+                        hasQueueEnded = false;
+                        queueCurrentIndex = 0;
+                        if (QueueFragment.qAdapter != null) {
+                            QueueFragment.qAdapter.notifyDataSetChanged();
+                        }
+                        onQueueItemClicked(0);
+                    }
                 }
             }
         } else {
             Random r = new Random();
             int x;
             while (true) {
+                if (queue.getQueue().size() == 1) {
+                    x = 0;
+                    break;
+                }
                 x = r.nextInt(queue.getQueue().size());
                 if (x != queueCurrentIndex) {
                     break;
@@ -2039,6 +2059,7 @@ public class HomeActivity extends AppCompatActivity
         if (isFullScreenEnabled) {
             View decorView = getWindow().getDecorView();
             int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+            int uiOptions2 = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
             decorView.setSystemUiVisibility(uiOptions);
             ActionBar actionBar = getSupportActionBar();
             actionBar.hide();
@@ -2108,6 +2129,9 @@ public class HomeActivity extends AppCompatActivity
         isReloaded = true;
         String json7 = gson.toJson(isReloaded);
         prefsEditor.putString("isReloaded", json7);
+        String json8 = gson.toJson(settings);
+        prefsEditor.putString("settings", json8);
+
 
         prefsEditor.commit();
     }
@@ -2974,6 +2998,22 @@ public class HomeActivity extends AppCompatActivity
 //                        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 //                        window.setStatusBarColor(themeColor);
 //                    }
+
+                    if (settings == null) {
+                        settings = new Settings();
+                    }
+
+                    themeColor = settings.getThemeColor();
+                    minAudioStrength = settings.getMinAudioStrength();
+
+                    toolbar.setBackgroundColor(themeColor);
+
+                    if (Build.VERSION.SDK_INT >= 21) {
+                        Window window = ((Activity) (HomeActivity.ctx)).getWindow();
+                        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                        window.setStatusBarColor(themeColor);
+                    }
 
                     if (allPlaylists == null) {
                         allPlaylists = new AllPlaylists();

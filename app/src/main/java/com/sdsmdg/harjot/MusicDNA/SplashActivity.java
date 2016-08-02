@@ -48,13 +48,6 @@ public class SplashActivity extends AppCompatActivity {
             Log.d("TYPEFACE", e.getMessage() + ":");
             Toast.makeText(SplashActivity.this, "typeface error", Toast.LENGTH_SHORT).show();
         }
-//        tx = (TextView) findViewById(R.id.splash_text);
-//        tx.setTypeface(tf);
-//
-//        TextView tx2 = (TextView) findViewById(R.id.text_soundcloud);
-//        tx2.setTypeface(tf);
-//
-//        relSplash = (RelativeLayout) findViewById(R.id.rel_splash);
 
         if (Build.VERSION.SDK_INT >= 23) {
             requestPermissions();
@@ -80,6 +73,7 @@ public class SplashActivity extends AppCompatActivity {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     perm1 = true;
+                    requestPermissions();
                     Toast.makeText(SplashActivity.this, "one", Toast.LENGTH_SHORT).show();
                 } else {
                 }
@@ -89,18 +83,8 @@ public class SplashActivity extends AppCompatActivity {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     perm2 = true;
+                    requestPermissions();
                     Toast.makeText(SplashActivity.this, "two", Toast.LENGTH_SHORT).show();
-                    if (perm2 && perm4 && perm5) {
-                        final Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                Intent i = new Intent(SplashActivity.this, HomeActivity.class);
-                                startActivity(i);
-                                finish();
-                            }
-                        }, 1000);
-                    }
                 } else {
                 }
                 break;
@@ -109,6 +93,7 @@ public class SplashActivity extends AppCompatActivity {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     perm3 = true;
+                    requestPermissions();
                     Toast.makeText(SplashActivity.this, "three", Toast.LENGTH_SHORT).show();
                 } else {
                 }
@@ -118,6 +103,7 @@ public class SplashActivity extends AppCompatActivity {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     perm4 = true;
+                    requestPermissions();
                     Toast.makeText(SplashActivity.this, "four", Toast.LENGTH_SHORT).show();
                 } else {
                 }
@@ -127,6 +113,7 @@ public class SplashActivity extends AppCompatActivity {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     perm5 = true;
+                    requestPermissions();
                     Toast.makeText(SplashActivity.this, "five", Toast.LENGTH_SHORT).show();
                 } else {
                 }
@@ -136,34 +123,21 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     public void requestPermissions() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.INTERNET)
-                != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
 
-            // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.INTERNET)) {
 
-                // Show an expanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
-            } else {
-
-                // No explanation needed, we can request the permission.
-
+            } else if (!perm1) {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.INTERNET},
                         0);
 
                 Toast.makeText(SplashActivity.this, "perm1", Toast.LENGTH_SHORT).show();
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
             }
         } else {
             perm1 = true;
+            Toast.makeText(SplashActivity.this, "perm1_granted", Toast.LENGTH_SHORT).show();
         }
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.RECORD_AUDIO)
@@ -171,7 +145,7 @@ public class SplashActivity extends AppCompatActivity {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.RECORD_AUDIO)) {
 
-            } else {
+            } else if (!perm2 && perm1) {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.RECORD_AUDIO},
                         1);
@@ -179,6 +153,7 @@ public class SplashActivity extends AppCompatActivity {
             }
         } else {
             perm2 = true;
+            Toast.makeText(SplashActivity.this, "perm2_granted", Toast.LENGTH_SHORT).show();
         }
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.MODIFY_AUDIO_SETTINGS)
@@ -187,7 +162,7 @@ public class SplashActivity extends AppCompatActivity {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.MODIFY_AUDIO_SETTINGS)) {
 
-            } else {
+            } else if (!perm3 && perm2 && perm1) {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.MODIFY_AUDIO_SETTINGS},
                         2);
@@ -195,13 +170,14 @@ public class SplashActivity extends AppCompatActivity {
             }
         } else {
             perm3 = true;
+            Toast.makeText(SplashActivity.this, "perm3_granted", Toast.LENGTH_SHORT).show();
         }
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            } else {
+            } else if (!perm4 && perm3 && perm2 && perm1) {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         3);
@@ -209,6 +185,7 @@ public class SplashActivity extends AppCompatActivity {
             }
         } else {
             perm4 = true;
+            Toast.makeText(SplashActivity.this, "perm4_granted ", Toast.LENGTH_SHORT).show();
         }
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -216,7 +193,7 @@ public class SplashActivity extends AppCompatActivity {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.READ_EXTERNAL_STORAGE)) {
 
-            } else {
+            } else if (!perm5 && perm4 && perm3 && perm2 && perm1) {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                         4);
@@ -224,9 +201,10 @@ public class SplashActivity extends AppCompatActivity {
             }
         } else {
             perm5 = true;
+            Toast.makeText(SplashActivity.this, "perm5_granted", Toast.LENGTH_SHORT).show();
         }
 
-        if (perm2 && perm4 && perm5) {
+        if (perm1 && perm2 && perm3 && perm4 && perm5) {
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override

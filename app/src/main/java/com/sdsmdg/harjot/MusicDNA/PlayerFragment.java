@@ -670,10 +670,14 @@ public class PlayerFragment extends Fragment {
         mainTrackController.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!pauseClicked) {
-                    pauseClicked = true;
+                if (!HomeActivity.hasQueueEnded) {
+                    if (!pauseClicked) {
+                        pauseClicked = true;
+                    }
+                    togglePlayPause();
+                } else {
+                    mCallback2.onComplete();
                 }
-                togglePlayPause();
             }
         });
 

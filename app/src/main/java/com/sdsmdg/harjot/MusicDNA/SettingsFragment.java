@@ -56,6 +56,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 HomeActivity.minAudioStrength = 1.0f - ((float) progress / (float) 100);
+                HomeActivity.settings.setMinAudioStrength(HomeActivity.minAudioStrength);
                 densityText.setText(String.valueOf(progress));
             }
 
@@ -82,6 +83,7 @@ public class SettingsFragment extends Fragment {
                         .onColorSelected(new ColorSelectListener() {
                             @Override
                             public void onColorSelected(int color) {
+                                HomeActivity.settings.setThemeColor(color);
                                 HomeActivity.themeColor = color;
                                 HomeActivity.toolbar.setBackgroundColor(color);
                                 HomeActivity.fragmentToolbar.setBackgroundColor(color);

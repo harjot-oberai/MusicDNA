@@ -36,6 +36,7 @@ import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.Models.SavedDNA;
 import com.sdsmdg.harjot.MusicDNA.Models.Track;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
+import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
@@ -90,6 +91,8 @@ public class PlayerFragment extends Fragment {
     public static ImageView player_controller;
 
     static Toolbar smallPlayer;
+
+    ImageLoader imgLoader;
 
     public static SeekBar progressBar;
 
@@ -293,6 +296,8 @@ public class PlayerFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        imgLoader = new ImageLoader(HomeActivity.ctx);
 
         bufferingIndicator = view.findViewById(R.id.bufferingIndicator);
         currTime = (TextView) view.findViewById(R.id.currTime);
@@ -572,14 +577,16 @@ public class PlayerFragment extends Fragment {
             } catch (Exception e) {
 
             }
-            Bitmap temp = LocalTrackListAdapter.getAlbumArt(localTrack.getPath());
-            if (temp != null) {
-                HomeActivity.spImgAB.setImageBitmap(temp);
-                selected_track_image.setImageBitmap(temp);
-            } else {
-                HomeActivity.spImgAB.setImageResource(R.drawable.ic_default);
-                selected_track_image.setImageResource(R.drawable.ic_default);
-            }
+            imgLoader.DisplayImage(localTrack.getPath(), HomeActivity.spImgAB);
+            imgLoader.DisplayImage(localTrack.getPath(), selected_track_image);
+//            Bitmap temp = imgLoader.DisplayImage(localTrack.getPath());
+//            if (temp != null) {
+//                HomeActivity.spImgAB.setImageBitmap(temp);
+//                selected_track_image.setImageBitmap(temp);
+//            } else {
+//                HomeActivity.spImgAB.setImageResource(R.drawable.ic_default);
+//                selected_track_image.setImageResource(R.drawable.ic_default);
+//            }
             HomeActivity.spTitleAB.setText(localTrack.getTitle());
             selected_track_title.setText(localTrack.getTitle());
         }
@@ -801,8 +808,10 @@ public class PlayerFragment extends Fragment {
                 mMediaPlayer.stop();
             }
             mMediaPlayer.release();
-            mVisualizer.release();
             mMediaPlayer = null;
+        }
+        if (mVisualizer != null) {
+            mVisualizer.release();
         }
     }
 
@@ -874,14 +883,16 @@ public class PlayerFragment extends Fragment {
             selected_track_title.setText(track.getTitle());
         } else {
             durationInMilliSec = (int) localTrack.getDuration();
-            Bitmap temp = LocalTrackListAdapter.getAlbumArt(localTrack.getPath());
-            if (temp != null) {
-                HomeActivity.spImgAB.setImageBitmap(temp);
-                selected_track_image.setImageBitmap(temp);
-            } else {
-                HomeActivity.spImgAB.setImageResource(R.drawable.ic_default);
-                selected_track_image.setImageResource(R.drawable.ic_default);
-            }
+            imgLoader.DisplayImage(localTrack.getPath(), HomeActivity.spImgAB);
+            imgLoader.DisplayImage(localTrack.getPath(), selected_track_image);
+//            Bitmap temp = LocalTrackListAdapter.getAlbumArt(localTrack.getPath());
+//            if (temp != null) {
+//                HomeActivity.spImgAB.setImageBitmap(temp);
+//                selected_track_image.setImageBitmap(temp);
+//            } else {
+//                HomeActivity.spImgAB.setImageResource(R.drawable.ic_default);
+//                selected_track_image.setImageResource(R.drawable.ic_default);
+//            }
             HomeActivity.spTitleAB.setText(localTrack.getTitle());
             selected_track_title.setText(localTrack.getTitle());
         }

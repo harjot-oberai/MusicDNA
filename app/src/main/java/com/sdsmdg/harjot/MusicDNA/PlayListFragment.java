@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.sdsmdg.harjot.MusicDNA.Models.Playlist;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -69,7 +71,7 @@ public class PlayListFragment extends Fragment {
         allPlaylistRecycler = (RecyclerView) view.findViewById(R.id.all_playlists_recycler);
 
         if (SplashActivity.tf2 != null)
-            ((TextView)view.findViewById(R.id.noPlaylistContentText)).setTypeface(SplashActivity.tf2);
+            ((TextView) view.findViewById(R.id.noPlaylistContentText)).setTypeface(SplashActivity.tf2);
 
         if (HomeActivity.allPlaylists.getPlaylists().size() == 0) {
             allPlaylistRecycler.setVisibility(View.INVISIBLE);
@@ -100,7 +102,11 @@ public class PlayListFragment extends Fragment {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         if (item.getTitle().equals("Play")) {
-                            HomeActivity.tempPlaylist = HomeActivity.allPlaylists.getPlaylists().get(position);
+                            Playlist tmp = HomeActivity.allPlaylists.getPlaylists().get(position);
+                            HomeActivity.tempPlaylist.setPlaylistName(tmp.getPlaylistName());
+                            for (int i = 0; i < tmp.getSongList().size(); i++) {
+                                HomeActivity.tempPlaylist.getSongList().add(tmp.getSongList().get(i));
+                            }
                             HomeActivity.queue.setQueue(HomeActivity.tempPlaylist.getSongList());
                             HomeActivity.queueCurrentIndex = 0;
                             mCallback2.onPlaylistMenuPLayAll();

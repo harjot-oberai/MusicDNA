@@ -29,6 +29,8 @@ public class SplashActivity extends AppCompatActivity {
     boolean perm3 = false;
     boolean perm4 = false;
     boolean perm5 = false;
+    boolean perm6 = false;
+    boolean perm7 = false;
 
     RelativeLayout relSplash;
     TextView tx;
@@ -119,10 +121,116 @@ public class SplashActivity extends AppCompatActivity {
                 }
                 break;
             }
+            case 5: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    perm6 = true;
+                    requestPermissions();
+                    Toast.makeText(SplashActivity.this, "six", Toast.LENGTH_SHORT).show();
+                } else {
+                }
+                break;
+            }
+            case 6: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    perm7 = true;
+                    requestPermissions();
+                    Toast.makeText(SplashActivity.this, "seven", Toast.LENGTH_SHORT).show();
+                } else {
+                }
+                break;
+            }
         }
     }
 
     public void requestPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
+            if (!perm1) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, 0);
+                Toast.makeText(SplashActivity.this, "perm1", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            perm1 = true;
+            Toast.makeText(SplashActivity.this, "perm1_granted", Toast.LENGTH_SHORT).show();
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            if (!perm2 && perm1) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.RECORD_AUDIO},
+                        1);
+                Toast.makeText(SplashActivity.this, "perm2", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            perm2 = true;
+            Toast.makeText(SplashActivity.this, "perm2_granted", Toast.LENGTH_SHORT).show();
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.MODIFY_AUDIO_SETTINGS) != PackageManager.PERMISSION_GRANTED) {
+            if (!perm3 && perm2 && perm1) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.MODIFY_AUDIO_SETTINGS}, 2);
+                Toast.makeText(SplashActivity.this, "perm3", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            perm3 = true;
+            Toast.makeText(SplashActivity.this, "perm3_granted", Toast.LENGTH_SHORT).show();
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (!perm4 && perm3 && perm2 && perm1) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 3);
+                Toast.makeText(SplashActivity.this, "perm4", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            perm4 = true;
+            Toast.makeText(SplashActivity.this, "perm4_granted ", Toast.LENGTH_SHORT).show();
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (!perm5 && perm4 && perm3 && perm2 && perm1) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 4);
+                Toast.makeText(SplashActivity.this, "perm5", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            perm5 = true;
+            Toast.makeText(SplashActivity.this, "perm5_granted", Toast.LENGTH_SHORT).show();
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            if (!perm6 && perm5 && perm4 && perm3 && perm2 && perm1) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, 5);
+                Toast.makeText(SplashActivity.this, "perm6", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            perm6 = true;
+            Toast.makeText(SplashActivity.this, "perm6_granted", Toast.LENGTH_SHORT).show();
+        }
+
+        /*if (ContextCompat.checkSelfPermission(this, Manifest.permission.MEDIA_CONTENT_CONTROL) != PackageManager.PERMISSION_GRANTED) {
+            if (!perm7 && perm6 && perm5 && perm4 && perm3 && perm2 && perm1) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.MEDIA_CONTENT_CONTROL}, 6);
+                Toast.makeText(SplashActivity.this, "perm7", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            perm7 = true;
+            Toast.makeText(SplashActivity.this, "perm7_granted", Toast.LENGTH_SHORT).show();
+        }*/
+
+        if (perm1 && perm2 && perm3 && perm4 && perm5 && perm6) {
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent i = new Intent(SplashActivity.this, HomeActivity.class);
+                    startActivity(i);
+                    finish();
+                }
+            }, 1000);
+        }
+    }
+
+    public void requestPermissions2() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
 
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
@@ -187,16 +295,11 @@ public class SplashActivity extends AppCompatActivity {
             perm4 = true;
             Toast.makeText(SplashActivity.this, "perm4_granted ", Toast.LENGTH_SHORT).show();
         }
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
 
             } else if (!perm5 && perm4 && perm3 && perm2 && perm1) {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                        4);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 4);
                 Toast.makeText(SplashActivity.this, "perm5", Toast.LENGTH_SHORT).show();
             }
         } else {

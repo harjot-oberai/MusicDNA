@@ -1720,7 +1720,7 @@ public class HomeActivity extends AppCompatActivity
                     if (!hasQueueEnded) {
                         PlayerFragment.mMediaPlayer.stop();
                         hasQueueEnded = true;
-                    } else {
+                    } else if (queue.getQueue().size() > 0) {
                         hasQueueEnded = false;
                         queueCurrentIndex = 0;
                         if (QueueFragment.qAdapter != null) {
@@ -1981,7 +1981,11 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onPlaylistTouched(int pos) {
-        tempPlaylist = allPlaylists.getPlaylists().get(pos);
+        Playlist tmp = allPlaylists.getPlaylists().get(pos);
+        tempPlaylist.setPlaylistName(tmp.getPlaylistName());
+        for (int i = 0; i < tmp.getSongList().size(); i++) {
+            tempPlaylist.getSongList().add(tmp.getSongList().get(i));
+        }
         tempPlaylistNumber = pos;
         showFragment("playlist");
     }
@@ -2143,8 +2147,8 @@ public class HomeActivity extends AppCompatActivity
         if (mgr != null) {
             mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE);
         }
-        notificationManager.cancel(1);
-        Toast.makeText(HomeActivity.this, "Removing notification", Toast.LENGTH_SHORT).show();
+//        notificationManager.cancel(1);
+//        Toast.makeText(HomeActivity.this, "Removing notification", Toast.LENGTH_SHORT).show();
     }
 
     @Override

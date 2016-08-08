@@ -329,10 +329,12 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
             public void onStop() {
                 super.onStop();
                 Log.e(Constants.LOG_TAG, "onStop");
-                if (PlayerFragment.mMediaPlayer.isPlaying()) {
-                    buildNotification(generateAction(android.R.drawable.ic_media_pause, "Pause", Constants.ACTION_PAUSE));
-                } else {
-                    buildNotification(generateAction(android.R.drawable.ic_media_play, "Play", Constants.ACTION_PLAY));
+                if (PlayerFragment.mMediaPlayer != null) {
+                    if (PlayerFragment.mMediaPlayer.isPlaying()) {
+                        buildNotification(generateAction(android.R.drawable.ic_media_pause, "Pause", Constants.ACTION_PAUSE));
+                    } else {
+                        buildNotification(generateAction(android.R.drawable.ic_media_play, "Play", Constants.ACTION_PLAY));
+                    }
                 }
             }
 

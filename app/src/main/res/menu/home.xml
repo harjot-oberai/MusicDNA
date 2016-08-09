@@ -11,11 +11,6 @@
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="always"/>
     <item
-        android:id="@+id/action_analog"
-        android:orderInCategory="300"
-        android:title="Analog"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_settings"
         android:orderInCategory="400"
         android:title="@string/action_settings"

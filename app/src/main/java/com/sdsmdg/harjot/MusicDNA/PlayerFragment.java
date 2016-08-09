@@ -118,6 +118,7 @@ public class PlayerFragment extends Fragment {
     public static onPreparedLsitener mCallback6;
     public static onPlayPauseListener mCallback7;
     public static fullScreenListener mCallback8;
+    public static onSettingsClickedListener mCallback9;
 
     public static boolean isStart = true;
 
@@ -234,6 +235,7 @@ public class PlayerFragment extends Fragment {
             mCallback5 = (onQueueClickListener) context;
             mCallback6 = (onPreparedLsitener) context;
             mCallback8 = (fullScreenListener) context;
+            mCallback9 = (onSettingsClickedListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnHeadlineSelectedListener");
@@ -291,6 +293,10 @@ public class PlayerFragment extends Fragment {
 
     public interface fullScreenListener {
         public void onFullScreen();
+    }
+
+    public interface onSettingsClickedListener {
+        public void onSettingsClicked();
     }
 
     @Override
@@ -640,7 +646,6 @@ public class PlayerFragment extends Fragment {
         HomeActivity.overflowMenuAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(HomeActivity.ctx, "clicked!", Toast.LENGTH_SHORT).show();
                 PopupMenu popMenu = new PopupMenu(HomeActivity.ctx, HomeActivity.overflowMenuAB);
                 popMenu.getMenuInflater().inflate(R.menu.player_overflow_menu, popMenu.getMenu());
 
@@ -664,7 +669,7 @@ public class PlayerFragment extends Fragment {
                                 mCallback8.onFullScreen();
                             }
                         } else if (item.getTitle().equals("Settings")) {
-
+                            mCallback9.onSettingsClicked();
                         }
                         return true;
                     }

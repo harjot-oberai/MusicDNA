@@ -123,6 +123,7 @@ public class HomeActivity extends AppCompatActivity
         PlayerFragment.onPreparedLsitener,
         PlayerFragment.onPlayPauseListener,
         PlayerFragment.fullScreenListener,
+        PlayerFragment.onSettingsClickedListener,
         PlayListFragment.onPLaylistTouchedListener,
         PlayListFragment.onPlaylistMenuPlayAllListener,
         FolderFragment.onFolderClickedListener,
@@ -355,6 +356,7 @@ public class HomeActivity extends AppCompatActivity
                 PlayerFragment.mCallback5 = this;
                 PlayerFragment.mCallback6 = this;
                 PlayerFragment.mCallback8 = this;
+                PlayerFragment.mCallback9 = this;
                 if (Build.VERSION.SDK_INT < 21)
                     PlayerFragment.mCallback7 = this;
                 int flag = 0;
@@ -473,6 +475,7 @@ public class HomeActivity extends AppCompatActivity
                 PlayerFragment.mCallback5 = this;
                 PlayerFragment.mCallback6 = this;
                 PlayerFragment.mCallback8 = this;
+                PlayerFragment.mCallback9 = this;
                 if (Build.VERSION.SDK_INT < 21)
                     PlayerFragment.mCallback7 = this;
                 int flag = 0;
@@ -1046,10 +1049,8 @@ public class HomeActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            showFragment("settings");
             return true;
-        }
-        if (id == R.id.action_analog) {
-            showFragment("analog");
         }
         return super.onOptionsItemSelected(item);
     }
@@ -2061,6 +2062,7 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onFullScreen() {
         if (isFullScreenEnabled) {
+            Toast.makeText(HomeActivity.this, "Long Press to Exit", Toast.LENGTH_SHORT).show();
             View decorView = getWindow().getDecorView();
             int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
             int uiOptions2 = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
@@ -2090,6 +2092,14 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onArtistSongClick() {
         onLocalTrackSelected(-1);
+    }
+
+    @Override
+    public void onSettingsClicked() {
+        hidePlayer();
+        showTabs();
+        isPlayerVisible = false;
+        showFragment("settings");
     }
 
     public static class MyAsyncTask extends AsyncTask<Void, Void, Void> {

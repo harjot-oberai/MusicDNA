@@ -311,42 +311,31 @@ public class PlayerFragment extends Fragment {
         totalTime = (TextView) view.findViewById(R.id.totalTime);
 
         repeatIcon = (ImageView) view.findViewById(R.id.repeat_icon);
-        if (HomeActivity.repeatEnabled) {
-            repeatIcon.setImageResource(R.drawable.ic_repeat_red_48dp);
-        } else {
+        if (HomeActivity.shuffleEnabled) {
+            repeatIcon.setImageResource(R.drawable.ic_shuffle_white_48dp);
+        } else if (HomeActivity.repeatEnabled) {
             repeatIcon.setImageResource(R.drawable.ic_repeat_white_48dp);
+        } else if (HomeActivity.repeatOnceEnabled) {
+            repeatIcon.setImageResource(R.drawable.ic_repeat_once_white_48dp);
         }
         repeatIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!HomeActivity.repeatEnabled) {
+                if (HomeActivity.shuffleEnabled) {
+                    HomeActivity.shuffleEnabled = false;
                     HomeActivity.repeatEnabled = true;
-                    repeatIcon.setImageResource(R.drawable.ic_repeat_red_48dp);
-                } else {
-                    HomeActivity.repeatEnabled = false;
                     repeatIcon.setImageResource(R.drawable.ic_repeat_white_48dp);
+                } else if (HomeActivity.repeatEnabled) {
+                    HomeActivity.repeatEnabled = false;
+                    HomeActivity.repeatOnceEnabled = true;
+                    repeatIcon.setImageResource(R.drawable.ic_repeat_once_white_48dp);
+                } else if (HomeActivity.repeatOnceEnabled) {
+                    HomeActivity.repeatOnceEnabled = false;
+                    HomeActivity.shuffleEnabled = true;
+                    repeatIcon.setImageResource(R.drawable.ic_shuffle_white_48dp);
                 }
             }
         });
-
-//        shuffleIcon = (ImageView) view.findViewById(R.id.shuffle_icon);
-//        if (HomeActivity.shuffleEnabled) {
-//            shuffleIcon.setImageResource(R.drawable.ic_shuffle_red_48dp);
-//        } else {
-//            shuffleIcon.setImageResource(R.drawable.ic_shuffle_white_48dp);
-//        }
-//        shuffleIcon.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (!HomeActivity.shuffleEnabled) {
-//                    HomeActivity.shuffleEnabled = true;
-//                    shuffleIcon.setImageResource(R.drawable.ic_shuffle_red_48dp);
-//                } else {
-//                    HomeActivity.shuffleEnabled = false;
-//                    shuffleIcon.setImageResource(R.drawable.ic_shuffle_white_48dp);
-//                }
-//            }
-//        });
 
         equalizerIcon = (ImageView) view.findViewById(R.id.equalizer_icon);
         equalizerIcon.setOnClickListener(new View.OnClickListener() {
@@ -463,7 +452,6 @@ public class PlayerFragment extends Fragment {
                 if (HomeActivity.isPlayerVisible) {
                     player_controller.setVisibility(View.VISIBLE);
                     player_controller.setImageResource(R.drawable.ic_queue_music_white_48dp);
-//                    HomeActivity.playerControllerAB.setImageResource(R.drawable.ic_queue_music_white_48dp);
                 } else {
                     player_controller.setVisibility(View.VISIBLE);
                     player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
@@ -516,7 +504,7 @@ public class PlayerFragment extends Fragment {
 
                 completed = false;
                 isPrepared = false;
-                mMediaPlayer.stop();
+                mMediaPlayer.pause();
                 mCallback2.onComplete();
 
             }
@@ -594,14 +582,6 @@ public class PlayerFragment extends Fragment {
             }
             imgLoader.DisplayImage(localTrack.getPath(), HomeActivity.spImgAB);
             imgLoader.DisplayImage(localTrack.getPath(), selected_track_image);
-//            Bitmap temp = imgLoader.DisplayImage(localTrack.getPath());
-//            if (temp != null) {
-//                HomeActivity.spImgAB.setImageBitmap(temp);
-//                selected_track_image.setImageBitmap(temp);
-//            } else {
-//                HomeActivity.spImgAB.setImageResource(R.drawable.ic_default);
-//                selected_track_image.setImageResource(R.drawable.ic_default);
-//            }
             HomeActivity.spTitleAB.setText(localTrack.getTitle());
             selected_track_title.setText(localTrack.getTitle());
         }
@@ -636,19 +616,6 @@ public class PlayerFragment extends Fragment {
                     togglePlayPause();
                 else
                     mCallback5.onQueueClicked();
-            }
-        });
-
-        HomeActivity.playerControllerAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                if (!pauseClicked) {
-//                    pauseClicked = true;
-//                }
-//                if (!HomeActivity.isPlayerVisible)
-//                    togglePlayPause();
-//                else
-//                    mCallback5.onQueueClicked();
             }
         });
 
@@ -705,7 +672,8 @@ public class PlayerFragment extends Fragment {
         nextTrackController.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mMediaPlayer.stop();
+                mMediaPlayer.pause();
+                HomeActivity.nextControllerClicked = true;
                 mCallback2.onComplete();
             }
         });
@@ -713,7 +681,7 @@ public class PlayerFragment extends Fragment {
         previousTrackController.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mMediaPlayer.stop();
+                mMediaPlayer.pause();
                 mCallback3.onPreviousTrack();
             }
         });
@@ -835,6 +803,10 @@ public class PlayerFragment extends Fragment {
 
     public void refresh() {
 
+        if (HomeActivity.repeatOnceEnabled) {
+            Toast.makeText(HomeActivity.ctx, "repeatOnce OK", Toast.LENGTH_SHORT).show();
+        }
+
         isRefreshed = true;
 
         mVisualizerView.clear();
@@ -845,7 +817,6 @@ public class PlayerFragment extends Fragment {
         if (HomeActivity.isPlayerVisible) {
             player_controller.setVisibility(View.VISIBLE);
             player_controller.setImageResource(R.drawable.ic_queue_music_white_48dp);
-//            HomeActivity.playerControllerAB.setImageResource(R.drawable.ic_queue_music_white_48dp);
         } else {
             player_controller.setVisibility(View.VISIBLE);
             player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
@@ -861,17 +832,13 @@ public class PlayerFragment extends Fragment {
             isFav = false;
         }
 
-        if (HomeActivity.repeatEnabled) {
-            repeatIcon.setImageResource(R.drawable.ic_repeat_red_48dp);
-        } else {
+        if (HomeActivity.shuffleEnabled) {
+            repeatIcon.setImageResource(R.drawable.ic_shuffle_white_48dp);
+        } else if (HomeActivity.repeatEnabled) {
             repeatIcon.setImageResource(R.drawable.ic_repeat_white_48dp);
+        } else if (HomeActivity.repeatOnceEnabled) {
+            repeatIcon.setImageResource(R.drawable.ic_repeat_once_white_48dp);
         }
-
-//        if (HomeActivity.shuffleEnabled) {
-//            shuffleIcon.setImageResource(R.drawable.ic_shuffle_red_48dp);
-//        } else {
-//            shuffleIcon.setImageResource(R.drawable.ic_shuffle_white_48dp);
-//        }
 
         if (HomeActivity.isSaveDNAEnabled) {
             saveDNAToggle.setImageResource(R.drawable.ic_download_red);
@@ -899,14 +866,6 @@ public class PlayerFragment extends Fragment {
             durationInMilliSec = (int) localTrack.getDuration();
             imgLoader.DisplayImage(localTrack.getPath(), HomeActivity.spImgAB);
             imgLoader.DisplayImage(localTrack.getPath(), selected_track_image);
-//            Bitmap temp = LocalTrackListAdapter.getAlbumArt(localTrack.getPath());
-//            if (temp != null) {
-//                HomeActivity.spImgAB.setImageBitmap(temp);
-//                selected_track_image.setImageBitmap(temp);
-//            } else {
-//                HomeActivity.spImgAB.setImageResource(R.drawable.ic_default);
-//                selected_track_image.setImageResource(R.drawable.ic_default);
-//            }
             HomeActivity.spTitleAB.setText(localTrack.getTitle());
             selected_track_title.setText(localTrack.getTitle());
         }

@@ -195,8 +195,11 @@ public class HomeActivity extends AppCompatActivity
     static List<LocalTrack> tempFolderContent;
     static MusicFolder tempMusicFolder;
 
+    static boolean shuffleEnabled = true;
     static boolean repeatEnabled = false;
-    static boolean shuffleEnabled = false;
+    static boolean repeatOnceEnabled = false;
+
+    static boolean nextControllerClicked = false;
 
     static boolean isFavourite = false;
 
@@ -305,13 +308,6 @@ public class HomeActivity extends AppCompatActivity
     public static boolean isRecentVisible = false;
     public static boolean isFullScreenEnabled = false;
     public static boolean isSettingsVisible = false;
-
-    /*
-     * 0 -> shuffle
-     * 1 -> repeat normal
-     * 2 -> repeat once
-     */
-    public static int repeatState = 0;
 
     public static boolean hasQueueEnded = false;
 
@@ -1691,20 +1687,69 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onComplete() {
 
-//        Log.d("FULLSONGMAXMIN", max_max + ":" + min_min);
-//        Toast.makeText(HomeActivity.this, max_max + " : " + min_min, Toast.LENGTH_LONG).show();
-//        Toast.makeText(HomeActivity.this, avg_max + " : " + avg + " : " + avg_min, Toast.LENGTH_LONG).show();
-        max_max = Float.MIN_VALUE;
-        min_min = Float.MAX_VALUE;
-        avg = 0;
-        avg_max = 0;
-        avg_min = 0;
-        k = 0;
-
         queueCall = true;
-        if (!shuffleEnabled) {
-            if (queueCurrentIndex < queue.getQueue().size() - 1) {
-                queueCurrentIndex++;
+        if (repeatOnceEnabled && !nextControllerClicked) {
+            PlayerFragment.progressBar.setProgress(0);
+            PlayerFragment.progressBar.setSecondaryProgress(0);
+            PlayerFragment.mVisualizerView.clear();
+            PlayerFragment.mMediaPlayer.seekTo(0);
+            PlayerFragment.mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
+            PlayerFragment.isPrepared = true;
+            PlayerFragment.mMediaPlayer.start();
+        } else {
+            if (nextControllerClicked) {
+                nextControllerClicked = false;
+            }
+            if (!shuffleEnabled) {
+                if (queueCurrentIndex < queue.getQueue().size() - 1) {
+                    queueCurrentIndex++;
+                    if (QueueFragment.qAdapter != null)
+                        QueueFragment.qAdapter.notifyDataSetChanged();
+                    if (queue.getQueue().get(queueCurrentIndex).getType()) {
+                        localSelectedTrack = queue.getQueue().get(queueCurrentIndex).getLocalTrack();
+                        streamSelected = false;
+                        localSelected = true;
+                        onLocalTrackSelected(-1);
+                    } else {
+                        selectedTrack = queue.getQueue().get(queueCurrentIndex).getStreamTrack();
+                        streamSelected = true;
+                        localSelected = false;
+                        onTrackSelected(-1);
+                    }
+                } else {
+                    if (repeatEnabled) {
+                        queueCurrentIndex = 0;
+                        if (QueueFragment.qAdapter != null)
+                            QueueFragment.qAdapter.notifyDataSetChanged();
+                        onQueueItemClicked(0);
+                    } else {
+                        if (!hasQueueEnded) {
+                            PlayerFragment.mMediaPlayer.stop();
+                            hasQueueEnded = true;
+                        } else if (queue.getQueue().size() > 0) {
+                            hasQueueEnded = false;
+                            queueCurrentIndex = 0;
+                            if (QueueFragment.qAdapter != null) {
+                                QueueFragment.qAdapter.notifyDataSetChanged();
+                            }
+                            onQueueItemClicked(0);
+                        }
+                    }
+                }
+            } else {
+                Random r = new Random();
+                int x;
+                while (true) {
+                    if (queue.getQueue().size() == 1) {
+                        x = 0;
+                        break;
+                    }
+                    x = r.nextInt(queue.getQueue().size());
+                    if (x != queueCurrentIndex) {
+                        break;
+                    }
+                }
+                queueCurrentIndex = x;
                 if (QueueFragment.qAdapter != null)
                     QueueFragment.qAdapter.notifyDataSetChanged();
                 if (queue.getQueue().get(queueCurrentIndex).getType()) {
@@ -1718,54 +1763,9 @@ public class HomeActivity extends AppCompatActivity
                     localSelected = false;
                     onTrackSelected(-1);
                 }
-            } else {
-                if (repeatEnabled) {
-                    queueCurrentIndex = 0;
-                    if (QueueFragment.qAdapter != null)
-                        QueueFragment.qAdapter.notifyDataSetChanged();
-                    onQueueItemClicked(0);
-                } else {
-                    if (!hasQueueEnded) {
-                        PlayerFragment.mMediaPlayer.stop();
-                        hasQueueEnded = true;
-                    } else if (queue.getQueue().size() > 0) {
-                        hasQueueEnded = false;
-                        queueCurrentIndex = 0;
-                        if (QueueFragment.qAdapter != null) {
-                            QueueFragment.qAdapter.notifyDataSetChanged();
-                        }
-                        onQueueItemClicked(0);
-                    }
-                }
-            }
-        } else {
-            Random r = new Random();
-            int x;
-            while (true) {
-                if (queue.getQueue().size() == 1) {
-                    x = 0;
-                    break;
-                }
-                x = r.nextInt(queue.getQueue().size());
-                if (x != queueCurrentIndex) {
-                    break;
-                }
-            }
-            queueCurrentIndex = x;
-            if (QueueFragment.qAdapter != null)
-                QueueFragment.qAdapter.notifyDataSetChanged();
-            if (queue.getQueue().get(queueCurrentIndex).getType()) {
-                localSelectedTrack = queue.getQueue().get(queueCurrentIndex).getLocalTrack();
-                streamSelected = false;
-                localSelected = true;
-                onLocalTrackSelected(-1);
-            } else {
-                selectedTrack = queue.getQueue().get(queueCurrentIndex).getStreamTrack();
-                streamSelected = true;
-                localSelected = false;
-                onTrackSelected(-1);
             }
         }
+
     }
 
     @Override

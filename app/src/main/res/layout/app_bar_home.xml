@@ -109,7 +109,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="10dp"
                         android:gravity="center_vertical"
-                        android:text="Equailzer"
+                        android:text="Equalizer"
                         android:textAlignment="center"
                         android:textColor="#FFFFFF"
                         android:textSize="17sp" />

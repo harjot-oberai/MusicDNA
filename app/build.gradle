@@ -46,4 +46,5 @@ dependencies {
     compile 'com.h6ah4i.android.widget.verticalseekbar:verticalseekbar:0.7.0'
     compile 'jp.wasabeef:blurry:2.0.2'
     compile 'me.priyesh:chroma:1.0.2'
+    compile 'com.github.amlcurran.showcaseview:library:5.4.3'
 }

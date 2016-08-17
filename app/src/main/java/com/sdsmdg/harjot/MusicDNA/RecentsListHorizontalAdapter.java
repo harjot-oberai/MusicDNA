@@ -29,7 +29,6 @@ import java.util.List;
 public class RecentsListHorizontalAdapter extends RecyclerView.Adapter<RecentsListHorizontalAdapter.MyViewHolder> {
 
     private List<UnifiedTrack> recentslyPlayed;
-    int def = 0x000000;
     Context ctx;
     ImageLoader imgLoader;
 

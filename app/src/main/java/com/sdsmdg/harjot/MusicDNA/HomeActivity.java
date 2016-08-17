@@ -306,6 +306,13 @@ public class HomeActivity extends AppCompatActivity
     public static boolean isFullScreenEnabled = false;
     public static boolean isSettingsVisible = false;
 
+    /*
+     * 0 -> shuffle
+     * 1 -> repeat normal
+     * 2 -> repeat once
+     */
+    public static int repeatState = 0;
+
     public static boolean hasQueueEnded = false;
 
     static boolean isEqualizerEnabled = false;
@@ -2064,8 +2071,7 @@ public class HomeActivity extends AppCompatActivity
         if (isFullScreenEnabled) {
             Toast.makeText(HomeActivity.this, "Long Press to Exit", Toast.LENGTH_SHORT).show();
             View decorView = getWindow().getDecorView();
-            int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-            int uiOptions2 = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+            int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
             decorView.setSystemUiVisibility(uiOptions);
             ActionBar actionBar = getSupportActionBar();
             actionBar.hide();
@@ -3105,7 +3111,7 @@ public class HomeActivity extends AppCompatActivity
                                     break;
                                 }
                             }
-                            if (!isRepeat && isReloaded) {
+                            if (!isRepeat) {
                                 if (ut.getType()) {
                                     LocalTrack track = ut.getLocalTrack();
                                     if (queue.getQueue().size() == 0) {

@@ -74,105 +74,16 @@
         android:id="@+id/myvisualizerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/seekBarContainer"
+        android:layout_above="@+id/bottomContainer"
         android:layout_centerHorizontal="true" />
 
-    <RelativeLayout
-        android:id="@+id/toggleContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/seekBarContainer">
-
-        <ImageView
-            android:id="@+id/toggleSaveDNA"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="10dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:src="@drawable/ic_download" />
-
-        <ImageView
-            android:id="@+id/repeat_icon"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_alignParentLeft="true"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="5dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:src="@drawable/ic_repeat_white_48dp" />
-
-        <ImageView
-            android:id="@+id/shuffle_icon"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="10dp"
-            android:layout_marginRight="5dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:src="@drawable/ic_shuffle_white_48dp" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/seekBarContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/bottomContainer"
-        android:padding="2dp">
-
-        <TextView
-            android:id="@+id/currTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:text="0:00"
-            android:textColor="#FFF" />
-
-        <SeekBar
-            android:id="@+id/progressBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="3dp"
-            android:layout_marginRight="3dp"
-            android:layout_toEndOf="@+id/currTime"
-            android:layout_toStartOf="@+id/totalTime"
-            android:thumb="@drawable/custom_progress_bar_thumb" />
-
-        <TextView
-            android:id="@+id/totalTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:text="0:00"
-            android:textColor="#FFF" />
-
-    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/bottomContainer"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/seekBarContainer"
         android:padding="5dp">
-
-        <ImageView
-            android:id="@+id/equalizer_icon"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:src="@drawable/ic_equalizer_white_48dp" />
 
         <ImageView
             android:id="@+id/previous"
@@ -215,16 +126,119 @@
             android:clickable="true"
             android:src="@drawable/ic_skip_next_white_48dp" />
 
-        <ImageView
-            android:id="@+id/fav_icon"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/seekBarContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/toggleContainer"
+        android:layout_marginBottom="10dp"
+        android:padding="2dp">
+
+        <TextView
+            android:id="@+id/currTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:text="0:00"
+            android:textColor="#FFF" />
+
+        <SeekBar
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_toEndOf="@+id/currTime"
+            android:layout_toStartOf="@+id/totalTime"
+            android:thumb="@drawable/custom_progress_bar_thumb" />
+
+        <TextView
+            android:id="@+id/totalTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:src="@drawable/ic_heart_out" />
+            android:text="0:00"
+            android:textColor="#FFF" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/toggleContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="6dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:padding="4dp">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="32dp"
+                android:layout_weight="0.5" />
+
+            <ImageView
+                android:id="@+id/equalizer_icon"
+                android:layout_width="0dp"
+                android:layout_height="32dp"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:src="@drawable/ic_equalizer_white_48dp" />
+
+            <ImageView
+                android:id="@+id/repeat_icon"
+                android:layout_width="0dp"
+                android:layout_height="32dp"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:src="@drawable/ic_repeat_white_48dp" />
+
+            <ImageView
+                android:id="@+id/toggleSaveDNA"
+                android:layout_width="0dp"
+                android:layout_height="32dp"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:src="@drawable/ic_download" />
+
+            <ImageView
+                android:id="@+id/fav_icon"
+                android:layout_width="0dp"
+                android:layout_height="32dp"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:src="@drawable/ic_heart_out" />
+
+            <ImageView
+                android:id="@+id/queue_icon"
+                android:layout_width="0dp"
+                android:layout_height="32dp"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:src="@drawable/ic_queue_music_white_48dp" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="32dp"
+                android:layout_weight="0.5" />
+        </LinearLayout>
+
+
     </RelativeLayout>
 
 </com.sdsmdg.harjot.MusicDNA.SlidingRelativeLayout>

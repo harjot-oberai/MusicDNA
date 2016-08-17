@@ -74,7 +74,7 @@
                         android:layout_toLeftOf="@+id/menuIcon"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:clickable="true"
-                        android:visibility="visible" />
+                        android:visibility="gone" />
 
                     <ImageView
                         android:id="@+id/menuIcon"

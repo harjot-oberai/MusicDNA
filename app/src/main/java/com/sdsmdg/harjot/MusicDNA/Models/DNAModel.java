@@ -15,12 +15,10 @@ public class DNAModel {
     private List<Pair<Float, Pair<Integer, Integer>>> ptPaint;
     private byte[] byteArray;
 
-    public DNAModel(boolean type, LocalTrack localTrack, Track track, List<Pair<Float, Float>> pts, List<Pair<Float, Pair<Integer, Integer>>> ptPaint, byte[] byteArray) {
+    public DNAModel(boolean type, LocalTrack localTrack, Track track, byte[] byteArray) {
         this.type = type;
         this.localTrack = localTrack;
         this.track = track;
-        this.pts = pts;
-        this.ptPaint = ptPaint;
         this.byteArray = byteArray;
     }
 

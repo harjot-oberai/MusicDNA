@@ -72,12 +72,7 @@ public class VisualizerView2 extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (bmp != null)
-            canvas.drawBitmap(bmp, 0, -1 * (canvas.getHeight() / 5), null);
-        /*for (int i = 0; i < pts.size(); i++) {
-            mForePaint.setColor(ptPaint.get(i).second.first);
-            mForePaint.setAlpha(ptPaint.get(i).second.second);
-            canvas.drawCircle(pts.get(i).first, pts.get(i).second - (canvas.getHeight() / 5), ptPaint.get(i).first, mForePaint);
-        }*/
+            canvas.drawBitmap(bmp, 0, -1 * (canvas.getHeight() / 8), null);
         if (textEnabled && HomeActivity.tempSavedDNA != null) {
             canvas.drawText(text, canvas.getWidth() / 2, (canvas.getHeight() * 15) / 16, mTextPaint);
         }

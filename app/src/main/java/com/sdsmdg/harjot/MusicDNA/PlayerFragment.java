@@ -15,6 +15,7 @@ import android.media.audiofx.BassBoost;
 import android.media.audiofx.Equalizer;
 import android.media.audiofx.PresetReverb;
 import android.media.audiofx.Visualizer;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -476,36 +477,8 @@ public class PlayerFragment extends Fragment {
                     mainTrackController.setImageResource(R.drawable.ic_replay_white_48dp);
                 }
 
-                if (HomeActivity.isSaveDNAEnabled) {
-                    Toast.makeText(HomeActivity.ctx, "SAVING..", Toast.LENGTH_SHORT).show();
-                    if (!HomeActivity.isPlayerVisible) {
-                        mVisualizerView.setVisibility(View.INVISIBLE);
-                    }
-                    List<Pair<Float, Float>> pts = new ArrayList<Pair<Float, Float>>();
-                    List<Pair<Float, Pair<Integer, Integer>>> ptPaint = new ArrayList<Pair<Float, Pair<Integer, Integer>>>();
-                    Bitmap bmp = mVisualizerView.bmp;
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                    byte[] byteArray = stream.toByteArray();
-                    for (int i = 0; i < VisualizerView.pts.size(); i++) {
-                        pts.add(VisualizerView.pts.get(i));
-                        ptPaint.add(VisualizerView.ptPaint.get(i));
-                    }
-                    if (localIsPlaying) {
-                        DNAModel model = new DNAModel(true, localTrack, null, pts, ptPaint, byteArray);
-                        SavedDNA sDna = new SavedDNA(localTrack.getTitle(), model);
-                        HomeActivity.savedDNAs.getSavedDNAs().add(sDna);
-                    } else {
-                        DNAModel model = new DNAModel(false, null, track, pts, ptPaint, byteArray);
-                        SavedDNA sDna = new SavedDNA(track.getTitle(), model);
-                        HomeActivity.savedDNAs.getSavedDNAs().add(sDna);
-                    }
-                }
+                new SaveDNA().execute();
 
-                completed = false;
-                isPrepared = false;
-                mMediaPlayer.pause();
-                mCallback2.onComplete();
 
             }
         });
@@ -966,6 +939,38 @@ public class PlayerFragment extends Fragment {
         }
         Pair<String, String> pair = Pair.create(minS, secS);
         return pair;
+    }
+
+    public class SaveDNA extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            if (HomeActivity.isSaveDNAEnabled) {
+                Bitmap bmp = mVisualizerView.bmp;
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byte[] byteArray = stream.toByteArray();
+                if (localIsPlaying) {
+                    DNAModel model = new DNAModel(true, localTrack, null, byteArray);
+                    SavedDNA sDna = new SavedDNA(localTrack.getTitle(), model);
+                    HomeActivity.savedDNAs.getSavedDNAs().add(sDna);
+                } else {
+                    DNAModel model = new DNAModel(false, null, track, byteArray);
+                    SavedDNA sDna = new SavedDNA(track.getTitle(), model);
+                    HomeActivity.savedDNAs.getSavedDNAs().add(sDna);
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            completed = false;
+            isPrepared = false;
+            mMediaPlayer.pause();
+            mCallback2.onComplete();
+        }
     }
 
 }

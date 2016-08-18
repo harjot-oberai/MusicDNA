@@ -1991,6 +1991,7 @@ public class HomeActivity extends AppCompatActivity
     public void onPlaylistTouched(int pos) {
         Playlist tmp = allPlaylists.getPlaylists().get(pos);
         tempPlaylist.setPlaylistName(tmp.getPlaylistName());
+        tempPlaylist.setSongList(new ArrayList<UnifiedTrack>());
         for (int i = 0; i < tmp.getSongList().size(); i++) {
             tempPlaylist.getSongList().add(tmp.getSongList().get(i));
         }
@@ -2113,18 +2114,18 @@ public class HomeActivity extends AppCompatActivity
         @Override
         protected Void doInBackground(Void... params) {
             updatePoints();
-            main.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    PlayerFragment.mVisualizerView.updateVisualizer(mBytes);
-                }
-            });
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            main.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    PlayerFragment.mVisualizerView.updateVisualizer(mBytes);
+                }
+            });
         }
     }
 
@@ -2132,28 +2133,8 @@ public class HomeActivity extends AppCompatActivity
     protected void onPause() {
         super.onPause();
 
-        SharedPreferences.Editor prefsEditor = mPrefs.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(savedDNAs);
-        prefsEditor.putString("savedDNAs", json);
-        String json2 = gson.toJson(allPlaylists);
-        prefsEditor.putString("allPlaylists", json2);
-        String json3 = gson.toJson(queue);
-        prefsEditor.putString("queue", json3);
-        String json4 = gson.toJson(recentlyPlayed);
-        prefsEditor.putString("recentlyPlayed", json4);
-        String json5 = gson.toJson(favouriteTracks);
-        prefsEditor.putString("favouriteTracks", json5);
-        String json6 = gson.toJson(queueCurrentIndex);
-        prefsEditor.putString("queueCurrentIndex", json6);
-        isReloaded = true;
-        String json7 = gson.toJson(isReloaded);
-        prefsEditor.putString("isReloaded", json7);
-        String json8 = gson.toJson(settings);
-        prefsEditor.putString("settings", json8);
+        new SaveData().execute();
 
-
-        prefsEditor.commit();
     }
 
     @Override
@@ -3328,7 +3309,12 @@ public class HomeActivity extends AppCompatActivity
                     playlistsRecycler.addOnItemTouchListener(new ClickItemTouchListener(playlistsRecycler) {
                         @Override
                         boolean onClick(RecyclerView parent, View view, final int position, long id) {
-                            tempPlaylist = allPlaylists.getPlaylists().get(position);
+                            Playlist tmp = allPlaylists.getPlaylists().get(position);
+                            tempPlaylist.setPlaylistName(tmp.getPlaylistName());
+                            tempPlaylist.setSongList(new ArrayList<UnifiedTrack>());
+                            for (int i = 0; i < tmp.getSongList().size(); i++) {
+                                tempPlaylist.getSongList().add(tmp.getSongList().get(i));
+                            }
                             tempPlaylistNumber = position;
                             showFragment("playlist");
                             return true;
@@ -3343,7 +3329,12 @@ public class HomeActivity extends AppCompatActivity
                                 @Override
                                 public boolean onMenuItemClick(MenuItem item) {
                                     if (item.getTitle().equals("Play")) {
-                                        tempPlaylist = allPlaylists.getPlaylists().get(position);
+                                        Playlist tmp = allPlaylists.getPlaylists().get(position);
+                                        tempPlaylist.setPlaylistName(tmp.getPlaylistName());
+                                        tempPlaylist.setSongList(new ArrayList<UnifiedTrack>());
+                                        for (int i = 0; i < tmp.getSongList().size(); i++) {
+                                            tempPlaylist.getSongList().add(tmp.getSongList().get(i));
+                                        }
                                         tempPlaylistNumber = position;
                                         queue.setQueue(tempPlaylist.getSongList());
                                         queueCurrentIndex = 0;
@@ -3635,6 +3626,37 @@ public class HomeActivity extends AppCompatActivity
 
                 }
             });
+        }
+    }
+
+    public class SaveData extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            SharedPreferences.Editor prefsEditor = mPrefs.edit();
+            Gson gson = new Gson();
+            String json = gson.toJson(savedDNAs);
+            prefsEditor.putString("savedDNAs", json);
+            String json2 = gson.toJson(allPlaylists);
+            prefsEditor.putString("allPlaylists", json2);
+            String json3 = gson.toJson(queue);
+            prefsEditor.putString("queue", json3);
+            String json4 = gson.toJson(recentlyPlayed);
+            prefsEditor.putString("recentlyPlayed", json4);
+            String json5 = gson.toJson(favouriteTracks);
+            prefsEditor.putString("favouriteTracks", json5);
+            String json6 = gson.toJson(queueCurrentIndex);
+            prefsEditor.putString("queueCurrentIndex", json6);
+            isReloaded = true;
+            String json7 = gson.toJson(isReloaded);
+            prefsEditor.putString("isReloaded", json7);
+            String json8 = gson.toJson(settings);
+            prefsEditor.putString("settings", json8);
+
+            prefsEditor.commit();
+
+            return null;
         }
     }
 

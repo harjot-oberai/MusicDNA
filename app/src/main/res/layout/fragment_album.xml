@@ -9,13 +9,6 @@
         android:id="@+id/albums_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bottomAlbumMargin"
         android:padding="10dp"></android.support.v7.widget.RecyclerView>
-
-    <FrameLayout
-        android:id="@+id/bottomAlbumMargin"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_alignParentBottom="true"></FrameLayout>
 
 </RelativeLayout>

@@ -11,15 +11,14 @@
         android:id="@+id/localMusicList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bottomMarginLocal"
         android:background="#FFF"></android.support.v7.widget.RecyclerView>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/play_all_fab_local"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_above="@+id/bottomMarginLocal"
         android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
         android:clickable="true"
         android:src="@drawable/ic_shuffle_white_48dp"
@@ -28,11 +27,5 @@
         app:elevation="6dp"
         app:pressedTranslationZ="9dp"
         app:rippleColor="#888888" />
-
-    <FrameLayout
-        android:id="@+id/bottomMarginLocal"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_alignParentBottom="true"></FrameLayout>
 
 </RelativeLayout>

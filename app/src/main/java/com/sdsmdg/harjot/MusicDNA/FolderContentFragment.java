@@ -67,6 +67,7 @@ public class FolderContentFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         folderContentRecycler = (RecyclerView) view.findViewById(R.id.folder_content_recycler);
         fContentAdapter = new LocalTrackListAdapter(HomeActivity.tempFolderContent);
         LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(HomeActivity.ctx, LinearLayoutManager.VERTICAL, false);

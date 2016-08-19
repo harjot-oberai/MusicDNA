@@ -79,14 +79,8 @@
         android:id="@+id/album_songs_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bottomViewAlbum"
         android:layout_below="@+id/cover_container"
         android:padding="1dp"></android.support.v7.widget.RecyclerView>
 
-    <View
-        android:id="@+id/bottomViewAlbum"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_alignParentBottom="true"></View>
 
 </RelativeLayout>

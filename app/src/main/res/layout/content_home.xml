@@ -9,6 +9,136 @@
     tools:context="com.sdsmdg.harjot.MusicDNA.HomeActivity"
     tools:showIn="@layout/app_bar_home">
 
+    <RelativeLayout
+        android:id="@+id/localRecyclerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="-6dp"
+        android:layout_marginRight="-6dp"
+        android:background="#FFF"
+        android:translationZ="6dp"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/localRecyclerLabelContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/localRecyclerLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                android:text="Local"
+                android:textSize="16dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/localViewAll"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:text="View All"
+                android:textSize="12dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/localNothingText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/localRecyclerLabelContainer"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="25dp"
+            android:layout_marginTop="25dp"
+            android:text="Nothing to Show !"
+            android:textColor="#888"
+            android:textSize="13dp"
+            android:visibility="invisible" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/localMusicList_home"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/localRecyclerLabelContainer"
+            android:padding="5dp"></android.support.v7.widget.RecyclerView>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/streamRecyclerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/localRecyclerContainer"
+        android:layout_marginLeft="-6dp"
+        android:layout_marginRight="-6dp"
+        android:background="#FFF"
+        android:translationZ="6dp"
+        android:visibility="gone">
+
+        <com.wang.avi.AVLoadingIndicatorView
+            android:id="@+id/loadingIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="invisible"
+            app:indicator="BallPulse"
+            app:indicator_color="#3F334D" />
+
+        <LinearLayout
+            android:id="@+id/streamRecyclerLabelContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/streamRecyclerLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                android:text="SoundCloud"
+                android:textSize="16dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/streamViewAll"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:text="View All"
+                android:textSize="12dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/streamNothingText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/streamRecyclerLabelContainer"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="25dp"
+            android:layout_marginTop="25dp"
+            android:text="Nothing to Show !"
+            android:textColor="#888"
+            android:textSize="13dp"
+            android:visibility="invisible" />
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/trackList_home"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/streamRecyclerLabelContainer"
+            android:padding="5dp"></android.support.v7.widget.RecyclerView>
+    </RelativeLayout>
+
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/container"
         android:layout_width="match_parent"
@@ -22,155 +152,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="0dp">
-
-
-            <RelativeLayout
-                android:id="@+id/localRecyclerContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="-6dp"
-                android:layout_marginRight="-6dp"
-                android:background="#FFF"
-                android:translationZ="6dp"
-                android:visibility="gone">
-
-                <LinearLayout
-                    android:id="@+id/localRecyclerLabelContainer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/localRecyclerLabel"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="10"
-                        android:text="Local"
-                        android:textSize="16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/localViewAll"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="2"
-                        android:text="View All"
-                        android:textSize="12dp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-
-                <TextView
-                    android:id="@+id/localNothingText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/localRecyclerLabelContainer"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="25dp"
-                    android:layout_marginTop="25dp"
-                    android:text="Nothing to Show !"
-                    android:textColor="#888"
-                    android:textSize="13dp"
-                    android:visibility="invisible" />
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/localMusicList_home"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/localRecyclerLabelContainer"
-                    android:padding="5dp"></android.support.v7.widget.RecyclerView>
-            </RelativeLayout>
-
-            <!--<View-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="1dp"-->
-            <!--android:layout_below="@+id/localRecyclerContainer"-->
-            <!--android:layout_marginLeft="10dp"-->
-            <!--android:layout_marginRight="10dp"-->
-            <!--android:layout_marginTop="3dp"-->
-            <!--android:background="@android:color/darker_gray" />-->
-
-            <RelativeLayout
-                android:id="@+id/streamRecyclerContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/localRecyclerContainer"
-                android:layout_marginLeft="-6dp"
-                android:layout_marginRight="-6dp"
-                android:background="#FFF"
-                android:translationZ="6dp"
-                android:visibility="gone">
-
-                <com.wang.avi.AVLoadingIndicatorView
-                    android:id="@+id/loadingIndicator"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:visibility="invisible"
-                    app:indicator="BallPulse"
-                    app:indicator_color="#3F334D" />
-
-                <LinearLayout
-                    android:id="@+id/streamRecyclerLabelContainer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/streamRecyclerLabel"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="10"
-                        android:text="SoundCloud"
-                        android:textSize="16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/streamViewAll"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_weight="2"
-                        android:text="View All"
-                        android:textSize="12dp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/streamNothingText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/streamRecyclerLabelContainer"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="25dp"
-                    android:layout_marginTop="25dp"
-                    android:text="Nothing to Show !"
-                    android:textColor="#888"
-                    android:textSize="13dp"
-                    android:visibility="invisible" />
-
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/trackList_home"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/streamRecyclerLabelContainer"
-                    android:padding="5dp"></android.support.v7.widget.RecyclerView>
-            </RelativeLayout>
-
-            <!--<View-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="1dp"-->
-            <!--android:layout_below="@+id/streamRecyclerContainer"-->
-            <!--android:layout_marginLeft="10dp"-->
-            <!--android:layout_marginRight="10dp"-->
-            <!--android:layout_marginTop="3dp"-->
-            <!--android:background="@android:color/darker_gray" />-->
 
             <RelativeLayout
                 android:id="@+id/recentsRecyclerContainer"
@@ -498,15 +479,10 @@
     </ScrollView>
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_above="@+id/bottomMargin"
-        android:background="@drawable/transparent_gradient"></FrameLayout>
-
-    <FrameLayout
         android:id="@+id/fragContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></FrameLayout>
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottomMargin"></FrameLayout>
 
     <FrameLayout
         android:id="@+id/bottomMargin"
@@ -573,7 +549,12 @@
     </FrameLayout>
 
     <FrameLayout
-        android:id="@+id/playerFragContainer"
+        android:id="@+id/equalizer_queue_frag_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/player_frag_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"></FrameLayout>
 

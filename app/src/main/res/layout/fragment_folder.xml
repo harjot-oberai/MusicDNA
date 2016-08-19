@@ -10,13 +10,6 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/all_folders_recycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/bottom_margin_folder_frag"></android.support.v7.widget.RecyclerView>
-
-    <View
-        android:id="@+id/bottom_margin_folder_frag"
-        android:layout_alignParentBottom="true"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"></View>
+        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
 
 </RelativeLayout>

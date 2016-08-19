@@ -52,6 +52,7 @@ public class FolderFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         allFoldersRecycler = (RecyclerView) view.findViewById(R.id.all_folders_recycler);
         mfAdapter = new FolderRecyclerAdapter(HomeActivity.allMusicFolders.getMusicFolders());
         LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(HomeActivity.ctx, LinearLayoutManager.VERTICAL, false);

@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.sdsmdg.harjot.MusicDNA.LocalMusicFragments.AlbumFragment;
 import com.sdsmdg.harjot.MusicDNA.LocalMusicFragments.ArtistFragment;
@@ -43,6 +44,7 @@ public class FullLocalMusicFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         tabLayout.setBackgroundColor(HomeActivity.themeColor);
@@ -50,7 +52,6 @@ public class FullLocalMusicFragment extends Fragment {
         adapter.addFragment(new LocalMusicFragment(), "Songs");
         adapter.addFragment(new AlbumFragment(), "Albums");
         adapter.addFragment(new ArtistFragment(), "Artists");
-//        adapter.addFragment(new FolderContentFragment(),"folder");
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
     }

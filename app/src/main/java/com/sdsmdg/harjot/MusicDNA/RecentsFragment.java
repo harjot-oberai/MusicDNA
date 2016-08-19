@@ -74,6 +74,7 @@ public class RecentsFragment extends Fragment implements RecentsTrackAdapter.OnD
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         recentRecycler = (RecyclerView) view.findViewById(R.id.view_recent_recycler);
         rtAdpater = new RecentsTrackAdapter(HomeActivity.recentlyPlayed.getRecentlyPlayed(), this);
         LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(HomeActivity.ctx, LinearLayoutManager.VERTICAL, false);
@@ -304,12 +305,17 @@ public class RecentsFragment extends Fragment implements RecentsTrackAdapter.OnD
         });
 
         shuffleFab = (FloatingActionButton) view.findViewById(R.id.play_all_fab_recent);
+
+        if (HomeActivity.recentlyPlayed != null && HomeActivity.recentlyPlayed.getRecentlyPlayed().size() > 0) {
+            shuffleFab.setVisibility(View.VISIBLE);
+        }
+
         shuffleFab.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));
         shuffleFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 HomeActivity.queue.getQueue().clear();
-                for (int i = 0; i < HomeActivity.recentlyPlayed.getRecentlyPlayed().size();i++) {
+                for (int i = 0; i < HomeActivity.recentlyPlayed.getRecentlyPlayed().size(); i++) {
                     HomeActivity.queue.getQueue().add(HomeActivity.recentlyPlayed.getRecentlyPlayed().get(i));
                 }
                 HomeActivity.shuffleEnabled = true;

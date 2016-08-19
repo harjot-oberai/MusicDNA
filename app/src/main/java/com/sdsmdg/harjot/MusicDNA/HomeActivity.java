@@ -164,7 +164,7 @@ public class HomeActivity extends AppCompatActivity
 
     Toolbar spHome;
     ImageView playerControllerHome;
-    FrameLayout bottomToolbar;
+    static FrameLayout bottomToolbar;
     CircleImageView spImgHome;
     TextView spTitleHome;
 
@@ -203,7 +203,7 @@ public class HomeActivity extends AppCompatActivity
 
     static boolean isFavourite = false;
 
-    static boolean isReloaded = false;
+    public static boolean isReloaded = false;
 
     public static int queueCurrentIndex = 0;
 
@@ -379,7 +379,7 @@ public class HomeActivity extends AppCompatActivity
                                 R.animator.slide_down,
                                 R.animator.slide_up,
                                 R.animator.slide_down)
-                        .add(R.id.playerFragContainer, newFragment, "player")
+                        .add(R.id.player_frag_container, newFragment, "player")
                         .show(newFragment)
                         .addToBackStack(null)
                         .commitAllowingStateLoss();
@@ -498,7 +498,7 @@ public class HomeActivity extends AppCompatActivity
                                 R.animator.slide_down,
                                 R.animator.slide_up,
                                 R.animator.slide_down)
-                        .add(R.id.playerFragContainer, newFragment, "player")
+                        .add(R.id.player_frag_container, newFragment, "player")
                         .show(newFragment)
                         .commitAllowingStateLoss();
             } else {
@@ -2327,7 +2327,7 @@ public class HomeActivity extends AppCompatActivity
             QueueFragment.mCallback = this;
             QueueFragment.mCallback2 = this;
             fm.beginTransaction()
-                    .add(R.id.fragContainer, newFragment, "queue")
+                    .add(R.id.equalizer_queue_frag_container, newFragment, "queue")
                     .show(newFragment)
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
@@ -2371,7 +2371,7 @@ public class HomeActivity extends AppCompatActivity
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             EqualizerFragment newFragment = new EqualizerFragment();
             fm.beginTransaction()
-                    .add(R.id.fragContainer, newFragment, "equalizer")
+                    .add(R.id.equalizer_queue_frag_container, newFragment, "equalizer")
                     .show(newFragment)
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
@@ -3055,7 +3055,7 @@ public class HomeActivity extends AppCompatActivity
                             spTitleHome.setText(utHome.getStreamTrack().getTitle());
                         }
                     } else {
-                        bottomToolbar.setVisibility(View.INVISIBLE);
+                        bottomToolbar.setVisibility(View.GONE);
                     }
 
                     getLocalSongs();
@@ -3590,7 +3590,7 @@ public class HomeActivity extends AppCompatActivity
                         }
                     });
 
-                    playerContainer = findViewById(R.id.playerFragContainer);
+                    playerContainer = findViewById(R.id.player_frag_container);
 
                     if (finalLocalSearchResultList.size() == 0) {
                         localListView.setVisibility(View.GONE);

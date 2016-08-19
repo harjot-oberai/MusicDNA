@@ -46,16 +46,9 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/saved_dna_recycler"
         android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
         android:layout_height="135dp"
-        android:layout_above="@+id/bottomView"
         android:background="#FFF"
         android:padding="1dp" />
-
-    <View
-        android:id="@+id/bottomView"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_alignParentBottom="true"
-        android:background="#000000" />
 
 </RelativeLayout>

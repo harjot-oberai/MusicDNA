@@ -25,7 +25,6 @@
         android:id="@+id/artist_songs_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/artist_bottom_margin"
         android:layout_below="@+id/artist_title"
         android:background="#FFFFFF"></android.support.v7.widget.RecyclerView>
 
@@ -33,7 +32,7 @@
         android:id="@+id/play_all_fab_artist"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_above="@+id/artist_bottom_margin"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="16dp"
         android:clickable="true"
@@ -43,12 +42,5 @@
         app:elevation="6dp"
         app:pressedTranslationZ="9dp"
         app:rippleColor="#888888" />
-
-    <LinearLayout
-        android:id="@+id/artist_bottom_margin"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal"></LinearLayout>
 
 </RelativeLayout>

@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.sdsmdg.harjot.MusicDNA.Helpers.GridSpacingItemDecoration;
 import com.sdsmdg.harjot.MusicDNA.HomeActivity;
@@ -56,6 +57,7 @@ public class AlbumFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         rv = (RecyclerView) view.findViewById(R.id.albums_recycler);
         abAdapter = new AlbumRecyclerAdapter(HomeActivity.albums);
         GridLayoutManager glManager = new GridLayoutManager(HomeActivity.ctx, 2);

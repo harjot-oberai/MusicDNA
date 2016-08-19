@@ -344,6 +344,7 @@ public class HomeActivity extends AppCompatActivity
 
             searchView.setQuery("", false);
             searchView.setIconified(true);
+            new Thread(new CancelCall()).start();
 
             hideTabs();
             isPlayerVisible = true;
@@ -463,6 +464,7 @@ public class HomeActivity extends AppCompatActivity
 
             searchView.setQuery("", false);
             searchView.setIconified(true);
+            new Thread(new CancelCall()).start();
 
             hideTabs();
             isPlayerVisible = true;
@@ -967,6 +969,7 @@ public class HomeActivity extends AppCompatActivity
         } else if (!searchView.isIconified()) {
             searchView.setQuery("", true);
             searchView.setIconified(true);
+            new Thread(new CancelCall()).start();
         } else {
             if (isEqualizerVisible) {
                 showPlayer2();
@@ -1399,6 +1402,7 @@ public class HomeActivity extends AppCompatActivity
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         searchView.setQuery("", false);
         searchView.setIconified(true);
+        new Thread(new CancelCall()).start();
 
         isPlayerVisible = true;
         isEqualizerVisible = false;

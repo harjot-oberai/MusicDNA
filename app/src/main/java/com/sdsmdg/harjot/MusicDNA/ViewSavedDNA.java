@@ -19,6 +19,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.sdsmdg.harjot.MusicDNA.Models.SavedDNA;
 
@@ -36,6 +38,8 @@ public class ViewSavedDNA extends Fragment {
     static VisualizerView2 mVisualizerView2;
 
     ImageView shareIcon, saveToStorageIcon;
+
+    LinearLayout noSavedContent;
 
     static onShareListener mCallback;
 
@@ -72,14 +76,31 @@ public class ViewSavedDNA extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        mVisualizerView2 = (VisualizerView2) view.findViewById(R.id.saved_dna_visualizer);
         viewDnaRecycler = (RecyclerView) view.findViewById(R.id.saved_dna_recycler);
+
+        noSavedContent = (LinearLayout) view.findViewById(R.id.no_saved_dnas);
+
+        if (SplashActivity.tf2 != null)
+            ((TextView) view.findViewById(R.id.no_saved_content_text)).setTypeface(SplashActivity.tf2);
+
+        if (HomeActivity.savedDNAs == null || HomeActivity.savedDNAs.getSavedDNAs().size() == 0) {
+            noSavedContent.setVisibility(View.VISIBLE);
+            mVisualizerView2.setVisibility(View.INVISIBLE);
+            viewDnaRecycler.setVisibility(View.INVISIBLE);
+        } else {
+            noSavedContent.setVisibility(View.GONE);
+            mVisualizerView2.setVisibility(View.VISIBLE);
+            viewDnaRecycler.setVisibility(View.VISIBLE);
+        }
+
         vdAdapter = new ViewSavedDnaRecyclerAdapter(HomeActivity.savedDNAs.getSavedDNAs());
         LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(HomeActivity.ctx, LinearLayoutManager.HORIZONTAL, false);
         viewDnaRecycler.setLayoutManager(mLayoutManager2);
         viewDnaRecycler.setItemAnimator(new DefaultItemAnimator());
         viewDnaRecycler.setAdapter(vdAdapter);
 
-        mVisualizerView2 = (VisualizerView2) view.findViewById(R.id.saved_dna_visualizer);
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {

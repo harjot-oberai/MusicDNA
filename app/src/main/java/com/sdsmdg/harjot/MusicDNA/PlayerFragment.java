@@ -926,7 +926,7 @@ public class PlayerFragment extends Fragment {
         });
     }
 
-    public Pair<String, String> getTime(int millsec) {
+    public static Pair<String, String> getTime(int millsec) {
         int min, sec;
         sec = millsec / 1000;
         min = sec / 60;

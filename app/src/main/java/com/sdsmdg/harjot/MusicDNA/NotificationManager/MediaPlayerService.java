@@ -105,7 +105,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
 
         Notification notification = new Notification.Builder(this)
                 .setStyle(style)
-                .setSmallIcon(R.drawable.ic_default)
+                .setSmallIcon(R.drawable.ic_notification)
                 .setVisibility(Notification.VISIBILITY_PUBLIC)
                 .setDeleteIntent(pendingIntent)
                 .addAction(generateAction(android.R.drawable.ic_media_previous, "Previous", Constants.ACTION_PREVIOUS))

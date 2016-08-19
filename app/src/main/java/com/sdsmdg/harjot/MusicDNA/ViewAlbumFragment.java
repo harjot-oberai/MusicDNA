@@ -16,6 +16,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.sdsmdg.harjot.MusicDNA.Blur.BlurringView;
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
@@ -49,6 +51,8 @@ public class ViewAlbumFragment extends Fragment {
     BlurringView blurringView;
     ViewGroup root;
     FloatingActionButton fab;
+
+    TextView albumDetails;
 
     static onAlbumSongClickListener mCallback;
     static onAlbumPlayAllListener mCallback2;
@@ -87,6 +91,25 @@ public class ViewAlbumFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        albumDetails = (TextView) view.findViewById(R.id.album_details);
+        int tmp = HomeActivity.tempAlbum.getAlbumSongs().size();
+        String details1;
+        if (tmp == 1) {
+            details1 = "1 Song ";
+        } else {
+            details1 = tmp + " Songs ";
+        }
+
+        int tmp2 = 0;
+
+        for (int i = 0; i < tmp; i++) {
+            tmp2 += HomeActivity.tempAlbum.getAlbumSongs().get(i).getDuration();
+        }
+
+        Pair<String, String> time = PlayerFragment.getTime(tmp2);
+
+        albumDetails.setText(details1 + " •  " + time.first + "m" + time.second + "s");
 
         fab = (FloatingActionButton) view.findViewById(R.id.play_all_from_album);
         fab.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));

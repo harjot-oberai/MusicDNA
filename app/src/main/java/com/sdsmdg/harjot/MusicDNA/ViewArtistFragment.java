@@ -34,7 +34,7 @@ public class ViewArtistFragment extends Fragment {
 
     FloatingActionButton playAllfab;
 
-    TextView title;
+    TextView title, albumDetails;
 
     public ViewArtistFragment() {
         // Required empty public constructor
@@ -73,6 +73,8 @@ public class ViewArtistFragment extends Fragment {
 
         title = (TextView) view.findViewById(R.id.artist_title);
         title.setText(HomeActivity.tempArtist.getName());
+
+
 
         rv = (RecyclerView) view.findViewById(R.id.artist_songs_recycler);
         lAdapter = new LocalTrackListAdapter(HomeActivity.tempArtist.getArtistSongs());

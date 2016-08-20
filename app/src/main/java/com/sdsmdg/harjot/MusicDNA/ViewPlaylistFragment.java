@@ -101,7 +101,11 @@ public class ViewPlaylistFragment extends Fragment implements PlaylistTrackAdapt
         playAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HomeActivity.queue.setQueue(HomeActivity.tempPlaylist.getSongList());
+                int size = HomeActivity.tempPlaylist.getSongList().size();
+                HomeActivity.queue.getQueue().clear();
+                for (int i = 0; i < size; i++) {
+                    HomeActivity.queue.addToQueue(HomeActivity.tempPlaylist.getSongList().get(i));
+                }
                 HomeActivity.queueCurrentIndex = 0;
                 mCallback2.onPlaylistPLayAll();
             }

@@ -23,7 +23,6 @@ public class Queue {
 
     public void addToQueue(UnifiedTrack track){
         queue.add(track);
-
     }
 
 }

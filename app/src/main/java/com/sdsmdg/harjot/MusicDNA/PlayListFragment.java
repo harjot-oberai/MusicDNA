@@ -102,13 +102,15 @@ public class PlayListFragment extends Fragment {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         if (item.getTitle().equals("Play")) {
-                            Playlist tmp = HomeActivity.allPlaylists.getPlaylists().get(position);
-                            HomeActivity.tempPlaylist.setPlaylistName(tmp.getPlaylistName());
-                            for (int i = 0; i < tmp.getSongList().size(); i++) {
-                                HomeActivity.tempPlaylist.getSongList().add(tmp.getSongList().get(i));
+                            HomeActivity.tempPlaylist = HomeActivity.allPlaylists.getPlaylists().get(position);
+
+                            int size = HomeActivity.tempPlaylist.getSongList().size();
+                            HomeActivity.queue.getQueue().clear();
+                            for (int i = 0; i < size; i++) {
+                                HomeActivity.queue.addToQueue(HomeActivity.tempPlaylist.getSongList().get(i));
                             }
-                            HomeActivity.queue.setQueue(HomeActivity.tempPlaylist.getSongList());
                             HomeActivity.queueCurrentIndex = 0;
+
                             mCallback2.onPlaylistMenuPLayAll();
                         } else if (item.getTitle().equals("Delete")) {
                             HomeActivity.allPlaylists.getPlaylists().remove(position);
@@ -116,6 +118,9 @@ public class PlayListFragment extends Fragment {
                                 PlayListFragment.vpAdapter.notifyItemRemoved(position);
                             }
                             HomeActivity.pAdapter.notifyItemRemoved(position);
+                        } else if (item.getTitle().equals("Rename")) {
+                            HomeActivity.renamePlaylistNumber = position;
+                            HomeActivity.renamePlaylistDialog(HomeActivity.allPlaylists.getPlaylists().get(position).getPlaylistName());
                         }
                         return true;
                     }

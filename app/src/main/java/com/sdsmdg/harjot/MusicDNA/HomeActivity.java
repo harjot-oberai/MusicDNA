@@ -51,6 +51,7 @@ import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -185,6 +186,7 @@ public class HomeActivity extends AppCompatActivity
     static Queue queue;
     static Playlist tempPlaylist;
     static int tempPlaylistNumber;
+    static int renamePlaylistNumber;
     static AllPlaylists allPlaylists;
     static AllDNAModels allDNAs;
     static AllMusicFolders allMusicFolders;
@@ -1993,12 +1995,13 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onPlaylistTouched(int pos) {
-        Playlist tmp = allPlaylists.getPlaylists().get(pos);
+        tempPlaylist = allPlaylists.getPlaylists().get(pos);
+        /*Playlist tmp = allPlaylists.getPlaylists().get(pos);
         tempPlaylist.setPlaylistName(tmp.getPlaylistName());
         tempPlaylist.setSongList(new ArrayList<UnifiedTrack>());
         for (int i = 0; i < tmp.getSongList().size(); i++) {
             tempPlaylist.getSongList().add(tmp.getSongList().get(i));
-        }
+        }*/
         tempPlaylistNumber = pos;
         showFragment("playlist");
     }
@@ -2197,6 +2200,39 @@ public class HomeActivity extends AppCompatActivity
         DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
         int dp = Math.round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
         return dp;
+    }
+
+    public static void renamePlaylistDialog(String oldName) {
+        final Dialog dialog = new Dialog(ctx);
+        dialog.setContentView(R.layout.save_image_dialog);
+        dialog.setTitle("Rename");
+
+        Button btn = (Button) dialog.findViewById(R.id.save_image_btn);
+        final EditText newName = (EditText) dialog.findViewById(R.id.save_image_filename_text);
+
+        newName.setText(oldName);
+        btn.setBackgroundColor(themeColor);
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (newName.getText().toString().trim().equals("")) {
+                    newName.setError("Enter Playlist Name!");
+                } else {
+                    allPlaylists.getPlaylists().get(renamePlaylistNumber).setPlaylistName(newName.getText().toString());
+                    if (pAdapter != null) {
+                        pAdapter.notifyItemChanged(renamePlaylistNumber);
+                    }
+                    if (PlayListFragment.vpAdapter != null) {
+                        PlayListFragment.vpAdapter.notifyItemChanged(renamePlaylistNumber);
+                    }
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        dialog.show();
+
     }
 
     public static void showAddToPlaylistDialog(final UnifiedTrack track) {
@@ -3313,12 +3349,7 @@ public class HomeActivity extends AppCompatActivity
                     playlistsRecycler.addOnItemTouchListener(new ClickItemTouchListener(playlistsRecycler) {
                         @Override
                         boolean onClick(RecyclerView parent, View view, final int position, long id) {
-                            Playlist tmp = allPlaylists.getPlaylists().get(position);
-                            tempPlaylist.setPlaylistName(tmp.getPlaylistName());
-                            tempPlaylist.setSongList(new ArrayList<UnifiedTrack>());
-                            for (int i = 0; i < tmp.getSongList().size(); i++) {
-                                tempPlaylist.getSongList().add(tmp.getSongList().get(i));
-                            }
+                            tempPlaylist = allPlaylists.getPlaylists().get(position);
                             tempPlaylistNumber = position;
                             showFragment("playlist");
                             return true;
@@ -3333,14 +3364,16 @@ public class HomeActivity extends AppCompatActivity
                                 @Override
                                 public boolean onMenuItemClick(MenuItem item) {
                                     if (item.getTitle().equals("Play")) {
-                                        Playlist tmp = allPlaylists.getPlaylists().get(position);
-                                        tempPlaylist.setPlaylistName(tmp.getPlaylistName());
-                                        tempPlaylist.setSongList(new ArrayList<UnifiedTrack>());
-                                        for (int i = 0; i < tmp.getSongList().size(); i++) {
-                                            tempPlaylist.getSongList().add(tmp.getSongList().get(i));
-                                        }
+
+                                        tempPlaylist = allPlaylists.getPlaylists().get(position);
                                         tempPlaylistNumber = position;
-                                        queue.setQueue(tempPlaylist.getSongList());
+
+                                        int size = tempPlaylist.getSongList().size();
+                                        queue.getQueue().clear();
+                                        for (int i = 0; i < size; i++) {
+                                            queue.addToQueue(tempPlaylist.getSongList().get(i));
+                                        }
+
                                         queueCurrentIndex = 0;
                                         onPlaylistPLayAll();
                                     } else if (item.getTitle().equals("Delete")) {
@@ -3349,6 +3382,9 @@ public class HomeActivity extends AppCompatActivity
                                             PlayListFragment.vpAdapter.notifyItemRemoved(position);
                                         }
                                         pAdapter.notifyItemRemoved(position);
+                                    } else if (item.getTitle().equals("Rename")) {
+                                        renamePlaylistNumber = position;
+                                        renamePlaylistDialog(allPlaylists.getPlaylists().get(position).getPlaylistName());
                                     }
                                     return true;
                                 }

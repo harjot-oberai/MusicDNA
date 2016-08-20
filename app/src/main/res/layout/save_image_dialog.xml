@@ -6,12 +6,12 @@
     android:padding="0dp">
 
     <EditText
-        android:layout_marginRight="5dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="5dp"
         android:id="@+id/save_image_filename_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
         android:text="Title"
         android:textSize="15dp" />
 

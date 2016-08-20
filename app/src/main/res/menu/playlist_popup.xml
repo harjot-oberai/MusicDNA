@@ -8,4 +8,9 @@
         android:id="@+id/play_next"
         android:icon="@android:drawable/ic_menu_add"
         android:title="Delete" />
+
+    <item
+        android:id="@+id/rename"
+        android:icon="@android:drawable/ic_menu_add"
+        android:title="Rename" />
 </menu>

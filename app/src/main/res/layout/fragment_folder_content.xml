@@ -11,14 +11,12 @@
         android:id="@+id/folder_content_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bottomLinear2"
         android:background="#FFF"></android.support.v7.widget.RecyclerView>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/folder_play_all_fab"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_above="@+id/bottomLinear2"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="16dp"

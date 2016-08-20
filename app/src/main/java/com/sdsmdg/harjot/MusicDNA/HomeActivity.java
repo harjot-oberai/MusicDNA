@@ -1547,7 +1547,7 @@ public class HomeActivity extends AppCompatActivity
         mBytes = bytes;
 //        updatePoints();
 //        PlayerFragment.mVisualizerView.updateVisualizer(mBytes);
-        new MyAsyncTask().execute();
+        new MyAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public static void updatePoints() {

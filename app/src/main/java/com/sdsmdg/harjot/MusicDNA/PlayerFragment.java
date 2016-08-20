@@ -477,7 +477,7 @@ public class PlayerFragment extends Fragment {
                     mainTrackController.setImageResource(R.drawable.ic_replay_white_48dp);
                 }
 
-                new SaveDNA().execute();
+                new SaveDNA().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
 
             }

@@ -108,11 +108,9 @@ public class ViewSavedDNA extends Fragment {
             @Override
             public void run() {
                 if (HomeActivity.savedDNAs.getSavedDNAs().size() > 0) {
-                    SavedDNA dna = HomeActivity.savedDNAs.getSavedDNAs().get(0);
+                    SavedDNA dna = HomeActivity.savedDNAs.getSavedDNAs().get(selectedDNA);
                     selectedDNA = 0;
                     HomeActivity.tempSavedDNA = dna;
-                    mVisualizerView2.setPts(dna.getModel().getPts());
-                    mVisualizerView2.setPtPaint(dna.getModel().getPtPaint());
                     byte[] bArr = dna.getModel().getByteArray();
                     Bitmap bmp = BitmapFactory.decodeByteArray(bArr, 0, bArr.length);
                     mVisualizerView2.setBmp(bmp);

@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -39,6 +40,7 @@ public class EqualizerFragment extends Fragment {
     Paint paint;
     float[] points;
 
+    ImageView spinnerDropDownIcon;
 
     boolean correctPosition = true;
 
@@ -66,6 +68,14 @@ public class EqualizerFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        spinnerDropDownIcon = (ImageView) view.findViewById(R.id.spinner_dropdown_icon);
+        spinnerDropDownIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presetSpinner.performClick();
+            }
+        });
 
         presetSpinner = (Spinner) view.findViewById(R.id.equalizer_preset_spinner);
 

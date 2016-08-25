@@ -9,6 +9,8 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -148,6 +150,8 @@ public class HomeActivity extends AppCompatActivity
     public static List<Artist> artists = new ArrayList<>();
     public static List<UnifiedTrack> continuePlayingList = new ArrayList<>();
 
+    String version;
+    TextView copyrightText;
 
     static Canvas cacheCanvas;
 
@@ -587,6 +591,18 @@ public class HomeActivity extends AppCompatActivity
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
 
         setContentView(R.layout.activity_home);
+
+        PackageInfo pInfo = null;
+        try {
+            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            version = pInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        copyrightText = (TextView) findViewById(R.id.copyright_text);
+        copyrightText.setTypeface(SplashActivity.tf2);
+        copyrightText.setText("\nMusic DNA v" + version + " \n© 2016");
 
         imgLoader = new ImageLoader(this);
         ctx = this;

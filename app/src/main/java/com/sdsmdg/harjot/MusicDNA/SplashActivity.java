@@ -32,9 +32,6 @@ public class SplashActivity extends AppCompatActivity {
     boolean perm6 = false;
     boolean perm7 = false;
 
-    RelativeLayout relSplash;
-    TextView tx;
-
     static Typeface tf;
     static Typeface tf2;
 

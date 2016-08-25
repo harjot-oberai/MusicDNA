@@ -20,14 +20,31 @@
             android:layout_alignParentTop="true"
             android:layout_weight="3"></com.db.chart.view.LineChartView>
 
-        <Spinner
-            android:id="@+id/equalizer_preset_spinner"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginLeft="9dp"
-            android:layout_marginRight="9dp"
             android:layout_weight="1"
-            android:background="#111"></Spinner>
+            android:background="#111">
+
+            <Spinner
+                android:id="@+id/equalizer_preset_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_toLeftOf="@+id/spinner_dropdown_icon"
+                android:background="#111"></Spinner>
+
+            <ImageView
+                android:id="@+id/spinner_dropdown_icon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="25dp"
+                android:src="@drawable/dropdown_icon"
+                android:tint="#FFFFFF" />
+        </RelativeLayout>
+
 
         <LinearLayout
             android:id="@+id/equalizerContainer"
@@ -62,8 +79,8 @@
                         android:layout_height="0dp"
                         android:layout_marginTop="20dp"
                         android:splitTrack="false"
-                        app:seekBarRotation="CW270"
-                        android:thumb="@drawable/custom_equalizer_thumb"/>
+                        android:thumb="@drawable/custom_equalizer_thumb"
+                        app:seekBarRotation="CW270" />
                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
 
                 <TextView
@@ -91,8 +108,8 @@
                         android:layout_height="0dp"
                         android:layout_marginTop="20dp"
                         android:splitTrack="false"
-                        app:seekBarRotation="CW270"
-                        android:thumb="@drawable/custom_equalizer_thumb" />
+                        android:thumb="@drawable/custom_equalizer_thumb"
+                        app:seekBarRotation="CW270" />
                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
 
                 <TextView
@@ -120,8 +137,8 @@
                         android:layout_height="0dp"
                         android:layout_marginTop="20dp"
                         android:splitTrack="false"
-                        app:seekBarRotation="CW270"
-                        android:thumb="@drawable/custom_equalizer_thumb" />
+                        android:thumb="@drawable/custom_equalizer_thumb"
+                        app:seekBarRotation="CW270" />
                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
 
                 <TextView
@@ -149,8 +166,8 @@
                         android:layout_height="0dp"
                         android:layout_marginTop="20dp"
                         android:splitTrack="false"
-                        app:seekBarRotation="CW270"
-                        android:thumb="@drawable/custom_equalizer_thumb" />
+                        android:thumb="@drawable/custom_equalizer_thumb"
+                        app:seekBarRotation="CW270" />
                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
 
                 <TextView
@@ -178,8 +195,8 @@
                         android:layout_height="0dp"
                         android:layout_marginTop="20dp"
                         android:splitTrack="false"
-                        app:seekBarRotation="CW270"
-                        android:thumb="@drawable/custom_equalizer_thumb" />
+                        android:thumb="@drawable/custom_equalizer_thumb"
+                        app:seekBarRotation="CW270" />
                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
 
                 <TextView

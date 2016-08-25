@@ -28,8 +28,8 @@ public class PlayListFragment extends Fragment {
 
     LinearLayout noPlaylistContent;
 
-    static onPLaylistTouchedListener mCallback;
-    static onPlaylistMenuPlayAllListener mCallback2;
+    onPLaylistTouchedListener mCallback;
+    onPlaylistMenuPlayAllListener mCallback2;
 
     public PlayListFragment() {
         // Required empty public constructor

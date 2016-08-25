@@ -485,6 +485,12 @@
         android:layout_above="@+id/bottomMargin"></FrameLayout>
 
     <FrameLayout
+        android:id="@+id/content_frag"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottomMargin"></FrameLayout>
+
+    <FrameLayout
         android:id="@+id/bottomMargin"
         android:layout_width="match_parent"
         android:layout_height="70dp"

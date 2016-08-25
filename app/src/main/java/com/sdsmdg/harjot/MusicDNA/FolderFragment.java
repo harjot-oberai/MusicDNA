@@ -21,7 +21,7 @@ public class FolderFragment extends Fragment {
     RecyclerView allFoldersRecycler;
     FolderRecyclerAdapter mfAdapter;
 
-    static onFolderClickedListener mCallback;
+    onFolderClickedListener mCallback;
 
     public FolderFragment() {
         // Required empty public constructor

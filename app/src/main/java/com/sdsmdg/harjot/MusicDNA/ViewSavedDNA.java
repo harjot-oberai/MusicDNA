@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.os.Handler;
@@ -32,8 +33,8 @@ import java.nio.ByteBuffer;
  */
 public class ViewSavedDNA extends Fragment {
 
-    static RecyclerView viewDnaRecycler;
-    static ViewSavedDnaRecyclerAdapter vdAdapter;
+    RecyclerView viewDnaRecycler;
+    ViewSavedDnaRecyclerAdapter vdAdapter;
 
     static VisualizerView2 mVisualizerView2;
 
@@ -41,7 +42,7 @@ public class ViewSavedDNA extends Fragment {
 
     LinearLayout noSavedContent;
 
-    static onShareListener mCallback;
+    onShareListener mCallback;
 
     static int selectedDNA = 0;
 
@@ -162,6 +163,9 @@ public class ViewSavedDNA extends Fragment {
                         } else if (item.getTitle().equals("Delete")) {
                             HomeActivity.savedDNAs.getSavedDNAs().remove(position);
                             vdAdapter.notifyItemRemoved(position);
+
+                            new HomeActivity.SaveTheDNAs().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
                         }
                         return true;
                     }

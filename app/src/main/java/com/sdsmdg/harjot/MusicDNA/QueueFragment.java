@@ -29,12 +29,12 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
     RecyclerView queueRecycler;
     static QueueRecyclerAdapter qAdapter;
 
-    static ItemTouchHelper mItemTouchHelper;
+    ItemTouchHelper mItemTouchHelper;
 
     FloatingActionButton saveQueue;
 
-    static onQueueItemClickedListener mCallback;
-    static onQueueSaveListener mCallback2;
+    onQueueItemClickedListener mCallback;
+    onQueueSaveListener mCallback2;
 
     public interface onQueueItemClickedListener {
         public void onQueueItemClicked(int position);
@@ -53,6 +53,7 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
         super.onAttach(context);
         try {
             mCallback = (onQueueItemClickedListener) context;
+            mCallback2 = (onQueueSaveListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnHeadlineSelectedListener");

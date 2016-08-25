@@ -54,8 +54,8 @@ public class ViewAlbumFragment extends Fragment {
 
     TextView albumDetails;
 
-    static onAlbumSongClickListener mCallback;
-    static onAlbumPlayAllListener mCallback2;
+    onAlbumSongClickListener mCallback;
+    onAlbumPlayAllListener mCallback2;
 
     public ViewAlbumFragment() {
         // Required empty public constructor

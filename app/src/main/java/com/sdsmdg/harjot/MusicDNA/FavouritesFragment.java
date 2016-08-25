@@ -27,10 +27,10 @@ public class FavouritesFragment extends Fragment implements FavouriteTrackAdapte
     RecyclerView favouriteRecycler;
     static FavouriteTrackAdapter fAdapter;
 
-    static ItemTouchHelper mItemTouchHelper;
+    ItemTouchHelper mItemTouchHelper;
 
-    static onFavouriteItemClickedListener mCallback;
-    static onFavouritePlayAllListener mCallback2;
+    onFavouriteItemClickedListener mCallback;
+    onFavouritePlayAllListener mCallback2;
 
     LinearLayout noFavouriteContent;
 

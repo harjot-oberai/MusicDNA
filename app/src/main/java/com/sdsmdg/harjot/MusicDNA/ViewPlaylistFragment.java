@@ -26,10 +26,10 @@ public class ViewPlaylistFragment extends Fragment implements PlaylistTrackAdapt
     static PlaylistTrackAdapter plAdapter;
     FloatingActionButton playAll;
 
-    static ItemTouchHelper mItemTouchHelper;
+    ItemTouchHelper mItemTouchHelper;
 
-    static onPLaylistItemClickedListener mCallback;
-    static onPlaylistPlayAllListener mCallback2;
+    onPLaylistItemClickedListener mCallback;
+    onPlaylistPlayAllListener mCallback2;
 
     @Override
     public void onDragStarted(RecyclerView.ViewHolder viewHolder) {

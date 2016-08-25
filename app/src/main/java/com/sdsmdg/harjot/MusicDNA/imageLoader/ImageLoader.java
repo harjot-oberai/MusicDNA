@@ -131,7 +131,7 @@ public class ImageLoader {
             BitmapFactory.decodeStream(new FileInputStream(f), null, o);
 
             //Find the correct scale value. It should be the power of 2.
-            final int REQUIRED_SIZE = 70;
+            final int REQUIRED_SIZE = 128;
             int width_tmp = o.outWidth, height_tmp = o.outHeight;
             int scale = 1;
             while (true) {

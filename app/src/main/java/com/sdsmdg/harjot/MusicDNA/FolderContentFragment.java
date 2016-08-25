@@ -30,8 +30,8 @@ public class FolderContentFragment extends Fragment {
 
     FloatingActionButton playAllFAB;
 
-    static onFolderContentPlayAllListener mCallback;
-    static onFolderContentItemClickListener mCallback2;
+    onFolderContentPlayAllListener mCallback;
+    onFolderContentItemClickListener mCallback2;
 
     public FolderContentFragment() {
         // Required empty public constructor

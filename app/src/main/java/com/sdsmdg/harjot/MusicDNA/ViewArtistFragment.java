@@ -29,8 +29,8 @@ public class ViewArtistFragment extends Fragment {
     RecyclerView rv;
     LocalTrackListAdapter lAdapter;
 
-    static onArtistSongClickListener mCallback;
-    static onArtistPlayAllListener mCallback2;
+    onArtistSongClickListener mCallback;
+    onArtistPlayAllListener mCallback2;
 
     FloatingActionButton playAllfab;
 

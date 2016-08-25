@@ -26,7 +26,7 @@ import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
 public class StreamMusicFragment extends Fragment {
 
     public static StreamTrackListAdapter adapter;
-    static OnTrackSelectedListener mCallback;
+    OnTrackSelectedListener mCallback;
     Context ctx;
 
     static RecyclerView lv;

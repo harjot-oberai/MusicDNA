@@ -33,10 +33,10 @@ public class RecentsFragment extends Fragment implements RecentsTrackAdapter.OnD
     RecyclerView recentRecycler;
     RecentsTrackAdapter rtAdpater;
 
-    static ItemTouchHelper mItemTouchHelper;
+    ItemTouchHelper mItemTouchHelper;
 
-    static onRecentItemClickedListener mCallback;
-    static onRepeatListener mCallback2;
+    onRecentItemClickedListener mCallback;
+    onRepeatListener mCallback2;
 
     FloatingActionButton shuffleFab;
 

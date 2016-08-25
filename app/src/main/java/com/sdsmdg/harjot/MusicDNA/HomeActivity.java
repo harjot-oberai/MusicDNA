@@ -177,6 +177,8 @@ public class HomeActivity extends AppCompatActivity
     static SwitchCompat equalizerSwitch;
 
     SharedPreferences mPrefs;
+    static SharedPreferences.Editor prefsEditor;
+    static Gson gson;
 
     ImageLoader imgLoader;
 
@@ -299,7 +301,6 @@ public class HomeActivity extends AppCompatActivity
     public static boolean isPlaylistVisible = false;
     public static boolean isEqualizerVisible = false;
     public static boolean isFavouriteVisible = false;
-    public static boolean isAnalogVisible = false;
     public static boolean isAllPlaylistVisible = false;
     public static boolean isAllFolderVisible = false;
     public static boolean isFolderContentVisible = false;
@@ -688,6 +689,8 @@ public class HomeActivity extends AppCompatActivity
         }
 
         mPrefs = getPreferences(MODE_PRIVATE);
+        prefsEditor = mPrefs.edit();
+        gson = new Gson();
 
         appBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
         VisualizerView.act = this;
@@ -1006,9 +1009,6 @@ public class HomeActivity extends AppCompatActivity
                     setTitle("Music DNA");
                 } else if (isFavouriteVisible) {
                     hideFragment("favourite");
-                    setTitle("Music DNA");
-                } else if (isAnalogVisible) {
-                    hideFragment("analog");
                     setTitle("Music DNA");
                 } else if (isAllPlaylistVisible) {
                     hideFragment("allPlaylists");
@@ -1693,6 +1693,10 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onComplete() {
 
+        if (isSaveDNAEnabled) {
+            new SaveTheDNAs().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
+
         queueCall = true;
         if (repeatOnceEnabled && !nextControllerClicked) {
             PlayerFragment.progressBar.setProgress(0);
@@ -2140,7 +2144,11 @@ public class HomeActivity extends AppCompatActivity
     protected void onPause() {
         super.onPause();
 
-        new SaveData().execute();
+//        new SaveTheDNAs().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new SaveQueue().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new SaveSettings().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new SaveData().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
     }
 
@@ -2349,7 +2357,10 @@ public class HomeActivity extends AppCompatActivity
             navigationView.setCheckedItem(R.id.nav_local);
             isLocalVisible = true;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-            FullLocalMusicFragment newFragment = new FullLocalMusicFragment();
+            FullLocalMusicFragment newFragment = (FullLocalMusicFragment) fm.findFragmentByTag("local");
+            if (newFragment == null) {
+                newFragment = new FullLocalMusicFragment();
+            }
             fm.beginTransaction()
                     .setCustomAnimations(R.anim.slide_up,
                             R.anim.slide_down,
@@ -2363,9 +2374,10 @@ public class HomeActivity extends AppCompatActivity
             hideAllFrags();
             isQueueVisible = true;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-            QueueFragment newFragment = new QueueFragment();
-            QueueFragment.mCallback = this;
-            QueueFragment.mCallback2 = this;
+            QueueFragment newFragment = (QueueFragment) fm.findFragmentByTag("queue");
+            if (newFragment == null) {
+                newFragment = new QueueFragment();
+            }
             fm.beginTransaction()
                     .add(R.id.equalizer_queue_frag_container, newFragment, "queue")
                     .show(newFragment)
@@ -2377,8 +2389,10 @@ public class HomeActivity extends AppCompatActivity
             switchToolbar(toolbar, fragmentToolbar, "left");
             isStreamVisible = true;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-            StreamMusicFragment newFragment = new StreamMusicFragment();
-            StreamMusicFragment.mCallback = this;
+            StreamMusicFragment newFragment = (StreamMusicFragment) fm.findFragmentByTag("stream");
+            if (newFragment == null) {
+                newFragment = new StreamMusicFragment();
+            }
             fm.beginTransaction()
                     .setCustomAnimations(R.anim.slide_up,
                             R.anim.slide_down,
@@ -2394,22 +2408,26 @@ public class HomeActivity extends AppCompatActivity
             switchToolbar(toolbar, fragmentToolbar, "left");
             isPlaylistVisible = true;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-            ViewPlaylistFragment newFragment = new ViewPlaylistFragment();
-            ViewPlaylistFragment.mCallback = this;
-            ViewPlaylistFragment.mCallback2 = this;
+            ViewPlaylistFragment newFragment = (ViewPlaylistFragment) fm.findFragmentByTag("playlist");
+            if (newFragment == null) {
+                newFragment = new ViewPlaylistFragment();
+            }
             fm.beginTransaction()
                     .setCustomAnimations(R.anim.slide_up,
                             R.anim.slide_down,
                             R.anim.slide_up,
                             R.anim.slide_down)
-                    .add(R.id.fragContainer, newFragment, "playlist")
+                    .add(R.id.content_frag, newFragment, "playlist")
                     .show(newFragment)
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
         } else if (type.equals("equalizer") && !isEqualizerVisible) {
             isEqualizerVisible = true;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-            EqualizerFragment newFragment = new EqualizerFragment();
+            EqualizerFragment newFragment = (EqualizerFragment) fm.findFragmentByTag("equalizer");
+            if (newFragment == null) {
+                newFragment = new EqualizerFragment();
+            }
             fm.beginTransaction()
                     .add(R.id.equalizer_queue_frag_container, newFragment, "equalizer")
                     .show(newFragment)
@@ -2422,31 +2440,16 @@ public class HomeActivity extends AppCompatActivity
             navigationView.setCheckedItem(R.id.nav_fav);
             isFavouriteVisible = true;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-            FavouritesFragment newFragment = new FavouritesFragment();
-            FavouritesFragment.mCallback = this;
-            FavouritesFragment.mCallback2 = this;
+            FavouritesFragment newFragment = (FavouritesFragment) fm.findFragmentByTag("favourite");
+            if (newFragment == null) {
+                newFragment = new FavouritesFragment();
+            }
             fm.beginTransaction()
                     .setCustomAnimations(R.anim.slide_up,
                             R.anim.slide_down,
                             R.anim.slide_up,
                             R.anim.slide_down)
                     .add(R.id.fragContainer, newFragment, "favourite")
-                    .show(newFragment)
-                    .addToBackStack(null)
-                    .commitAllowingStateLoss();
-        } else if (type.equals("analog") && !isAnalogVisible) {
-            setTitle("Analog");
-            setUpFragmentToolbar(themeColor, (String) getTitle());
-            switchToolbar(toolbar, fragmentToolbar, "left");
-            isAnalogVisible = true;
-            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-            AnalogControllerFragment newFragment = new AnalogControllerFragment();
-            fm.beginTransaction()
-                    .setCustomAnimations(R.anim.slide_up,
-                            R.anim.slide_down,
-                            R.anim.slide_up,
-                            R.anim.slide_down)
-                    .add(R.id.fragContainer, newFragment, "analog")
                     .show(newFragment)
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
@@ -2458,8 +2461,6 @@ public class HomeActivity extends AppCompatActivity
             isAllPlaylistVisible = true;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             PlayListFragment newFragment = new PlayListFragment();
-            PlayListFragment.mCallback = this;
-            PlayListFragment.mCallback2 = this;
             fm.beginTransaction()
                     .setCustomAnimations(R.anim.slide_up,
                             R.anim.slide_down,
@@ -2474,15 +2475,16 @@ public class HomeActivity extends AppCompatActivity
             setUpFragmentToolbar(themeColor, (String) getTitle());
             isFolderContentVisible = true;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-            FolderContentFragment.mCallback = this;
-            FolderContentFragment.mCallback2 = this;
-            FolderContentFragment newFragment = new FolderContentFragment();
+            FolderContentFragment newFragment = (FolderContentFragment) fm.findFragmentByTag("folderContent");
+            if (newFragment == null) {
+                newFragment = new FolderContentFragment();
+            }
             fm.beginTransaction()
                     .setCustomAnimations(R.anim.slide_up,
                             R.anim.slide_down,
                             R.anim.slide_up,
                             R.anim.slide_down)
-                    .add(R.id.fragContainer, newFragment, "folderContent")
+                    .add(R.id.content_frag, newFragment, "folderContent")
                     .show(newFragment)
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
@@ -2493,8 +2495,10 @@ public class HomeActivity extends AppCompatActivity
             navigationView.setCheckedItem(R.id.nav_folder);
             isAllFolderVisible = true;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-            FolderFragment newFragment = new FolderFragment();
-            FolderFragment.mCallback = this;
+            FolderFragment newFragment = (FolderFragment) fm.findFragmentByTag("allFolders");
+            if (newFragment == null) {
+                newFragment = new FolderFragment();
+            }
             fm.beginTransaction()
                     .setCustomAnimations(R.anim.slide_up,
                             R.anim.slide_down,
@@ -2510,11 +2514,11 @@ public class HomeActivity extends AppCompatActivity
             switchToolbar(toolbar, fragmentToolbar, "left");
             navigationView.setCheckedItem(R.id.nav_view);
             isAllSavedDnaVisisble = true;
-//            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-            ViewSavedDNA.mCallback = this;
-//            getSupportActionBar().hide();
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-            ViewSavedDNA newFragment = new ViewSavedDNA();
+            ViewSavedDNA newFragment = (ViewSavedDNA) fm.findFragmentByTag("allSavedDNAs");
+            if (newFragment == null) {
+                newFragment = new ViewSavedDNA();
+            }
             fm.beginTransaction()
                     .setCustomAnimations(R.anim.slide_up,
                             R.anim.slide_down,
@@ -2529,10 +2533,11 @@ public class HomeActivity extends AppCompatActivity
             setUpFragmentToolbar(themeColor, (String) getTitle());
             switchToolbar(toolbar, fragmentToolbar, "left");
             isAlbumVisible = true;
-            ViewAlbumFragment.mCallback = this;
-            ViewAlbumFragment.mCallback2 = this;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-            ViewAlbumFragment newFragment = new ViewAlbumFragment();
+            ViewAlbumFragment newFragment = (ViewAlbumFragment) fm.findFragmentByTag("viewAlbum");
+            if (newFragment == null) {
+                newFragment = new ViewAlbumFragment();
+            }
             fm.beginTransaction()
                     .setCustomAnimations(R.anim.slide_up,
                             R.anim.slide_down,
@@ -2547,10 +2552,11 @@ public class HomeActivity extends AppCompatActivity
             setUpFragmentToolbar(themeColor, (String) getTitle());
             switchToolbar(toolbar, fragmentToolbar, "left");
             isArtistVisible = true;
-            ViewArtistFragment.mCallback = this;
-            ViewArtistFragment.mCallback2 = this;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-            ViewArtistFragment newFragment = new ViewArtistFragment();
+            ViewArtistFragment newFragment = (ViewArtistFragment) fm.findFragmentByTag("viewArtist");
+            if (newFragment == null) {
+                newFragment = new ViewArtistFragment();
+            }
             fm.beginTransaction()
                     .setCustomAnimations(R.anim.slide_up,
                             R.anim.slide_down,
@@ -2565,10 +2571,11 @@ public class HomeActivity extends AppCompatActivity
             setUpFragmentToolbar(themeColor, (String) getTitle());
             switchToolbar(toolbar, fragmentToolbar, "left");
             HomeActivity.isRecentVisible = true;
-            RecentsFragment.mCallback = this;
-            RecentsFragment.mCallback2 = this;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-            RecentsFragment newFragment = new RecentsFragment();
+            RecentsFragment newFragment = (RecentsFragment) fm.findFragmentByTag("recent");
+            if (newFragment == null) {
+                newFragment = new RecentsFragment();
+            }
             fm.beginTransaction()
                     .setCustomAnimations(R.anim.slide_up,
                             R.anim.slide_down,
@@ -2584,7 +2591,10 @@ public class HomeActivity extends AppCompatActivity
             switchToolbar(toolbar, fragmentToolbar, "left");
             isSettingsVisible = true;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-            SettingsFragment newFragment = new SettingsFragment();
+            SettingsFragment newFragment = (SettingsFragment) fm.findFragmentByTag("settings");
+            if (newFragment == null) {
+                newFragment = new SettingsFragment();
+            }
             fm.beginTransaction()
                     .setCustomAnimations(R.anim.slide_up,
                             R.anim.slide_down,
@@ -2662,17 +2672,6 @@ public class HomeActivity extends AppCompatActivity
                         .remove(frag)
                         .commitAllowingStateLoss();
             }
-        } else if (type.equals("analog")) {
-            isAnalogVisible = false;
-            switchToolbar(fragmentToolbar, toolbar, "instant");
-            setTitle("Music DNA");
-            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-            android.support.v4.app.Fragment frag = fm.findFragmentByTag("analog");
-            if (frag != null) {
-                fm.beginTransaction()
-                        .remove(frag)
-                        .commitAllowingStateLoss();
-            }
         } else if (type.equals("allPlaylists")) {
             isAllPlaylistVisible = false;
             switchToolbar(fragmentToolbar, toolbar, "instant");
@@ -2712,8 +2711,6 @@ public class HomeActivity extends AppCompatActivity
             switchToolbar(fragmentToolbar, toolbar, "instant");
             setTitle("Music DNA");
             navigationView.setCheckedItem(R.id.nav_home);
-//            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-//            getSupportActionBar().show();
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             android.support.v4.app.Fragment frag = fm.findFragmentByTag("allSavedDNAs");
             if (frag != null) {
@@ -3674,14 +3671,6 @@ public class HomeActivity extends AppCompatActivity
         @Override
         protected Void doInBackground(Void... params) {
 
-            SharedPreferences.Editor prefsEditor = mPrefs.edit();
-            Gson gson = new Gson();
-            String json = gson.toJson(savedDNAs);
-            prefsEditor.putString("savedDNAs", json);
-            String json2 = gson.toJson(allPlaylists);
-            prefsEditor.putString("allPlaylists", json2);
-            String json3 = gson.toJson(queue);
-            prefsEditor.putString("queue", json3);
             String json4 = gson.toJson(recentlyPlayed);
             prefsEditor.putString("recentlyPlayed", json4);
             String json5 = gson.toJson(favouriteTracks);
@@ -3691,11 +3680,53 @@ public class HomeActivity extends AppCompatActivity
             isReloaded = true;
             String json7 = gson.toJson(isReloaded);
             prefsEditor.putString("isReloaded", json7);
-            String json8 = gson.toJson(settings);
-            prefsEditor.putString("settings", json8);
 
             prefsEditor.commit();
 
+            return null;
+        }
+    }
+
+    public class SaveSettings extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            String json8 = gson.toJson(settings);
+            prefsEditor.putString("settings", json8);
+            prefsEditor.commit();
+            return null;
+        }
+    }
+
+    public static class SaveTheDNAs extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            String json = gson.toJson(savedDNAs);
+            prefsEditor.putString("savedDNAs", json);
+            prefsEditor.commit();
+            return null;
+        }
+    }
+
+    public class SaveQueue extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            String json3 = gson.toJson(queue);
+            prefsEditor.putString("queue", json3);
+            prefsEditor.commit();
+            return null;
+        }
+    }
+
+    public class SavePlaylists extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            String json2 = gson.toJson(allPlaylists);
+            prefsEditor.putString("allPlaylists", json2);
+            prefsEditor.commit();
             return null;
         }
     }

@@ -953,11 +953,11 @@ public class PlayerFragment extends Fragment {
                 if (localIsPlaying) {
                     DNAModel model = new DNAModel(true, localTrack, null, byteArray);
                     SavedDNA sDna = new SavedDNA(localTrack.getTitle(), model);
-                    HomeActivity.savedDNAs.getSavedDNAs().add(sDna);
+                    HomeActivity.savedDNAs.getSavedDNAs().add(0, sDna);
                 } else {
                     DNAModel model = new DNAModel(false, null, track, byteArray);
                     SavedDNA sDna = new SavedDNA(track.getTitle(), model);
-                    HomeActivity.savedDNAs.getSavedDNAs().add(sDna);
+                    HomeActivity.savedDNAs.getSavedDNAs().add(0, sDna);
                 }
             }
             return null;

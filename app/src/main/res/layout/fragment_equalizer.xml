@@ -24,13 +24,15 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="#111">
+            android:background="#111"
+            android:layout_marginLeft="9dp"
+            android:layout_marginRight="9dp">
 
             <Spinner
                 android:id="@+id/equalizer_preset_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="15dp"
+                android:layout_marginLeft="5dp"
                 android:layout_toLeftOf="@+id/spinner_dropdown_icon"
                 android:background="#111"></Spinner>
 
@@ -40,7 +42,7 @@
                 android:layout_height="20dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="25dp"
+                android:layout_marginRight="10dp"
                 android:src="@drawable/dropdown_icon"
                 android:tint="#FFFFFF" />
         </RelativeLayout>

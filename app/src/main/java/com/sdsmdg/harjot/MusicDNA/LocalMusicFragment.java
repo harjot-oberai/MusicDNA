@@ -103,34 +103,14 @@ public class LocalMusicFragment extends Fragment {
         lv.addOnItemTouchListener(new ClickItemTouchListener(lv) {
             @Override
             boolean onClick(RecyclerView parent, View view, int position, long id) {
-                /*LocalTrack track = HomeActivity.finalLocalSearchResultList.get(position);
-                if (HomeActivity.queue.getQueue().size() == 0) {
-                    HomeActivity.queueCurrentIndex = 0;
-                    HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
-                } else if (HomeActivity.queueCurrentIndex == HomeActivity.queue.getQueue().size() - 1) {
-                    HomeActivity.queueCurrentIndex++;
-                    HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
-                } else if (HomeActivity.isReloaded) {
-                    HomeActivity.isReloaded = false;
-                    HomeActivity.queueCurrentIndex = HomeActivity.queue.getQueue().size();
-                    HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
-                } else {
-                    HomeActivity.queue.getQueue().add(++HomeActivity.queueCurrentIndex, new UnifiedTrack(true, track, null));
-                }
-                HomeActivity.localSelectedTrack = track;
-                HomeActivity.streamSelected = false;
-                HomeActivity.localSelected = true;
-                HomeActivity.queueCall = false;
-                HomeActivity.isReloaded = false;
-                mCallback.onLocalTrackSelected(position);*/
 
                 HomeActivity.queue.getQueue().clear();
                 for (int i = 0; i < HomeActivity.localTrackList.size(); i++) {
                     UnifiedTrack ut = new UnifiedTrack(true, HomeActivity.localTrackList.get(i), null);
                     HomeActivity.queue.getQueue().add(ut);
                 }
-                HomeActivity.queueCurrentIndex = position;
-                LocalTrack track = HomeActivity.localTrackList.get(position);
+                HomeActivity.queueCurrentIndex = getPosition(HomeActivity.finalLocalSearchResultList.get(position));
+                LocalTrack track = HomeActivity.finalLocalSearchResultList.get(position);
                 HomeActivity.localSelectedTrack = track;
                 HomeActivity.streamSelected = false;
                 HomeActivity.localSelected = true;
@@ -162,8 +142,8 @@ public class LocalMusicFragment extends Fragment {
                                 UnifiedTrack ut = new UnifiedTrack(true, HomeActivity.localTrackList.get(i), null);
                                 HomeActivity.queue.getQueue().add(ut);
                             }
-                            HomeActivity.queueCurrentIndex = position;
-                            LocalTrack track = HomeActivity.localTrackList.get(position);
+                            HomeActivity.queueCurrentIndex = getPosition(HomeActivity.localTrackList.get(position));
+                            LocalTrack track = HomeActivity.finalLocalSearchResultList.get(position);
                             HomeActivity.localSelectedTrack = track;
                             HomeActivity.streamSelected = false;
                             HomeActivity.localSelected = true;
@@ -219,6 +199,15 @@ public class LocalMusicFragment extends Fragment {
             }
         });
 
+    }
+
+    public int getPosition(LocalTrack lt) {
+        for (int i = 0; i < HomeActivity.localTrackList.size(); i++) {
+            if (HomeActivity.localTrackList.get(i).getTitle().equals(lt.getTitle())) {
+                return i;
+            }
+        }
+        return -1;
     }
 
 }

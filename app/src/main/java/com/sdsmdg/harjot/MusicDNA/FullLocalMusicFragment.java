@@ -25,7 +25,6 @@ import java.util.List;
 public class FullLocalMusicFragment extends Fragment {
 
     ViewPager viewPager;
-    List<Fragment> fragmentList;
     MyPageAdapter adapter;
     TabLayout tabLayout;
 

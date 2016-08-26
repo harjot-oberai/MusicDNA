@@ -22,9 +22,9 @@ import com.sdsmdg.harjot.MusicDNA.R;
  */
 public class AlbumFragment extends Fragment {
 
-    static AlbumRecyclerAdapter abAdapter;
+    public static AlbumRecyclerAdapter abAdapter;
 
-    static RecyclerView rv;
+    public static RecyclerView rv;
 
     public static onAlbumClickListener mCallback;
 
@@ -59,7 +59,7 @@ public class AlbumFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         rv = (RecyclerView) view.findViewById(R.id.albums_recycler);
-        abAdapter = new AlbumRecyclerAdapter(HomeActivity.albums);
+        abAdapter = new AlbumRecyclerAdapter(HomeActivity.finalAlbums);
         GridLayoutManager glManager = new GridLayoutManager(HomeActivity.ctx, 2);
         rv.setLayoutManager(glManager);
         rv.setItemAnimator(new DefaultItemAnimator());
@@ -68,7 +68,7 @@ public class AlbumFragment extends Fragment {
         rv.addOnItemTouchListener(new ClickItemTouchListener(rv) {
             @Override
             boolean onClick(RecyclerView parent, View view, int position, long id) {
-                HomeActivity.tempAlbum = HomeActivity.albums.get(position);
+                HomeActivity.tempAlbum = HomeActivity.finalAlbums.get(position);
                 mCallback.onAlbumClick();
                 return true;
             }

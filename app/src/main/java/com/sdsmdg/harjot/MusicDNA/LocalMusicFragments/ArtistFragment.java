@@ -20,8 +20,8 @@ import com.sdsmdg.harjot.MusicDNA.R;
  */
 public class ArtistFragment extends Fragment {
 
-    static ArtistRecyclerAdapter arAdapter;
-    static RecyclerView rv;
+    public static ArtistRecyclerAdapter arAdapter;
+    public static RecyclerView rv;
 
     public static onArtistClickListener mCallback;
 
@@ -55,7 +55,7 @@ public class ArtistFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         rv = (RecyclerView) view.findViewById(R.id.artists_recycler);
-        arAdapter = new ArtistRecyclerAdapter(HomeActivity.artists);
+        arAdapter = new ArtistRecyclerAdapter(HomeActivity.finalArtists);
         LinearLayoutManager llManager = new LinearLayoutManager(HomeActivity.ctx, LinearLayoutManager.VERTICAL, false);
         rv.setLayoutManager(llManager);
         rv.setItemAnimator(new DefaultItemAnimator());
@@ -64,7 +64,7 @@ public class ArtistFragment extends Fragment {
         rv.addOnItemTouchListener(new ClickItemTouchListener(rv) {
             @Override
             boolean onClick(RecyclerView parent, View view, int position, long id) {
-                HomeActivity.tempArtist = HomeActivity.artists.get(position);
+                HomeActivity.tempArtist = HomeActivity.finalArtists.get(position);
                 mCallback.onArtistClick();
                 return true;
             }

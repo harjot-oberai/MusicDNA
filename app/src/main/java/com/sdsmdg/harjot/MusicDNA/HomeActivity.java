@@ -147,7 +147,9 @@ public class HomeActivity extends AppCompatActivity
     public static List<LocalTrack> finalLocalSearchResultList = new ArrayList<>();
     public static List<Track> streamingTrackList = new ArrayList<>();
     public static List<Album> albums = new ArrayList<>();
+    public static List<Album> finalAlbums = new ArrayList<>();
     public static List<Artist> artists = new ArrayList<>();
+    public static List<Artist> finalArtists = new ArrayList<>();
     public static List<UnifiedTrack> continuePlayingList = new ArrayList<>();
 
     String version;
@@ -159,9 +161,6 @@ public class HomeActivity extends AppCompatActivity
     public static Artist tempArtist;
 
     private Dialog progress;
-
-    static float fftMax = 3000;
-    static float fftMin = 0;
 
     static float ratio, ratio2;
 
@@ -862,9 +861,6 @@ public class HomeActivity extends AppCompatActivity
 
     private void getLocalSongs() {
 
-        Log.d("HOME", "Getting");
-        Toast.makeText(HomeActivity.this, "Getting", Toast.LENGTH_SHORT).show();
-
         ContentResolver musicResolver = this.getContentResolver();
         Uri musicUri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         Cursor musicCursor = musicResolver.query(musicUri, null, null, null, null);
@@ -900,21 +896,25 @@ public class HomeActivity extends AppCompatActivity
 
                     if (pos != -1) {
                         albums.get(pos).getAlbumSongs().add(lt);
+                        finalAlbums.get(pos).getAlbumSongs().add(lt);
                     } else {
                         List<LocalTrack> llt = new ArrayList<>();
                         llt.add(lt);
                         Album ab = new Album(thisAlbum, llt);
                         albums.add(ab);
+                        finalAlbums.add(ab);
                     }
 
                     pos = checkArtist(thisArtist);
                     if (pos != -1) {
                         artists.get(pos).getArtistSongs().add(lt);
+                        finalArtists.get(pos).getArtistSongs().add(lt);
                     } else {
                         List<LocalTrack> llt = new ArrayList<>();
                         llt.add(lt);
                         Artist ab = new Artist(thisArtist, llt);
                         artists.add(ab);
+                        finalArtists.add(ab);
                     }
 
                     File f = new File(path);
@@ -936,10 +936,9 @@ public class HomeActivity extends AppCompatActivity
         Collections.sort(localTrackList, new localMusicComparator());
         Collections.sort(finalLocalSearchResultList, new localMusicComparator());
         Collections.sort(albums, new albumComparator());
+        Collections.sort(finalAlbums, new albumComparator());
         Collections.sort(artists, new artistComparator());
-
-        Log.d("HOME", "GOT");
-        Toast.makeText(HomeActivity.this, "GOT", Toast.LENGTH_SHORT).show();
+        Collections.sort(finalArtists, new artistComparator());
 
     }
 
@@ -1112,18 +1111,22 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public boolean onQueryTextSubmit(String query) {
         hideKeyboard();
-        updateList(query.trim());
+        updateLocalList(query.trim());
+        updateAlbumList(query.trim());
+        updateArtistList(query.trim());
         return true;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        updateList(newText.trim());
+        updateLocalList(newText.trim());
         updateStreamingList(newText.trim());
+        updateAlbumList(newText.trim());
+        updateArtistList(newText.trim());
         return true;
     }
 
-    private void updateList(String query) {
+    private void updateLocalList(String query) {
 
         if (isPlayerVisible) {
             hidePlayer();
@@ -1164,6 +1167,37 @@ public class HomeActivity extends AppCompatActivity
                 LocalMusicFragment.shuffleFab.setVisibility(View.VISIBLE);
         }
 
+    }
+
+    private void updateAlbumList(String query) {
+        finalAlbums.clear();
+        for (int i = 0; i < albums.size(); i++) {
+            Album album = albums.get(i);
+            String tmp1 = album.getName().toLowerCase();
+            String tmp2 = query.toLowerCase();
+            if (tmp1.contains(tmp2)) {
+                finalAlbums.add(album);
+            }
+        }
+        if(AlbumFragment.rv != null){
+            AlbumFragment.rv.getAdapter().notifyDataSetChanged();
+        }
+
+    }
+
+    private void updateArtistList(String query) {
+        finalArtists.clear();
+        for (int i = 0; i < artists.size(); i++) {
+            Artist artist = artists.get(i);
+            String tmp1 = artist.getName().toLowerCase();
+            String tmp2 = query.toLowerCase();
+            if (tmp1.contains(tmp2)) {
+                finalArtists.add(artist);
+            }
+        }
+        if(ArtistFragment.rv != null){
+            ArtistFragment.rv.getAdapter().notifyDataSetChanged();
+        }
     }
 
     private void updateStreamingList(String query) {
@@ -1230,20 +1264,6 @@ public class HomeActivity extends AppCompatActivity
             streamRecyclerContainer.setVisibility(View.GONE);
         }
 
-    }
-
-    public void hideAppBarLayout() {
-        appBarLayout.animate()
-                .translationY(-1 * appBarLayout.getHeight())
-                .setDuration(300);
-        appBarLayout.setVisibility(View.GONE);
-    }
-
-    public void showAppBarLayout() {
-        appBarLayout.setVisibility(View.VISIBLE);
-        appBarLayout.animate()
-                .translationY(0)
-                .setDuration(300);
     }
 
     public void hideTabs() {
@@ -2214,18 +2234,6 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    public int dpToPx(int dp) {
-        DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
-        int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
-        return px;
-    }
-
-    public int pxToDp(int px) {
-        DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
-        int dp = Math.round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
-        return dp;
-    }
-
     public static void renamePlaylistDialog(String oldName) {
         final Dialog dialog = new Dialog(ctx);
         dialog.setContentView(R.layout.save_image_dialog);
@@ -2367,6 +2375,12 @@ public class HomeActivity extends AppCompatActivity
 
         if (!type.equals("viewAlbum") && !type.equals("folderContent") && !type.equals("viewArtist"))
             hideAllFrags();
+
+        if (!searchView.isIconified()) {
+            searchView.setQuery("", true);
+            searchView.setIconified(true);
+            new Thread(new CancelCall()).start();
+        }
 
         if (type.equals("local") && !isLocalVisible) {
             setTitle("Local");

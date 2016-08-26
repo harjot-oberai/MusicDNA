@@ -127,6 +127,7 @@ public class HomeActivity extends AppCompatActivity
         PlayerFragment.onPlayPauseListener,
         PlayerFragment.fullScreenListener,
         PlayerFragment.onSettingsClickedListener,
+        PlayerFragment.resetNotificationListener,
         PlayListFragment.onPLaylistTouchedListener,
         PlayListFragment.onPlaylistMenuPlayAllListener,
         FolderFragment.onFolderClickedListener,
@@ -2156,6 +2157,11 @@ public class HomeActivity extends AppCompatActivity
         showFragment("settings");
     }
 
+    @Override
+    public void resetNotificationCalled() {
+        showNotification();
+    }
+
     public static class MyAsyncTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -2886,7 +2892,9 @@ public class HomeActivity extends AppCompatActivity
         notification.bigContentView = notificationView;
         notification.contentView = notificationViewSmall;
         notification.contentIntent = pendingNotificationIntent;
-        notification.flags |= Notification.FLAG_ONGOING_EVENT;
+        if(PlayerFragment.mMediaPlayer.isPlaying()) {
+            notification.flags |= Notification.FLAG_ONGOING_EVENT;
+        }
         notificationView.setImageViewBitmap(R.id.image_in_notification, ((BitmapDrawable) PlayerFragment.selected_track_image.getDrawable()).getBitmap());
         if (PlayerFragment.localIsPlaying) {
             notificationView.setTextViewText(R.id.title_in_notification, PlayerFragment.localTrack.getTitle());

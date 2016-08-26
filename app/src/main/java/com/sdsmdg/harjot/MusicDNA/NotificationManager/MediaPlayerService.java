@@ -51,6 +51,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
     private MediaPlayer m_objMediaPlayer;
     private NotificationManager notificationManager;
 
+    private boolean isSwipable = false;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -118,7 +119,11 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
 
         notification.contentIntent = pendingNotificationIntent;
         notification.priority = Notification.PRIORITY_MAX;
-//        notification.flags |= Notification.FLAG_ONGOING_EVENT;
+
+        if (isSwipable || (PlayerFragment.mMediaPlayer != null && PlayerFragment.mMediaPlayer.isPlaying())) {
+            notification.flags |= Notification.FLAG_ONGOING_EVENT;
+        }
+
 
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(1, notification);
@@ -253,48 +258,63 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
             @Override
             public void onPlay() {
                 super.onPlay();
-                Log.d(Constants.LOG_TAG, "onPlay");
-                if (!PlayerFragment.isStart) {
-                    PlayerFragment.togglePlayPause();
+                try {
+                    Log.d(Constants.LOG_TAG, "onPlay");
+                    if (!PlayerFragment.isStart) {
+                        PlayerFragment.togglePlayPause();
+                    }
+                    PlayerFragment.isStart = false;
+                    buildNotification(generateAction(android.R.drawable.ic_media_pause, "Pause", Constants.ACTION_PAUSE));
+                } catch (Exception e) {
+                    notificationManager.cancel(1);
                 }
-                PlayerFragment.isStart = false;
-                buildNotification(generateAction(android.R.drawable.ic_media_pause, "Pause", Constants.ACTION_PAUSE));
             }
 
             @Override
             public void onPause() {
                 super.onPause();
-                Log.d(Constants.LOG_TAG, "onPause");
-                PlayerFragment.togglePlayPause();
-                buildNotification(generateAction(android.R.drawable.ic_media_play, "Play", Constants.ACTION_PLAY));
+                try {
+                    PlayerFragment.togglePlayPause();
+                    buildNotification(generateAction(android.R.drawable.ic_media_play, "Play", Constants.ACTION_PLAY));
+                } catch (Exception e) {
+
+                }
             }
 
             @Override
             public void onSkipToNext() {
                 super.onSkipToNext();
-                Log.d(Constants.LOG_TAG, "onSkipToNext");
-                PlayerFragment.mCallback2.onComplete();
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        buildNotification(generateAction(android.R.drawable.ic_media_pause, "Pause", Constants.ACTION_PAUSE));
-                    }
-                }, 100);
+                try {
+                    PlayerFragment.mCallback2.onComplete();
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            buildNotification(generateAction(android.R.drawable.ic_media_pause, "Pause", Constants.ACTION_PAUSE));
+                        }
+                    }, 100);
+                } catch (Exception e) {
+
+                }
+
             }
 
             @Override
             public void onSkipToPrevious() {
                 super.onSkipToPrevious();
-                Log.d(Constants.LOG_TAG, "onSkipToPrevious");
-                PlayerFragment.mCallback3.onPreviousTrack();
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        buildNotification(generateAction(android.R.drawable.ic_media_pause, "Pause", Constants.ACTION_PAUSE));
-                    }
-                }, 100);
+                try {
+                    PlayerFragment.mCallback3.onPreviousTrack();
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            buildNotification(generateAction(android.R.drawable.ic_media_pause, "Pause", Constants.ACTION_PAUSE));
+                        }
+                    }, 100);
+                } catch (Exception e) {
+
+                }
+
             }
 
             @Override
@@ -328,14 +348,13 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
             @Override
             public void onStop() {
                 super.onStop();
-                Log.e(Constants.LOG_TAG, "onStop");
-                if (PlayerFragment.mMediaPlayer != null) {
-                    if (PlayerFragment.mMediaPlayer.isPlaying()) {
-                        buildNotification(generateAction(android.R.drawable.ic_media_pause, "Pause", Constants.ACTION_PAUSE));
-                    } else {
-                        buildNotification(generateAction(android.R.drawable.ic_media_play, "Play", Constants.ACTION_PLAY));
-                    }
-                }
+//                if (PlayerFragment.mMediaPlayer != null) {
+//                    if (PlayerFragment.mMediaPlayer.isPlaying()) {
+//                        buildNotification(generateAction(android.R.drawable.ic_media_pause, "Pause", Constants.ACTION_PAUSE));
+//                    } else {
+//                        buildNotification(generateAction(android.R.drawable.ic_media_play, "Play", Constants.ACTION_PLAY));
+//                    }
+//                }
             }
 
             @Override
@@ -369,10 +388,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         super.onTaskRemoved(rootIntent);
-//        Log.d("NOTE","CLEAR");
-//        Toast.makeText(MediaPlayerService.this, "Cleared1", Toast.LENGTH_SHORT).show();
-//        Toast.makeText(HomeActivity.ctx, "Cleared2", Toast.LENGTH_SHORT).show();
-//        ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancel(1);
-//        stopSelf();
+//        buildNotification(generateAction(android.R.drawable.ic_media_play, "Play", Constants.ACTION_PLAY));
+        notificationManager.cancel(1);
     }
 }

@@ -16,17 +16,31 @@ public class AudioPlayerBroadcastReceiver extends BroadcastReceiver {
 
         String action = intent.getAction();
         if (action.equalsIgnoreCase("com.sdsmdg.harjot.MusicDNA.ACTION_PLAY_PAUSE")) {
-            if (!PlayerFragment.pauseClicked) {
-                PlayerFragment.pauseClicked = true;
+            try {
+                if (!PlayerFragment.pauseClicked) {
+                    PlayerFragment.pauseClicked = true;
+                }
+                PlayerFragment.togglePlayPause();
+                PlayerFragment.mCallback6.onPrepared();
+            } catch (Exception e) {
+
             }
-            PlayerFragment.togglePlayPause();
-            PlayerFragment.mCallback6.onPrepared();
+
         } else if (action.equalsIgnoreCase("com.sdsmdg.harjot.MusicDNA.ACTION_NEXT")) {
-            PlayerFragment.mMediaPlayer.stop();
-            PlayerFragment.mCallback2.onComplete();
+
+            try {
+                PlayerFragment.mMediaPlayer.stop();
+                PlayerFragment.mCallback2.onComplete();
+            } catch (Exception e) {
+
+            }
         } else if (action.equalsIgnoreCase("com.sdsmdg.harjot.MusicDNA.ACTION_PREV")) {
-            PlayerFragment.mMediaPlayer.stop();
-            PlayerFragment.mCallback3.onPreviousTrack();
+            try {
+                PlayerFragment.mMediaPlayer.stop();
+                PlayerFragment.mCallback3.onPreviousTrack();
+            } catch (Exception e) {
+
+            }
         }
     }
 }

@@ -121,6 +121,7 @@ public class PlayerFragment extends Fragment {
     public static onPlayPauseListener mCallback7;
     public static fullScreenListener mCallback8;
     public static onSettingsClickedListener mCallback9;
+    public static resetNotificationListener mCallback10;
 
     public static boolean isStart = true;
 
@@ -238,6 +239,7 @@ public class PlayerFragment extends Fragment {
             mCallback6 = (onPreparedLsitener) context;
             mCallback8 = (fullScreenListener) context;
             mCallback9 = (onSettingsClickedListener) context;
+            mCallback10 = (resetNotificationListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnHeadlineSelectedListener");
@@ -299,6 +301,10 @@ public class PlayerFragment extends Fragment {
 
     public interface onSettingsClickedListener {
         public void onSettingsClicked();
+    }
+
+    public interface resetNotificationListener {
+        public void resetNotificationCalled();
     }
 
     @Override
@@ -636,6 +642,7 @@ public class PlayerFragment extends Fragment {
                         pauseClicked = true;
                     }
                     togglePlayPause();
+
                 } else {
                     mCallback2.onComplete();
                 }

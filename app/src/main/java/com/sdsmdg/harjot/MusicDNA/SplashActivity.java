@@ -17,10 +17,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -38,14 +36,13 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_splash);
 
         try {
             tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Regular.ttf");
             tf2 = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Medium.ttf");
         } catch (Exception e) {
-            Log.d("TYPEFACE", e.getMessage() + ":");
-            Toast.makeText(SplashActivity.this, "typeface error", Toast.LENGTH_SHORT).show();
         }
 
         if (Build.VERSION.SDK_INT >= 23) {

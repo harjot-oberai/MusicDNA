@@ -64,6 +64,7 @@ import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
 import com.sdsmdg.harjot.MusicDNA.Interfaces.StreamService;
 import com.sdsmdg.harjot.MusicDNA.LocalMusicFragments.AlbumFragment;
@@ -100,6 +101,7 @@ import java.util.List;
 import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.fabric.sdk.android.Fabric;
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import retrofit.Call;
 import retrofit.Callback;
@@ -591,6 +593,8 @@ public class HomeActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
 
+        Fabric.with(this, new Crashlytics());
+
         setContentView(R.layout.activity_home);
 
         PackageInfo pInfo = null;
@@ -863,7 +867,6 @@ public class HomeActivity extends AppCompatActivity
             String json8 = mPrefs.getString("settings", "");
             settings = gson.fromJson(json8, Settings.class);
         } catch (Exception e) {
-//            Toast.makeText(HomeActivity.this, e.getMessage() + "::", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
 
@@ -930,7 +933,6 @@ public class HomeActivity extends AppCompatActivity
                     File f = new File(path);
                     String dirName = f.getParentFile().getName();
                     if (getFolder(dirName) == null) {
-                        Toast.makeText(HomeActivity.this, dirName, Toast.LENGTH_SHORT).show();
                         MusicFolder mf = new MusicFolder(dirName);
                         mf.getLocalTracks().add(lt);
                         allMusicFolders.getMusicFolders().add(mf);
@@ -2833,7 +2835,6 @@ public class HomeActivity extends AppCompatActivity
 
         if (Build.VERSION.SDK_INT >= 21) {
             if (!isNotificationVisible) {
-                Toast.makeText(HomeActivity.this, "Starting", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(this, MediaPlayerService.class);
                 intent.setAction(Constants.ACTION_PLAY);
                 startService(intent);

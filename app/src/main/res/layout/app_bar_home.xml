@@ -156,6 +156,18 @@
                         android:ellipsize="end"
                         android:singleLine="true"
                         android:text="Queue"/>
+
+                    <TextView
+                        android:id="@+id/clear_queue_txt"
+                        android:layout_centerVertical="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:textSize="15dp"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginRight="10dp"
+                        android:text="CLEAR"/>
+
                 </RelativeLayout>
             </android.support.v7.widget.Toolbar>
 

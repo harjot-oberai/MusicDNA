@@ -388,7 +388,6 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         super.onTaskRemoved(rootIntent);
-//        buildNotification(generateAction(android.R.drawable.ic_media_play, "Play", Constants.ACTION_PLAY));
         notificationManager.cancel(1);
     }
 }

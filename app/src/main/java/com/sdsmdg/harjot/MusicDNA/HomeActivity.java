@@ -278,8 +278,9 @@ public class HomeActivity extends AppCompatActivity
     static Toolbar spToolbar;
     static Toolbar equalizerToolbar;
 
-    static Toolbar queueToolbar;
+    Toolbar queueToolbar;
     ImageView queueBackButton;
+    TextView queueClearText;
 
     static Toolbar fragmentToolbar;
     ImageView fragmentBackButton;
@@ -617,6 +618,13 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 onBackPressed();
+            }
+        });
+        queueClearText = (TextView) findViewById(R.id.clear_queue_txt);
+        queueClearText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clearQueue();
             }
         });
 
@@ -1180,7 +1188,7 @@ public class HomeActivity extends AppCompatActivity
                 finalAlbums.add(album);
             }
         }
-        if(AlbumFragment.rv != null){
+        if (AlbumFragment.rv != null) {
             AlbumFragment.rv.getAdapter().notifyDataSetChanged();
         }
 
@@ -1196,7 +1204,7 @@ public class HomeActivity extends AppCompatActivity
                 finalArtists.add(artist);
             }
         }
-        if(ArtistFragment.rv != null){
+        if (ArtistFragment.rv != null) {
             ArtistFragment.rv.getAdapter().notifyDataSetChanged();
         }
     }
@@ -2186,7 +2194,6 @@ public class HomeActivity extends AppCompatActivity
     protected void onPause() {
         super.onPause();
 
-//        new SaveTheDNAs().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         new SaveQueue().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         new SaveSettings().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -2201,8 +2208,6 @@ public class HomeActivity extends AppCompatActivity
         if (mgr != null) {
             mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE);
         }
-//        notificationManager.cancel(1);
-//        Toast.makeText(HomeActivity.this, "Removing notification", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -2892,7 +2897,7 @@ public class HomeActivity extends AppCompatActivity
         notification.bigContentView = notificationView;
         notification.contentView = notificationViewSmall;
         notification.contentIntent = pendingNotificationIntent;
-        if(PlayerFragment.mMediaPlayer.isPlaying()) {
+        if (PlayerFragment.mMediaPlayer.isPlaying()) {
             notification.flags |= Notification.FLAG_ONGOING_EVENT;
         }
         notificationView.setImageViewBitmap(R.id.image_in_notification, ((BitmapDrawable) PlayerFragment.selected_track_image.getDrawable()).getBitmap());
@@ -3813,6 +3818,23 @@ public class HomeActivity extends AppCompatActivity
     public void setUpFragmentToolbar(int color, String title) {
         fragmentToolbar.setBackgroundColor(color);
         fragmentToolbarTitle.setText(title);
+    }
+
+    public void clearQueue() {
+        for (int i = 0; i < queue.getQueue().size(); i++) {
+            if (i < queueCurrentIndex) {
+                queue.getQueue().remove(i);
+                queueCurrentIndex--;
+                QueueFragment.qAdapter.notifyItemRemoved(i);
+                i--;
+            } else if (i > queueCurrentIndex) {
+                queue.getQueue().remove(i);
+                QueueFragment.qAdapter.notifyItemRemoved(i);
+                i--;
+            }
+        }
+
+
     }
 
 }

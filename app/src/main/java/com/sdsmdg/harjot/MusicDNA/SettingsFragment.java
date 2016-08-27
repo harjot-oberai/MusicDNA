@@ -2,11 +2,13 @@ package com.sdsmdg.harjot.MusicDNA;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,8 +28,8 @@ import me.priyesh.chroma.ColorSelectListener;
  */
 public class SettingsFragment extends Fragment {
 
-    CardView densitycard, themeCard;
-    static ImageView themeColorImg;
+    CardView densitycard, themeCard, aboutCard;
+    ImageView themeColorImg;
     SeekBar densitySeekbar;
     TextView densityText;
 
@@ -100,5 +102,22 @@ public class SettingsFragment extends Fragment {
                         .show(getFragmentManager(), "ChromaDialog");
             }
         });
+
+        aboutCard = (CardView) view.findViewById(R.id.about_card);
+        aboutCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.ctx);
+                alertDialogBuilder.setTitle("About");
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.setMessage("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+                alertDialog.show();
+            }
+        });
+
     }
 }

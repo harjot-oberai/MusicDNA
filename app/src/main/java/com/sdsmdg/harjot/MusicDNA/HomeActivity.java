@@ -621,6 +621,7 @@ public class HomeActivity extends AppCompatActivity
             }
         });
         queueClearText = (TextView) findViewById(R.id.clear_queue_txt);
+        queueClearText.setTypeface(SplashActivity.tf2);
         queueClearText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

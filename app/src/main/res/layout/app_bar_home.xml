@@ -138,7 +138,7 @@
                     <ImageView
                         android:id="@+id/queue_toolbar_back_button_img"
                         android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_height="48dp"
                         android:layout_centerVertical="true"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:clickable="true"
@@ -165,6 +165,7 @@
                         android:layout_alignParentRight="true"
                         android:textSize="15dp"
                         android:textColor="#FFFFFF"
+                        android:background="?attr/selectableItemBackgroundBorderless"
                         android:layout_marginRight="10dp"
                         android:text="CLEAR"/>
 
@@ -185,7 +186,7 @@
                     <ImageView
                         android:id="@+id/fragment_toolbar_back_button_img"
                         android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_height="48dp"
                         android:layout_centerVertical="true"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:clickable="true"

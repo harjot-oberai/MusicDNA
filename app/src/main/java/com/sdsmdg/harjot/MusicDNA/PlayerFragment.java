@@ -17,6 +17,7 @@ import android.media.audiofx.PresetReverb;
 import android.media.audiofx.Visualizer;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -32,6 +33,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.sdsmdg.harjot.MusicDNA.Models.DNAModel;
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.Models.SavedDNA;
@@ -124,6 +127,8 @@ public class PlayerFragment extends Fragment {
     public static resetNotificationListener mCallback10;
 
     public static boolean isStart = true;
+
+    ShowcaseView showCase;
 
     long startTrack;
     long endTrack;
@@ -355,9 +360,9 @@ public class PlayerFragment extends Fragment {
 
         saveDNAToggle = (ImageView) view.findViewById(R.id.toggleSaveDNA);
         if (HomeActivity.isSaveDNAEnabled) {
-            saveDNAToggle.setImageResource(R.drawable.ic_download_red);
+            saveDNAToggle.setImageResource(R.drawable.ic_save_red_2);
         } else {
-            saveDNAToggle.setImageResource(R.drawable.ic_download);
+            saveDNAToggle.setImageResource(R.drawable.ic_save_white_2);
         }
 
         saveDNAToggle.setOnClickListener(new View.OnClickListener() {
@@ -365,10 +370,10 @@ public class PlayerFragment extends Fragment {
             public void onClick(View v) {
                 if (HomeActivity.isSaveDNAEnabled) {
                     HomeActivity.isSaveDNAEnabled = false;
-                    saveDNAToggle.setImageResource(R.drawable.ic_download);
+                    saveDNAToggle.setImageResource(R.drawable.ic_save_white_2);
                 } else {
                     HomeActivity.isSaveDNAEnabled = true;
-                    saveDNAToggle.setImageResource(R.drawable.ic_download_red);
+                    saveDNAToggle.setImageResource(R.drawable.ic_save_red_2);
                 }
             }
         });
@@ -723,6 +728,48 @@ public class PlayerFragment extends Fragment {
 
         });
 
+        Handler handler = new Handler();
+        handler.postDelayed(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        showCase = new ShowcaseView.Builder(getActivity())
+                                .blockAllTouches()
+                                .singleShot(2)
+                                .setStyle(R.style.CustomShowcaseTheme)
+                                .useDecorViewAsParent()
+                                .setTarget(new ViewTarget(mVisualizerView.getId(), getActivity()))
+                                .setContentTitle("The DNA")
+                                .setContentText("The DNA of the currently playing song. The magic happens here.")
+                                .build();
+                        showCase.setButtonText("Next");
+                        showCase.overrideButtonClick(new View.OnClickListener() {
+                            int count1 = 0;
+
+                            @Override
+                            public void onClick(View v) {
+                                count1++;
+                                switch (count1) {
+                                    case 1:
+                                        showCase.setTarget(new ViewTarget(R.id.toggleContainer, getActivity()));
+                                        showCase.setContentTitle("The Controls");
+                                        showCase.setContentText("Equalizer \n" +
+                                                "Repeat Controller \n" +
+                                                "Save DNA toggle\n" +
+                                                "Add to Favourites \n" +
+                                                "Queue");
+                                        showCase.setButtonText("Done");
+                                        break;
+                                    case 2:
+                                        showCase.hide();
+                                        break;
+                                }
+                            }
+
+                        });
+                    }
+                }, 500);
+
     }
 
     public static void addToFavourite() {
@@ -821,9 +868,9 @@ public class PlayerFragment extends Fragment {
         }
 
         if (HomeActivity.isSaveDNAEnabled) {
-            saveDNAToggle.setImageResource(R.drawable.ic_download_red);
+            saveDNAToggle.setImageResource(R.drawable.ic_save_red_2);
         } else {
-            saveDNAToggle.setImageResource(R.drawable.ic_download);
+            saveDNAToggle.setImageResource(R.drawable.ic_save_white_2);
         }
 
         equalizerIcon.setVisibility(View.INVISIBLE);

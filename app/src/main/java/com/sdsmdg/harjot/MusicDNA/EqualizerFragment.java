@@ -26,6 +26,8 @@ import com.db.chart.model.LineSet;
 import com.db.chart.view.AxisController;
 import com.db.chart.view.ChartView;
 import com.db.chart.view.LineChartView;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 import java.util.ArrayList;
 
@@ -55,6 +57,8 @@ public class EqualizerFragment extends Fragment {
 
     static FrameLayout equalizerBlocker;
 
+    ShowcaseView showCase;
+
     public EqualizerFragment() {
         // Required empty public constructor
     }
@@ -68,6 +72,8 @@ public class EqualizerFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        HomeActivity.isEqualizerEnabled = true;
 
         spinnerDropDownIcon = (ImageView) view.findViewById(R.id.spinner_dropdown_icon);
         spinnerDropDownIcon.setOnClickListener(new View.OnClickListener() {
@@ -219,7 +225,7 @@ public class EqualizerFragment extends Fragment {
                     break;
             }
             seekBarFinal[i] = seekBar;
-            seekBar.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(Color.parseColor("#FFA036"), PorterDuff.Mode.SRC_IN));
+            seekBar.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(Color.parseColor("#565656"), PorterDuff.Mode.SRC_IN));
             seekBar.setId(i);
 //            seekBar.setLayoutParams(layoutParams);
             seekBar.setMax(upperEqualizerBandLevel - lowerEqualizerBandLevel);
@@ -288,6 +294,43 @@ public class EqualizerFragment extends Fragment {
 
         chart.addData(dataset);
         chart.show();
+
+        showCase = new ShowcaseView.Builder(getActivity())
+                .blockAllTouches()
+                .singleShot(4)
+                .setStyle(R.style.CustomShowcaseTheme)
+                .useDecorViewAsParent()
+                .setTarget(new ViewTarget(R.id.showcase_view_equalizer, getActivity()))
+                .setContentTitle("Presets")
+                .setContentText("Use one of the available presets")
+                .build();
+        showCase.setButtonText("Next");
+        showCase.overrideButtonClick(new View.OnClickListener() {
+            int count1 = 0;
+
+            @Override
+            public void onClick(View v) {
+                count1++;
+                switch (count1) {
+                    case 1:
+                        showCase.setTarget(new ViewTarget(R.id.equalizerContainer, getActivity()));
+                        showCase.setContentTitle("Equalizer Controls");
+                        showCase.setContentText("Use the seekbars to control the Individual frequencies");
+                        showCase.setButtonText("Next");
+                        break;
+                    case 2:
+                        showCase.setTarget(new ViewTarget(R.id.controllerBass, getActivity()));
+                        showCase.setContentTitle("Bass and Reverb");
+                        showCase.setContentText("Use these controls to control Bass and Reverb");
+                        showCase.setButtonText("Done");
+                        break;
+                    case 3:
+                        showCase.hide();
+                        break;
+                }
+            }
+
+        });
 
     }
 

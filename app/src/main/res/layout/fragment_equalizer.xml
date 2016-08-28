@@ -28,6 +28,13 @@
             android:layout_marginLeft="9dp"
             android:layout_marginRight="9dp">
 
+            <View
+                android:id="@+id/showcase_view_equalizer"
+                android:layout_alignParentLeft="true"
+                android:layout_width="50dp"
+                android:layout_marginLeft="20dp"
+                android:layout_height="match_parent"/>
+
             <Spinner
                 android:id="@+id/equalizer_preset_spinner"
                 android:layout_width="match_parent"

@@ -19,7 +19,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
 
@@ -34,6 +37,8 @@ public class LocalMusicFragment extends Fragment {
     static LocalTrackListAdapter adapter;
     static OnLocalTrackSelectedListener mCallback;
     Context ctx;
+
+    ShowcaseView showCase;
 
     static RecyclerView lv;
 
@@ -197,6 +202,43 @@ public class LocalMusicFragment extends Fragment {
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
             }
+        });
+
+        showCase = new ShowcaseView.Builder(getActivity())
+                .blockAllTouches()
+                .singleShot(1)
+                .setStyle(R.style.CustomShowcaseTheme)
+                .useDecorViewAsParent()
+                .setTarget(new ViewTarget(lv.getId(), getActivity()))
+                .setContentTitle("All Songs")
+                .setContentText("All local Songs listed here.Click to Play.Long click for more options")
+                .build();
+        showCase.setButtonText("Next");
+        showCase.overrideButtonClick(new View.OnClickListener() {
+            int count1 = 0;
+
+            @Override
+            public void onClick(View v) {
+                count1++;
+                switch (count1) {
+                    case 1:
+                        RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        lps.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                        lps.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                        int margin = ((Number) (getResources().getDisplayMetrics().density * 12)).intValue();
+                        lps.setMargins(margin, margin, margin, margin);
+                        showCase.setTarget(new ViewTarget(shuffleFab.getId(), getActivity()));
+                        showCase.setContentTitle("Shuffle");
+                        showCase.setContentText("Play all songs, shuffled randomly");
+                        showCase.setButtonText("Done");
+                        showCase.setButtonPosition(lps);
+                        break;
+                    case 2:
+                        showCase.hide();
+                        break;
+                }
+            }
+
         });
 
     }

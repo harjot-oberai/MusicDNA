@@ -268,11 +268,13 @@
                         android:background="#230C33" />
 
                     <ImageView
+                        android:id="@+id/local_banner_play_all"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="20dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
                         android:src="@drawable/ic_play_arrow_white_48dp" />
 
                     <LinearLayout
@@ -429,7 +431,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:alpha="0.8"
-                            android:background="#869B4C" />
+                            android:background="#424B54" />
 
                         <ImageView
                             android:layout_width="50dp"
@@ -437,7 +439,7 @@
                             android:layout_alignParentTop="true"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="10dp"
-                            android:src="@drawable/floppy" />
+                            android:src="@drawable/ic_save_2" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -485,6 +487,14 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/bottomMargin"
         android:translationZ="10dp"></FrameLayout>
+
+    <View
+        android:id="@+id/gradient_view"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_alignBottom="@+id/container"
+        android:layout_gravity="bottom"
+        android:background="@drawable/transparent_gradient" />
 
     <FrameLayout
         android:id="@+id/content_frag"

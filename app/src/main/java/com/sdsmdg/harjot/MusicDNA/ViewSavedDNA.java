@@ -23,6 +23,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.sdsmdg.harjot.MusicDNA.Models.SavedDNA;
 
 import java.nio.ByteBuffer;
@@ -43,6 +45,8 @@ public class ViewSavedDNA extends Fragment {
     LinearLayout noSavedContent;
 
     onShareListener mCallback;
+
+    ShowcaseView showCase;
 
     static int selectedDNA = 0;
 
@@ -199,6 +203,44 @@ public class ViewSavedDNA extends Fragment {
             }
         });
 
+        if (HomeActivity.savedDNAs.getSavedDNAs().size() > 0) {
+            showCase = new ShowcaseView.Builder(getActivity())
+                    .blockAllTouches()
+                    .singleShot(5)
+                    .setStyle(R.style.CustomShowcaseTheme)
+                    .useDecorViewAsParent()
+                    .setTarget(new ViewTarget(mVisualizerView2.getId(), getActivity()))
+                    .setContentTitle("Saved DNAs")
+                    .setContentText("View all your saved DNAs here")
+                    .build();
+            showCase.setButtonText("Next");
+            showCase.overrideButtonClick(new View.OnClickListener() {
+                int count1 = 0;
+
+                @Override
+                public void onClick(View v) {
+                    count1++;
+                    switch (count1) {
+                        case 1:
+                            showCase.setTarget(new ViewTarget(shareIcon.getId(), getActivity()));
+                            showCase.setContentTitle("Share DNA");
+                            showCase.setContentText("Share the DNA as an image with your friends");
+                            showCase.setButtonText("Next");
+                            break;
+                        case 2:
+                            showCase.setTarget(new ViewTarget(saveToStorageIcon.getId(), getActivity()));
+                            showCase.setContentTitle("Save DNA");
+                            showCase.setContentText("Save the DNA as an image to your internal storage");
+                            showCase.setButtonText("Done");
+                            break;
+                        case 3:
+                            showCase.hide();
+                            break;
+                    }
+                }
+
+            });
+        }
     }
 
     public void showDialog(int type) {

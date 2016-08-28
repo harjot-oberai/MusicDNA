@@ -47,6 +47,7 @@ import android.util.Pair;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -64,7 +65,10 @@ import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.crashlytics.android.Crashlytics;
+import com.github.amlcurran.showcaseview.OnShowcaseEventListener;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.gson.Gson;
 import com.sdsmdg.harjot.MusicDNA.Interfaces.StreamService;
 import com.sdsmdg.harjot.MusicDNA.LocalMusicFragments.AlbumFragment;
@@ -101,7 +105,6 @@ import java.util.List;
 import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import io.fabric.sdk.android.Fabric;
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import retrofit.Call;
 import retrofit.Callback;
@@ -168,6 +171,8 @@ public class HomeActivity extends AppCompatActivity
     static float ratio, ratio2;
 
     AppBarLayout appBarLayout;
+
+    View gradientView;
 
     Toolbar spHome;
     ImageView playerControllerHome;
@@ -266,6 +271,8 @@ public class HomeActivity extends AppCompatActivity
     RelativeLayout folderBanner;
     RelativeLayout savedDNABanner;
 
+    ImageView localBannerPlayAll;
+
     TextView localViewAll, streamViewAll;
 
     TextView localNothingText;
@@ -296,6 +303,8 @@ public class HomeActivity extends AppCompatActivity
     static float seekBarColor;
 
     static byte[] mBytes;
+
+    ShowcaseView showCase;
 
     View playerContainer;
 
@@ -593,9 +602,9 @@ public class HomeActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
 
-        Fabric.with(this, new Crashlytics());
-
         setContentView(R.layout.activity_home);
+
+        gradientView = findViewById(R.id.gradient_view);
 
         PackageInfo pInfo = null;
         try {
@@ -635,7 +644,8 @@ public class HomeActivity extends AppCompatActivity
 
         equalizerToolbar = (Toolbar) findViewById(R.id.equalizerToolbar);
         equalizerSwitch = (SwitchCompat) findViewById(R.id.equalizerSwitch);
-        equalizerSwitch.setChecked(false);
+        isEqualizerEnabled = true;
+        equalizerSwitch.setChecked(true);
         equalizerSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -747,6 +757,8 @@ public class HomeActivity extends AppCompatActivity
         folderBanner = (RelativeLayout) findViewById(R.id.folderBanner);
         savedDNABanner = (RelativeLayout) findViewById(R.id.savedDNABanner);
 
+        localBannerPlayAll = (ImageView) findViewById(R.id.local_banner_play_all);
+
         localBanner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -775,6 +787,28 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 showFragment("allSavedDNAs");
+            }
+        });
+
+        localBannerPlayAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                queue.getQueue().clear();
+                for (int i = 0; i < localTrackList.size(); i++) {
+                    UnifiedTrack ut = new UnifiedTrack(true, localTrackList.get(i), null);
+                    queue.getQueue().add(ut);
+                }
+                Random r = new Random();
+                shuffleEnabled = true;
+                int tmp = r.nextInt(HomeActivity.queue.getQueue().size());
+                queueCurrentIndex = tmp;
+                LocalTrack track = localTrackList.get(tmp);
+                localSelectedTrack = track;
+                streamSelected = false;
+                localSelected = true;
+                queueCall = false;
+                isReloaded = false;
+                onLocalTrackSelected(-1);
             }
         });
 
@@ -842,6 +876,43 @@ public class HomeActivity extends AppCompatActivity
         progress.setContentView(R.layout.custom_progress_dialog);
         progress.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         progress.show();
+
+        showCase = new ShowcaseView.Builder(this)
+                .blockAllTouches()
+                .singleShot(0)
+                .setStyle(R.style.CustomShowcaseTheme)
+                .useDecorViewAsParent()
+                .setTarget(new ViewTarget(R.id.recentsRecyclerContainer, this))
+                .setContentTitle("Recents and Playlists")
+                .setContentText("Here all you recent songs and playlists will be listed. Long press the cards or playlists for more options")
+                .build();
+        showCase.setButtonText("Next");
+        showCase.overrideButtonClick(new View.OnClickListener() {
+            int count1 = 0;
+
+            @Override
+            public void onClick(View v) {
+                count1++;
+                switch (count1) {
+                    case 1:
+                        showCase.setTarget(new ViewTarget(R.id.localBanner, HomeActivity.this));
+                        showCase.setContentTitle("Local Songs");
+                        showCase.setContentText("See all songs available locally, classified on basis of Artist and Album");
+                        showCase.setButtonText("Next");
+                        break;
+                    case 2:
+                        showCase.setTarget(new ViewTarget(searchView.getId(), HomeActivity.this));
+                        showCase.setContentTitle("Search");
+                        showCase.setContentText("Search for songs from local library and SoundCloud™");
+                        showCase.setButtonText("Done");
+                        break;
+                    case 3:
+                        showCase.hide();
+                        break;
+                }
+            }
+
+        });
 
         new loadSavedData().execute();
 

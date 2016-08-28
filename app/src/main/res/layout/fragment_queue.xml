@@ -7,6 +7,12 @@
     android:padding="3dp"
     tools:context="com.sdsmdg.harjot.MusicDNA.QueueFragment">
 
+    <View
+        android:id="@+id/showcase_view"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/queueRecycler"
         android:layout_width="match_parent"

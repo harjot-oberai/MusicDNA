@@ -14,7 +14,10 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.sdsmdg.harjot.MusicDNA.Helpers.SimpleItemTouchHelperCallback;
 
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
@@ -35,6 +38,8 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
 
     onQueueItemClickedListener mCallback;
     onQueueSaveListener mCallback2;
+
+    ShowcaseView showCase;
 
     public interface onQueueItemClickedListener {
         public void onQueueItemClicked(int position);
@@ -109,6 +114,44 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(qAdapter);
         mItemTouchHelper = new ItemTouchHelper(callback);
         mItemTouchHelper.attachToRecyclerView(queueRecycler);
+
+        showCase = new ShowcaseView.Builder(getActivity())
+                .blockAllTouches()
+                .singleShot(3)
+                .setStyle(R.style.CustomShowcaseTheme)
+                .useDecorViewAsParent()
+                .setTarget(new ViewTarget(R.id.showcase_view, getActivity()))
+                .setContentTitle("Queue")
+                .setContentText("Here all songs that are currently in queue are listed." +
+                        " Use handle to reorder the Queue and swipe the song to remove from queue")
+                .build();
+        showCase.setButtonText("Next");
+        showCase.overrideButtonClick(new View.OnClickListener() {
+            int count1 = 0;
+
+            @Override
+            public void onClick(View v) {
+                count1++;
+                switch (count1) {
+                    case 1:
+                        RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        lps.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                        lps.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                        int margin = ((Number) (getResources().getDisplayMetrics().density * 12)).intValue();
+                        lps.setMargins(margin, margin, margin, margin);
+                        showCase.setButtonPosition(lps);
+                        showCase.setTarget(new ViewTarget(saveQueue.getId(), getActivity()));
+                        showCase.setContentTitle("Save Queue");
+                        showCase.setContentText("Save the queue as a playlist");
+                        showCase.setButtonText("Done");
+                        break;
+                    case 2:
+                        showCase.hide();
+                        break;
+                }
+            }
+
+        });
 
     }
 

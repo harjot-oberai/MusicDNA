@@ -980,24 +980,39 @@ public class HomeActivity extends AppCompatActivity
 
                     if (pos != -1) {
                         albums.get(pos).getAlbumSongs().add(lt);
-                        finalAlbums.get(pos).getAlbumSongs().add(lt);
                     } else {
                         List<LocalTrack> llt = new ArrayList<>();
                         llt.add(lt);
                         Album ab = new Album(thisAlbum, llt);
                         albums.add(ab);
+                    }
+
+                    if (pos != -1) {
+                        finalAlbums.get(pos).getAlbumSongs().add(lt);
+                    } else {
+                        List<LocalTrack> llt = new ArrayList<>();
+                        llt.add(lt);
+                        Album ab = new Album(thisAlbum, llt);
                         finalAlbums.add(ab);
                     }
 
                     pos = checkArtist(thisArtist);
+                    
                     if (pos != -1) {
                         artists.get(pos).getArtistSongs().add(lt);
-                        finalArtists.get(pos).getArtistSongs().add(lt);
                     } else {
                         List<LocalTrack> llt = new ArrayList<>();
                         llt.add(lt);
                         Artist ab = new Artist(thisArtist, llt);
                         artists.add(ab);
+                    }
+
+                    if (pos != -1) {
+                        finalArtists.get(pos).getArtistSongs().add(lt);
+                    } else {
+                        List<LocalTrack> llt = new ArrayList<>();
+                        llt.add(lt);
+                        Artist ab = new Artist(thisArtist, llt);
                         finalArtists.add(ab);
                     }
 

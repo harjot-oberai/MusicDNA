@@ -1899,10 +1899,46 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onPreviousTrack() {
-        if (!shuffleEnabled) {
-            if (queueCurrentIndex > 0) {
-                queueCall = true;
-                queueCurrentIndex--;
+
+        if (queueCurrentIndex == 0) {
+            PlayerFragment.progressBar.setProgress(0);
+            PlayerFragment.progressBar.setSecondaryProgress(0);
+            PlayerFragment.mVisualizerView.clear();
+            PlayerFragment.mMediaPlayer.seekTo(0);
+            PlayerFragment.mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
+            PlayerFragment.isPrepared = true;
+            PlayerFragment.mMediaPlayer.start();
+        } else {
+            if (!shuffleEnabled) {
+                if (queueCurrentIndex > 0) {
+                    queueCall = true;
+                    queueCurrentIndex--;
+                    if (QueueFragment.qAdapter != null)
+                        QueueFragment.qAdapter.notifyDataSetChanged();
+                    if (queue.getQueue().get(queueCurrentIndex).getType()) {
+                        localSelectedTrack = queue.getQueue().get(queueCurrentIndex).getLocalTrack();
+                        streamSelected = false;
+                        localSelected = true;
+                        onLocalTrackSelected(-1);
+                    } else {
+                        selectedTrack = queue.getQueue().get(queueCurrentIndex).getStreamTrack();
+                        streamSelected = true;
+                        localSelected = false;
+                        onTrackSelected(-1);
+                    }
+                } else {
+
+                }
+            } else {
+                Random r = new Random();
+                int x;
+                while (true) {
+                    x = r.nextInt(queue.getQueue().size());
+                    if (x != queueCurrentIndex) {
+                        break;
+                    }
+                }
+                queueCurrentIndex = x;
                 if (QueueFragment.qAdapter != null)
                     QueueFragment.qAdapter.notifyDataSetChanged();
                 if (queue.getQueue().get(queueCurrentIndex).getType()) {
@@ -1916,31 +1952,6 @@ public class HomeActivity extends AppCompatActivity
                     localSelected = false;
                     onTrackSelected(-1);
                 }
-            } else {
-                PlayerFragment.mMediaPlayer.stop();
-            }
-        } else {
-            Random r = new Random();
-            int x;
-            while (true) {
-                x = r.nextInt(queue.getQueue().size());
-                if (x != queueCurrentIndex) {
-                    break;
-                }
-            }
-            queueCurrentIndex = x;
-            if (QueueFragment.qAdapter != null)
-                QueueFragment.qAdapter.notifyDataSetChanged();
-            if (queue.getQueue().get(queueCurrentIndex).getType()) {
-                localSelectedTrack = queue.getQueue().get(queueCurrentIndex).getLocalTrack();
-                streamSelected = false;
-                localSelected = true;
-                onLocalTrackSelected(-1);
-            } else {
-                selectedTrack = queue.getQueue().get(queueCurrentIndex).getStreamTrack();
-                streamSelected = true;
-                localSelected = false;
-                onTrackSelected(-1);
             }
         }
     }

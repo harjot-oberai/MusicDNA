@@ -61,8 +61,8 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/play_all_from_album"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_above="@+id/album_songs_recycler"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="-25dp"

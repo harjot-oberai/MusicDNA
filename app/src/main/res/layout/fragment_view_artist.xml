@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:background="#F8F8F8"
     android:padding="5dp"
+    android:clickable="true"
     tools:context="com.sdsmdg.harjot.MusicDNA.ViewArtistFragment">
 
     <TextView
@@ -30,8 +31,8 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/play_all_fab_artist"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="16dp"

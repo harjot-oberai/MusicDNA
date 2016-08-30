@@ -74,12 +74,12 @@
         android:id="@+id/myvisualizerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bottomContainer"
+        android:layout_above="@+id/mainControllerContainer"
         android:layout_centerHorizontal="true" />
 
 
     <RelativeLayout
-        android:id="@+id/bottomContainer"
+        android:id="@+id/mainControllerContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/seekBarContainer"
@@ -134,7 +134,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/toggleContainer"
         android:layout_marginBottom="10dp"
-        android:padding="2dp">
+        android:padding="7dp">
 
         <TextView
             android:id="@+id/currTime"

@@ -7,8 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.audiofx.BassBoost;
@@ -18,7 +16,6 @@ import android.media.audiofx.Visualizer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.Pair;
@@ -45,8 +42,6 @@ import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -422,7 +417,7 @@ public class PlayerFragment extends Fragment {
 
         smallPlayer = (Toolbar) view.findViewById(R.id.smallPlayer);
 
-        bottomContainer = (RelativeLayout) view.findViewById(R.id.bottomContainer);
+        bottomContainer = (RelativeLayout) view.findViewById(R.id.mainControllerContainer);
         seekBarContainer = (RelativeLayout) view.findViewById(R.id.seekBarContainer);
         toggleContainer = (RelativeLayout) view.findViewById(R.id.toggleContainer);
 
@@ -710,7 +705,13 @@ public class PlayerFragment extends Fragment {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
+                temp = getTime(progress);
+                HomeActivity.main.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        currTime.setText(temp.first + ":" + temp.second);
+                    }
+                });
             }
 
             @Override
@@ -960,7 +961,13 @@ public class PlayerFragment extends Fragment {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
+                temp = getTime(progress);
+                HomeActivity.main.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        currTime.setText(temp.first + ":" + temp.second);
+                    }
+                });
             }
 
             @Override

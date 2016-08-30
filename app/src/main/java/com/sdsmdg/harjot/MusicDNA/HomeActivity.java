@@ -997,7 +997,7 @@ public class HomeActivity extends AppCompatActivity
                     }
 
                     pos = checkArtist(thisArtist);
-                    
+
                     if (pos != -1) {
                         artists.get(pos).getArtistSongs().add(lt);
                     } else {
@@ -2228,7 +2228,12 @@ public class HomeActivity extends AppCompatActivity
         if (isFullScreenEnabled) {
             Toast.makeText(HomeActivity.this, "Long Press to Exit", Toast.LENGTH_SHORT).show();
             View decorView = getWindow().getDecorView();
-            int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+            int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
             decorView.setSystemUiVisibility(uiOptions);
             ActionBar actionBar = getSupportActionBar();
             actionBar.hide();

@@ -70,7 +70,13 @@
         </android.support.v7.widget.Toolbar>
     </FrameLayout>
 
+    <View
+        android:id="@+id/fullscreen_extra_space_occupier"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"/>
+
     <com.sdsmdg.harjot.MusicDNA.VisualizerView
+        android:layout_below="@+id/fullscreen_extra_space_occupier"
         android:id="@+id/myvisualizerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

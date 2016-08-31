@@ -388,6 +388,10 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         super.onTaskRemoved(rootIntent);
-        notificationManager.cancel(1);
+        try {
+            notificationManager.cancel(1);
+        } catch (Exception e) {
+
+        }
     }
 }

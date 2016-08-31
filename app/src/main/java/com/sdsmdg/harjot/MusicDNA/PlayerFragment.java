@@ -62,6 +62,8 @@ public class PlayerFragment extends Fragment {
 
     View bufferingIndicator;
 
+    View fullscreenExtraSpaceOccupier;
+
     static CustomProgressBar cpb;
 
     Pair<String, String> temp;
@@ -69,7 +71,6 @@ public class PlayerFragment extends Fragment {
     TextView currTime, totalTime;
 
     public static ImageView repeatIcon;
-//    public static ImageView shuffleIcon;
 
     public static ImageView equalizerIcon;
     public static ImageView mainTrackController;
@@ -134,11 +135,14 @@ public class PlayerFragment extends Fragment {
 
     public static void setupVisualizerFxAndUI() {
 
-        mVisualizer = new Visualizer(mMediaPlayer.getAudioSessionId());
+        try {
+            mVisualizer = new Visualizer(mMediaPlayer.getAudioSessionId());
+            mEqualizer = new Equalizer(0, mMediaPlayer.getAudioSessionId());
+            mEqualizer.setEnabled(true);
+            mMediaPlayer.setAuxEffectSendLevel(1.0f);
+        } catch (Exception e) {
 
-        mEqualizer = new Equalizer(0, mMediaPlayer.getAudioSessionId());
-        mEqualizer.setEnabled(true);
-        mMediaPlayer.setAuxEffectSendLevel(1.0f);
+        }
 
         bassBoost = new BassBoost(0, mMediaPlayer.getAudioSessionId());
         bassBoost.setEnabled(true);
@@ -168,7 +172,6 @@ public class PlayerFragment extends Fragment {
                     new Visualizer.OnDataCaptureListener() {
                         public void onWaveFormDataCapture(Visualizer visualizer,
                                                           byte[] bytes, int samplingRate) {
-//                            HomeActivity.updateVisualizer(bytes);
                         }
 
                         public void onFftDataCapture(Visualizer visualizer,
@@ -187,7 +190,6 @@ public class PlayerFragment extends Fragment {
             if (HomeActivity.isPlayerVisible) {
                 mainTrackController.setImageResource(R.drawable.ic_play_arrow_white_48dp);
                 player_controller.setImageResource(R.drawable.ic_queue_music_white_48dp);
-//                HomeActivity.playerControllerAB.setImageResource(R.drawable.ic_queue_music_white_48dp);
             } else {
                 player_controller.setImageResource(R.drawable.ic_play_arrow_white_48dp);
                 mainTrackController.setImageResource(R.drawable.ic_play_arrow_white_48dp);
@@ -202,7 +204,6 @@ public class PlayerFragment extends Fragment {
                 if (HomeActivity.isPlayerVisible) {
                     mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
                     player_controller.setImageResource(R.drawable.ic_queue_music_white_48dp);
-//                    HomeActivity.playerControllerAB.setImageResource(R.drawable.ic_queue_music_white_48dp);
                 } else {
                     mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
                     player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
@@ -313,6 +314,8 @@ public class PlayerFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         imgLoader = new ImageLoader(HomeActivity.ctx);
+
+        fullscreenExtraSpaceOccupier = view.findViewById(R.id.fullscreen_extra_space_occupier);
 
         bufferingIndicator = view.findViewById(R.id.bufferingIndicator);
         currTime = (TextView) view.findViewById(R.id.currTime);
@@ -433,6 +436,7 @@ public class PlayerFragment extends Fragment {
                     seekBarContainer.setVisibility(View.VISIBLE);
                     toggleContainer.setVisibility(View.VISIBLE);
                     HomeActivity.spToolbar.setVisibility(View.VISIBLE);
+                    fullscreenExtraSpaceOccupier.getLayoutParams().height = 0;
                     mCallback8.onFullScreen();
                 } else {
                     HomeActivity.isFullScreenEnabled = true;
@@ -440,6 +444,7 @@ public class PlayerFragment extends Fragment {
                     seekBarContainer.setVisibility(View.INVISIBLE);
                     toggleContainer.setVisibility(View.INVISIBLE);
                     HomeActivity.spToolbar.setVisibility(View.INVISIBLE);
+                    fullscreenExtraSpaceOccupier.getLayoutParams().height = HomeActivity.statusBarHeightinDp;
                     mCallback8.onFullScreen();
                 }
                 return true;
@@ -464,6 +469,8 @@ public class PlayerFragment extends Fragment {
                     player_controller.setVisibility(View.VISIBLE);
                     player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
                 }
+//                setupVisualizerFxAndUI();
+//                mVisualizer.setEnabled(true);
                 togglePlayPause();
                 togglePlayPause();
                 togglePlayPause();
@@ -1034,7 +1041,6 @@ public class PlayerFragment extends Fragment {
             mCallback2.onComplete();
         }
     }
-
 
 
 }

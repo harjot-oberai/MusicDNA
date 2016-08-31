@@ -46,7 +46,7 @@ public class ViewSavedDNA extends Fragment {
 
     onShareListener mCallback;
 
-    ShowcaseView showCase;
+    static ShowcaseView showCase;
 
     static int selectedDNA = 0;
 

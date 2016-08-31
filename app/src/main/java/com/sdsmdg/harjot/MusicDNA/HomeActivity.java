@@ -65,6 +65,7 @@ import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.github.amlcurran.showcaseview.OnShowcaseEventListener;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
@@ -105,6 +106,7 @@ import java.util.List;
 import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.fabric.sdk.android.Fabric;
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import retrofit.Call;
 import retrofit.Callback;
@@ -230,12 +232,12 @@ public class HomeActivity extends AppCompatActivity
 
     boolean wasMediaPlayerPlaying = false;
 
-    static float max_max = Float.MIN_VALUE;
-    static float min_min = Float.MAX_VALUE;
-    static float avg_max = 0;
-    static float avg_min = 0;
-    static float avg = 0;
-    static int k = 0;
+//    static float max_max = Float.MIN_VALUE;
+//    static float min_min = Float.MAX_VALUE;
+//    static float avg_max = 0;
+//    static float avg_min = 0;
+//    static float avg = 0;
+//    static int k = 0;
 
     DrawerLayout drawer;
 
@@ -884,7 +886,10 @@ public class HomeActivity extends AppCompatActivity
                 .useDecorViewAsParent()
                 .setTarget(new ViewTarget(R.id.recentsRecyclerContainer, this))
                 .setContentTitle("Recents and Playlists")
-                .setContentText("Here all you recent songs and playlists will be listed. Long press the cards or playlists for more options")
+                .setContentText("Here all you recent songs and playlists will be listed." +
+                        "Long press the cards or playlists for more options \n" +
+                        "\n" +
+                        "(Press Next to continue / Press back to Hide)")
                 .build();
         showCase.setButtonText("Next");
         showCase.overrideButtonClick(new View.OnClickListener() {
@@ -1077,6 +1082,18 @@ public class HomeActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if (showCase != null && showCase.isShowing()) {
+            showCase.hide();
+        } else if (PlayerFragment.showCase != null && PlayerFragment.showCase.isShowing()) {
+            PlayerFragment.showCase.hide();
+        } else if (LocalMusicFragment.showCase != null && LocalMusicFragment.showCase.isShowing()) {
+            LocalMusicFragment.showCase.hide();
+        } else if (QueueFragment.showCase != null && QueueFragment.showCase.isShowing()) {
+            QueueFragment.showCase.hide();
+        } else if (EqualizerFragment.showCase != null && EqualizerFragment.showCase.isShowing()) {
+            EqualizerFragment.showCase.hide();
+        } else if (ViewSavedDNA.showCase != null && ViewSavedDNA.showCase.isShowing()) {
+            ViewSavedDNA.showCase.hide();
         } else if (isFullScreenEnabled) {
             HomeActivity.isFullScreenEnabled = false;
             PlayerFragment.bottomContainer.setVisibility(View.VISIBLE);
@@ -1686,6 +1703,120 @@ public class HomeActivity extends AppCompatActivity
         new MyAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
+    public static void updatePoints3() {
+
+        PlayerFragment.mVisualizerView.outerRadius = (float) (Math.min(PlayerFragment.mVisualizerView.width, PlayerFragment.mVisualizerView.height) * 0.42);
+        PlayerFragment.mVisualizerView.normalizedPosition = ((float) (PlayerFragment.mMediaPlayer.getCurrentPosition()) / (float) (PlayerFragment.durationInMilliSec));
+        if (mBytes == null) {
+            return;
+        }
+        PlayerFragment.mVisualizerView.angle = (float) (Math.PI - PlayerFragment.mVisualizerView.normalizedPosition * PlayerFragment.mVisualizerView.TAU);
+        PlayerFragment.mVisualizerView.color = 0;
+        PlayerFragment.mVisualizerView.lnDataDistance = 0;
+        PlayerFragment.mVisualizerView.distance = 0;
+        PlayerFragment.mVisualizerView.size = 0;
+        PlayerFragment.mVisualizerView.volume = 0;
+        PlayerFragment.mVisualizerView.power = 0;
+
+        float x, y;
+
+        int midx = (int) (PlayerFragment.mVisualizerView.width / 2);
+        int midy = (int) (PlayerFragment.mVisualizerView.height / 2);
+
+        // calculate min and max amplitude for current byte array
+        float max = Integer.MIN_VALUE, min = Integer.MAX_VALUE;
+//        for (int a = 16; a < (mBytes.length); a += 2) {
+//
+//            float amp = (float) (mBytes[a] + 128) / (float) 255;
+//            if (amp > max) {
+//                max = amp;
+//            }
+//            if (amp < min) {
+//                min = amp;
+//            }
+//        }
+
+        /**
+         * Number Fishing is all that is used here to get the best looking DNA
+         * Number fishing is HOW YOU WIN AT LIFE. -- paullewis :)
+         * **/
+
+        for (int a = 16; a < (mBytes.length); a++) {
+
+//            if (max <= 70) {
+//                break;
+//            }
+
+            // scale the amplitude to the range [0,1]
+            float amp = (float) Math.abs(mBytes[a]) / (float) 255;
+//            if (max != min)
+//                amp = (amp - min) / (max - min);
+//            else {
+//                amp = 0;
+//            }
+
+            Log.d("AMP", amp + "");
+
+            PlayerFragment.mVisualizerView.volume = (amp);
+
+            // converting polar to cartesian (distance calculated afterwards acts as radius for polar co-ords)
+            x = (float) Math.sin(PlayerFragment.mVisualizerView.angle);
+            y = (float) Math.cos(PlayerFragment.mVisualizerView.angle);
+
+            // filtering low amplitude
+            if (PlayerFragment.mVisualizerView.volume < minAudioStrength) {
+                continue;
+            }
+
+            // color ( value of hue inn HSV ) calculated based on current progress of the song or audio clip
+            PlayerFragment.mVisualizerView.color = (float) (PlayerFragment.mVisualizerView.normalizedPosition - 0.12 + Math.random() * 0.24);
+            PlayerFragment.mVisualizerView.color = Math.round(PlayerFragment.mVisualizerView.color * 360);
+            seekBarColor = (float) (PlayerFragment.mVisualizerView.normalizedPosition);
+            seekBarColor = Math.round(seekBarColor * 360);
+
+            // calculating distance from center ( 'r' in polar coordinates)
+            PlayerFragment.mVisualizerView.lnDataDistance = (float) ((Math.log(a - 4) / PlayerFragment.mVisualizerView.LOG_MAX) - PlayerFragment.mVisualizerView.BASE);
+            PlayerFragment.mVisualizerView.distance = PlayerFragment.mVisualizerView.lnDataDistance * PlayerFragment.mVisualizerView.outerRadius;
+
+
+            // size of the circle to be rendered at the calculated position
+            PlayerFragment.mVisualizerView.size = ratio * ((float) (4.5 * PlayerFragment.mVisualizerView.volume * PlayerFragment.mVisualizerView.MAX_DOT_SIZE + Math.random() * 2));
+
+            // alpha also based on volume ( amplitude )
+            PlayerFragment.mVisualizerView.alpha = (float) (PlayerFragment.mVisualizerView.volume * 0.09);
+
+            // final cartesian coordinates for drawing on canvas
+            x = x * PlayerFragment.mVisualizerView.distance;
+            y = y * PlayerFragment.mVisualizerView.distance;
+
+
+            float[] hsv = new float[3];
+            hsv[0] = PlayerFragment.mVisualizerView.color;
+            hsv[1] = (float) 0.8;
+            hsv[2] = (float) 0.72;
+
+            // setting color of the Paint
+            PlayerFragment.mVisualizerView.mForePaint.setColor(Color.HSVToColor(hsv));
+
+            if (PlayerFragment.mVisualizerView.size >= 8.0 && PlayerFragment.mVisualizerView.size < 29.0) {
+                PlayerFragment.mVisualizerView.mForePaint.setAlpha(17);
+            } else if (PlayerFragment.mVisualizerView.size >= 29.0 && PlayerFragment.mVisualizerView.size <= 60.0) {
+                PlayerFragment.mVisualizerView.mForePaint.setAlpha(9);
+            } else if (PlayerFragment.mVisualizerView.size > 60.0) {
+                PlayerFragment.mVisualizerView.mForePaint.setAlpha(3);
+            } else {
+                PlayerFragment.mVisualizerView.mForePaint.setAlpha((int) (PlayerFragment.mVisualizerView.alpha * 1000));
+            }
+
+            // Add points and paint config to lists for redraw
+            PlayerFragment.mVisualizerView.pts.add(Pair.create(midx + x, midy + y));
+            PlayerFragment.mVisualizerView.ptPaint.add(Pair.create(PlayerFragment.mVisualizerView.size, Pair.create(PlayerFragment.mVisualizerView.mForePaint.getColor(), PlayerFragment.mVisualizerView.mForePaint.getAlpha())));
+
+            cacheCanvas.drawCircle(midx + x, midy + y, PlayerFragment.mVisualizerView.size, PlayerFragment.mVisualizerView.mForePaint);
+
+        }
+    }
+
     public static void updatePoints() {
 
         PlayerFragment.mVisualizerView.outerRadius = (float) (Math.min(PlayerFragment.mVisualizerView.width, PlayerFragment.mVisualizerView.height) * 0.42);
@@ -1719,23 +1850,6 @@ public class HomeActivity extends AppCompatActivity
             }
         }
 
-        Log.d("MAXMIN", max + ":" + min);
-
-        if (max > max_max) {
-            max_max = max;
-        }
-        if (min < min_min) {
-            min_min = min;
-        }
-
-        avg = ((avg * k) + ((max + min) / ((float) 2))) / ((float) (k + 1));
-
-        avg_max = ((avg_max * k) + (max)) / ((float) (k + 1));
-
-        avg_min = ((avg_min * k) + (min)) / ((float) (k + 1));
-
-        k++;
-
         /**
          * Number Fishing is all that is used here to get the best looking DNA
          * Number fishing is HOW YOU WIN AT LIFE. -- paullewis :)
@@ -1754,13 +1868,6 @@ public class HomeActivity extends AppCompatActivity
             else {
                 amp = 0;
             }
-
-            /*amp = (amp - fftMin) / (fftMax - fftMin);
-            if (amp > 1) {
-                amp = 1;
-            } else if (amp < 0) {
-                amp = 0;
-            }*/
 
             Log.d("AMP", amp + "");
 
@@ -2228,18 +2335,25 @@ public class HomeActivity extends AppCompatActivity
         if (isFullScreenEnabled) {
             Toast.makeText(HomeActivity.this, "Long Press to Exit", Toast.LENGTH_SHORT).show();
             View decorView = getWindow().getDecorView();
-            int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+//            int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+//                    | View.SYSTEM_UI_FLAG_FULLSCREEN
+//                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+            int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+
             decorView.setSystemUiVisibility(uiOptions);
             ActionBar actionBar = getSupportActionBar();
             actionBar.hide();
         } else {
             View decorView = getWindow().getDecorView();
             int uiOptions = View.SYSTEM_UI_FLAG_VISIBLE;
+//            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
             decorView.setSystemUiVisibility(uiOptions);
             ActionBar actionBar = getSupportActionBar();
             actionBar.show();

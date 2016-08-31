@@ -57,7 +57,7 @@ public class EqualizerFragment extends Fragment {
 
     static FrameLayout equalizerBlocker;
 
-    ShowcaseView showCase;
+    static ShowcaseView showCase;
 
     public EqualizerFragment() {
         // Required empty public constructor

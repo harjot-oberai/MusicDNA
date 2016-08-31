@@ -39,7 +39,7 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
     onQueueItemClickedListener mCallback;
     onQueueSaveListener mCallback2;
 
-    ShowcaseView showCase;
+    static ShowcaseView showCase;
 
     public interface onQueueItemClickedListener {
         public void onQueueItemClicked(int position);

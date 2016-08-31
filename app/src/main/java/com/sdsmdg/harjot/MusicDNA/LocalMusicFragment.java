@@ -38,7 +38,7 @@ public class LocalMusicFragment extends Fragment {
     static OnLocalTrackSelectedListener mCallback;
     Context ctx;
 
-    ShowcaseView showCase;
+    static ShowcaseView showCase;
 
     static RecyclerView lv;
 

@@ -123,7 +123,7 @@ public class PlayerFragment extends Fragment {
 
     public static boolean isStart = true;
 
-    ShowcaseView showCase;
+    static ShowcaseView showCase;
 
     long startTrack;
     long endTrack;
@@ -168,6 +168,7 @@ public class PlayerFragment extends Fragment {
                     new Visualizer.OnDataCaptureListener() {
                         public void onWaveFormDataCapture(Visualizer visualizer,
                                                           byte[] bytes, int samplingRate) {
+//                            HomeActivity.updateVisualizer(bytes);
                         }
 
                         public void onFftDataCapture(Visualizer visualizer,
@@ -1033,5 +1034,7 @@ public class PlayerFragment extends Fragment {
             mCallback2.onComplete();
         }
     }
+
+
 
 }

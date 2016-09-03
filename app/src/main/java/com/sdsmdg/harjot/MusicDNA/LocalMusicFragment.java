@@ -76,6 +76,11 @@ public class LocalMusicFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         shuffleFab = (FloatingActionButton) view.findViewById(R.id.play_all_fab_local);
+
+        if (HomeActivity.localTrackList.size() == 0) {
+            shuffleFab.setVisibility(View.INVISIBLE);
+        }
+
         shuffleFab.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));
         shuffleFab.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,6 +1,7 @@
 package com.sdsmdg.harjot.MusicDNA;
 
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
@@ -59,6 +60,7 @@ public class RecentsTrackAdapter extends RecyclerView.Adapter<RecentsTrackAdapte
             }
             HomeActivity.rAdapter.notifyDataSetChanged();
         }
+        new HomeActivity.SaveRecents().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder

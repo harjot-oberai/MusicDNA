@@ -156,7 +156,8 @@ public class EqualizerFragment extends Fragment {
         equalizerHeading.setTextSize(20);
         equalizerHeading.setGravity(Gravity.CENTER_HORIZONTAL);
 
-        numberOfFrequencyBands = PlayerFragment.mEqualizer.getNumberOfBands();
+//        numberOfFrequencyBands = PlayerFragment.mEqualizer.getNumberOfBands();
+        numberOfFrequencyBands = 5;
 
         points = new float[numberOfFrequencyBands];
 

@@ -48,7 +48,6 @@ import android.util.TypedValue;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -66,10 +65,7 @@ import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.crashlytics.android.Crashlytics;
-import com.github.amlcurran.showcaseview.OnShowcaseEventListener;
 import com.github.amlcurran.showcaseview.ShowcaseView;
-import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.gson.Gson;
 import com.sdsmdg.harjot.MusicDNA.Interfaces.StreamService;
@@ -107,7 +103,6 @@ import java.util.List;
 import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import io.fabric.sdk.android.Fabric;
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import retrofit.Call;
 import retrofit.Callback;
@@ -136,7 +131,7 @@ public class HomeActivity extends AppCompatActivity
         PlayerFragment.fullScreenListener,
         PlayerFragment.onSettingsClickedListener,
         PlayerFragment.resetNotificationListener,
-        PlayListFragment.onPLaylistTouchedListener,
+        PlayListFragment.onPlaylistTouchedListener,
         PlayListFragment.onPlaylistMenuPlayAllListener,
         FolderFragment.onFolderClickedListener,
         FolderContentFragment.onFolderContentPlayAllListener,
@@ -213,15 +208,15 @@ public class HomeActivity extends AppCompatActivity
     static List<LocalTrack> tempFolderContent;
     static MusicFolder tempMusicFolder;
 
-    static boolean shuffleEnabled = true;
-    static boolean repeatEnabled = false;
+    static boolean shuffleEnabled = false;
+    static boolean repeatEnabled = true;
     static boolean repeatOnceEnabled = false;
 
     static boolean nextControllerClicked = false;
 
     static boolean isFavourite = false;
 
-    public static boolean isReloaded = false;
+    public static boolean isReloaded = true;
 
     public static int queueCurrentIndex = 0;
 
@@ -232,13 +227,6 @@ public class HomeActivity extends AppCompatActivity
     static boolean queueCall = false;
 
     boolean wasMediaPlayerPlaying = false;
-
-//    static float max_max = Float.MIN_VALUE;
-//    static float min_min = Float.MAX_VALUE;
-//    static float avg_max = 0;
-//    static float avg_min = 0;
-//    static float avg = 0;
-//    static int k = 0;
 
     DrawerLayout drawer;
 
@@ -354,6 +342,7 @@ public class HomeActivity extends AppCompatActivity
 
     public void onTrackSelected(int position) {
 
+        isReloaded = false;
         HideBottomFakeToolbar();
 
         if (Build.VERSION.SDK_INT >= 21) {
@@ -474,6 +463,7 @@ public class HomeActivity extends AppCompatActivity
 
     public void onLocalTrackSelected(int position) {
 
+        isReloaded = false;
         HideBottomFakeToolbar();
 
         if (Build.VERSION.SDK_INT >= 21) {
@@ -806,17 +796,19 @@ public class HomeActivity extends AppCompatActivity
                     UnifiedTrack ut = new UnifiedTrack(true, localTrackList.get(i), null);
                     queue.getQueue().add(ut);
                 }
-                Random r = new Random();
-                shuffleEnabled = true;
-                int tmp = r.nextInt(HomeActivity.queue.getQueue().size());
-                queueCurrentIndex = tmp;
-                LocalTrack track = localTrackList.get(tmp);
-                localSelectedTrack = track;
-                streamSelected = false;
-                localSelected = true;
-                queueCall = false;
-                isReloaded = false;
-                onLocalTrackSelected(-1);
+                if (queue.getQueue().size() > 0) {
+                    Random r = new Random();
+                    shuffleEnabled = true;
+                    int tmp = r.nextInt(HomeActivity.queue.getQueue().size());
+                    queueCurrentIndex = tmp;
+                    LocalTrack track = localTrackList.get(tmp);
+                    localSelectedTrack = track;
+                    streamSelected = false;
+                    localSelected = true;
+                    queueCall = false;
+                    isReloaded = false;
+                    onLocalTrackSelected(-1);
+                }
             }
         });
 
@@ -944,8 +936,6 @@ public class HomeActivity extends AppCompatActivity
             favouriteTracks = gson.fromJson(json5, Favourite.class);
             String json6 = mPrefs.getString("queueCurrentIndex", "");
             queueCurrentIndex = gson.fromJson(json6, Integer.class);
-            String json7 = mPrefs.getString("isReloaded", "");
-            isReloaded = gson.fromJson(json7, Boolean.class);
             String json8 = mPrefs.getString("settings", "");
             settings = gson.fromJson(json8, Settings.class);
         } catch (Exception e) {
@@ -1042,12 +1032,18 @@ public class HomeActivity extends AppCompatActivity
             while (musicCursor.moveToNext());
         }
 
-        Collections.sort(localTrackList, new localMusicComparator());
-        Collections.sort(finalLocalSearchResultList, new localMusicComparator());
-        Collections.sort(albums, new albumComparator());
-        Collections.sort(finalAlbums, new albumComparator());
-        Collections.sort(artists, new artistComparator());
-        Collections.sort(finalArtists, new artistComparator());
+        if (localTrackList.size() > 0) {
+            Collections.sort(localTrackList, new localMusicComparator());
+            Collections.sort(finalLocalSearchResultList, new localMusicComparator());
+        }
+        if (albums.size() > 0) {
+            Collections.sort(albums, new albumComparator());
+            Collections.sort(finalAlbums, new albumComparator());
+        }
+        if (artists.size() > 0) {
+            Collections.sort(artists, new artistComparator());
+            Collections.sort(finalArtists, new artistComparator());
+        }
 
     }
 
@@ -1139,12 +1135,14 @@ public class HomeActivity extends AppCompatActivity
                     setTitle("Music DNA");
                 } else if (isPlaylistVisible) {
                     hideFragment("playlist");
+                    new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     setTitle("Music DNA");
                 } else if (isEqualizerVisible) {
                     hideFragment("equalizer");
                     setTitle("Music DNA");
                 } else if (isFavouriteVisible) {
                     hideFragment("favourite");
+                    new SaveFavourites().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     setTitle("Music DNA");
                 } else if (isAllPlaylistVisible) {
                     hideFragment("allPlaylists");
@@ -1163,9 +1161,11 @@ public class HomeActivity extends AppCompatActivity
                     setTitle("Music DNA");
                 } else if (isRecentVisible) {
                     hideFragment("recent");
+                    new SaveRecents().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     setTitle("Music DNA");
                 } else if (isSettingsVisible) {
                     hideFragment("settings");
+                    new SaveSettings().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     setTitle("Music DNA");
                 } else {
                     startActivity(new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME));
@@ -2419,7 +2419,6 @@ public class HomeActivity extends AppCompatActivity
     protected void onPause() {
         super.onPause();
 
-        new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         new SaveQueue().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         new SaveSettings().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         new SaveData().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -2494,6 +2493,7 @@ public class HomeActivity extends AppCompatActivity
                     if (PlayListFragment.vpAdapter != null) {
                         PlayListFragment.vpAdapter.notifyItemChanged(renamePlaylistNumber);
                     }
+                    new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     dialog.dismiss();
                 }
             }
@@ -2545,6 +2545,7 @@ public class HomeActivity extends AppCompatActivity
                     playlistNothingText.setVisibility(View.INVISIBLE);
                     pAdapter.notifyDataSetChanged();
                     dialog.dismiss();
+                    new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 }
             }
         });
@@ -3646,6 +3647,7 @@ public class HomeActivity extends AppCompatActivity
                                             PlayListFragment.vpAdapter.notifyItemRemoved(position);
                                         }
                                         pAdapter.notifyItemRemoved(position);
+                                        new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                                     } else if (item.getTitle().equals("Rename")) {
                                         renamePlaylistNumber = position;
                                         renamePlaylistDialog(allPlaylists.getPlaylists().get(position).getPlaylistName());
@@ -3938,15 +3940,8 @@ public class HomeActivity extends AppCompatActivity
         @Override
         protected Void doInBackground(Void... params) {
 
-            String json4 = gson.toJson(recentlyPlayed);
-            prefsEditor.putString("recentlyPlayed", json4);
-            String json5 = gson.toJson(favouriteTracks);
-            prefsEditor.putString("favouriteTracks", json5);
             String json6 = gson.toJson(queueCurrentIndex);
             prefsEditor.putString("queueCurrentIndex", json6);
-            isReloaded = true;
-            String json7 = gson.toJson(isReloaded);
-            prefsEditor.putString("isReloaded", json7);
 
             prefsEditor.commit();
 
@@ -3954,7 +3949,33 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    public class SaveSettings extends AsyncTask<Void, Void, Void> {
+    public static class SaveRecents extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            String json4 = gson.toJson(recentlyPlayed);
+            prefsEditor.putString("recentlyPlayed", json4);
+
+            prefsEditor.commit();
+
+            return null;
+        }
+    }
+
+    public static class SaveFavourites extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            String json5 = gson.toJson(favouriteTracks);
+            prefsEditor.putString("favouriteTracks", json5);
+
+            prefsEditor.commit();
+
+            return null;
+        }
+    }
+
+    public static class SaveSettings extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -3976,7 +3997,7 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    public class SaveQueue extends AsyncTask<Void, Void, Void> {
+    public static class SaveQueue extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -3987,7 +4008,7 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    public class SavePlaylists extends AsyncTask<Void, Void, Void> {
+    public static class SavePlaylists extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {

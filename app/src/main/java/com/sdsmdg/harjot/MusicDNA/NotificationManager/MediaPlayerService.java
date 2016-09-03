@@ -389,6 +389,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
     public void onTaskRemoved(Intent rootIntent) {
         super.onTaskRemoved(rootIntent);
         try {
+            notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.cancel(1);
         } catch (Exception e) {
 

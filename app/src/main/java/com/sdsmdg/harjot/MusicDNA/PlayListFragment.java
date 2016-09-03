@@ -2,6 +2,7 @@ package com.sdsmdg.harjot.MusicDNA;
 
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -15,8 +16,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.Models.Playlist;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,7 +27,7 @@ public class PlayListFragment extends Fragment {
 
     LinearLayout noPlaylistContent;
 
-    onPLaylistTouchedListener mCallback;
+    onPlaylistTouchedListener mCallback;
     onPlaylistMenuPlayAllListener mCallback2;
 
     public PlayListFragment() {
@@ -39,7 +38,7 @@ public class PlayListFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            mCallback = (onPLaylistTouchedListener) context;
+            mCallback = (onPlaylistTouchedListener) context;
             mCallback2 = (onPlaylistMenuPlayAllListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
@@ -47,7 +46,7 @@ public class PlayListFragment extends Fragment {
         }
     }
 
-    public interface onPLaylistTouchedListener {
+    public interface onPlaylistTouchedListener {
         public void onPlaylistTouched(int pos);
     }
 
@@ -117,6 +116,7 @@ public class PlayListFragment extends Fragment {
                             if (PlayListFragment.vpAdapter != null) {
                                 PlayListFragment.vpAdapter.notifyItemRemoved(position);
                             }
+                            new HomeActivity.SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                             HomeActivity.pAdapter.notifyItemRemoved(position);
                         } else if (item.getTitle().equals("Rename")) {
                             HomeActivity.renamePlaylistNumber = position;

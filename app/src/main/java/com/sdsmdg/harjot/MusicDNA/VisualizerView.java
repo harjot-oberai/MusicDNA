@@ -88,7 +88,6 @@ public class VisualizerView extends View {
         invalidate();
     }
 
-    //  ***** DNA Visualizer using Fast Fourier transform (FFT) *****
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -101,16 +100,15 @@ public class VisualizerView extends View {
                 if (bmp != null)
                     canvas.drawBitmap(bmp, 0, 0, null);
                 for (int i = 0; i < pts.size(); i++) {
-                    try{
+                    try {
+                        canvas.drawCircle(pts.get(i).first, pts.get(i).second, ptPaint.get(i).first, mForePaint);
+                        pts.clear();
+                        ptPaint.clear();
                         mForePaint.setColor(ptPaint.get(i).second.first);
                         mForePaint.setAlpha(ptPaint.get(i).second.second);
-                    } catch (Exception e){
+                    } catch (Exception e) {
 
                     }
-                    canvas.drawCircle(pts.get(i).first, pts.get(i).second, ptPaint.get(i).first, mForePaint);
-//                    HomeActivity.cacheCanvas.drawCircle(pts.get(i).first, pts.get(i).second, ptPaint.get(i).first, mForePaint);
-                    pts.clear();
-                    ptPaint.clear();
                 }
                 canvas.drawBitmap(bmp, 0, 0, null);
             }

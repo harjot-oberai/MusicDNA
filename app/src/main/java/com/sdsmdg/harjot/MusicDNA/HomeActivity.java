@@ -2419,7 +2419,6 @@ public class HomeActivity extends AppCompatActivity
     protected void onPause() {
         super.onPause();
 
-        new SaveQueue().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         new SaveSettings().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         new SaveData().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 

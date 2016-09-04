@@ -21,6 +21,7 @@ import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -59,6 +60,9 @@ public class PlayerFragment extends Fragment {
     public static PresetReverb presetReverb;
 
     static boolean isPrepared = false;
+
+    private float x1, x2;
+    static final int MIN_DISTANCE = 200;
 
     View bufferingIndicator;
 
@@ -404,6 +408,7 @@ public class PlayerFragment extends Fragment {
                     isFav = true;
                     addToFavourite();
                 }
+                new HomeActivity.SaveFavourites().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
         });
 
@@ -451,6 +456,38 @@ public class PlayerFragment extends Fragment {
             }
         });
 
+        mVisualizerView.setOnTouchListener(
+                new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_DOWN:
+                                x1 = event.getX();
+                                break;
+                            case MotionEvent.ACTION_UP:
+                                x2 = event.getX();
+                                float deltaX = x2 - x1;
+
+                                if (Math.abs(deltaX) > MIN_DISTANCE) {
+                                    if (x2 > x1) {
+                                        mMediaPlayer.pause();
+                                        mCallback3.onPreviousTrack();
+                                        return false;
+                                    } else {
+                                        mMediaPlayer.pause();
+                                        HomeActivity.nextControllerClicked = true;
+                                        mCallback2.onComplete();
+                                        return false;
+                                    }
+                                } else {
+                                    return false;
+                                }
+                        }
+                        return false;
+                    }
+                }
+        );
+
         cpb = (CustomProgressBar) view.findViewById(R.id.customProgress);
 
         mMediaPlayer = new MediaPlayer();
@@ -476,6 +513,9 @@ public class PlayerFragment extends Fragment {
                 togglePlayPause();
                 bufferingIndicator.setVisibility(View.GONE);
                 equalizerIcon.setVisibility(View.VISIBLE);
+
+                new HomeActivity.SaveQueue().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                new HomeActivity.SaveRecents().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
             }
         });
@@ -622,6 +662,7 @@ public class PlayerFragment extends Fragment {
                                 seekBarContainer.setVisibility(View.VISIBLE);
                                 toggleContainer.setVisibility(View.VISIBLE);
                                 HomeActivity.spToolbar.setVisibility(View.VISIBLE);
+                                fullscreenExtraSpaceOccupier.getLayoutParams().height = 0;
                                 mCallback8.onFullScreen();
                             } else {
                                 HomeActivity.isFullScreenEnabled = true;
@@ -629,6 +670,7 @@ public class PlayerFragment extends Fragment {
                                 seekBarContainer.setVisibility(View.INVISIBLE);
                                 toggleContainer.setVisibility(View.INVISIBLE);
                                 HomeActivity.spToolbar.setVisibility(View.INVISIBLE);
+                                fullscreenExtraSpaceOccupier.getLayoutParams().height = HomeActivity.statusBarHeightinDp;
                                 mCallback8.onFullScreen();
                             }
                         } else if (item.getTitle().equals("Settings")) {

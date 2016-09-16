@@ -1,5 +1,6 @@
 package com.sdsmdg.harjot.MusicDNA;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,11 +20,13 @@ import java.util.List;
 public class ViewAllPlaylistsRecyclerAdapter extends RecyclerView.Adapter<ViewAllPlaylistsRecyclerAdapter.MyViewHolder> {
 
     List<Playlist> playlists;
+    Context ctx;
     ImageLoader imgLoader;
 
-    public ViewAllPlaylistsRecyclerAdapter(List<Playlist> playlists) {
+    public ViewAllPlaylistsRecyclerAdapter(List<Playlist> playlists, Context ctx) {
         this.playlists = playlists;
-        imgLoader = new ImageLoader(HomeActivity.ctx);
+        this.ctx = ctx;
+        imgLoader = new ImageLoader(ctx);
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

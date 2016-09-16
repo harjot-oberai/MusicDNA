@@ -16,6 +16,7 @@ import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.sdsmdg.harjot.MusicDNA.LocalMusicFragments.AlbumFragment;
 import com.sdsmdg.harjot.MusicDNA.LocalMusicFragments.ArtistFragment;
+import com.squareup.leakcanary.RefWatcher;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,6 +87,24 @@ public class FullLocalMusicFragment extends Fragment {
             return mFragmentTitleList.get(position);
         }
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
+    }
+
+    public Fragment getFragmentByPosition(int position) {
+        return adapter.getItem(position);
     }
 
 }

@@ -3,25 +3,36 @@ package com.sdsmdg.harjot.MusicDNA.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-
-import com.sdsmdg.harjot.MusicDNA.PlayerFragment;
+import android.media.MediaPlayer;
 
 /**
  * Created by Harjot on 29-Jun-16.
  */
 public class AudioPlayerBroadcastReceiver extends BroadcastReceiver {
 
+    public interface onCallbackListener {
+        public void onCallbackCalled(int i);
+        public void togglePLayPauseCallback();
+        public boolean getPauseClicked();
+        public void setPauseClicked(boolean bool);
+        public MediaPlayer getMediaPlayer();
+    }
+
+    onCallbackListener callback;
+
     @Override
     public void onReceive(Context context, Intent intent) {
+
+        callback = (onCallbackListener) context;
 
         String action = intent.getAction();
         if (action.equalsIgnoreCase("com.sdsmdg.harjot.MusicDNA.ACTION_PLAY_PAUSE")) {
             try {
-                if (!PlayerFragment.pauseClicked) {
-                    PlayerFragment.pauseClicked = true;
+                if (!callback.getPauseClicked()) {
+                    callback.setPauseClicked(true);
                 }
-                PlayerFragment.togglePlayPause();
-                PlayerFragment.mCallback6.onPrepared();
+                callback.togglePLayPauseCallback();
+                callback.onCallbackCalled(6);
             } catch (Exception e) {
 
             }
@@ -29,15 +40,15 @@ public class AudioPlayerBroadcastReceiver extends BroadcastReceiver {
         } else if (action.equalsIgnoreCase("com.sdsmdg.harjot.MusicDNA.ACTION_NEXT")) {
 
             try {
-                PlayerFragment.mMediaPlayer.stop();
-                PlayerFragment.mCallback2.onComplete();
+                callback.getMediaPlayer().stop();
+                callback.onCallbackCalled(2);
             } catch (Exception e) {
 
             }
         } else if (action.equalsIgnoreCase("com.sdsmdg.harjot.MusicDNA.ACTION_PREV")) {
             try {
-                PlayerFragment.mMediaPlayer.stop();
-                PlayerFragment.mCallback3.onPreviousTrack();
+                callback.getMediaPlayer().stop();
+                callback.onCallbackCalled(3);
             } catch (Exception e) {
 
             }

@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
+import com.squareup.leakcanary.RefWatcher;
 
 
 /**
@@ -32,6 +33,7 @@ public class FolderContentFragment extends Fragment {
 
     onFolderContentPlayAllListener mCallback;
     onFolderContentItemClickListener mCallback2;
+    folderContentAddToPlaylistListener mCallback3;
 
     public FolderContentFragment() {
         // Required empty public constructor
@@ -45,12 +47,17 @@ public class FolderContentFragment extends Fragment {
         void onFolderContentItemClick(int position);
     }
 
+    public interface folderContentAddToPlaylistListener {
+        public void addToPlaylist(UnifiedTrack ut);
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
             mCallback = (onFolderContentPlayAllListener) context;
             mCallback2 = (onFolderContentItemClickListener) context;
+            mCallback3 = (folderContentAddToPlaylistListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnHeadlineSelectedListener");
@@ -69,8 +76,8 @@ public class FolderContentFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         folderContentRecycler = (RecyclerView) view.findViewById(R.id.folder_content_recycler);
-        fContentAdapter = new LocalTrackListAdapter(HomeActivity.tempFolderContent);
-        LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(HomeActivity.ctx, LinearLayoutManager.VERTICAL, false);
+        fContentAdapter = new LocalTrackListAdapter(HomeActivity.tempFolderContent, getContext());
+        LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         folderContentRecycler.setLayoutManager(mLayoutManager2);
         folderContentRecycler.setItemAnimator(new DefaultItemAnimator());
         folderContentRecycler.setAdapter(fContentAdapter);
@@ -103,13 +110,13 @@ public class FolderContentFragment extends Fragment {
 
             @Override
             boolean onLongClick(RecyclerView parent, View view, final int position, long id) {
-                PopupMenu popup = new PopupMenu(HomeActivity.ctx, view);
+                PopupMenu popup = new PopupMenu(getContext(), view);
                 popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
 
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
                         if (item.getTitle().equals("Add to Playlist")) {
-                            HomeActivity.showAddToPlaylistDialog(new UnifiedTrack(true, HomeActivity.tempMusicFolder.getLocalTracks().get(position), null));
+                            mCallback3.addToPlaylist(new UnifiedTrack(true, HomeActivity.tempMusicFolder.getLocalTracks().get(position), null));
                             HomeActivity.pAdapter.notifyDataSetChanged();
                         }
                         if (item.getTitle().equals("Add to Queue")) {
@@ -192,5 +199,19 @@ public class FolderContentFragment extends Fragment {
             }
         });
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
     }
 }

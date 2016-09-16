@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.sdsmdg.harjot.MusicDNA.Helpers.SimpleItemTouchHelperCallback;
+import com.squareup.leakcanary.RefWatcher;
 
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
@@ -30,7 +31,7 @@ import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDragStartListener {
 
     RecyclerView queueRecycler;
-    static QueueRecyclerAdapter qAdapter;
+    QueueRecyclerAdapter qAdapter;
 
     ItemTouchHelper mItemTouchHelper;
 
@@ -39,7 +40,7 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
     onQueueItemClickedListener mCallback;
     onQueueSaveListener mCallback2;
 
-    static ShowcaseView showCase;
+    ShowcaseView showCase;
 
     public interface onQueueItemClickedListener {
         public void onQueueItemClicked(int position);
@@ -77,8 +78,8 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
         super.onViewCreated(view, savedInstanceState);
         queueRecycler = (RecyclerView) view.findViewById(R.id.queueRecycler);
 
-        qAdapter = new QueueRecyclerAdapter(HomeActivity.queue.getQueue(), HomeActivity.ctx, this);
-        LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(HomeActivity.ctx, LinearLayoutManager.VERTICAL, false);
+        qAdapter = new QueueRecyclerAdapter(HomeActivity.queue.getQueue(), getContext(), this);
+        LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         queueRecycler.setLayoutManager(mLayoutManager2);
         queueRecycler.setItemAnimator(new DefaultItemAnimator());
         queueRecycler.setAdapter(qAdapter);
@@ -126,6 +127,7 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
                         " Use handle to reorder the Queue and swipe the song to remove from queue")
                 .build();
         showCase.setButtonText("Next");
+        showCase.setButtonPosition(HomeActivity.lps);
         showCase.overrideButtonClick(new View.OnClickListener() {
             int count1 = 0;
 
@@ -138,7 +140,7 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
                         lps.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                         lps.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
                         int margin = ((Number) (getResources().getDisplayMetrics().density * 12)).intValue();
-                        lps.setMargins(margin, margin, margin, margin);
+                        lps.setMargins(margin, margin, margin, 5 + HomeActivity.navBarHeightSizeinDp);
                         showCase.setButtonPosition(lps);
                         showCase.setTarget(new ViewTarget(saveQueue.getId(), getActivity()));
                         showCase.setContentTitle("Save Queue");
@@ -160,4 +162,36 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
         mItemTouchHelper.startDrag(viewHolder);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
+    }
+
+    public boolean isShowcaseVisible(){
+        return (showCase != null && showCase.isShowing());
+    }
+
+    public void hideShowcase(){
+        showCase.hide();
+    }
+
+    public void updateQueueAdapter(){
+        if (qAdapter != null)
+            qAdapter.notifyDataSetChanged();
+    }
+
+    public void notifyAdapterItemRemoved(int i){
+        if(qAdapter!=null){
+            qAdapter.notifyItemRemoved(i);
+        }
+    }
 }

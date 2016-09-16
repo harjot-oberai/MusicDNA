@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.squareup.leakcanary.RefWatcher;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,8 +56,8 @@ public class FolderFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         allFoldersRecycler = (RecyclerView) view.findViewById(R.id.all_folders_recycler);
-        mfAdapter = new FolderRecyclerAdapter(HomeActivity.allMusicFolders.getMusicFolders());
-        LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(HomeActivity.ctx, LinearLayoutManager.VERTICAL, false);
+        mfAdapter = new FolderRecyclerAdapter(HomeActivity.allMusicFolders.getMusicFolders() , getContext());
+        LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         allFoldersRecycler.setLayoutManager(mLayoutManager2);
         allFoldersRecycler.setItemAnimator(new DefaultItemAnimator());
         allFoldersRecycler.setAdapter(mfAdapter);
@@ -78,5 +80,19 @@ public class FolderFragment extends Fragment {
             }
         });
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
     }
 }

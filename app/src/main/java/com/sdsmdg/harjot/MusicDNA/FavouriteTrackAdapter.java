@@ -1,5 +1,6 @@
 package com.sdsmdg.harjot.MusicDNA;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
@@ -26,7 +27,8 @@ import java.util.List;
 public class FavouriteTrackAdapter extends RecyclerView.Adapter<FavouriteTrackAdapter.MyViewHolder> implements ItemTouchHelperAdapter {
 
     private List<UnifiedTrack> favouriteList;
-    ImageLoader imgLoader;
+    private Context ctx;
+    private ImageLoader imgLoader;
 
     public interface OnDragStartListener {
         void onDragStarted(RecyclerView.ViewHolder viewHolder);
@@ -34,10 +36,11 @@ public class FavouriteTrackAdapter extends RecyclerView.Adapter<FavouriteTrackAd
 
     private final OnDragStartListener mDragStartListener;
 
-    public FavouriteTrackAdapter(List<UnifiedTrack> favouriteList, OnDragStartListener mDragStartListener) {
+    public FavouriteTrackAdapter(List<UnifiedTrack> favouriteList, OnDragStartListener mDragStartListener ,Context ctx) {
         this.mDragStartListener = mDragStartListener;
         this.favouriteList = favouriteList;
-        imgLoader = new ImageLoader(HomeActivity.ctx);
+        this.ctx = ctx;
+        imgLoader = new ImageLoader(ctx);
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder
@@ -86,7 +89,7 @@ public class FavouriteTrackAdapter extends RecyclerView.Adapter<FavouriteTrackAd
             holder.artist.setText(lt.getArtist());
         } else {
             Track t = ut.getStreamTrack();
-            Picasso.with(HomeActivity.ctx)
+            Picasso.with(ctx)
                     .load(t.getArtworkURL())
                     .resize(100, 100)
                     .error(R.drawable.ic_default)

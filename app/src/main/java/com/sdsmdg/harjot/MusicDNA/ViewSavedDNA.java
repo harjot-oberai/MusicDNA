@@ -26,6 +26,7 @@ import android.widget.TextView;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.sdsmdg.harjot.MusicDNA.Models.SavedDNA;
+import com.squareup.leakcanary.RefWatcher;
 
 import java.nio.ByteBuffer;
 
@@ -38,7 +39,7 @@ public class ViewSavedDNA extends Fragment {
     RecyclerView viewDnaRecycler;
     ViewSavedDnaRecyclerAdapter vdAdapter;
 
-    static VisualizerView2 mVisualizerView2;
+    VisualizerView2 mVisualizerView2;
 
     ImageView shareIcon, saveToStorageIcon;
 
@@ -46,9 +47,9 @@ public class ViewSavedDNA extends Fragment {
 
     onShareListener mCallback;
 
-    static ShowcaseView showCase;
+    ShowcaseView showCase;
 
-    static int selectedDNA = 0;
+    int selectedDNA = 0;
 
     public ViewSavedDNA() {
         // Required empty public constructor
@@ -100,8 +101,8 @@ public class ViewSavedDNA extends Fragment {
             viewDnaRecycler.setVisibility(View.VISIBLE);
         }
 
-        vdAdapter = new ViewSavedDnaRecyclerAdapter(HomeActivity.savedDNAs.getSavedDNAs());
-        LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(HomeActivity.ctx, LinearLayoutManager.HORIZONTAL, false);
+        vdAdapter = new ViewSavedDnaRecyclerAdapter(HomeActivity.savedDNAs.getSavedDNAs(), getContext(), this);
+        LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         viewDnaRecycler.setLayoutManager(mLayoutManager2);
         viewDnaRecycler.setItemAnimator(new DefaultItemAnimator());
         viewDnaRecycler.setAdapter(vdAdapter);
@@ -143,7 +144,7 @@ public class ViewSavedDNA extends Fragment {
 
             @Override
             boolean onLongClick(RecyclerView parent, View view, final int position, long id) {
-                PopupMenu popup = new PopupMenu(HomeActivity.ctx, view);
+                PopupMenu popup = new PopupMenu(getContext(), view);
                 popup.getMenuInflater().inflate(R.menu.save_dna_popup, popup.getMenu());
 
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -214,6 +215,7 @@ public class ViewSavedDNA extends Fragment {
                     .setContentText("View all your saved DNAs here")
                     .build();
             showCase.setButtonText("Next");
+            showCase.setButtonPosition(HomeActivity.lps);
             showCase.overrideButtonClick(new View.OnClickListener() {
                 int count1 = 0;
 
@@ -225,12 +227,14 @@ public class ViewSavedDNA extends Fragment {
                             showCase.setTarget(new ViewTarget(shareIcon.getId(), getActivity()));
                             showCase.setContentTitle("Share DNA");
                             showCase.setContentText("Share the DNA as an image with your friends");
+                            showCase.setButtonPosition(HomeActivity.lps);
                             showCase.setButtonText("Next");
                             break;
                         case 2:
                             showCase.setTarget(new ViewTarget(saveToStorageIcon.getId(), getActivity()));
                             showCase.setContentTitle("Save DNA");
                             showCase.setContentText("Save the DNA as an image to your internal storage");
+                            showCase.setButtonPosition(HomeActivity.lps);
                             showCase.setButtonText("Done");
                             break;
                         case 3:
@@ -245,7 +249,7 @@ public class ViewSavedDNA extends Fragment {
 
     public void showDialog(int type) {
         if (type == 0) {
-            final Dialog dialog = new Dialog(HomeActivity.ctx);
+            final Dialog dialog = new Dialog(getContext());
             dialog.setContentView(R.layout.save_image_dialog);
             dialog.setTitle("Save as Image");
 
@@ -273,7 +277,7 @@ public class ViewSavedDNA extends Fragment {
 
             dialog.show();
         } else if (type == 1) {
-            final Dialog dialog = new Dialog(HomeActivity.ctx);
+            final Dialog dialog = new Dialog(getContext());
             dialog.setContentView(R.layout.save_image_dialog);
             dialog.setTitle("Share as Image");
 
@@ -301,6 +305,36 @@ public class ViewSavedDNA extends Fragment {
             });
             dialog.show();
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
+    }
+
+    public boolean isShowcaseVisible() {
+        return (showCase != null && showCase.isShowing());
+    }
+
+    public void hideShowcase() {
+        showCase.hide();
+    }
+
+    public void setVisualizerVisibility(int visibility) {
+        mVisualizerView2.setVisibility(visibility);
+    }
+
+    public int getSelectedDNAnumber(){
+        return selectedDNA;
     }
 
 }

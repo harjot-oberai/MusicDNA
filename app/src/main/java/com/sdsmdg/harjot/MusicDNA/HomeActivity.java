@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -49,6 +50,7 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -90,6 +92,7 @@ import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.NotificationManager.Constants;
 import com.sdsmdg.harjot.MusicDNA.NotificationManager.MediaPlayerService;
 import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
+import com.squareup.leakcanary.RefWatcher;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -130,12 +133,13 @@ public class HomeActivity extends AppCompatActivity
         PlayerFragment.onPlayPauseListener,
         PlayerFragment.fullScreenListener,
         PlayerFragment.onSettingsClickedListener,
-        PlayerFragment.resetNotificationListener,
         PlayListFragment.onPlaylistTouchedListener,
         PlayListFragment.onPlaylistMenuPlayAllListener,
+        PlayListFragment.onPLaylistRenameListener,
         FolderFragment.onFolderClickedListener,
         FolderContentFragment.onFolderContentPlayAllListener,
         FolderContentFragment.onFolderContentItemClickListener,
+        FolderContentFragment.folderContentAddToPlaylistListener,
         ViewSavedDNA.onShareListener,
         AlbumFragment.onAlbumClickListener,
         ViewAlbumFragment.onAlbumSongClickListener,
@@ -222,7 +226,7 @@ public class HomeActivity extends AppCompatActivity
 
     public static boolean isSaveDNAEnabled = false;
 
-    public static Context ctx;
+    public Context ctx;
 
     static boolean queueCall = false;
 
@@ -299,7 +303,7 @@ public class HomeActivity extends AppCompatActivity
 
     View playerContainer;
 
-    static android.app.FragmentManager fragMan;
+    android.support.v4.app.FragmentManager fragMan;
 
     public static boolean isPlayerVisible = false;
     public static boolean isLocalVisible = false;
@@ -339,6 +343,9 @@ public class HomeActivity extends AppCompatActivity
     static int y = 0;
 
     static int statusBarHeightinDp;
+    static int navBarHeightSizeinDp;
+    public static boolean hasSoftNavbar = false;
+    static RelativeLayout.LayoutParams lps;
 
     public void onTrackSelected(int position) {
 
@@ -362,18 +369,18 @@ public class HomeActivity extends AppCompatActivity
             hideTabs();
             isPlayerVisible = true;
 
-            PlayerFragment frag = (PlayerFragment) getFragmentManager().findFragmentByTag("player");
-            android.app.FragmentManager fm = getFragmentManager();
+            PlayerFragment frag = (PlayerFragment) getSupportFragmentManager().findFragmentByTag("player");
+            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             PlayerFragment newFragment = new PlayerFragment();
             if (frag == null) {
-                PlayerFragment.mCallback = this;
-                PlayerFragment.mCallback2 = this;
-                PlayerFragment.mCallback3 = this;
-                PlayerFragment.mCallback4 = this;
-                PlayerFragment.mCallback5 = this;
-                PlayerFragment.mCallback6 = this;
-                PlayerFragment.mCallback8 = this;
-                PlayerFragment.mCallback9 = this;
+//                PlayerFragment.mCallback = this;
+//                PlayerFragment.mCallback2 = this;
+//                PlayerFragment.mCallback3 = this;
+//                PlayerFragment.mCallback4 = this;
+//                PlayerFragment.mCallback5 = this;
+//                PlayerFragment.mCallback6 = this;
+//                PlayerFragment.mCallback8 = this;
+//                PlayerFragment.mCallback9 = this;
                 if (Build.VERSION.SDK_INT < 21)
                     PlayerFragment.mCallback7 = this;
                 int flag = 0;
@@ -389,10 +396,10 @@ public class HomeActivity extends AppCompatActivity
                     isFavourite = false;
                 }
                 fm.beginTransaction()
-                        .setCustomAnimations(R.animator.slide_up,
-                                R.animator.slide_down,
-                                R.animator.slide_up,
-                                R.animator.slide_down)
+                        .setCustomAnimations(R.anim.slide_up,
+                                R.anim.slide_down,
+                                R.anim.slide_up,
+                                R.anim.slide_down)
                         .add(R.id.player_frag_container, newFragment, "player")
                         .show(newFragment)
                         .addToBackStack(null)
@@ -422,7 +429,7 @@ public class HomeActivity extends AppCompatActivity
             PlayerFragment.track = selectedTrack;
         } else {
 
-            PlayerFragment frag = (PlayerFragment) getFragmentManager().findFragmentByTag("player");
+            PlayerFragment frag = (PlayerFragment) getSupportFragmentManager().findFragmentByTag("player");
             PlayerFragment.localIsPlaying = false;
             PlayerFragment.track = selectedTrack;
             int flag = 0;
@@ -440,8 +447,10 @@ public class HomeActivity extends AppCompatActivity
             frag.refresh();
         }
 
-        if (QueueFragment.qAdapter != null)
-            QueueFragment.qAdapter.notifyDataSetChanged();
+        QueueFragment qFrag = (QueueFragment) fragMan.findFragmentByTag("queue");
+        if (qFrag != null) {
+            qFrag.updateQueueAdapter();
+        }
 
         UnifiedTrack track = new UnifiedTrack(false, null, PlayerFragment.track);
         for (int i = 0; i < recentlyPlayed.getRecentlyPlayed().size(); i++) {
@@ -483,18 +492,18 @@ public class HomeActivity extends AppCompatActivity
             hideTabs();
             isPlayerVisible = true;
 
-            PlayerFragment frag = (PlayerFragment) getFragmentManager().findFragmentByTag("player");
-            android.app.FragmentManager fm = getFragmentManager();
+            PlayerFragment frag = (PlayerFragment) getSupportFragmentManager().findFragmentByTag("player");
+            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             PlayerFragment newFragment = new PlayerFragment();
             if (frag == null) {
-                PlayerFragment.mCallback = this;
-                PlayerFragment.mCallback2 = this;
-                PlayerFragment.mCallback3 = this;
-                PlayerFragment.mCallback4 = this;
-                PlayerFragment.mCallback5 = this;
-                PlayerFragment.mCallback6 = this;
-                PlayerFragment.mCallback8 = this;
-                PlayerFragment.mCallback9 = this;
+//                PlayerFragment.mCallback = this;
+//                PlayerFragment.mCallback2 = this;
+//                PlayerFragment.mCallback3 = this;
+//                PlayerFragment.mCallback4 = this;
+//                PlayerFragment.mCallback5 = this;
+//                PlayerFragment.mCallback6 = this;
+//                PlayerFragment.mCallback8 = this;
+//                PlayerFragment.mCallback9 = this;
                 if (Build.VERSION.SDK_INT < 21)
                     PlayerFragment.mCallback7 = this;
                 int flag = 0;
@@ -510,10 +519,10 @@ public class HomeActivity extends AppCompatActivity
                     isFavourite = false;
                 }
                 fm.beginTransaction()
-                        .setCustomAnimations(R.animator.slide_up,
-                                R.animator.slide_down,
-                                R.animator.slide_up,
-                                R.animator.slide_down)
+                        .setCustomAnimations(R.anim.slide_up,
+                                R.anim.slide_down,
+                                R.anim.slide_up,
+                                R.anim.slide_down)
                         .add(R.id.player_frag_container, newFragment, "player")
                         .show(newFragment)
                         .commitAllowingStateLoss();
@@ -543,7 +552,7 @@ public class HomeActivity extends AppCompatActivity
             PlayerFragment.localTrack = localSelectedTrack;
 
         } else {
-            PlayerFragment frag = (PlayerFragment) getFragmentManager().findFragmentByTag("player");
+            PlayerFragment frag = (PlayerFragment) getSupportFragmentManager().findFragmentByTag("player");
             PlayerFragment.localIsPlaying = true;
             PlayerFragment.localTrack = localSelectedTrack;
 
@@ -563,8 +572,10 @@ public class HomeActivity extends AppCompatActivity
             frag.refresh();
         }
 
-        if (QueueFragment.qAdapter != null)
-            QueueFragment.qAdapter.notifyDataSetChanged();
+        QueueFragment qFrag = (QueueFragment) fragMan.findFragmentByTag("queue");
+        if (qFrag != null) {
+            qFrag.updateQueueAdapter();
+        }
 
         UnifiedTrack track = new UnifiedTrack(true, PlayerFragment.localTrack, null);
         for (int i = 0; i < recentlyPlayed.getRecentlyPlayed().size(); i++) {
@@ -582,13 +593,6 @@ public class HomeActivity extends AppCompatActivity
             continuePlayingList.add(recentlyPlayed.getRecentlyPlayed().get(i));
         }
         rAdapter.notifyDataSetChanged();
-//        final Handler handler = new Handler();
-//        handler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//            }
-//        }, 320);
 
     }
 
@@ -616,9 +620,17 @@ public class HomeActivity extends AppCompatActivity
         imgLoader = new ImageLoader(this);
         ctx = this;
 
+        hasSoftNavbar = hasNavBar(getResources());
         statusBarHeightinDp = getStatusBarHeight();
+        navBarHeightSizeinDp = hasSoftNavbar ? getNavBarHeight() : 0;
 
-        fragMan = getFragmentManager();
+        lps = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lps.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        lps.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        int margin = ((Number) (getResources().getDisplayMetrics().density * 12)).intValue();
+        lps.setMargins(margin, margin, margin, navBarHeightSizeinDp + 5);
+
+        fragMan = getSupportFragmentManager();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         spToolbar = (Toolbar) findViewById(R.id.smallPlayer_AB);
@@ -647,6 +659,7 @@ public class HomeActivity extends AppCompatActivity
         equalizerSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                EqualizerFragment eqFrag = (EqualizerFragment) fragMan.findFragmentByTag("equalizer");
                 if (isChecked) {
                     isEqualizerEnabled = true;
                     int pos = presetPos;
@@ -661,13 +674,15 @@ public class HomeActivity extends AppCompatActivity
                         PlayerFragment.bassBoost.setStrength(bassStrength);
                         PlayerFragment.presetReverb.setPreset(reverbPreset);
                     }
-                    EqualizerFragment.equalizerBlocker.setVisibility(View.GONE);
+                    if (eqFrag != null)
+                        eqFrag.setBlockerVisibility(View.GONE);
                 } else {
                     isEqualizerEnabled = false;
                     PlayerFragment.mEqualizer.usePreset((short) 0);
                     PlayerFragment.bassBoost.setStrength((short) (((float) 1000 / 19) * (1)));
                     PlayerFragment.presetReverb.setPreset((short) 0);
-                    EqualizerFragment.equalizerBlocker.setVisibility(View.VISIBLE);
+                    if (eqFrag != null)
+                        eqFrag.setBlockerVisibility(View.VISIBLE);
                 }
             }
         });
@@ -730,7 +745,6 @@ public class HomeActivity extends AppCompatActivity
         gson = new Gson();
 
         appBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
-        VisualizerView.act = this;
         main = this;
 
         WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
@@ -799,7 +813,7 @@ public class HomeActivity extends AppCompatActivity
                 if (queue.getQueue().size() > 0) {
                     Random r = new Random();
                     shuffleEnabled = true;
-                    int tmp = r.nextInt(HomeActivity.queue.getQueue().size());
+                    int tmp = r.nextInt(queue.getQueue().size());
                     queueCurrentIndex = tmp;
                     LocalTrack track = localTrackList.get(tmp);
                     localSelectedTrack = track;
@@ -890,6 +904,7 @@ public class HomeActivity extends AppCompatActivity
                         "(Press Next to continue / Press back to Hide)")
                 .build();
         showCase.setButtonText("Next");
+        showCase.setButtonPosition(lps);
         showCase.overrideButtonClick(new View.OnClickListener() {
             int count1 = 0;
 
@@ -898,15 +913,17 @@ public class HomeActivity extends AppCompatActivity
                 count1++;
                 switch (count1) {
                     case 1:
-                        showCase.setTarget(new ViewTarget(R.id.localBanner, HomeActivity.this));
+                        showCase.setTarget(new ViewTarget(R.id.localBanner, (Activity) ctx));
                         showCase.setContentTitle("Local Songs");
                         showCase.setContentText("See all songs available locally, classified on basis of Artist and Album");
+                        showCase.setButtonPosition(lps);
                         showCase.setButtonText("Next");
                         break;
                     case 2:
-                        showCase.setTarget(new ViewTarget(searchView.getId(), HomeActivity.this));
+                        showCase.setTarget(new ViewTarget(searchView.getId(), (Activity) ctx));
                         showCase.setContentTitle("Search");
                         showCase.setContentText("Search for songs from local library and SoundCloud™");
+                        showCase.setButtonPosition(lps);
                         showCase.setButtonText("Done");
                         break;
                     case 3:
@@ -1081,27 +1098,39 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
+
+        PlayerFragment plFrag = (PlayerFragment) fragMan.findFragmentByTag("player");
+        FullLocalMusicFragment flmFrag = (FullLocalMusicFragment) fragMan.findFragmentByTag("local");
+        LocalMusicFragment lFrag = null;
+        if (flmFrag != null) {
+            lFrag = (LocalMusicFragment) flmFrag.getFragmentByPosition(0);
+        }
+        QueueFragment qFrag = (QueueFragment) fragMan.findFragmentByTag("queue");
+        EqualizerFragment eqFrag = (EqualizerFragment) fragMan.findFragmentByTag("equalizer");
+        ViewSavedDNA vsdFrag = (ViewSavedDNA) fragMan.findFragmentByTag("allSavedDNAs");
+
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else if (showCase != null && showCase.isShowing()) {
             showCase.hide();
-        } else if (PlayerFragment.showCase != null && PlayerFragment.showCase.isShowing()) {
-            PlayerFragment.showCase.hide();
-        } else if (LocalMusicFragment.showCase != null && LocalMusicFragment.showCase.isShowing()) {
-            LocalMusicFragment.showCase.hide();
-        } else if (QueueFragment.showCase != null && QueueFragment.showCase.isShowing()) {
-            QueueFragment.showCase.hide();
-        } else if (EqualizerFragment.showCase != null && EqualizerFragment.showCase.isShowing()) {
-            EqualizerFragment.showCase.hide();
-        } else if (ViewSavedDNA.showCase != null && ViewSavedDNA.showCase.isShowing()) {
-            ViewSavedDNA.showCase.hide();
+        } else if (plFrag != null && plFrag.isShowcaseVisible()) {
+            plFrag.hideShowcase();
+        } else if (lFrag != null && lFrag.isShowcaseVisible()) {
+            lFrag.hideShowcase();
+        } else if (qFrag != null && qFrag.isShowcaseVisible()) {
+            qFrag.hideShowcase();
+        } else if (eqFrag != null && eqFrag.isShowcaseVisible()) {
+            eqFrag.hideShowcase();
+        } else if (vsdFrag != null && vsdFrag.isShowcaseVisible()) {
+            vsdFrag.hideShowcase();
         } else if (isFullScreenEnabled) {
-            HomeActivity.isFullScreenEnabled = false;
+            isFullScreenEnabled = false;
             PlayerFragment.bottomContainer.setVisibility(View.VISIBLE);
             PlayerFragment.seekBarContainer.setVisibility(View.VISIBLE);
             PlayerFragment.toggleContainer.setVisibility(View.VISIBLE);
-            HomeActivity.spToolbar.setVisibility(View.VISIBLE);
+            spToolbar.setVisibility(View.VISIBLE);
             onFullScreen();
         } else if (!searchView.isIconified()) {
             searchView.setQuery("", true);
@@ -1253,8 +1282,13 @@ public class HomeActivity extends AppCompatActivity
             hidePlayer();
         }
 
-        if (LocalMusicFragment.shuffleFab != null)
-            LocalMusicFragment.shuffleFab.setVisibility(View.INVISIBLE);
+        FullLocalMusicFragment flmFrag = (FullLocalMusicFragment) fragMan.findFragmentByTag("local");
+        LocalMusicFragment lFrag = null;
+        if (flmFrag != null)
+            lFrag = (LocalMusicFragment) flmFrag.getFragmentByPosition(0);
+
+        if (lFrag != null)
+            lFrag.hideShuffleFab();
 
         /*Update the Local List*/
 
@@ -1278,14 +1312,14 @@ public class HomeActivity extends AppCompatActivity
         }
 
         (localListView.getAdapter()).notifyDataSetChanged();
-        if ((LocalMusicFragment.lv) != null)
-            (LocalMusicFragment.lv.getAdapter()).notifyDataSetChanged();
+        if (lFrag != null)
+            lFrag.updateAdapter();
         if (query.equals("")) {
             localRecyclerContainer.setVisibility(View.GONE);
         }
         if (query.equals("") && isLocalVisible) {
-            if (LocalMusicFragment.shuffleFab != null)
-                LocalMusicFragment.shuffleFab.setVisibility(View.VISIBLE);
+            if (lFrag != null)
+                lFrag.showShuffleFab();
         }
 
     }
@@ -1300,10 +1334,13 @@ public class HomeActivity extends AppCompatActivity
                 finalAlbums.add(album);
             }
         }
-        if (AlbumFragment.rv != null) {
-            AlbumFragment.rv.getAdapter().notifyDataSetChanged();
+        FullLocalMusicFragment flmFrag = (FullLocalMusicFragment) fragMan.findFragmentByTag("local");
+        if (flmFrag != null) {
+            AlbumFragment aFrag = (AlbumFragment) flmFrag.getFragmentByPosition(1);
+            if (aFrag != null) {
+                aFrag.updateAdapter();
+            }
         }
-
     }
 
     private void updateArtistList(String query) {
@@ -1316,8 +1353,12 @@ public class HomeActivity extends AppCompatActivity
                 finalArtists.add(artist);
             }
         }
-        if (ArtistFragment.rv != null) {
-            ArtistFragment.rv.getAdapter().notifyDataSetChanged();
+        FullLocalMusicFragment flmFrag = (FullLocalMusicFragment) fragMan.findFragmentByTag("local");
+        if (flmFrag != null) {
+            ArtistFragment aFrag = (ArtistFragment) flmFrag.getFragmentByPosition(2);
+            if (aFrag != null) {
+                aFrag.updateAdapter();
+            }
         }
     }
 
@@ -1411,7 +1452,8 @@ public class HomeActivity extends AppCompatActivity
                 });
 
 
-        spToolbar.setVisibility(View.VISIBLE);
+        if (!isFullScreenEnabled)
+            spToolbar.setVisibility(View.VISIBLE);
         spToolbar.setAlpha(0.0f);
         spToolbar.setY(spToolbar.getHeight());
         spToolbar.animate()
@@ -1432,6 +1474,11 @@ public class HomeActivity extends AppCompatActivity
                         spToolbar.setVisibility(View.GONE);
                     }
                 });
+
+        if(isFullScreenEnabled){
+            toolbar.setVisibility(View.INVISIBLE);
+            fragmentToolbar.setVisibility(View.INVISIBLE);
+        }
 
         toolbar.setAlpha(0.0f);
         toolbar.animate()
@@ -1487,7 +1534,9 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void run() {
                 if (isAllSavedDnaVisisble) {
-                    ViewSavedDNA.mVisualizerView2.setVisibility(View.VISIBLE);
+                    ViewSavedDNA vsdFrag = (ViewSavedDNA) fragMan.findFragmentByTag("allSavedDNAs");
+                    if (vsdFrag != null)
+                        vsdFrag.setVisualizerVisibility(View.VISIBLE);
                 }
             }
         }, 350);
@@ -1548,9 +1597,6 @@ public class HomeActivity extends AppCompatActivity
 
     public void showPlayer() {
 
-        if (isAllSavedDnaVisisble) {
-            ViewSavedDNA.mVisualizerView2.setVisibility(View.INVISIBLE);
-        }
         if (Build.VERSION.SDK_INT >= 21) {
             Window window = ((Activity) (ctx)).getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -1944,6 +1990,8 @@ public class HomeActivity extends AppCompatActivity
             new SaveTheDNAs().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
 
+        QueueFragment qFrag = (QueueFragment) fragMan.findFragmentByTag("queue");
+
         queueCall = true;
         if (repeatOnceEnabled && !nextControllerClicked) {
             PlayerFragment.progressBar.setProgress(0);
@@ -1960,8 +2008,9 @@ public class HomeActivity extends AppCompatActivity
             if (!shuffleEnabled) {
                 if (queueCurrentIndex < queue.getQueue().size() - 1) {
                     queueCurrentIndex++;
-                    if (QueueFragment.qAdapter != null)
-                        QueueFragment.qAdapter.notifyDataSetChanged();
+                    if (qFrag != null) {
+                        qFrag.updateQueueAdapter();
+                    }
                     if (queue.getQueue().get(queueCurrentIndex).getType()) {
                         localSelectedTrack = queue.getQueue().get(queueCurrentIndex).getLocalTrack();
                         streamSelected = false;
@@ -1976,8 +2025,9 @@ public class HomeActivity extends AppCompatActivity
                 } else {
                     if (repeatEnabled) {
                         queueCurrentIndex = 0;
-                        if (QueueFragment.qAdapter != null)
-                            QueueFragment.qAdapter.notifyDataSetChanged();
+                        if (qFrag != null) {
+                            qFrag.updateQueueAdapter();
+                        }
                         onQueueItemClicked(0);
                     } else {
                         if (!hasQueueEnded) {
@@ -1986,8 +2036,8 @@ public class HomeActivity extends AppCompatActivity
                         } else if (queue.getQueue().size() > 0) {
                             hasQueueEnded = false;
                             queueCurrentIndex = 0;
-                            if (QueueFragment.qAdapter != null) {
-                                QueueFragment.qAdapter.notifyDataSetChanged();
+                            if (qFrag != null) {
+                                qFrag.updateQueueAdapter();
                             }
                             onQueueItemClicked(0);
                         }
@@ -2007,8 +2057,9 @@ public class HomeActivity extends AppCompatActivity
                     }
                 }
                 queueCurrentIndex = x;
-                if (QueueFragment.qAdapter != null)
-                    QueueFragment.qAdapter.notifyDataSetChanged();
+                if (qFrag != null) {
+                    qFrag.updateQueueAdapter();
+                }
                 if (queue.getQueue().get(queueCurrentIndex).getType()) {
                     localSelectedTrack = queue.getQueue().get(queueCurrentIndex).getLocalTrack();
                     streamSelected = false;
@@ -2028,6 +2079,8 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onPreviousTrack() {
 
+        QueueFragment qFrag = (QueueFragment) fragMan.findFragmentByTag("queue");
+
         if (queueCurrentIndex == 0) {
             PlayerFragment.progressBar.setProgress(0);
             PlayerFragment.progressBar.setSecondaryProgress(0);
@@ -2041,8 +2094,9 @@ public class HomeActivity extends AppCompatActivity
                 if (queueCurrentIndex > 0) {
                     queueCall = true;
                     queueCurrentIndex--;
-                    if (QueueFragment.qAdapter != null)
-                        QueueFragment.qAdapter.notifyDataSetChanged();
+                    if (qFrag != null) {
+                        qFrag.updateQueueAdapter();
+                    }
                     if (queue.getQueue().get(queueCurrentIndex).getType()) {
                         localSelectedTrack = queue.getQueue().get(queueCurrentIndex).getLocalTrack();
                         streamSelected = false;
@@ -2067,8 +2121,9 @@ public class HomeActivity extends AppCompatActivity
                     }
                 }
                 queueCurrentIndex = x;
-                if (QueueFragment.qAdapter != null)
-                    QueueFragment.qAdapter.notifyDataSetChanged();
+                if (qFrag != null) {
+                    qFrag.updateQueueAdapter();
+                }
                 if (queue.getQueue().get(queueCurrentIndex).getType()) {
                     localSelectedTrack = queue.getQueue().get(queueCurrentIndex).getLocalTrack();
                     streamSelected = false;
@@ -2097,7 +2152,7 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void run() {
                 queueCurrentIndex = position;
-                UnifiedTrack ut = HomeActivity.queue.getQueue().get(position);
+                UnifiedTrack ut = queue.getQueue().get(position);
                 if (ut.getType()) {
                     LocalTrack track = ut.getLocalTrack();
                     localSelectedTrack = track;
@@ -2121,7 +2176,7 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onPLaylistItemClicked(int position) {
-        UnifiedTrack ut = HomeActivity.tempPlaylist.getSongList().get(position);
+        UnifiedTrack ut = tempPlaylist.getSongList().get(position);
         if (ut.getType()) {
             LocalTrack track = ut.getLocalTrack();
             if (queue.getQueue().size() == 0) {
@@ -2169,7 +2224,7 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onFavouriteItemClicked(int position) {
-        UnifiedTrack ut = HomeActivity.favouriteTracks.getFavourite().get(position);
+        UnifiedTrack ut = favouriteTracks.getFavourite().get(position);
         if (ut.getType()) {
             LocalTrack track = ut.getLocalTrack();
             if (queue.getQueue().size() == 0) {
@@ -2339,7 +2394,7 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onFullScreen() {
         if (isFullScreenEnabled) {
-            Toast.makeText(HomeActivity.this, "Long Press to Exit", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Long Press to Exit", Toast.LENGTH_SHORT).show();
             View decorView = getWindow().getDecorView();
 //            int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 //                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -2391,8 +2446,13 @@ public class HomeActivity extends AppCompatActivity
     }
 
     @Override
-    public void resetNotificationCalled() {
-        showNotification();
+    public void onPlaylsitRename() {
+        renamePlaylistDialog(allPlaylists.getPlaylists().get(renamePlaylistNumber).getPlaylistName());
+    }
+
+    @Override
+    public void addToPlaylist(UnifiedTrack ut) {
+        showAddToPlaylistDialog(ut);
     }
 
     public static class MyAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -2427,6 +2487,8 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(this);
+        refWatcher.watch(this);
         TelephonyManager mgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
         if (mgr != null) {
             mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE);
@@ -2468,7 +2530,7 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    public static void renamePlaylistDialog(String oldName) {
+    public void renamePlaylistDialog(String oldName) {
         final Dialog dialog = new Dialog(ctx);
         dialog.setContentView(R.layout.save_image_dialog);
         dialog.setTitle("Rename");
@@ -2502,7 +2564,7 @@ public class HomeActivity extends AppCompatActivity
 
     }
 
-    public static void showAddToPlaylistDialog(final UnifiedTrack track) {
+    public void showAddToPlaylistDialog(final UnifiedTrack track) {
         final Dialog dialog = new Dialog(ctx);
         dialog.setContentView(R.layout.add_to_playlist_dialog);
         dialog.setTitle("Add to Playlist");
@@ -2628,10 +2690,10 @@ public class HomeActivity extends AppCompatActivity
                 newFragment = new FullLocalMusicFragment();
             }
             fm.beginTransaction()
-                    .setCustomAnimations(R.anim.slide_up,
-                            R.anim.slide_down,
-                            R.anim.slide_up,
-                            R.anim.slide_down)
+                    .setCustomAnimations(R.anim.slide_left,
+                            R.anim.slide_right,
+                            R.anim.slide_left,
+                            R.anim.slide_right)
                     .add(R.id.fragContainer, newFragment, "local")
                     .show(newFragment)
                     .addToBackStack(null)
@@ -2660,10 +2722,10 @@ public class HomeActivity extends AppCompatActivity
                 newFragment = new StreamMusicFragment();
             }
             fm.beginTransaction()
-                    .setCustomAnimations(R.anim.slide_up,
-                            R.anim.slide_down,
-                            R.anim.slide_up,
-                            R.anim.slide_down)
+                    .setCustomAnimations(R.anim.slide_left,
+                            R.anim.slide_right,
+                            R.anim.slide_left,
+                            R.anim.slide_right)
                     .add(R.id.fragContainer, newFragment, "stream")
                     .show(newFragment)
                     .addToBackStack(null)
@@ -2679,10 +2741,10 @@ public class HomeActivity extends AppCompatActivity
                 newFragment = new ViewPlaylistFragment();
             }
             fm.beginTransaction()
-                    .setCustomAnimations(R.anim.slide_up,
-                            R.anim.slide_down,
-                            R.anim.slide_up,
-                            R.anim.slide_down)
+                    .setCustomAnimations(R.anim.slide_left,
+                            R.anim.slide_right,
+                            R.anim.slide_left,
+                            R.anim.slide_right)
                     .add(R.id.content_frag, newFragment, "playlist")
                     .show(newFragment)
                     .addToBackStack(null)
@@ -2711,10 +2773,10 @@ public class HomeActivity extends AppCompatActivity
                 newFragment = new FavouritesFragment();
             }
             fm.beginTransaction()
-                    .setCustomAnimations(R.anim.slide_up,
-                            R.anim.slide_down,
-                            R.anim.slide_up,
-                            R.anim.slide_down)
+                    .setCustomAnimations(R.anim.slide_left,
+                            R.anim.slide_right,
+                            R.anim.slide_left,
+                            R.anim.slide_right)
                     .add(R.id.fragContainer, newFragment, "favourite")
                     .show(newFragment)
                     .addToBackStack(null)
@@ -2728,10 +2790,10 @@ public class HomeActivity extends AppCompatActivity
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             PlayListFragment newFragment = new PlayListFragment();
             fm.beginTransaction()
-                    .setCustomAnimations(R.anim.slide_up,
-                            R.anim.slide_down,
-                            R.anim.slide_up,
-                            R.anim.slide_down)
+                    .setCustomAnimations(R.anim.slide_left,
+                            R.anim.slide_right,
+                            R.anim.slide_left,
+                            R.anim.slide_right)
                     .add(R.id.fragContainer, newFragment, "allPlaylists")
                     .show(newFragment)
                     .addToBackStack(null)
@@ -2746,10 +2808,10 @@ public class HomeActivity extends AppCompatActivity
                 newFragment = new FolderContentFragment();
             }
             fm.beginTransaction()
-                    .setCustomAnimations(R.anim.slide_up,
-                            R.anim.slide_down,
-                            R.anim.slide_up,
-                            R.anim.slide_down)
+                    .setCustomAnimations(R.anim.slide_left,
+                            R.anim.slide_right,
+                            R.anim.slide_left,
+                            R.anim.slide_right)
                     .add(R.id.content_frag, newFragment, "folderContent")
                     .show(newFragment)
                     .addToBackStack(null)
@@ -2766,10 +2828,10 @@ public class HomeActivity extends AppCompatActivity
                 newFragment = new FolderFragment();
             }
             fm.beginTransaction()
-                    .setCustomAnimations(R.anim.slide_up,
-                            R.anim.slide_down,
-                            R.anim.slide_up,
-                            R.anim.slide_down)
+                    .setCustomAnimations(R.anim.slide_left,
+                            R.anim.slide_right,
+                            R.anim.slide_left,
+                            R.anim.slide_right)
                     .add(R.id.fragContainer, newFragment, "allFolders")
                     .show(newFragment)
                     .addToBackStack(null)
@@ -2786,10 +2848,10 @@ public class HomeActivity extends AppCompatActivity
                 newFragment = new ViewSavedDNA();
             }
             fm.beginTransaction()
-                    .setCustomAnimations(R.anim.slide_up,
-                            R.anim.slide_down,
-                            R.anim.slide_up,
-                            R.anim.slide_down)
+                    .setCustomAnimations(R.anim.slide_left,
+                            R.anim.slide_right,
+                            R.anim.slide_left,
+                            R.anim.slide_right)
                     .add(R.id.fragContainer, newFragment, "allSavedDNAs")
                     .show(newFragment)
                     .addToBackStack(null)
@@ -2805,10 +2867,10 @@ public class HomeActivity extends AppCompatActivity
                 newFragment = new ViewAlbumFragment();
             }
             fm.beginTransaction()
-                    .setCustomAnimations(R.anim.slide_up,
-                            R.anim.slide_down,
-                            R.anim.slide_up,
-                            R.anim.slide_down)
+                    .setCustomAnimations(R.anim.slide_left,
+                            R.anim.slide_right,
+                            R.anim.slide_left,
+                            R.anim.slide_right)
                     .add(R.id.fragContainer, newFragment, "viewAlbum")
                     .show(newFragment)
                     .addToBackStack(null)
@@ -2824,10 +2886,10 @@ public class HomeActivity extends AppCompatActivity
                 newFragment = new ViewArtistFragment();
             }
             fm.beginTransaction()
-                    .setCustomAnimations(R.anim.slide_up,
-                            R.anim.slide_down,
-                            R.anim.slide_up,
-                            R.anim.slide_down)
+                    .setCustomAnimations(R.anim.slide_left,
+                            R.anim.slide_right,
+                            R.anim.slide_left,
+                            R.anim.slide_right)
                     .add(R.id.fragContainer, newFragment, "viewArtist")
                     .show(newFragment)
                     .addToBackStack(null)
@@ -2836,17 +2898,17 @@ public class HomeActivity extends AppCompatActivity
             setTitle("Recently Played");
             setUpFragmentToolbar(themeColor, (String) getTitle());
             switchToolbar(toolbar, fragmentToolbar, "left");
-            HomeActivity.isRecentVisible = true;
+            isRecentVisible = true;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             RecentsFragment newFragment = (RecentsFragment) fm.findFragmentByTag("recent");
             if (newFragment == null) {
                 newFragment = new RecentsFragment();
             }
             fm.beginTransaction()
-                    .setCustomAnimations(R.anim.slide_up,
-                            R.anim.slide_down,
-                            R.anim.slide_up,
-                            R.anim.slide_down)
+                    .setCustomAnimations(R.anim.slide_left,
+                            R.anim.slide_right,
+                            R.anim.slide_left,
+                            R.anim.slide_right)
                     .add(R.id.fragContainer, newFragment, "recent")
                     .show(newFragment)
                     .addToBackStack(null)
@@ -2862,10 +2924,10 @@ public class HomeActivity extends AppCompatActivity
                 newFragment = new SettingsFragment();
             }
             fm.beginTransaction()
-                    .setCustomAnimations(R.anim.slide_up,
-                            R.anim.slide_down,
-                            R.anim.slide_up,
-                            R.anim.slide_down)
+                    .setCustomAnimations(R.anim.slide_left,
+                            R.anim.slide_right,
+                            R.anim.slide_left,
+                            R.anim.slide_right)
                     .add(R.id.fragContainer, newFragment, "settings")
                     .show(newFragment)
                     .addToBackStack(null)
@@ -3074,7 +3136,7 @@ public class HomeActivity extends AppCompatActivity
         notificationManager = (NotificationManager) getSystemService(ns);
         RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.notification_view);
         RemoteViews notificationViewSmall = new RemoteViews(getPackageName(), R.layout.notification_view_small);
-        Intent notificationIntent = new Intent(this, HomeActivity.class);
+        Intent notificationIntent = new Intent(this, getClass());
         PendingIntent pendingNotificationIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
         Intent switchIntent = new Intent("com.sdsmdg.harjot.MusicDNA.ACTION_PLAY_PAUSE");
         PendingIntent pendingSwitchIntent = PendingIntent.getBroadcast(this, 100, switchIntent, 0);
@@ -3150,8 +3212,8 @@ public class HomeActivity extends AppCompatActivity
 
     public static void addToFavourites(UnifiedTrack ut) {
         boolean isRepeat = false;
-        for (int i = 0; i < HomeActivity.favouriteTracks.getFavourite().size(); i++) {
-            UnifiedTrack ut1 = HomeActivity.favouriteTracks.getFavourite().get(i);
+        for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
+            UnifiedTrack ut1 = favouriteTracks.getFavourite().get(i);
             if (ut.getType() && ut1.getType()) {
                 if (ut.getLocalTrack().getTitle().equals(ut1.getLocalTrack().getTitle())) {
                     isRepeat = true;
@@ -3295,15 +3357,6 @@ public class HomeActivity extends AppCompatActivity
                 @Override
                 public void run() {
 
-//                    HomeActivity.toolbar.setBackgroundColor(themeColor);
-//                    SettingsFragment.themeColorImg.setBackgroundColor(themeColor);
-//                    if (Build.VERSION.SDK_INT >= 21) {
-//                        Window window = ((Activity)(HomeActivity.ctx)).getWindow();
-//                        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//                        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-//                        window.setStatusBarColor(themeColor);
-//                    }
-
                     if (settings == null) {
                         settings = new Settings();
                     }
@@ -3314,7 +3367,7 @@ public class HomeActivity extends AppCompatActivity
                     toolbar.setBackgroundColor(themeColor);
 
                     if (Build.VERSION.SDK_INT >= 21) {
-                        Window window = ((Activity) (HomeActivity.ctx)).getWindow();
+                        Window window = ((Activity) ctx).getWindow();
                         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
                         window.setStatusBarColor(themeColor);
@@ -3601,7 +3654,7 @@ public class HomeActivity extends AppCompatActivity
                         }
                     });
 
-                    pAdapter = new PlayListsHorizontalAdapter(allPlaylists.getPlaylists());
+                    pAdapter = new PlayListsHorizontalAdapter(allPlaylists.getPlaylists(), ctx);
                     playlistsRecycler = (RecyclerView) findViewById(R.id.playlist_home);
                     LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(ctx, LinearLayoutManager.HORIZONTAL, false);
                     playlistsRecycler.setLayoutManager(mLayoutManager2);
@@ -3664,7 +3717,7 @@ public class HomeActivity extends AppCompatActivity
                         }
                     });
 
-                    adapter = new LocalTracksHorizontalAdapter(finalLocalSearchResultList);
+                    adapter = new LocalTracksHorizontalAdapter(finalLocalSearchResultList, ctx);
                     localListView = (RecyclerView) findViewById(R.id.localMusicList_home);
                     LinearLayoutManager mLayoutManager = new LinearLayoutManager(ctx, LinearLayoutManager.HORIZONTAL, false);
                     localListView.setLayoutManager(mLayoutManager);
@@ -4029,7 +4082,8 @@ public class HomeActivity extends AppCompatActivity
                             t1.setVisibility(View.GONE);
                         }
                     });
-            t2.setVisibility(View.VISIBLE);
+            if (!isFullScreenEnabled)
+                t2.setVisibility(View.VISIBLE);
             t2.setX(-1 * t2.getWidth());
             t2.setAlpha(0.0f);
             t2.animate()
@@ -4045,7 +4099,8 @@ public class HomeActivity extends AppCompatActivity
                             t1.setVisibility(View.GONE);
                         }
                     });
-            t2.setVisibility(View.VISIBLE);
+            if (!isFullScreenEnabled)
+                t2.setVisibility(View.VISIBLE);
             t2.setX(t2.getWidth());
             t2.setAlpha(0.0f);
             t2.animate()
@@ -4055,7 +4110,8 @@ public class HomeActivity extends AppCompatActivity
             t1.setVisibility(View.GONE);
             t2.setX(0);
             t2.setAlpha(1.0f);
-            t2.setVisibility(View.VISIBLE);
+            if (!isFullScreenEnabled)
+                t2.setVisibility(View.VISIBLE);
         }
     }
 
@@ -4065,15 +4121,20 @@ public class HomeActivity extends AppCompatActivity
     }
 
     public void clearQueue() {
+        QueueFragment qFrag = (QueueFragment) fragMan.findFragmentByTag("queue");
         for (int i = 0; i < queue.getQueue().size(); i++) {
             if (i < queueCurrentIndex) {
                 queue.getQueue().remove(i);
                 queueCurrentIndex--;
-                QueueFragment.qAdapter.notifyItemRemoved(i);
+                if (qFrag != null) {
+                    qFrag.notifyAdapterItemRemoved(i);
+                }
                 i--;
             } else if (i > queueCurrentIndex) {
                 queue.getQueue().remove(i);
-                QueueFragment.qAdapter.notifyItemRemoved(i);
+                if (qFrag != null) {
+                    qFrag.notifyAdapterItemRemoved(i);
+                }
                 i--;
             }
         }
@@ -4094,10 +4155,28 @@ public class HomeActivity extends AppCompatActivity
         return (pxToDp(result) - 5);
     }
 
+    public int getNavBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("navigation_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        TypedValue tv = new TypedValue();
+        if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+            result += TypedValue.complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics());
+        }
+        return (pxToDp(result));
+    }
+
     public int pxToDp(int px) {
         DisplayMetrics displayMetrics = ctx.getResources().getDisplayMetrics();
         int dp = Math.round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
         return dp;
+    }
+
+    public static boolean hasNavBar(Resources resources) {
+        int id = resources.getIdentifier("config_showNavigationBar", "bool", "android");
+        return id > 0 && resources.getBoolean(id);
     }
 
 }

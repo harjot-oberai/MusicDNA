@@ -1,5 +1,6 @@
 package com.sdsmdg.harjot.MusicDNA;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -23,6 +24,7 @@ import java.util.List;
 public class LocalTracksHorizontalAdapter extends RecyclerView.Adapter<LocalTracksHorizontalAdapter.MyViewHolder> {
 
     private List<LocalTrack> localList;
+    private Context ctx;
     ImageLoader imgLoader;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -40,9 +42,10 @@ public class LocalTracksHorizontalAdapter extends RecyclerView.Adapter<LocalTrac
         }
     }
 
-    public LocalTracksHorizontalAdapter(List<LocalTrack> localList) {
+    public LocalTracksHorizontalAdapter(List<LocalTrack> localList, Context ctx) {
         this.localList = localList;
-        imgLoader = new ImageLoader(HomeActivity.ctx);
+        this.ctx = ctx;
+        imgLoader = new ImageLoader(ctx);
     }
 
     @Override

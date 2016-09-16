@@ -1,5 +1,6 @@
 package com.sdsmdg.harjot.MusicDNA.LocalMusicFragments;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,11 +24,13 @@ import java.util.List;
 public class AlbumRecyclerAdapter extends RecyclerView.Adapter<AlbumRecyclerAdapter.MyViewHolder> {
 
     List<Album> albumList;
+    Context ctx;
     ImageLoader imgLoader;
 
-    public AlbumRecyclerAdapter(List<Album> albumList) {
+    public AlbumRecyclerAdapter(List<Album> albumList, Context ctx) {
         this.albumList = albumList;
-        imgLoader = new ImageLoader(HomeActivity.ctx);
+        this.ctx = ctx;
+        imgLoader = new ImageLoader(ctx);
     }
 
     @Override

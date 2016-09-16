@@ -1,8 +1,10 @@
 package com.sdsmdg.harjot.MusicDNA;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +27,9 @@ import java.util.List;
 public class ViewSavedDnaRecyclerAdapter extends RecyclerView.Adapter<ViewSavedDnaRecyclerAdapter.MyViewHolder> {
 
     private List<SavedDNA> savedDNAs;
+    private Context ctx;
     ImageLoader imgLoader;
+    ViewSavedDNA vsdFrag;
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -46,7 +50,7 @@ public class ViewSavedDnaRecyclerAdapter extends RecyclerView.Adapter<ViewSavedD
             holder.artist.setText(lt.getArtist());
         } else {
             Track t = dna.getModel().getTrack();
-            Picasso.with(HomeActivity.ctx)
+            Picasso.with(ctx)
                     .load(t.getArtworkURL())
                     .resize(100, 100)
                     .error(R.drawable.ic_default)
@@ -56,7 +60,7 @@ public class ViewSavedDnaRecyclerAdapter extends RecyclerView.Adapter<ViewSavedD
             holder.artist.setText("");
         }
 
-        if (position == ViewSavedDNA.selectedDNA) {
+        if (position == vsdFrag.getSelectedDNAnumber()) {
             holder.title.setTextColor(Color.parseColor("#DE1A1A"));
         } else {
             holder.title.setTextColor(Color.parseColor("#444444"));
@@ -84,9 +88,11 @@ public class ViewSavedDnaRecyclerAdapter extends RecyclerView.Adapter<ViewSavedD
         }
     }
 
-    public ViewSavedDnaRecyclerAdapter(List<SavedDNA> savedDNAs) {
+    public ViewSavedDnaRecyclerAdapter(List<SavedDNA> savedDNAs, Context ctx, ViewSavedDNA vsdFrag) {
         this.savedDNAs = savedDNAs;
-        imgLoader = new ImageLoader(HomeActivity.ctx);
+        this.ctx = ctx;
+        this.vsdFrag = vsdFrag;
+        imgLoader = new ImageLoader(ctx);
     }
 
 

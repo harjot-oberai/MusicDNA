@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.sdsmdg.harjot.MusicDNA.Helpers.SimpleItemTouchHelperCallback;
+import com.squareup.leakcanary.RefWatcher;
 
 
 /**
@@ -25,7 +26,7 @@ public class FavouritesFragment extends Fragment implements FavouriteTrackAdapte
 
 
     RecyclerView favouriteRecycler;
-    static FavouriteTrackAdapter fAdapter;
+    FavouriteTrackAdapter fAdapter;
 
     ItemTouchHelper mItemTouchHelper;
 
@@ -79,8 +80,8 @@ public class FavouritesFragment extends Fragment implements FavouriteTrackAdapte
             noFavouriteContent.setVisibility(View.INVISIBLE);
         }
 
-        fAdapter = new FavouriteTrackAdapter(HomeActivity.favouriteTracks.getFavourite(), this);
-        LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(HomeActivity.ctx, LinearLayoutManager.VERTICAL, false);
+        fAdapter = new FavouriteTrackAdapter(HomeActivity.favouriteTracks.getFavourite(), this , getContext());
+        LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         favouriteRecycler.setLayoutManager(mLayoutManager2);
         favouriteRecycler.setItemAnimator(new DefaultItemAnimator());
         favouriteRecycler.setAdapter(fAdapter);
@@ -136,5 +137,19 @@ public class FavouritesFragment extends Fragment implements FavouriteTrackAdapte
     @Override
     public void onDragStarted(RecyclerView.ViewHolder viewHolder) {
         mItemTouchHelper.startDrag(viewHolder);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
     }
 }

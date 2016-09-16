@@ -13,17 +13,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sdsmdg.harjot.MusicDNA.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
 import com.sdsmdg.harjot.MusicDNA.R;
+import com.squareup.leakcanary.RefWatcher;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ArtistFragment extends Fragment {
 
-    public static ArtistRecyclerAdapter arAdapter;
-    public static RecyclerView rv;
+    public ArtistRecyclerAdapter arAdapter;
+    public RecyclerView rv;
 
-    public static onArtistClickListener mCallback;
+    public onArtistClickListener mCallback;
 
     public ArtistFragment() {
         // Required empty public constructor
@@ -56,7 +58,7 @@ public class ArtistFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         rv = (RecyclerView) view.findViewById(R.id.artists_recycler);
         arAdapter = new ArtistRecyclerAdapter(HomeActivity.finalArtists);
-        LinearLayoutManager llManager = new LinearLayoutManager(HomeActivity.ctx, LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager llManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rv.setLayoutManager(llManager);
         rv.setItemAnimator(new DefaultItemAnimator());
         rv.setAdapter(arAdapter);
@@ -80,5 +82,24 @@ public class ArtistFragment extends Fragment {
             }
         });
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
+    }
+
+    public void updateAdapter() {
+        if (rv != null && rv.getAdapter() != null)
+            rv.getAdapter().notifyDataSetChanged();
     }
 }

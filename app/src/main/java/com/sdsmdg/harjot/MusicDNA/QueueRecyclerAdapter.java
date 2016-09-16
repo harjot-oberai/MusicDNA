@@ -74,7 +74,7 @@ public class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdap
         this.queue = queue;
         this.ctx = ctx;
         mDragStartListener = listener;
-        imgLoader = new ImageLoader(HomeActivity.ctx);
+        imgLoader = new ImageLoader(ctx);
     }
 
     @Override
@@ -104,7 +104,7 @@ public class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdap
             holder.artist.setText(lt.getArtist());
         } else {
             Track t = ut.getStreamTrack();
-            Picasso.with(HomeActivity.ctx)
+            Picasso.with(ctx)
                     .load(t.getArtworkURL())
                     .resize(100, 100)
                     .error(R.drawable.ic_default)

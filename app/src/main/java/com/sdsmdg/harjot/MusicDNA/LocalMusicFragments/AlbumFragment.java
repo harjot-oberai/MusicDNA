@@ -15,18 +15,20 @@ import android.widget.FrameLayout;
 import com.sdsmdg.harjot.MusicDNA.Helpers.GridSpacingItemDecoration;
 import com.sdsmdg.harjot.MusicDNA.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.Models.RecentlyPlayed;
+import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
 import com.sdsmdg.harjot.MusicDNA.R;
+import com.squareup.leakcanary.RefWatcher;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class AlbumFragment extends Fragment {
 
-    public static AlbumRecyclerAdapter abAdapter;
+    public AlbumRecyclerAdapter abAdapter;
 
-    public static RecyclerView rv;
+    public RecyclerView rv;
 
-    public static onAlbumClickListener mCallback;
+    public onAlbumClickListener mCallback;
 
     public AlbumFragment() {
         // Required empty public constructor
@@ -59,8 +61,8 @@ public class AlbumFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         rv = (RecyclerView) view.findViewById(R.id.albums_recycler);
-        abAdapter = new AlbumRecyclerAdapter(HomeActivity.finalAlbums);
-        GridLayoutManager glManager = new GridLayoutManager(HomeActivity.ctx, 2);
+        abAdapter = new AlbumRecyclerAdapter(HomeActivity.finalAlbums, getContext());
+        GridLayoutManager glManager = new GridLayoutManager(getContext(), 2);
         rv.setLayoutManager(glManager);
         rv.setItemAnimator(new DefaultItemAnimator());
         rv.setAdapter(abAdapter);
@@ -84,5 +86,24 @@ public class AlbumFragment extends Fragment {
             }
         });
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
+    }
+
+    public void updateAdapter() {
+        if (rv != null && rv.getAdapter() != null)
+            rv.getAdapter().notifyDataSetChanged();
     }
 }

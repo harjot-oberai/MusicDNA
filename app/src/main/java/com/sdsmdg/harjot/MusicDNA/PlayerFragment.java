@@ -1,7 +1,7 @@
 package com.sdsmdg.harjot.MusicDNA;
 
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -38,7 +38,10 @@ import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.Models.SavedDNA;
 import com.sdsmdg.harjot.MusicDNA.Models.Track;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
+import com.sdsmdg.harjot.MusicDNA.NotificationManager.AudioPlayerBroadcastReceiver;
+import com.sdsmdg.harjot.MusicDNA.NotificationManager.MediaPlayerService;
 import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
+import com.squareup.leakcanary.RefWatcher;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
@@ -50,7 +53,8 @@ import java.util.TimerTask;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PlayerFragment extends Fragment {
+public class PlayerFragment extends Fragment implements
+        AudioPlayerBroadcastReceiver.onCallbackListener {
 
     public static VisualizerView mVisualizerView;
     public static MediaPlayer mMediaPlayer;
@@ -115,20 +119,19 @@ public class PlayerFragment extends Fragment {
 
     static boolean isRefreshed = false;
 
-    public static onSmallPlayerTouchedListener mCallback;
+    public onSmallPlayerTouchedListener mCallback;
     public static onCompleteListener mCallback2;
     public static onPreviousTrackListener mCallback3;
-    public static onEqualizerClickedListener mCallback4;
-    public static onQueueClickListener mCallback5;
-    public static onPreparedLsitener mCallback6;
+    public onEqualizerClickedListener mCallback4;
+    public onQueueClickListener mCallback5;
+    public onPreparedLsitener mCallback6;
     public static onPlayPauseListener mCallback7;
-    public static fullScreenListener mCallback8;
-    public static onSettingsClickedListener mCallback9;
-    public static resetNotificationListener mCallback10;
+    public fullScreenListener mCallback8;
+    public onSettingsClickedListener mCallback9;
 
     public static boolean isStart = true;
 
-    static ShowcaseView showCase;
+    ShowcaseView showCase;
 
     long startTrack;
     long endTrack;
@@ -245,7 +248,6 @@ public class PlayerFragment extends Fragment {
             mCallback6 = (onPreparedLsitener) context;
             mCallback8 = (fullScreenListener) context;
             mCallback9 = (onSettingsClickedListener) context;
-            mCallback10 = (resetNotificationListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnHeadlineSelectedListener");
@@ -275,6 +277,41 @@ public class PlayerFragment extends Fragment {
     public void onResume() {
         super.onResume();
         //mVisualizerView.onResumeMySurfaceView();
+    }
+
+    @Override
+    public void onCallbackCalled(int i) {
+        switch (i) {
+            case 6:
+                mCallback6.onPrepared();
+                break;
+            case 3:
+                mCallback3.onPreviousTrack();
+                break;
+            case 2:
+                mCallback2.onComplete();
+                break;
+        }
+    }
+
+    @Override
+    public void togglePLayPauseCallback() {
+        togglePlayPause();
+    }
+
+    @Override
+    public boolean getPauseClicked() {
+        return pauseClicked;
+    }
+
+    @Override
+    public void setPauseClicked(boolean bool) {
+        pauseClicked = bool;
+    }
+
+    @Override
+    public MediaPlayer getMediaPlayer() {
+        return mMediaPlayer;
     }
 
     public interface onCompleteListener {
@@ -309,15 +346,11 @@ public class PlayerFragment extends Fragment {
         public void onSettingsClicked();
     }
 
-    public interface resetNotificationListener {
-        public void resetNotificationCalled();
-    }
-
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        imgLoader = new ImageLoader(HomeActivity.ctx);
+        imgLoader = new ImageLoader(getContext());
 
         fullscreenExtraSpaceOccupier = view.findViewById(R.id.fullscreen_extra_space_occupier);
 
@@ -552,7 +585,7 @@ public class PlayerFragment extends Fragment {
                 new MediaPlayer.OnErrorListener() {
                     @Override
                     public boolean onError(MediaPlayer mp, int what, int extra) {
-                        Toast.makeText(HomeActivity.ctx, what + ":" + extra, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), what + ":" + extra, Toast.LENGTH_SHORT).show();
                         return true;
                     }
                 }
@@ -607,8 +640,12 @@ public class PlayerFragment extends Fragment {
             } catch (Exception e) {
 
             }
-            imgLoader.DisplayImage(localTrack.getPath(), HomeActivity.spImgAB);
-            imgLoader.DisplayImage(localTrack.getPath(), selected_track_image);
+            try {
+                imgLoader.DisplayImage(localTrack.getPath(), HomeActivity.spImgAB);
+                imgLoader.DisplayImage(localTrack.getPath(), selected_track_image);
+            } catch (Exception e) {
+
+            }
             HomeActivity.spTitleAB.setText(localTrack.getTitle());
             selected_track_title.setText(localTrack.getTitle());
         }
@@ -649,7 +686,7 @@ public class PlayerFragment extends Fragment {
         HomeActivity.overflowMenuAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PopupMenu popMenu = new PopupMenu(HomeActivity.ctx, HomeActivity.overflowMenuAB);
+                PopupMenu popMenu = new PopupMenu(getContext(), HomeActivity.overflowMenuAB);
                 popMenu.getMenuInflater().inflate(R.menu.player_overflow_menu, popMenu.getMenu());
 
                 popMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -723,7 +760,7 @@ public class PlayerFragment extends Fragment {
         t.scheduleAtFixedRate(
                 new TimerTask() {
                     public void run() {
-                        if (isPrepared && !PlayerFragment.isTracking && getActivity() != null) {
+                        if (isPrepared && !isTracking && getActivity() != null) {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -791,16 +828,25 @@ public class PlayerFragment extends Fragment {
                                 .useDecorViewAsParent()
                                 .setTarget(new ViewTarget(mVisualizerView.getId(), getActivity()))
                                 .setContentTitle("The DNA")
-                                .setContentText("The DNA of the currently playing song. The magic happens here.")
+                                .setContentText("The DNA of the currently playing song.")
                                 .build();
                         showCase.setButtonText("Next");
+                        showCase.setButtonPosition(HomeActivity.lps);
                         showCase.overrideButtonClick(new View.OnClickListener() {
-                            int count1 = 0;
+                            int count1 = -1;
 
                             @Override
                             public void onClick(View v) {
                                 count1++;
                                 switch (count1) {
+                                    case 0:
+                                        showCase.setTarget(new ViewTarget(mVisualizerView.getId(), getActivity()));
+                                        showCase.setContentTitle("The DNA");
+                                        showCase.setContentText("Swipe Left or Right to change Song." +
+                                                "Long Press for fullscreen");
+                                        showCase.setButtonPosition(HomeActivity.lps);
+                                        showCase.setButtonText("Next");
+                                        break;
                                     case 1:
                                         showCase.setTarget(new ViewTarget(R.id.toggleContainer, getActivity()));
                                         showCase.setContentTitle("The Controls");
@@ -809,6 +855,7 @@ public class PlayerFragment extends Fragment {
                                                 "Save DNA toggle\n" +
                                                 "Add to Favourites \n" +
                                                 "Queue");
+                                        showCase.setButtonPosition(HomeActivity.lps);
                                         showCase.setButtonText("Done");
                                         break;
                                     case 2:
@@ -861,8 +908,17 @@ public class PlayerFragment extends Fragment {
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroy();
+        RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
         if (mMediaPlayer != null) {
             if (mMediaPlayer.isPlaying()) {
                 mMediaPlayer.stop();
@@ -882,7 +938,7 @@ public class PlayerFragment extends Fragment {
     public void refresh() {
 
         if (HomeActivity.repeatOnceEnabled) {
-            Toast.makeText(HomeActivity.ctx, "repeatOnce OK", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "repeatOnce OK", Toast.LENGTH_SHORT).show();
         }
 
         isRefreshed = true;
@@ -979,7 +1035,7 @@ public class PlayerFragment extends Fragment {
         t.scheduleAtFixedRate(
                 new TimerTask() {
                     public void run() {
-                        if (isPrepared && !PlayerFragment.isTracking && getActivity() != null) {
+                        if (isPrepared && !isTracking && getActivity() != null) {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -1084,5 +1140,12 @@ public class PlayerFragment extends Fragment {
         }
     }
 
+    public boolean isShowcaseVisible() {
+        return (showCase != null && showCase.isShowing());
+    }
+
+    public void hideShowcase() {
+        showCase.hide();
+    }
 
 }

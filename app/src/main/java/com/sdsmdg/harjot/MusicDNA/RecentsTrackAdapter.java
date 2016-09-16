@@ -1,5 +1,6 @@
 package com.sdsmdg.harjot.MusicDNA;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -27,7 +28,9 @@ import java.util.List;
  */
 public class RecentsTrackAdapter extends RecyclerView.Adapter<RecentsTrackAdapter.MyViewHolder>
         implements ItemTouchHelperAdapter {
+
     private List<UnifiedTrack> songList;
+    private Context ctx;
     ImageLoader imgLoader;
 
     public interface OnDragStartListener {
@@ -36,10 +39,11 @@ public class RecentsTrackAdapter extends RecyclerView.Adapter<RecentsTrackAdapte
 
     private final OnDragStartListener mDragStartListener;
 
-    public RecentsTrackAdapter(List<UnifiedTrack> songList, OnDragStartListener listener) {
+    public RecentsTrackAdapter(List<UnifiedTrack> songList, OnDragStartListener listener , Context ctx) {
         this.songList = songList;
         mDragStartListener = listener;
-        imgLoader = new ImageLoader(HomeActivity.ctx);
+        this.ctx = ctx;
+        imgLoader = new ImageLoader(ctx);
     }
 
     @Override
@@ -111,7 +115,7 @@ public class RecentsTrackAdapter extends RecyclerView.Adapter<RecentsTrackAdapte
             holder.artist.setText(lt.getArtist());
         } else {
             Track t = ut.getStreamTrack();
-            Picasso.with(HomeActivity.ctx)
+            Picasso.with(ctx)
                     .load(t.getArtworkURL())
                     .resize(100, 100)
                     .error(R.drawable.ic_default)

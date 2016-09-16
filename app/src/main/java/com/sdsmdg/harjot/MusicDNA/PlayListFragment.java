@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.squareup.leakcanary.RefWatcher;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +31,7 @@ public class PlayListFragment extends Fragment {
 
     onPlaylistTouchedListener mCallback;
     onPlaylistMenuPlayAllListener mCallback2;
+    onPLaylistRenameListener mCallback3;
 
     public PlayListFragment() {
         // Required empty public constructor
@@ -40,6 +43,7 @@ public class PlayListFragment extends Fragment {
         try {
             mCallback = (onPlaylistTouchedListener) context;
             mCallback2 = (onPlaylistMenuPlayAllListener) context;
+            mCallback3 = (onPLaylistRenameListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnHeadlineSelectedListener");
@@ -54,6 +58,9 @@ public class PlayListFragment extends Fragment {
         public void onPlaylistMenuPLayAll();
     }
 
+    public interface onPLaylistRenameListener{
+        public void onPlaylsitRename();
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -79,8 +86,8 @@ public class PlayListFragment extends Fragment {
             allPlaylistRecycler.setVisibility(View.VISIBLE);
             noPlaylistContent.setVisibility(View.INVISIBLE);
         }
-        vpAdapter = new ViewAllPlaylistsRecyclerAdapter(HomeActivity.allPlaylists.getPlaylists());
-        LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(HomeActivity.ctx, LinearLayoutManager.VERTICAL, false);
+        vpAdapter = new ViewAllPlaylistsRecyclerAdapter(HomeActivity.allPlaylists.getPlaylists(), getContext());
+        LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         allPlaylistRecycler.setLayoutManager(mLayoutManager2);
         allPlaylistRecycler.setItemAnimator(new DefaultItemAnimator());
         allPlaylistRecycler.setAdapter(vpAdapter);
@@ -94,7 +101,7 @@ public class PlayListFragment extends Fragment {
 
             @Override
             boolean onLongClick(RecyclerView parent, View view, final int position, long id) {
-                PopupMenu popup = new PopupMenu(HomeActivity.ctx, view);
+                PopupMenu popup = new PopupMenu(getContext(), view);
                 popup.getMenuInflater().inflate(R.menu.playlist_popup, popup.getMenu());
 
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -120,7 +127,7 @@ public class PlayListFragment extends Fragment {
                             HomeActivity.pAdapter.notifyItemRemoved(position);
                         } else if (item.getTitle().equals("Rename")) {
                             HomeActivity.renamePlaylistNumber = position;
-                            HomeActivity.renamePlaylistDialog(HomeActivity.allPlaylists.getPlaylists().get(position).getPlaylistName());
+                            mCallback3.onPlaylsitRename();
                         }
                         return true;
                     }
@@ -135,5 +142,19 @@ public class PlayListFragment extends Fragment {
             }
         });
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
     }
 }

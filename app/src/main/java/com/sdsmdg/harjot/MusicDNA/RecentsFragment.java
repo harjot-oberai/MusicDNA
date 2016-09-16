@@ -21,6 +21,7 @@ import com.sdsmdg.harjot.MusicDNA.Helpers.SimpleItemTouchHelperCallback;
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.Models.Track;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
+import com.squareup.leakcanary.RefWatcher;
 
 import java.util.Random;
 
@@ -46,6 +47,7 @@ public class RecentsFragment extends Fragment implements RecentsTrackAdapter.OnD
 
     public interface onRecentItemClickedListener {
         public void onRecentItemClicked(boolean isLocal);
+        public void addToPlaylist(UnifiedTrack ut);
     }
 
     public interface onRepeatListener {
@@ -76,8 +78,8 @@ public class RecentsFragment extends Fragment implements RecentsTrackAdapter.OnD
         super.onViewCreated(view, savedInstanceState);
 
         recentRecycler = (RecyclerView) view.findViewById(R.id.view_recent_recycler);
-        rtAdpater = new RecentsTrackAdapter(HomeActivity.recentlyPlayed.getRecentlyPlayed(), this);
-        LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(HomeActivity.ctx, LinearLayoutManager.VERTICAL, false);
+        rtAdpater = new RecentsTrackAdapter(HomeActivity.recentlyPlayed.getRecentlyPlayed(), this, getContext());
+        LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recentRecycler.setLayoutManager(mLayoutManager2);
         recentRecycler.setItemAnimator(new DefaultItemAnimator());
         recentRecycler.setAdapter(rtAdpater);
@@ -156,13 +158,13 @@ public class RecentsFragment extends Fragment implements RecentsTrackAdapter.OnD
             boolean onLongClick(RecyclerView parent, View view, int position, long id) {
                 final UnifiedTrack ut = HomeActivity.recentlyPlayed.getRecentlyPlayed().get(position);
 
-                PopupMenu popup = new PopupMenu(HomeActivity.ctx, view);
+                PopupMenu popup = new PopupMenu(getContext(), view);
                 popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
 
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
                         if (item.getTitle().equals("Add to Playlist")) {
-                            HomeActivity.showAddToPlaylistDialog(ut);
+                            mCallback.addToPlaylist(ut);
                             HomeActivity.pAdapter.notifyDataSetChanged();
                         }
                         if (item.getTitle().equals("Add to Queue")) {
@@ -333,5 +335,19 @@ public class RecentsFragment extends Fragment implements RecentsTrackAdapter.OnD
     @Override
     public void onDragStarted(RecyclerView.ViewHolder viewHolder) {
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
     }
 }

@@ -25,12 +25,6 @@ import java.util.Timer;
 
 public class VisualizerView extends View {
 
-//    boolean isRendering
-
-    Timer t;
-
-    static Activity act;
-
     static double LOG_MAX = Math.log(64);
     static double TAU = Math.PI * 2;
     static double MAX_DOT_SIZE = 0.5;
@@ -49,8 +43,6 @@ public class VisualizerView extends View {
     static int h;
     static Bitmap.Config conf;
     static Bitmap bmp;
-
-    boolean prevDrawn = false;
 
     public VisualizerView(Context context) {
         super(context);

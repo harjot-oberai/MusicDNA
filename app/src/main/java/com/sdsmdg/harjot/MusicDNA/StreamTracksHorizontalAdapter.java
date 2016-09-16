@@ -42,7 +42,7 @@ public class StreamTracksHorizontalAdapter extends RecyclerView.Adapter<StreamTr
     public StreamTracksHorizontalAdapter(List<Track> streamList, Context ctx) {
         this.streamList = streamList;
         this.ctx = ctx;
-        imgLoader = new ImageLoader(HomeActivity.ctx);
+        imgLoader = new ImageLoader(ctx);
     }
 
     @Override

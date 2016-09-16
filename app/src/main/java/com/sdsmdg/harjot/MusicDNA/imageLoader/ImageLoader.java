@@ -6,6 +6,7 @@ package com.sdsmdg.harjot.MusicDNA.imageLoader;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
@@ -60,7 +61,10 @@ public class ImageLoader {
     }
 
     private Bitmap getBitmap(String url) {
-        if (url.contains("https")) {
+        if (url == null) {
+//            return BitmapFactory.decodeResource(HomeActivity.ctx.getResources(), R.drawable.ic_default);
+            return BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.ic_default);
+        } else if (url.contains("https")) {
             File f = fileCache.getFile(url);
 
             //from SD cache

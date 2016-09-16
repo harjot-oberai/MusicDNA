@@ -30,6 +30,7 @@ import com.sdsmdg.harjot.MusicDNA.Blur.BlurringView;
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
+import com.squareup.leakcanary.RefWatcher;
 
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class ViewAlbumFragment extends Fragment {
 
     RecyclerView rv;
 
-    ImageLoader imgLoader = new ImageLoader(HomeActivity.ctx);
+    ImageLoader imgLoader = new ImageLoader(getContext());
     ImageView backCover, mainCover;
     View blurredView;
     BlurringView blurringView;
@@ -63,6 +64,7 @@ public class ViewAlbumFragment extends Fragment {
 
     public interface onAlbumSongClickListener {
         public void onAlbumSongClickListener();
+        public void addToPlaylist(UnifiedTrack ut);
     }
 
     public interface onAlbumPlayAllListener {
@@ -116,8 +118,8 @@ public class ViewAlbumFragment extends Fragment {
         backCover = (ImageView) view.findViewById(R.id.backAlbumCover);
         mainCover = (ImageView) view.findViewById(R.id.mainAlbumCover);
         rv = (RecyclerView) view.findViewById(R.id.album_songs_recycler);
-        aslAdapter = new LocalTrackListAdapter(HomeActivity.tempAlbum.getAlbumSongs());
-        LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(HomeActivity.ctx, LinearLayoutManager.VERTICAL, false);
+        aslAdapter = new LocalTrackListAdapter(HomeActivity.tempAlbum.getAlbumSongs(), getContext());
+        LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rv.setLayoutManager(mLayoutManager2);
         rv.setItemAnimator(new DefaultItemAnimator());
         rv.setAdapter(aslAdapter);
@@ -162,13 +164,13 @@ public class ViewAlbumFragment extends Fragment {
 
             @Override
             boolean onLongClick(RecyclerView parent, View view, final int position, long id) {
-                PopupMenu popup = new PopupMenu(HomeActivity.ctx, view);
+                PopupMenu popup = new PopupMenu(getContext(), view);
                 popup.getMenuInflater().inflate(R.menu.popup_local, popup.getMenu());
 
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
                         if (item.getTitle().equals("Add to Playlist")) {
-                            HomeActivity.showAddToPlaylistDialog(new UnifiedTrack(true, HomeActivity.tempAlbum.getAlbumSongs().get(position), null));
+                            mCallback.addToPlaylist(new UnifiedTrack(true, HomeActivity.tempAlbum.getAlbumSongs().get(position), null));
                             HomeActivity.pAdapter.notifyDataSetChanged();
                         }
                         if (item.getTitle().equals("Add to Queue")) {
@@ -247,7 +249,11 @@ public class ViewAlbumFragment extends Fragment {
 
         imgLoader.DisplayImage(HomeActivity.tempAlbum.getAlbumSongs().get(0).getPath(), backCover);
 //        imgLoader.DisplayImage(HomeActivity.tempAlbum.getAlbumSongs().get(0).getPath(), mainCover);
-        Bitmap bmp = getBitmap(HomeActivity.tempAlbum.getAlbumSongs().get(0).getPath());
+        Bitmap bmp = null;
+        try {
+            bmp = getBitmap(HomeActivity.tempAlbum.getAlbumSongs().get(0).getPath());
+        } catch (Exception e) {
+        }
         if (bmp != null)
             mainCover.setImageBitmap(bmp);
         else
@@ -285,5 +291,19 @@ public class ViewAlbumFragment extends Fragment {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
     }
 }

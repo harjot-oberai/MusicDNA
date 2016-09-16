@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sdsmdg.harjot.MusicDNA.Helpers.SimpleItemTouchHelperCallback;
+import com.squareup.leakcanary.RefWatcher;
 
 
 /**
@@ -72,8 +73,8 @@ public class ViewPlaylistFragment extends Fragment implements PlaylistTrackAdapt
         super.onViewCreated(view, savedInstanceState);
         playlistRecyler = (RecyclerView) view.findViewById(R.id.view_playlist_recycler);
 
-        plAdapter = new PlaylistTrackAdapter(HomeActivity.tempPlaylist.getSongList(), this);
-        LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(HomeActivity.ctx, LinearLayoutManager.VERTICAL, false);
+        plAdapter = new PlaylistTrackAdapter(HomeActivity.tempPlaylist.getSongList(), this, getContext());
+        LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         playlistRecyler.setLayoutManager(mLayoutManager2);
         playlistRecyler.setItemAnimator(new DefaultItemAnimator());
         playlistRecyler.setAdapter(plAdapter);
@@ -97,6 +98,9 @@ public class ViewPlaylistFragment extends Fragment implements PlaylistTrackAdapt
         });
 
         playAll = (FloatingActionButton) view.findViewById(R.id.play_all_fab);
+        if (HomeActivity.tempPlaylist.getSongList().size() == 0) {
+            playAll.setVisibility(View.GONE);
+        }
         playAll.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));
         playAll.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,6 +119,20 @@ public class ViewPlaylistFragment extends Fragment implements PlaylistTrackAdapt
         mItemTouchHelper = new ItemTouchHelper(callback);
         mItemTouchHelper.attachToRecyclerView(playlistRecyler);
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
     }
 
 }

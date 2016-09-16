@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
+import com.squareup.leakcanary.RefWatcher;
 
 
 /**
@@ -42,6 +43,8 @@ public class ViewArtistFragment extends Fragment {
 
     public interface onArtistSongClickListener {
         public void onArtistSongClick();
+
+        public void addToPlaylist(UnifiedTrack ut);
     }
 
     public interface onArtistPlayAllListener {
@@ -75,10 +78,9 @@ public class ViewArtistFragment extends Fragment {
         title.setText(HomeActivity.tempArtist.getName());
 
 
-
         rv = (RecyclerView) view.findViewById(R.id.artist_songs_recycler);
-        lAdapter = new LocalTrackListAdapter(HomeActivity.tempArtist.getArtistSongs());
-        LinearLayoutManager llManager = new LinearLayoutManager(HomeActivity.ctx, LinearLayoutManager.VERTICAL, false);
+        lAdapter = new LocalTrackListAdapter(HomeActivity.tempArtist.getArtistSongs(), getContext());
+        LinearLayoutManager llManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rv.setLayoutManager(llManager);
         rv.setItemAnimator(new DefaultItemAnimator());
         rv.setAdapter(lAdapter);
@@ -111,13 +113,13 @@ public class ViewArtistFragment extends Fragment {
 
             @Override
             boolean onLongClick(RecyclerView parent, View view, final int position, long id) {
-                PopupMenu popup = new PopupMenu(HomeActivity.ctx, view);
+                PopupMenu popup = new PopupMenu(getContext(), view);
                 popup.getMenuInflater().inflate(R.menu.popup_local, popup.getMenu());
 
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
                         if (item.getTitle().equals("Add to Playlist")) {
-                            HomeActivity.showAddToPlaylistDialog(new UnifiedTrack(true, HomeActivity.tempArtist.getArtistSongs().get(position), null));
+                            mCallback.addToPlaylist(new UnifiedTrack(true, HomeActivity.tempArtist.getArtistSongs().get(position), null));
                             HomeActivity.pAdapter.notifyDataSetChanged();
                         }
                         if (item.getTitle().equals("Add to Queue")) {
@@ -206,5 +208,19 @@ public class ViewArtistFragment extends Fragment {
                 mCallback2.onArtistPlayAll();
             }
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
     }
 }

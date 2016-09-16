@@ -28,6 +28,7 @@ import com.db.chart.view.ChartView;
 import com.db.chart.view.LineChartView;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
+import com.squareup.leakcanary.RefWatcher;
 
 import java.util.ArrayList;
 
@@ -53,11 +54,11 @@ public class EqualizerFragment extends Fragment {
 
     AnalogController bassController, reverbController;
 
-    static Spinner presetSpinner;
+    Spinner presetSpinner;
 
-    static FrameLayout equalizerBlocker;
+    FrameLayout equalizerBlocker;
 
-    static ShowcaseView showCase;
+    ShowcaseView showCase;
 
     public EqualizerFragment() {
         // Required empty public constructor
@@ -73,7 +74,7 @@ public class EqualizerFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        HomeActivity.isEqualizerEnabled = true;
+//        HomeActivity.isEqualizerEnabled = true;
 
         spinnerDropDownIcon = (ImageView) view.findViewById(R.id.spinner_dropdown_icon);
         spinnerDropDownIcon.setOnClickListener(new View.OnClickListener() {
@@ -151,7 +152,7 @@ public class EqualizerFragment extends Fragment {
         mLinearLayout = (LinearLayout) view.findViewById(R.id.equalizerContainer);
 //        mLinearLayout.setOrientation(LinearLayout.VERTICAL);
 
-        TextView equalizerHeading = new TextView(HomeActivity.ctx);
+        TextView equalizerHeading = new TextView(getContext());
         equalizerHeading.setText("Equalizer");
         equalizerHeading.setTextSize(20);
         equalizerHeading.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -166,7 +167,7 @@ public class EqualizerFragment extends Fragment {
 
         for (short i = 0; i < numberOfFrequencyBands; i++) {
             final short equalizerBandIndex = i;
-            final TextView frequencyHeaderTextView = new TextView(HomeActivity.ctx);
+            final TextView frequencyHeaderTextView = new TextView(getContext());
             frequencyHeaderTextView.setLayoutParams(new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
@@ -176,10 +177,10 @@ public class EqualizerFragment extends Fragment {
             frequencyHeaderTextView.setText((PlayerFragment.mEqualizer.getCenterFreq(equalizerBandIndex) / 1000) + "Hz");
 //            mLinearLayout.addView(frequencyHeaderTextView);
 
-            LinearLayout seekBarRowLayout = new LinearLayout(HomeActivity.ctx);
+            LinearLayout seekBarRowLayout = new LinearLayout(getContext());
             seekBarRowLayout.setOrientation(LinearLayout.VERTICAL);
 
-            TextView lowerEqualizerBandLevelTextView = new TextView(HomeActivity.ctx);
+            TextView lowerEqualizerBandLevelTextView = new TextView(getContext());
             lowerEqualizerBandLevelTextView.setLayoutParams(new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.MATCH_PARENT
@@ -187,7 +188,7 @@ public class EqualizerFragment extends Fragment {
             lowerEqualizerBandLevelTextView.setTextColor(Color.parseColor("#FFFFFF"));
             lowerEqualizerBandLevelTextView.setText((lowerEqualizerBandLevel / 100) + "dB");
 
-            TextView upperEqualizerBandLevelTextView = new TextView(HomeActivity.ctx);
+            TextView upperEqualizerBandLevelTextView = new TextView(getContext());
             lowerEqualizerBandLevelTextView.setLayoutParams(new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
@@ -201,8 +202,8 @@ public class EqualizerFragment extends Fragment {
             );
             layoutParams.weight = 1;
 
-            SeekBar seekBar = new SeekBar(HomeActivity.ctx);
-            TextView textView = new TextView(HomeActivity.ctx);
+            SeekBar seekBar = new SeekBar(getContext());
+            TextView textView = new TextView(getContext());
             switch (i) {
                 case 0:
                     seekBar = (SeekBar) view.findViewById(R.id.seekBar1);
@@ -306,6 +307,7 @@ public class EqualizerFragment extends Fragment {
                 .setContentText("Use one of the available presets")
                 .build();
         showCase.setButtonText("Next");
+        showCase.setButtonPosition(HomeActivity.lps);
         showCase.overrideButtonClick(new View.OnClickListener() {
             int count1 = 0;
 
@@ -317,12 +319,14 @@ public class EqualizerFragment extends Fragment {
                         showCase.setTarget(new ViewTarget(R.id.equalizerContainer, getActivity()));
                         showCase.setContentTitle("Equalizer Controls");
                         showCase.setContentText("Use the seekbars to control the Individual frequencies");
+                        showCase.setButtonPosition(HomeActivity.lps);
                         showCase.setButtonText("Next");
                         break;
                     case 2:
                         showCase.setTarget(new ViewTarget(R.id.controllerBass, getActivity()));
                         showCase.setContentTitle("Bass and Reverb");
                         showCase.setContentText("Use these controls to control Bass and Reverb");
+                        showCase.setButtonPosition(HomeActivity.lps);
                         showCase.setButtonText("Done");
                         break;
                     case 3:
@@ -337,7 +341,7 @@ public class EqualizerFragment extends Fragment {
 
     public void equalizeSound() {
         ArrayList<String> equalizerPresetNames = new ArrayList<>();
-        ArrayAdapter<String> equalizerPresetSpinnerAdapter = new ArrayAdapter<String>(HomeActivity.ctx,
+        ArrayAdapter<String> equalizerPresetSpinnerAdapter = new ArrayAdapter<String>(getContext(),
                 R.layout.spinner_item,
                 equalizerPresetNames);
         equalizerPresetSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -358,7 +362,6 @@ public class EqualizerFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position != 0 && correctPosition) {
-                    Toast.makeText(HomeActivity.ctx, "called", Toast.LENGTH_SHORT).show();
                     PlayerFragment.mEqualizer.usePreset((short) (position - 1));
                     HomeActivity.presetPos = position;
                     short numberOfFreqBands = PlayerFragment.mEqualizer.getNumberOfBands();
@@ -375,7 +378,6 @@ public class EqualizerFragment extends Fragment {
                 } else {
 
                 }
-
                 correctPosition = true;
 
             }
@@ -386,4 +388,31 @@ public class EqualizerFragment extends Fragment {
             }
         });
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
+    }
+
+    public boolean isShowcaseVisible(){
+        return (showCase != null && showCase.isShowing());
+    }
+
+    public void hideShowcase(){
+        showCase.hide();
+    }
+
+    public void setBlockerVisibility(int visibility){
+        equalizerBlocker.setVisibility(visibility);
+    }
+
 }

@@ -50,7 +50,7 @@ public class RecentsListHorizontalAdapter extends RecyclerView.Adapter<RecentsLi
     public RecentsListHorizontalAdapter(List<UnifiedTrack> recentslyPlayed, Context ctx) {
         this.recentslyPlayed = recentslyPlayed;
         this.ctx = ctx;
-        imgLoader = new ImageLoader(HomeActivity.ctx);
+        imgLoader = new ImageLoader(ctx);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class RecentsListHorizontalAdapter extends RecyclerView.Adapter<RecentsLi
             holder.artist.setText(lt.getArtist());
         } else {
             Track t = ut.getStreamTrack();
-            Picasso.with(HomeActivity.ctx)
+            Picasso.with(ctx)
                     .load(t.getArtworkURL())
                     .resize(100, 100)
                     .error(R.drawable.ic_default)

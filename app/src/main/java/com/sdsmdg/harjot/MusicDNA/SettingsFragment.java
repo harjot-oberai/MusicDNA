@@ -18,6 +18,8 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.squareup.leakcanary.RefWatcher;
+
 import me.priyesh.chroma.ChromaDialog;
 import me.priyesh.chroma.ColorMode;
 import me.priyesh.chroma.ColorSelectListener;
@@ -91,7 +93,7 @@ public class SettingsFragment extends Fragment {
                                 HomeActivity.fragmentToolbar.setBackgroundColor(color);
                                 themeColorImg.setBackgroundColor(color);
                                 if (Build.VERSION.SDK_INT >= 21) {
-                                    Window window = ((Activity) (HomeActivity.ctx)).getWindow();
+                                    Window window = ((Activity) (getContext())).getWindow();
                                     window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                                     window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
                                     window.setStatusBarColor(color);
@@ -107,7 +109,7 @@ public class SettingsFragment extends Fragment {
         aboutCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(HomeActivity.ctx);
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
                 alertDialogBuilder.setTitle("About");
                 AlertDialog alertDialog = alertDialogBuilder.create();
                 alertDialog.setMessage("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
@@ -119,5 +121,19 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
+        refWatcher.watch(this);
     }
 }

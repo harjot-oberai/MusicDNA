@@ -51,7 +51,16 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
     private MediaPlayer m_objMediaPlayer;
     private NotificationManager notificationManager;
 
+    onCallbackListener callback;
+
     private boolean isSwipable = false;
+
+    public interface onCallbackListener{
+        public MediaPlayer MPSgetMediaPlayer();
+        public void callCallback(int i);
+        public void getIsStart();
+        public void MPStogglePlayPauseCallback();
+    }
 
     @Override
     public IBinder onBind(Intent intent) {

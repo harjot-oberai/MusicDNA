@@ -1,5 +1,6 @@
 package com.sdsmdg.harjot.MusicDNA;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
@@ -22,6 +23,7 @@ import java.util.List;
 public class LocalTrackListAdapter extends RecyclerView.Adapter<LocalTrackListAdapter.MyViewHolder> {
 
     private List<LocalTrack> localTracks;
+    private Context ctx;
     ImageLoader imgLoader;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -37,9 +39,10 @@ public class LocalTrackListAdapter extends RecyclerView.Adapter<LocalTrackListAd
         }
     }
 
-    public LocalTrackListAdapter(List<LocalTrack> localTracks) {
+    public LocalTrackListAdapter(List<LocalTrack> localTracks, Context ctx) {
         this.localTracks = localTracks;
-        imgLoader = new ImageLoader(HomeActivity.ctx);
+        this.ctx = ctx;
+        imgLoader = new ImageLoader(ctx);
     }
 
     @Override

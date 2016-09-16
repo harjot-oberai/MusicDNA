@@ -18,6 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -48,6 +50,8 @@ public class ViewSavedDNA extends Fragment {
     onShareListener mCallback;
 
     ShowcaseView showCase;
+
+    boolean addTextToImage = true;
 
     int selectedDNA = 0;
 
@@ -248,6 +252,7 @@ public class ViewSavedDNA extends Fragment {
     }
 
     public void showDialog(int type) {
+        addTextToImage = true;
         if (type == 0) {
             final Dialog dialog = new Dialog(getContext());
             dialog.setContentView(R.layout.save_image_dialog);
@@ -258,6 +263,15 @@ public class ViewSavedDNA extends Fragment {
             text.setText(HomeActivity.tempSavedDNA.getName());
             Button btn = (Button) dialog.findViewById(R.id.save_image_btn);
             btn.setBackgroundColor(HomeActivity.themeColor);
+
+            CheckBox cb = (CheckBox) dialog.findViewById(R.id.text_checkbox);
+            cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    addTextToImage = isChecked;
+                }
+            });
+
             // if button is clicked, close the custom dialog
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -265,7 +279,7 @@ public class ViewSavedDNA extends Fragment {
                     if (text.getText().toString().trim().equals("")) {
                         text.setError("Enter Filename");
                     } else {
-                        mVisualizerView2.drawText(text.getText().toString());
+                        mVisualizerView2.drawText(text.getText().toString(), addTextToImage);
                         mVisualizerView2.setDrawingCacheEnabled(true);
                         HomeActivity.saveBitmapAsImage(mVisualizerView2.getDrawingCache(), text.getText().toString());
                         mVisualizerView2.dropText();
@@ -287,14 +301,23 @@ public class ViewSavedDNA extends Fragment {
             Button btn = (Button) dialog.findViewById(R.id.save_image_btn);
             btn.setBackgroundColor(HomeActivity.themeColor);
             btn.setText("SHARE");
+
+            CheckBox cb = (CheckBox) dialog.findViewById(R.id.text_checkbox);
+            cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    addTextToImage = isChecked;
+                }
+            });
+
             // if button is clicked, close the custom dialog
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (text.getText().toString().trim().equals("")) {
-                        text.setError("Enter Filename");
+                        text.setError("Enter Text");
                     } else {
-                        mVisualizerView2.drawText(text.getText().toString());
+                        mVisualizerView2.drawText(text.getText().toString(), addTextToImage);
                         mVisualizerView2.setDrawingCacheEnabled(true);
                         mCallback.onShare(mVisualizerView2.getDrawingCache(), text.getText().toString());
                         mVisualizerView2.dropText();
@@ -333,7 +356,7 @@ public class ViewSavedDNA extends Fragment {
         mVisualizerView2.setVisibility(visibility);
     }
 
-    public int getSelectedDNAnumber(){
+    public int getSelectedDNAnumber() {
         return selectedDNA;
     }
 

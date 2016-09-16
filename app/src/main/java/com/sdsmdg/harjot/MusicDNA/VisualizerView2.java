@@ -82,8 +82,8 @@ public class VisualizerView2 extends View {
         invalidate();
     }
 
-    public void drawText(String str) {
-        textEnabled = true;
+    public void drawText(String str ,boolean addTexttoImage) {
+        textEnabled = addTexttoImage;
         text = str;
         invalidate();
     }

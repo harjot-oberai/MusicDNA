@@ -15,11 +15,22 @@
         android:text="Title"
         android:textSize="15dp" />
 
+    <CheckBox
+        android:id="@+id/text_checkbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/save_image_filename_text"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="30dp"
+        android:text="Add Text to Image also"
+        android:checked="true"/>
+
     <Button
         android:id="@+id/save_image_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/save_image_filename_text"
+        android:layout_below="@+id/text_checkbox"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         android:background="@color/colorPrimary"

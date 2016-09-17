@@ -58,9 +58,10 @@ public class PlayListFragment extends Fragment {
         public void onPlaylistMenuPLayAll();
     }
 
-    public interface onPLaylistRenameListener{
+    public interface onPLaylistRenameListener {
         public void onPlaylsitRename();
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -157,4 +158,17 @@ public class PlayListFragment extends Fragment {
         RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
         refWatcher.watch(this);
     }
+
+    public void itemChanged(int position) {
+        if (vpAdapter != null) {
+            vpAdapter.notifyItemChanged(position);
+        }
+    }
+
+    public void itemRemoved(int position) {
+        if (vpAdapter != null) {
+            vpAdapter.notifyItemRemoved(position);
+        }
+    }
+
 }

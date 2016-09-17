@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
+import com.google.gson.annotations.SerializedName;
 import com.sdsmdg.harjot.MusicDNA.Models.DNAModel;
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.Models.SavedDNA;
@@ -46,6 +47,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -54,6 +56,7 @@ import java.util.TimerTask;
  * A simple {@link Fragment} subclass.
  */
 public class PlayerFragment extends Fragment implements
+        Serializable,
         AudioPlayerBroadcastReceiver.onCallbackListener {
 
     public static VisualizerView mVisualizerView;
@@ -62,6 +65,8 @@ public class PlayerFragment extends Fragment implements
     public static Equalizer mEqualizer;
     public static BassBoost bassBoost;
     public static PresetReverb presetReverb;
+
+    private static final long serialVersionUID = 1L;
 
     static boolean isPrepared = false;
 
@@ -80,14 +85,14 @@ public class PlayerFragment extends Fragment implements
 
     public static ImageView repeatIcon;
 
-    public static ImageView equalizerIcon;
+    public ImageView equalizerIcon;
     public static ImageView mainTrackController;
-    public static ImageView nextTrackController;
-    public static ImageView previousTrackController;
-    public static ImageView favouriteIcon;
-    public static ImageView queueIcon;
+    public ImageView nextTrackController;
+    public ImageView previousTrackController;
+    public ImageView favouriteIcon;
+    public ImageView queueIcon;
 
-    public static ImageView saveDNAToggle;
+    public ImageView saveDNAToggle;
 
     boolean isFav = false;
 
@@ -106,9 +111,9 @@ public class PlayerFragment extends Fragment implements
     public static SeekBar progressBar;
 
     public static int durationInMilliSec;
-    static boolean completed = false;
-    public static boolean pauseClicked = false;
-    static boolean isTracking = false;
+    boolean completed = false;
+    boolean pauseClicked = false;
+    boolean isTracking = false;
 
     public static boolean localIsPlaying = false;
 
@@ -120,16 +125,16 @@ public class PlayerFragment extends Fragment implements
     static boolean isRefreshed = false;
 
     public onSmallPlayerTouchedListener mCallback;
-    public static onCompleteListener mCallback2;
-    public static onPreviousTrackListener mCallback3;
+    public onCompleteListener mCallback2;
+    public onPreviousTrackListener mCallback3;
     public onEqualizerClickedListener mCallback4;
     public onQueueClickListener mCallback5;
     public onPreparedLsitener mCallback6;
-    public static onPlayPauseListener mCallback7;
+    public onPlayPauseListener mCallback7;
     public fullScreenListener mCallback8;
     public onSettingsClickedListener mCallback9;
 
-    public static boolean isStart = true;
+    public boolean isStart = true;
 
     ShowcaseView showCase;
 
@@ -140,7 +145,7 @@ public class PlayerFragment extends Fragment implements
         // Required empty public constructor
     }
 
-    public static void setupVisualizerFxAndUI() {
+    public void setupVisualizerFxAndUI() {
 
         try {
             mVisualizer = new Visualizer(mMediaPlayer.getAudioSessionId());
@@ -191,7 +196,7 @@ public class PlayerFragment extends Fragment implements
         }
     }
 
-    public static void togglePlayPause() {
+    public void togglePlayPause() {
         if (mMediaPlayer.isPlaying()) {
             mMediaPlayer.pause();
             if (HomeActivity.isPlayerVisible) {
@@ -870,7 +875,7 @@ public class PlayerFragment extends Fragment implements
 
     }
 
-    public static void addToFavourite() {
+    public void addToFavourite() {
 
         UnifiedTrack ut;
 
@@ -882,7 +887,7 @@ public class PlayerFragment extends Fragment implements
         HomeActivity.favouriteTracks.getFavourite().add(ut);
     }
 
-    public static void removeFromFavourite() {
+    public void removeFromFavourite() {
 
         UnifiedTrack ut;
 
@@ -1093,7 +1098,7 @@ public class PlayerFragment extends Fragment implements
         });
     }
 
-    public static Pair<String, String> getTime(int millsec) {
+    public Pair<String, String> getTime(int millsec) {
         int min, sec;
         sec = millsec / 1000;
         min = sec / 60;

@@ -62,6 +62,10 @@ public class PlayListsHorizontalAdapter extends RecyclerView.Adapter<PlayListsHo
         Playlist pl = playlists.get(position);
         List<UnifiedTrack> list = pl.getSongList();
 
+        for (int i = 0; i < 4; i++) {
+            holder.img[i].setImageBitmap(null);
+        }
+
         if (list.size() >= 4) {
             for (int i = 0; i < 4; i++) {
                 if (list.get(i).getType()) {
@@ -82,7 +86,7 @@ public class PlayListsHorizontalAdapter extends RecyclerView.Adapter<PlayListsHo
         }
 
         holder.playlistName.setText(pl.getPlaylistName());
-        if(pl.getSongList().size()>1)
+        if (pl.getSongList().size() > 1)
             holder.playlistSize.setText(String.valueOf(pl.getSongList().size()) + " Songs");
         else
             holder.playlistSize.setText(String.valueOf(pl.getSongList().size()) + " Song");

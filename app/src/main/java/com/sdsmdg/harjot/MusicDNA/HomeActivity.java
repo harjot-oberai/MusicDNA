@@ -5,9 +5,11 @@ import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -24,9 +26,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.IBinder;
 import android.provider.MediaStore;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -57,6 +61,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -148,7 +153,8 @@ public class HomeActivity extends AppCompatActivity
         ViewArtistFragment.onArtistSongClickListener,
         ViewArtistFragment.onArtistPlayAllListener,
         RecentsFragment.onRecentItemClickedListener,
-        RecentsFragment.onRepeatListener {
+        RecentsFragment.onRepeatListener,
+        MediaPlayerService.onCallbackListener{
 
 
     public static List<LocalTrack> localTrackList = new ArrayList<>();
@@ -304,6 +310,7 @@ public class HomeActivity extends AppCompatActivity
     View playerContainer;
 
     android.support.v4.app.FragmentManager fragMan;
+    static android.support.v4.app.FragmentManager fragMan2;
 
     public static boolean isPlayerVisible = false;
     public static boolean isLocalVisible = false;
@@ -382,7 +389,7 @@ public class HomeActivity extends AppCompatActivity
 //                PlayerFragment.mCallback8 = this;
 //                PlayerFragment.mCallback9 = this;
                 if (Build.VERSION.SDK_INT < 21)
-                    PlayerFragment.mCallback7 = this;
+                    getPlayerFragment().mCallback7 = this;
                 int flag = 0;
                 for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
                     UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
@@ -505,7 +512,7 @@ public class HomeActivity extends AppCompatActivity
 //                PlayerFragment.mCallback8 = this;
 //                PlayerFragment.mCallback9 = this;
                 if (Build.VERSION.SDK_INT < 21)
-                    PlayerFragment.mCallback7 = this;
+                    getPlayerFragment().mCallback7 = this;
                 int flag = 0;
                 for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
                     UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
@@ -631,6 +638,7 @@ public class HomeActivity extends AppCompatActivity
         lps.setMargins(margin, margin, margin, navBarHeightSizeinDp + 5);
 
         fragMan = getSupportFragmentManager();
+        fragMan2 = getSupportFragmentManager();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         spToolbar = (Toolbar) findViewById(R.id.smallPlayer_AB);
@@ -710,24 +718,27 @@ public class HomeActivity extends AppCompatActivity
         phoneStateListener = new PhoneStateListener() {
             @Override
             public void onCallStateChanged(int state, String incomingNumber) {
+
+                PlayerFragment pFrag = (PlayerFragment) fragMan.findFragmentByTag("player");
+
                 if (state == TelephonyManager.CALL_STATE_RINGING) {
                     //Incoming call: Pause music
-                    if (PlayerFragment.mMediaPlayer != null && PlayerFragment.mMediaPlayer.isPlaying()) {
+                    if (pFrag.mMediaPlayer != null && pFrag.mMediaPlayer.isPlaying()) {
                         wasMediaPlayerPlaying = true;
-                        PlayerFragment.togglePlayPause();
+                        pFrag.togglePlayPause();
                     } else {
                         wasMediaPlayerPlaying = false;
                     }
                 } else if (state == TelephonyManager.CALL_STATE_IDLE) {
                     //Not in call: Play music
-                    if (PlayerFragment.mMediaPlayer != null && !PlayerFragment.mMediaPlayer.isPlaying() && wasMediaPlayerPlaying) {
-                        PlayerFragment.togglePlayPause();
+                    if (pFrag.mMediaPlayer != null && !pFrag.mMediaPlayer.isPlaying() && wasMediaPlayerPlaying) {
+                        pFrag.togglePlayPause();
                     }
                 } else if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
                     //A call is dialing, active or on hold
-                    if (PlayerFragment.mMediaPlayer != null && PlayerFragment.mMediaPlayer.isPlaying()) {
+                    if (PlayerFragment.mMediaPlayer != null && pFrag.mMediaPlayer.isPlaying()) {
                         wasMediaPlayerPlaying = true;
-                        PlayerFragment.togglePlayPause();
+                        pFrag.togglePlayPause();
                     } else {
                         wasMediaPlayerPlaying = false;
                     }
@@ -1408,8 +1419,10 @@ public class HomeActivity extends AppCompatActivity
                         stopLoadingIndicator();
                         (streamingListView.getAdapter()).notifyDataSetChanged();
 
-                        if (StreamMusicFragment.adapter != null)
-                            StreamMusicFragment.adapter.notifyDataSetChanged();
+                        StreamMusicFragment sFrag = (StreamMusicFragment) fragMan.findFragmentByTag("stream");
+                        if(sFrag!=null){
+                            sFrag.dataChanged();
+                        }
                     } else {
                         stopLoadingIndicator();
                     }
@@ -2455,6 +2468,11 @@ public class HomeActivity extends AppCompatActivity
         showAddToPlaylistDialog(ut);
     }
 
+    @Override
+    public PlayerFragment getPlayerFragmentFromHome() {
+        return getPlayerFragment();
+    }
+
     public static class MyAsyncTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -2538,6 +2556,9 @@ public class HomeActivity extends AppCompatActivity
         Button btn = (Button) dialog.findViewById(R.id.save_image_btn);
         final EditText newName = (EditText) dialog.findViewById(R.id.save_image_filename_text);
 
+        CheckBox cb = (CheckBox) dialog.findViewById(R.id.text_checkbox);
+        cb.setVisibility(View.GONE);
+
         newName.setText(oldName);
         btn.setBackgroundColor(themeColor);
 
@@ -2551,8 +2572,9 @@ public class HomeActivity extends AppCompatActivity
                     if (pAdapter != null) {
                         pAdapter.notifyItemChanged(renamePlaylistNumber);
                     }
-                    if (PlayListFragment.vpAdapter != null) {
-                        PlayListFragment.vpAdapter.notifyItemChanged(renamePlaylistNumber);
+                    PlayListFragment plFrag = (PlayListFragment) fragMan.findFragmentByTag("allPlaylists");
+                    if(plFrag!=null){
+                        plFrag.itemChanged(renamePlaylistNumber);
                     }
                     new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     dialog.dismiss();
@@ -3202,7 +3224,7 @@ public class HomeActivity extends AppCompatActivity
             notificationViewSmall.setTextViewText(R.id.title_in_notification, PlayerFragment.track.getTitle());
             notificationViewSmall.setTextViewText(R.id.artist_in_notification, "");
         }
-        PlayerFragment.isStart = false;
+        getPlayerFragment().isStart = false;
         notificationManager.notify(1, notification);
     }
 
@@ -3695,8 +3717,9 @@ public class HomeActivity extends AppCompatActivity
                                         onPlaylistPLayAll();
                                     } else if (item.getTitle().equals("Delete")) {
                                         allPlaylists.getPlaylists().remove(position);
-                                        if (PlayListFragment.vpAdapter != null) {
-                                            PlayListFragment.vpAdapter.notifyItemRemoved(position);
+                                        PlayListFragment plFrag = (PlayListFragment) fragMan.findFragmentByTag("allPlaylists");
+                                        if(plFrag!=null){
+                                            plFrag.itemRemoved(position);
                                         }
                                         pAdapter.notifyItemRemoved(position);
                                         new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -4174,9 +4197,27 @@ public class HomeActivity extends AppCompatActivity
         return dp;
     }
 
-    public static boolean hasNavBar(Resources resources) {
+    public boolean hasNavBar(Resources resources) {
         int id = resources.getIdentifier("config_showNavigationBar", "bool", "android");
         return id > 0 && resources.getBoolean(id);
     }
 
+    public static PlayerFragment getPlayerFragment(){
+        return (PlayerFragment) fragMan2.findFragmentByTag("player");
+    }
+
+    public static Pair<String, String> getTime(int millsec) {
+        int min, sec;
+        sec = millsec / 1000;
+        min = sec / 60;
+        sec = sec % 60;
+        String minS, secS;
+        minS = String.valueOf(min);
+        secS = String.valueOf(sec);
+        if (sec < 10) {
+            secS = "0" + secS;
+        }
+        Pair<String, String> pair = Pair.create(minS, secS);
+        return pair;
+    }
 }

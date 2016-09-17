@@ -24,7 +24,7 @@ import com.squareup.leakcanary.RefWatcher;
 public class ViewPlaylistFragment extends Fragment implements PlaylistTrackAdapter.OnDragStartListener {
 
     RecyclerView playlistRecyler;
-    static PlaylistTrackAdapter plAdapter;
+    PlaylistTrackAdapter plAdapter;
     FloatingActionButton playAll;
 
     ItemTouchHelper mItemTouchHelper;

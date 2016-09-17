@@ -30,7 +30,7 @@ public class StreamMusicFragment extends Fragment {
     OnTrackSelectedListener mCallback;
     Context ctx;
 
-    static RecyclerView lv;
+    RecyclerView lv;
 
     public StreamMusicFragment() {
         // Required empty public constructor
@@ -38,6 +38,7 @@ public class StreamMusicFragment extends Fragment {
 
     public interface OnTrackSelectedListener {
         public void onTrackSelected(int position);
+
         public void addToPlaylist(UnifiedTrack ut);
     }
 
@@ -194,4 +195,10 @@ public class StreamMusicFragment extends Fragment {
         RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
         refWatcher.watch(this);
     }
+
+    public void dataChanged() {
+        if (adapter != null)
+            adapter.notifyDataSetChanged();
+    }
+
 }

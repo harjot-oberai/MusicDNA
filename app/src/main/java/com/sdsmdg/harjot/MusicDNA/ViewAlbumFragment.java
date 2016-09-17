@@ -109,7 +109,7 @@ public class ViewAlbumFragment extends Fragment {
             tmp2 += HomeActivity.tempAlbum.getAlbumSongs().get(i).getDuration();
         }
 
-        Pair<String, String> time = PlayerFragment.getTime(tmp2);
+        Pair<String, String> time = HomeActivity.getTime(tmp2);
 
         albumDetails.setText(details1 + " •  " + time.first + "m" + time.second + "s");
 

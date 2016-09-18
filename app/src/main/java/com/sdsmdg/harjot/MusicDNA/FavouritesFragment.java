@@ -112,12 +112,14 @@ public class FavouritesFragment extends Fragment implements FavouriteTrackAdapte
         playAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HomeActivity.queue.getQueue().clear();
-                for (int i = 0; i < HomeActivity.favouriteTracks.getFavourite().size(); i++) {
-                    HomeActivity.queue.getQueue().add(HomeActivity.favouriteTracks.getFavourite().get(i));
+                if (HomeActivity.favouriteTracks.getFavourite().size() > 0) {
+                    HomeActivity.queue.getQueue().clear();
+                    for (int i = 0; i < HomeActivity.favouriteTracks.getFavourite().size(); i++) {
+                        HomeActivity.queue.getQueue().add(HomeActivity.favouriteTracks.getFavourite().get(i));
+                    }
+                    HomeActivity.queueCurrentIndex = 0;
+                    mCallback2.onFavouritePlayAll();
                 }
-                HomeActivity.queueCurrentIndex = 0;
-                mCallback2.onFavouritePlayAll();
             }
         });
 

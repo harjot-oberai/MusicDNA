@@ -156,26 +156,28 @@ public class PlayerFragment extends Fragment implements
 
         }
 
-        bassBoost = new BassBoost(0, mMediaPlayer.getAudioSessionId());
-        bassBoost.setEnabled(true);
-        BassBoost.Settings bassBoostSettingTemp = bassBoost.getProperties();
-        BassBoost.Settings bassBoostSetting = new BassBoost.Settings(bassBoostSettingTemp.toString());
-        if (HomeActivity.bassStrength == -1) {
-            bassBoostSetting.strength = (1000 / 19);
-        } else {
-            bassBoostSetting.strength = HomeActivity.bassStrength;
-        }
-        bassBoost.setProperties(bassBoostSetting);
-        mMediaPlayer.setAuxEffectSendLevel(1.0f);
+        if(HomeActivity.isEqualizerEnabled) {
+            bassBoost = new BassBoost(0, mMediaPlayer.getAudioSessionId());
+            bassBoost.setEnabled(true);
+            BassBoost.Settings bassBoostSettingTemp = bassBoost.getProperties();
+            BassBoost.Settings bassBoostSetting = new BassBoost.Settings(bassBoostSettingTemp.toString());
+            if (HomeActivity.bassStrength == -1) {
+                bassBoostSetting.strength = (1000 / 19);
+            } else {
+                bassBoostSetting.strength = HomeActivity.bassStrength;
+            }
+            bassBoost.setProperties(bassBoostSetting);
+            mMediaPlayer.setAuxEffectSendLevel(1.0f);
 
-        presetReverb = new PresetReverb(0, mMediaPlayer.getAudioSessionId());
-        if (HomeActivity.reverbPreset == -1) {
-            presetReverb.setPreset(PresetReverb.PRESET_NONE);
-        } else {
-            presetReverb.setPreset(HomeActivity.reverbPreset);
+            presetReverb = new PresetReverb(0, mMediaPlayer.getAudioSessionId());
+            if (HomeActivity.reverbPreset == -1) {
+                presetReverb.setPreset(PresetReverb.PRESET_NONE);
+            } else {
+                presetReverb.setPreset(HomeActivity.reverbPreset);
+            }
+            presetReverb.setEnabled(true);
+            mMediaPlayer.setAuxEffectSendLevel(1.0f);
         }
-        presetReverb.setEnabled(true);
-        mMediaPlayer.setAuxEffectSendLevel(1.0f);
 
 
         try {

@@ -53,6 +53,7 @@ import android.util.TypedValue;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -69,6 +70,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.RemoteViews;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -154,8 +156,10 @@ public class HomeActivity extends AppCompatActivity
         ViewArtistFragment.onArtistPlayAllListener,
         RecentsFragment.onRecentItemClickedListener,
         RecentsFragment.onRepeatListener,
-        MediaPlayerService.onCallbackListener{
+        MediaPlayerService.onCallbackListener {
 
+
+    ScrollView container;
 
     public static List<LocalTrack> localTrackList = new ArrayList<>();
     public static List<LocalTrack> finalLocalSearchResultList = new ArrayList<>();
@@ -492,7 +496,7 @@ public class HomeActivity extends AppCompatActivity
         if (!queueCall) {
             hideKeyboard();
 
-            searchView.setQuery("", false);
+            searchView.setQuery("", true);
             searchView.setIconified(true);
             new Thread(new CancelCall()).start();
 
@@ -503,14 +507,6 @@ public class HomeActivity extends AppCompatActivity
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             PlayerFragment newFragment = new PlayerFragment();
             if (frag == null) {
-//                PlayerFragment.mCallback = this;
-//                PlayerFragment.mCallback2 = this;
-//                PlayerFragment.mCallback3 = this;
-//                PlayerFragment.mCallback4 = this;
-//                PlayerFragment.mCallback5 = this;
-//                PlayerFragment.mCallback6 = this;
-//                PlayerFragment.mCallback8 = this;
-//                PlayerFragment.mCallback9 = this;
                 if (Build.VERSION.SDK_INT < 21)
                     getPlayerFragment().mCallback7 = this;
                 int flag = 0;
@@ -635,7 +631,7 @@ public class HomeActivity extends AppCompatActivity
         lps.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         lps.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         int margin = ((Number) (getResources().getDisplayMetrics().density * 12)).intValue();
-        lps.setMargins(margin, margin, margin, navBarHeightSizeinDp + 5);
+        lps.setMargins(margin, margin, margin, navBarHeightSizeinDp + ((Number) (getResources().getDisplayMetrics().density * 5)).intValue());
 
         fragMan = getSupportFragmentManager();
         fragMan2 = getSupportFragmentManager();
@@ -869,6 +865,22 @@ public class HomeActivity extends AppCompatActivity
         recentsRecyclerContainer = (RelativeLayout) findViewById(R.id.recentsRecyclerContainer);
         streamRecyclerContainer = (RelativeLayout) findViewById(R.id.streamRecyclerContainer);
         playlistRecyclerContainer = (RelativeLayout) findViewById(R.id.playlistRecyclerContainer);
+
+        container = (ScrollView) findViewById(R.id.container);
+        container.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    localRecyclerContainer.setVisibility(View.GONE);
+                    streamRecyclerContainer.setVisibility(View.GONE);
+                    if (!searchView.isIconified()) {
+                        searchView.setQuery("", true);
+                        searchView.setIconified(true);
+                    }
+                }
+                return false;
+            }
+        });
 
         if (SplashActivity.tf2 != null) {
             ((TextView) findViewById(R.id.playListRecyclerLabel)).setTypeface(SplashActivity.tf2);
@@ -1147,6 +1159,13 @@ public class HomeActivity extends AppCompatActivity
             searchView.setQuery("", true);
             searchView.setIconified(true);
             new Thread(new CancelCall()).start();
+            if (localRecyclerContainer.getVisibility() == View.VISIBLE || streamRecyclerContainer.getVisibility() == View.VISIBLE) {
+                localRecyclerContainer.setVisibility(View.GONE);
+                streamRecyclerContainer.setVisibility(View.GONE);
+            }
+        } else if (localRecyclerContainer.getVisibility() == View.VISIBLE || streamRecyclerContainer.getVisibility() == View.VISIBLE) {
+            localRecyclerContainer.setVisibility(View.GONE);
+            streamRecyclerContainer.setVisibility(View.GONE);
         } else {
             if (isEqualizerVisible) {
                 showPlayer2();
@@ -1273,6 +1292,7 @@ public class HomeActivity extends AppCompatActivity
     public boolean onQueryTextSubmit(String query) {
         hideKeyboard();
         updateLocalList(query.trim());
+        updateStreamingList(query.trim());
         updateAlbumList(query.trim());
         updateArtistList(query.trim());
         return true;
@@ -1288,7 +1308,7 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void updateLocalList(String query) {
-
+        Log.d("QUERY", "Local Query" + query);
         if (isPlayerVisible) {
             hidePlayer();
         }
@@ -1336,6 +1356,7 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void updateAlbumList(String query) {
+        Log.d("QUERY", "Album Query" + query);
         finalAlbums.clear();
         for (int i = 0; i < albums.size(); i++) {
             Album album = albums.get(i);
@@ -1355,15 +1376,20 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void updateArtistList(String query) {
+        Log.d("QUERY", "Artist Query" + query);
         finalArtists.clear();
         for (int i = 0; i < artists.size(); i++) {
             Artist artist = artists.get(i);
             String tmp1 = artist.getName().toLowerCase();
             String tmp2 = query.toLowerCase();
             if (tmp1.contains(tmp2)) {
+                Log.d("ARTIST_INFO", String.valueOf(i) + ": " + artist.getName());
                 finalArtists.add(artist);
             }
         }
+
+        Log.d("FINAL_ARTIST_SIZE", String.valueOf(finalArtists.size()));
+
         FullLocalMusicFragment flmFrag = (FullLocalMusicFragment) fragMan.findFragmentByTag("local");
         if (flmFrag != null) {
             ArtistFragment aFrag = (ArtistFragment) flmFrag.getFragmentByPosition(2);
@@ -1420,7 +1446,7 @@ public class HomeActivity extends AppCompatActivity
                         (streamingListView.getAdapter()).notifyDataSetChanged();
 
                         StreamMusicFragment sFrag = (StreamMusicFragment) fragMan.findFragmentByTag("stream");
-                        if(sFrag!=null){
+                        if (sFrag != null) {
                             sFrag.dataChanged();
                         }
                     } else {
@@ -1488,7 +1514,7 @@ public class HomeActivity extends AppCompatActivity
                     }
                 });
 
-        if(isFullScreenEnabled){
+        if (isFullScreenEnabled) {
             toolbar.setVisibility(View.INVISIBLE);
             fragmentToolbar.setVisibility(View.INVISIBLE);
         }
@@ -2436,6 +2462,8 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onArtistClick() {
+        searchView.setQuery("", true);
+        searchView.setIconified(true);
         showFragment("viewArtist");
     }
 
@@ -2573,7 +2601,7 @@ public class HomeActivity extends AppCompatActivity
                         pAdapter.notifyItemChanged(renamePlaylistNumber);
                     }
                     PlayListFragment plFrag = (PlayListFragment) fragMan.findFragmentByTag("allPlaylists");
-                    if(plFrag!=null){
+                    if (plFrag != null) {
                         plFrag.itemChanged(renamePlaylistNumber);
                     }
                     new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -2699,6 +2727,7 @@ public class HomeActivity extends AppCompatActivity
         if (!searchView.isIconified()) {
             searchView.setQuery("", true);
             searchView.setIconified(true);
+            streamRecyclerContainer.setVisibility(View.GONE);
             new Thread(new CancelCall()).start();
         }
 
@@ -3718,7 +3747,7 @@ public class HomeActivity extends AppCompatActivity
                                     } else if (item.getTitle().equals("Delete")) {
                                         allPlaylists.getPlaylists().remove(position);
                                         PlayListFragment plFrag = (PlayListFragment) fragMan.findFragmentByTag("allPlaylists");
-                                        if(plFrag!=null){
+                                        if (plFrag != null) {
                                             plFrag.itemRemoved(position);
                                         }
                                         pAdapter.notifyItemRemoved(position);
@@ -4078,6 +4107,8 @@ public class HomeActivity extends AppCompatActivity
         protected Void doInBackground(Void... params) {
             String json3 = gson.toJson(queue);
             prefsEditor.putString("queue", json3);
+            String json6 = gson.toJson(queueCurrentIndex);
+            prefsEditor.putString("queueCurrentIndex", json6);
             prefsEditor.commit();
             return null;
         }
@@ -4202,7 +4233,7 @@ public class HomeActivity extends AppCompatActivity
         return id > 0 && resources.getBoolean(id);
     }
 
-    public static PlayerFragment getPlayerFragment(){
+    public static PlayerFragment getPlayerFragment() {
         return (PlayerFragment) fragMan2.findFragmentByTag("player");
     }
 

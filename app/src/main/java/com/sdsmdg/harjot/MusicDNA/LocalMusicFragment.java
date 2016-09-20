@@ -51,6 +51,7 @@ public class LocalMusicFragment extends Fragment {
 
     public interface OnLocalTrackSelectedListener {
         void onLocalTrackSelected(int position);
+
         void addToPlaylist(UnifiedTrack ut);
     }
 
@@ -108,7 +109,7 @@ public class LocalMusicFragment extends Fragment {
             }
         });
         lv = (RecyclerView) view.findViewById(R.id.localMusicList);
-        adapter = new LocalTrackListAdapter(HomeActivity.finalLocalSearchResultList , getContext());
+        adapter = new LocalTrackListAdapter(HomeActivity.finalLocalSearchResultList, getContext());
         LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         lv.setLayoutManager(mLayoutManager2);
         lv.setItemAnimator(new DefaultItemAnimator());
@@ -276,26 +277,26 @@ public class LocalMusicFragment extends Fragment {
         refWatcher.watch(this);
     }
 
-    public void hideShuffleFab(){
+    public void hideShuffleFab() {
         if (shuffleFab != null)
             shuffleFab.setVisibility(View.INVISIBLE);
     }
 
-    public void showShuffleFab(){
+    public void showShuffleFab() {
         if (shuffleFab != null)
             shuffleFab.setVisibility(View.VISIBLE);
     }
 
-    public void updateAdapter(){
-        if (lv != null)
-            lv.getAdapter().notifyDataSetChanged();
+    public void updateAdapter() {
+        if (adapter != null)
+            adapter.notifyDataSetChanged();
     }
 
-    public boolean isShowcaseVisible(){
+    public boolean isShowcaseVisible() {
         return (showCase != null && showCase.isShowing());
     }
 
-    public void hideShowcase(){
+    public void hideShowcase() {
         showCase.hide();
     }
 

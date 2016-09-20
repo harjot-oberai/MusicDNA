@@ -103,7 +103,7 @@ public class AlbumFragment extends Fragment {
     }
 
     public void updateAdapter() {
-        if (rv != null && rv.getAdapter() != null)
-            rv.getAdapter().notifyDataSetChanged();
+        if (abAdapter != null)
+            abAdapter.notifyDataSetChanged();
     }
 }

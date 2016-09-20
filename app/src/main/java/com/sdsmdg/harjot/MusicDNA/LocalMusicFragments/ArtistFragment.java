@@ -99,7 +99,7 @@ public class ArtistFragment extends Fragment {
     }
 
     public void updateAdapter() {
-        if (rv != null && rv.getAdapter() != null)
-            rv.getAdapter().notifyDataSetChanged();
+        if (arAdapter != null)
+            arAdapter.notifyDataSetChanged();
     }
 }

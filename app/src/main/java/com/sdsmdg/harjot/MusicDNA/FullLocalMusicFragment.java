@@ -1,6 +1,7 @@
 package com.sdsmdg.harjot.MusicDNA;
 
 
+import android.content.Context;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
@@ -50,12 +51,23 @@ public class FullLocalMusicFragment extends Fragment {
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         tabLayout.setBackgroundColor(HomeActivity.themeColor);
+//        adapter = new MyPageAdapter(getChildFragmentManager());
+//        adapter.addFragment(new LocalMusicFragment(), "Songs");
+//        adapter.addFragment(new AlbumFragment(), "Albums");
+//        adapter.addFragment(new ArtistFragment(), "Artists");
+        viewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(viewPager);
+
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
         adapter = new MyPageAdapter(getChildFragmentManager());
         adapter.addFragment(new LocalMusicFragment(), "Songs");
         adapter.addFragment(new AlbumFragment(), "Albums");
         adapter.addFragment(new ArtistFragment(), "Artists");
-        viewPager.setAdapter(adapter);
-        tabLayout.setupWithViewPager(viewPager);
 
     }
 

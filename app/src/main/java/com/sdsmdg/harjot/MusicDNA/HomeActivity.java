@@ -2688,6 +2688,7 @@ public class HomeActivity extends AppCompatActivity
                     playlistsRecycler.setVisibility(View.VISIBLE);
                     playlistNothingText.setVisibility(View.INVISIBLE);
                     pAdapter.notifyDataSetChanged();
+                    new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     dialog.dismiss();
                 }
             }

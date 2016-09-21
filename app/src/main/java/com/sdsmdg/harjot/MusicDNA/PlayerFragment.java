@@ -75,7 +75,7 @@ public class PlayerFragment extends Fragment implements
 
     View bufferingIndicator;
 
-    View fullscreenExtraSpaceOccupier;
+    static View fullscreenExtraSpaceOccupier;
 
     static CustomProgressBar cpb;
 

@@ -1154,6 +1154,7 @@ public class HomeActivity extends AppCompatActivity
             PlayerFragment.seekBarContainer.setVisibility(View.VISIBLE);
             PlayerFragment.toggleContainer.setVisibility(View.VISIBLE);
             spToolbar.setVisibility(View.VISIBLE);
+            PlayerFragment.fullscreenExtraSpaceOccupier.getLayoutParams().height = 0;
             onFullScreen();
         } else if (!searchView.isIconified()) {
             searchView.setQuery("", true);
@@ -4203,11 +4204,9 @@ public class HomeActivity extends AppCompatActivity
         if (resourceId > 0) {
             result = getResources().getDimensionPixelSize(resourceId);
         }
-        TypedValue tv = new TypedValue();
-        if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
-            result += TypedValue.complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics());
-        }
-        return (pxToDp(result) - 5);
+//        Log.d("STATUSBAR_HEIGHT", String.valueOf(result));
+//        return (pxToDp(result));
+        return (result);
     }
 
     public int getNavBarHeight() {
@@ -4216,17 +4215,22 @@ public class HomeActivity extends AppCompatActivity
         if (resourceId > 0) {
             result = getResources().getDimensionPixelSize(resourceId);
         }
-        TypedValue tv = new TypedValue();
-        if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
-            result += TypedValue.complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics());
-        }
-        return (pxToDp(result));
+//        return (pxToDp(result));
+        return (result);
+    }
+
+//    public int pxToDp(int px) {
+//        DisplayMetrics displayMetrics = ctx.getResources().getDisplayMetrics();
+//        int dp = Math.round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+//        return dp;
+//    }
+
+    public int dpToPx(int dp) {
+        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
     }
 
     public int pxToDp(int px) {
-        DisplayMetrics displayMetrics = ctx.getResources().getDisplayMetrics();
-        int dp = Math.round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
-        return dp;
+        return (int) (px / Resources.getSystem().getDisplayMetrics().density);
     }
 
     public boolean hasNavBar(Resources resources) {

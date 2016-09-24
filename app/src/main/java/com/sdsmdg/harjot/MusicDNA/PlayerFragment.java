@@ -1,6 +1,7 @@
 package com.sdsmdg.harjot.MusicDNA;
 
 
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -138,6 +139,8 @@ public class PlayerFragment extends Fragment implements
 
     ShowcaseView showCase;
 
+    SlidingRelativeLayout rootView;
+
     long startTrack;
     long endTrack;
 
@@ -156,7 +159,7 @@ public class PlayerFragment extends Fragment implements
 
         }
 
-        if(HomeActivity.isEqualizerEnabled) {
+        if (HomeActivity.isEqualizerEnabled) {
             bassBoost = new BassBoost(0, mMediaPlayer.getAudioSessionId());
             bassBoost.setEnabled(true);
             BassBoost.Settings bassBoostSettingTemp = bassBoost.getProperties();
@@ -354,10 +357,12 @@ public class PlayerFragment extends Fragment implements
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(final View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         imgLoader = new ImageLoader(getContext());
+
+        rootView = (SlidingRelativeLayout) view.findViewById(R.id.root_view);
 
         fullscreenExtraSpaceOccupier = view.findViewById(R.id.fullscreen_extra_space_occupier);
 
@@ -442,10 +447,12 @@ public class PlayerFragment extends Fragment implements
                 if (isFav) {
                     favouriteIcon.setImageResource(R.drawable.ic_heart_out);
                     isFav = false;
+                    Snackbar.make(view, "Removed from favourites", Snackbar.LENGTH_SHORT).show();
                     removeFromFavourite();
                 } else {
                     favouriteIcon.setImageResource(R.drawable.ic_heart_filled);
                     isFav = true;
+                    Snackbar.make(view, "Added to favourites", Snackbar.LENGTH_SHORT).show();
                     addToFavourite();
                 }
                 new HomeActivity.SaveFavourites().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -1093,7 +1100,8 @@ public class PlayerFragment extends Fragment implements
             public void onStopTrackingTouch(SeekBar seekBar) {
                 endTrack = System.currentTimeMillis();
                 mMediaPlayer.seekTo(seekBar.getProgress());
-                mMediaPlayer.start();
+                if (mMediaPlayer.isPlaying())
+                    mMediaPlayer.start();
                 isTracking = false;
             }
 

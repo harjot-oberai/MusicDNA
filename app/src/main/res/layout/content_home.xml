@@ -488,13 +488,13 @@
         android:layout_above="@+id/bottomMargin"
         android:translationZ="10dp"></FrameLayout>
 
-    <View
-        android:id="@+id/gradient_view"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_alignBottom="@+id/container"
-        android:layout_gravity="bottom"
-        android:background="@drawable/transparent_gradient" />
+    <!--<View-->
+        <!--android:id="@+id/gradient_view"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="70dp"-->
+        <!--android:layout_alignBottom="@+id/container"-->
+        <!--android:layout_gravity="bottom"-->
+        <!--android:background="@drawable/transparent_gradient" />-->
 
     <FrameLayout
         android:id="@+id/content_frag"

@@ -3,6 +3,7 @@ package com.sdsmdg.harjot.MusicDNA;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +19,10 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.flask.colorpicker.ColorPickerView;
+import com.flask.colorpicker.OnColorSelectedListener;
+import com.flask.colorpicker.builder.ColorPickerClickListener;
+import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.squareup.leakcanary.RefWatcher;
 
 import me.priyesh.chroma.ChromaDialog;
@@ -78,15 +83,53 @@ public class SettingsFragment extends Fragment {
         themeCard = (CardView) view.findViewById(R.id.theme_card);
         themeColorImg = (ImageView) view.findViewById(R.id.theme_color_img);
         themeColorImg.setBackgroundColor(HomeActivity.themeColor);
+//        themeCard.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                new ChromaDialog.Builder()
+//                        .initialColor(((ColorDrawable) themeColorImg.getBackground()).getColor())
+//                        .colorMode(ColorMode.RGB) // There's also ARGB and HSV
+//                        .onColorSelected(new ColorSelectListener() {
+//                            @Override
+//                            public void onColorSelected(int color) {
+//                                HomeActivity.settings.setThemeColor(color);
+//                                HomeActivity.themeColor = color;
+//                                HomeActivity.toolbar.setBackgroundColor(color);
+//                                HomeActivity.fragmentToolbar.setBackgroundColor(color);
+//                                themeColorImg.setBackgroundColor(color);
+//                                if (Build.VERSION.SDK_INT >= 21) {
+//                                    Window window = ((Activity) (getContext())).getWindow();
+//                                    window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//                                    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//                                    window.setStatusBarColor(color);
+//                                }
+//                            }
+//                        })
+//                        .create()
+//                        .show(getFragmentManager(), "ChromaDialog");
+//            }
+//        });
+
         themeCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ChromaDialog.Builder()
+                ColorPickerDialogBuilder
+                        .with(getContext())
+                        .setTitle("Choose color")
                         .initialColor(((ColorDrawable) themeColorImg.getBackground()).getColor())
-                        .colorMode(ColorMode.RGB) // There's also ARGB and HSV
-                        .onColorSelected(new ColorSelectListener() {
+                        .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+                        .density(9)
+                        .showColorPreview(true)
+                        .lightnessSliderOnly()
+                        .setOnColorSelectedListener(new OnColorSelectedListener() {
                             @Override
                             public void onColorSelected(int color) {
+
+                            }
+                        })
+                        .setPositiveButton("ok", new ColorPickerClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int color, Integer[] allColors) {
                                 HomeActivity.settings.setThemeColor(color);
                                 HomeActivity.themeColor = color;
                                 HomeActivity.toolbar.setBackgroundColor(color);
@@ -100,8 +143,14 @@ public class SettingsFragment extends Fragment {
                                 }
                             }
                         })
-                        .create()
-                        .show(getFragmentManager(), "ChromaDialog");
+                        .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .build()
+                        .show();
             }
         });
 

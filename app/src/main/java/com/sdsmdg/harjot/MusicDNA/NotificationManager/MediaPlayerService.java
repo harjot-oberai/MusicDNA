@@ -57,13 +57,14 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
 
     private boolean isSwipable = false;
 
-    public interface onCallbackListener{
+    public interface onCallbackListener {
         public PlayerFragment getPlayerFragmentFromHome();
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        pFragment.mCallback7 = this;
+        if (pFragment != null)
+            pFragment.mCallback7 = this;
         return null;
     }
 
@@ -192,7 +193,8 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         pFragment = HomeActivity.getPlayerFragment();
-        pFragment.mCallback7 = this;
+        if (pFragment != null)
+            pFragment.mCallback7 = this;
 
         if (m_objMediaSessionManager == null) {
             initMediaSessions();
@@ -229,7 +231,9 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void initMediaSessions() {
 
-        pFragment.mCallback7 = this;
+        if (pFragment != null) {
+            pFragment.mCallback7 = this;
+        }
         m_objMediaPlayer = PlayerFragment.mMediaPlayer;
         m_objMediaSessionManager = (MediaSessionManager) getSystemService(Context.MEDIA_SESSION_SERVICE);
         m_objMediaSession = new MediaSession(getApplicationContext(), "sample session");
@@ -297,7 +301,8 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
             public void onSkipToNext() {
                 super.onSkipToNext();
                 try {
-                    pFragment.mCallback2.onComplete();
+                    if (pFragment != null)
+                        pFragment.mCallback2.onComplete();
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -315,7 +320,8 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
             public void onSkipToPrevious() {
                 super.onSkipToPrevious();
                 try {
-                    pFragment.mCallback3.onPreviousTrack();
+                    if (pFragment != null)
+                        pFragment.mCallback3.onPreviousTrack();
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -333,7 +339,8 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
             public void onFastForward() {
                 super.onFastForward();
                 Log.d(Constants.LOG_TAG, "onFastForward");
-                pFragment.mCallback2.onComplete();
+                if (pFragment != null)
+                    pFragment.mCallback2.onComplete();
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -347,7 +354,8 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
             public void onRewind() {
                 super.onRewind();
                 Log.d(Constants.LOG_TAG, "onRewind");
-                pFragment.mCallback3.onPreviousTrack();
+                if (pFragment != null)
+                    pFragment.mCallback3.onPreviousTrack();
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override

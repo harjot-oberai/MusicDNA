@@ -12,6 +12,7 @@ apply plugin: 'io.fabric'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
+    maven { url "https://jitpack.io" }
 }
 
 
@@ -66,6 +67,7 @@ dependencies {
     compile 'com.h6ah4i.android.widget.verticalseekbar:verticalseekbar:0.7.0'
     compile 'jp.wasabeef:blurry:2.0.2'
     compile 'me.priyesh:chroma:1.0.2'
+    compile 'com.github.QuadFlask:colorpicker:0.0.12'
     compile 'com.github.amlcurran.showcaseview:library:5.4.3'
     compile('com.crashlytics.sdk.android:crashlytics:2.6.2@aar') {
         transitive = true;

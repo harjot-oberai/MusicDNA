@@ -184,8 +184,6 @@ public class HomeActivity extends AppCompatActivity
 
     AppBarLayout appBarLayout;
 
-    View gradientView;
-
     Toolbar spHome;
     ImageView playerControllerHome;
     static FrameLayout bottomToolbar;
@@ -300,7 +298,7 @@ public class HomeActivity extends AppCompatActivity
     ImageView fragmentBackButton;
     TextView fragmentToolbarTitle;
 
-    static int themeColor = Color.parseColor("#000000");
+    static int themeColor = Color.parseColor("#607D8B");
     static float minAudioStrength = 0.40f;
 
     public static Activity main;
@@ -605,8 +603,6 @@ public class HomeActivity extends AppCompatActivity
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
 
         setContentView(R.layout.activity_home);
-
-        gradientView = findViewById(R.id.gradient_view);
 
         PackageInfo pInfo = null;
         try {
@@ -1072,17 +1068,22 @@ public class HomeActivity extends AppCompatActivity
             while (musicCursor.moveToNext());
         }
 
-        if (localTrackList.size() > 0) {
-            Collections.sort(localTrackList, new localMusicComparator());
-            Collections.sort(finalLocalSearchResultList, new localMusicComparator());
-        }
-        if (albums.size() > 0) {
-            Collections.sort(albums, new albumComparator());
-            Collections.sort(finalAlbums, new albumComparator());
-        }
-        if (artists.size() > 0) {
-            Collections.sort(artists, new artistComparator());
-            Collections.sort(finalArtists, new artistComparator());
+        System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
+        try {
+            if (localTrackList.size() > 0) {
+                Collections.sort(localTrackList, new localMusicComparator());
+                Collections.sort(finalLocalSearchResultList, new localMusicComparator());
+            }
+            if (albums.size() > 0) {
+                Collections.sort(albums, new albumComparator());
+                Collections.sort(finalAlbums, new albumComparator());
+            }
+            if (artists.size() > 0) {
+                Collections.sort(artists, new artistComparator());
+                Collections.sort(finalArtists, new artistComparator());
+            }
+        } catch (Exception e){
+
         }
 
     }
@@ -1309,7 +1310,6 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void updateLocalList(String query) {
-        Log.d("QUERY", "Local Query" + query);
         if (isPlayerVisible) {
             hidePlayer();
         }
@@ -1357,7 +1357,6 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void updateAlbumList(String query) {
-        Log.d("QUERY", "Album Query" + query);
         finalAlbums.clear();
         for (int i = 0; i < albums.size(); i++) {
             Album album = albums.get(i);
@@ -1377,19 +1376,15 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void updateArtistList(String query) {
-        Log.d("QUERY", "Artist Query" + query);
         finalArtists.clear();
         for (int i = 0; i < artists.size(); i++) {
             Artist artist = artists.get(i);
             String tmp1 = artist.getName().toLowerCase();
             String tmp2 = query.toLowerCase();
             if (tmp1.contains(tmp2)) {
-                Log.d("ARTIST_INFO", String.valueOf(i) + ": " + artist.getName());
                 finalArtists.add(artist);
             }
         }
-
-        Log.d("FINAL_ARTIST_SIZE", String.valueOf(finalArtists.size()));
 
         FullLocalMusicFragment flmFrag = (FullLocalMusicFragment) fragMan.findFragmentByTag("local");
         if (flmFrag != null) {
@@ -1841,13 +1836,12 @@ public class HomeActivity extends AppCompatActivity
 
             // scale the amplitude to the range [0,1]
             float amp = (float) Math.abs(mBytes[a]) / (float) 255;
+
 //            if (max != min)
 //                amp = (amp - min) / (max - min);
 //            else {
 //                amp = 0;
 //            }
-
-            Log.d("AMP", amp + "");
 
             PlayerFragment.mVisualizerView.volume = (amp);
 
@@ -1932,7 +1926,6 @@ public class HomeActivity extends AppCompatActivity
         // calculate min and max amplitude for current byte array
         float max = Integer.MIN_VALUE, min = Integer.MAX_VALUE;
         for (int a = 16; a < (mBytes.length / 2); a++) {
-            Log.d("BYTE", mBytes[a] + "");
             float amp = mBytes[(a * 2) + 0] * mBytes[(a * 2) + 0] + mBytes[(a * 2) + 1] * mBytes[(a * 2) + 1];
             if (amp > max) {
                 max = amp;
@@ -1960,8 +1953,6 @@ public class HomeActivity extends AppCompatActivity
             else {
                 amp = 0;
             }
-
-            Log.d("AMP", amp + "");
 
             PlayerFragment.mVisualizerView.volume = (amp);
 
@@ -2695,16 +2686,6 @@ public class HomeActivity extends AppCompatActivity
             }
         });
         dialog.show();
-    }
-
-    public void logQueue() {
-        Log.d("QUEUE", "ENTERED");
-        for (int i = 0; i < queue.getQueue().size(); i++) {
-            if (queue.getQueue().get(i).getLocalTrack() != null)
-                Log.d("QUEUE", queue.getQueue().get(i).getLocalTrack().getTitle() + ":" + queue.getQueue().get(i).getStreamTrack());
-            else
-                Log.d("QUEUE", queue.getQueue().get(i).getLocalTrack() + ":" + queue.getQueue().get(i).getStreamTrack().getTitle());
-        }
     }
 
     public void startLoadingIndicator() {
@@ -3567,9 +3548,7 @@ public class HomeActivity extends AppCompatActivity
                                         pAdapter.notifyDataSetChanged();
                                     }
                                     if (item.getTitle().equals("Add to Queue")) {
-                                        Log.d("QUEUE", "CALLED");
                                         queue.getQueue().add(ut);
-                                        logQueue();
                                     }
                                     if (item.getTitle().equals("Play")) {
                                         boolean isRepeat = false;
@@ -3818,9 +3797,7 @@ public class HomeActivity extends AppCompatActivity
                                         pAdapter.notifyDataSetChanged();
                                     }
                                     if (item.getTitle().equals("Add to Queue")) {
-                                        Log.d("QUEUE", "CALLED");
                                         queue.getQueue().add(new UnifiedTrack(true, finalLocalSearchResultList.get(position), null));
-                                        logQueue();
                                     }
                                     if (item.getTitle().equals("Play")) {
                                         LocalTrack track = finalLocalSearchResultList.get(position);
@@ -3932,9 +3909,7 @@ public class HomeActivity extends AppCompatActivity
                                         pAdapter.notifyDataSetChanged();
                                     }
                                     if (item.getTitle().equals("Add to Queue")) {
-                                        Log.d("QUEUE", "CALLED");
                                         queue.getQueue().add(new UnifiedTrack(false, null, streamingTrackList.get(position)));
-                                        logQueue();
                                     }
                                     if (item.getTitle().equals("Play")) {
                                         Track track = streamingTrackList.get(position);
@@ -4204,8 +4179,6 @@ public class HomeActivity extends AppCompatActivity
         if (resourceId > 0) {
             result = getResources().getDimensionPixelSize(resourceId);
         }
-//        Log.d("STATUSBAR_HEIGHT", String.valueOf(result));
-//        return (pxToDp(result));
         return (result);
     }
 
@@ -4218,12 +4191,6 @@ public class HomeActivity extends AppCompatActivity
 //        return (pxToDp(result));
         return (result);
     }
-
-//    public int pxToDp(int px) {
-//        DisplayMetrics displayMetrics = ctx.getResources().getDisplayMetrics();
-//        int dp = Math.round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
-//        return dp;
-//    }
 
     public int dpToPx(int dp) {
         return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
@@ -4239,7 +4206,12 @@ public class HomeActivity extends AppCompatActivity
     }
 
     public static PlayerFragment getPlayerFragment() {
-        return (PlayerFragment) fragMan2.findFragmentByTag("player");
+        try {
+            return (PlayerFragment) fragMan2.findFragmentByTag("player");
+        } catch (Exception e) {
+
+        }
+        return null;
     }
 
     public static Pair<String, String> getTime(int millsec) {

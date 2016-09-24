@@ -32,7 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:visibility="invisible">
+        android:visibility="visible">
 
         <View
             android:layout_width="match_parent"
@@ -42,7 +42,8 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="5"
+            android:layout_weight="3"
+            android:tint="#898989"
             android:src="@drawable/broken_heart" />
 
         <TextView
@@ -52,6 +53,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="30dp"
             android:layout_weight="5"
+            android:textColor="#565656"
             android:gravity="top|center_horizontal"
             android:text="No Favourites"
             android:textSize="22dp" />

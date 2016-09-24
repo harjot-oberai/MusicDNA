@@ -47,7 +47,7 @@ public class CustomProgressBar extends View {
         hsv[0] = HomeActivity.seekBarColor;
         hsv[1] = (float) 0.8;
         hsv[2] = (float) 0.5;
-        forePaint.setColor(Color.HSVToColor(hsv));
+        forePaint.setColor(HomeActivity.themeColor);
         forePaint.setAlpha(248);
         float right = ((float) canvas.getWidth() / (float) PlayerFragment.durationInMilliSec) * (float) PlayerFragment.mMediaPlayer.getCurrentPosition();
         canvas.drawRect(0, 0, right, canvas.getHeight(), forePaint);

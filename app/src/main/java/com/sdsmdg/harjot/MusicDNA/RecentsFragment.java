@@ -47,6 +47,7 @@ public class RecentsFragment extends Fragment implements RecentsTrackAdapter.OnD
 
     public interface onRecentItemClickedListener {
         public void onRecentItemClicked(boolean isLocal);
+
         public void addToPlaylist(UnifiedTrack ut);
     }
 
@@ -316,13 +317,15 @@ public class RecentsFragment extends Fragment implements RecentsTrackAdapter.OnD
         shuffleFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HomeActivity.queue.getQueue().clear();
-                for (int i = 0; i < HomeActivity.recentlyPlayed.getRecentlyPlayed().size(); i++) {
-                    HomeActivity.queue.getQueue().add(HomeActivity.recentlyPlayed.getRecentlyPlayed().get(i));
+                if (HomeActivity.recentlyPlayed.getRecentlyPlayed().size() > 0) {
+                    HomeActivity.queue.getQueue().clear();
+                    for (int i = 0; i < HomeActivity.recentlyPlayed.getRecentlyPlayed().size(); i++) {
+                        HomeActivity.queue.getQueue().add(HomeActivity.recentlyPlayed.getRecentlyPlayed().get(i));
+                    }
+                    HomeActivity.shuffleEnabled = true;
+                    Random r = new Random();
+                    mCallback2.onRecent(r.nextInt(HomeActivity.queue.getQueue().size()));
                 }
-                HomeActivity.shuffleEnabled = true;
-                Random r = new Random();
-                mCallback2.onRecent(r.nextInt(HomeActivity.queue.getQueue().size()));
             }
         });
 

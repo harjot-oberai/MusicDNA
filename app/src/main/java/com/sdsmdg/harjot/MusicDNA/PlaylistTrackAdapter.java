@@ -2,6 +2,7 @@ package com.sdsmdg.harjot.MusicDNA;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
@@ -52,6 +53,8 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
         notifyItemMoved(fromPosition, toPosition);
         if (HomeActivity.pAdapter != null)
             HomeActivity.pAdapter.notifyDataSetChanged();
+
+        new HomeActivity.SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
@@ -67,9 +70,10 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
             if (HomeActivity.pAdapter != null) {
                 HomeActivity.pAdapter.notifyItemRemoved(HomeActivity.tempPlaylistNumber);
             }
-        }
-        else if (HomeActivity.pAdapter != null)
+        } else if (HomeActivity.pAdapter != null)
             HomeActivity.pAdapter.notifyDataSetChanged();
+
+        new HomeActivity.SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder

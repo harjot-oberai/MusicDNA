@@ -1,6 +1,7 @@
 package com.sdsmdg.harjot.MusicDNA;
 
 
+import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
@@ -116,11 +118,16 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
         mItemTouchHelper = new ItemTouchHelper(callback);
         mItemTouchHelper.attachToRecyclerView(queueRecycler);
 
+        Button mEndButton = new Button(getContext());
+        mEndButton.setBackgroundColor(Color.parseColor("#FFA036"));
+        mEndButton.setTextColor(Color.WHITE);
+
         showCase = new ShowcaseView.Builder(getActivity())
                 .blockAllTouches()
                 .singleShot(3)
                 .setStyle(R.style.CustomShowcaseTheme)
                 .useDecorViewAsParent()
+                .replaceEndButton(mEndButton)
                 .setTarget(new ViewTarget(R.id.showcase_view, getActivity()))
                 .setContentTitle("Queue")
                 .setContentText("Here all songs that are currently in queue are listed." +
@@ -176,21 +183,21 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
         refWatcher.watch(this);
     }
 
-    public boolean isShowcaseVisible(){
+    public boolean isShowcaseVisible() {
         return (showCase != null && showCase.isShowing());
     }
 
-    public void hideShowcase(){
+    public void hideShowcase() {
         showCase.hide();
     }
 
-    public void updateQueueAdapter(){
+    public void updateQueueAdapter() {
         if (qAdapter != null)
             qAdapter.notifyDataSetChanged();
     }
 
-    public void notifyAdapterItemRemoved(int i){
-        if(qAdapter!=null){
+    public void notifyAdapterItemRemoved(int i) {
+        if (qAdapter != null) {
             qAdapter.notifyItemRemoved(i);
         }
     }

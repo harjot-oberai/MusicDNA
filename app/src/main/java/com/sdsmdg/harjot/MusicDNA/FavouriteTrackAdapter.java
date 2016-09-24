@@ -2,6 +2,7 @@ package com.sdsmdg.harjot.MusicDNA;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -36,7 +37,7 @@ public class FavouriteTrackAdapter extends RecyclerView.Adapter<FavouriteTrackAd
 
     private final OnDragStartListener mDragStartListener;
 
-    public FavouriteTrackAdapter(List<UnifiedTrack> favouriteList, OnDragStartListener mDragStartListener ,Context ctx) {
+    public FavouriteTrackAdapter(List<UnifiedTrack> favouriteList, OnDragStartListener mDragStartListener, Context ctx) {
         this.mDragStartListener = mDragStartListener;
         this.favouriteList = favouriteList;
         this.ctx = ctx;
@@ -120,12 +121,16 @@ public class FavouriteTrackAdapter extends RecyclerView.Adapter<FavouriteTrackAd
         UnifiedTrack prev = favouriteList.remove(fromPosition);
         favouriteList.add(toPosition, prev);
         notifyItemMoved(fromPosition, toPosition);
+
+        new HomeActivity.SaveFavourites().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
     public void onItemDismiss(int position) {
         favouriteList.remove(position);
         notifyItemRemoved(position);
+
+        new HomeActivity.SaveFavourites().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
 }

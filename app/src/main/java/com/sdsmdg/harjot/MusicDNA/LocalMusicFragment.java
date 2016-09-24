@@ -4,6 +4,7 @@ package com.sdsmdg.harjot.MusicDNA;
 //import android.app.Fragment;
 
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.content.Context;
@@ -18,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
@@ -214,11 +216,22 @@ public class LocalMusicFragment extends Fragment {
             }
         });
 
+//        FullLocalMusicFragment flmFrag = (FullLocalMusicFragment) HomeActivity.fragMan2.findFragmentByTag("local");
+//        int viewId = 0;
+//        if (flmFrag != null) {
+//            viewId = ((ViewGroup) flmFrag.tabLayout.getChildAt(0)).getChildAt(0).getId();
+//        }
+
+        Button mEndButton = new Button(getContext());
+        mEndButton.setBackgroundColor(Color.parseColor("#FFA036"));
+        mEndButton.setTextColor(Color.WHITE);
+
         showCase = new ShowcaseView.Builder(getActivity())
                 .blockAllTouches()
                 .singleShot(1)
                 .setStyle(R.style.CustomShowcaseTheme)
                 .useDecorViewAsParent()
+                .replaceEndButton(mEndButton)
                 .setTarget(new ViewTarget(lv.getId(), getActivity()))
                 .setContentTitle("All Songs")
                 .setContentText("All local Songs listed here.Click to Play.Long click for more options")

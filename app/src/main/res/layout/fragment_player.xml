@@ -223,11 +223,11 @@
             <ImageView
                 android:id="@+id/fav_icon"
                 android:layout_width="0dp"
-                android:layout_height="32dp"
+                android:layout_height="30dp"
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
-                android:src="@drawable/ic_heart_out" />
+                android:src="@drawable/ic_heart_out_1" />
 
             <ImageView
                 android:id="@+id/queue_icon"

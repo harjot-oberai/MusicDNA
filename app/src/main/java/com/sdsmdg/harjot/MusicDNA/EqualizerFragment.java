@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -297,11 +298,16 @@ public class EqualizerFragment extends Fragment {
         chart.addData(dataset);
         chart.show();
 
+        Button mEndButton = new Button(getContext());
+        mEndButton.setBackgroundColor(Color.parseColor("#FFA036"));
+        mEndButton.setTextColor(Color.WHITE);
+
         showCase = new ShowcaseView.Builder(getActivity())
                 .blockAllTouches()
                 .singleShot(4)
                 .setStyle(R.style.CustomShowcaseTheme)
                 .useDecorViewAsParent()
+                .replaceEndButton(mEndButton)
                 .setTarget(new ViewTarget(R.id.showcase_view_equalizer, getActivity()))
                 .setContentTitle("Presets")
                 .setContentText("Use one of the available presets")

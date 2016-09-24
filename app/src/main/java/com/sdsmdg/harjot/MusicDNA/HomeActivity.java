@@ -298,7 +298,7 @@ public class HomeActivity extends AppCompatActivity
     ImageView fragmentBackButton;
     TextView fragmentToolbarTitle;
 
-    static int themeColor = Color.parseColor("#607D8B");
+    static int themeColor = Color.parseColor("#FFA036");
     static float minAudioStrength = 0.40f;
 
     public static Activity main;
@@ -350,6 +350,8 @@ public class HomeActivity extends AppCompatActivity
 
     static short reverbPreset = -1, bassStrength = -1;
     static int y = 0;
+
+    Button mEndButton;
 
     static int statusBarHeightinDp;
     static int navBarHeightSizeinDp;
@@ -611,6 +613,10 @@ public class HomeActivity extends AppCompatActivity
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+
+        mEndButton = new Button(this);
+        mEndButton.setBackgroundColor(Color.parseColor("#FFA036"));
+        mEndButton.setTextColor(Color.WHITE);
 
         copyrightText = (TextView) findViewById(R.id.copyright_text);
         copyrightText.setTypeface(SplashActivity.tf2);
@@ -915,6 +921,7 @@ public class HomeActivity extends AppCompatActivity
                 .singleShot(0)
                 .setStyle(R.style.CustomShowcaseTheme)
                 .useDecorViewAsParent()
+                .replaceEndButton(mEndButton)
                 .setTarget(new ViewTarget(R.id.recentsRecyclerContainer, this))
                 .setContentTitle("Recents and Playlists")
                 .setContentText("Here all you recent songs and playlists will be listed." +
@@ -1082,7 +1089,7 @@ public class HomeActivity extends AppCompatActivity
                 Collections.sort(artists, new artistComparator());
                 Collections.sort(finalArtists, new artistComparator());
             }
-        } catch (Exception e){
+        } catch (Exception e) {
 
         }
 
@@ -1172,10 +1179,7 @@ public class HomeActivity extends AppCompatActivity
             if (isEqualizerVisible) {
                 showPlayer2();
             } else if (isQueueVisible) {
-                if (isPlayerVisible)
-                    showPlayer3();
-                else
-                    hideFragment("queue");
+                showPlayer3();
             } else if (isPlayerVisible) {
                 hidePlayer();
                 showTabs();
@@ -1196,14 +1200,12 @@ public class HomeActivity extends AppCompatActivity
                     setTitle("Music DNA");
                 } else if (isPlaylistVisible) {
                     hideFragment("playlist");
-                    new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     setTitle("Music DNA");
                 } else if (isEqualizerVisible) {
                     hideFragment("equalizer");
                     setTitle("Music DNA");
                 } else if (isFavouriteVisible) {
                     hideFragment("favourite");
-                    new SaveFavourites().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     setTitle("Music DNA");
                 } else if (isAllPlaylistVisible) {
                     hideFragment("allPlaylists");
@@ -1222,7 +1224,6 @@ public class HomeActivity extends AppCompatActivity
                     setTitle("Music DNA");
                 } else if (isRecentVisible) {
                     hideFragment("recent");
-                    new SaveRecents().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     setTitle("Music DNA");
                 } else if (isSettingsVisible) {
                     hideFragment("settings");
@@ -1648,14 +1649,6 @@ public class HomeActivity extends AppCompatActivity
         isEqualizerVisible = false;
         isQueueVisible = false;
 
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                hideFragment("equalizer");
-            }
-        }, 350);
-
         playerContainer.setVisibility(View.VISIBLE);
         if (PlayerFragment.mVisualizerView != null)
             PlayerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
@@ -1669,16 +1662,7 @@ public class HomeActivity extends AppCompatActivity
 
         if (PlayerFragment.cpb != null) {
             PlayerFragment.cpb.animate()
-                    .alpha(0.0f)
-                    .withEndAction(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (isQueueVisible) {
-                                hideFragment("queue");
-                            }
-                            isQueueVisible = false;
-                        }
-                    });
+                    .alpha(0.0f);
         }
         if (PlayerFragment.smallPlayer != null) {
             PlayerFragment.smallPlayer.animate()
@@ -1695,10 +1679,6 @@ public class HomeActivity extends AppCompatActivity
             public void run() {
                 if (PlayerFragment.mVisualizerView != null)
                     PlayerFragment.mVisualizerView.setVisibility(View.VISIBLE);
-                if (PlayerFragment.player_controller != null) {
-                    PlayerFragment.player_controller.setImageResource(R.drawable.ic_queue_music_white_48dp);
-                    PlayerFragment.player_controller.setAlpha(1.0f);
-                }
             }
         }, 400);
 
@@ -2054,18 +2034,30 @@ public class HomeActivity extends AppCompatActivity
                         onTrackSelected(-1);
                     }
                 } else {
-                    if (repeatEnabled) {
+                    if (repeatEnabled && (queue.getQueue().size() > 1)) {
                         queueCurrentIndex = 0;
                         if (qFrag != null) {
                             qFrag.updateQueueAdapter();
                         }
                         onQueueItemClicked(0);
+                    } else if (repeatEnabled && (queue.getQueue().size() == 1)) {
+                        PlayerFragment.progressBar.setProgress(0);
+                        PlayerFragment.progressBar.setSecondaryProgress(0);
+                        PlayerFragment.mVisualizerView.clear();
+                        PlayerFragment.mMediaPlayer.seekTo(0);
+                        PlayerFragment.mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
+                        PlayerFragment.isPrepared = true;
+                        PlayerFragment.mMediaPlayer.start();
                     } else {
-                        if (!hasQueueEnded) {
-                            PlayerFragment.mMediaPlayer.stop();
-                            hasQueueEnded = true;
-                        } else if (queue.getQueue().size() > 0) {
-                            hasQueueEnded = false;
+                        if (queue.getQueue().size() == 1) {
+                            PlayerFragment.progressBar.setProgress(0);
+                            PlayerFragment.progressBar.setSecondaryProgress(0);
+                            PlayerFragment.mVisualizerView.clear();
+                            PlayerFragment.mMediaPlayer.seekTo(0);
+                            PlayerFragment.mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
+                            PlayerFragment.isPrepared = true;
+                            PlayerFragment.mMediaPlayer.start();
+                        } else {
                             queueCurrentIndex = 0;
                             if (qFrag != null) {
                                 qFrag.updateQueueAdapter();
@@ -2519,6 +2511,7 @@ public class HomeActivity extends AppCompatActivity
 
         new SaveSettings().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         new SaveData().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new SaveQueue().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
     }
 
@@ -2623,6 +2616,7 @@ public class HomeActivity extends AppCompatActivity
                     playlistsRecycler.setVisibility(View.VISIBLE);
                     playlistNothingText.setVisibility(View.INVISIBLE);
                     pAdapter.notifyDataSetChanged();
+                    new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     dialog.dismiss();
                 }
             });
@@ -2648,6 +2642,7 @@ public class HomeActivity extends AppCompatActivity
                     playlistNothingText.setVisibility(View.INVISIBLE);
                     pAdapter.notifyDataSetChanged();
                     dialog.dismiss();
+
                     new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 }
             }

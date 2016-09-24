@@ -242,6 +242,15 @@
                     android:padding="5dp"></android.support.v7.widget.RecyclerView>
             </RelativeLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/playlistRecyclerContainer"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="3dp"
+                android:background="@android:color/darker_gray" />
+
             <RelativeLayout
                 android:id="@+id/bannerContainer"
                 android:layout_width="match_parent"
@@ -328,7 +337,7 @@
                             android:layout_alignParentTop="true"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="10dp"
-                            android:src="@drawable/ic_heart_out" />
+                            android:src="@drawable/ic_heart_out_1" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -489,12 +498,12 @@
         android:translationZ="10dp"></FrameLayout>
 
     <!--<View-->
-        <!--android:id="@+id/gradient_view"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="70dp"-->
-        <!--android:layout_alignBottom="@+id/container"-->
-        <!--android:layout_gravity="bottom"-->
-        <!--android:background="@drawable/transparent_gradient" />-->
+    <!--android:id="@+id/gradient_view"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="70dp"-->
+    <!--android:layout_alignBottom="@+id/container"-->
+    <!--android:layout_gravity="bottom"-->
+    <!--android:background="@drawable/transparent_gradient" />-->
 
     <FrameLayout
         android:id="@+id/content_frag"

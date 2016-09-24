@@ -9,13 +9,6 @@
     android:foreground="?android:attr/selectableItemBackground"
     android:longClickable="true">
 
-    <!--<ImageView-->
-    <!--android:id="@+id/backImage"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="91dp"-->
-    <!--android:scaleType="fitXY"-->
-    <!--android:layout_gravity="top" />-->
-
     <LinearLayout
         android:id="@+id/custom_image_holder"
         android:layout_width="match_parent"
@@ -38,7 +31,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="#333"
+                    android:background="#BBB"
                     android:scaleType="centerCrop" />
 
                 <ImageView
@@ -46,7 +39,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="#333"
+                    android:background="#BBB"
                     android:scaleType="centerCrop" />
             </LinearLayout>
         </RelativeLayout>
@@ -66,7 +59,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="#333"
+                    android:background="#BBB"
                     android:scaleType="centerCrop" />
 
                 <ImageView
@@ -74,7 +67,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="#333"
+                    android:background="#BBB"
                     android:scaleType="centerCrop" />
             </LinearLayout>
         </RelativeLayout>

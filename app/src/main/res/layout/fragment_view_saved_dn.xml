@@ -10,10 +10,11 @@
         android:id="@+id/saved_dna_visualizer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/saved_dna_recycler"
+        android:layout_above="@+id/action_button_container"
         android:background="#000000" />
 
     <RelativeLayout
+        android:id="@+id/action_button_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/saved_dna_recycler"
@@ -55,8 +56,8 @@
         android:id="@+id/no_saved_dnas"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:background="#FFFFFF"
+        android:orientation="vertical"
         android:visibility="invisible">
 
         <View
@@ -67,8 +68,9 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="5"
-            android:src="@drawable/broken_heart" />
+            android:layout_weight="2"
+            android:src="@drawable/ic_error_white_48dp"
+            android:tint="#898989" />
 
         <TextView
             android:id="@+id/no_saved_content_text"
@@ -79,6 +81,7 @@
             android:layout_weight="5"
             android:gravity="top|center_horizontal"
             android:text="No Saved DNAs"
+            android:textColor="#565656"
             android:textSize="22dp" />
 
     </LinearLayout>

@@ -71,8 +71,10 @@ public class VisualizerView2 extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (bmp != null)
-            canvas.drawBitmap(bmp, 0, -1 * (canvas.getHeight() / 8), null);
+        if (bmp != null) {
+            canvas.drawBitmap(bmp, 0, -1 * (canvas.getHeight() / 6), null);
+//            canvas.drawBitmap(bmp, 0, 0, null);
+        }
         if (textEnabled && HomeActivity.tempSavedDNA != null) {
             canvas.drawText(text, canvas.getWidth() / 2, (canvas.getHeight() * 15) / 16, mTextPaint);
         }

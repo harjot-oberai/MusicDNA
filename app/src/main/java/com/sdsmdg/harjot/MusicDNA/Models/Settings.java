@@ -6,7 +6,7 @@ import android.graphics.Color;
  * Created by Harjot on 02-Aug-16.
  */
 public class Settings {
-    private int themeColor = Color.parseColor("#607D8B");
+    private int themeColor = Color.parseColor("#FFA036");
     private float minAudioStrength;
 
     public Settings() {

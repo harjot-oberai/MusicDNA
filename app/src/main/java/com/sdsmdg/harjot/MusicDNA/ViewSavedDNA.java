@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -208,12 +209,17 @@ public class ViewSavedDNA extends Fragment {
             }
         });
 
+        Button mEndButton = new Button(getContext());
+        mEndButton.setBackgroundColor(Color.parseColor("#FFA036"));
+        mEndButton.setTextColor(Color.WHITE);
+
         if (HomeActivity.savedDNAs.getSavedDNAs().size() > 0) {
             showCase = new ShowcaseView.Builder(getActivity())
                     .blockAllTouches()
                     .singleShot(5)
                     .setStyle(R.style.CustomShowcaseTheme)
                     .useDecorViewAsParent()
+                    .replaceEndButton(mEndButton)
                     .setTarget(new ViewTarget(mVisualizerView2.getId(), getActivity()))
                     .setContentTitle("Saved DNAs")
                     .setContentText("View all your saved DNAs here")

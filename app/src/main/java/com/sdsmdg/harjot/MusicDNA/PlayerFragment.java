@@ -25,6 +25,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
@@ -34,14 +35,12 @@ import android.widget.Toast;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
-import com.google.gson.annotations.SerializedName;
 import com.sdsmdg.harjot.MusicDNA.Models.DNAModel;
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.Models.SavedDNA;
 import com.sdsmdg.harjot.MusicDNA.Models.Track;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.NotificationManager.AudioPlayerBroadcastReceiver;
-import com.sdsmdg.harjot.MusicDNA.NotificationManager.MediaPlayerService;
 import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
 import com.squareup.leakcanary.RefWatcher;
 import com.squareup.picasso.Picasso;
@@ -434,10 +433,10 @@ public class PlayerFragment extends Fragment implements
 
         favouriteIcon = (ImageView) view.findViewById(R.id.fav_icon);
         if (HomeActivity.isFavourite) {
-            favouriteIcon.setImageResource(R.drawable.ic_heart_filled);
+            favouriteIcon.setImageResource(R.drawable.ic_heart_filled_1);
             isFav = true;
         } else {
-            favouriteIcon.setImageResource(R.drawable.ic_heart_out);
+            favouriteIcon.setImageResource(R.drawable.ic_heart_out_1);
             isFav = false;
         }
 
@@ -445,14 +444,12 @@ public class PlayerFragment extends Fragment implements
             @Override
             public void onClick(View v) {
                 if (isFav) {
-                    favouriteIcon.setImageResource(R.drawable.ic_heart_out);
+                    favouriteIcon.setImageResource(R.drawable.ic_heart_out_1);
                     isFav = false;
-                    Snackbar.make(view, "Removed from favourites", Snackbar.LENGTH_SHORT).show();
                     removeFromFavourite();
                 } else {
-                    favouriteIcon.setImageResource(R.drawable.ic_heart_filled);
+                    favouriteIcon.setImageResource(R.drawable.ic_heart_filled_1);
                     isFav = true;
-                    Snackbar.make(view, "Added to favourites", Snackbar.LENGTH_SHORT).show();
                     addToFavourite();
                 }
                 new HomeActivity.SaveFavourites().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -577,10 +574,7 @@ public class PlayerFragment extends Fragment implements
                     player_controller.setImageResource(R.drawable.ic_replay_white_48dp);
                     mainTrackController.setImageResource(R.drawable.ic_replay_white_48dp);
                 }
-
                 new SaveDNA().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
-
             }
         });
 
@@ -743,7 +737,6 @@ public class PlayerFragment extends Fragment implements
                         pauseClicked = true;
                     }
                     togglePlayPause();
-
                 } else {
                     mCallback2.onComplete();
                 }
@@ -830,6 +823,10 @@ public class PlayerFragment extends Fragment implements
 
         });
 
+        final Button mEndButton = new Button(getContext());
+        mEndButton.setBackgroundColor(Color.parseColor("#FFA036"));
+        mEndButton.setTextColor(Color.WHITE);
+
         Handler handler = new Handler();
         handler.postDelayed(
                 new Runnable() {
@@ -840,6 +837,7 @@ public class PlayerFragment extends Fragment implements
                                 .singleShot(2)
                                 .setStyle(R.style.CustomShowcaseTheme)
                                 .useDecorViewAsParent()
+                                .replaceEndButton(mEndButton)
                                 .setTarget(new ViewTarget(mVisualizerView.getId(), getActivity()))
                                 .setContentTitle("The DNA")
                                 .setContentText("The DNA of the currently playing song.")
@@ -951,10 +949,6 @@ public class PlayerFragment extends Fragment implements
 
     public void refresh() {
 
-        if (HomeActivity.repeatOnceEnabled) {
-            Toast.makeText(getContext(), "repeatOnce OK", Toast.LENGTH_SHORT).show();
-        }
-
         isRefreshed = true;
 
         mVisualizerView.clear();
@@ -973,10 +967,10 @@ public class PlayerFragment extends Fragment implements
         isFav = false;
 
         if (HomeActivity.isFavourite) {
-            favouriteIcon.setImageResource(R.drawable.ic_heart_filled);
+            favouriteIcon.setImageResource(R.drawable.ic_heart_filled_1);
             isFav = true;
         } else {
-            favouriteIcon.setImageResource(R.drawable.ic_heart_out);
+            favouriteIcon.setImageResource(R.drawable.ic_heart_out_1);
             isFav = false;
         }
 

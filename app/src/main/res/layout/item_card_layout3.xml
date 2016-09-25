@@ -15,7 +15,7 @@
         android:layout_height="115dp"
         android:layout_centerHorizontal="true"
         android:layout_gravity="top"
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerCrop" />
 
     <RelativeLayout
         android:id="@+id/bottomHolder"
@@ -35,7 +35,7 @@
             android:singleLine="true"
             android:text="Title"
             android:textAlignment="center"
-            android:textColor="#444"
+            android:textColor="#DDD"
             android:textSize="13dp" />
 
         <TextView
@@ -48,7 +48,7 @@
             android:singleLine="true"
             android:text="Artist"
             android:textAlignment="center"
-            android:textColor="#777"
+            android:textColor="#BBB"
             android:textSize="9dp" />
 
     </RelativeLayout>

@@ -95,7 +95,7 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
 
         @Override
         public void onItemSelected() {
-            itemView.setBackgroundColor(Color.LTGRAY);
+            itemView.setBackgroundColor(Color.parseColor("#444444"));
             if (Build.VERSION.SDK_INT >= 21) {
                 itemView.setTranslationZ(12);
             }
@@ -103,7 +103,7 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
 
         @Override
         public void onItemClear() {
-            itemView.setBackgroundColor(Color.WHITE);
+            itemView.setBackgroundColor(Color.parseColor("#111111"));
             if (Build.VERSION.SDK_INT >= 21) {
                 itemView.setTranslationZ(0);
             }

@@ -3,14 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EEE"
+    android:background="#111"
     android:padding="3dp"
     tools:context="com.sdsmdg.harjot.MusicDNA.ViewPlaylistFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/view_playlist_recycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent"
+        android:background="#111"></android.support.v7.widget.RecyclerView>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/play_all_fab"

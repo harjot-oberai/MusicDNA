@@ -1,101 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/relItemContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#FFF"
+    android:background="#111"
     android:foreground="?android:attr/selectableItemBackground"
-    android:longClickable="true">
+    android:longClickable="true"
+    android:padding="10dp">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/relItemContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <ImageView
+        android:id="@+id/holderImage"
+        android:layout_width="40dp"
+        android:layout_height="55dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="-5dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/handle" />
+
+    <ImageView
+        android:id="@+id/img"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/holderImage"
         android:background="#FFF"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:longClickable="true"
-        android:padding="10dp">
-
-        <ImageView
-            android:id="@+id/holderImage"
-            android:layout_width="40dp"
-            android:layout_height="55dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="-5dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/handle" />
-
-        <ImageView
-            android:id="@+id/img"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@+id/holderImage"
-            android:background="#FFF"
-            android:scaleType="centerCrop" />
-
-        <LinearLayout
-            android:id="@+id/row_item_holder"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="14dp"
-            android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@+id/currently_playing_indicator"
-            android:layout_toRightOf="@+id/img"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:text="Title"
-                android:textColor="#000000"
-                android:textSize="14dp" />
-
-            <TextView
-                android:id="@+id/url"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="1dp"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:text="Artist"
-                android:textSize="11dp" />
-        </LinearLayout>
-
-        <com.wang.avi.AVLoadingIndicatorView
-            android:id="@+id/currently_playing_indicator"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:visibility="invisible"
-            app:indicator="LineScale"
-            app:indicator_color="#3F334D" />
-
-    </RelativeLayout>
+        android:scaleType="centerCrop" />
 
     <LinearLayout
+        android:id="@+id/row_item_holder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/relItemContainer"
-        android:orientation="horizontal">
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="14dp"
+        android:layout_marginRight="10dp"
+        android:layout_toLeftOf="@+id/currently_playing_indicator"
+        android:layout_toRightOf="@+id/img"
+        android:orientation="vertical">
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="5"></View>
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="Title"
+            android:textColor="#DDD"
+            android:textSize="14dp" />
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="9"
-            android:background="#DDD" />
+        <TextView
+            android:id="@+id/url"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="1dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="Artist"
+            android:textColor="#BBB"
+            android:textSize="11dp" />
     </LinearLayout>
+
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/currently_playing_indicator"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        android:visibility="invisible"
+        app:indicator="LineScale"
+        app:indicator_color="#3F334D" />
+
+    <!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--android:id="@+id/relItemContainer"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="#111"-->
+    <!--android:foreground="?android:attr/selectableItemBackground"-->
+    <!--android:longClickable="true"-->
+    <!--android:padding="10dp">-->
+
+    <!-- -->
+    <!--</RelativeLayout>-->
 </RelativeLayout>

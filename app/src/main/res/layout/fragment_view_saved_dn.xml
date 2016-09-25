@@ -49,14 +49,14 @@
         android:layout_width="match_parent"
         android:layout_height="135dp"
         android:layout_alignParentBottom="true"
-        android:background="#FFF"
+        android:background="#111"
         android:padding="1dp" />
 
     <LinearLayout
         android:id="@+id/no_saved_dnas"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFFFFF"
+        android:background="#111111"
         android:orientation="vertical"
         android:visibility="invisible">
 
@@ -69,8 +69,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="2"
-            android:src="@drawable/ic_error_white_48dp"
-            android:tint="#898989" />
+            android:src="@drawable/ic_error_white_48dp" />
 
         <TextView
             android:id="@+id/no_saved_content_text"
@@ -81,7 +80,7 @@
             android:layout_weight="5"
             android:gravity="top|center_horizontal"
             android:text="No Saved DNAs"
-            android:textColor="#565656"
+            android:textColor="#DDDDDD"
             android:textSize="22dp" />
 
     </LinearLayout>

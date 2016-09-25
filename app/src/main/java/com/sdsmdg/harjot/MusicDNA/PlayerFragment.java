@@ -134,6 +134,8 @@ public class PlayerFragment extends Fragment implements
     public fullScreenListener mCallback8;
     public onSettingsClickedListener mCallback9;
 
+    static ImageView currentAlbumArtHolder;
+
     public boolean isStart = true;
 
     ShowcaseView showCase;
@@ -362,6 +364,8 @@ public class PlayerFragment extends Fragment implements
         imgLoader = new ImageLoader(getContext());
 
         rootView = (SlidingRelativeLayout) view.findViewById(R.id.root_view);
+
+        currentAlbumArtHolder = (ImageView) view.findViewById(R.id.current_album_art_holder);
 
         fullscreenExtraSpaceOccupier = view.findViewById(R.id.fullscreen_extra_space_occupier);
 
@@ -636,9 +640,11 @@ public class PlayerFragment extends Fragment implements
             if (track.getArtworkURL() != null) {
                 Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(selected_track_image);
                 Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(HomeActivity.spImgAB);
+                Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(currentAlbumArtHolder);
             } else {
                 selected_track_image.setImageResource(R.drawable.ic_default);
                 HomeActivity.spImgAB.setImageResource(R.drawable.ic_default);
+                currentAlbumArtHolder.setImageResource(R.drawable.ic_default);
             }
             HomeActivity.spTitleAB.setText(track.getTitle());
             selected_track_title.setText(track.getTitle());
@@ -651,6 +657,7 @@ public class PlayerFragment extends Fragment implements
             try {
                 imgLoader.DisplayImage(localTrack.getPath(), HomeActivity.spImgAB);
                 imgLoader.DisplayImage(localTrack.getPath(), selected_track_image);
+                imgLoader.DisplayImage(localTrack.getPath(), currentAlbumArtHolder);
             } catch (Exception e) {
 
             }
@@ -998,15 +1005,18 @@ public class PlayerFragment extends Fragment implements
             if (track.getArtworkURL() != null) {
                 Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(selected_track_image);
                 Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(HomeActivity.spImgAB);
+                Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(currentAlbumArtHolder);
             } else {
                 selected_track_image.setImageResource(R.drawable.ic_default);
                 HomeActivity.spImgAB.setImageResource(R.drawable.ic_default);
+                currentAlbumArtHolder.setImageResource(R.drawable.ic_default);
             }
             HomeActivity.spTitleAB.setText(track.getTitle());
             selected_track_title.setText(track.getTitle());
         } else {
             durationInMilliSec = (int) localTrack.getDuration();
             imgLoader.DisplayImage(localTrack.getPath(), HomeActivity.spImgAB);
+            imgLoader.DisplayImage(localTrack.getPath(), currentAlbumArtHolder);
             imgLoader.DisplayImage(localTrack.getPath(), selected_track_image);
             HomeActivity.spTitleAB.setText(localTrack.getTitle());
             selected_track_title.setText(localTrack.getTitle());

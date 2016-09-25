@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F8F8"
-    android:padding="5dp"
+    android:background="#111111"
     android:clickable="true"
     tools:context="com.sdsmdg.harjot.MusicDNA.ViewArtistFragment">
 
@@ -18,7 +17,7 @@
         android:ellipsize="marquee"
         android:fadingEdge="horizontal"
         android:singleLine="true"
-        android:textColor="#444444"
+        android:textColor="#FFFFFF"
         android:text="Artist"
         android:textSize="20dp" />
 
@@ -27,7 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/artist_title"
-        android:background="#FFFFFF"></android.support.v7.widget.RecyclerView>
+        android:background="#111111"></android.support.v7.widget.RecyclerView>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/play_all_fab_artist"

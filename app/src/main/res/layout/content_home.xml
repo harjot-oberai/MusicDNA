@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EEE"
+    android:background="#111111"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.sdsmdg.harjot.MusicDNA.HomeActivity"
     tools:showIn="@layout/app_bar_home">
@@ -167,7 +167,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:layout_marginTop="10dp"
-                    android:text="Keep Listening"
+                    android:text="Recently Played"
+                    android:textColor="#FFF"
                     android:textSize="16dp"
                     android:textStyle="bold" />
 
@@ -192,15 +193,6 @@
                     android:padding="5dp"></android.support.v7.widget.RecyclerView>
             </RelativeLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@+id/recentsRecyclerContainer"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="3dp"
-                android:background="@android:color/darker_gray" />
-
             <RelativeLayout
                 android:id="@+id/playlistRecyclerContainer"
                 android:layout_width="match_parent"
@@ -217,6 +209,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:layout_marginTop="10dp"
+                    android:textColor="#FFF"
                     android:text="Playlists"
                     android:textSize="15dp"
                     android:textStyle="bold" />
@@ -242,15 +235,6 @@
                     android:padding="5dp"></android.support.v7.widget.RecyclerView>
             </RelativeLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@+id/playlistRecyclerContainer"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="3dp"
-                android:background="@android:color/darker_gray" />
-
             <RelativeLayout
                 android:id="@+id/bannerContainer"
                 android:layout_width="match_parent"
@@ -260,6 +244,8 @@
 
                 <RelativeLayout
                     android:id="@+id/localBanner"
+                    android:padding="1dp"
+                    android:background="#888"
                     android:layout_width="match_parent"
                     android:layout_height="100dp">
 
@@ -371,7 +357,8 @@
                             android:layout_alignParentTop="true"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="10dp"
-                            android:src="@drawable/clock" />
+                            android:tint="#FFFFFF"
+                            android:src="@drawable/ic_recents" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -466,12 +453,6 @@
 
             </RelativeLayout>
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_below="@id/bannerContainer"
-                android:background="#EEE"></FrameLayout>
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
@@ -482,6 +463,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
+                    android:textColor="#888"
                     android:text="\nMusic DNA\n© 2016"
                     android:textAlignment="center" />
             </RelativeLayout>
@@ -496,14 +478,6 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/bottomMargin"
         android:translationZ="10dp"></FrameLayout>
-
-    <!--<View-->
-    <!--android:id="@+id/gradient_view"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="70dp"-->
-    <!--android:layout_alignBottom="@+id/container"-->
-    <!--android:layout_gravity="bottom"-->
-    <!--android:background="@drawable/transparent_gradient" />-->
 
     <FrameLayout
         android:id="@+id/content_frag"

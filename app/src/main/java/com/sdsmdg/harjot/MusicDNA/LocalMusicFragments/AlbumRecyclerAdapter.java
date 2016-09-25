@@ -49,8 +49,8 @@ public class AlbumRecyclerAdapter extends RecyclerView.Adapter<AlbumRecyclerAdap
             holder.artist.setText(ab.getAlbumSongs().size() + " Songs");
         else
             holder.artist.setText(ab.getAlbumSongs().size() + " Song");
-        holder.title.setTextColor(Color.parseColor("#444444"));
-        holder.artist.setTextColor(Color.parseColor("#777777"));
+        holder.title.setTextColor(Color.parseColor("#DDDDDD"));
+        holder.artist.setTextColor(Color.parseColor("#BBBBBB"));
         imgLoader.DisplayImage(ab.getAlbumSongs().get(0).getPath(), holder.art);
     }
 

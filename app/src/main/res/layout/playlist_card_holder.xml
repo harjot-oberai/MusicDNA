@@ -31,7 +31,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="#BBB"
+                    android:background="#151515"
                     android:scaleType="centerCrop" />
 
                 <ImageView
@@ -39,7 +39,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="#BBB"
+                    android:background="#151515"
                     android:scaleType="centerCrop" />
             </LinearLayout>
         </RelativeLayout>
@@ -59,7 +59,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="#BBB"
+                    android:background="#151515"
                     android:scaleType="centerCrop" />
 
                 <ImageView
@@ -67,7 +67,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="#BBB"
+                    android:background="#151515"
                     android:scaleType="centerCrop" />
             </LinearLayout>
         </RelativeLayout>
@@ -89,7 +89,7 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:text="Title"
-            android:textColor="#444"
+            android:textColor="#DDD"
             android:textSize="13dp" />
 
         <TextView
@@ -101,7 +101,7 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:text="Artist"
-            android:textColor="#777"
+            android:textColor="#BBB"
             android:textSize="8dp" />
 
     </RelativeLayout>

@@ -769,6 +769,14 @@ public class HomeActivity extends AppCompatActivity
         playerControllerAB.setImageResource(R.drawable.ic_queue_music_white_48dp);
         overflowMenuAB = (ImageView) findViewById(R.id.menuIcon);
         spImgAB = (CircleImageView) findViewById(R.id.selected_track_image_sp_AB);
+        spImgAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hidePlayer();
+                showTabs();
+                isPlayerVisible = false;
+            }
+        });
         spTitleAB = (TextView) findViewById(R.id.selected_track_title_sp_AB);
         spTitleAB.setSelected(true);
 
@@ -1582,6 +1590,15 @@ public class HomeActivity extends AppCompatActivity
 
         PlayerFragment.player_controller.animate()
                 .alpha(1.0f);
+
+        PlayerFragment.currentAlbumArtHolder.animate()
+                .alpha(0.0f)
+                .withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        PlayerFragment.currentAlbumArtHolder.setVisibility(View.GONE);
+                    }
+                });
     }
 
     public void hidePlayer2() {
@@ -1649,6 +1666,7 @@ public class HomeActivity extends AppCompatActivity
         isEqualizerVisible = false;
         isQueueVisible = false;
 
+
         playerContainer.setVisibility(View.VISIBLE);
         if (PlayerFragment.mVisualizerView != null)
             PlayerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
@@ -1672,6 +1690,13 @@ public class HomeActivity extends AppCompatActivity
         playerContainer.animate()
                 .setDuration(300)
                 .translationY(0);
+
+        if (PlayerFragment.currentAlbumArtHolder != null){
+            PlayerFragment.currentAlbumArtHolder.setVisibility(View.VISIBLE);
+            PlayerFragment.currentAlbumArtHolder.animate()
+                    .alpha(0.1f)
+                    .setDuration(300);
+        }
 
         final Handler handler2 = new Handler();
         handler2.postDelayed(new Runnable() {

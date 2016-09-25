@@ -63,12 +63,12 @@ public class FavouriteTrackAdapter extends RecyclerView.Adapter<FavouriteTrackAd
 
         @Override
         public void onItemSelected() {
-            itemView.setBackgroundColor(Color.LTGRAY);
+            itemView.setBackgroundColor(Color.DKGRAY);
         }
 
         @Override
         public void onItemClear() {
-            itemView.setBackgroundColor(Color.WHITE);
+            itemView.setBackgroundColor(Color.parseColor("#111111"));
         }
     }
 

@@ -85,7 +85,7 @@ public class RecentsTrackAdapter extends RecyclerView.Adapter<RecentsTrackAdapte
 
         @Override
         public void onItemSelected() {
-            itemView.setBackgroundColor(Color.LTGRAY);
+            itemView.setBackgroundColor(Color.DKGRAY);
             if (Build.VERSION.SDK_INT >= 21) {
                 itemView.setTranslationZ(12);
             }
@@ -93,7 +93,7 @@ public class RecentsTrackAdapter extends RecyclerView.Adapter<RecentsTrackAdapte
 
         @Override
         public void onItemClear() {
-            itemView.setBackgroundColor(Color.WHITE);
+            itemView.setBackgroundColor(Color.parseColor("#111111"));
             if (Build.VERSION.SDK_INT >= 21) {
                 itemView.setTranslationZ(0);
             }

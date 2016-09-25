@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EEE"
+    android:background="#111"
     android:padding="3dp"
     tools:context="com.sdsmdg.harjot.MusicDNA.FavouritesFragment">
 
@@ -31,6 +31,7 @@
         android:id="@+id/noFavouriteContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#111111"
         android:orientation="vertical"
         android:visibility="invisible">
 
@@ -43,8 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="2"
-            android:src="@drawable/ic_error_white_48dp"
-            android:tint="#898989" />
+            android:src="@drawable/ic_error_white_48dp" />
 
         <TextView
             android:id="@+id/favNoContentText"
@@ -55,7 +55,7 @@
             android:layout_weight="5"
             android:gravity="top|center_horizontal"
             android:text="No Favourites"
-            android:textColor="#565656"
+            android:textColor="#DDDDDD"
             android:textSize="22dp" />
 
     </LinearLayout>

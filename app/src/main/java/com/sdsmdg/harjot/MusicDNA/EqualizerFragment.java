@@ -283,7 +283,7 @@ public class EqualizerFragment extends Fragment {
         paint.setColor(Color.parseColor("#555555"));
         paint.setStrokeWidth((float) (1.33 * HomeActivity.ratio));
 
-        dataset.setColor(Color.parseColor("#FFA036"));
+        dataset.setColor(Color.parseColor("#FFFFFF"));
         dataset.setSmooth(true);
         dataset.setThickness(5);
 

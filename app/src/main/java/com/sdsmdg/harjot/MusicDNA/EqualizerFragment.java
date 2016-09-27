@@ -307,7 +307,7 @@ public class EqualizerFragment extends Fragment {
         chart.show();
 
         Button mEndButton = new Button(getContext());
-        mEndButton.setBackgroundColor(Color.parseColor("#FFA036"));
+        mEndButton.setBackgroundColor(HomeActivity.themeColor);
         mEndButton.setTextColor(Color.WHITE);
 
         showCase = new ShowcaseView.Builder(getActivity())
@@ -316,6 +316,7 @@ public class EqualizerFragment extends Fragment {
                 .setStyle(R.style.CustomShowcaseTheme)
                 .useDecorViewAsParent()
                 .replaceEndButton(mEndButton)
+                .setContentTitlePaint(HomeActivity.tp)
                 .setTarget(new ViewTarget(R.id.showcase_view_equalizer, getActivity()))
                 .setContentTitle("Presets")
                 .setContentText("Use one of the available presets")

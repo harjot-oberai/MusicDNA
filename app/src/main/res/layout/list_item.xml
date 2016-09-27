@@ -4,7 +4,9 @@
     android:id="@+id/relItemContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorListItem"
+    android:background="@drawable/custom_ripple"
+    android:clickable="true"
+    android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
     android:longClickable="true"
     android:padding="10dp">

@@ -121,7 +121,7 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
         mItemTouchHelper.attachToRecyclerView(queueRecycler);
 
         Button mEndButton = new Button(getContext());
-        mEndButton.setBackgroundColor(Color.parseColor("#FFA036"));
+        mEndButton.setBackgroundColor(HomeActivity.themeColor);
         mEndButton.setTextColor(Color.WHITE);
 
         showCase = new ShowcaseView.Builder(getActivity())
@@ -130,6 +130,7 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
                 .setStyle(R.style.CustomShowcaseTheme)
                 .useDecorViewAsParent()
                 .replaceEndButton(mEndButton)
+                .setContentTitlePaint(HomeActivity.tp)
                 .setTarget(new ViewTarget(R.id.showcase_view, getActivity()))
                 .setContentTitle("Queue")
                 .setContentText("Here all songs that are currently in queue are listed." +

@@ -831,7 +831,7 @@ public class PlayerFragment extends Fragment implements
         });
 
         final Button mEndButton = new Button(getContext());
-        mEndButton.setBackgroundColor(Color.parseColor("#FFA036"));
+        mEndButton.setBackgroundColor(HomeActivity.themeColor);
         mEndButton.setTextColor(Color.WHITE);
 
         Handler handler = new Handler();
@@ -845,6 +845,7 @@ public class PlayerFragment extends Fragment implements
                                 .setStyle(R.style.CustomShowcaseTheme)
                                 .useDecorViewAsParent()
                                 .replaceEndButton(mEndButton)
+                                .setContentTitlePaint(HomeActivity.tp)
                                 .setTarget(new ViewTarget(mVisualizerView.getId(), getActivity()))
                                 .setContentTitle("The DNA")
                                 .setContentText("The DNA of the currently playing song.")

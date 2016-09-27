@@ -223,7 +223,7 @@ public class LocalMusicFragment extends Fragment {
 //        }
 
         Button mEndButton = new Button(getContext());
-        mEndButton.setBackgroundColor(Color.parseColor("#FFA036"));
+        mEndButton.setBackgroundColor(HomeActivity.themeColor);
         mEndButton.setTextColor(Color.WHITE);
 
         showCase = new ShowcaseView.Builder(getActivity())
@@ -232,6 +232,7 @@ public class LocalMusicFragment extends Fragment {
                 .setStyle(R.style.CustomShowcaseTheme)
                 .useDecorViewAsParent()
                 .replaceEndButton(mEndButton)
+                .setContentTitlePaint(HomeActivity.tp)
                 .setTarget(new ViewTarget(lv.getId(), getActivity()))
                 .setContentTitle("All Songs")
                 .setContentText("All local Songs listed here.Click to Play.Long click for more options")

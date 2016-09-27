@@ -42,6 +42,7 @@ import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.text.TextPaint;
 import android.util.Log;
 import android.util.Pair;
 import android.view.Display;
@@ -293,8 +294,10 @@ public class HomeActivity extends AppCompatActivity
     ImageView fragmentBackButton;
     TextView fragmentToolbarTitle;
 
-    static int themeColor = Color.parseColor("#FFA036");
+    static int themeColor = Color.parseColor("#B24242");
     static float minAudioStrength = 0.40f;
+
+    static TextPaint tp;
 
     public static Activity main;
 
@@ -621,8 +624,13 @@ public class HomeActivity extends AppCompatActivity
         }
 
         mEndButton = new Button(this);
-        mEndButton.setBackgroundColor(Color.parseColor("#FFA036"));
+        mEndButton.setBackgroundColor(themeColor);
         mEndButton.setTextColor(Color.WHITE);
+
+        tp = new TextPaint();
+        tp.setColor(themeColor);
+        tp.setTextSize(65);
+        tp.setFakeBoldText(true);
 
         copyrightText = (TextView) findViewById(R.id.copyright_text);
         copyrightText.setTypeface(SplashActivity.tf2);
@@ -921,12 +929,14 @@ public class HomeActivity extends AppCompatActivity
         progress.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         progress.show();
 
+
         showCase = new ShowcaseView.Builder(this)
                 .blockAllTouches()
                 .singleShot(0)
                 .setStyle(R.style.CustomShowcaseTheme)
                 .useDecorViewAsParent()
                 .replaceEndButton(mEndButton)
+                .setContentTitlePaint(tp)
                 .setTarget(new ViewTarget(R.id.recentsRecyclerContainer, this))
                 .setContentTitle("Recents and Playlists")
                 .setContentText("Here all you recent songs and playlists will be listed." +
@@ -2518,7 +2528,7 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onColorChanged() {
         QueueFragment qFrag = (QueueFragment) fragMan.findFragmentByTag("queue");
-        if(qFrag != null){
+        if (qFrag != null) {
             qFrag.qAdapter.notifyDataSetChanged();
         }
     }

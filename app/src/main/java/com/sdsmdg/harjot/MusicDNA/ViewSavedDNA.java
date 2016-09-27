@@ -232,7 +232,7 @@ public class ViewSavedDNA extends Fragment {
         });
 
         Button mEndButton = new Button(getContext());
-        mEndButton.setBackgroundColor(Color.parseColor("#FFA036"));
+        mEndButton.setBackgroundColor(HomeActivity.themeColor);
         mEndButton.setTextColor(Color.WHITE);
 
         if (HomeActivity.savedDNAs.getSavedDNAs().size() > 0) {
@@ -242,6 +242,7 @@ public class ViewSavedDNA extends Fragment {
                     .setStyle(R.style.CustomShowcaseTheme)
                     .useDecorViewAsParent()
                     .replaceEndButton(mEndButton)
+                    .setContentTitlePaint(HomeActivity.tp)
                     .setTarget(new ViewTarget(mVisualizerView2.getId(), getActivity()))
                     .setContentTitle("Saved DNAs")
                     .setContentText("View all your saved DNAs here")

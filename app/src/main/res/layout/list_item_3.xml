@@ -61,15 +61,13 @@
             android:textSize="11dp" />
     </LinearLayout>
 
-    <com.wang.avi.AVLoadingIndicatorView
+    <com.sdsmdg.harjot.MusicDNA.CustomPlayingIndicator
         android:id="@+id/currently_playing_indicator"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="10dp"
-        android:visibility="invisible"
-        app:indicator="LineScale"
-        app:indicator_color="#FFA036" />
+        android:visibility="invisible" />
 
 </RelativeLayout>

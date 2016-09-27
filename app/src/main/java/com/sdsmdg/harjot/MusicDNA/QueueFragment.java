@@ -1,6 +1,7 @@
 package com.sdsmdg.harjot.MusicDNA;
 
 
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.content.Context;
@@ -107,7 +108,7 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
         });
 
         saveQueue = (FloatingActionButton) view.findViewById(R.id.save_queue);
-        saveQueue.setColorFilter(HomeActivity.themeColor);
+        saveQueue.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));
         saveQueue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

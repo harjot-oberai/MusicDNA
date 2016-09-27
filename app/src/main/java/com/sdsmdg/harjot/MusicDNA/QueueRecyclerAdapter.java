@@ -49,7 +49,7 @@ public class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdap
 
         ImageView art;
         TextView title, artist;
-        View indicator;
+        CustomPlayingIndicator indicator;
         ImageView holderImg;
 
         public MyViewHolder(View view) {
@@ -57,7 +57,7 @@ public class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdap
             art = (ImageView) view.findViewById(R.id.img);
             title = (TextView) view.findViewById(R.id.title);
             artist = (TextView) view.findViewById(R.id.url);
-            indicator = view.findViewById(R.id.currently_playing_indicator);
+            indicator = (CustomPlayingIndicator) view.findViewById(R.id.currently_playing_indicator);
             holderImg = (ImageView) view.findViewById(R.id.holderImage);
         }
 
@@ -93,12 +93,18 @@ public class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdap
         if (HomeActivity.queueCurrentIndex == position && !HomeActivity.isReloaded) {
             holder.title.setTextColor(HomeActivity.themeColor);
             holder.indicator.setVisibility(View.VISIBLE);
+            if (PlayerFragment.mMediaPlayer.isPlaying()) {
+                holder.indicator.play();
+            } else {
+                holder.indicator.pause();
+            }
         } else {
             holder.title.setTextColor(Color.WHITE);
             holder.indicator.setVisibility(View.INVISIBLE);
         }
 
         holder.holderImg.setColorFilter(HomeActivity.themeColor);
+        holder.indicator.setDrawColor(HomeActivity.themeColor);
 
         UnifiedTrack ut = queue.get(position);
         if (ut.getType()) {

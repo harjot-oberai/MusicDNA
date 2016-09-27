@@ -601,6 +601,15 @@ public class HomeActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
 
+        WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        screen_width = display.getWidth();
+        screen_height = display.getHeight();
+
+        ratio = (float) screen_height / (float) 1920;
+        ratio2 = (float) screen_width / (float) 1080;
+        ratio = Math.min(ratio, ratio2);
+
         setContentView(R.layout.activity_home);
 
         PackageInfo pInfo = null;
@@ -752,15 +761,6 @@ public class HomeActivity extends AppCompatActivity
 
         appBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
         main = this;
-
-        WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        screen_width = display.getWidth();
-        screen_height = display.getHeight();
-
-        ratio = (float) screen_height / (float) 1920;
-        ratio2 = (float) screen_width / (float) 1080;
-        ratio = Math.min(ratio, ratio2);
 
         playerControllerAB = (ImageView) findViewById(R.id.player_control_sp_AB);
         playerControllerAB.setImageResource(R.drawable.ic_queue_music_white_48dp);

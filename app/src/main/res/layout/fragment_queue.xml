@@ -1,6 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorDark"
@@ -8,29 +8,29 @@
 
     <View
         android:id="@+id/showcase_view"
-        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
-        android:layout_height="70dp"/>
+        android:layout_height="70dp"
+        android:layout_alignParentTop="true" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/queueRecycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
 
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/save_queue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="16dp"
         android:clickable="true"
-        app:backgroundTint="#333333"
-        android:tint="#FFA036"
+        android:src="@drawable/ic_save_white"
+        app:backgroundTint="#111111"
         app:borderWidth="0dp"
         app:elevation="6dp"
         app:pressedTranslationZ="9dp"
-        app:rippleColor="#888888"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="16dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_save_white"/>
+        app:rippleColor="#888888" />
 
 </RelativeLayout>

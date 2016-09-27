@@ -332,6 +332,8 @@ public class HomeActivity extends AppCompatActivity
     public static boolean isFullScreenEnabled = false;
     public static boolean isSettingsVisible = false;
 
+    boolean isPlayerTransitioning = false;
+
     public static boolean hasQueueEnded = false;
 
     static boolean isEqualizerEnabled = false;
@@ -1188,7 +1190,7 @@ public class HomeActivity extends AppCompatActivity
                 showPlayer2();
             } else if (isQueueVisible) {
                 showPlayer3();
-            } else if (isPlayerVisible) {
+            } else if (isPlayerVisible && !isPlayerTransitioning) {
                 hidePlayer();
                 showTabs();
                 isPlayerVisible = false;
@@ -1237,7 +1239,7 @@ public class HomeActivity extends AppCompatActivity
                     hideFragment("settings");
                     new SaveSettings().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     setTitle("Music DNA");
-                } else {
+                } else if (!isPlayerTransitioning) {
                     startActivity(new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME));
                 }
             }
@@ -1687,11 +1689,19 @@ public class HomeActivity extends AppCompatActivity
                     .alpha(0.0f);
         }
 
+        isPlayerTransitioning = true;
+
         playerContainer.animate()
                 .setDuration(300)
-                .translationY(0);
+                .translationY(0)
+                .withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        isPlayerTransitioning = false;
+                    }
+                });
 
-        if (PlayerFragment.currentAlbumArtHolder != null){
+        if (PlayerFragment.currentAlbumArtHolder != null) {
             PlayerFragment.currentAlbumArtHolder.setVisibility(View.VISIBLE);
             PlayerFragment.currentAlbumArtHolder.animate()
                     .alpha(0.1f)
@@ -2656,19 +2666,28 @@ public class HomeActivity extends AppCompatActivity
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                boolean isNameRepeat = false;
                 if (text.getText().toString().trim().equals("")) {
                     text.setError("Enter Playlist Name!");
                 } else {
-                    List<UnifiedTrack> l = new ArrayList<UnifiedTrack>();
-                    l.add(track);
-                    Playlist pl = new Playlist(l, text.getText().toString().trim());
-                    allPlaylists.addPlaylist(pl);
-                    playlistsRecycler.setVisibility(View.VISIBLE);
-                    playlistNothingText.setVisibility(View.INVISIBLE);
-                    pAdapter.notifyDataSetChanged();
-                    dialog.dismiss();
-
-                    new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    for (int i = 0; i < allPlaylists.getPlaylists().size(); i++) {
+                        if (text.getText().toString().equals(allPlaylists.getPlaylists().get(i).getPlaylistName())) {
+                            isNameRepeat = true;
+                            text.setError("Playlist with same name exists!");
+                            break;
+                        }
+                    }
+                    if (!isNameRepeat) {
+                        List<UnifiedTrack> l = new ArrayList<UnifiedTrack>();
+                        l.add(track);
+                        Playlist pl = new Playlist(l, text.getText().toString().trim());
+                        allPlaylists.addPlaylist(pl);
+                        playlistsRecycler.setVisibility(View.VISIBLE);
+                        playlistNothingText.setVisibility(View.INVISIBLE);
+                        pAdapter.notifyDataSetChanged();
+                        dialog.dismiss();
+                        new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    }
                 }
             }
         });
@@ -2691,17 +2710,29 @@ public class HomeActivity extends AppCompatActivity
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                boolean isNameRepeat = false;
                 if (text.getText().toString().trim().equals("")) {
                     text.setError("Enter Playlist Name!");
                 } else {
-                    Playlist pl = new Playlist(text.getText().toString());
-                    pl.setSongList(queue.getQueue());
-                    allPlaylists.addPlaylist(pl);
-                    playlistsRecycler.setVisibility(View.VISIBLE);
-                    playlistNothingText.setVisibility(View.INVISIBLE);
-                    pAdapter.notifyDataSetChanged();
-                    new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    dialog.dismiss();
+                    for (int i = 0; i < allPlaylists.getPlaylists().size(); i++) {
+                        if (text.getText().toString().equals(allPlaylists.getPlaylists().get(i).getPlaylistName())) {
+                            isNameRepeat = true;
+                            text.setError("Playlist with same name exists!");
+                            break;
+                        }
+                    }
+                    if (!isNameRepeat) {
+                        Playlist pl = new Playlist(text.getText().toString());
+                        for (int i = 0; i < queue.getQueue().size(); i++) {
+                            pl.getSongList().add(queue.getQueue().get(i));
+                        }
+                        allPlaylists.addPlaylist(pl);
+                        playlistsRecycler.setVisibility(View.VISIBLE);
+                        playlistNothingText.setVisibility(View.INVISIBLE);
+                        pAdapter.notifyDataSetChanged();
+                        new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                        dialog.dismiss();
+                    }
                 }
             }
         });

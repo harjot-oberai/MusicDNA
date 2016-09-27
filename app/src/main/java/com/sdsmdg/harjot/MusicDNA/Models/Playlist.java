@@ -1,5 +1,6 @@
 package com.sdsmdg.harjot.MusicDNA.Models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,8 +10,9 @@ public class Playlist {
     private List<UnifiedTrack> songList;
     private String playlistName;
 
-    public Playlist(String name){
+    public Playlist(String name) {
         playlistName = name;
+        songList = new ArrayList<UnifiedTrack>();
     }
 
     public Playlist(List<UnifiedTrack> songList, String playlistName) {
@@ -34,7 +36,7 @@ public class Playlist {
         this.playlistName = playlistName;
     }
 
-    public void addSong(UnifiedTrack track){
+    public void addSong(UnifiedTrack track) {
         songList.add(track);
     }
 

@@ -12,7 +12,7 @@
     android:foreground="?android:attr/selectableItemBackground"
     android:longClickable="true"
     android:padding="5dp"
-    app:cardBackgroundColor="#333333"
+    app:cardBackgroundColor="@color/colorPlaylistCardView"
     app:cardCornerRadius="1dp"
     app:cardElevation="2dp">
 

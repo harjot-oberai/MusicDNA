@@ -22,7 +22,7 @@
 
     <style name="MyMaterialTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="MyMaterialTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="MyMaterialTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark" />;
 
     <style name="CustomShowcaseTheme" parent="ShowcaseView.Light">
         <item name="sv_backgroundColor">#DD424342</item>

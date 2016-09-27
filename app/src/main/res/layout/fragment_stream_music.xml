@@ -2,14 +2,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EEE"
+    android:background="@color/colorDark"
     android:padding="5dp"
     tools:context="com.sdsmdg.harjot.MusicDNA.StreamMusicFragment">
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/trackList"
-        android:background="#FFF"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </android.support.v7.widget.RecyclerView>
+        android:layout_height="wrap_content"
+        android:background="@color/colorDark"></android.support.v7.widget.RecyclerView>
 
 </RelativeLayout>

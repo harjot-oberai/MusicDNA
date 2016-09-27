@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#111111"
+    android:background="@color/colorDark"
     android:clickable="true"
     tools:context="com.sdsmdg.harjot.MusicDNA.ViewArtistFragment">
 
@@ -26,7 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/artist_title"
-        android:background="#111111"></android.support.v7.widget.RecyclerView>
+        android:background="@color/colorDark"></android.support.v7.widget.RecyclerView>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/play_all_fab_artist"

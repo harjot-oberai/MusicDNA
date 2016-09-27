@@ -172,8 +172,30 @@ public class ViewSavedDNA extends Fragment {
                             HomeActivity.savedDNAs.getSavedDNAs().remove(position);
                             vdAdapter.notifyItemRemoved(position);
 
-                            new HomeActivity.SaveTheDNAs().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                            if (position == selectedDNA) {
+                                if (position > 0) {
+                                    selectedDNA = position - 1;
+                                } else if (position == 0) {
+                                    if (HomeActivity.savedDNAs.getSavedDNAs().size() == 0) {
+                                        noSavedContent.setVisibility(View.VISIBLE);
+                                        new HomeActivity.SaveTheDNAs().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                                        return true;
+                                    } else {
+                                        selectedDNA = 0;
+                                    }
+                                }
 
+                                SavedDNA dna = HomeActivity.savedDNAs.getSavedDNAs().get(selectedDNA);
+                                HomeActivity.tempSavedDNA = dna;
+                                mVisualizerView2.setPts(dna.getModel().getPts());
+                                mVisualizerView2.setPtPaint(dna.getModel().getPtPaint());
+                                byte[] bArr = dna.getModel().getByteArray();
+                                Bitmap bmp = BitmapFactory.decodeByteArray(bArr, 0, bArr.length);
+                                mVisualizerView2.setBmp(bmp);
+                                mVisualizerView2.update();
+                            }
+
+                            new HomeActivity.SaveTheDNAs().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                         }
                         return true;
                     }

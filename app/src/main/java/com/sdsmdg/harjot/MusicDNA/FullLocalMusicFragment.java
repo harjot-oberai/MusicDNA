@@ -2,6 +2,7 @@ package com.sdsmdg.harjot.MusicDNA;
 
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
@@ -50,7 +51,9 @@ public class FullLocalMusicFragment extends Fragment {
 
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         tabLayout = (TabLayout) view.findViewById(R.id.tabs);
-        tabLayout.setBackgroundColor(HomeActivity.themeColor);
+//        tabLayout.setBackgroundColor(HomeActivity.themeColor);
+        tabLayout.setBackgroundColor(Color.parseColor("#111111"));
+        tabLayout.setSelectedTabIndicatorColor(HomeActivity.themeColor);
 //        adapter = new MyPageAdapter(getChildFragmentManager());
 //        adapter.addFragment(new LocalMusicFragment(), "Songs");
 //        adapter.addFragment(new AlbumFragment(), "Albums");

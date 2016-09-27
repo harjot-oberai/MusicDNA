@@ -35,10 +35,16 @@ public class FavouriteTrackAdapter extends RecyclerView.Adapter<FavouriteTrackAd
         void onDragStarted(RecyclerView.ViewHolder viewHolder);
     }
 
-    private final OnDragStartListener mDragStartListener;
+    public interface onEmptyListener {
+        public void onEmpty();
+    }
 
-    public FavouriteTrackAdapter(List<UnifiedTrack> favouriteList, OnDragStartListener mDragStartListener, Context ctx) {
+    private final OnDragStartListener mDragStartListener;
+    private onEmptyListener mCallback;
+
+    public FavouriteTrackAdapter(List<UnifiedTrack> favouriteList, OnDragStartListener mDragStartListener, onEmptyListener mCallback, Context ctx) {
         this.mDragStartListener = mDragStartListener;
+        this.mCallback = mCallback;
         this.favouriteList = favouriteList;
         this.ctx = ctx;
         imgLoader = new ImageLoader(ctx);
@@ -129,6 +135,10 @@ public class FavouriteTrackAdapter extends RecyclerView.Adapter<FavouriteTrackAd
     public void onItemDismiss(int position) {
         favouriteList.remove(position);
         notifyItemRemoved(position);
+
+        if (favouriteList.size() == 0) {
+            mCallback.onEmpty();
+        }
 
         new HomeActivity.SaveFavourites().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }

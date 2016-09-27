@@ -23,7 +23,9 @@ import com.squareup.leakcanary.RefWatcher;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FavouritesFragment extends Fragment implements FavouriteTrackAdapter.OnDragStartListener {
+public class FavouritesFragment extends Fragment implements
+        FavouriteTrackAdapter.OnDragStartListener,
+        FavouriteTrackAdapter.onEmptyListener {
 
 
     RecyclerView favouriteRecycler;
@@ -37,6 +39,12 @@ public class FavouritesFragment extends Fragment implements FavouriteTrackAdapte
     LinearLayout noFavouriteContent;
 
     FloatingActionButton playAll;
+
+    @Override
+    public void onEmpty() {
+        noFavouriteContent.setVisibility(View.VISIBLE);
+        playAll.setVisibility(View.GONE);
+    }
 
     public interface onFavouriteItemClickedListener {
         public void onFavouriteItemClicked(int position);
@@ -81,7 +89,7 @@ public class FavouritesFragment extends Fragment implements FavouriteTrackAdapte
             noFavouriteContent.setVisibility(View.INVISIBLE);
         }
 
-        fAdapter = new FavouriteTrackAdapter(HomeActivity.favouriteTracks.getFavourite(), this, getContext());
+        fAdapter = new FavouriteTrackAdapter(HomeActivity.favouriteTracks.getFavourite(), this, this, getContext());
         LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         favouriteRecycler.setLayoutManager(mLayoutManager2);
         favouriteRecycler.setItemAnimator(new DefaultItemAnimator());

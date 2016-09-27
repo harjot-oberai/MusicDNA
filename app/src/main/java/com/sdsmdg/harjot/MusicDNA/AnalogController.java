@@ -20,6 +20,8 @@ public class AnalogController extends View {
     float currdeg, deg = 3, downdeg, prevCurrDeg;
     boolean isIncreasing, isDecreasing;
 
+    int progressColor, lineColor;
+
     onProgressChangedListener mListener;
 
     String label;
@@ -58,11 +60,11 @@ public class AnalogController extends View {
         circlePaint.setColor(Color.parseColor("#222222"));
         circlePaint.setStyle(Paint.Style.FILL);
         circlePaint2 = new Paint();
-        circlePaint2.setColor(Color.parseColor("#FFFFFF"));
+        circlePaint2.setColor(HomeActivity.themeColor);
 //        circlePaint2.setColor(Color.parseColor("#FFA036"));
         circlePaint2.setStyle(Paint.Style.FILL);
         linePaint = new Paint();
-        linePaint.setColor(Color.parseColor("#FFFFFF"));
+        linePaint.setColor(HomeActivity.themeColor);
 //        linePaint.setColor(Color.parseColor("#FFA036"));
         linePaint.setStrokeWidth(7 * HomeActivity.ratio);
         angle = "0.0";
@@ -104,7 +106,6 @@ public class AnalogController extends View {
         canvas.drawCircle(midx, midy, radius * ((float) 13 / 15), circlePaint);
         circlePaint.setColor(Color.parseColor("#000000"));
         canvas.drawCircle(midx, midy, radius * ((float) 11 / 15), circlePaint);
-//        canvas.drawText(angle, midx, midy, textPaint);
         canvas.drawText(label, midx, midy + (float) (radius * 1.1), textPaint);
         canvas.drawLine(x1, y1, x2, y2, linePaint);
 
@@ -185,4 +186,19 @@ public class AnalogController extends View {
         label = txt;
     }
 
+    public int getLineColor() {
+        return lineColor;
+    }
+
+    public void setLineColor(int lineColor) {
+        this.lineColor = lineColor;
+    }
+
+    public int getProgressColor() {
+        return progressColor;
+    }
+
+    public void setProgressColor(int progressColor) {
+        this.progressColor = progressColor;
+    }
 }

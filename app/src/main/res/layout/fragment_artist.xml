@@ -10,6 +10,6 @@
         android:id="@+id/artists_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="10dp"></android.support.v7.widget.RecyclerView>
+        android:layout_marginTop="3dp"></android.support.v7.widget.RecyclerView>
 
 </FrameLayout>

@@ -1,6 +1,7 @@
 package com.sdsmdg.harjot.MusicDNA;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -90,12 +91,14 @@ public class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdap
     public void onBindViewHolder(final MyViewHolder holder, int position) {
 
         if (HomeActivity.queueCurrentIndex == position && !HomeActivity.isReloaded) {
-            holder.title.setTextColor(Color.parseColor("#FFA036"));
+            holder.title.setTextColor(HomeActivity.themeColor);
             holder.indicator.setVisibility(View.VISIBLE);
         } else {
             holder.title.setTextColor(Color.WHITE);
             holder.indicator.setVisibility(View.INVISIBLE);
         }
+
+        holder.holderImg.setColorFilter(HomeActivity.themeColor);
 
         UnifiedTrack ut = queue.get(position);
         if (ut.getType()) {
@@ -156,5 +159,4 @@ public class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdap
         notifyItemRemoved(position);
         new HomeActivity.SaveQueue().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
-
 }

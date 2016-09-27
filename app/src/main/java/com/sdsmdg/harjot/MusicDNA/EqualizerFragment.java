@@ -105,6 +105,13 @@ public class EqualizerFragment extends Fragment {
         bassController.setLabel("BASS");
         reverbController.setLabel("3D");
 
+        bassController.circlePaint2.setColor(HomeActivity.themeColor);
+        bassController.linePaint.setColor(HomeActivity.themeColor);
+        bassController.invalidate();
+        reverbController.circlePaint2.setColor(HomeActivity.themeColor);
+        bassController.linePaint.setColor(HomeActivity.themeColor);
+        reverbController.invalidate();
+
         if (!HomeActivity.isEqualizerReloaded) {
             int x = (int) ((PlayerFragment.bassBoost.getRoundedStrength() * 19) / 1000);
             if (x == 0) {
@@ -228,7 +235,8 @@ public class EqualizerFragment extends Fragment {
                     break;
             }
             seekBarFinal[i] = seekBar;
-            seekBar.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(Color.parseColor("#565656"), PorterDuff.Mode.SRC_IN));
+            seekBar.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(Color.DKGRAY, PorterDuff.Mode.SRC_IN));
+            seekBar.getThumb().setColorFilter(new PorterDuffColorFilter(HomeActivity.themeColor, PorterDuff.Mode.SRC_IN));
             seekBar.setId(i);
 //            seekBar.setLayoutParams(layoutParams);
             seekBar.setMax(upperEqualizerBandLevel - lowerEqualizerBandLevel);
@@ -281,9 +289,9 @@ public class EqualizerFragment extends Fragment {
         }
 
         paint.setColor(Color.parseColor("#555555"));
-        paint.setStrokeWidth((float) (1.33 * HomeActivity.ratio));
+        paint.setStrokeWidth((float) (1.10 * HomeActivity.ratio));
 
-        dataset.setColor(Color.parseColor("#FFFFFF"));
+        dataset.setColor(HomeActivity.themeColor);
         dataset.setSmooth(true);
         dataset.setThickness(5);
 
@@ -409,15 +417,15 @@ public class EqualizerFragment extends Fragment {
         refWatcher.watch(this);
     }
 
-    public boolean isShowcaseVisible(){
+    public boolean isShowcaseVisible() {
         return (showCase != null && showCase.isShowing());
     }
 
-    public void hideShowcase(){
+    public void hideShowcase() {
         showCase.hide();
     }
 
-    public void setBlockerVisibility(int visibility){
+    public void setBlockerVisibility(int visibility) {
         equalizerBlocker.setVisibility(visibility);
     }
 

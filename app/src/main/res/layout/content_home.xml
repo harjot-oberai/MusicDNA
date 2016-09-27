@@ -193,6 +193,14 @@
                     android:padding="5dp"></android.support.v7.widget.RecyclerView>
             </RelativeLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_below="@+id/recentsRecyclerContainer"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="#565656" />
+
             <RelativeLayout
                 android:id="@+id/playlistRecyclerContainer"
                 android:layout_width="match_parent"
@@ -209,8 +217,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:layout_marginTop="10dp"
-                    android:textColor="#FFF"
                     android:text="Playlists"
+                    android:textColor="#FFF"
                     android:textSize="15dp"
                     android:textStyle="bold" />
 
@@ -235,6 +243,14 @@
                     android:padding="5dp"></android.support.v7.widget.RecyclerView>
             </RelativeLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_below="@+id/playlistRecyclerContainer"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="#565656" />
+
             <RelativeLayout
                 android:id="@+id/bannerContainer"
                 android:layout_width="match_parent"
@@ -244,10 +260,10 @@
 
                 <RelativeLayout
                     android:id="@+id/localBanner"
-                    android:padding="1dp"
-                    android:background="#888"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp">
+                    android:layout_height="100dp"
+                    android:background="#888"
+                    android:padding="1dp">
 
                     <ImageView
                         android:layout_width="match_parent"
@@ -357,8 +373,8 @@
                             android:layout_alignParentTop="true"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="10dp"
-                            android:tint="#FFFFFF"
-                            android:src="@drawable/ic_recents" />
+                            android:src="@drawable/ic_recents"
+                            android:tint="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -463,9 +479,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
-                    android:textColor="#888"
                     android:text="\nMusic DNA\n© 2016"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    android:textColor="#888" />
             </RelativeLayout>
 
         </RelativeLayout>

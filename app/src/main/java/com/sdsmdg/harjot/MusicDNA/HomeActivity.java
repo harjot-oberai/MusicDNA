@@ -5,11 +5,9 @@ import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -26,11 +24,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.os.IBinder;
 import android.provider.MediaStore;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -46,10 +42,8 @@ import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Pair;
-import android.util.TypedValue;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -156,7 +150,8 @@ public class HomeActivity extends AppCompatActivity
         ViewArtistFragment.onArtistPlayAllListener,
         RecentsFragment.onRecentItemClickedListener,
         RecentsFragment.onRepeatListener,
-        MediaPlayerService.onCallbackListener {
+        MediaPlayerService.onCallbackListener,
+        SettingsFragment.onColorChangedListener {
 
 
     ScrollView container;
@@ -2518,6 +2513,14 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public PlayerFragment getPlayerFragmentFromHome() {
         return getPlayerFragment();
+    }
+
+    @Override
+    public void onColorChanged() {
+        QueueFragment qFrag = (QueueFragment) fragMan.findFragmentByTag("queue");
+        if(qFrag != null){
+            qFrag.qAdapter.notifyDataSetChanged();
+        }
     }
 
     public static class MyAsyncTask extends AsyncTask<Void, Void, Void> {

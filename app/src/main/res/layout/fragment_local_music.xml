@@ -4,14 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorDark"
-    android:padding="5dp"
     tools:context="com.sdsmdg.harjot.MusicDNA.LocalMusicFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/localMusicList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorDark"></android.support.v7.widget.RecyclerView>
+        android:background="@color/colorDark"
+        android:layout_marginTop="3dp"></android.support.v7.widget.RecyclerView>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/play_all_fab_local"

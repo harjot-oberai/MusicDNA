@@ -3,12 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorDark"
+    android:clickable="true"
     tools:context="com.sdsmdg.harjot.MusicDNA.LocalMusicFragments.AlbumFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/albums_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="10dp"></android.support.v7.widget.RecyclerView>
+        android:layout_marginTop="3dp"></android.support.v7.widget.RecyclerView>
 
 </RelativeLayout>

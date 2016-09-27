@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_alignParentTop="true"
-            android:background="#222222"
+            android:background="#000000"
             android:layout_marginBottom="0dp"
             android:visibility="invisible">
 

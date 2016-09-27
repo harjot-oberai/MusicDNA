@@ -107,6 +107,7 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
         });
 
         saveQueue = (FloatingActionButton) view.findViewById(R.id.save_queue);
+        saveQueue.setColorFilter(HomeActivity.themeColor);
         saveQueue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

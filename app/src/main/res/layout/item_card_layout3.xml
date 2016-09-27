@@ -35,7 +35,7 @@
             android:singleLine="true"
             android:text="Title"
             android:textAlignment="center"
-            android:textColor="#DDD"
+            android:textColor="#EEE"
             android:textSize="13dp" />
 
         <TextView
@@ -48,7 +48,7 @@
             android:singleLine="true"
             android:text="Artist"
             android:textAlignment="center"
-            android:textColor="#BBB"
+            android:textColor="#EEE"
             android:textSize="9dp" />
 
     </RelativeLayout>

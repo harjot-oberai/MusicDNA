@@ -152,7 +152,8 @@ public class HomeActivity extends AppCompatActivity
         RecentsFragment.onRecentItemClickedListener,
         RecentsFragment.onRepeatListener,
         MediaPlayerService.onCallbackListener,
-        SettingsFragment.onColorChangedListener {
+        SettingsFragment.onColorChangedListener,
+        SettingsFragment.onAlbumArtBackgroundToggled {
 
 
     ScrollView container;
@@ -1706,11 +1707,13 @@ public class HomeActivity extends AppCompatActivity
                     }
                 });
 
-        if (PlayerFragment.currentAlbumArtHolder != null) {
-            PlayerFragment.currentAlbumArtHolder.setVisibility(View.VISIBLE);
-            PlayerFragment.currentAlbumArtHolder.animate()
-                    .alpha(0.1f)
-                    .setDuration(300);
+        if (settings.isAlbumArtBackgroundEnabled()) {
+            if (PlayerFragment.currentAlbumArtHolder != null) {
+                PlayerFragment.currentAlbumArtHolder.setVisibility(View.VISIBLE);
+                PlayerFragment.currentAlbumArtHolder.animate()
+                        .alpha(0.1f)
+                        .setDuration(300);
+            }
         }
 
         final Handler handler2 = new Handler();
@@ -2530,6 +2533,14 @@ public class HomeActivity extends AppCompatActivity
         QueueFragment qFrag = (QueueFragment) fragMan.findFragmentByTag("queue");
         if (qFrag != null) {
             qFrag.qAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onAlbumArtBackgroundChangedVisibility(int visibility) {
+        PlayerFragment plFrag = getPlayerFragment();
+        if (plFrag != null) {
+            plFrag.toggleAlbumArtBackground(visibility);
         }
     }
 

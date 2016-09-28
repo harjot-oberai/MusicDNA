@@ -15,8 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
+import android.support.v7.widget.SwitchCompat;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,10 +38,13 @@ import me.priyesh.chroma.ColorSelectListener;
  */
 public class SettingsFragment extends Fragment {
 
-    CardView densitycard, themeCard, aboutCard;
+    CardView densitycard, themeCard, aboutCard, albumArtCard;
+    SwitchCompat albumArtToggle;
     ImageView themeColorImg;
     SeekBar densitySeekbar;
     TextView densityText;
+
+    onAlbumArtBackgroundToggled mCallback;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -47,6 +52,10 @@ public class SettingsFragment extends Fragment {
 
     public interface onColorChangedListener {
         public void onColorChanged();
+    }
+
+    public interface onAlbumArtBackgroundToggled {
+        public void onAlbumArtBackgroundChangedVisibility(int visibility);
     }
 
 
@@ -60,6 +69,9 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        mCallback = (onAlbumArtBackgroundToggled) getContext();
+
         densitycard = (CardView) view.findViewById(R.id.density_card);
         densitySeekbar = (SeekBar) view.findViewById(R.id.density_seekbar);
         densityText = (TextView) view.findViewById(R.id.density_text);
@@ -129,6 +141,23 @@ public class SettingsFragment extends Fragment {
                         })
                         .build()
                         .show();
+            }
+        });
+
+        albumArtCard = (CardView) view.findViewById(R.id.album_art_card);
+        albumArtToggle = (SwitchCompat) view.findViewById(R.id.album_art_toggle);
+        albumArtToggle.setChecked(HomeActivity.settings.isAlbumArtBackgroundEnabled());
+        albumArtCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                albumArtToggle.toggle();
+            }
+        });
+        albumArtToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                HomeActivity.settings.setAlbumArtBackgroundEnabled(isChecked);
+                mCallback.onAlbumArtBackgroundChangedVisibility(isChecked ? View.VISIBLE : View.GONE);
             }
         });
 

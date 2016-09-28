@@ -1168,4 +1168,7 @@ public class PlayerFragment extends Fragment implements
         showCase.hide();
     }
 
+    public void toggleAlbumArtBackground(int visibility) {
+        currentAlbumArtHolder.setVisibility(visibility);
+    }
 }

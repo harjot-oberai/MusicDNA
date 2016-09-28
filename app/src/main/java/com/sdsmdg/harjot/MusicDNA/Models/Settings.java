@@ -8,9 +8,11 @@ import android.graphics.Color;
 public class Settings {
     private int themeColor = Color.parseColor("#B24242");
     private float minAudioStrength;
+    private boolean albumArtBackgroundEnabled = false;
 
     public Settings() {
         this.minAudioStrength = 0.40f;
+        albumArtBackgroundEnabled = false;
     }
 
     public int getThemeColor() {
@@ -27,5 +29,13 @@ public class Settings {
 
     public void setMinAudioStrength(float minAudioStrength) {
         this.minAudioStrength = minAudioStrength;
+    }
+
+    public boolean isAlbumArtBackgroundEnabled() {
+        return albumArtBackgroundEnabled;
+    }
+
+    public void setAlbumArtBackgroundEnabled(boolean albumArtBackgroundEnabled) {
+        this.albumArtBackgroundEnabled = albumArtBackgroundEnabled;
     }
 }

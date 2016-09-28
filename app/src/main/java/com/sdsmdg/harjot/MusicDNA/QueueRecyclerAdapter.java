@@ -93,10 +93,12 @@ public class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdap
         if (HomeActivity.queueCurrentIndex == position && !HomeActivity.isReloaded) {
             holder.title.setTextColor(HomeActivity.themeColor);
             holder.indicator.setVisibility(View.VISIBLE);
-            if (PlayerFragment.mMediaPlayer.isPlaying()) {
-                holder.indicator.play();
-            } else {
-                holder.indicator.pause();
+            if (PlayerFragment.mMediaPlayer != null) {
+                if (PlayerFragment.mMediaPlayer.isPlaying()) {
+                    holder.indicator.play();
+                } else {
+                    holder.indicator.pause();
+                }
             }
         } else {
             holder.title.setTextColor(Color.WHITE);

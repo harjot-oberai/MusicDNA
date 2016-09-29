@@ -938,7 +938,7 @@ public class HomeActivity extends AppCompatActivity
                 .useDecorViewAsParent()
                 .replaceEndButton(mEndButton)
                 .setContentTitlePaint(tp)
-                .setTarget(new ViewTarget(R.id.recentsRecyclerContainer, this))
+                .setTarget(new ViewTarget(R.id.recentsRecyclerLabel, this))
                 .setContentTitle("Recents and Playlists")
                 .setContentText("Here all you recent songs and playlists will be listed." +
                         "Long press the cards or playlists for more options \n" +
@@ -955,7 +955,7 @@ public class HomeActivity extends AppCompatActivity
                 count1++;
                 switch (count1) {
                     case 1:
-                        showCase.setTarget(new ViewTarget(R.id.localBanner, (Activity) ctx));
+                        showCase.setTarget(new ViewTarget(R.id.local_banner_alt_showcase, (Activity) ctx));
                         showCase.setContentTitle("Local Songs");
                         showCase.setContentText("See all songs available locally, classified on basis of Artist and Album");
                         showCase.setButtonPosition(lps);

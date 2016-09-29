@@ -233,7 +233,7 @@ public class LocalMusicFragment extends Fragment {
                 .useDecorViewAsParent()
                 .replaceEndButton(mEndButton)
                 .setContentTitlePaint(HomeActivity.tp)
-                .setTarget(new ViewTarget(lv.getId(), getActivity()))
+                .setTarget(new ViewTarget(R.id.songs_tab_alt_showcase, getActivity()))
                 .setContentTitle("All Songs")
                 .setContentText("All local Songs listed here.Click to Play.Long click for more options")
                 .build();

@@ -131,7 +131,7 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
                 .useDecorViewAsParent()
                 .replaceEndButton(mEndButton)
                 .setContentTitlePaint(HomeActivity.tp)
-                .setTarget(new ViewTarget(R.id.showcase_view, getActivity()))
+                .setTarget(new ViewTarget(R.id.queue_alt_showcase, getActivity()))
                 .setContentTitle("Queue")
                 .setContentText("Here all songs that are currently in queue are listed." +
                         " Use handle to reorder the Queue and swipe the song to remove from queue")

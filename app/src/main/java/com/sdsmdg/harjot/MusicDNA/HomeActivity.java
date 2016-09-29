@@ -480,6 +480,10 @@ public class HomeActivity extends AppCompatActivity
             continuePlayingList.add(recentlyPlayed.getRecentlyPlayed().get(i));
         }
         rAdapter.notifyDataSetChanged();
+        RecentsFragment rFrag = (RecentsFragment) fragMan.findFragmentByTag("recent");
+        if(rFrag!=null && rFrag.rtAdpater!=null){
+            rFrag.rtAdpater.notifyDataSetChanged();
+        }
     }
 
     public void onLocalTrackSelected(int position) {
@@ -598,6 +602,11 @@ public class HomeActivity extends AppCompatActivity
         }
         rAdapter.notifyDataSetChanged();
 
+        RecentsFragment rFrag = (RecentsFragment) fragMan.findFragmentByTag("recent");
+        if(rFrag!=null && rFrag.rtAdpater!=null){
+            rFrag.rtAdpater.notifyDataSetChanged();
+        }
+
     }
 
     @Override
@@ -630,7 +639,7 @@ public class HomeActivity extends AppCompatActivity
 
         tp = new TextPaint();
         tp.setColor(themeColor);
-        tp.setTextSize(65);
+        tp.setTextSize(65 * ratio);
         tp.setFakeBoldText(true);
 
         copyrightText = (TextView) findViewById(R.id.copyright_text);
@@ -2572,6 +2581,8 @@ public class HomeActivity extends AppCompatActivity
         new SaveData().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         new SaveQueue().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
+        prefsEditor.commit();
+
     }
 
     @Override
@@ -4096,11 +4107,13 @@ public class HomeActivity extends AppCompatActivity
         @Override
         protected Void doInBackground(Void... params) {
 
-            String json6 = gson.toJson(queueCurrentIndex);
-            prefsEditor.putString("queueCurrentIndex", json6);
+            try {
+                String json6 = gson.toJson(queueCurrentIndex);
+                prefsEditor.putString("queueCurrentIndex", json6);
+            } catch (Exception e) {
 
-            prefsEditor.commit();
-
+            }
+//            prefsEditor.commit();
             return null;
         }
     }
@@ -4109,11 +4122,13 @@ public class HomeActivity extends AppCompatActivity
 
         @Override
         protected Void doInBackground(Void... params) {
-            String json4 = gson.toJson(recentlyPlayed);
-            prefsEditor.putString("recentlyPlayed", json4);
+            try {
+                String json4 = gson.toJson(recentlyPlayed);
+                prefsEditor.putString("recentlyPlayed", json4);
+            } catch (Exception e) {
 
-            prefsEditor.commit();
-
+            }
+//            prefsEditor.commit();
             return null;
         }
     }
@@ -4122,11 +4137,13 @@ public class HomeActivity extends AppCompatActivity
 
         @Override
         protected Void doInBackground(Void... params) {
-            String json5 = gson.toJson(favouriteTracks);
-            prefsEditor.putString("favouriteTracks", json5);
+            try {
+                String json5 = gson.toJson(favouriteTracks);
+                prefsEditor.putString("favouriteTracks", json5);
+            } catch (Exception e) {
 
-            prefsEditor.commit();
-
+            }
+//            prefsEditor.commit();
             return null;
         }
     }
@@ -4135,9 +4152,13 @@ public class HomeActivity extends AppCompatActivity
 
         @Override
         protected Void doInBackground(Void... params) {
-            String json8 = gson.toJson(settings);
-            prefsEditor.putString("settings", json8);
-            prefsEditor.commit();
+            try {
+                String json8 = gson.toJson(settings);
+                prefsEditor.putString("settings", json8);
+            } catch (Exception e) {
+
+            }
+//            prefsEditor.commit();
             return null;
         }
     }
@@ -4146,9 +4167,13 @@ public class HomeActivity extends AppCompatActivity
 
         @Override
         protected Void doInBackground(Void... params) {
-            String json = gson.toJson(savedDNAs);
-            prefsEditor.putString("savedDNAs", json);
-            prefsEditor.commit();
+            try {
+                String json = gson.toJson(savedDNAs);
+                prefsEditor.putString("savedDNAs", json);
+            } catch (Exception e) {
+
+            }
+//            prefsEditor.commit();
             return null;
         }
     }
@@ -4157,11 +4182,15 @@ public class HomeActivity extends AppCompatActivity
 
         @Override
         protected Void doInBackground(Void... params) {
-            String json3 = gson.toJson(queue);
-            prefsEditor.putString("queue", json3);
-            String json6 = gson.toJson(queueCurrentIndex);
-            prefsEditor.putString("queueCurrentIndex", json6);
-            prefsEditor.commit();
+            try {
+                String json3 = gson.toJson(queue);
+                prefsEditor.putString("queue", json3);
+                String json6 = gson.toJson(queueCurrentIndex);
+                prefsEditor.putString("queueCurrentIndex", json6);
+            } catch (Exception e) {
+
+            }
+//            prefsEditor.commit();
             return null;
         }
     }
@@ -4170,9 +4199,14 @@ public class HomeActivity extends AppCompatActivity
 
         @Override
         protected Void doInBackground(Void... params) {
-            String json2 = gson.toJson(allPlaylists);
-            prefsEditor.putString("allPlaylists", json2);
-            prefsEditor.commit();
+
+            try {
+                String json2 = gson.toJson(allPlaylists);
+                prefsEditor.putString("allPlaylists", json2);
+            } catch (Exception e) {
+
+            }
+//            prefsEditor.commit();
             return null;
         }
     }

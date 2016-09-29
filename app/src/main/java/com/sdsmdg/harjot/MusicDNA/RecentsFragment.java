@@ -104,7 +104,7 @@ public class RecentsFragment extends Fragment implements RecentsTrackAdapter.OnD
                         break;
                     }
                 }
-                if (!isRepeat && HomeActivity.isReloaded) {
+                if (!isRepeat) {
                     if (ut.getType()) {
                         LocalTrack track = ut.getLocalTrack();
                         if (HomeActivity.queue.getQueue().size() == 0) {

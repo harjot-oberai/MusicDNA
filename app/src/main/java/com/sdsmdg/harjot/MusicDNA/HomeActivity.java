@@ -137,7 +137,9 @@ public class HomeActivity extends AppCompatActivity
         PlayerFragment.onSettingsClickedListener,
         PlayListFragment.onPlaylistTouchedListener,
         PlayListFragment.onPlaylistMenuPlayAllListener,
-        PlayListFragment.onPLaylistRenameListener,
+        PlayListFragment.onPlaylistRenameListener,
+        PlayListFragment.newPlaylistListerner,
+        PlaylistTrackAdapter.onPlaylistEmptyListener,
         FolderFragment.onFolderClickedListener,
         FolderContentFragment.onFolderContentPlayAllListener,
         FolderContentFragment.onFolderContentItemClickListener,
@@ -153,13 +155,15 @@ public class HomeActivity extends AppCompatActivity
         RecentsFragment.onRepeatListener,
         MediaPlayerService.onCallbackListener,
         SettingsFragment.onColorChangedListener,
-        SettingsFragment.onAlbumArtBackgroundToggled {
+        SettingsFragment.onAlbumArtBackgroundToggled,
+        AddToPlaylistFragment.newPlaylistListener {
 
 
     ScrollView container;
 
     public static List<LocalTrack> localTrackList = new ArrayList<>();
     public static List<LocalTrack> finalLocalSearchResultList = new ArrayList<>();
+    public static List<LocalTrack> finalSelectedTracks = new ArrayList<>();
     public static List<Track> streamingTrackList = new ArrayList<>();
     public static List<Album> albums = new ArrayList<>();
     public static List<Album> finalAlbums = new ArrayList<>();
@@ -275,6 +279,8 @@ public class HomeActivity extends AppCompatActivity
 
     TextView localViewAll, streamViewAll;
 
+    TextView newPlaylistText;
+
     TextView localNothingText;
     TextView streamNothingText;
     TextView recentsNothingText;
@@ -330,6 +336,7 @@ public class HomeActivity extends AppCompatActivity
     public static boolean isRecentVisible = false;
     public static boolean isFullScreenEnabled = false;
     public static boolean isSettingsVisible = false;
+    public static boolean isNewPlaylistVisible = false;
 
     boolean isPlayerTransitioning = false;
 
@@ -481,7 +488,7 @@ public class HomeActivity extends AppCompatActivity
         }
         rAdapter.notifyDataSetChanged();
         RecentsFragment rFrag = (RecentsFragment) fragMan.findFragmentByTag("recent");
-        if(rFrag!=null && rFrag.rtAdpater!=null){
+        if (rFrag != null && rFrag.rtAdpater != null) {
             rFrag.rtAdpater.notifyDataSetChanged();
         }
     }
@@ -603,7 +610,7 @@ public class HomeActivity extends AppCompatActivity
         rAdapter.notifyDataSetChanged();
 
         RecentsFragment rFrag = (RecentsFragment) fragMan.findFragmentByTag("recent");
-        if(rFrag!=null && rFrag.rtAdpater!=null){
+        if (rFrag != null && rFrag.rtAdpater != null) {
             rFrag.rtAdpater.notifyDataSetChanged();
         }
 
@@ -664,6 +671,14 @@ public class HomeActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         spToolbar = (Toolbar) findViewById(R.id.smallPlayer_AB);
+
+        newPlaylistText = (TextView) findViewById(R.id.new_playlist_text);
+        newPlaylistText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFragment("newPlaylist");
+            }
+        });
 
         queueToolbar = (Toolbar) findViewById(R.id.queue_toolbar);
         queueBackButton = (ImageView) findViewById(R.id.queue_toolbar_back_button_img);
@@ -1225,6 +1240,9 @@ public class HomeActivity extends AppCompatActivity
                     setTitle("Music DNA");
                 } else if (isPlaylistVisible) {
                     hideFragment("playlist");
+                    setTitle("Music DNA");
+                } else if (isNewPlaylistVisible) {
+                    hideFragment("newPlaylist");
                     setTitle("Music DNA");
                 } else if (isEqualizerVisible) {
                     hideFragment("equalizer");
@@ -2553,6 +2571,33 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    public void newPlaylistListener() {
+        showFragment("newPlaylist");
+    }
+
+    @Override
+    public void onPlaylistEmpty() {
+        PlayListFragment plFrag = (PlayListFragment) fragMan.findFragmentByTag("allPlaylists");
+        if (plFrag != null && plFrag.vpAdapter != null) {
+            plFrag.vpAdapter.notifyItemRemoved(tempPlaylistNumber);
+        }
+        if (pAdapter != null) {
+            pAdapter.notifyItemRemoved(tempPlaylistNumber);
+        }
+    }
+
+    @Override
+    public void onCancel() {
+        finalSelectedTracks.clear();
+        onBackPressed();
+    }
+
+    @Override
+    public void onDone() {
+        newPlaylistNameDialog();
+    }
+
     public static class MyAsyncTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -2631,6 +2676,65 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
+    public void newPlaylistNameDialog() {
+        final Dialog dialog = new Dialog(ctx);
+        dialog.setContentView(R.layout.save_image_dialog);
+        dialog.setTitle("Playlist Name");
+
+        Button btn = (Button) dialog.findViewById(R.id.save_image_btn);
+        final EditText newName = (EditText) dialog.findViewById(R.id.save_image_filename_text);
+
+        CheckBox cb = (CheckBox) dialog.findViewById(R.id.text_checkbox);
+        cb.setVisibility(View.GONE);
+
+        btn.setBackgroundColor(themeColor);
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean isNameRepeat = false;
+                if (newName.getText().toString().trim().equals("")) {
+                    newName.setError("Enter Playlist Name!");
+                } else {
+                    for (int i = 0; i < allPlaylists.getPlaylists().size(); i++) {
+                        if (newName.getText().toString().equals(allPlaylists.getPlaylists().get(i).getPlaylistName())) {
+                            isNameRepeat = true;
+                            newName.setError("Playlist with same name exists!");
+                            break;
+                        }
+                    }
+                    if (!isNameRepeat) {
+                        UnifiedTrack ut;
+                        Playlist pl = new Playlist(newName.getText().toString());
+                        for (int i = 0; i < finalSelectedTracks.size(); i++) {
+                            ut = new UnifiedTrack(true, finalSelectedTracks.get(i), null);
+                            pl.getSongList().add(ut);
+                        }
+                        allPlaylists.addPlaylist(pl);
+                        finalSelectedTracks.clear();
+                        if (pAdapter != null) {
+                            pAdapter.notifyDataSetChanged();
+                            if (allPlaylists.getPlaylists().size() > 0) {
+                                playlistsRecycler.setVisibility(View.VISIBLE);
+                                playlistNothingText.setVisibility(View.INVISIBLE);
+                            }
+                        }
+                        PlayListFragment plFrag = (PlayListFragment) fragMan.findFragmentByTag("allPlaylists");
+                        if (plFrag != null) {
+                            plFrag.dataChanged();
+                        }
+                        new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                        dialog.dismiss();
+                        onBackPressed();
+                    }
+                }
+            }
+        });
+
+        dialog.show();
+
+    }
+
     public void renamePlaylistDialog(String oldName) {
         final Dialog dialog = new Dialog(ctx);
         dialog.setContentView(R.layout.save_image_dialog);
@@ -2648,19 +2752,29 @@ public class HomeActivity extends AppCompatActivity
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                boolean isNameRepeat = false;
                 if (newName.getText().toString().trim().equals("")) {
                     newName.setError("Enter Playlist Name!");
                 } else {
-                    allPlaylists.getPlaylists().get(renamePlaylistNumber).setPlaylistName(newName.getText().toString());
-                    if (pAdapter != null) {
-                        pAdapter.notifyItemChanged(renamePlaylistNumber);
+                    for (int i = 0; i < allPlaylists.getPlaylists().size(); i++) {
+                        if (newName.getText().toString().equals(allPlaylists.getPlaylists().get(i).getPlaylistName())) {
+                            isNameRepeat = true;
+                            newName.setError("Playlist with same name exists!");
+                            break;
+                        }
                     }
-                    PlayListFragment plFrag = (PlayListFragment) fragMan.findFragmentByTag("allPlaylists");
-                    if (plFrag != null) {
-                        plFrag.itemChanged(renamePlaylistNumber);
+                    if (!isNameRepeat) {
+                        allPlaylists.getPlaylists().get(renamePlaylistNumber).setPlaylistName(newName.getText().toString());
+                        if (pAdapter != null) {
+                            pAdapter.notifyItemChanged(renamePlaylistNumber);
+                        }
+                        PlayListFragment plFrag = (PlayListFragment) fragMan.findFragmentByTag("allPlaylists");
+                        if (plFrag != null) {
+                            plFrag.itemChanged(renamePlaylistNumber);
+                        }
+                        new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                        dialog.dismiss();
                     }
-                    new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    dialog.dismiss();
                 }
             }
         });
@@ -2901,6 +3015,26 @@ public class HomeActivity extends AppCompatActivity
                     .show(newFragment)
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
+        } else if (type.equals("newPlaylist") && !isNewPlaylistVisible) {
+            setTitle("Add to Playlist");
+            setUpFragmentToolbar(themeColor, (String) getTitle());
+            switchToolbar(toolbar, fragmentToolbar, "left");
+            navigationView.setCheckedItem(R.id.nav_playlists);
+            isNewPlaylistVisible = true;
+            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+            AddToPlaylistFragment newFragment = (AddToPlaylistFragment) fm.findFragmentByTag("newPlaylist");
+            if (newFragment == null) {
+                newFragment = new AddToPlaylistFragment();
+            }
+            fm.beginTransaction()
+                    .setCustomAnimations(R.anim.slide_left,
+                            R.anim.slide_right,
+                            R.anim.slide_left,
+                            R.anim.slide_right)
+                    .add(R.id.content_frag, newFragment, "newPlaylist")
+                    .show(newFragment)
+                    .addToBackStack(null)
+                    .commitAllowingStateLoss();
         } else if (type.equals("allPlaylists") && !isAllPlaylistVisible) {
             setTitle("All Playlists");
             setUpFragmentToolbar(themeColor, (String) getTitle());
@@ -2908,7 +3042,10 @@ public class HomeActivity extends AppCompatActivity
             navigationView.setCheckedItem(R.id.nav_playlists);
             isAllPlaylistVisible = true;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-            PlayListFragment newFragment = new PlayListFragment();
+            PlayListFragment newFragment = (PlayListFragment) fm.findFragmentByTag("allPlaylists");
+            if (newFragment == null) {
+                newFragment = new PlayListFragment();
+            }
             fm.beginTransaction()
                     .setCustomAnimations(R.anim.slide_left,
                             R.anim.slide_right,
@@ -3091,7 +3228,11 @@ public class HomeActivity extends AppCompatActivity
             }
         } else if (type.equals("playlist")) {
             isPlaylistVisible = false;
-            switchToolbar(fragmentToolbar, toolbar, "instant");
+            if (!isAllPlaylistVisible) {
+                switchToolbar(fragmentToolbar, toolbar, "instant");
+            } else {
+                setUpFragmentToolbar(themeColor, "All Playlists");
+            }
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             android.support.v4.app.Fragment frag = fm.findFragmentByTag("playlist");
             if (frag != null) {
@@ -3115,6 +3256,22 @@ public class HomeActivity extends AppCompatActivity
             navigationView.setCheckedItem(R.id.nav_home);
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             android.support.v4.app.Fragment frag = fm.findFragmentByTag("favourite");
+            if (frag != null) {
+                fm.beginTransaction()
+                        .remove(frag)
+                        .commitAllowingStateLoss();
+            }
+        } else if (type.equals("newPlaylist")) {
+            isNewPlaylistVisible = false;
+            if (!isAllPlaylistVisible) {
+                switchToolbar(fragmentToolbar, toolbar, "instant");
+                setTitle("Music DNA");
+            } else {
+                setUpFragmentToolbar(themeColor, "All Playlists");
+            }
+            navigationView.setCheckedItem(R.id.nav_home);
+            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+            android.support.v4.app.Fragment frag = fm.findFragmentByTag("newPlaylist");
             if (frag != null) {
                 fm.beginTransaction()
                         .remove(frag)

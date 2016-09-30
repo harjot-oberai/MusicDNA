@@ -37,11 +37,17 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
         void onDragStarted(RecyclerView.ViewHolder viewHolder);
     }
 
+    public interface onPlaylistEmptyListener{
+        public void onPlaylistEmpty();
+    }
+
     private final OnDragStartListener mDragStartListener;
+    public onPlaylistEmptyListener mCallback;
 
     public PlaylistTrackAdapter(List<UnifiedTrack> songList, OnDragStartListener listener, Context ctx) {
         this.songList = songList;
         mDragStartListener = listener;
+        mCallback = (onPlaylistEmptyListener) ctx;
         this.ctx = ctx;
         imgLoader = new ImageLoader(ctx);
     }
@@ -64,14 +70,10 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
         if (songList.size() == 0) {
             HomeActivity.main.onBackPressed();
             HomeActivity.allPlaylists.getPlaylists().remove(HomeActivity.tempPlaylistNumber);
-            if (PlayListFragment.vpAdapter != null) {
-                PlayListFragment.vpAdapter.notifyItemRemoved(HomeActivity.tempPlaylistNumber);
-            }
-            if (HomeActivity.pAdapter != null) {
-                HomeActivity.pAdapter.notifyItemRemoved(HomeActivity.tempPlaylistNumber);
-            }
-        } else if (HomeActivity.pAdapter != null)
+            mCallback.onPlaylistEmpty();
+        } else if (HomeActivity.pAdapter != null) {
             HomeActivity.pAdapter.notifyDataSetChanged();
+        }
 
         new HomeActivity.SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }

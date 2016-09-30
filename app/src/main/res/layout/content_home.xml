@@ -211,22 +211,47 @@
                 android:layout_marginTop="3dp">
 
 
-                <TextView
-                    android:id="@+id/playListRecyclerLabel"
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:id="@+id/playlist_label_container"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
-                    android:layout_marginTop="10dp"
-                    android:text="Playlists"
-                    android:textColor="#FFF"
-                    android:textSize="15dp"
-                    android:textStyle="bold" />
+                    android:layout_marginTop="10dp">
+                    <TextView
+                        android:id="@+id/playListRecyclerLabel"
+                        android:layout_alignParentLeft="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Playlists"
+                        android:textColor="#FFF"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_alignParentRight="true"
+                        android:background="#FFF"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="15dp"
+                        android:padding="1dp">
+                        <TextView
+                            android:id="@+id/new_playlist_text"
+                            android:paddingLeft="4dp"
+                            android:paddingRight="4dp"
+                            android:background="@color/colorDark"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="NEW"
+                            android:textColor="#FFF"/>
+                    </LinearLayout>
+
+                </RelativeLayout>
 
                 <TextView
                     android:id="@+id/playlistNothingText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/playListRecyclerLabel"
+                    android:layout_below="@+id/playlist_label_container"
                     android:layout_centerInParent="true"
                     android:layout_marginBottom="25dp"
                     android:layout_marginTop="25dp"
@@ -239,7 +264,7 @@
                     android:id="@+id/playlist_home"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/playListRecyclerLabel"
+                    android:layout_below="@+id/playlist_label_container"
                     android:padding="5dp"></android.support.v7.widget.RecyclerView>
             </RelativeLayout>
 

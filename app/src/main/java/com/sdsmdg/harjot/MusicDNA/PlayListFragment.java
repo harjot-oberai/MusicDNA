@@ -2,8 +2,10 @@ package com.sdsmdg.harjot.MusicDNA;
 
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,13 +27,16 @@ import com.squareup.leakcanary.RefWatcher;
 public class PlayListFragment extends Fragment {
 
     RecyclerView allPlaylistRecycler;
-    static ViewAllPlaylistsRecyclerAdapter vpAdapter;
+    ViewAllPlaylistsRecyclerAdapter vpAdapter;
 
     LinearLayout noPlaylistContent;
 
     onPlaylistTouchedListener mCallback;
     onPlaylistMenuPlayAllListener mCallback2;
-    onPLaylistRenameListener mCallback3;
+    onPlaylistRenameListener mCallback3;
+    newPlaylistListerner mCallback4;
+
+    FloatingActionButton addPlaylistFAB;
 
     public PlayListFragment() {
         // Required empty public constructor
@@ -43,7 +48,8 @@ public class PlayListFragment extends Fragment {
         try {
             mCallback = (onPlaylistTouchedListener) context;
             mCallback2 = (onPlaylistMenuPlayAllListener) context;
-            mCallback3 = (onPLaylistRenameListener) context;
+            mCallback3 = (onPlaylistRenameListener) context;
+            mCallback4 = (newPlaylistListerner) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnHeadlineSelectedListener");
@@ -58,8 +64,13 @@ public class PlayListFragment extends Fragment {
         public void onPlaylistMenuPLayAll();
     }
 
-    public interface onPLaylistRenameListener {
+    public interface onPlaylistRenameListener {
         public void onPlaylsitRename();
+    }
+
+
+    public interface newPlaylistListerner {
+        public void newPlaylistListener();
     }
 
     @Override
@@ -76,6 +87,15 @@ public class PlayListFragment extends Fragment {
         noPlaylistContent = (LinearLayout) view.findViewById(R.id.noPlaylistContent);
 
         allPlaylistRecycler = (RecyclerView) view.findViewById(R.id.all_playlists_recycler);
+
+        addPlaylistFAB = (FloatingActionButton) view.findViewById(R.id.new_playlist_fab);
+        addPlaylistFAB.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));
+        addPlaylistFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallback4.newPlaylistListener();
+            }
+        });
 
         if (SplashActivity.tf2 != null)
             ((TextView) view.findViewById(R.id.noPlaylistContentText)).setTypeface(SplashActivity.tf2);
@@ -121,8 +141,11 @@ public class PlayListFragment extends Fragment {
                             mCallback2.onPlaylistMenuPLayAll();
                         } else if (item.getTitle().equals("Delete")) {
                             HomeActivity.allPlaylists.getPlaylists().remove(position);
-                            if (PlayListFragment.vpAdapter != null) {
-                                PlayListFragment.vpAdapter.notifyItemRemoved(position);
+                            if (vpAdapter != null) {
+                                vpAdapter.notifyItemRemoved(position);
+                            }
+                            if (HomeActivity.allPlaylists.getPlaylists().size() == 0) {
+                                noPlaylistContent.setVisibility(View.VISIBLE);
                             }
                             new HomeActivity.SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                             HomeActivity.pAdapter.notifyItemRemoved(position);
@@ -162,6 +185,12 @@ public class PlayListFragment extends Fragment {
     public void itemChanged(int position) {
         if (vpAdapter != null) {
             vpAdapter.notifyItemChanged(position);
+        }
+    }
+
+    public void dataChanged() {
+        if (vpAdapter != null) {
+            vpAdapter.notifyDataSetChanged();
         }
     }
 

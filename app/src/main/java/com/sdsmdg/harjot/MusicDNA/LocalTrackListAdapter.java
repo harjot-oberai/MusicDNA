@@ -59,7 +59,6 @@ public class LocalTrackListAdapter extends RecyclerView.Adapter<LocalTrackListAd
         holder.title.setText(track.getTitle());
         holder.artist.setText(track.getArtist());
         imgLoader.DisplayImage(track.getPath(), holder.art);
-        Log.d("ARTWORKURL",track.getPath()+":");
     }
 
     @Override

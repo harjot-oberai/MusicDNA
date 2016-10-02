@@ -33,7 +33,8 @@
             android:singleLine="true"
             android:layout_marginTop="5dp"
             android:text="Title"
-            android:textColor="#DDD"
+            android:textColor="#FFF"
+            android:textStyle="bold"
             android:textSize="13dp" />
 
         <TextView
@@ -45,7 +46,7 @@
             android:layout_marginTop="-5dp"
             android:singleLine="true"
             android:text="Artist"
-            android:textColor="#BBB"
+            android:textColor="#EEE"
             android:textSize="9dp" />
 
     </RelativeLayout>

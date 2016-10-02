@@ -34,6 +34,7 @@ public class SplashActivity extends AppCompatActivity {
 
     static Typeface tf;
     static Typeface tf2;
+    static Typeface tf3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,7 @@ public class SplashActivity extends AppCompatActivity {
         try {
             tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Regular.ttf");
             tf2 = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Medium.ttf");
+            tf3 = Typeface.createFromAsset(getAssets(), "fonts/Gidole-Regular.ttf");
         } catch (Exception e) {
         }
 

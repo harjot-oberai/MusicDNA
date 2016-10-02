@@ -243,7 +243,7 @@ public class ViewSavedDNA extends Fragment {
                     .useDecorViewAsParent()
                     .replaceEndButton(mEndButton)
                     .setContentTitlePaint(HomeActivity.tp)
-                    .setTarget(new ViewTarget(mVisualizerView2.getId(), getActivity()))
+                    .setTarget(new ViewTarget(R.id.visualizer_alt_showcase, getActivity()))
                     .setContentTitle("Saved DNAs")
                     .setContentText("View all your saved DNAs here")
                     .build();

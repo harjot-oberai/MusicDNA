@@ -164,4 +164,20 @@ public class FavouritesFragment extends Fragment implements
         RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
         refWatcher.watch(this);
     }
+
+    public void updateData() {
+        if (HomeActivity.favouriteTracks.getFavourite().size() == 0) {
+            favouriteRecycler.setVisibility(View.INVISIBLE);
+            playAll.setVisibility(View.INVISIBLE);
+            noFavouriteContent.setVisibility(View.VISIBLE);
+        } else {
+            favouriteRecycler.setVisibility(View.VISIBLE);
+            playAll.setVisibility(View.VISIBLE);
+            noFavouriteContent.setVisibility(View.INVISIBLE);
+        }
+        if (fAdapter != null) {
+            fAdapter.notifyDataSetChanged();
+        }
+    }
+
 }

@@ -13,17 +13,11 @@
         android:layout_width="match_parent"
         android:layout_height="70dp">
 
-        <com.sdsmdg.harjot.MusicDNA.CustomProgressBar
-            android:id="@+id/customProgress"
-            android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:visibility="invisible" />
-
-        <android.support.v7.widget.Toolbar
+        <RelativeLayout
             android:id="@+id/smallPlayer"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_alignParentTop="true"
+            android:layout_height="65dp"
+            android:layout_gravity="top"
             android:layout_marginBottom="0dp"
             android:background="#000000"
             android:visibility="invisible">
@@ -33,21 +27,20 @@
                 android:layout_width="54dp"
                 android:layout_height="54dp"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/myvisualizerview"
-                android:layout_marginLeft="0dp"
-                android:layout_marginTop="10dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
                 android:visibility="visible"
                 app:civ_border_color="#FF000000"
                 app:civ_border_width="0dp" />
 
             <TextView
                 android:id="@+id/selected_track_title_sp"
-                android:layout_width="200dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/player_control"
-                android:layout_alignParentStart="true"
-                android:layout_marginLeft="35dp"
-                android:layout_marginTop="2dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/selected_track_image_sp"
+                android:layout_toLeftOf="@+id/sp_controls_container"
                 android:ellipsize="end"
                 android:singleLine="false"
                 android:text="Title"
@@ -55,20 +48,60 @@
                 android:textColor="#FFFFFF"
                 android:textSize="13dp" />
 
-            <ImageView
-                android:id="@+id/player_control_sp"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="right|center_vertical"
-                android:layout_marginBottom="5dp"
-                android:layout_marginRight="17dp"
-                android:layout_marginTop="2dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:visibility="visible" />
-        </android.support.v7.widget.Toolbar>
+            <LinearLayout
+                android:id="@+id/sp_controls_container"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:orientation="horizontal"
+                android:padding="0dp">
+
+                <ImageView
+                    android:id="@+id/fav_controller_sp"
+                    android:layout_width="0dp"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_weight="1"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:padding="3dp"
+                    android:src="@drawable/ic_heart_out_1"
+                    android:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/player_control_sp"
+                    android:layout_width="0dp"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_weight="1"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:src="@drawable/ic_play_arrow_white_48dp"
+                    android:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/next_controller_sp"
+                    android:layout_width="0dp"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_weight="1"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:src="@drawable/ic_skip_next_white_48dp"
+                    android:visibility="visible" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <com.sdsmdg.harjot.MusicDNA.CustomProgressBar
+            android:id="@+id/customProgress"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:visibility="invisible" />
     </FrameLayout>
 
     <View
@@ -92,7 +125,8 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/mainControllerContainer"
         android:layout_below="@+id/fullscreen_extra_space_occupier"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:visibility="visible" />
 
     <RelativeLayout
         android:id="@+id/mainControllerContainer"

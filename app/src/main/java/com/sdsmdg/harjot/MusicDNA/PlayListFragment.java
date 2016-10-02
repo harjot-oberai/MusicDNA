@@ -191,6 +191,9 @@ public class PlayListFragment extends Fragment {
     public void dataChanged() {
         if (vpAdapter != null) {
             vpAdapter.notifyDataSetChanged();
+            if (HomeActivity.allPlaylists.getPlaylists().size() > 0) {
+                noPlaylistContent.setVisibility(View.INVISIBLE);
+            }
         }
     }
 

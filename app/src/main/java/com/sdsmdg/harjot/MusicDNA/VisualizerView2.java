@@ -71,9 +71,11 @@ public class VisualizerView2 extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        int midY = canvas.getHeight() / 2;
         if (bmp != null) {
-            canvas.drawBitmap(bmp, 0, -1 * (canvas.getHeight() / 6), null);
+            canvas.drawBitmap(bmp, 0, -1 * (canvas.getHeight() / 7), null);
 //            canvas.drawBitmap(bmp, 0, 0, null);
+//            canvas.drawBitmap(bmp, 0, midY - (bmp.getHeight() / 2), null);
         }
         if (textEnabled && HomeActivity.tempSavedDNA != null) {
             canvas.drawText(text, canvas.getWidth() / 2, (canvas.getHeight() * 15) / 16, mTextPaint);
@@ -84,7 +86,7 @@ public class VisualizerView2 extends View {
         invalidate();
     }
 
-    public void drawText(String str ,boolean addTexttoImage) {
+    public void drawText(String str, boolean addTexttoImage) {
         textEnabled = addTexttoImage;
         text = str;
         invalidate();

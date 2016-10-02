@@ -9,6 +9,6 @@
         android:layout_height="wrap_content"
         android:text="Playlist1"
         android:padding="5dp"
-        android:textSize="14dp" />
+        android:textSize="18dp" />
 
 </LinearLayout>

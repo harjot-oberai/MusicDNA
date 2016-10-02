@@ -34,7 +34,8 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:text="Title"
-            android:textColor="#DDD"
+            android:textStyle="bold"
+            android:textColor="#FFF"
             android:textSize="11sp" />
 
         <TextView
@@ -46,7 +47,7 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:text="Artist"
-            android:textColor="#BBB"
+            android:textColor="#EEE"
             android:textSize="7sp" />
 
     </RelativeLayout>

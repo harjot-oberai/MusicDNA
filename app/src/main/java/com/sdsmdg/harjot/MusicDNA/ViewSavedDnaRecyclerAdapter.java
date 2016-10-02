@@ -61,9 +61,9 @@ public class ViewSavedDnaRecyclerAdapter extends RecyclerView.Adapter<ViewSavedD
         }
 
         if (position == vsdFrag.getSelectedDNAnumber()) {
-            holder.title.setTextColor(Color.parseColor("#DE1A1A"));
+            holder.title.setTextColor(HomeActivity.themeColor);
         } else {
-            holder.title.setTextColor(Color.parseColor("#444444"));
+            holder.title.setTextColor(Color.parseColor("#FFFFFF"));
         }
 
     }

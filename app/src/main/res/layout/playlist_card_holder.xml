@@ -89,8 +89,9 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:text="Title"
-            android:textColor="#DDD"
-            android:textSize="13dp" />
+            android:textColor="#FFF"
+            android:textSize="13dp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/playlist_num_songs"
@@ -101,7 +102,7 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:text="Artist"
-            android:textColor="#BBB"
+            android:textColor="#EEE"
             android:textSize="8dp" />
 
     </RelativeLayout>

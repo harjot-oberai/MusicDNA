@@ -135,6 +135,7 @@ public class HomeActivity extends AppCompatActivity
         PlayerFragment.onPlayPauseListener,
         PlayerFragment.fullScreenListener,
         PlayerFragment.onSettingsClickedListener,
+        PlayerFragment.onFavouritesListener,
         PlayListFragment.onPlaylistTouchedListener,
         PlayListFragment.onPlaylistMenuPlayAllListener,
         PlayListFragment.onPlaylistRenameListener,
@@ -650,7 +651,7 @@ public class HomeActivity extends AppCompatActivity
         tp.setFakeBoldText(true);
 
         copyrightText = (TextView) findViewById(R.id.copyright_text);
-        copyrightText.setTypeface(SplashActivity.tf2);
+        copyrightText.setTypeface(SplashActivity.tf3);
         copyrightText.setText("\nMusic DNA v" + version + " \n© 2016");
 
         imgLoader = new ImageLoader(this);
@@ -689,7 +690,7 @@ public class HomeActivity extends AppCompatActivity
             }
         });
         queueClearText = (TextView) findViewById(R.id.clear_queue_txt);
-        queueClearText.setTypeface(SplashActivity.tf2);
+        queueClearText.setTypeface(SplashActivity.tf3);
         queueClearText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -922,9 +923,9 @@ public class HomeActivity extends AppCompatActivity
             }
         });
 
-        if (SplashActivity.tf2 != null) {
-            ((TextView) findViewById(R.id.playListRecyclerLabel)).setTypeface(SplashActivity.tf2);
-            ((TextView) findViewById(R.id.recentsRecyclerLabel)).setTypeface(SplashActivity.tf2);
+        if (SplashActivity.tf3 != null) {
+            ((TextView) findViewById(R.id.playListRecyclerLabel)).setTypeface(SplashActivity.tf3);
+            ((TextView) findViewById(R.id.recentsRecyclerLabel)).setTypeface(SplashActivity.tf3);
         }
 
         localNothingText = (TextView) findViewById(R.id.localNothingText);
@@ -1169,7 +1170,6 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-
         PlayerFragment plFrag = (PlayerFragment) fragMan.findFragmentByTag("player");
         FullLocalMusicFragment flmFrag = (FullLocalMusicFragment) fragMan.findFragmentByTag("local");
         LocalMusicFragment lFrag = null;
@@ -1245,6 +1245,7 @@ public class HomeActivity extends AppCompatActivity
                     hideFragment("newPlaylist");
                     setTitle("Music DNA");
                 } else if (isEqualizerVisible) {
+                    finalSelectedTracks.clear();
                     hideFragment("equalizer");
                     setTitle("Music DNA");
                 } else if (isFavouriteVisible) {
@@ -2590,12 +2591,32 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onCancel() {
         finalSelectedTracks.clear();
-        onBackPressed();
     }
 
     @Override
     public void onDone() {
-        newPlaylistNameDialog();
+        if (finalSelectedTracks.size() == 0) {
+            finalSelectedTracks.clear();
+            onBackPressed();
+        } else {
+            newPlaylistNameDialog();
+        }
+    }
+
+    @Override
+    public void onAddedtoFavfromPlayer() {
+        FavouritesFragment favouritesFragment = (FavouritesFragment) fragMan.findFragmentByTag("favourite");
+        if(favouritesFragment!=null){
+            favouritesFragment.updateData();
+        }
+    }
+
+    @Override
+    public void onRemovedfromFavfromPlayer() {
+        FavouritesFragment favouritesFragment = (FavouritesFragment) fragMan.findFragmentByTag("favourite");
+        if(favouritesFragment!=null){
+            favouritesFragment.updateData();
+        }
     }
 
     public static class MyAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -3025,6 +3046,8 @@ public class HomeActivity extends AppCompatActivity
             AddToPlaylistFragment newFragment = (AddToPlaylistFragment) fm.findFragmentByTag("newPlaylist");
             if (newFragment == null) {
                 newFragment = new AddToPlaylistFragment();
+            } else {
+                newFragment.reinit();
             }
             fm.beginTransaction()
                     .setCustomAnimations(R.anim.slide_left,
@@ -3376,6 +3399,7 @@ public class HomeActivity extends AppCompatActivity
         hideFragment("queue");
         hideFragment("stream");
         hideFragment("playlist");
+        hideFragment("newPlaylist");
         hideFragment("equalizer");
         hideFragment("favourite");
         hideFragment("folderContent");

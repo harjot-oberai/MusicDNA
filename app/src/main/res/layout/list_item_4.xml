@@ -8,16 +8,15 @@
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
     android:longClickable="true"
-    android:orientation="horizontal"
-    android:padding="10dp">
+    android:orientation="horizontal">
 
     <LinearLayout
         android:id="@+id/row_item_holder_2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="14dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
         android:layout_toLeftOf="@+id/currently_playing_indicator_2"
         android:orientation="vertical">
 
@@ -28,7 +27,7 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:text="Title"
-            android:textColor="#DDD"
+            android:textColor="#FFF"
             android:textSize="14dp" />
 
         <TextView
@@ -39,8 +38,17 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:text="Artist"
-            android:textColor="#BBB"
+            android:textColor="#EEE"
             android:textSize="11dp" />
     </LinearLayout>
+
+    <View
+        android:layout_below="@+id/row_item_holder_2"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:background="#333" />
 
 </RelativeLayout>

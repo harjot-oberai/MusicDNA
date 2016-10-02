@@ -9,6 +9,13 @@
     tools:context="com.sdsmdg.harjot.MusicDNA.HomeActivity"
     tools:showIn="@layout/app_bar_home">
 
+    <!--<ImageView-->
+        <!--android:scaleType="fitXY"-->
+        <!--android:alpha="1"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:src="@drawable/back_01"/>-->
+
     <RelativeLayout
         android:id="@+id/localRecyclerContainer"
         android:layout_width="match_parent"
@@ -287,21 +294,20 @@
                     android:id="@+id/localBanner"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
-                    android:background="#888"
-                    android:padding="1dp">
+                    android:background="#888">
+
+                    <!--<ImageView-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:layout_alignParentLeft="true"-->
+                        <!--android:layout_centerVertical="true"-->
+                        <!--android:src="@drawable/music_record3" />-->
 
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/music_record3" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:alpha="0.8"
-                        android:background="#230C33" />
+                        android:alpha="1"
+                        android:background="@drawable/local_card" />
 
                     <ImageView
                         android:id="@+id/local_banner_play_all"
@@ -327,7 +333,8 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="30dp"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="invisible">
 
                         <TextView
                             android:layout_width="match_parent"
@@ -361,11 +368,11 @@
                         android:layout_weight="1"
                         android:paddingRight="5dp">
 
-                        <View
+                        <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:alpha="0.8"
-                            android:background="#D72638" />
+                            android:alpha="1"
+                            android:background="@drawable/fav_card" />
 
                         <ImageView
                             android:layout_width="50dp"
@@ -373,7 +380,8 @@
                             android:layout_alignParentTop="true"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="10dp"
-                            android:src="@drawable/ic_heart_out_1" />
+                            android:src="@drawable/ic_heart_out_1"
+                            android:visibility="invisible" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -385,7 +393,8 @@
                             android:textAlignment="center"
                             android:textColor="#FFFFFF"
                             android:textSize="17dp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:visibility="invisible" />
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -395,11 +404,11 @@
                         android:layout_weight="1"
                         android:paddingLeft="5dp">
 
-                        <View
+                        <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:alpha="0.8"
-                            android:background="#0A0A1D" />
+                            android:alpha="1"
+                            android:background="@drawable/recents_card" />
 
                         <ImageView
                             android:layout_width="50dp"
@@ -408,7 +417,8 @@
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="10dp"
                             android:src="@drawable/ic_recents"
-                            android:tint="#FFFFFF" />
+                            android:tint="#FFFFFF"
+                            android:visibility="invisible"/>
 
                         <TextView
                             android:layout_width="match_parent"
@@ -420,7 +430,8 @@
                             android:textAlignment="center"
                             android:textColor="#FFFFFF"
                             android:textSize="17dp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:visibility="invisible" />
                     </RelativeLayout>
                 </LinearLayout>
 
@@ -439,11 +450,11 @@
                         android:layout_weight="1"
                         android:paddingRight="5dp">
 
-                        <View
+                        <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:alpha="0.8"
-                            android:background="#2E5077" />
+                            android:alpha="1"
+                            android:background="@drawable/folder_card" />
 
                         <ImageView
                             android:layout_width="50dp"
@@ -451,7 +462,8 @@
                             android:layout_alignParentTop="true"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="10dp"
-                            android:src="@drawable/folder" />
+                            android:src="@drawable/folder"
+                            android:visibility="invisible" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -463,7 +475,8 @@
                             android:textAlignment="center"
                             android:textColor="#FFFFFF"
                             android:textSize="17dp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:visibility="invisible" />
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -473,11 +486,11 @@
                         android:layout_weight="1"
                         android:paddingLeft="5dp">
 
-                        <View
+                        <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:alpha="0.8"
-                            android:background="#424B54" />
+                            android:alpha="1"
+                            android:background="@drawable/saved_card" />
 
                         <ImageView
                             android:layout_width="50dp"
@@ -485,7 +498,8 @@
                             android:layout_alignParentTop="true"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="10dp"
-                            android:src="@drawable/ic_save_2" />
+                            android:src="@drawable/ic_save_2"
+                            android:visibility="invisible"/>
 
                         <TextView
                             android:layout_width="match_parent"
@@ -497,7 +511,8 @@
                             android:textAlignment="center"
                             android:textColor="#FFFFFF"
                             android:textSize="17dp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:visibility="invisible" />
                     </RelativeLayout>
                 </LinearLayout>
 
@@ -506,6 +521,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
+                android:layout_alignParentBottom="true"
                 android:layout_below="@+id/bannerContainer">
 
                 <TextView
@@ -539,7 +555,7 @@
     <FrameLayout
         android:id="@+id/bottomMargin"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="65dp"
         android:layout_alignParentBottom="true"
         android:background="#000"
         android:translationZ="10dp">
@@ -553,7 +569,7 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/smallPlayer_home"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="65dp"
             android:layout_alignParentTop="true"
             android:layout_marginBottom="0dp"
             android:visibility="visible">

@@ -6,11 +6,18 @@
     android:clickable="true"
     tools:context="com.sdsmdg.harjot.MusicDNA.ViewSavedDNA">
 
+    <View
+        android:id="@+id/visualizer_alt_showcase"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="96dp"/>
+
     <com.sdsmdg.harjot.MusicDNA.VisualizerView2
         android:id="@+id/saved_dna_visualizer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/action_button_container"
+        android:layout_above="@+id/saved_dna_recycler"
         android:background="#000000" />
 
     <RelativeLayout

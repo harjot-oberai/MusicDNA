@@ -42,6 +42,8 @@ public class AddToPlaylistFragment extends Fragment {
 
     ImageView clearSearchBtn;
 
+    LinearLayoutManager mLayoutManager2;
+
     int numberSelected = 0;
 
     public newPlaylistListener mCallback;
@@ -76,6 +78,9 @@ public class AddToPlaylistFragment extends Fragment {
         for (int i = 0; i < HomeActivity.localTrackList.size(); i++) {
             finalList.add(HomeActivity.localTrackList.get(i));
         }
+
+        atpAdapter = new AddToPlaylistAdapter(finalList, getContext());
+
     }
 
     @Override
@@ -83,6 +88,8 @@ public class AddToPlaylistFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         numberSelected = 0;
+        HomeActivity.finalSelectedTracks.clear();
+        atpAdapter.notifyDataSetChanged();
         clearSearchBtn = (ImageView) view.findViewById(R.id.clear_search_btn);
         clearSearchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,6 +146,9 @@ public class AddToPlaylistFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 mCallback.onCancel();
+                atpAdapter.notifyDataSetChanged();
+                numberSelected = 0;
+                numberSelectedSongs.setText(String.valueOf(numberSelected) + " selected");
             }
         });
 
@@ -150,8 +160,7 @@ public class AddToPlaylistFragment extends Fragment {
         });
 
         rv = (RecyclerView) view.findViewById(R.id.add_to_playlist_recycler);
-        atpAdapter = new AddToPlaylistAdapter(finalList, getContext());
-        LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rv.setLayoutManager(mLayoutManager2);
         rv.setItemAnimator(new DefaultItemAnimator());
         rv.setAdapter(atpAdapter);
@@ -189,5 +198,11 @@ public class AddToPlaylistFragment extends Fragment {
             }
         });
 
+    }
+
+    public void reinit() {
+        if (rv != null) {
+            ((LinearLayoutManager) rv.getLayoutManager()).scrollToPositionWithOffset(0, 0);
+        }
     }
 }

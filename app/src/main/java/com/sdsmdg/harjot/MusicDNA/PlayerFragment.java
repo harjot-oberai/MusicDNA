@@ -31,7 +31,6 @@ import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
@@ -56,7 +55,6 @@ import java.util.TimerTask;
  * A simple {@link Fragment} subclass.
  */
 public class PlayerFragment extends Fragment implements
-        Serializable,
         AudioPlayerBroadcastReceiver.onCallbackListener {
 
     public static VisualizerView mVisualizerView;
@@ -65,8 +63,6 @@ public class PlayerFragment extends Fragment implements
     public static Equalizer mEqualizer;
     public static BassBoost bassBoost;
     public static PresetReverb presetReverb;
-
-    private static final long serialVersionUID = 1L;
 
     static boolean isPrepared = false;
 
@@ -104,7 +100,9 @@ public class PlayerFragment extends Fragment implements
     public static TextView selected_track_title;
     public static ImageView player_controller;
 
-    static Toolbar smallPlayer;
+    static RelativeLayout smallPlayer;
+
+    ImageView favControllerSp, nextControllerSp;
 
     ImageLoader imgLoader;
 
@@ -133,6 +131,7 @@ public class PlayerFragment extends Fragment implements
     public onPlayPauseListener mCallback7;
     public fullScreenListener mCallback8;
     public onSettingsClickedListener mCallback9;
+    public onFavouritesListener mCallback10;
 
     static ImageView currentAlbumArtHolder;
 
@@ -259,6 +258,7 @@ public class PlayerFragment extends Fragment implements
             mCallback6 = (onPreparedLsitener) context;
             mCallback8 = (fullScreenListener) context;
             mCallback9 = (onSettingsClickedListener) context;
+            mCallback10 = (onFavouritesListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnHeadlineSelectedListener");
@@ -357,6 +357,12 @@ public class PlayerFragment extends Fragment implements
         public void onSettingsClicked();
     }
 
+    public interface onFavouritesListener {
+        void onAddedtoFavfromPlayer();
+
+        void onRemovedfromFavfromPlayer();
+    }
+
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -436,11 +442,15 @@ public class PlayerFragment extends Fragment implements
         isFav = false;
 
         favouriteIcon = (ImageView) view.findViewById(R.id.fav_icon);
+        favControllerSp = (ImageView) view.findViewById(R.id.fav_controller_sp);
+
         if (HomeActivity.isFavourite) {
             favouriteIcon.setImageResource(R.drawable.ic_heart_filled_1);
+            favControllerSp.setImageResource(R.drawable.ic_heart_filled_1);
             isFav = true;
         } else {
             favouriteIcon.setImageResource(R.drawable.ic_heart_out_1);
+            favControllerSp.setImageResource(R.drawable.ic_heart_out_1);
             isFav = false;
         }
 
@@ -449,10 +459,30 @@ public class PlayerFragment extends Fragment implements
             public void onClick(View v) {
                 if (isFav) {
                     favouriteIcon.setImageResource(R.drawable.ic_heart_out_1);
+                    favControllerSp.setImageResource(R.drawable.ic_heart_out_1);
                     isFav = false;
                     removeFromFavourite();
                 } else {
                     favouriteIcon.setImageResource(R.drawable.ic_heart_filled_1);
+                    favControllerSp.setImageResource(R.drawable.ic_heart_filled_1);
+                    isFav = true;
+                    addToFavourite();
+                }
+                new HomeActivity.SaveFavourites().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            }
+        });
+
+        favControllerSp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isFav) {
+                    favouriteIcon.setImageResource(R.drawable.ic_heart_out_1);
+                    favControllerSp.setImageResource(R.drawable.ic_heart_out_1);
+                    isFav = false;
+                    removeFromFavourite();
+                } else {
+                    favouriteIcon.setImageResource(R.drawable.ic_heart_filled_1);
+                    favControllerSp.setImageResource(R.drawable.ic_heart_filled_1);
                     isFav = true;
                     addToFavourite();
                 }
@@ -472,7 +502,18 @@ public class PlayerFragment extends Fragment implements
         selected_track_title = (TextView) view.findViewById(R.id.selected_track_title_sp);
         player_controller = (ImageView) view.findViewById(R.id.player_control_sp);
 
-        smallPlayer = (Toolbar) view.findViewById(R.id.smallPlayer);
+        smallPlayer = (RelativeLayout) view.findViewById(R.id.smallPlayer);
+
+        nextControllerSp = (ImageView) view.findViewById(R.id.next_controller_sp);
+
+        nextControllerSp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mMediaPlayer.pause();
+                HomeActivity.nextControllerClicked = true;
+                mCallback2.onComplete();
+            }
+        });
 
         bottomContainer = (RelativeLayout) view.findViewById(R.id.mainControllerContainer);
         seekBarContainer = (RelativeLayout) view.findViewById(R.id.seekBarContainer);
@@ -597,7 +638,6 @@ public class PlayerFragment extends Fragment implements
                 new MediaPlayer.OnErrorListener() {
                     @Override
                     public boolean onError(MediaPlayer mp, int what, int extra) {
-                        Toast.makeText(getContext(), what + ":" + extra, Toast.LENGTH_SHORT).show();
                         return true;
                     }
                 }
@@ -900,6 +940,7 @@ public class PlayerFragment extends Fragment implements
             ut = new UnifiedTrack(false, null, track);
 
         HomeActivity.favouriteTracks.getFavourite().add(ut);
+        mCallback10.onAddedtoFavfromPlayer();
     }
 
     public void removeFromFavourite() {
@@ -925,6 +966,7 @@ public class PlayerFragment extends Fragment implements
                 }
             }
         }
+        mCallback10.onAddedtoFavfromPlayer();
     }
 
     @Override
@@ -976,9 +1018,11 @@ public class PlayerFragment extends Fragment implements
 
         if (HomeActivity.isFavourite) {
             favouriteIcon.setImageResource(R.drawable.ic_heart_filled_1);
+            favControllerSp.setImageResource(R.drawable.ic_heart_filled_1);
             isFav = true;
         } else {
             favouriteIcon.setImageResource(R.drawable.ic_heart_out_1);
+            favControllerSp.setImageResource(R.drawable.ic_heart_out_1);
             isFav = false;
         }
 

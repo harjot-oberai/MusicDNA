@@ -8,15 +8,16 @@
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
-    android:longClickable="true"
-    android:padding="10dp">
+    android:longClickable="true">
 
     <ImageView
         android:id="@+id/holderImage"
         android:layout_width="40dp"
         android:layout_height="55dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="-5dp"
+        android:layout_marginLeft="5dp"
         android:scaleType="fitXY"
         android:src="@drawable/handle" />
 
@@ -25,6 +26,8 @@
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:layout_toRightOf="@+id/holderImage"
         android:background="#FFF"
         android:scaleType="centerCrop" />
@@ -34,6 +37,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="14dp"
         android:layout_marginRight="10dp"
         android:layout_toLeftOf="@+id/currently_playing_indicator"
@@ -47,7 +52,7 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:text="Title"
-            android:textColor="#DDD"
+            android:textColor="#FFF"
             android:textSize="14dp" />
 
         <TextView
@@ -59,7 +64,7 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:text="Artist"
-            android:textColor="#BBB"
+            android:textColor="#EEE"
             android:textSize="11dp" />
     </LinearLayout>
 
@@ -69,10 +74,17 @@
         android:layout_height="32dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="10dp"
+        android:layout_marginRight="20dp"
         android:visibility="invisible"
         app:indicator="LineScale"
         app:indicator_color="#3F334D" />
+
+    <View
+        android:layout_marginTop="10dp"
+        android:layout_alignParentBottom="true"
+        android:background="#333"
+        android:layout_width="match_parent"
+        android:layout_height="1px"/>
 
     <!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
     <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->

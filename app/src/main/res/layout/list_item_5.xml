@@ -8,14 +8,15 @@
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
     android:longClickable="true"
-    android:orientation="horizontal"
-    android:padding="10dp">
+    android:orientation="horizontal">
 
     <ImageView
         android:id="@+id/img_2"
         android:layout_width="56dp"
         android:layout_height="56dp"
-        android:layout_marginLeft="2dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
         android:background="#222"
         android:scaleType="centerCrop" />
 
@@ -25,7 +26,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="14dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
         android:layout_toLeftOf="@+id/is_selected_checkbox"
         android:layout_toRightOf="@+id/img_2"
         android:orientation="vertical">
@@ -37,7 +39,7 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:text="Title"
-            android:textColor="#DDD"
+            android:textColor="#FFF"
             android:textSize="14dp" />
 
         <TextView
@@ -48,7 +50,7 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:text="Artist"
-            android:textColor="#BBB"
+            android:textColor="#EEE"
             android:textSize="11dp" />
     </LinearLayout>
 
@@ -56,8 +58,16 @@
         android:id="@+id/is_selected_checkbox"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
+        android:layout_marginRight="5dp"
         android:layout_width="wrap_content"
         android:clickable="false"
         android:layout_height="wrap_content" />
+
+    <View
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#333"/>
 
 </RelativeLayout>

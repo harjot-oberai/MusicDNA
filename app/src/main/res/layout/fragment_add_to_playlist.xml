@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
+        android:layout_marginRight="5dp"
         android:layout_marginTop="3dp">
 
         <EditText
@@ -28,11 +28,13 @@
 
         <ImageView
             android:id="@+id/clear_search_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:src="@android:drawable/ic_delete"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="10dp"
+            android:src="@drawable/ic_cross"
             android:tint="#FFF" />
 
     </RelativeLayout>
@@ -52,7 +54,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/colorPrimary"
+        android:background="#080808"
         android:padding="5dp">
 
         <TextView
@@ -65,7 +67,7 @@
             android:padding="5dp"
             android:text="0 selected"
             android:textColor="#FFF"
-            android:textSize="20dp" />
+            android:textSize="13dp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -83,9 +85,9 @@
                 android:layout_height="wrap_content"
                 android:background="#000"
                 android:padding="4dp"
-                android:text="CANCEL"
+                android:text="CLEAR"
                 android:textColor="#FFF"
-                android:textSize="16dp" />
+                android:textSize="13dp" />
 
         </LinearLayout>
 
@@ -107,7 +109,7 @@
                 android:padding="6dp"
                 android:text=" DONE "
                 android:textColor="#FFF"
-                android:textSize="16dp" />
+                android:textSize="13dp" />
         </LinearLayout>
 
     </RelativeLayout>

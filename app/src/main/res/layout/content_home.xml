@@ -9,20 +9,13 @@
     tools:context="com.sdsmdg.harjot.MusicDNA.HomeActivity"
     tools:showIn="@layout/app_bar_home">
 
-    <!--<ImageView-->
-        <!--android:scaleType="fitXY"-->
-        <!--android:alpha="1"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:src="@drawable/back_01"/>-->
-
     <RelativeLayout
         android:id="@+id/localRecyclerContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="-6dp"
         android:layout_marginRight="-6dp"
-        android:background="#FFF"
+        android:background="#222"
         android:translationZ="6dp"
         android:visibility="gone">
 
@@ -40,6 +33,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="10"
                 android:text="Local"
+                android:textColor="#FFF"
                 android:textSize="16dp"
                 android:textStyle="bold" />
 
@@ -50,6 +44,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="2"
                 android:text="View All"
+                android:textColor="#FFF"
                 android:textSize="12dp"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -64,7 +59,7 @@
             android:layout_marginBottom="25dp"
             android:layout_marginTop="25dp"
             android:text="Nothing to Show !"
-            android:textColor="#888"
+            android:textColor="#DDD"
             android:textSize="13dp"
             android:visibility="invisible" />
 
@@ -83,7 +78,7 @@
         android:layout_below="@+id/localRecyclerContainer"
         android:layout_marginLeft="-6dp"
         android:layout_marginRight="-6dp"
-        android:background="#FFF"
+        android:background="#222"
         android:translationZ="6dp"
         android:visibility="gone">
 
@@ -94,7 +89,7 @@
             android:layout_centerInParent="true"
             android:visibility="invisible"
             app:indicator="BallPulse"
-            app:indicator_color="#3F334D" />
+            app:indicator_color="#FFF" />
 
         <LinearLayout
             android:id="@+id/streamRecyclerLabelContainer"
@@ -110,6 +105,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="10"
                 android:text="SoundCloud"
+                android:textColor="#FFF"
                 android:textSize="16dp"
                 android:textStyle="bold" />
 
@@ -120,6 +116,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="2"
                 android:text="View All"
+                android:textColor="#FFF"
                 android:textSize="12dp"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -133,7 +130,7 @@
             android:layout_marginBottom="25dp"
             android:layout_marginTop="25dp"
             android:text="Nothing to Show !"
-            android:textColor="#888"
+            android:textColor="#DDD"
             android:textSize="13dp"
             android:visibility="invisible" />
 
@@ -224,32 +221,34 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:layout_marginTop="10dp">
+
                     <TextView
                         android:id="@+id/playListRecyclerLabel"
-                        android:layout_alignParentLeft="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
                         android:text="Playlists"
                         android:textColor="#FFF"
                         android:textSize="15dp"
                         android:textStyle="bold" />
 
                     <LinearLayout
-                        android:layout_alignParentRight="true"
-                        android:background="#FFF"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
                         android:layout_marginRight="15dp"
+                        android:background="#FFF"
                         android:padding="1dp">
+
                         <TextView
                             android:id="@+id/new_playlist_text"
-                            android:paddingLeft="4dp"
-                            android:paddingRight="4dp"
-                            android:background="@color/colorDark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:background="@color/colorDark"
+                            android:paddingLeft="4dp"
+                            android:paddingRight="4dp"
                             android:text="NEW"
-                            android:textColor="#FFF"/>
+                            android:textColor="#FFF" />
                     </LinearLayout>
 
                 </RelativeLayout>
@@ -297,11 +296,11 @@
                     android:background="#888">
 
                     <!--<ImageView-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="match_parent"-->
-                        <!--android:layout_alignParentLeft="true"-->
-                        <!--android:layout_centerVertical="true"-->
-                        <!--android:src="@drawable/music_record3" />-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_alignParentLeft="true"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:src="@drawable/music_record3" />-->
 
                     <ImageView
                         android:layout_width="match_parent"
@@ -323,9 +322,9 @@
                         android:id="@+id/local_banner_alt_showcase"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:layout_marginLeft="-10dp"
+                        android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
-                        android:layout_alignParentLeft="true"/>
+                        android:layout_marginLeft="-10dp" />
 
                     <LinearLayout
                         android:id="@+id/local_songs_text"
@@ -418,7 +417,7 @@
                             android:layout_marginTop="10dp"
                             android:src="@drawable/ic_recents"
                             android:tint="#FFFFFF"
-                            android:visibility="invisible"/>
+                            android:visibility="invisible" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -499,7 +498,7 @@
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="10dp"
                             android:src="@drawable/ic_save_2"
-                            android:visibility="invisible"/>
+                            android:visibility="invisible" />
 
                         <TextView
                             android:layout_width="match_parent"

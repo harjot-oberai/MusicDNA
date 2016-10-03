@@ -17,6 +17,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.support.v7.widget.SwitchCompat;
 import android.widget.TextView;
@@ -38,13 +39,14 @@ import me.priyesh.chroma.ColorSelectListener;
  */
 public class SettingsFragment extends Fragment {
 
-    CardView densitycard, themeCard, aboutCard, albumArtCard;
+    RelativeLayout densitycard, themeCard, aboutCard, albumArtCard;
     SwitchCompat albumArtToggle;
     ImageView themeColorImg;
     SeekBar densitySeekbar;
     TextView densityText;
 
     onAlbumArtBackgroundToggled mCallback;
+    onColorChangedListener mCallback2;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -71,8 +73,9 @@ public class SettingsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         mCallback = (onAlbumArtBackgroundToggled) getContext();
+        mCallback2 = (onColorChangedListener) getContext();
 
-        densitycard = (CardView) view.findViewById(R.id.density_card);
+        densitycard = (RelativeLayout) view.findViewById(R.id.density_card);
         densitySeekbar = (SeekBar) view.findViewById(R.id.density_seekbar);
         densityText = (TextView) view.findViewById(R.id.density_text);
         densitySeekbar.setMax(100);
@@ -97,7 +100,7 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-        themeCard = (CardView) view.findViewById(R.id.theme_card);
+        themeCard = (RelativeLayout) view.findViewById(R.id.theme_card);
         themeColorImg = (ImageView) view.findViewById(R.id.theme_color_img);
         themeColorImg.setBackgroundColor(HomeActivity.themeColor);
         themeCard.setOnClickListener(new View.OnClickListener() {
@@ -125,6 +128,7 @@ public class SettingsFragment extends Fragment {
                                 HomeActivity.toolbar.setBackgroundColor(color);
                                 HomeActivity.fragmentToolbar.setBackgroundColor(color);
                                 themeColorImg.setBackgroundColor(color);
+                                mCallback2.onColorChanged();
                                 if (Build.VERSION.SDK_INT >= 21) {
                                     Window window = ((Activity) (getContext())).getWindow();
                                     window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -144,7 +148,7 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-        albumArtCard = (CardView) view.findViewById(R.id.album_art_card);
+        albumArtCard = (RelativeLayout) view.findViewById(R.id.album_art_card);
         albumArtToggle = (SwitchCompat) view.findViewById(R.id.album_art_toggle);
         albumArtToggle.setChecked(HomeActivity.settings.isAlbumArtBackgroundEnabled());
         albumArtCard.setOnClickListener(new View.OnClickListener() {
@@ -161,7 +165,7 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-        aboutCard = (CardView) view.findViewById(R.id.about_card);
+        aboutCard = (RelativeLayout) view.findViewById(R.id.about_card);
         aboutCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

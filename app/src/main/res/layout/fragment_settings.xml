@@ -1,8 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#EEE"
+    android:background="@color/colorDark"
     android:clickable="true"
     tools:context="com.sdsmdg.harjot.MusicDNA.SettingsFragment">
 
@@ -13,173 +14,174 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="7dp">
+            android:padding="1dp">
 
-            <android.support.v7.widget.CardView
+            <RelativeLayout
                 android:id="@+id/density_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true">
+                android:clickable="true"
+                android:padding="5dp">
 
-                <RelativeLayout
+                <TextView
+                    android:id="@+id/density_setting_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:padding="5dp">
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="7dp"
+                    android:padding="5dp"
+                    android:textColor="#FFF"
+                    android:text="DNA Density"
+                    android:textSize="18dp" />
 
-                    <TextView
-                        android:id="@+id/density_setting_text"
-                        android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/density_text_byline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/density_setting_text"
+                    android:layout_marginBottom="7dp"
+                    android:layout_marginLeft="7dp"
+                    android:layout_marginTop="-10dp"
+                    android:padding="5dp"
+                    android:textColor="#FFF"
+                    android:textSize="15dp"
+                    android:text="(Higher is NOT always better)"
+                    android:textStyle="italic" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/density_text_byline"
+                    android:orientation="horizontal">
+
+                    <SeekBar
+                        android:id="@+id/density_seekbar"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginLeft="7dp"
-                        android:padding="5dp"
-                        android:text="DNA Density"
-                        android:textSize="25dp" />
+                        android:layout_gravity="center_vertical"
+                        android:layout_toStartOf="@+id/density_text"
+                        android:layout_weight="15" />
 
                     <TextView
-                        android:id="@+id/density_text_byline"
+                        android:id="@+id/density_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/density_setting_text"
-                        android:layout_marginBottom="7dp"
-                        android:layout_marginLeft="7dp"
-                        android:layout_marginTop="-10dp"
-                        android:padding="5dp"
-                        android:text="(Higher is NOT always better)"
-                        android:textStyle="italic" />
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:textColor="#FFF"
+                        android:gravity="right"
+                        android:text="35" />
+                </LinearLayout>
+            </RelativeLayout>
+            
+            <View
+                android:background="#232323"
+                android:layout_below="@+id/density_card"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/density_text_byline"
-                        android:orientation="horizontal">
-
-                        <SeekBar
-                            android:id="@+id/density_seekbar"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_toStartOf="@+id/density_text"
-                            android:layout_weight="15" />
-
-                        <TextView
-                            android:id="@+id/density_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginRight="5dp"
-                            android:layout_weight="1"
-                            android:gravity="right"
-                            android:text="35" />
-                    </LinearLayout>
-
-
-                </RelativeLayout>
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
+            <RelativeLayout
                 android:id="@+id/theme_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/density_card"
-                android:layout_marginBottom="6dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true">
+                android:clickable="true"
+                android:padding="5dp">
 
-                <RelativeLayout
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:padding="5dp">
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="7dp"
+                    android:padding="5dp"
+                    android:text="Theme Color"
+                    android:textColor="#FFF"
+                    android:textSize="18dp" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:layout_margin="7dp"
-                        android:padding="5dp"
-                        android:text="Theme Color"
-                        android:textSize="25dp" />
+                <ImageView
+                    android:id="@+id/theme_color_img"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="10dp"
+                    android:layout_marginRight="15dp"
+                    android:background="#000000" />
+            </RelativeLayout>
 
-                    <ImageView
-                        android:id="@+id/theme_color_img"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_margin="10dp"
-                        android:layout_marginRight="15dp"
-                        android:background="#000000" />
-                </RelativeLayout>
-            </android.support.v7.widget.CardView>
+            <View
+                android:background="#232323"
+                android:layout_below="@+id/theme_card"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
 
-            <android.support.v7.widget.CardView
+            <RelativeLayout
                 android:id="@+id/album_art_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/theme_card"
-                android:layout_marginBottom="6dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true">
+                android:clickable="true"
+                android:padding="5dp">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:padding="5dp">
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="7dp"
+                    android:padding="5dp"
+                    android:textColor="#FFF"
+                    android:text="Art behind the DNA"
+                    android:textSize="18dp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:layout_margin="7dp"
-                        android:padding="5dp"
-                        android:text="Art behind the DNA"
-                        android:textSize="25dp" />
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/album_art_toggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:checked="false"
+                    android:clickable="true" />
 
-                    <android.support.v7.widget.SwitchCompat
-                        android:id="@+id/album_art_toggle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:checked="false"
-                        android:clickable="true" />
+            </RelativeLayout>
 
-                </RelativeLayout>
-            </android.support.v7.widget.CardView>
+            <View
+                android:background="#232323"
+                android:layout_below="@+id/album_art_card"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
 
-            <android.support.v7.widget.CardView
+            <RelativeLayout
                 android:id="@+id/about_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/album_art_card"
-                android:layout_marginBottom="6dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true">
+                android:clickable="true"
+                android:padding="5dp">
 
-                <RelativeLayout
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:padding="5dp">
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="7dp"
+                    android:textColor="#FFF"
+                    android:padding="5dp"
+                    android:text="About"
+                    android:textSize="18dp" />
+            </RelativeLayout>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:layout_margin="7dp"
-                        android:padding="5dp"
-                        android:text="About"
-                        android:textSize="25dp" />
-                </RelativeLayout>
-            </android.support.v7.widget.CardView>
+            <View
+                android:background="#232323"
+                android:layout_below="@+id/about_card"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
 
         </RelativeLayout>
 

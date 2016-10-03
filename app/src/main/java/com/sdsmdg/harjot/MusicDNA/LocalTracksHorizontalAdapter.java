@@ -61,8 +61,6 @@ public class LocalTracksHorizontalAdapter extends RecyclerView.Adapter<LocalTrac
 
         LocalTrack localTrack = localList.get(position);
         imgLoader.DisplayImage(localTrack.getPath(), holder.art);
-        holder.title.setTextColor(Color.parseColor("#444444"));
-        holder.artist.setTextColor(Color.parseColor("#777777"));
         holder.title.setText(localTrack.getTitle());
         holder.artist.setText(localTrack.getArtist());
     }

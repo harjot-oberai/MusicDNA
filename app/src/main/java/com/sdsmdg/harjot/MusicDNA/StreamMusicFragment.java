@@ -106,12 +106,13 @@ public class StreamMusicFragment extends Fragment {
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
                         if (item.getTitle().equals("Add to Playlist")) {
-                            mCallback.addToPlaylist(new UnifiedTrack(true, HomeActivity.finalLocalSearchResultList.get(position), null));
+                            Track track = HomeActivity.streamingTrackList.get(position);
+                            mCallback.addToPlaylist(new UnifiedTrack(false, null, track));
                             HomeActivity.pAdapter.notifyDataSetChanged();
                         }
                         if (item.getTitle().equals("Add to Queue")) {
-                            Log.d("QUEUE", "CALLED");
-                            HomeActivity.queue.getQueue().add(new UnifiedTrack(true, HomeActivity.finalLocalSearchResultList.get(position), null));
+                            Track track = HomeActivity.streamingTrackList.get(position);
+                            HomeActivity.queue.getQueue().add(new UnifiedTrack(false, null, track));
                         }
                         if (item.getTitle().equals("Play")) {
                             Track track = HomeActivity.streamingTrackList.get(position);

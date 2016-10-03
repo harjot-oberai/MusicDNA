@@ -46,7 +46,6 @@ import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -237,6 +236,7 @@ public class PlayerFragment extends Fragment implements
                 completed = false;
                 if (HomeActivity.isPlayerVisible) {
                     mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
+                    player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
                 } else {
                     mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
                     player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
@@ -615,6 +615,7 @@ public class PlayerFragment extends Fragment implements
                 completed = true;
                 if (HomeActivity.isPlayerVisible) {
                     mainTrackController.setImageResource(R.drawable.ic_replay_white_48dp);
+                    player_controller.setImageResource(R.drawable.ic_replay_white_48dp);
                 } else {
                     player_controller.setImageResource(R.drawable.ic_replay_white_48dp);
                     mainTrackController.setImageResource(R.drawable.ic_replay_white_48dp);

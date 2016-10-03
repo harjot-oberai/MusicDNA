@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -752,7 +753,6 @@ public class HomeActivity extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_home);
-        navigationView.setItemIconTintList(null);
         phoneStateListener = new PhoneStateListener() {
             @Override
             public void onCallStateChanged(int state, String incomingNumber) {
@@ -2081,6 +2081,7 @@ public class HomeActivity extends AppCompatActivity
             PlayerFragment.mVisualizerView.clear();
             PlayerFragment.mMediaPlayer.seekTo(0);
             PlayerFragment.mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
+            PlayerFragment.player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
             PlayerFragment.isPrepared = true;
             PlayerFragment.mMediaPlayer.start();
         } else {
@@ -2117,6 +2118,7 @@ public class HomeActivity extends AppCompatActivity
                         PlayerFragment.mVisualizerView.clear();
                         PlayerFragment.mMediaPlayer.seekTo(0);
                         PlayerFragment.mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
+                        PlayerFragment.player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
                         PlayerFragment.isPrepared = true;
                         PlayerFragment.mMediaPlayer.start();
                     } else {
@@ -2126,6 +2128,7 @@ public class HomeActivity extends AppCompatActivity
                             PlayerFragment.mVisualizerView.clear();
                             PlayerFragment.mMediaPlayer.seekTo(0);
                             PlayerFragment.mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
+                            PlayerFragment.player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
                             PlayerFragment.isPrepared = true;
                             PlayerFragment.mMediaPlayer.start();
                         } else {
@@ -2181,6 +2184,7 @@ public class HomeActivity extends AppCompatActivity
             PlayerFragment.mVisualizerView.clear();
             PlayerFragment.mMediaPlayer.seekTo(0);
             PlayerFragment.mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
+            PlayerFragment.player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
             PlayerFragment.isPrepared = true;
             PlayerFragment.mMediaPlayer.start();
         } else {
@@ -2558,10 +2562,7 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onColorChanged() {
-        QueueFragment qFrag = (QueueFragment) fragMan.findFragmentByTag("queue");
-        if (qFrag != null) {
-            qFrag.qAdapter.notifyDataSetChanged();
-        }
+        navigationView.setItemIconTintList(ColorStateList.valueOf(themeColor));
     }
 
     @Override
@@ -3664,6 +3665,9 @@ public class HomeActivity extends AppCompatActivity
 
                     themeColor = settings.getThemeColor();
                     minAudioStrength = settings.getMinAudioStrength();
+
+
+                    navigationView.setItemIconTintList(ColorStateList.valueOf(themeColor));
 
                     toolbar.setBackgroundColor(themeColor);
 

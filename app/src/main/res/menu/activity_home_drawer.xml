@@ -5,7 +5,7 @@
         <item
             android:id="@+id/nav_home"
             android:checked="true"
-            android:icon="@drawable/web"
+            android:icon="@drawable/ic_home"
             android:title="Home" />
         <item
             android:id="@+id/nav_local"

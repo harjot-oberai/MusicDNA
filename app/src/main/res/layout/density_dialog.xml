@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/density_dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="DNA Density"
+        android:textAlignment="center"
+        android:textSize="18dp" />
+
+    <TextView
+        android:id="@+id/density_dialog_byline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/density_dialog_title"
+        android:layout_marginTop="2dp"
+        android:text="(Higher is not always better)"
+        android:textAlignment="center" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/density_dialog_byline"
+        android:layout_marginTop="5dp"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <SeekBar
+            android:id="@+id/density_dialog_seekbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="8"
+            android:thumb="@drawable/custom_progress_bar_thumb_3" />
+
+        <TextView
+            android:id="@+id/density_dialog_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:text="100" />
+    </LinearLayout>
+
+</RelativeLayout>

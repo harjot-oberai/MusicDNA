@@ -42,4 +42,15 @@
         <item name="android:textColor">#FFFFFF</item>
     </style>
 
+    <style name="CustomSwitch" parent="Theme.AppCompat.Light">
+        <!-- active thumb & track color (30% transparency) -->
+        <item name="colorControlActivated">#FFFFFF</item>
+
+        <!-- inactive thumb color -->
+        <item name="colorSwitchThumbNormal">#565656</item>
+
+        <!-- inactive track color (30% transparency) -->
+        <item name="android:colorForeground">#383838</item>
+    </style>
+
 </resources>

@@ -1,7 +1,6 @@
 package com.sdsmdg.harjot.MusicDNA;
 
 
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -17,7 +16,6 @@ import android.media.audiofx.Visualizer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -373,6 +371,10 @@ public class PlayerFragment extends Fragment implements
 
         currentAlbumArtHolder = (ImageView) view.findViewById(R.id.current_album_art_holder);
 
+        if(HomeActivity.settings.isAlbumArtBackgroundEnabled() && (currentAlbumArtHolder.getVisibility() == View.GONE || currentAlbumArtHolder.getVisibility() == View.INVISIBLE)){
+            currentAlbumArtHolder.setVisibility(View.VISIBLE);
+        }
+
         fullscreenExtraSpaceOccupier = view.findViewById(R.id.fullscreen_extra_space_occupier);
 
         bufferingIndicator = view.findViewById(R.id.bufferingIndicator);
@@ -417,9 +419,9 @@ public class PlayerFragment extends Fragment implements
 
         saveDNAToggle = (ImageView) view.findViewById(R.id.toggleSaveDNA);
         if (HomeActivity.isSaveDNAEnabled) {
-            saveDNAToggle.setImageResource(R.drawable.ic_save_red_2);
+            saveDNAToggle.setImageResource(R.drawable.ic_save_filled);
         } else {
-            saveDNAToggle.setImageResource(R.drawable.ic_save_white_2);
+            saveDNAToggle.setImageResource(R.drawable.ic_save_outline);
         }
 
         saveDNAToggle.setOnClickListener(new View.OnClickListener() {
@@ -427,10 +429,10 @@ public class PlayerFragment extends Fragment implements
             public void onClick(View v) {
                 if (HomeActivity.isSaveDNAEnabled) {
                     HomeActivity.isSaveDNAEnabled = false;
-                    saveDNAToggle.setImageResource(R.drawable.ic_save_white_2);
+                    saveDNAToggle.setImageResource(R.drawable.ic_save_outline);
                 } else {
                     HomeActivity.isSaveDNAEnabled = true;
-                    saveDNAToggle.setImageResource(R.drawable.ic_save_red_2);
+                    saveDNAToggle.setImageResource(R.drawable.ic_save_filled);
                 }
             }
         });
@@ -1036,9 +1038,9 @@ public class PlayerFragment extends Fragment implements
         }
 
         if (HomeActivity.isSaveDNAEnabled) {
-            saveDNAToggle.setImageResource(R.drawable.ic_save_red_2);
+            saveDNAToggle.setImageResource(R.drawable.ic_save_filled);
         } else {
-            saveDNAToggle.setImageResource(R.drawable.ic_save_white_2);
+            saveDNAToggle.setImageResource(R.drawable.ic_save_outline);
         }
 
         equalizerIcon.setVisibility(View.INVISIBLE);

@@ -6,7 +6,7 @@
     android:layout_margin="7dp"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="?android:attr/selectableItemBackground"
+    android:background="@drawable/custom_ripple"
     android:longClickable="true">
 
     <LinearLayout
@@ -90,8 +90,7 @@
             android:singleLine="true"
             android:text="Title"
             android:textColor="#FFF"
-            android:textSize="13dp"
-            android:textStyle="bold" />
+            android:textSize="13dp" />
 
         <TextView
             android:id="@+id/playlist_num_songs"

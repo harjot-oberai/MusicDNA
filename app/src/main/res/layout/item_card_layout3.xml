@@ -6,7 +6,7 @@
     android:layout_margin="7dp"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="?android:attr/selectableItemBackground"
+    android:background="@drawable/custom_ripple"
     android:longClickable="true">
 
     <ImageView
@@ -36,7 +36,6 @@
             android:text="Title"
             android:textAlignment="center"
             android:textColor="#FFF"
-            android:textStyle="bold"
             android:textSize="13dp" />
 
         <TextView

@@ -51,7 +51,7 @@ public class PlayListsHorizontalAdapter extends RecyclerView.Adapter<PlayListsHo
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.playlist_card_holder, parent, false);
+                .inflate(R.layout.playlist_item_card_holder, parent, false);
 
         return new MyViewHolder(itemView);
     }

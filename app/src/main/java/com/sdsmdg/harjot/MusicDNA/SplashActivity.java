@@ -43,9 +43,9 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         try {
+            tf3 = Typeface.createFromAsset(getAssets(), "fonts/Gidole-Regular.ttf");
             tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Regular.ttf");
             tf2 = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Medium.ttf");
-            tf3 = Typeface.createFromAsset(getAssets(), "fonts/Gidole-Regular.ttf");
         } catch (Exception e) {
         }
 

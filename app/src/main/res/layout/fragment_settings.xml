@@ -25,56 +25,29 @@
                 android:padding="5dp">
 
                 <TextView
+                    android:layout_toLeftOf="@+id/density_value"
                     android:id="@+id/density_setting_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginLeft="7dp"
+                    android:layout_margin="7dp"
                     android:padding="5dp"
                     android:textColor="#FFF"
                     android:text="DNA Density"
                     android:textSize="18dp" />
 
                 <TextView
-                    android:id="@+id/density_text_byline"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/density_setting_text"
-                    android:layout_marginBottom="7dp"
-                    android:layout_marginLeft="7dp"
-                    android:layout_marginTop="-10dp"
-                    android:padding="5dp"
                     android:textColor="#FFF"
-                    android:textSize="15dp"
-                    android:text="(Higher is NOT always better)"
-                    android:textStyle="italic" />
+                    android:text="100"
+                    android:id="@+id/density_value"
+                    android:textSize="18dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/density_text_byline"
-                    android:orientation="horizontal">
-
-                    <SeekBar
-                        android:id="@+id/density_seekbar"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_toStartOf="@+id/density_text"
-                        android:layout_weight="15" />
-
-                    <TextView
-                        android:id="@+id/density_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginRight="5dp"
-                        android:layout_weight="1"
-                        android:textColor="#FFF"
-                        android:gravity="right"
-                        android:text="35" />
-                </LinearLayout>
             </RelativeLayout>
             
             <View
@@ -109,7 +82,6 @@
                     android:layout_height="32dp"
                     android:layout_alignParentRight="true"
                     android:layout_margin="10dp"
-                    android:layout_marginRight="15dp"
                     android:background="#000000" />
             </RelativeLayout>
 
@@ -145,8 +117,10 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
                     android:checked="false"
-                    android:clickable="true" />
+                    android:clickable="true"
+                    android:theme="@style/CustomSwitch"/>
 
             </RelativeLayout>
 

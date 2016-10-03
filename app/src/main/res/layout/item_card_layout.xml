@@ -7,7 +7,7 @@
     android:layout_margin="5dp"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="?android:attr/selectableItemBackground"
+    android:background="@drawable/custom_ripple"
     android:longClickable="true">
 
     <ImageView
@@ -34,7 +34,6 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:text="Title"
-            android:textStyle="bold"
             android:textColor="#FFF"
             android:textSize="11sp" />
 

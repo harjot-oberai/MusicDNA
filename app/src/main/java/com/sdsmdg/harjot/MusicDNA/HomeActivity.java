@@ -272,10 +272,10 @@ public class HomeActivity extends AppCompatActivity
     RelativeLayout playlistRecyclerContainer;
 
     RelativeLayout localBanner;
-    RelativeLayout favBanner;
-    RelativeLayout recentBanner;
-    RelativeLayout folderBanner;
-    RelativeLayout savedDNABanner;
+    ImageView favBanner;
+    ImageView recentBanner;
+    ImageView folderBanner;
+    ImageView savedDNABanner;
 
     ImageView localBannerPlayAll;
 
@@ -696,6 +696,7 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 clearQueue();
+                new SaveQueue().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
         });
 
@@ -812,10 +813,10 @@ public class HomeActivity extends AppCompatActivity
         spTitleAB.setSelected(true);
 
         localBanner = (RelativeLayout) findViewById(R.id.localBanner);
-        favBanner = (RelativeLayout) findViewById(R.id.favbanner);
-        recentBanner = (RelativeLayout) findViewById(R.id.recentBanner);
-        folderBanner = (RelativeLayout) findViewById(R.id.folderBanner);
-        savedDNABanner = (RelativeLayout) findViewById(R.id.savedDNABanner);
+        favBanner = (ImageView) findViewById(R.id.favBanner);
+        recentBanner = (ImageView) findViewById(R.id.recentBanner);
+        folderBanner = (ImageView) findViewById(R.id.folderBanner);
+        savedDNABanner = (ImageView) findViewById(R.id.savedDNABanner);
 
         localBannerPlayAll = (ImageView) findViewById(R.id.local_banner_play_all);
 
@@ -2372,7 +2373,6 @@ public class HomeActivity extends AppCompatActivity
     public void onPlaylistPLayAll() {
         onQueueItemClicked(0);
         hideFragment("playlist");
-        showFragment("queue");
     }
 
     @Override
@@ -2380,7 +2380,6 @@ public class HomeActivity extends AppCompatActivity
         if (queue.getQueue().size() > 0) {
             onQueueItemClicked(0);
             hideFragment("favourite");
-            showFragment("queue");
         }
     }
 
@@ -2607,7 +2606,7 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onAddedtoFavfromPlayer() {
         FavouritesFragment favouritesFragment = (FavouritesFragment) fragMan.findFragmentByTag("favourite");
-        if(favouritesFragment!=null){
+        if (favouritesFragment != null) {
             favouritesFragment.updateData();
         }
     }
@@ -2615,7 +2614,7 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onRemovedfromFavfromPlayer() {
         FavouritesFragment favouritesFragment = (FavouritesFragment) fragMan.findFragmentByTag("favourite");
-        if(favouritesFragment!=null){
+        if (favouritesFragment != null) {
             favouritesFragment.updateData();
         }
     }

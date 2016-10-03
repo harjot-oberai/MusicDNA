@@ -13,11 +13,11 @@
             android:title="Local Music" />
         <item
             android:id="@+id/nav_playlists"
-            android:icon="@drawable/ic_queue_music_black_48dp"
+            android:icon="@drawable/ic_playlist"
             android:title="Playlists" />
         <item
             android:id="@+id/nav_recent"
-            android:icon="@drawable/nav_clock2"
+            android:icon="@drawable/ic_recent"
             android:title="Recently Played" />
         <item
             android:id="@+id/nav_fav"
@@ -29,7 +29,7 @@
             android:title="Folders" />
         <item
             android:id="@+id/nav_view"
-            android:icon="@drawable/save"
+            android:icon="@drawable/ic_save_filled"
             android:title="Saved DNA" />
         <item
             android:id="@+id/nav_settings"

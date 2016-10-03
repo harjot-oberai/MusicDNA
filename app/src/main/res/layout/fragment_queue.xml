@@ -28,7 +28,7 @@
         android:layout_alignParentRight="true"
         android:layout_margin="16dp"
         android:clickable="true"
-        android:src="@drawable/ic_save_white"
+        android:src="@drawable/ic_save_filled_2"
         app:backgroundTint="#111111"
         app:borderWidth="0dp"
         app:elevation="6dp"

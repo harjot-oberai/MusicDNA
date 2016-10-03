@@ -3,13 +3,15 @@ package com.sdsmdg.harjot.MusicDNA;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
-import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,17 +23,12 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.support.v7.widget.SwitchCompat;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.squareup.leakcanary.RefWatcher;
-
-import me.priyesh.chroma.ChromaDialog;
-import me.priyesh.chroma.ColorMode;
-import me.priyesh.chroma.ColorSelectListener;
 
 
 /**
@@ -43,7 +40,7 @@ public class SettingsFragment extends Fragment {
     SwitchCompat albumArtToggle;
     ImageView themeColorImg;
     SeekBar densitySeekbar;
-    TextView densityText;
+    TextView densityTextDialog, densityText;
 
     onAlbumArtBackgroundToggled mCallback;
     onColorChangedListener mCallback2;
@@ -76,26 +73,43 @@ public class SettingsFragment extends Fragment {
         mCallback2 = (onColorChangedListener) getContext();
 
         densitycard = (RelativeLayout) view.findViewById(R.id.density_card);
-        densitySeekbar = (SeekBar) view.findViewById(R.id.density_seekbar);
-        densityText = (TextView) view.findViewById(R.id.density_text);
-        densitySeekbar.setMax(100);
-        densitySeekbar.setProgress(100 - (int) (HomeActivity.minAudioStrength * 100));
-        densityText.setText(String.valueOf(densitySeekbar.getProgress()));
-        densitySeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                HomeActivity.minAudioStrength = 1.0f - ((float) progress / (float) 100);
-                HomeActivity.settings.setMinAudioStrength(HomeActivity.minAudioStrength);
-                densityText.setText(String.valueOf(progress));
-            }
+        densityText = (TextView) view.findViewById(R.id.density_value);
+        densityText.setText(String.valueOf(100 - (int) (HomeActivity.minAudioStrength * 100)));
 
+        densitycard.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
+            public void onClick(View v) {
+                Dialog dialog = new Dialog(getContext());
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-            }
+                dialog.setContentView(R.layout.density_dialog);
+                densitySeekbar = (SeekBar) dialog.findViewById(R.id.density_dialog_seekbar);
+                densitySeekbar.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(HomeActivity.themeColor, PorterDuff.Mode.SRC_IN));
+                densityTextDialog = (TextView) dialog.findViewById(R.id.density_dialog_value);
+                densitySeekbar.setMax(100);
+                densitySeekbar.setProgress(Integer.parseInt(densityText.getText().toString()));
+                densityTextDialog.setText(String.valueOf(densitySeekbar.getProgress()));
+                densitySeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        HomeActivity.minAudioStrength = 1.0f - ((float) progress / (float) 100);
+                        HomeActivity.settings.setMinAudioStrength(HomeActivity.minAudioStrength);
+                        densityTextDialog.setText(String.valueOf(progress));
+                        densityText.setText(String.valueOf(progress));
+                    }
 
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+
+                    }
+                });
+
+                dialog.show();
 
             }
         });

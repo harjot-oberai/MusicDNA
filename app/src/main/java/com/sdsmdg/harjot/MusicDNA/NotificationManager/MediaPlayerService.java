@@ -281,7 +281,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
                     pFrag.isStart = false;
                     buildNotification(generateAction(android.R.drawable.ic_media_pause, "Pause", Constants.ACTION_PAUSE));
                 } catch (Exception e) {
-                    notificationManager.cancel(1);
+
                 }
             }
 

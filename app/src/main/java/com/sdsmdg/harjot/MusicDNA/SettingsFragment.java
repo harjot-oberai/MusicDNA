@@ -147,7 +147,7 @@ public class SettingsFragment extends Fragment {
                                     Window window = ((Activity) (getContext())).getWindow();
                                     window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                                     window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                                    window.setStatusBarColor(color);
+                                    window.setStatusBarColor(getDarkColor(color));
                                 }
                             }
                         })
@@ -209,5 +209,17 @@ public class SettingsFragment extends Fragment {
         super.onDestroy();
         RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
         refWatcher.watch(this);
+    }
+
+    public int getDarkColor(int color) {
+        int darkColor = 0;
+
+        int r = (int) (Color.red(color) * 0.823);
+        int g = (int) (Color.green(color) * 0.823);
+        int b = (int) (Color.green(color) * 0.823);
+
+        darkColor = Color.rgb(r, g, b);
+
+        return darkColor;
     }
 }

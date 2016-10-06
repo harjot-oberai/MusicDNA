@@ -138,8 +138,10 @@
 
                     <ImageView
                         android:id="@+id/queue_toolbar_back_button_img"
-                        android:layout_width="24dp"
-                        android:layout_height="48dp"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="-11dp"
+                        android:padding="12dp"
                         android:layout_centerVertical="true"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:clickable="true"
@@ -164,7 +166,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:textSize="15dp"
+                        android:padding="10dp"
+                        android:textSize="17dp"
                         android:textColor="#FFFFFF"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:layout_marginRight="10dp"
@@ -186,8 +189,10 @@
 
                     <ImageView
                         android:id="@+id/fragment_toolbar_back_button_img"
-                        android:layout_width="27dp"
-                        android:layout_height="48dp"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="-11dp"
+                        android:padding="12dp"
                         android:layout_centerVertical="true"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:clickable="true"
@@ -200,7 +205,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="12dp"
+                        android:layout_marginLeft="5dp"
                         android:layout_toRightOf="@+id/fragment_toolbar_back_button_img"
                         android:ellipsize="end"
                         android:singleLine="true" />

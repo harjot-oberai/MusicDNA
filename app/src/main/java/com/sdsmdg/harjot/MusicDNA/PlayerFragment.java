@@ -157,26 +157,30 @@ public class PlayerFragment extends Fragment implements
         }
 
         if (HomeActivity.isEqualizerEnabled) {
-            bassBoost = new BassBoost(0, mMediaPlayer.getAudioSessionId());
-            bassBoost.setEnabled(true);
-            BassBoost.Settings bassBoostSettingTemp = bassBoost.getProperties();
-            BassBoost.Settings bassBoostSetting = new BassBoost.Settings(bassBoostSettingTemp.toString());
-            if (HomeActivity.bassStrength == -1) {
-                bassBoostSetting.strength = (1000 / 19);
-            } else {
-                bassBoostSetting.strength = HomeActivity.bassStrength;
-            }
-            bassBoost.setProperties(bassBoostSetting);
-            mMediaPlayer.setAuxEffectSendLevel(1.0f);
+            try {
+                bassBoost = new BassBoost(0, mMediaPlayer.getAudioSessionId());
+                bassBoost.setEnabled(true);
+                BassBoost.Settings bassBoostSettingTemp = bassBoost.getProperties();
+                BassBoost.Settings bassBoostSetting = new BassBoost.Settings(bassBoostSettingTemp.toString());
+                if (HomeActivity.bassStrength == -1) {
+                    bassBoostSetting.strength = (1000 / 19);
+                } else {
+                    bassBoostSetting.strength = HomeActivity.bassStrength;
+                }
+                bassBoost.setProperties(bassBoostSetting);
+                mMediaPlayer.setAuxEffectSendLevel(1.0f);
 
-            presetReverb = new PresetReverb(0, mMediaPlayer.getAudioSessionId());
-            if (HomeActivity.reverbPreset == -1) {
-                presetReverb.setPreset(PresetReverb.PRESET_NONE);
-            } else {
-                presetReverb.setPreset(HomeActivity.reverbPreset);
+                presetReverb = new PresetReverb(0, mMediaPlayer.getAudioSessionId());
+                if (HomeActivity.reverbPreset == -1) {
+                    presetReverb.setPreset(PresetReverb.PRESET_NONE);
+                } else {
+                    presetReverb.setPreset(HomeActivity.reverbPreset);
+                }
+                presetReverb.setEnabled(true);
+                mMediaPlayer.setAuxEffectSendLevel(1.0f);
+            } catch (Exception e) {
+
             }
-            presetReverb.setEnabled(true);
-            mMediaPlayer.setAuxEffectSendLevel(1.0f);
         }
 
 
@@ -371,7 +375,7 @@ public class PlayerFragment extends Fragment implements
 
         currentAlbumArtHolder = (ImageView) view.findViewById(R.id.current_album_art_holder);
 
-        if(HomeActivity.settings.isAlbumArtBackgroundEnabled() && (currentAlbumArtHolder.getVisibility() == View.GONE || currentAlbumArtHolder.getVisibility() == View.INVISIBLE)){
+        if (HomeActivity.settings != null && HomeActivity.settings.isAlbumArtBackgroundEnabled() && (currentAlbumArtHolder.getVisibility() == View.GONE || currentAlbumArtHolder.getVisibility() == View.INVISIBLE)) {
             currentAlbumArtHolder.setVisibility(View.VISIBLE);
         }
 
@@ -704,8 +708,12 @@ public class PlayerFragment extends Fragment implements
             } catch (Exception e) {
 
             }
-            HomeActivity.spTitleAB.setText(localTrack.getTitle());
-            selected_track_title.setText(localTrack.getTitle());
+            try {
+                HomeActivity.spTitleAB.setText(localTrack.getTitle());
+                selected_track_title.setText(localTrack.getTitle());
+            } catch (Exception e) {
+
+            }
         }
 
         temp = getTime(durationInMilliSec);
@@ -1062,12 +1070,24 @@ public class PlayerFragment extends Fragment implements
             HomeActivity.spTitleAB.setText(track.getTitle());
             selected_track_title.setText(track.getTitle());
         } else {
-            durationInMilliSec = (int) localTrack.getDuration();
-            imgLoader.DisplayImage(localTrack.getPath(), HomeActivity.spImgAB);
-            imgLoader.DisplayImage(localTrack.getPath(), currentAlbumArtHolder);
-            imgLoader.DisplayImage(localTrack.getPath(), selected_track_image);
-            HomeActivity.spTitleAB.setText(localTrack.getTitle());
-            selected_track_title.setText(localTrack.getTitle());
+            try {
+                durationInMilliSec = (int) localTrack.getDuration();
+            } catch (Exception e) {
+
+            }
+            try {
+                imgLoader.DisplayImage(localTrack.getPath(), HomeActivity.spImgAB);
+                imgLoader.DisplayImage(localTrack.getPath(), selected_track_image);
+                imgLoader.DisplayImage(localTrack.getPath(), currentAlbumArtHolder);
+            } catch (Exception e) {
+
+            }
+            try {
+                HomeActivity.spTitleAB.setText(localTrack.getTitle());
+                selected_track_title.setText(localTrack.getTitle());
+            } catch (Exception e) {
+
+            }
         }
 
         temp = getTime(durationInMilliSec);

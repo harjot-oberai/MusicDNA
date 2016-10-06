@@ -8,6 +8,7 @@ import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -73,6 +74,7 @@ import android.widget.Toast;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.gson.Gson;
+import com.sdsmdg.harjot.MusicDNA.HeadsetHandler.HeadSetReceiver;
 import com.sdsmdg.harjot.MusicDNA.Interfaces.StreamService;
 import com.sdsmdg.harjot.MusicDNA.LocalMusicFragments.AlbumFragment;
 import com.sdsmdg.harjot.MusicDNA.LocalMusicFragments.ArtistFragment;
@@ -158,7 +160,8 @@ public class HomeActivity extends AppCompatActivity
         MediaPlayerService.onCallbackListener,
         SettingsFragment.onColorChangedListener,
         SettingsFragment.onAlbumArtBackgroundToggled,
-        AddToPlaylistFragment.newPlaylistListener {
+        AddToPlaylistFragment.newPlaylistListener,
+        HeadSetReceiver.onHeadsetRemovedListener {
 
 
     ScrollView container;
@@ -313,6 +316,8 @@ public class HomeActivity extends AppCompatActivity
     static float seekBarColor;
 
     static byte[] mBytes;
+
+    HeadSetReceiver headSetReceiver;
 
     ShowcaseView showCase;
 
@@ -633,6 +638,8 @@ public class HomeActivity extends AppCompatActivity
         ratio = Math.min(ratio, ratio2);
 
         setContentView(R.layout.activity_home);
+
+        headSetReceiver = new HeadSetReceiver();
 
         PackageInfo pInfo = null;
         try {
@@ -1006,6 +1013,7 @@ public class HomeActivity extends AppCompatActivity
 
     }
 
+
     private void getSavedData() {
         try {
             Gson gson = new Gson();
@@ -1279,6 +1287,13 @@ public class HomeActivity extends AppCompatActivity
                 }
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
+        registerReceiver(headSetReceiver, filter);
+        super.onResume();
     }
 
     @Override
@@ -1586,7 +1601,7 @@ public class HomeActivity extends AppCompatActivity
             Window window = ((Activity) (ctx)).getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(themeColor);
+            window.setStatusBarColor(getDarkColor(themeColor));
         }
 
         isPlayerVisible = false;
@@ -1844,18 +1859,22 @@ public class HomeActivity extends AppCompatActivity
 
     public static void updatePoints3() {
 
-        PlayerFragment.mVisualizerView.outerRadius = (float) (Math.min(PlayerFragment.mVisualizerView.width, PlayerFragment.mVisualizerView.height) * 0.42);
-        PlayerFragment.mVisualizerView.normalizedPosition = ((float) (PlayerFragment.mMediaPlayer.getCurrentPosition()) / (float) (PlayerFragment.durationInMilliSec));
-        if (mBytes == null) {
-            return;
+        try {
+            PlayerFragment.mVisualizerView.outerRadius = (float) (Math.min(PlayerFragment.mVisualizerView.width, PlayerFragment.mVisualizerView.height) * 0.42);
+            PlayerFragment.mVisualizerView.normalizedPosition = ((float) (PlayerFragment.mMediaPlayer.getCurrentPosition()) / (float) (PlayerFragment.durationInMilliSec));
+            if (mBytes == null) {
+                return;
+            }
+            PlayerFragment.mVisualizerView.angle = (float) (Math.PI - PlayerFragment.mVisualizerView.normalizedPosition * PlayerFragment.mVisualizerView.TAU);
+            PlayerFragment.mVisualizerView.color = 0;
+            PlayerFragment.mVisualizerView.lnDataDistance = 0;
+            PlayerFragment.mVisualizerView.distance = 0;
+            PlayerFragment.mVisualizerView.size = 0;
+            PlayerFragment.mVisualizerView.volume = 0;
+            PlayerFragment.mVisualizerView.power = 0;
+        } catch (Exception e) {
+
         }
-        PlayerFragment.mVisualizerView.angle = (float) (Math.PI - PlayerFragment.mVisualizerView.normalizedPosition * PlayerFragment.mVisualizerView.TAU);
-        PlayerFragment.mVisualizerView.color = 0;
-        PlayerFragment.mVisualizerView.lnDataDistance = 0;
-        PlayerFragment.mVisualizerView.distance = 0;
-        PlayerFragment.mVisualizerView.size = 0;
-        PlayerFragment.mVisualizerView.volume = 0;
-        PlayerFragment.mVisualizerView.power = 0;
 
         float x, y;
 
@@ -1957,18 +1976,22 @@ public class HomeActivity extends AppCompatActivity
 
     public static void updatePoints() {
 
-        PlayerFragment.mVisualizerView.outerRadius = (float) (Math.min(PlayerFragment.mVisualizerView.width, PlayerFragment.mVisualizerView.height) * 0.42);
-        PlayerFragment.mVisualizerView.normalizedPosition = ((float) (PlayerFragment.mMediaPlayer.getCurrentPosition()) / (float) (PlayerFragment.durationInMilliSec));
-        if (mBytes == null) {
-            return;
+        try {
+            PlayerFragment.mVisualizerView.outerRadius = (float) (Math.min(PlayerFragment.mVisualizerView.width, PlayerFragment.mVisualizerView.height) * 0.42);
+            PlayerFragment.mVisualizerView.normalizedPosition = ((float) (PlayerFragment.mMediaPlayer.getCurrentPosition()) / (float) (PlayerFragment.durationInMilliSec));
+            if (mBytes == null) {
+                return;
+            }
+            PlayerFragment.mVisualizerView.angle = (float) (Math.PI - PlayerFragment.mVisualizerView.normalizedPosition * PlayerFragment.mVisualizerView.TAU);
+            PlayerFragment.mVisualizerView.color = 0;
+            PlayerFragment.mVisualizerView.lnDataDistance = 0;
+            PlayerFragment.mVisualizerView.distance = 0;
+            PlayerFragment.mVisualizerView.size = 0;
+            PlayerFragment.mVisualizerView.volume = 0;
+            PlayerFragment.mVisualizerView.power = 0;
+        } catch (Exception e) {
+
         }
-        PlayerFragment.mVisualizerView.angle = (float) (Math.PI - PlayerFragment.mVisualizerView.normalizedPosition * PlayerFragment.mVisualizerView.TAU);
-        PlayerFragment.mVisualizerView.color = 0;
-        PlayerFragment.mVisualizerView.lnDataDistance = 0;
-        PlayerFragment.mVisualizerView.distance = 0;
-        PlayerFragment.mVisualizerView.size = 0;
-        PlayerFragment.mVisualizerView.volume = 0;
-        PlayerFragment.mVisualizerView.power = 0;
 
         float x, y;
 
@@ -2619,6 +2642,19 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    public void onHeadsetRemoved() {
+        PlayerFragment pFrag = getPlayerFragment();
+        if (pFrag != null) {
+            if (pFrag.mMediaPlayer != null && pFrag.mMediaPlayer.isPlaying()) {
+                if (!pFrag.pauseClicked) {
+                    pFrag.pauseClicked = true;
+                }
+                pFrag.togglePlayPause();
+            }
+        }
+    }
+
     public static class MyAsyncTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -2642,6 +2678,8 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
+
+        unregisterReceiver(headSetReceiver);
 
         new SaveSettings().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         new SaveData().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -2925,7 +2963,7 @@ public class HomeActivity extends AppCompatActivity
 
     public void showFragment(String type) {
 
-        if (!type.equals("viewAlbum") && !type.equals("folderContent") && !type.equals("viewArtist"))
+        if (!type.equals("viewAlbum") && !type.equals("folderContent") && !type.equals("viewArtist") && !type.equals("playlist") && !type.equals("newPlaylist"))
             hideAllFrags();
 
         if (!searchView.isIconified()) {
@@ -2988,7 +3026,8 @@ public class HomeActivity extends AppCompatActivity
         } else if (type.equals("playlist") && !isPlaylistVisible) {
             setTitle(tempPlaylist.getPlaylistName());
             setUpFragmentToolbar(themeColor, (String) getTitle());
-            switchToolbar(toolbar, fragmentToolbar, "left");
+            if (!isAllPlaylistVisible)
+                switchToolbar(toolbar, fragmentToolbar, "left");
             isPlaylistVisible = true;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             ViewPlaylistFragment newFragment = (ViewPlaylistFragment) fm.findFragmentByTag("playlist");
@@ -3039,7 +3078,8 @@ public class HomeActivity extends AppCompatActivity
         } else if (type.equals("newPlaylist") && !isNewPlaylistVisible) {
             setTitle("Add to Playlist");
             setUpFragmentToolbar(themeColor, (String) getTitle());
-            switchToolbar(toolbar, fragmentToolbar, "left");
+            if (!isAllPlaylistVisible)
+                switchToolbar(toolbar, fragmentToolbar, "left");
             navigationView.setCheckedItem(R.id.nav_playlists);
             isNewPlaylistVisible = true;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
@@ -3674,7 +3714,7 @@ public class HomeActivity extends AppCompatActivity
                         Window window = ((Activity) ctx).getWindow();
                         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                        window.setStatusBarColor(themeColor);
+                        window.setStatusBarColor(getDarkColor(themeColor));
                     }
 
                     if (allPlaylists == null) {
@@ -4521,4 +4561,17 @@ public class HomeActivity extends AppCompatActivity
         Pair<String, String> pair = Pair.create(minS, secS);
         return pair;
     }
+
+    public int getDarkColor(int color) {
+        int darkColor = 0;
+
+        int r = (int) (Color.red(color) * 0.823);
+        int g = (int) (Color.green(color) * 0.823);
+        int b = (int) (Color.green(color) * 0.823);
+
+        darkColor = Color.rgb(r, g, b);
+
+        return darkColor;
+    }
+
 }

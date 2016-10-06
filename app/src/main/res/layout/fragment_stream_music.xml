@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorDark"
     android:padding="5dp"
+    android:clickable="true"
     tools:context="com.sdsmdg.harjot.MusicDNA.StreamMusicFragment">
 
     <android.support.v7.widget.RecyclerView

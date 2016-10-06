@@ -282,6 +282,8 @@ public class HomeActivity extends AppCompatActivity
 
     ImageView localBannerPlayAll;
 
+    static ImageView navImageView;
+
     TextView localViewAll, streamViewAll;
 
     TextView newPlaylistText;
@@ -640,6 +642,8 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_home);
 
         headSetReceiver = new HeadSetReceiver();
+        IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
+        registerReceiver(headSetReceiver, filter);
 
         PackageInfo pInfo = null;
         try {
@@ -761,6 +765,25 @@ public class HomeActivity extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_home);
+
+
+        View header = navigationView.getHeaderView(0);
+        navImageView = (ImageView) header.findViewById(R.id.nav_image_view);
+        navImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PlayerFragment pFrag = getPlayerFragment();
+                if(pFrag!=null){
+                    if(pFrag.mMediaPlayer != null && pFrag.mMediaPlayer.isPlaying()){
+                        onBackPressed();
+                        isPlayerVisible = true;
+                        hideTabs();
+                        showPlayer();
+                    }
+                }
+            }
+        });
+
         phoneStateListener = new PhoneStateListener() {
             @Override
             public void onCallStateChanged(int state, String incomingNumber) {
@@ -1012,7 +1035,6 @@ public class HomeActivity extends AppCompatActivity
         new loadSavedData().execute();
 
     }
-
 
     private void getSavedData() {
         try {
@@ -1287,13 +1309,6 @@ public class HomeActivity extends AppCompatActivity
                 }
             }
         }
-    }
-
-    @Override
-    protected void onResume() {
-        IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
-        registerReceiver(headSetReceiver, filter);
-        super.onResume();
     }
 
     @Override
@@ -2085,7 +2100,6 @@ public class HomeActivity extends AppCompatActivity
             PlayerFragment.mVisualizerView.ptPaint.add(Pair.create(PlayerFragment.mVisualizerView.size, Pair.create(PlayerFragment.mVisualizerView.mForePaint.getColor(), PlayerFragment.mVisualizerView.mForePaint.getAlpha())));
 
             cacheCanvas.drawCircle(midx + x, midy + y, PlayerFragment.mVisualizerView.size, PlayerFragment.mVisualizerView.mForePaint);
-
         }
     }
 
@@ -2670,6 +2684,8 @@ public class HomeActivity extends AppCompatActivity
                 @Override
                 public void run() {
                     PlayerFragment.mVisualizerView.updateVisualizer(mBytes);
+                    if (PlayerFragment.mVisualizerView.bmp != null)
+                        navImageView.setImageBitmap(PlayerFragment.mVisualizerView.bmp);
                 }
             });
         }
@@ -2678,8 +2694,6 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
-
-        unregisterReceiver(headSetReceiver);
 
         new SaveSettings().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         new SaveData().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -2692,6 +2706,7 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        unregisterReceiver(headSetReceiver);
         RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(this);
         refWatcher.watch(this);
         TelephonyManager mgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);

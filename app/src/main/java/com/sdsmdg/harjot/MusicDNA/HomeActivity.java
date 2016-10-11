@@ -4580,9 +4580,9 @@ public class HomeActivity extends AppCompatActivity
     public int getDarkColor(int color) {
         int darkColor = 0;
 
-        int r = (int) (Color.red(color) * 0.823);
-        int g = (int) (Color.green(color) * 0.823);
-        int b = (int) (Color.green(color) * 0.823);
+        int r = Math.max(Color.red(color) - 25 , 0);
+        int g = Math.max(Color.green(color) - 25 , 0);
+        int b = Math.max(Color.blue(color) - 25 , 0);
 
         darkColor = Color.rgb(r, g, b);
 

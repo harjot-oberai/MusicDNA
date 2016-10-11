@@ -302,7 +302,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
                 super.onSkipToNext();
                 try {
                     if (pFragment != null)
-                        pFragment.mCallback2.onComplete();
+                        pFragment.onCallbackCalled(2);
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -321,7 +321,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
                 super.onSkipToPrevious();
                 try {
                     if (pFragment != null)
-                        pFragment.mCallback3.onPreviousTrack();
+                        pFragment.onCallbackCalled(3);
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override

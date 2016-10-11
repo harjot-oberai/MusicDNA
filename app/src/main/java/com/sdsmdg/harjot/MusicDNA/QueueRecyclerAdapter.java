@@ -160,6 +160,9 @@ public class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdap
 
     @Override
     public void onItemDismiss(int position) {
+        UnifiedTrack ut = queue.get(position);
+        if (HomeActivity.originalQueue != null)
+            HomeActivity.originalQueue.removeItem(ut);
         queue.remove(position);
         if (position < HomeActivity.queueCurrentIndex) {
             HomeActivity.queueCurrentIndex--;

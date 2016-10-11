@@ -61,6 +61,8 @@ public class PlayerFragment extends Fragment implements
     public static BassBoost bassBoost;
     public static PresetReverb presetReverb;
 
+    static boolean isReplayIconVisible = false;
+
     static boolean isPrepared = false;
 
     private float x1, x2;
@@ -76,7 +78,8 @@ public class PlayerFragment extends Fragment implements
 
     TextView currTime, totalTime;
 
-    public static ImageView repeatIcon;
+    public ImageView repeatController;
+    public ImageView shuffleController;
 
     public ImageView equalizerIcon;
     public static ImageView mainTrackController;
@@ -129,6 +132,7 @@ public class PlayerFragment extends Fragment implements
     public fullScreenListener mCallback8;
     public onSettingsClickedListener mCallback9;
     public onFavouritesListener mCallback10;
+    public onShuffleListener mCallback11;
 
     static ImageView currentAlbumArtHolder;
 
@@ -208,9 +212,11 @@ public class PlayerFragment extends Fragment implements
             if (HomeActivity.isPlayerVisible) {
                 mainTrackController.setImageResource(R.drawable.ic_play_arrow_white_48dp);
                 player_controller.setImageResource(R.drawable.ic_queue_music_white_48dp);
+                isReplayIconVisible = false;
             } else {
                 player_controller.setImageResource(R.drawable.ic_play_arrow_white_48dp);
                 mainTrackController.setImageResource(R.drawable.ic_play_arrow_white_48dp);
+                isReplayIconVisible = false;
             }
             mVisualizer.setEnabled(false);
             if (!isStart && mCallback7 != null)
@@ -222,9 +228,11 @@ public class PlayerFragment extends Fragment implements
                 if (HomeActivity.isPlayerVisible) {
                     mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
                     player_controller.setImageResource(R.drawable.ic_queue_music_white_48dp);
+                    isReplayIconVisible = false;
                 } else {
                     mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
                     player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
+                    isReplayIconVisible = false;
                 }
                 mMediaPlayer.start();
                 if (!isStart && mCallback7 != null)
@@ -239,9 +247,11 @@ public class PlayerFragment extends Fragment implements
                 if (HomeActivity.isPlayerVisible) {
                     mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
                     player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
+                    isReplayIconVisible = false;
                 } else {
                     mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
                     player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
+                    isReplayIconVisible = false;
                 }
             }
         }
@@ -261,6 +271,7 @@ public class PlayerFragment extends Fragment implements
             mCallback8 = (fullScreenListener) context;
             mCallback9 = (onSettingsClickedListener) context;
             mCallback10 = (onFavouritesListener) context;
+            mCallback11 = (onShuffleListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnHeadlineSelectedListener");
@@ -299,10 +310,19 @@ public class PlayerFragment extends Fragment implements
                 mCallback6.onPrepared();
                 break;
             case 3:
-                mCallback3.onPreviousTrack();
+                if (HomeActivity.queueCurrentIndex != 0) {
+                    mMediaPlayer.pause();
+                    mCallback3.onPreviousTrack();
+                }
                 break;
             case 2:
-                mCallback2.onComplete();
+                if (!HomeActivity.repeatEnabled && !HomeActivity.repeatOnceEnabled && HomeActivity.queueCurrentIndex == HomeActivity.queue.getQueue().size() - 1) {
+
+                } else {
+                    mMediaPlayer.pause();
+                    HomeActivity.nextControllerClicked = true;
+                    mCallback2.onComplete();
+                }
                 break;
         }
     }
@@ -365,6 +385,12 @@ public class PlayerFragment extends Fragment implements
         void onRemovedfromFavfromPlayer();
     }
 
+    public interface onShuffleListener {
+        public void onShuffleEnabled();
+
+        public void onShuffleDisabled();
+    }
+
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -385,29 +411,51 @@ public class PlayerFragment extends Fragment implements
         currTime = (TextView) view.findViewById(R.id.currTime);
         totalTime = (TextView) view.findViewById(R.id.totalTime);
 
-        repeatIcon = (ImageView) view.findViewById(R.id.repeat_icon);
+        repeatController = (ImageView) view.findViewById(R.id.repeat_controller);
+        shuffleController = (ImageView) view.findViewById(R.id.shuffle_controller);
+
         if (HomeActivity.shuffleEnabled) {
-            repeatIcon.setImageResource(R.drawable.ic_shuffle_white_48dp);
-        } else if (HomeActivity.repeatEnabled) {
-            repeatIcon.setImageResource(R.drawable.ic_repeat_white_48dp);
-        } else if (HomeActivity.repeatOnceEnabled) {
-            repeatIcon.setImageResource(R.drawable.ic_repeat_once_white_48dp);
+            shuffleController.setImageResource(R.drawable.ic_shuffle_filled);
+        } else {
+            shuffleController.setImageResource(R.drawable.ic_shuffle_outline);
         }
-        repeatIcon.setOnClickListener(new View.OnClickListener() {
+
+        if (HomeActivity.repeatEnabled) {
+            repeatController.setImageResource(R.drawable.ic_repeat_filled);
+        } else if (HomeActivity.repeatOnceEnabled) {
+            repeatController.setImageResource(R.drawable.ic_repeat_once);
+        } else {
+            repeatController.setImageResource(R.drawable.ic_repeat_outline);
+        }
+
+        repeatController.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (HomeActivity.repeatOnceEnabled) {
+                    HomeActivity.repeatOnceEnabled = false;
+                    repeatController.setImageResource(R.drawable.ic_repeat_outline);
+                } else if (HomeActivity.repeatEnabled) {
+                    HomeActivity.repeatEnabled = false;
+                    HomeActivity.repeatOnceEnabled = true;
+                    repeatController.setImageResource(R.drawable.ic_repeat_once);
+                } else {
+                    HomeActivity.repeatEnabled = true;
+                    repeatController.setImageResource(R.drawable.ic_repeat_filled);
+                }
+            }
+        });
+
+        shuffleController.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (HomeActivity.shuffleEnabled) {
                     HomeActivity.shuffleEnabled = false;
-                    HomeActivity.repeatEnabled = true;
-                    repeatIcon.setImageResource(R.drawable.ic_repeat_white_48dp);
-                } else if (HomeActivity.repeatEnabled) {
-                    HomeActivity.repeatEnabled = false;
-                    HomeActivity.repeatOnceEnabled = true;
-                    repeatIcon.setImageResource(R.drawable.ic_repeat_once_white_48dp);
-                } else if (HomeActivity.repeatOnceEnabled) {
-                    HomeActivity.repeatOnceEnabled = false;
+                    shuffleController.setImageResource(R.drawable.ic_shuffle_outline);
+                    mCallback11.onShuffleDisabled();
+                } else {
                     HomeActivity.shuffleEnabled = true;
-                    repeatIcon.setImageResource(R.drawable.ic_shuffle_white_48dp);
+                    shuffleController.setImageResource(R.drawable.ic_shuffle_filled);
+                    mCallback11.onShuffleEnabled();
                 }
             }
         });
@@ -515,9 +563,13 @@ public class PlayerFragment extends Fragment implements
         nextControllerSp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mMediaPlayer.pause();
-                HomeActivity.nextControllerClicked = true;
-                mCallback2.onComplete();
+                if (!HomeActivity.repeatEnabled && !HomeActivity.repeatOnceEnabled && HomeActivity.queueCurrentIndex == HomeActivity.queue.getQueue().size() - 1) {
+
+                } else {
+                    mMediaPlayer.pause();
+                    HomeActivity.nextControllerClicked = true;
+                    mCallback2.onComplete();
+                }
             }
         });
 
@@ -601,8 +653,6 @@ public class PlayerFragment extends Fragment implements
                     player_controller.setVisibility(View.VISIBLE);
                     player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
                 }
-//                setupVisualizerFxAndUI();
-//                mVisualizer.setEnabled(true);
                 togglePlayPause();
                 togglePlayPause();
                 togglePlayPause();
@@ -622,9 +672,11 @@ public class PlayerFragment extends Fragment implements
                 if (HomeActivity.isPlayerVisible) {
                     mainTrackController.setImageResource(R.drawable.ic_replay_white_48dp);
                     player_controller.setImageResource(R.drawable.ic_replay_white_48dp);
+                    isReplayIconVisible = true;
                 } else {
                     player_controller.setImageResource(R.drawable.ic_replay_white_48dp);
                     mainTrackController.setImageResource(R.drawable.ic_replay_white_48dp);
+                    isReplayIconVisible = true;
                 }
                 new SaveDNA().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
@@ -739,13 +791,15 @@ public class PlayerFragment extends Fragment implements
         player_controller.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!pauseClicked) {
-                    pauseClicked = true;
-                }
-                if (!HomeActivity.isPlayerVisible)
+                if (isReplayIconVisible) {
+                    HomeActivity.hasQueueEnded = true;
+                    mCallback2.onComplete();
+                } else {
+                    if (!pauseClicked) {
+                        pauseClicked = true;
+                    }
                     togglePlayPause();
-                else
-                    mCallback5.onQueueClicked();
+                }
             }
         });
 
@@ -790,13 +844,14 @@ public class PlayerFragment extends Fragment implements
         mainTrackController.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!HomeActivity.hasQueueEnded) {
+                if (isReplayIconVisible) {
+                    HomeActivity.hasQueueEnded = true;
+                    mCallback2.onComplete();
+                } else {
                     if (!pauseClicked) {
                         pauseClicked = true;
                     }
                     togglePlayPause();
-                } else {
-                    mCallback2.onComplete();
                 }
             }
         });
@@ -804,17 +859,23 @@ public class PlayerFragment extends Fragment implements
         nextTrackController.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mMediaPlayer.pause();
-                HomeActivity.nextControllerClicked = true;
-                mCallback2.onComplete();
+                if (!HomeActivity.repeatEnabled && !HomeActivity.repeatOnceEnabled && HomeActivity.queueCurrentIndex == HomeActivity.queue.getQueue().size() - 1) {
+
+                } else {
+                    mMediaPlayer.pause();
+                    HomeActivity.nextControllerClicked = true;
+                    mCallback2.onComplete();
+                }
             }
         });
 
         previousTrackController.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mMediaPlayer.pause();
-                mCallback3.onPreviousTrack();
+                if (HomeActivity.queueCurrentIndex != 0) {
+                    mMediaPlayer.pause();
+                    mCallback3.onPreviousTrack();
+                }
             }
         });
 
@@ -1038,11 +1099,17 @@ public class PlayerFragment extends Fragment implements
         }
 
         if (HomeActivity.shuffleEnabled) {
-            repeatIcon.setImageResource(R.drawable.ic_shuffle_white_48dp);
-        } else if (HomeActivity.repeatEnabled) {
-            repeatIcon.setImageResource(R.drawable.ic_repeat_white_48dp);
+            shuffleController.setImageResource(R.drawable.ic_shuffle_filled);
+        } else {
+            shuffleController.setImageResource(R.drawable.ic_shuffle_outline);
+        }
+
+        if (HomeActivity.repeatEnabled) {
+            repeatController.setImageResource(R.drawable.ic_repeat_filled);
         } else if (HomeActivity.repeatOnceEnabled) {
-            repeatIcon.setImageResource(R.drawable.ic_repeat_once_white_48dp);
+            repeatController.setImageResource(R.drawable.ic_repeat_once);
+        } else {
+            repeatController.setImageResource(R.drawable.ic_repeat_outline);
         }
 
         if (HomeActivity.isSaveDNAEnabled) {

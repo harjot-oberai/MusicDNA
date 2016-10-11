@@ -40,14 +40,12 @@ public class AudioPlayerBroadcastReceiver extends BroadcastReceiver {
         } else if (action.equalsIgnoreCase("com.sdsmdg.harjot.MusicDNA.ACTION_NEXT")) {
 
             try {
-                callback.getMediaPlayer().stop();
                 callback.onCallbackCalled(2);
             } catch (Exception e) {
 
             }
         } else if (action.equalsIgnoreCase("com.sdsmdg.harjot.MusicDNA.ACTION_PREV")) {
             try {
-                callback.getMediaPlayer().stop();
                 callback.onCallbackCalled(3);
             } catch (Exception e) {
 

@@ -299,7 +299,8 @@ public class EqualizerFragment extends Fragment {
         chart.setYAxis(false);
 
         chart.setYLabels(AxisController.LabelPosition.NONE);
-        chart.setGrid(ChartView.GridType.FULL, 7, 10, paint);
+        chart.setXLabels(AxisController.LabelPosition.NONE);
+        chart.setGrid(ChartView.GridType.NONE, 7, 10, paint);
 
         chart.setAxisBorderValues(-300, 3300);
 

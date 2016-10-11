@@ -13,27 +13,31 @@
         android:orientation="vertical">
 
         <com.db.chart.view.LineChartView
+            android:paddingBottom="5dp"
+            android:paddingRight="15dp"
+            android:paddingLeft="15dp"
             android:id="@+id/lineChart"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_above="@+id/equalizerContainer"
             android:layout_alignParentTop="true"
-            android:layout_weight="3"></com.db.chart.view.LineChartView>
+            android:layout_weight="3"
+            android:background="@drawable/graph_back_2" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="#111"
             android:layout_marginLeft="9dp"
-            android:layout_marginRight="9dp">
+            android:layout_marginRight="9dp"
+            android:layout_weight="1"
+            android:background="#111">
 
             <View
                 android:id="@+id/showcase_view_equalizer"
-                android:layout_alignParentLeft="true"
                 android:layout_width="50dp"
-                android:layout_marginLeft="20dp"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="20dp" />
 
             <Spinner
                 android:id="@+id/equalizer_preset_spinner"
@@ -41,7 +45,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
                 android:layout_toLeftOf="@+id/spinner_dropdown_icon"
-                android:background="#111"></Spinner>
+                android:background="#111"/>
 
             <ImageView
                 android:id="@+id/spinner_dropdown_icon"
@@ -66,14 +70,6 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:orientation="vertical">
 
@@ -87,7 +83,6 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_marginTop="20dp"
-                        android:splitTrack="false"
                         android:thumb="@drawable/custom_equalizer_thumb"
                         app:seekBarRotation="CW270" />
                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
@@ -97,7 +92,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:textSize="10dp"></TextView>
+                    android:textSize="10dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -116,7 +111,6 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_marginTop="20dp"
-                        android:splitTrack="false"
                         android:thumb="@drawable/custom_equalizer_thumb"
                         app:seekBarRotation="CW270" />
                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
@@ -126,7 +120,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:textSize="10dp"></TextView>
+                    android:textSize="10dp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -145,7 +139,6 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_marginTop="20dp"
-                        android:splitTrack="false"
                         android:thumb="@drawable/custom_equalizer_thumb"
                         app:seekBarRotation="CW270" />
                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
@@ -155,7 +148,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:textSize="10dp"></TextView>
+                    android:textSize="10dp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -174,7 +167,6 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_marginTop="20dp"
-                        android:splitTrack="false"
                         android:thumb="@drawable/custom_equalizer_thumb"
                         app:seekBarRotation="CW270" />
                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
@@ -184,7 +176,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:textSize="10dp"></TextView>
+                    android:textSize="10dp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -203,7 +195,6 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_marginTop="20dp"
-                        android:splitTrack="false"
                         android:thumb="@drawable/custom_equalizer_thumb"
                         app:seekBarRotation="CW270" />
                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
@@ -213,14 +204,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:textSize="10dp"></TextView>
+                    android:textSize="10dp"/>
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical"></LinearLayout>
 
         </LinearLayout>
 

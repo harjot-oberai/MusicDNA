@@ -21,8 +21,17 @@ public class Queue {
         this.queue = queue;
     }
 
-    public void addToQueue(UnifiedTrack track){
+    public void addToQueue(UnifiedTrack track) {
         queue.add(track);
+    }
+
+    public void removeItem(UnifiedTrack ut) {
+        for (int i = 0; i < queue.size(); i++) {
+            if (ut.equals(queue.get(i))) {
+                queue.remove(i);
+                break;
+            }
+        }
     }
 
 }

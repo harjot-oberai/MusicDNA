@@ -139,6 +139,7 @@ public class HomeActivity extends AppCompatActivity
         PlayerFragment.fullScreenListener,
         PlayerFragment.onSettingsClickedListener,
         PlayerFragment.onFavouritesListener,
+        PlayerFragment.onShuffleListener,
         PlayListFragment.onPlaylistTouchedListener,
         PlayListFragment.onPlaylistMenuPlayAllListener,
         PlayListFragment.onPlaylistRenameListener,
@@ -212,7 +213,10 @@ public class HomeActivity extends AppCompatActivity
     public static RecentlyPlayed recentlyPlayed;
     static Favourite favouriteTracks;
     static Settings settings;
+
     static Queue queue;
+    static Queue originalQueue;
+
     static Playlist tempPlaylist;
     static int tempPlaylistNumber;
     static int renamePlaylistNumber;
@@ -227,7 +231,7 @@ public class HomeActivity extends AppCompatActivity
     static MusicFolder tempMusicFolder;
 
     static boolean shuffleEnabled = false;
-    static boolean repeatEnabled = true;
+    static boolean repeatEnabled = false;
     static boolean repeatOnceEnabled = false;
 
     static boolean nextControllerClicked = false;
@@ -237,6 +241,7 @@ public class HomeActivity extends AppCompatActivity
     public static boolean isReloaded = true;
 
     public static int queueCurrentIndex = 0;
+    public int originalQueueIndex = 0;
 
     public static boolean isSaveDNAEnabled = false;
 
@@ -380,13 +385,6 @@ public class HomeActivity extends AppCompatActivity
         isReloaded = false;
         HideBottomFakeToolbar();
 
-        if (Build.VERSION.SDK_INT >= 21) {
-            Window window = ((Activity) (ctx)).getWindow();
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.parseColor("#000000"));
-        }
-
         if (!queueCall) {
             hideKeyboard();
 
@@ -507,12 +505,6 @@ public class HomeActivity extends AppCompatActivity
         isReloaded = false;
         HideBottomFakeToolbar();
 
-        if (Build.VERSION.SDK_INT >= 21) {
-            Window window = ((Activity) (ctx)).getWindow();
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.parseColor("#000000"));
-        }
 
         if (!queueCall) {
             hideKeyboard();
@@ -773,8 +765,8 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 PlayerFragment pFrag = getPlayerFragment();
-                if(pFrag!=null){
-                    if(pFrag.mMediaPlayer != null && pFrag.mMediaPlayer.isPlaying()){
+                if (pFrag != null) {
+                    if (pFrag.mMediaPlayer != null && pFrag.mMediaPlayer.isPlaying()) {
                         onBackPressed();
                         isPlayerVisible = true;
                         hideTabs();
@@ -2119,6 +2111,7 @@ public class HomeActivity extends AppCompatActivity
             PlayerFragment.mVisualizerView.clear();
             PlayerFragment.mMediaPlayer.seekTo(0);
             PlayerFragment.mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
+            PlayerFragment.isReplayIconVisible = false;
             PlayerFragment.player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
             PlayerFragment.isPrepared = true;
             PlayerFragment.mMediaPlayer.start();
@@ -2126,72 +2119,8 @@ public class HomeActivity extends AppCompatActivity
             if (nextControllerClicked) {
                 nextControllerClicked = false;
             }
-            if (!shuffleEnabled) {
-                if (queueCurrentIndex < queue.getQueue().size() - 1) {
-                    queueCurrentIndex++;
-                    if (qFrag != null) {
-                        qFrag.updateQueueAdapter();
-                    }
-                    if (queue.getQueue().get(queueCurrentIndex).getType()) {
-                        localSelectedTrack = queue.getQueue().get(queueCurrentIndex).getLocalTrack();
-                        streamSelected = false;
-                        localSelected = true;
-                        onLocalTrackSelected(-1);
-                    } else {
-                        selectedTrack = queue.getQueue().get(queueCurrentIndex).getStreamTrack();
-                        streamSelected = true;
-                        localSelected = false;
-                        onTrackSelected(-1);
-                    }
-                } else {
-                    if (repeatEnabled && (queue.getQueue().size() > 1)) {
-                        queueCurrentIndex = 0;
-                        if (qFrag != null) {
-                            qFrag.updateQueueAdapter();
-                        }
-                        onQueueItemClicked(0);
-                    } else if (repeatEnabled && (queue.getQueue().size() == 1)) {
-                        PlayerFragment.progressBar.setProgress(0);
-                        PlayerFragment.progressBar.setSecondaryProgress(0);
-                        PlayerFragment.mVisualizerView.clear();
-                        PlayerFragment.mMediaPlayer.seekTo(0);
-                        PlayerFragment.mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
-                        PlayerFragment.player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
-                        PlayerFragment.isPrepared = true;
-                        PlayerFragment.mMediaPlayer.start();
-                    } else {
-                        if (queue.getQueue().size() == 1) {
-                            PlayerFragment.progressBar.setProgress(0);
-                            PlayerFragment.progressBar.setSecondaryProgress(0);
-                            PlayerFragment.mVisualizerView.clear();
-                            PlayerFragment.mMediaPlayer.seekTo(0);
-                            PlayerFragment.mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
-                            PlayerFragment.player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
-                            PlayerFragment.isPrepared = true;
-                            PlayerFragment.mMediaPlayer.start();
-                        } else {
-                            queueCurrentIndex = 0;
-                            if (qFrag != null) {
-                                qFrag.updateQueueAdapter();
-                            }
-                            onQueueItemClicked(0);
-                        }
-                    }
-                }
-            } else {
-                Random r = new Random();
-                int x;
-                while (true) {
-                    if (queue.getQueue().size() == 1) {
-                        x = 0;
-                        break;
-                    }
-                    x = r.nextInt(queue.getQueue().size());
-                    if (x != queueCurrentIndex) {
-                        break;
-                    }
-                }
-                queueCurrentIndex = x;
+            if (queueCurrentIndex < queue.getQueue().size() - 1) {
+                queueCurrentIndex++;
                 if (qFrag != null) {
                     qFrag.updateQueueAdapter();
                 }
@@ -2205,6 +2134,40 @@ public class HomeActivity extends AppCompatActivity
                     streamSelected = true;
                     localSelected = false;
                     onTrackSelected(-1);
+                }
+            } else {
+                if ((repeatEnabled || repeatOnceEnabled) && (queue.getQueue().size() > 1)) {
+                    queueCurrentIndex = 0;
+                    if (qFrag != null) {
+                        qFrag.updateQueueAdapter();
+                    }
+                    onQueueItemClicked(0);
+                } else if ((repeatEnabled || repeatOnceEnabled) && (queue.getQueue().size() == 1)) {
+                    PlayerFragment.progressBar.setProgress(0);
+                    PlayerFragment.progressBar.setSecondaryProgress(0);
+                    PlayerFragment.mVisualizerView.clear();
+                    PlayerFragment.mMediaPlayer.seekTo(0);
+                    PlayerFragment.mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
+                    PlayerFragment.isReplayIconVisible = false;
+                    PlayerFragment.player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
+                    PlayerFragment.isPrepared = true;
+                    PlayerFragment.mMediaPlayer.start();
+                } else {
+                    PlayerFragment plFrag = getPlayerFragment();
+                    if (plFrag != null) {
+                        if (plFrag.mMediaPlayer.isPlaying()) {
+                            plFrag.mMediaPlayer.start();
+                        } else if (hasQueueEnded) {
+                            hasQueueEnded = false;
+                            queueCurrentIndex = 0;
+                            if (qFrag != null) {
+                                qFrag.updateQueueAdapter();
+                            }
+                            onQueueItemClicked(0);
+                        } else {
+                            // keep queue at last position
+                        }
+                    }
                 }
             }
         }
@@ -2216,72 +2179,33 @@ public class HomeActivity extends AppCompatActivity
 
         QueueFragment qFrag = (QueueFragment) fragMan.findFragmentByTag("queue");
 
-        if (queueCurrentIndex == 0) {
-            PlayerFragment.progressBar.setProgress(0);
-            PlayerFragment.progressBar.setSecondaryProgress(0);
-            PlayerFragment.mVisualizerView.clear();
-            PlayerFragment.mMediaPlayer.seekTo(0);
-            PlayerFragment.mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
-            PlayerFragment.player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
-            PlayerFragment.isPrepared = true;
-            PlayerFragment.mMediaPlayer.start();
-        } else {
-            if (!shuffleEnabled) {
-                if (queueCurrentIndex > 0) {
-                    queueCall = true;
-                    queueCurrentIndex--;
-                    if (qFrag != null) {
-                        qFrag.updateQueueAdapter();
-                    }
-                    if (queue.getQueue().get(queueCurrentIndex).getType()) {
-                        localSelectedTrack = queue.getQueue().get(queueCurrentIndex).getLocalTrack();
-                        streamSelected = false;
-                        localSelected = true;
-                        onLocalTrackSelected(-1);
-                    } else {
-                        selectedTrack = queue.getQueue().get(queueCurrentIndex).getStreamTrack();
-                        streamSelected = true;
-                        localSelected = false;
-                        onTrackSelected(-1);
-                    }
-                } else {
-
-                }
-            } else {
-                Random r = new Random();
-                int x;
-                while (true) {
-                    x = r.nextInt(queue.getQueue().size());
-                    if (x != queueCurrentIndex) {
-                        break;
-                    }
-                }
-                queueCurrentIndex = x;
-                if (qFrag != null) {
-                    qFrag.updateQueueAdapter();
-                }
-                if (queue.getQueue().get(queueCurrentIndex).getType()) {
-                    localSelectedTrack = queue.getQueue().get(queueCurrentIndex).getLocalTrack();
-                    streamSelected = false;
-                    localSelected = true;
-                    onLocalTrackSelected(-1);
-                } else {
-                    selectedTrack = queue.getQueue().get(queueCurrentIndex).getStreamTrack();
-                    streamSelected = true;
-                    localSelected = false;
-                    onTrackSelected(-1);
-                }
+        if (queueCurrentIndex > 0) {
+            queueCall = true;
+            queueCurrentIndex--;
+            if (qFrag != null) {
+                qFrag.updateQueueAdapter();
             }
+            if (queue.getQueue().get(queueCurrentIndex).getType()) {
+                localSelectedTrack = queue.getQueue().get(queueCurrentIndex).getLocalTrack();
+                streamSelected = false;
+                localSelected = true;
+                onLocalTrackSelected(-1);
+            } else {
+                selectedTrack = queue.getQueue().get(queueCurrentIndex).getStreamTrack();
+                streamSelected = true;
+                localSelected = false;
+                onTrackSelected(-1);
+            }
+        } else {
+            // keep queue at 0
         }
     }
 
     @Override
     public void onQueueItemClicked(final int position) {
 
-        if (isPlayerVisible)
+        if (isPlayerVisible && isQueueVisible)
             showPlayer3();
-        else
-            showPlayer();
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -2667,6 +2591,50 @@ public class HomeActivity extends AppCompatActivity
                 pFrag.togglePlayPause();
             }
         }
+    }
+
+    @Override
+    public void onShuffleEnabled() {
+        originalQueue = new Queue();
+        for (UnifiedTrack ut : queue.getQueue()) {
+            originalQueue.addToQueue(ut);
+        }
+        originalQueueIndex = queueCurrentIndex;
+        UnifiedTrack ut = queue.getQueue().get(queueCurrentIndex);
+        Collections.shuffle(queue.getQueue());
+        for (int i = 0; i < queue.getQueue().size(); i++) {
+            if (ut.equals(queue.getQueue().get(i))) {
+                queue.getQueue().remove(i);
+                break;
+            }
+        }
+        queue.getQueue().add(0, ut);
+        queueCurrentIndex = 0;
+
+        new SaveQueue().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    @Override
+    public void onShuffleDisabled() {
+        UnifiedTrack ut1 = queue.getQueue().get(queueCurrentIndex);
+        for (int i = 0; i < queue.getQueue().size(); i++) {
+            UnifiedTrack ut = queue.getQueue().get(i);
+            if (!originalQueue.getQueue().contains(ut)) {
+                originalQueue.getQueue().add(ut);
+            }
+        }
+        queue.getQueue().clear();
+        for (UnifiedTrack ut : originalQueue.getQueue()) {
+            queue.addToQueue(ut);
+        }
+        for (int i = 0; i < queue.getQueue().size(); i++) {
+            if (ut1.equals(queue.getQueue().get(i))) {
+                queueCurrentIndex = i;
+                break;
+            }
+        }
+
+        new SaveQueue().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public static class MyAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -4580,9 +4548,9 @@ public class HomeActivity extends AppCompatActivity
     public int getDarkColor(int color) {
         int darkColor = 0;
 
-        int r = Math.max(Color.red(color) - 25 , 0);
-        int g = Math.max(Color.green(color) - 25 , 0);
-        int b = Math.max(Color.blue(color) - 25 , 0);
+        int r = Math.max(Color.red(color) - 25, 0);
+        int g = Math.max(Color.green(color) - 25, 0);
+        int b = Math.max(Color.blue(color) - 25, 0);
 
         darkColor = Color.rgb(r, g, b);
 

@@ -284,9 +284,9 @@ public class EqualizerFragment extends Fragment {
 
             mLinearLayout.addView(seekBarRowLayout);*/
 
-            equalizeSound();
-
         }
+
+        equalizeSound();
 
         paint.setColor(Color.parseColor("#555555"));
         paint.setStrokeWidth((float) (1.10 * HomeActivity.ratio));
@@ -370,14 +370,14 @@ public class EqualizerFragment extends Fragment {
         presetSpinner.setAdapter(equalizerPresetSpinnerAdapter);
         presetSpinner.setDropDownWidth((HomeActivity.screen_width * 3) / 4);
         if (HomeActivity.isEqualizerReloaded && HomeActivity.presetPos != 0) {
-            correctPosition = false;
+//            correctPosition = false;
             presetSpinner.setSelection(HomeActivity.presetPos);
         }
 
         presetSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position != 0 && correctPosition) {
+                if (position != 0) {
                     PlayerFragment.mEqualizer.usePreset((short) (position - 1));
                     HomeActivity.presetPos = position;
                     short numberOfFreqBands = PlayerFragment.mEqualizer.getNumberOfBands();
@@ -388,13 +388,15 @@ public class EqualizerFragment extends Fragment {
                         seekBarFinal[i].setProgress(PlayerFragment.mEqualizer.getBandLevel(i) - lowerEqualizerBandLevel);
                         points[i] = PlayerFragment.mEqualizer.getBandLevel(i) - lowerEqualizerBandLevel;
                         HomeActivity.seekbarpos[i] = PlayerFragment.mEqualizer.getBandLevel(i);
-                        dataset.updateValues(points);
-                        chart.notifyDataUpdate();
+
                     }
+                    dataset.updateValues(points);
+                    chart.notifyDataUpdate();
+
                 } else {
 
                 }
-                correctPosition = true;
+//                correctPosition = true;
 
             }
 

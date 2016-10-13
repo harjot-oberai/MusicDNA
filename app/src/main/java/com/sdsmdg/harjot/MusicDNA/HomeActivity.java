@@ -487,6 +487,9 @@ public class HomeActivity extends AppCompatActivity
             }
         }
         recentlyPlayed.getRecentlyPlayed().add(0, track);
+        if (recentlyPlayed.getRecentlyPlayed().size() > 50) {
+            recentlyPlayed.getRecentlyPlayed().remove(50);
+        }
         recentsRecycler.setVisibility(View.VISIBLE);
         recentsNothingText.setVisibility(View.INVISIBLE);
         continuePlayingList.clear();
@@ -602,6 +605,9 @@ public class HomeActivity extends AppCompatActivity
             }
         }
         recentlyPlayed.getRecentlyPlayed().add(0, track);
+        if (recentlyPlayed.getRecentlyPlayed().size() == 51) {
+            recentlyPlayed.getRecentlyPlayed().remove(50);
+        }
         recentsRecycler.setVisibility(View.VISIBLE);
         recentsNothingText.setVisibility(View.INVISIBLE);
         continuePlayingList.clear();
@@ -2071,8 +2077,8 @@ public class HomeActivity extends AppCompatActivity
 
             float[] hsv = new float[3];
             hsv[0] = PlayerFragment.mVisualizerView.color;
-            hsv[1] = (float) 0.8;
-            hsv[2] = (float) 0.72;
+            hsv[1] = (float) 0.9;
+            hsv[2] = (float) 0.9;
 
             // setting color of the Paint
             PlayerFragment.mVisualizerView.mForePaint.setColor(Color.HSVToColor(hsv));
@@ -2667,7 +2673,11 @@ public class HomeActivity extends AppCompatActivity
         new SaveData().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         new SaveQueue().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-        prefsEditor.commit();
+        try {
+            prefsEditor.commit();
+        } catch (Exception e){
+
+        }
 
     }
 
@@ -2981,6 +2991,11 @@ public class HomeActivity extends AppCompatActivity
             QueueFragment newFragment = (QueueFragment) fm.findFragmentByTag("queue");
             if (newFragment == null) {
                 newFragment = new QueueFragment();
+            }
+            try {
+                newFragment.scrollToCurrentPosition();
+            } catch (Exception e) {
+
             }
             fm.beginTransaction()
                     .add(R.id.equalizer_queue_frag_container, newFragment, "queue")
@@ -3567,7 +3582,7 @@ public class HomeActivity extends AppCompatActivity
             Bitmap pictureBitmap = bmp;
             pictureBitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
         } catch (FileNotFoundException e) {
-            Log.e("ERROR", e.getMessage());
+            Log.e("DNA Save ERROR", e.getMessage());
             e.printStackTrace();
         }
         try {

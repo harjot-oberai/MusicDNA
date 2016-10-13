@@ -87,7 +87,7 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
         queueRecycler.setItemAnimator(new DefaultItemAnimator());
         queueRecycler.setAdapter(qAdapter);
 
-        mLayoutManager2.scrollToPositionWithOffset(HomeActivity.queueCurrentIndex, 2);
+        mLayoutManager2.scrollToPositionWithOffset(HomeActivity.queueCurrentIndex, 20);
 
         queueRecycler.addOnItemTouchListener(new ClickItemTouchListener(queueRecycler) {
             @Override
@@ -202,6 +202,12 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
     public void notifyAdapterItemRemoved(int i) {
         if (qAdapter != null) {
             qAdapter.notifyItemRemoved(i);
+        }
+    }
+
+    public void scrollToCurrentPosition() {
+        if (queueRecycler != null) {
+            ((LinearLayoutManager) (queueRecycler.getLayoutManager())).scrollToPositionWithOffset(HomeActivity.queueCurrentIndex, 20);
         }
     }
 }

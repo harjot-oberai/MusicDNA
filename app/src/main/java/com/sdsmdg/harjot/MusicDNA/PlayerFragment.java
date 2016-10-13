@@ -1280,6 +1280,9 @@ public class PlayerFragment extends Fragment implements
                     SavedDNA sDna = new SavedDNA(track.getTitle(), model);
                     HomeActivity.savedDNAs.getSavedDNAs().add(0, sDna);
                 }
+                if (HomeActivity.savedDNAs.getSavedDNAs().size() > 10) {
+                    HomeActivity.savedDNAs.getSavedDNAs().remove(10);
+                }
             }
             return null;
         }

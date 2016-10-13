@@ -2122,9 +2122,6 @@ public class HomeActivity extends AppCompatActivity
             PlayerFragment.isPrepared = true;
             PlayerFragment.mMediaPlayer.start();
         } else {
-            if (nextControllerClicked) {
-                nextControllerClicked = false;
-            }
             if (queueCurrentIndex < queue.getQueue().size() - 1) {
                 queueCurrentIndex++;
                 if (qFrag != null) {
@@ -2159,20 +2156,16 @@ public class HomeActivity extends AppCompatActivity
                     PlayerFragment.isPrepared = true;
                     PlayerFragment.mMediaPlayer.start();
                 } else {
-                    PlayerFragment plFrag = getPlayerFragment();
-                    if (plFrag != null) {
-                        if (plFrag.mMediaPlayer.isPlaying()) {
-                            plFrag.mMediaPlayer.start();
-                        } else if (hasQueueEnded) {
-                            hasQueueEnded = false;
-                            queueCurrentIndex = 0;
-                            if (qFrag != null) {
-                                qFrag.updateQueueAdapter();
-                            }
-                            onQueueItemClicked(0);
-                        } else {
-                            // keep queue at last position
+                    if (nextControllerClicked || hasQueueEnded) {
+                        nextControllerClicked = false;
+                        hasQueueEnded = false;
+                        queueCurrentIndex = 0;
+                        if (qFrag != null) {
+                            qFrag.updateQueueAdapter();
                         }
+                        onQueueItemClicked(0);
+                    } else {
+                        // keep queue at last track
                     }
                 }
             }
@@ -2340,6 +2333,7 @@ public class HomeActivity extends AppCompatActivity
     public void onPlaylistPLayAll() {
         onQueueItemClicked(0);
         hideFragment("playlist");
+        setTitle("Music DNA");
     }
 
     @Override
@@ -2675,7 +2669,7 @@ public class HomeActivity extends AppCompatActivity
 
         try {
             prefsEditor.commit();
-        } catch (Exception e){
+        } catch (Exception e) {
 
         }
 

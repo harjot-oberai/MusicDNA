@@ -109,7 +109,7 @@ public class PlayerFragment extends Fragment implements
     public static SeekBar progressBar;
 
     public static int durationInMilliSec;
-    boolean completed = false;
+    static boolean completed = false;
     boolean pauseClicked = false;
     boolean isTracking = false;
 
@@ -563,13 +563,18 @@ public class PlayerFragment extends Fragment implements
         nextControllerSp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!HomeActivity.repeatEnabled && !HomeActivity.repeatOnceEnabled && HomeActivity.queueCurrentIndex == HomeActivity.queue.getQueue().size() - 1) {
-
-                } else {
-                    mMediaPlayer.pause();
-                    HomeActivity.nextControllerClicked = true;
-                    mCallback2.onComplete();
-                }
+//                if (!HomeActivity.repeatEnabled && !HomeActivity.repeatOnceEnabled && HomeActivity.queueCurrentIndex == HomeActivity.queue.getQueue().size() - 1) {
+//                    if(completed){
+//
+//                    }
+//                } else {
+//                    mMediaPlayer.pause();
+//                    HomeActivity.nextControllerClicked = true;
+//                    mCallback2.onComplete();
+//                }
+                mMediaPlayer.pause();
+                HomeActivity.nextControllerClicked = true;
+                mCallback2.onComplete();
             }
         });
 
@@ -859,13 +864,16 @@ public class PlayerFragment extends Fragment implements
         nextTrackController.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!HomeActivity.repeatEnabled && !HomeActivity.repeatOnceEnabled && HomeActivity.queueCurrentIndex == HomeActivity.queue.getQueue().size() - 1) {
-
-                } else {
-                    mMediaPlayer.pause();
-                    HomeActivity.nextControllerClicked = true;
-                    mCallback2.onComplete();
-                }
+//                if (!HomeActivity.repeatEnabled && !HomeActivity.repeatOnceEnabled && HomeActivity.queueCurrentIndex == HomeActivity.queue.getQueue().size() - 1) {
+//
+//                } else {
+//                    mMediaPlayer.pause();
+//                    HomeActivity.nextControllerClicked = true;
+//                    mCallback2.onComplete();
+//                }
+                mMediaPlayer.pause();
+                HomeActivity.nextControllerClicked = true;
+                mCallback2.onComplete();
             }
         });
 

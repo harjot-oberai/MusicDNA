@@ -22,7 +22,7 @@ android {
 
     defaultConfig {
         applicationId "com.sdsmdg.harjot.MusicDNA"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 23
         versionCode 25
         versionName "0.9.97"
@@ -41,8 +41,8 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
 
-//    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4'
-    debugCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4'
+//    debugCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4'
 

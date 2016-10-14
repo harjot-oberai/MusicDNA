@@ -1,5 +1,6 @@
 package com.sdsmdg.harjot.MusicDNA;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -37,7 +38,7 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
         void onDragStarted(RecyclerView.ViewHolder viewHolder);
     }
 
-    public interface onPlaylistEmptyListener{
+    public interface onPlaylistEmptyListener {
         public void onPlaylistEmpty();
     }
 
@@ -68,7 +69,7 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
         songList.remove(position);
         notifyItemRemoved(position);
         if (songList.size() == 0) {
-            HomeActivity.main.onBackPressed();
+            ((HomeActivity) ctx).onBackPressed();
             HomeActivity.allPlaylists.getPlaylists().remove(HomeActivity.tempPlaylistNumber);
             mCallback.onPlaylistEmpty();
         } else if (HomeActivity.pAdapter != null) {

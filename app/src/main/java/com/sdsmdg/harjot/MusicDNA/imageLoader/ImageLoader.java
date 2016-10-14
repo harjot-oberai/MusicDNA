@@ -36,8 +36,10 @@ public class ImageLoader {
     FileCache fileCache;
     private Map<ImageView, String> imageViews = Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
     ExecutorService executorService;
+    Context ctx;
 
     public ImageLoader(Context context) {
+        ctx = context;
         fileCache = new FileCache(context);
         executorService = Executors.newFixedThreadPool(5);
     }
@@ -182,7 +184,7 @@ public class ImageLoader {
             if (imageViewReused(photoToLoad)) {
                 return;
             }
-            Activity a = HomeActivity.main;
+            Activity a = (Activity) ctx;
             a.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

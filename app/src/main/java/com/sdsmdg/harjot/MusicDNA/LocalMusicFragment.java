@@ -199,7 +199,7 @@ public class LocalMusicFragment extends Fragment {
                             HomeActivity.addToFavourites(ut);
                         }
                         if (item.getTitle().equals("Share")) {
-                            HomeActivity.shareLocalSong(HomeActivity.finalLocalSearchResultList.get(position).getPath());
+                            ((HomeActivity)ctx).shareLocalSong(HomeActivity.finalLocalSearchResultList.get(position).getPath());
                         }
                         return true;
                     }

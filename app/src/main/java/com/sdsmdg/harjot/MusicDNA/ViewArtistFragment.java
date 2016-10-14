@@ -34,6 +34,7 @@ public class ViewArtistFragment extends Fragment {
     onArtistPlayAllListener mCallback2;
 
     FloatingActionButton playAllfab;
+    Context ctx;
 
     TextView title, albumDetails;
 
@@ -54,6 +55,7 @@ public class ViewArtistFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        ctx = context;
         try {
             mCallback = (onArtistSongClickListener) context;
             mCallback2 = (onArtistPlayAllListener) context;
@@ -179,7 +181,7 @@ public class ViewArtistFragment extends Fragment {
                             HomeActivity.addToFavourites(ut);
                         }
                         if (item.getTitle().equals("Share")) {
-                            HomeActivity.shareLocalSong(HomeActivity.tempArtist.getArtistSongs().get(position).getPath());
+                            ((HomeActivity) ctx).shareLocalSong(HomeActivity.tempArtist.getArtistSongs().get(position).getPath());
                         }
                         return true;
                     }

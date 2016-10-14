@@ -53,6 +53,7 @@ public class ViewAlbumFragment extends Fragment {
     BlurringView blurringView;
     ViewGroup root;
     FloatingActionButton fab;
+    Context ctx;
 
     TextView albumDetails;
 
@@ -65,6 +66,7 @@ public class ViewAlbumFragment extends Fragment {
 
     public interface onAlbumSongClickListener {
         public void onAlbumSongClickListener();
+
         public void addToPlaylist(UnifiedTrack ut);
     }
 
@@ -75,6 +77,7 @@ public class ViewAlbumFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        ctx = context;
         try {
             mCallback = (onAlbumSongClickListener) context;
             mCallback2 = (onAlbumPlayAllListener) context;
@@ -233,7 +236,7 @@ public class ViewAlbumFragment extends Fragment {
                             HomeActivity.addToFavourites(ut);
                         }
                         if (item.getTitle().equals("Share")) {
-                            HomeActivity.shareLocalSong(HomeActivity.tempAlbum.getAlbumSongs().get(position).getPath());
+                            ((HomeActivity)ctx).shareLocalSong(HomeActivity.tempAlbum.getAlbumSongs().get(position).getPath());
                         }
                         return true;
                     }

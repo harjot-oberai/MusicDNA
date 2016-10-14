@@ -318,7 +318,7 @@ public class HomeActivity extends AppCompatActivity
 
     static TextPaint tp;
 
-    public static Activity main;
+    public Activity main;
 
     static float seekBarColor;
 
@@ -331,7 +331,7 @@ public class HomeActivity extends AppCompatActivity
     View playerContainer;
 
     android.support.v4.app.FragmentManager fragMan;
-    static android.support.v4.app.FragmentManager fragMan2;
+    android.support.v4.app.FragmentManager fragMan2;
 
     public static boolean isPlayerVisible = false;
     public static boolean isLocalVisible = false;
@@ -1862,7 +1862,7 @@ public class HomeActivity extends AppCompatActivity
 
     }
 
-    public static void updateVisualizer(byte[] bytes) {
+    public void updateVisualizer(byte[] bytes) {
         mBytes = bytes;
 //        updatePoints();
 //        PlayerFragment.mVisualizerView.updateVisualizer(mBytes);
@@ -2655,7 +2655,7 @@ public class HomeActivity extends AppCompatActivity
         new SaveQueue().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    public static class MyAsyncTask extends AsyncTask<Void, Void, Void> {
+    public class MyAsyncTask extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -3641,7 +3641,7 @@ public class HomeActivity extends AppCompatActivity
         fileOrDirectory.delete();
     }
 
-    public static void shareLocalSong(String path) {
+    public void shareLocalSong(String path) {
         Uri contentUri = Uri.parse("file:///" + path);
 
         if (contentUri != null) {
@@ -4550,7 +4550,7 @@ public class HomeActivity extends AppCompatActivity
         return id > 0 && resources.getBoolean(id);
     }
 
-    public static PlayerFragment getPlayerFragment() {
+    public PlayerFragment getPlayerFragment() {
         try {
             return (PlayerFragment) fragMan2.findFragmentByTag("player");
         } catch (Exception e) {

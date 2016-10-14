@@ -192,7 +192,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        pFragment = HomeActivity.getPlayerFragment();
+        pFragment = ((HomeActivity) PlayerFragment.ctx).getPlayerFragment();
         if (pFragment != null)
             pFragment.mCallback7 = this;
 

@@ -793,21 +793,6 @@ public class PlayerFragment extends Fragment implements
             e.printStackTrace();
         }
 
-        player_controller.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isReplayIconVisible) {
-                    HomeActivity.hasQueueEnded = true;
-                    mCallback2.onComplete();
-                } else {
-                    if (!pauseClicked) {
-                        pauseClicked = true;
-                    }
-                    togglePlayPause();
-                }
-            }
-        });
-
         HomeActivity.overflowMenuAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -843,6 +828,23 @@ public class PlayerFragment extends Fragment implements
                 });
 
                 popMenu.show();
+            }
+        });
+
+
+
+        player_controller.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isReplayIconVisible) {
+                    HomeActivity.hasQueueEnded = true;
+                    mCallback2.onComplete();
+                } else {
+                    if (!pauseClicked) {
+                        pauseClicked = true;
+                    }
+                    togglePlayPause();
+                }
             }
         });
 

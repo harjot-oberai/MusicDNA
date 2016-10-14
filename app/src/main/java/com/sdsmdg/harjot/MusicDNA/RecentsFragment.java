@@ -322,7 +322,6 @@ public class RecentsFragment extends Fragment implements RecentsTrackAdapter.OnD
                     for (int i = 0; i < HomeActivity.recentlyPlayed.getRecentlyPlayed().size(); i++) {
                         HomeActivity.queue.getQueue().add(HomeActivity.recentlyPlayed.getRecentlyPlayed().get(i));
                     }
-                    HomeActivity.shuffleEnabled = true;
                     Random r = new Random();
                     mCallback2.onRecent(r.nextInt(HomeActivity.queue.getQueue().size()));
                 }

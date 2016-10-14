@@ -889,7 +889,6 @@ public class HomeActivity extends AppCompatActivity
                 }
                 if (queue.getQueue().size() > 0) {
                     Random r = new Random();
-                    shuffleEnabled = true;
                     int tmp = r.nextInt(queue.getQueue().size());
                     queueCurrentIndex = tmp;
                     LocalTrack track = localTrackList.get(tmp);
@@ -2118,6 +2117,7 @@ public class HomeActivity extends AppCompatActivity
         if (repeatOnceEnabled && !nextControllerClicked) {
             PlayerFragment.progressBar.setProgress(0);
             PlayerFragment.progressBar.setSecondaryProgress(0);
+            PlayerFragment.mVisualizer.setEnabled(true);
             PlayerFragment.mVisualizerView.clear();
             PlayerFragment.mMediaPlayer.seekTo(0);
             PlayerFragment.mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
@@ -2152,6 +2152,7 @@ public class HomeActivity extends AppCompatActivity
                 } else if ((repeatEnabled || repeatOnceEnabled) && (queue.getQueue().size() == 1)) {
                     PlayerFragment.progressBar.setProgress(0);
                     PlayerFragment.progressBar.setSecondaryProgress(0);
+                    PlayerFragment.mVisualizer.setEnabled(true);
                     PlayerFragment.mVisualizerView.clear();
                     PlayerFragment.mMediaPlayer.seekTo(0);
                     PlayerFragment.mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
@@ -2169,8 +2170,11 @@ public class HomeActivity extends AppCompatActivity
                         }
                         onQueueItemClicked(0);
                     } else if ((nextControllerClicked || hasQueueEnded) && (queue.getQueue().size() == 1)) {
+                        nextControllerClicked = false;
+                        hasQueueEnded = false;
                         PlayerFragment.progressBar.setProgress(0);
                         PlayerFragment.progressBar.setSecondaryProgress(0);
+                        PlayerFragment.mVisualizer.setEnabled(true);
                         PlayerFragment.mVisualizerView.clear();
                         PlayerFragment.mMediaPlayer.seekTo(0);
                         PlayerFragment.mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
@@ -2999,11 +3003,6 @@ public class HomeActivity extends AppCompatActivity
             QueueFragment newFragment = (QueueFragment) fm.findFragmentByTag("queue");
             if (newFragment == null) {
                 newFragment = new QueueFragment();
-            }
-            try {
-                newFragment.scrollToCurrentPosition();
-            } catch (Exception e) {
-
             }
             fm.beginTransaction()
                     .add(R.id.equalizer_queue_frag_container, newFragment, "queue")

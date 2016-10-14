@@ -97,7 +97,6 @@ public class LocalMusicFragment extends Fragment {
                 }
                 if (HomeActivity.queue.getQueue().size() > 0) {
                     Random r = new Random();
-                    HomeActivity.shuffleEnabled = true;
                     int tmp = r.nextInt(HomeActivity.queue.getQueue().size());
                     HomeActivity.queueCurrentIndex = tmp;
                     LocalTrack track = HomeActivity.localTrackList.get(tmp);

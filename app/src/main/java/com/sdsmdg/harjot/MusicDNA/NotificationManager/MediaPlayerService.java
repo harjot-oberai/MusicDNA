@@ -12,6 +12,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaMetadata;
 import android.media.Rating;
 import android.media.session.PlaybackState;
+import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
@@ -37,6 +38,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.sdsmdg.harjot.MusicDNA.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.Interfaces.ServiceCallbacks;
 import com.sdsmdg.harjot.MusicDNA.PlayerFragment;
 import com.sdsmdg.harjot.MusicDNA.R;
 
@@ -51,6 +53,10 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
     private MediaPlayer m_objMediaPlayer;
     private NotificationManager notificationManager;
 
+    private ServiceCallbacks serviceCallbacks;
+
+    Intent startIntent;
+
     PlayerFragment pFragment;
 
     onCallbackListener callback;
@@ -61,14 +67,44 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
         public PlayerFragment getPlayerFragmentFromHome();
     }
 
-    @Override
-    public IBinder onBind(Intent intent) {
-        if (pFragment != null)
-            pFragment.mCallback7 = this;
-        return null;
+    public class LocalBinder extends Binder {
+        public MediaPlayerService getService() {
+            // Return this instance of MyService so clients can call public methods
+            return MediaPlayerService.this;
+        }
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public void setCallbacks(ServiceCallbacks callbacks) {
+        serviceCallbacks = callbacks;
+        pFragment = serviceCallbacks.getPlayerFragment();
+        if (pFragment != null)
+            pFragment.mCallback7 = this;
+        if (m_objMediaSessionManager == null) {
+            initMediaSessions();
+        }
+        handleIntent(startIntent);
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        startIntent = intent;
+        IBinder binder = new LocalBinder();
+        return binder;
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        pFragment = ((HomeActivity) PlayerFragment.ctx).getPlayerFragment();
+        if (pFragment != null)
+            pFragment.mCallback7 = this;
+
+        if (m_objMediaSessionManager == null) {
+            initMediaSessions();
+        }
+        handleIntent(intent);
+        return super.onStartCommand(intent, flags, startId);
+    }
+
     private void handleIntent(Intent intent) {
         if (intent == null || intent.getAction() == null)
             return;
@@ -92,7 +128,6 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void buildNotification(Notification.Action action) {
 
         Notification.MediaStyle style = new Notification.MediaStyle();
@@ -141,7 +176,6 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
 
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT_WATCH)
     private Notification.Action generateAction(int icon, String title, String intentAction) {
         Intent intent = new Intent(getApplicationContext(), MediaPlayerService.class);
         intent.setAction(intentAction);
@@ -190,20 +224,6 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
         return null;
     }
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        pFragment = ((HomeActivity) PlayerFragment.ctx).getPlayerFragment();
-        if (pFragment != null)
-            pFragment.mCallback7 = this;
-
-        if (m_objMediaSessionManager == null) {
-            initMediaSessions();
-        }
-        handleIntent(intent);
-        return super.onStartCommand(intent, flags, startId);
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     void updateMediaSession() {
         m_objMediaSession.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS | MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);
 
@@ -228,7 +248,6 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
         m_objMediaSession.setActive(true);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void initMediaSessions() {
 
         if (pFragment != null) {

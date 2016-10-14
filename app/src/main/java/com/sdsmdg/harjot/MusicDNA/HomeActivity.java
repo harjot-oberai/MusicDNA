@@ -5,10 +5,12 @@ import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -26,6 +28,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.IBinder;
 import android.provider.MediaStore;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
@@ -75,6 +78,7 @@ import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.gson.Gson;
 import com.sdsmdg.harjot.MusicDNA.HeadsetHandler.HeadSetReceiver;
+import com.sdsmdg.harjot.MusicDNA.Interfaces.ServiceCallbacks;
 import com.sdsmdg.harjot.MusicDNA.Interfaces.StreamService;
 import com.sdsmdg.harjot.MusicDNA.LocalMusicFragments.AlbumFragment;
 import com.sdsmdg.harjot.MusicDNA.LocalMusicFragments.ArtistFragment;
@@ -162,7 +166,8 @@ public class HomeActivity extends AppCompatActivity
         SettingsFragment.onColorChangedListener,
         SettingsFragment.onAlbumArtBackgroundToggled,
         AddToPlaylistFragment.newPlaylistListener,
-        HeadSetReceiver.onHeadsetRemovedListener {
+        HeadSetReceiver.onHeadsetRemovedListener,
+        ServiceCallbacks {
 
 
     ScrollView container;
@@ -329,6 +334,10 @@ public class HomeActivity extends AppCompatActivity
     ShowcaseView showCase;
 
     View playerContainer;
+
+    ServiceConnection serviceConnection;
+    private MediaPlayerService myService;
+    private boolean bound = false;
 
     android.support.v4.app.FragmentManager fragMan;
     android.support.v4.app.FragmentManager fragMan2;
@@ -670,6 +679,23 @@ public class HomeActivity extends AppCompatActivity
         hasSoftNavbar = hasNavBar(getResources());
         statusBarHeightinDp = getStatusBarHeight();
         navBarHeightSizeinDp = hasSoftNavbar ? getNavBarHeight() : 0;
+
+        serviceConnection = new ServiceConnection() {
+
+            @Override
+            public void onServiceConnected(ComponentName className, IBinder service) {
+                // cast the IBinder and get MyService instance
+                MediaPlayerService.LocalBinder binder = (MediaPlayerService.LocalBinder) service;
+                myService = binder.getService();
+                bound = true;
+                myService.setCallbacks(HomeActivity.this); // register
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName arg0) {
+                bound = false;
+            }
+        };
 
         lps = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         lps.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
@@ -2703,6 +2729,11 @@ public class HomeActivity extends AppCompatActivity
         if (mgr != null) {
             mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE);
         }
+        if (bound) {
+            myService.setCallbacks(null); // unregister
+            unbindService(serviceConnection);
+            bound = false;
+        }
     }
 
     @Override
@@ -3464,18 +3495,13 @@ public class HomeActivity extends AppCompatActivity
     }
 
     public void showNotification() {
-
-        if (Build.VERSION.SDK_INT >= 21) {
-            if (!isNotificationVisible) {
-                Intent intent = new Intent(this, MediaPlayerService.class);
-                intent.setAction(Constants.ACTION_PLAY);
-                startService(intent);
-                isNotificationVisible = true;
-            }
-        } else {
-            setNotification();
+        if (!isNotificationVisible) {
+            Intent intent = new Intent(this, MediaPlayerService.class);
+            intent.setAction(Constants.ACTION_PLAY);
+//            bindService(intent, serviceConnection, BIND_AUTO_CREATE);
+            startService(intent);
+            isNotificationVisible = true;
         }
-
     }
 
     public void setNotification() {

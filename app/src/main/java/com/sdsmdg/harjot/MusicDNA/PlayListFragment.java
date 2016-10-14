@@ -18,6 +18,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.sdsmdg.harjot.MusicDNA.Models.Playlist;
+import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
 import com.squareup.leakcanary.RefWatcher;
 
 
@@ -139,6 +141,11 @@ public class PlayListFragment extends Fragment {
                             HomeActivity.queueCurrentIndex = 0;
 
                             mCallback2.onPlaylistMenuPLayAll();
+                        } else if (item.getTitle().equals("Add to Queue")) {
+                            Playlist pl = HomeActivity.allPlaylists.getPlaylists().get(position);
+                            for (UnifiedTrack ut : pl.getSongList()) {
+                                HomeActivity.queue.addToQueue(ut);
+                            }
                         } else if (item.getTitle().equals("Delete")) {
                             HomeActivity.allPlaylists.getPlaylists().remove(position);
                             if (vpAdapter != null) {

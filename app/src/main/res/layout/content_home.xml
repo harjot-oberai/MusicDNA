@@ -299,7 +299,7 @@
                         android:layout_height="match_parent"
                         android:alpha="1"
                         android:layout_margin="5dp"
-                        android:background="@drawable/local_card" />
+                        android:background="@drawable/local_card_3" />
 
                     <ImageView
                         android:id="@+id/local_banner_play_all"

@@ -52,7 +52,7 @@ public class ViewSavedDNA extends Fragment {
 
     ShowcaseView showCase;
 
-    boolean addTextToImage = true;
+    boolean addTextToImage = false;
 
     int selectedDNA = 0;
 
@@ -281,7 +281,6 @@ public class ViewSavedDNA extends Fragment {
     }
 
     public void showDialog(int type) {
-        addTextToImage = true;
         if (type == 0) {
             final Dialog dialog = new Dialog(getContext());
             dialog.setContentView(R.layout.save_image_dialog);
@@ -294,6 +293,7 @@ public class ViewSavedDNA extends Fragment {
             btn.setBackgroundColor(HomeActivity.themeColor);
 
             CheckBox cb = (CheckBox) dialog.findViewById(R.id.text_checkbox);
+            cb.setChecked(addTextToImage);
             cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -332,6 +332,7 @@ public class ViewSavedDNA extends Fragment {
             btn.setText("SHARE");
 
             CheckBox cb = (CheckBox) dialog.findViewById(R.id.text_checkbox);
+            cb.setChecked(addTextToImage);
             cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

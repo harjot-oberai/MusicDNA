@@ -4,6 +4,12 @@
         android:id="@+id/play"
         android:icon="@android:drawable/ic_menu_search"
         android:title="Play" />
+
+    <item
+        android:id="@+id/add_playlist_to_queue"
+        android:icon="@android:drawable/ic_menu_search"
+        android:title="Add to Queue" />
+
     <item
         android:id="@+id/play_next"
         android:icon="@android:drawable/ic_menu_add"

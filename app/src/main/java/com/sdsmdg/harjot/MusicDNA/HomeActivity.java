@@ -1867,7 +1867,11 @@ public class HomeActivity extends AppCompatActivity
         mBytes = bytes;
 //        updatePoints();
 //        PlayerFragment.mVisualizerView.updateVisualizer(mBytes);
-        new MyAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        try {
+            new MyAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } catch (Exception e) {
+
+        }
     }
 
     public static void updatePoints3() {
@@ -2156,7 +2160,7 @@ public class HomeActivity extends AppCompatActivity
                     PlayerFragment.isPrepared = true;
                     PlayerFragment.mMediaPlayer.start();
                 } else {
-                    if (nextControllerClicked || hasQueueEnded) {
+                    if ((nextControllerClicked || hasQueueEnded) && (queue.getQueue().size() > 1)) {
                         nextControllerClicked = false;
                         hasQueueEnded = false;
                         queueCurrentIndex = 0;
@@ -2164,6 +2168,16 @@ public class HomeActivity extends AppCompatActivity
                             qFrag.updateQueueAdapter();
                         }
                         onQueueItemClicked(0);
+                    } else if ((nextControllerClicked || hasQueueEnded) && (queue.getQueue().size() == 1)) {
+                        PlayerFragment.progressBar.setProgress(0);
+                        PlayerFragment.progressBar.setSecondaryProgress(0);
+                        PlayerFragment.mVisualizerView.clear();
+                        PlayerFragment.mMediaPlayer.seekTo(0);
+                        PlayerFragment.mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
+                        PlayerFragment.isReplayIconVisible = false;
+                        PlayerFragment.player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
+                        PlayerFragment.isPrepared = true;
+                        PlayerFragment.mMediaPlayer.start();
                     } else {
                         // keep queue at last track
                     }
@@ -3209,6 +3223,7 @@ public class HomeActivity extends AppCompatActivity
         } else if (type.equals("recent") && !isRecentVisible) {
             setTitle("Recently Played");
             setUpFragmentToolbar(themeColor, (String) getTitle());
+            navigationView.setCheckedItem(R.id.nav_recent);
             switchToolbar(toolbar, fragmentToolbar, "left");
             isRecentVisible = true;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
@@ -3404,6 +3419,7 @@ public class HomeActivity extends AppCompatActivity
             isRecentVisible = false;
             switchToolbar(fragmentToolbar, toolbar, "instant");
             setTitle("Music DNA");
+            navigationView.setCheckedItem(R.id.nav_home);
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             android.support.v4.app.Fragment frag = fm.findFragmentByTag("recent");
             if (frag != null) {
@@ -4027,6 +4043,11 @@ public class HomeActivity extends AppCompatActivity
 
                                         queueCurrentIndex = 0;
                                         onPlaylistPLayAll();
+                                    } else if (item.getTitle().equals("Add to Queue")) {
+                                        Playlist pl = allPlaylists.getPlaylists().get(position);
+                                        for (UnifiedTrack ut : pl.getSongList()) {
+                                            queue.addToQueue(ut);
+                                        }
                                     } else if (item.getTitle().equals("Delete")) {
                                         allPlaylists.getPlaylists().remove(position);
                                         PlayListFragment plFrag = (PlayListFragment) fragMan.findFragmentByTag("allPlaylists");

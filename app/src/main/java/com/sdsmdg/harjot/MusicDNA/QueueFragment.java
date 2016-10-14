@@ -35,6 +35,7 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
 
     RecyclerView queueRecycler;
     QueueRecyclerAdapter qAdapter;
+    LinearLayoutManager mLayoutManager2;
 
     ItemTouchHelper mItemTouchHelper;
 
@@ -67,6 +68,7 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
             throw new ClassCastException(context.toString()
                     + " must implement OnHeadlineSelectedListener");
         }
+        qAdapter = new QueueRecyclerAdapter(HomeActivity.queue.getQueue(), getContext(), this);
     }
 
     @Override
@@ -81,8 +83,7 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
         super.onViewCreated(view, savedInstanceState);
         queueRecycler = (RecyclerView) view.findViewById(R.id.queueRecycler);
 
-        qAdapter = new QueueRecyclerAdapter(HomeActivity.queue.getQueue(), getContext(), this);
-        LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         queueRecycler.setLayoutManager(mLayoutManager2);
         queueRecycler.setItemAnimator(new DefaultItemAnimator());
         queueRecycler.setAdapter(qAdapter);
@@ -206,8 +207,8 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
     }
 
     public void scrollToCurrentPosition() {
-        if (queueRecycler != null) {
-            ((LinearLayoutManager) (queueRecycler.getLayoutManager())).scrollToPositionWithOffset(HomeActivity.queueCurrentIndex, 20);
-        }
+//        if (queueRecycler != null) {
+//            ((LinearLayoutManager) (queueRecycler.getLayoutManager())).scrollToPositionWithOffset(HomeActivity.queueCurrentIndex, 20);
+//        }
     }
 }

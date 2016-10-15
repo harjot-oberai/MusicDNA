@@ -30,6 +30,7 @@ public class FavouritesFragment extends Fragment implements
 
     RecyclerView favouriteRecycler;
     FavouriteTrackAdapter fAdapter;
+    LinearLayoutManager mLayoutManager2;
 
     ItemTouchHelper mItemTouchHelper;
 
@@ -90,7 +91,7 @@ public class FavouritesFragment extends Fragment implements
         }
 
         fAdapter = new FavouriteTrackAdapter(HomeActivity.favouriteTracks.getFavourite(), this, this, getContext());
-        LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         favouriteRecycler.setLayoutManager(mLayoutManager2);
         favouriteRecycler.setItemAnimator(new DefaultItemAnimator());
         favouriteRecycler.setAdapter(fAdapter);
@@ -145,6 +146,12 @@ public class FavouritesFragment extends Fragment implements
         return inflater.inflate(R.layout.fragment_favourites, container, false);
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mLayoutManager2.scrollToPositionWithOffset(0, 0);
+    }
 
     @Override
     public void onDragStarted(RecyclerView.ViewHolder viewHolder) {

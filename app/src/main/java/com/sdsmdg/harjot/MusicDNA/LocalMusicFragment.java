@@ -44,6 +44,7 @@ public class LocalMusicFragment extends Fragment {
     ShowcaseView showCase;
 
     RecyclerView lv;
+    LinearLayoutManager mLayoutManager2;
 
     FloatingActionButton shuffleFab;
 
@@ -111,7 +112,7 @@ public class LocalMusicFragment extends Fragment {
         });
         lv = (RecyclerView) view.findViewById(R.id.localMusicList);
         adapter = new LocalTrackListAdapter(HomeActivity.finalLocalSearchResultList, getContext());
-        LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         lv.setLayoutManager(mLayoutManager2);
         lv.setItemAnimator(new DefaultItemAnimator());
         lv.setAdapter(adapter);
@@ -199,7 +200,7 @@ public class LocalMusicFragment extends Fragment {
                             HomeActivity.addToFavourites(ut);
                         }
                         if (item.getTitle().equals("Share")) {
-                            ((HomeActivity)ctx).shareLocalSong(HomeActivity.finalLocalSearchResultList.get(position).getPath());
+                            ((HomeActivity) ctx).shareLocalSong(HomeActivity.finalLocalSearchResultList.get(position).getPath());
                         }
                         return true;
                     }
@@ -265,6 +266,12 @@ public class LocalMusicFragment extends Fragment {
 
         });
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mLayoutManager2.scrollToPositionWithOffset(0, 0);
     }
 
     public int getPosition(LocalTrack lt) {

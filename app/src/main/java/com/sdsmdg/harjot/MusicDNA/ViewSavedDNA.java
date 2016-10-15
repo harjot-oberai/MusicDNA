@@ -41,6 +41,7 @@ public class ViewSavedDNA extends Fragment {
 
     RecyclerView viewDnaRecycler;
     ViewSavedDnaRecyclerAdapter vdAdapter;
+    LinearLayoutManager mLayoutManager2;
 
     VisualizerView2 mVisualizerView2;
 
@@ -107,7 +108,7 @@ public class ViewSavedDNA extends Fragment {
         }
 
         vdAdapter = new ViewSavedDnaRecyclerAdapter(HomeActivity.savedDNAs.getSavedDNAs(), getContext(), this);
-        LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         viewDnaRecycler.setLayoutManager(mLayoutManager2);
         viewDnaRecycler.setItemAnimator(new DefaultItemAnimator());
         viewDnaRecycler.setAdapter(vdAdapter);
@@ -278,6 +279,12 @@ public class ViewSavedDNA extends Fragment {
 
             });
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mLayoutManager2.scrollToPositionWithOffset(0, 0);
     }
 
     public void showDialog(int type) {

@@ -38,6 +38,8 @@ public class PlayListFragment extends Fragment {
     onPlaylistRenameListener mCallback3;
     newPlaylistListerner mCallback4;
 
+    LinearLayoutManager mLayoutManager2;
+
     FloatingActionButton addPlaylistFAB;
 
     public PlayListFragment() {
@@ -110,7 +112,7 @@ public class PlayListFragment extends Fragment {
             noPlaylistContent.setVisibility(View.INVISIBLE);
         }
         vpAdapter = new ViewAllPlaylistsRecyclerAdapter(HomeActivity.allPlaylists.getPlaylists(), getContext());
-        LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         allPlaylistRecycler.setLayoutManager(mLayoutManager2);
         allPlaylistRecycler.setItemAnimator(new DefaultItemAnimator());
         allPlaylistRecycler.setAdapter(vpAdapter);
@@ -173,6 +175,12 @@ public class PlayListFragment extends Fragment {
             }
         });
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mLayoutManager2.scrollToPositionWithOffset(0, 0);
     }
 
     @Override

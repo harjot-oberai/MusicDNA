@@ -8,7 +8,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -17,14 +16,11 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.Pair;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.sdsmdg.harjot.MusicDNA.Blur.BlurringView;
@@ -32,10 +28,6 @@ import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
 import com.squareup.leakcanary.RefWatcher;
-
-import java.util.List;
-
-import jp.wasabeef.blurry.Blurry;
 
 
 /**
@@ -49,9 +41,6 @@ public class ViewAlbumFragment extends Fragment {
 
     ImageLoader imgLoader = new ImageLoader(getContext());
     ImageView backCover, mainCover;
-    View blurredView;
-    BlurringView blurringView;
-    ViewGroup root;
     FloatingActionButton fab;
     Context ctx;
 
@@ -120,8 +109,8 @@ public class ViewAlbumFragment extends Fragment {
 
         fab = (FloatingActionButton) view.findViewById(R.id.play_all_from_album);
         fab.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));
-        backCover = (ImageView) view.findViewById(R.id.backAlbumCover);
-        mainCover = (ImageView) view.findViewById(R.id.mainAlbumCover);
+        backCover = (ImageView) view.findViewById(R.id.back_album_cover);
+        mainCover = (ImageView) view.findViewById(R.id.main_album_cover);
         rv = (RecyclerView) view.findViewById(R.id.album_songs_recycler);
         aslAdapter = new LocalTrackListAdapter(HomeActivity.tempAlbum.getAlbumSongs(), getContext());
         LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -236,7 +225,7 @@ public class ViewAlbumFragment extends Fragment {
                             HomeActivity.addToFavourites(ut);
                         }
                         if (item.getTitle().equals("Share")) {
-                            ((HomeActivity)ctx).shareLocalSong(HomeActivity.tempAlbum.getAlbumSongs().get(position).getPath());
+                            ((HomeActivity) ctx).shareLocalSong(HomeActivity.tempAlbum.getAlbumSongs().get(position).getPath());
                         }
                         return true;
                     }
@@ -252,34 +241,18 @@ public class ViewAlbumFragment extends Fragment {
             }
         });
 
-        imgLoader.DisplayImage(HomeActivity.tempAlbum.getAlbumSongs().get(0).getPath(), backCover);
-//        imgLoader.DisplayImage(HomeActivity.tempAlbum.getAlbumSongs().get(0).getPath(), mainCover);
         Bitmap bmp = null;
         try {
             bmp = getBitmap(HomeActivity.tempAlbum.getAlbumSongs().get(0).getPath());
         } catch (Exception e) {
         }
-        if (bmp != null)
+        if (bmp != null) {
             mainCover.setImageBitmap(bmp);
-        else
+            backCover.setImageBitmap(bmp);
+        } else {
             mainCover.setImageResource(R.drawable.ic_default);
-
-        root = (ViewGroup) view.findViewById(R.id.root);
-        blurredView = view.findViewById(R.id.blurredView);
-        blurringView = (BlurringView) view.findViewById(R.id.blurringView);
-
-        blurringView.setBlurredView(blurredView);
-        blurringView.setBlurRadius(10);
-        blurringView.setDownsampleFactor(5);
-        blurringView.setOverlayColor(Color.argb(50, 0, 0, 0));
-
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                blurringView.postInvalidate();
-            }
-        }, 100);
+            backCover.setImageResource(R.drawable.ic_default);
+        }
 
     }
 

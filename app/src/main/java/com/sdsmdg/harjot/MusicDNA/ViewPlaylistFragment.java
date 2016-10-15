@@ -29,6 +29,8 @@ public class ViewPlaylistFragment extends Fragment implements PlaylistTrackAdapt
 
     ItemTouchHelper mItemTouchHelper;
 
+    LinearLayoutManager mLayoutManager2;
+
     onPLaylistItemClickedListener mCallback;
     onPlaylistPlayAllListener mCallback2;
 
@@ -74,7 +76,7 @@ public class ViewPlaylistFragment extends Fragment implements PlaylistTrackAdapt
         playlistRecyler = (RecyclerView) view.findViewById(R.id.view_playlist_recycler);
 
         plAdapter = new PlaylistTrackAdapter(HomeActivity.tempPlaylist.getSongList(), this, getContext());
-        LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         playlistRecyler.setLayoutManager(mLayoutManager2);
         playlistRecyler.setItemAnimator(new DefaultItemAnimator());
         playlistRecyler.setAdapter(plAdapter);
@@ -119,6 +121,12 @@ public class ViewPlaylistFragment extends Fragment implements PlaylistTrackAdapt
         mItemTouchHelper = new ItemTouchHelper(callback);
         mItemTouchHelper.attachToRecyclerView(playlistRecyler);
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mLayoutManager2.scrollToPositionWithOffset(0, 0);
     }
 
     @Override

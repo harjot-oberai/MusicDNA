@@ -26,6 +26,7 @@ public class ArtistFragment extends Fragment {
     public RecyclerView rv;
 
     public onArtistClickListener mCallback;
+    LinearLayoutManager llManager;
 
     public ArtistFragment() {
         // Required empty public constructor
@@ -58,7 +59,7 @@ public class ArtistFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         rv = (RecyclerView) view.findViewById(R.id.artists_recycler);
         arAdapter = new ArtistRecyclerAdapter(HomeActivity.finalArtists);
-        LinearLayoutManager llManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        llManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rv.setLayoutManager(llManager);
         rv.setItemAnimator(new DefaultItemAnimator());
         rv.setAdapter(arAdapter);
@@ -82,6 +83,12 @@ public class ArtistFragment extends Fragment {
             }
         });
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        llManager.scrollToPositionWithOffset(0, 0);
     }
 
     @Override

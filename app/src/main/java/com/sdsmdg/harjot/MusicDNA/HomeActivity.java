@@ -3525,6 +3525,7 @@ public class HomeActivity extends AppCompatActivity
         hideFragment("viewArtist");
         hideFragment("recent");
         hideFragment("settings");
+        hideFragment("About");
 
         navigationView.setCheckedItem(R.id.nav_home);
 

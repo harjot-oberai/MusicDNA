@@ -13,33 +13,22 @@
         android:layout_height="270dp"
         android:layout_marginTop="-12dp">
 
-        <RelativeLayout
-            android:id="@+id/root"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <RelativeLayout
-                android:id="@+id/blurredView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:id="@+id/backAlbumCover"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/splash_img_2" />
-            </RelativeLayout>
-
-            <com.sdsmdg.harjot.MusicDNA.Blur.BlurringView
-                android:id="@+id/blurringView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </RelativeLayout>
-
 
         <ImageView
-            android:id="@+id/mainAlbumCover"
+            android:id="@+id/back_album_cover"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
+
+
+        <com.github.mmin18.widget.RealtimeBlurView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:realtimeBlurRadius="10dp"
+            app:realtimeOverlayColor="#4000" />
+
+        <ImageView
+            android:id="@+id/main_album_cover"
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_centerInParent="true"

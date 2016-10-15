@@ -17,7 +17,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.crashlytics.android.Crashlytics;
 
 import io.fabric.sdk.android.Fabric;
@@ -36,11 +39,14 @@ public class SplashActivity extends AppCompatActivity {
     static Typeface tf2;
     static Typeface tf3;
 
+    ImageView img;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("ERROR", this.toString());
         setContentView(R.layout.activity_splash);
+        img = (ImageView) findViewById(R.id.splash_img);
 
         try {
             tf3 = Typeface.createFromAsset(getAssets(), "fonts/Gidole-Regular.ttf");
@@ -52,6 +58,8 @@ public class SplashActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= 23) {
             requestPermissions();
         } else {
+            GlideDrawableImageViewTarget imageViewTarget = new GlideDrawableImageViewTarget(img);
+            Glide.with(this).load(R.raw.splash_gif).into(imageViewTarget);
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
@@ -60,7 +68,7 @@ public class SplashActivity extends AppCompatActivity {
                     startActivity(i);
                     finish();
                 }
-            }, 1000);
+            }, 1700);
         }
     }
 
@@ -194,6 +202,8 @@ public class SplashActivity extends AppCompatActivity {
         }*/
 
         if (perm1 && perm2 && perm3 && perm4 && perm5 && perm6) {
+            GlideDrawableImageViewTarget imageViewTarget = new GlideDrawableImageViewTarget(img);
+            Glide.with(this).load(R.raw.splash_gif).into(imageViewTarget);
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
@@ -202,7 +212,7 @@ public class SplashActivity extends AppCompatActivity {
                     startActivity(i);
                     finish();
                 }
-            }, 1000);
+            }, 1700);
         }
     }
 

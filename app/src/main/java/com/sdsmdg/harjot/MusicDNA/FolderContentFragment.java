@@ -28,6 +28,7 @@ public class FolderContentFragment extends Fragment {
 
     RecyclerView folderContentRecycler;
     LocalTrackListAdapter fContentAdapter;
+    LinearLayoutManager mLayoutManager2;
 
     FloatingActionButton playAllFAB;
 
@@ -77,7 +78,7 @@ public class FolderContentFragment extends Fragment {
 
         folderContentRecycler = (RecyclerView) view.findViewById(R.id.folder_content_recycler);
         fContentAdapter = new LocalTrackListAdapter(HomeActivity.tempFolderContent, getContext());
-        LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         folderContentRecycler.setLayoutManager(mLayoutManager2);
         folderContentRecycler.setItemAnimator(new DefaultItemAnimator());
         folderContentRecycler.setAdapter(fContentAdapter);
@@ -199,6 +200,12 @@ public class FolderContentFragment extends Fragment {
             }
         });
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mLayoutManager2.scrollToPositionWithOffset(0, 0);
     }
 
     @Override

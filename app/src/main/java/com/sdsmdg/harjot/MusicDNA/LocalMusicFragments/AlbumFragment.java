@@ -29,6 +29,7 @@ public class AlbumFragment extends Fragment {
     public RecyclerView rv;
 
     public onAlbumClickListener mCallback;
+    GridLayoutManager glManager;
 
     public AlbumFragment() {
         // Required empty public constructor
@@ -62,7 +63,7 @@ public class AlbumFragment extends Fragment {
 
         rv = (RecyclerView) view.findViewById(R.id.albums_recycler);
         abAdapter = new AlbumRecyclerAdapter(HomeActivity.finalAlbums, getContext());
-        GridLayoutManager glManager = new GridLayoutManager(getContext(), 2);
+        glManager = new GridLayoutManager(getContext(), 2);
         rv.setLayoutManager(glManager);
         rv.setItemAnimator(new DefaultItemAnimator());
         rv.setAdapter(abAdapter);
@@ -86,6 +87,12 @@ public class AlbumFragment extends Fragment {
             }
         });
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        glManager.scrollToPositionWithOffset(0, 0);
     }
 
     @Override

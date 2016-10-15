@@ -22,6 +22,7 @@ public class FolderFragment extends Fragment {
 
     RecyclerView allFoldersRecycler;
     FolderRecyclerAdapter mfAdapter;
+    LinearLayoutManager mLayoutManager2;
 
     onFolderClickedListener mCallback;
 
@@ -56,8 +57,8 @@ public class FolderFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         allFoldersRecycler = (RecyclerView) view.findViewById(R.id.all_folders_recycler);
-        mfAdapter = new FolderRecyclerAdapter(HomeActivity.allMusicFolders.getMusicFolders() , getContext());
-        LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        mfAdapter = new FolderRecyclerAdapter(HomeActivity.allMusicFolders.getMusicFolders(), getContext());
+        mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         allFoldersRecycler.setLayoutManager(mLayoutManager2);
         allFoldersRecycler.setItemAnimator(new DefaultItemAnimator());
         allFoldersRecycler.setAdapter(mfAdapter);
@@ -80,6 +81,12 @@ public class FolderFragment extends Fragment {
             }
         });
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mLayoutManager2.scrollToPositionWithOffset(0, 0);
     }
 
     @Override

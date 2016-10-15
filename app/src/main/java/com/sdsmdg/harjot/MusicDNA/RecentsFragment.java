@@ -33,6 +33,7 @@ public class RecentsFragment extends Fragment implements RecentsTrackAdapter.OnD
 
     RecyclerView recentRecycler;
     RecentsTrackAdapter rtAdpater;
+    LinearLayoutManager mLayoutManager2;
 
     ItemTouchHelper mItemTouchHelper;
 
@@ -80,7 +81,7 @@ public class RecentsFragment extends Fragment implements RecentsTrackAdapter.OnD
 
         recentRecycler = (RecyclerView) view.findViewById(R.id.view_recent_recycler);
         rtAdpater = new RecentsTrackAdapter(HomeActivity.recentlyPlayed.getRecentlyPlayed(), this, getContext());
-        LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recentRecycler.setLayoutManager(mLayoutManager2);
         recentRecycler.setItemAnimator(new DefaultItemAnimator());
         recentRecycler.setAdapter(rtAdpater);
@@ -337,6 +338,12 @@ public class RecentsFragment extends Fragment implements RecentsTrackAdapter.OnD
     @Override
     public void onDragStarted(RecyclerView.ViewHolder viewHolder) {
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mLayoutManager2.scrollToPositionWithOffset(0, 0);
     }
 
     @Override

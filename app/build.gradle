@@ -13,6 +13,7 @@ apply plugin: 'io.fabric'
 repositories {
     maven { url 'https://maven.fabric.io/public' }
     maven { url "https://jitpack.io" }
+    mavenCentral()
 }
 
 
@@ -26,7 +27,7 @@ android {
         targetSdkVersion 23
         versionCode 26
         versionName "0.9.98"
-        renderscriptTargetApi 19
+        renderscriptTargetApi 23
         renderscriptSupportModeEnabled true
     }
     buildTypes {
@@ -49,7 +50,9 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.6.2@aar') {
         transitive = true;
     }
+    compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.github.mmin18:realtimeblurview:1.0.4'
     compile 'jp.wasabeef:recyclerview-animators:2.2.3'
     compile 'com.squareup.retrofit:converter-gson:2.0.0-beta1'
     compile 'com.squareup.retrofit:retrofit:2.0.0-beta1'
@@ -68,7 +71,6 @@ dependencies {
     compile 'tyrantgit:explosionfield:1.0.1'
     compile 'com.google.code.gson:gson:2.5'
     compile 'com.h6ah4i.android.widget.verticalseekbar:verticalseekbar:0.7.0'
-    compile 'jp.wasabeef:blurry:2.0.2'
     compile 'me.priyesh:chroma:1.0.2'
     compile 'com.github.QuadFlask:colorpicker:0.0.12'
     compile 'com.github.amlcurran.showcaseview:library:5.4.3'

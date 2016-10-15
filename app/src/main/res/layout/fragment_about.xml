@@ -1,0 +1,26 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorDark"
+    tools:context="com.sdsmdg.harjot.MusicDNA.AboutFragment">
+
+    <ImageView
+        android:id="@+id/mdg_logo"
+        android:layout_width="140dp"
+        android:layout_height="70dp"
+        android:src="@drawable/logo"
+        android:layout_centerInParent="true"/>
+    <Button
+        android:id="@+id/link_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/mdg_logo"
+        android:layout_centerHorizontal="true"
+        android:textColor="#FFF"
+        android:padding="10dp"
+        android:textSize="15dp"
+        android:text="LICENCES" />
+
+</RelativeLayout>

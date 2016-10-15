@@ -4,6 +4,7 @@ package com.sdsmdg.harjot.MusicDNA;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -44,6 +45,7 @@ public class SettingsFragment extends Fragment {
 
     onAlbumArtBackgroundToggled mCallback;
     onColorChangedListener mCallback2;
+    onAboutClickedListener mCallback3;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -57,6 +59,22 @@ public class SettingsFragment extends Fragment {
         public void onAlbumArtBackgroundChangedVisibility(int visibility);
     }
 
+    public interface onAboutClickedListener {
+        public void onAboutClicked();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mCallback = (onAlbumArtBackgroundToggled) getContext();
+            mCallback2 = (onColorChangedListener) getContext();
+            mCallback3 = (onAboutClickedListener) getContext();
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnHeadlineSelectedListener");
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,8 +87,6 @@ public class SettingsFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mCallback = (onAlbumArtBackgroundToggled) getContext();
-        mCallback2 = (onColorChangedListener) getContext();
 
         densitycard = (RelativeLayout) view.findViewById(R.id.density_card);
         densityText = (TextView) view.findViewById(R.id.density_value);
@@ -183,15 +199,7 @@ public class SettingsFragment extends Fragment {
         aboutCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
-                alertDialogBuilder.setTitle("About");
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.setMessage("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
-                        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
-                        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
-                        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
-                        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-                alertDialog.show();
+                mCallback3.onAboutClicked();
             }
         });
 
@@ -214,9 +222,9 @@ public class SettingsFragment extends Fragment {
     public int getDarkColor(int color) {
         int darkColor = 0;
 
-        int r = Math.max(Color.red(color) - 25 , 0);
-        int g = Math.max(Color.green(color) - 25 , 0);
-        int b = Math.max(Color.blue(color) - 25 , 0);
+        int r = Math.max(Color.red(color) - 25, 0);
+        int g = Math.max(Color.green(color) - 25, 0);
+        int b = Math.max(Color.blue(color) - 25, 0);
 
         darkColor = Color.rgb(r, g, b);
 

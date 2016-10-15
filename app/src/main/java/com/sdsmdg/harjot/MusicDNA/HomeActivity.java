@@ -165,6 +165,7 @@ public class HomeActivity extends AppCompatActivity
         MediaPlayerService.onCallbackListener,
         SettingsFragment.onColorChangedListener,
         SettingsFragment.onAlbumArtBackgroundToggled,
+        SettingsFragment.onAboutClickedListener,
         AddToPlaylistFragment.newPlaylistListener,
         HeadSetReceiver.onHeadsetRemovedListener,
         ServiceCallbacks {
@@ -360,6 +361,7 @@ public class HomeActivity extends AppCompatActivity
     public static boolean isFullScreenEnabled = false;
     public static boolean isSettingsVisible = false;
     public static boolean isNewPlaylistVisible = false;
+    public static boolean isAboutVisible = false;
 
     boolean isPlayerTransitioning = false;
 
@@ -1323,6 +1325,9 @@ public class HomeActivity extends AppCompatActivity
                 } else if (isRecentVisible) {
                     hideFragment("recent");
                     setTitle("Music DNA");
+                } else if (isAboutVisible) {
+                    hideFragment("About");
+                    setTitle("Settings");
                 } else if (isSettingsVisible) {
                     hideFragment("settings");
                     new SaveSettings().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -2681,6 +2686,11 @@ public class HomeActivity extends AppCompatActivity
         new SaveQueue().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
+    @Override
+    public void onAboutClicked() {
+        showFragment("About");
+    }
+
     public class MyAsyncTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -2999,7 +3009,7 @@ public class HomeActivity extends AppCompatActivity
 
     public void showFragment(String type) {
 
-        if (!type.equals("viewAlbum") && !type.equals("folderContent") && !type.equals("viewArtist") && !type.equals("playlist") && !type.equals("newPlaylist"))
+        if (!type.equals("viewAlbum") && !type.equals("folderContent") && !type.equals("viewArtist") && !type.equals("playlist") && !type.equals("newPlaylist") && !type.equals("About"))
             hideAllFrags();
 
         if (!searchView.isIconified()) {
@@ -3289,6 +3299,24 @@ public class HomeActivity extends AppCompatActivity
                     .show(newFragment)
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
+        } else if (type.equals("About") && !isAboutVisible) {
+            setTitle("About");
+            setUpFragmentToolbar(themeColor, (String) getTitle());
+            isAboutVisible = true;
+            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+            AboutFragment newFragment = (AboutFragment) fm.findFragmentByTag("About");
+            if (newFragment == null) {
+                newFragment = new AboutFragment();
+            }
+            fm.beginTransaction()
+                    .setCustomAnimations(R.anim.slide_left,
+                            R.anim.slide_right,
+                            R.anim.slide_left,
+                            R.anim.slide_right)
+                    .add(R.id.content_frag, newFragment, "About")
+                    .show(newFragment)
+                    .addToBackStack(null)
+                    .commitAllowingStateLoss();
         }
     }
 
@@ -3464,6 +3492,16 @@ public class HomeActivity extends AppCompatActivity
             navigationView.setCheckedItem(R.id.nav_home);
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             android.support.v4.app.Fragment frag = fm.findFragmentByTag("settings");
+            if (frag != null) {
+                fm.beginTransaction()
+                        .remove(frag)
+                        .commitAllowingStateLoss();
+            }
+        } else if (type.equals("About")) {
+            isAboutVisible = false;
+            setUpFragmentToolbar(themeColor, "Settings");
+            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+            android.support.v4.app.Fragment frag = fm.findFragmentByTag("About");
             if (frag != null) {
                 fm.beginTransaction()
                         .remove(frag)

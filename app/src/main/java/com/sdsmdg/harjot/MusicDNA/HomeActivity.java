@@ -1826,25 +1826,17 @@ public class HomeActivity extends AppCompatActivity
         if (PlayerFragment.mVisualizerView != null)
             PlayerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
 
+        isPlayerTransitioning = true;
+
         playerContainer.animate()
                 .setDuration(300)
-                .translationX(0);
-
-        /*equalizerToolbar.animate()
-                .alpha(0.0f)
-                .translationX(-1 * equalizerToolbar.getWidth())
+                .translationX(0)
                 .withEndAction(new Runnable() {
                     @Override
                     public void run() {
-                        equalizerToolbar.setVisibility(View.GONE);
+                        isPlayerTransitioning = false;
                     }
                 });
-        spToolbar.setVisibility(View.VISIBLE);
-        spToolbar.setX(spToolbar.getWidth());
-        spToolbar.setAlpha(0.0f);
-        spToolbar.animate()
-                .alpha(1.0f)
-                .translationX(0);*/
 
         switchToolbar(equalizerToolbar, spToolbar, "left");
 
@@ -1869,9 +1861,17 @@ public class HomeActivity extends AppCompatActivity
         if (PlayerFragment.mVisualizerView != null)
             PlayerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
 
+        isPlayerTransitioning = true;
+
         playerContainer.animate()
                 .setDuration(300)
-                .translationX(0);
+                .translationX(0)
+                .withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        isPlayerTransitioning = false;
+                    }
+                });
 
         switchToolbar(queueToolbar, spToolbar, "right");
 

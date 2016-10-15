@@ -94,7 +94,10 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        pFragment = ((HomeActivity) PlayerFragment.ctx).getPlayerFragment();
+        try {
+            pFragment = ((HomeActivity) PlayerFragment.ctx).getPlayerFragment();
+        } catch (Exception e) {
+        }
         if (pFragment != null)
             pFragment.mCallback7 = this;
 
@@ -294,11 +297,13 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
                 try {
                     Log.d(Constants.LOG_TAG, "onPlay");
                     PlayerFragment pFrag = pFragment;
-                    if (!pFrag.isStart) {
-                        pFrag.togglePlayPause();
+                    if (pFrag != null) {
+                        if (!pFrag.isStart) {
+                            pFrag.togglePlayPause();
+                        }
+                        pFrag.isStart = false;
+                        buildNotification(generateAction(android.R.drawable.ic_media_pause, "Pause", Constants.ACTION_PAUSE));
                     }
-                    pFrag.isStart = false;
-                    buildNotification(generateAction(android.R.drawable.ic_media_pause, "Pause", Constants.ACTION_PAUSE));
                 } catch (Exception e) {
 
                 }
@@ -309,8 +314,10 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
                 super.onPause();
                 try {
                     PlayerFragment pFrag = pFragment;
-                    pFrag.togglePlayPause();
-                    buildNotification(generateAction(android.R.drawable.ic_media_play, "Play", Constants.ACTION_PLAY));
+                    if (pFrag != null) {
+                        pFrag.togglePlayPause();
+                        buildNotification(generateAction(android.R.drawable.ic_media_play, "Play", Constants.ACTION_PLAY));
+                    }
                 } catch (Exception e) {
 
                 }
@@ -320,15 +327,16 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
             public void onSkipToNext() {
                 super.onSkipToNext();
                 try {
-                    if (pFragment != null)
+                    if (pFragment != null) {
                         pFragment.onCallbackCalled(2);
-                    final Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            buildNotification(generateAction(android.R.drawable.ic_media_pause, "Pause", Constants.ACTION_PAUSE));
-                        }
-                    }, 100);
+                        final Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                buildNotification(generateAction(android.R.drawable.ic_media_pause, "Pause", Constants.ACTION_PAUSE));
+                            }
+                        }, 100);
+                    }
                 } catch (Exception e) {
 
                 }
@@ -339,15 +347,16 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
             public void onSkipToPrevious() {
                 super.onSkipToPrevious();
                 try {
-                    if (pFragment != null)
+                    if (pFragment != null) {
                         pFragment.onCallbackCalled(3);
-                    final Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            buildNotification(generateAction(android.R.drawable.ic_media_pause, "Pause", Constants.ACTION_PAUSE));
-                        }
-                    }, 100);
+                        final Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                buildNotification(generateAction(android.R.drawable.ic_media_pause, "Pause", Constants.ACTION_PAUSE));
+                            }
+                        }, 100);
+                    }
                 } catch (Exception e) {
 
                 }

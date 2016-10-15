@@ -564,15 +564,6 @@ public class PlayerFragment extends Fragment implements
         nextControllerSp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (!homeActivity.repeatEnabled && !homeActivity.repeatOnceEnabled && homeActivity.queueCurrentIndex == homeActivity.queue.getQueue().size() - 1) {
-//                    if(completed){
-//
-//                    }
-//                } else {
-//                    mMediaPlayer.pause();
-//                    homeActivity.nextControllerClicked = true;
-//                    mCallback2.onComplete();
-//                }
                 mMediaPlayer.pause();
                 homeActivity.nextControllerClicked = true;
                 mCallback2.onComplete();
@@ -751,8 +742,11 @@ public class PlayerFragment extends Fragment implements
                 homeActivity.spImgAB.setImageResource(R.drawable.ic_default);
                 currentAlbumArtHolder.setImageResource(R.drawable.ic_default);
             }
-            homeActivity.spTitleAB.setText(track.getTitle());
-            selected_track_title.setText(track.getTitle());
+            try {
+                homeActivity.spTitleAB.setText(track.getTitle());
+                selected_track_title.setText(track.getTitle());
+            } catch (Exception e) {
+            }
         } else {
             try {
                 durationInMilliSec = (int) localTrack.getDuration();
@@ -1144,8 +1138,11 @@ public class PlayerFragment extends Fragment implements
                 homeActivity.spImgAB.setImageResource(R.drawable.ic_default);
                 currentAlbumArtHolder.setImageResource(R.drawable.ic_default);
             }
-            homeActivity.spTitleAB.setText(track.getTitle());
-            selected_track_title.setText(track.getTitle());
+            try {
+                homeActivity.spTitleAB.setText(track.getTitle());
+                selected_track_title.setText(track.getTitle());
+            } catch (Exception e) {
+            }
         } else {
             try {
                 durationInMilliSec = (int) localTrack.getDuration();

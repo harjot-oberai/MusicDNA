@@ -74,12 +74,10 @@ public class VisualizerView2 extends View {
         super.onDraw(canvas);
         int midY = canvas.getHeight() / 2;
         if (bmp != null) {
-            canvas.drawBitmap(bmp, 0, -1 * (canvas.getHeight() / 7), null);
-//            canvas.drawBitmap(bmp, 0, 0, null);
-//            canvas.drawBitmap(bmp, 0, midY - (bmp.getHeight() / 2), null);
+            canvas.drawBitmap(bmp, 0, -1 * (canvas.getHeight() / 13), null);
         }
         if (textEnabled && HomeActivity.tempSavedDNA != null) {
-            canvas.drawText(text, canvas.getWidth() / 2, (canvas.getHeight() * 15) / 16, mTextPaint);
+            canvas.drawText(text, canvas.getWidth() / 2, (canvas.getHeight() * 16) / 17, mTextPaint);
         }
     }
 

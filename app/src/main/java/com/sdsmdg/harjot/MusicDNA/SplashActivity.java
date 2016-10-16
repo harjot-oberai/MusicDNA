@@ -59,7 +59,7 @@ public class SplashActivity extends AppCompatActivity {
             requestPermissions();
         } else {
             GlideDrawableImageViewTarget imageViewTarget = new GlideDrawableImageViewTarget(img);
-            Glide.with(this).load(R.raw.splash_gif).into(imageViewTarget);
+            Glide.with(this).load(R.raw.logo_gif).into(imageViewTarget);
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
@@ -68,7 +68,7 @@ public class SplashActivity extends AppCompatActivity {
                     startActivity(i);
                     finish();
                 }
-            }, 1700);
+            }, 1200);
         }
     }
 
@@ -203,7 +203,7 @@ public class SplashActivity extends AppCompatActivity {
 
         if (perm1 && perm2 && perm3 && perm4 && perm5 && perm6) {
             GlideDrawableImageViewTarget imageViewTarget = new GlideDrawableImageViewTarget(img);
-            Glide.with(this).load(R.raw.splash_gif).into(imageViewTarget);
+            Glide.with(this).load(R.raw.logo_gif).into(imageViewTarget);
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
@@ -212,7 +212,7 @@ public class SplashActivity extends AppCompatActivity {
                     startActivity(i);
                     finish();
                 }
-            }, 1700);
+            }, 1200);
         }
     }
 

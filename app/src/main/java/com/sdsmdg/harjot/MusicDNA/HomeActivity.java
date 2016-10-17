@@ -673,7 +673,7 @@ public class HomeActivity extends AppCompatActivity
 
         copyrightText = (TextView) findViewById(R.id.copyright_text);
         copyrightText.setTypeface(SplashActivity.tf3);
-        copyrightText.setText("\nMusic DNA v" + version + " \n© 2016");
+        copyrightText.setText("\nMusic DNA v" + version);
 
         imgLoader = new ImageLoader(this);
         ctx = this;

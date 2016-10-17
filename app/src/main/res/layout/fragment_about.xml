@@ -9,18 +9,35 @@
         android:id="@+id/mdg_logo"
         android:layout_width="140dp"
         android:layout_height="70dp"
-        android:src="@drawable/logo"
-        android:layout_centerInParent="true"/>
+        android:layout_above="@+id/version_text"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/logo" />
+
     <Button
+        android:layout_marginBottom="10dp"
         android:id="@+id/link_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/mdg_logo"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:paddingBottom="1dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="1dp"
+        android:text="     Source Code     "
         android:textColor="#FFF"
-        android:padding="10dp"
-        android:textSize="15dp"
-        android:text="LICENCES" />
+        android:textSize="16dp" />
+
+    <TextView
+        android:id="@+id/version_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="10dp"
+        android:text="\nMusic DNA © 2016"
+        android:textAlignment="center"
+        android:textColor="#CCC"
+        android:textSize="14dp" />
 
 </RelativeLayout>

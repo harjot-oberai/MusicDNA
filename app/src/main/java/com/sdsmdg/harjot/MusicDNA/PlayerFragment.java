@@ -1298,6 +1298,12 @@ public class PlayerFragment extends Fragment implements
                 if (homeActivity.savedDNAs.getSavedDNAs().size() > 10) {
                     homeActivity.savedDNAs.getSavedDNAs().remove(10);
                 }
+                homeActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(ctx, "DNA Saved!", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
             return null;
         }
@@ -1305,7 +1311,6 @@ public class PlayerFragment extends Fragment implements
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            Toast.makeText(ctx, "DNA Saved!", Toast.LENGTH_SHORT).show();
             completed = false;
             isPrepared = false;
             mMediaPlayer.pause();

@@ -746,28 +746,36 @@ public class HomeActivity extends AppCompatActivity
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 EqualizerFragment eqFrag = (EqualizerFragment) fragMan.findFragmentByTag("equalizer");
                 if (isChecked) {
-                    isEqualizerEnabled = true;
-                    int pos = presetPos;
-                    if (pos != 0) {
-                        PlayerFragment.mEqualizer.usePreset((short) (pos - 1));
-                    } else {
-                        for (short i = 0; i < 5; i++) {
-                            PlayerFragment.mEqualizer.setBandLevel(i, (short) seekbarpos[i]);
+                    try {
+                        isEqualizerEnabled = true;
+                        int pos = presetPos;
+                        if (pos != 0) {
+                            PlayerFragment.mEqualizer.usePreset((short) (pos - 1));
+                        } else {
+                            for (short i = 0; i < 5; i++) {
+                                PlayerFragment.mEqualizer.setBandLevel(i, (short) seekbarpos[i]);
+                            }
                         }
+                        if (bassStrength != -1 && reverbPreset != -1) {
+                            PlayerFragment.bassBoost.setStrength(bassStrength);
+                            PlayerFragment.presetReverb.setPreset(reverbPreset);
+                        }
+                        if (eqFrag != null)
+                            eqFrag.setBlockerVisibility(View.GONE);
+                    } catch (Exception e) {
+
                     }
-                    if (bassStrength != -1 && reverbPreset != -1) {
-                        PlayerFragment.bassBoost.setStrength(bassStrength);
-                        PlayerFragment.presetReverb.setPreset(reverbPreset);
-                    }
-                    if (eqFrag != null)
-                        eqFrag.setBlockerVisibility(View.GONE);
                 } else {
-                    isEqualizerEnabled = false;
-                    PlayerFragment.mEqualizer.usePreset((short) 0);
-                    PlayerFragment.bassBoost.setStrength((short) (((float) 1000 / 19) * (1)));
-                    PlayerFragment.presetReverb.setPreset((short) 0);
-                    if (eqFrag != null)
-                        eqFrag.setBlockerVisibility(View.VISIBLE);
+                    try {
+                        isEqualizerEnabled = false;
+                        PlayerFragment.mEqualizer.usePreset((short) 0);
+                        PlayerFragment.bassBoost.setStrength((short) (((float) 1000 / 19) * (1)));
+                        PlayerFragment.presetReverb.setPreset((short) 0);
+                        if (eqFrag != null)
+                            eqFrag.setBlockerVisibility(View.VISIBLE);
+                    } catch (Exception e) {
+
+                    }
                 }
             }
         });

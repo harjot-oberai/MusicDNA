@@ -430,8 +430,8 @@
 
             <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/selected_track_image_sp_home"
-                android:layout_width="54dp"
-                android:layout_height="54dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/myvisualizerview"
                 android:layout_marginLeft="0dp"

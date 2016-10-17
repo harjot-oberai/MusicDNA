@@ -2159,6 +2159,8 @@ public class HomeActivity extends AppCompatActivity
         } else {
             if (queueCurrentIndex < queue.getQueue().size() - 1) {
                 queueCurrentIndex++;
+                nextControllerClicked = false;
+                hasQueueEnded = false;
                 if (qFrag != null) {
                     qFrag.updateQueueAdapter();
                 }
@@ -2175,12 +2177,16 @@ public class HomeActivity extends AppCompatActivity
                 }
             } else {
                 if ((repeatEnabled || repeatOnceEnabled) && (queue.getQueue().size() > 1)) {
+                    nextControllerClicked = false;
+                    hasQueueEnded = false;
                     queueCurrentIndex = 0;
                     if (qFrag != null) {
                         qFrag.updateQueueAdapter();
                     }
                     onQueueItemClicked(0);
                 } else if ((repeatEnabled || repeatOnceEnabled) && (queue.getQueue().size() == 1)) {
+                    nextControllerClicked = false;
+                    hasQueueEnded = false;
                     PlayerFragment.progressBar.setProgress(0);
                     PlayerFragment.progressBar.setSecondaryProgress(0);
                     PlayerFragment.mVisualizer.setEnabled(true);
@@ -3132,8 +3138,6 @@ public class HomeActivity extends AppCompatActivity
             AddToPlaylistFragment newFragment = (AddToPlaylistFragment) fm.findFragmentByTag("newPlaylist");
             if (newFragment == null) {
                 newFragment = new AddToPlaylistFragment();
-            } else {
-                newFragment.reinit();
             }
             fm.beginTransaction()
                     .setCustomAnimations(R.anim.slide_left,

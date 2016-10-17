@@ -1285,6 +1285,13 @@ public class PlayerFragment extends Fragment implements
                 } else {
                     DNAModel model = new DNAModel(false, null, track, byteArray);
                     SavedDNA sDna = new SavedDNA(track.getTitle(), model);
+                    for (int i = 0; i < homeActivity.savedDNAs.getSavedDNAs().size(); i++) {
+                        DNAModel dModel = homeActivity.savedDNAs.getSavedDNAs().get(i).getModel();
+                        if (model.equals(dModel)) {
+                            homeActivity.savedDNAs.getSavedDNAs().remove(i);
+                            break;
+                        }
+                    }
                     homeActivity.savedDNAs.getSavedDNAs().add(0, sDna);
                 }
                 if (homeActivity.savedDNAs.getSavedDNAs().size() > 10) {

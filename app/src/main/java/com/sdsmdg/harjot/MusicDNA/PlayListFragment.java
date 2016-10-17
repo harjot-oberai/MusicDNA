@@ -207,7 +207,9 @@ public class PlayListFragment extends Fragment {
         if (vpAdapter != null) {
             vpAdapter.notifyDataSetChanged();
             if (HomeActivity.allPlaylists.getPlaylists().size() > 0) {
+                allPlaylistRecycler.setVisibility(View.VISIBLE);
                 noPlaylistContent.setVisibility(View.INVISIBLE);
+
             }
         }
     }

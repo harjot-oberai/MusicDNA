@@ -185,7 +185,7 @@ public class AddToPlaylistFragment extends Fragment {
                 CheckBox cb = (CheckBox) view.findViewById(R.id.is_selected_checkbox);
                 cb.setChecked(!cb.isChecked());
 
-                atpAdapter.notifyDataSetChanged();
+                atpAdapter.notifyItemChanged(position);
                 return false;
             }
 
@@ -202,10 +202,10 @@ public class AddToPlaylistFragment extends Fragment {
 
     }
 
-    public void reinit() {
-        if (rv != null) {
-            ((LinearLayoutManager) rv.getLayoutManager()).scrollToPositionWithOffset(0, 0);
-        }
+    @Override
+    public void onResume() {
+        super.onResume();
+        mLayoutManager2.scrollToPositionWithOffset(0, 0);
     }
 
     public void hideKeyboard() {

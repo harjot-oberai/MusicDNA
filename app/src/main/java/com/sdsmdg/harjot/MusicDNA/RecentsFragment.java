@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.sdsmdg.harjot.MusicDNA.Helpers.SimpleItemTouchHelperCallback;
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
@@ -34,6 +35,8 @@ public class RecentsFragment extends Fragment implements RecentsTrackAdapter.OnD
     RecyclerView recentRecycler;
     RecentsTrackAdapter rtAdpater;
     LinearLayoutManager mLayoutManager2;
+
+    LinearLayout noContent;
 
     ItemTouchHelper mItemTouchHelper;
 
@@ -78,6 +81,8 @@ public class RecentsFragment extends Fragment implements RecentsTrackAdapter.OnD
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        noContent = (LinearLayout) view.findViewById(R.id.no_recents_content);
 
         recentRecycler = (RecyclerView) view.findViewById(R.id.view_recent_recycler);
         rtAdpater = new RecentsTrackAdapter(HomeActivity.recentlyPlayed.getRecentlyPlayed(), this, getContext());
@@ -311,7 +316,11 @@ public class RecentsFragment extends Fragment implements RecentsTrackAdapter.OnD
         shuffleFab = (FloatingActionButton) view.findViewById(R.id.play_all_fab_recent);
 
         if (HomeActivity.recentlyPlayed != null && HomeActivity.recentlyPlayed.getRecentlyPlayed().size() > 0) {
+            noContent.setVisibility(View.INVISIBLE);
             shuffleFab.setVisibility(View.VISIBLE);
+        } else {
+            noContent.setVisibility(View.VISIBLE);
+            shuffleFab.setVisibility(View.INVISIBLE);
         }
 
         shuffleFab.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));

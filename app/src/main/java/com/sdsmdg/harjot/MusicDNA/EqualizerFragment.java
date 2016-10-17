@@ -1,6 +1,7 @@
 package com.sdsmdg.harjot.MusicDNA;
 
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -61,8 +62,16 @@ public class EqualizerFragment extends Fragment {
 
     ShowcaseView showCase;
 
+    Context ctx;
+
     public EqualizerFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        ctx = context;
     }
 
     @Override
@@ -377,24 +386,28 @@ public class EqualizerFragment extends Fragment {
         presetSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position != 0) {
-                    PlayerFragment.mEqualizer.usePreset((short) (position - 1));
-                    HomeActivity.presetPos = position;
-                    short numberOfFreqBands = PlayerFragment.mEqualizer.getNumberOfBands();
+                try {
+                    if (position != 0) {
+                        PlayerFragment.mEqualizer.usePreset((short) (position - 1));
+                        HomeActivity.presetPos = position;
+//                    short numberOfFreqBands = PlayerFragment.mEqualizer.getNumberOfBands();
+                        short numberOfFreqBands = 5;
 
-                    final short lowerEqualizerBandLevel = PlayerFragment.mEqualizer.getBandLevelRange()[0];
+                        final short lowerEqualizerBandLevel = PlayerFragment.mEqualizer.getBandLevelRange()[0];
 
-                    for (short i = 0; i < numberOfFreqBands; i++) {
-                        seekBarFinal[i].setProgress(PlayerFragment.mEqualizer.getBandLevel(i) - lowerEqualizerBandLevel);
-                        points[i] = PlayerFragment.mEqualizer.getBandLevel(i) - lowerEqualizerBandLevel;
-                        HomeActivity.seekbarpos[i] = PlayerFragment.mEqualizer.getBandLevel(i);
+                        for (short i = 0; i < numberOfFreqBands; i++) {
+                            seekBarFinal[i].setProgress(PlayerFragment.mEqualizer.getBandLevel(i) - lowerEqualizerBandLevel);
+                            points[i] = PlayerFragment.mEqualizer.getBandLevel(i) - lowerEqualizerBandLevel;
+                            HomeActivity.seekbarpos[i] = PlayerFragment.mEqualizer.getBandLevel(i);
+                        }
+                        dataset.updateValues(points);
+                        chart.notifyDataUpdate();
+
+                    } else {
 
                     }
-                    dataset.updateValues(points);
-                    chart.notifyDataUpdate();
-
-                } else {
-
+                } catch (Exception e) {
+//                    Toast.makeText(ctx, "Error while updating Equalizer", Toast.LENGTH_SHORT).show();
                 }
 //                correctPosition = true;
 

@@ -14,8 +14,8 @@
         android:id="@+id/img_2"
         android:layout_width="56dp"
         android:layout_height="56dp"
-        android:layout_marginLeft="12dp"
         android:layout_marginBottom="10dp"
+        android:layout_marginLeft="12dp"
         android:layout_marginTop="10dp"
         android:background="#222"
         android:scaleType="centerCrop" />
@@ -24,9 +24,9 @@
         android:id="@+id/row_item_holder_2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="14dp"
         android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
         android:layout_toLeftOf="@+id/is_selected_checkbox"
         android:layout_toRightOf="@+id/img_2"
@@ -56,18 +56,20 @@
 
     <CheckBox
         android:id="@+id/is_selected_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="5dp"
-        android:layout_width="wrap_content"
-        android:clickable="false"
-        android:layout_height="wrap_content" />
+        android:clickable="false" />
 
     <View
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="#333"/>
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:background="#333" />
 
 </RelativeLayout>

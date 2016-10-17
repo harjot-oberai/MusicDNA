@@ -29,6 +29,7 @@ import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
@@ -1304,6 +1305,7 @@ public class PlayerFragment extends Fragment implements
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            Toast.makeText(ctx, "DNA Saved!", Toast.LENGTH_SHORT).show();
             completed = false;
             isPrepared = false;
             mMediaPlayer.pause();

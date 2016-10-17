@@ -2991,6 +2991,7 @@ public class HomeActivity extends AppCompatActivity
                         playlistNothingText.setVisibility(View.INVISIBLE);
                         pAdapter.notifyDataSetChanged();
                         new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                        Toast.makeText(HomeActivity.this, "Queue saved!", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
                     }
                 }

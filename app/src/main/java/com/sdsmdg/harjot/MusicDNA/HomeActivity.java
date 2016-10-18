@@ -203,7 +203,6 @@ public class HomeActivity extends AppCompatActivity
     CircleImageView spImgHome;
     TextView spTitleHome;
 
-    static ImageView playerControllerAB;
     static ImageView overflowMenuAB;
     static CircleImageView spImgAB;
     static TextView spTitleAB;
@@ -710,6 +709,14 @@ public class HomeActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         spToolbar = (Toolbar) findViewById(R.id.smallPlayer_AB);
+        spToolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hidePlayer();
+                showTabs();
+                isPlayerVisible = false;
+            }
+        });
 
         newPlaylistText = (TextView) findViewById(R.id.new_playlist_text);
         newPlaylistText.setOnClickListener(new View.OnClickListener() {
@@ -861,8 +868,6 @@ public class HomeActivity extends AppCompatActivity
         appBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
         main = this;
 
-        playerControllerAB = (ImageView) findViewById(R.id.player_control_sp_AB);
-        playerControllerAB.setImageResource(R.drawable.ic_queue_music_white_48dp);
         overflowMenuAB = (ImageView) findViewById(R.id.menuIcon);
         spImgAB = (CircleImageView) findViewById(R.id.selected_track_image_sp_AB);
         spImgAB.setOnClickListener(new View.OnClickListener() {

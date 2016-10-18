@@ -785,7 +785,7 @@ public class PlayerFragment extends Fragment implements
                 mMediaPlayer.prepareAsync();
             }
             bufferingIndicator.setVisibility(View.VISIBLE);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

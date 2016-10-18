@@ -54,7 +54,7 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
                         android:layout_toEndOf="@+id/selected_track_image_sp_AB"
-                        android:layout_toStartOf="@+id/player_control_sp_AB"
+                        android:layout_toStartOf="@+id/menuIcon"
                         android:ellipsize="marquee"
                         android:fadingEdge="horizontal"
                         android:singleLine="true"
@@ -63,25 +63,14 @@
                         android:textColor="#FFFFFF"
                         android:textSize="17sp" />
 
-                    <ImageView
-                        android:id="@+id/player_control_sp_AB"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_centerVertical="true"
-                        android:layout_marginBottom="3dp"
-                        android:layout_marginRight="12dp"
-                        android:layout_marginTop="2dp"
-                        android:layout_toLeftOf="@+id/menuIcon"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:clickable="true"
-                        android:visibility="gone" />
 
                     <ImageView
                         android:id="@+id/menuIcon"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
+                        android:padding="4dp"
                         android:layout_marginRight="12dp"
                         android:layout_marginTop="2dp"
                         android:background="?attr/selectableItemBackgroundBorderless"

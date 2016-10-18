@@ -988,7 +988,6 @@ public class PlayerFragment extends Fragment implements
                                         showCase.setTarget(new ViewTarget(R.id.toggleContainer, getActivity()));
                                         showCase.setContentTitle("The Controls");
                                         showCase.setContentText("Equalizer \n" +
-                                                "Repeat Controller \n" +
                                                 "Save DNA toggle\n" +
                                                 "Add to Favourites \n" +
                                                 "Queue");

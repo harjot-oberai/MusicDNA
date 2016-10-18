@@ -8,6 +8,7 @@ import android.annotation.TargetApi;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaMetadata;
 import android.media.Rating;
@@ -151,6 +152,17 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
         Intent notificationIntent = new Intent(this, HomeActivity.class);
         PendingIntent pendingNotificationIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 
+        Bitmap bmp = null;
+
+        try {
+            bmp = ((BitmapDrawable) PlayerFragment.selected_track_image.getDrawable()).getBitmap();
+        } catch (Exception e) {
+        }
+
+        if (bmp == null) {
+            bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ic_default);
+        }
+
         Notification notification = new Notification.Builder(this)
                 .setStyle(style)
                 .setSmallIcon(R.drawable.ic_notification)
@@ -161,7 +173,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
                 .addAction(generateAction(android.R.drawable.ic_media_next, "Next", Constants.ACTION_NEXT))
                 .setContentTitle(PlayerFragment.selected_track_title.getText())
                 .setContentText(artist)
-                .setLargeIcon(((BitmapDrawable) PlayerFragment.selected_track_image.getDrawable()).getBitmap())
+                .setLargeIcon(bmp)
                 .build();
 
         notification.contentIntent = pendingNotificationIntent;

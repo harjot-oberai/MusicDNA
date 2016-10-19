@@ -364,6 +364,13 @@ public class HomeActivity extends AppCompatActivity
 
     boolean isPlayerTransitioning = false;
 
+    static boolean isSaveRecentsRunning = false;
+    static boolean isSaveFavouritesRunning = false;
+    static boolean isSaveSettingsRunning = false;
+    static boolean isSaveDNAsRunning = false;
+    static boolean isSaveQueueRunning = false;
+    static boolean isSavePLaylistsRunning = false;
+
     public static boolean hasQueueEnded = false;
 
     static boolean isEqualizerEnabled = false;
@@ -4445,13 +4452,17 @@ public class HomeActivity extends AppCompatActivity
 
         @Override
         protected Void doInBackground(Void... params) {
-            try {
-                String json4 = gson.toJson(recentlyPlayed);
-                prefsEditor.putString("recentlyPlayed", json4);
-            } catch (Exception e) {
 
+            if (!isSaveRecentsRunning) {
+                isSaveRecentsRunning = true;
+                try {
+                    String json4 = gson.toJson(recentlyPlayed);
+                    prefsEditor.putString("recentlyPlayed", json4);
+                } catch (Exception e) {
+
+                }
+                isSaveRecentsRunning = false;
             }
-//            prefsEditor.commit();
             return null;
         }
     }
@@ -4460,13 +4471,16 @@ public class HomeActivity extends AppCompatActivity
 
         @Override
         protected Void doInBackground(Void... params) {
-            try {
-                String json5 = gson.toJson(favouriteTracks);
-                prefsEditor.putString("favouriteTracks", json5);
-            } catch (Exception e) {
+            if (!isSaveFavouritesRunning) {
+                isSaveFavouritesRunning = true;
+                try {
+                    String json5 = gson.toJson(favouriteTracks);
+                    prefsEditor.putString("favouriteTracks", json5);
+                } catch (Exception e) {
 
+                }
+                isSaveFavouritesRunning = false;
             }
-//            prefsEditor.commit();
             return null;
         }
     }
@@ -4475,13 +4489,16 @@ public class HomeActivity extends AppCompatActivity
 
         @Override
         protected Void doInBackground(Void... params) {
-            try {
-                String json8 = gson.toJson(settings);
-                prefsEditor.putString("settings", json8);
-            } catch (Exception e) {
+            if (!isSaveSettingsRunning) {
+                isSaveSettingsRunning = true;
+                try {
+                    String json8 = gson.toJson(settings);
+                    prefsEditor.putString("settings", json8);
+                } catch (Exception e) {
 
+                }
+                isSaveSettingsRunning = false;
             }
-//            prefsEditor.commit();
             return null;
         }
     }
@@ -4490,13 +4507,16 @@ public class HomeActivity extends AppCompatActivity
 
         @Override
         protected Void doInBackground(Void... params) {
-            try {
-                String json = gson.toJson(savedDNAs);
-                prefsEditor.putString("savedDNAs", json);
-            } catch (Exception e) {
+            if (!isSaveDNAsRunning) {
+                isSaveDNAsRunning = true;
+                try {
+                    String json = gson.toJson(savedDNAs);
+                    prefsEditor.putString("savedDNAs", json);
+                } catch (Exception e) {
 
+                }
+                isSaveDNAsRunning = false;
             }
-//            prefsEditor.commit();
             return null;
         }
     }
@@ -4505,15 +4525,18 @@ public class HomeActivity extends AppCompatActivity
 
         @Override
         protected Void doInBackground(Void... params) {
-            try {
-                String json3 = gson.toJson(queue);
-                prefsEditor.putString("queue", json3);
-                String json6 = gson.toJson(queueCurrentIndex);
-                prefsEditor.putString("queueCurrentIndex", json6);
-            } catch (Exception e) {
+            if (!isSaveQueueRunning) {
+                isSaveQueueRunning = true;
+                try {
+                    String json3 = gson.toJson(queue);
+                    prefsEditor.putString("queue", json3);
+                    String json6 = gson.toJson(queueCurrentIndex);
+                    prefsEditor.putString("queueCurrentIndex", json6);
+                } catch (Exception e) {
 
+                }
+                isSaveQueueRunning = false;
             }
-//            prefsEditor.commit();
             return null;
         }
     }
@@ -4522,14 +4545,16 @@ public class HomeActivity extends AppCompatActivity
 
         @Override
         protected Void doInBackground(Void... params) {
+            if (!isSavePLaylistsRunning) {
+                isSavePLaylistsRunning = true;
+                try {
+                    String json2 = gson.toJson(allPlaylists);
+                    prefsEditor.putString("allPlaylists", json2);
+                } catch (Exception e) {
 
-            try {
-                String json2 = gson.toJson(allPlaylists);
-                prefsEditor.putString("allPlaylists", json2);
-            } catch (Exception e) {
-
+                }
+                isSavePLaylistsRunning = false;
             }
-//            prefsEditor.commit();
             return null;
         }
     }

@@ -40,12 +40,9 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
 
 //    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4'
-    debugCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4'
+
 
     compile('com.crashlytics.sdk.android:crashlytics:2.6.2@aar') {
         transitive = true;
@@ -74,4 +71,8 @@ dependencies {
     compile 'me.priyesh:chroma:1.0.2'
     compile 'com.github.QuadFlask:colorpicker:0.0.12'
     compile 'com.github.amlcurran.showcaseview:library:5.4.3'
+    testCompile 'junit:junit:4.12'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4'
 }

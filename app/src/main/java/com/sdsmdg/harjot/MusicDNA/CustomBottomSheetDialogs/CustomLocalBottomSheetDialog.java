@@ -22,7 +22,7 @@ import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
 
 public class CustomLocalBottomSheetDialog extends BottomSheetDialogFragment implements View.OnClickListener {
 
-    TextView playText, playNextText, addToQueueText, addToPlaylistText, addToFavouriteText, shareText;
+    TextView playText, playNextText, addToQueueText, addToPlaylistText, addToFavouriteText, shareText, editText;
 
     ImageView localSongImage;
     TextView localSongTitle, localSongArtist;
@@ -85,6 +85,8 @@ public class CustomLocalBottomSheetDialog extends BottomSheetDialogFragment impl
         addToFavouriteText.setOnClickListener(this);
         shareText = (TextView) view.findViewById(R.id.local_song_bottom_sheet_share);
         shareText.setOnClickListener(this);
+        editText = (TextView) view.findViewById(R.id.local_song_bottom_sheet_edit);
+        editText.setOnClickListener(this);
 
     }
 
@@ -108,6 +110,9 @@ public class CustomLocalBottomSheetDialog extends BottomSheetDialogFragment impl
                 break;
             case R.id.local_song_bottom_sheet_share:
                 activity.bottomSheetListener(position, "Share", fragment, true);
+                break;
+            case R.id.local_song_bottom_sheet_edit:
+                activity.bottomSheetListener(position, "Edit", fragment, true);
                 break;
         }
         dismiss();

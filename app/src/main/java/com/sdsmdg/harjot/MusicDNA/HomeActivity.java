@@ -171,6 +171,7 @@ public class HomeActivity extends AppCompatActivity
         SettingsFragment.onAboutClickedListener,
         AddToPlaylistFragment.newPlaylistListener,
         HeadSetReceiver.onHeadsetRemovedListener,
+        EditLocalSongFragment.onEditSongSaveListener,
         ServiceCallbacks {
 
 
@@ -365,6 +366,7 @@ public class HomeActivity extends AppCompatActivity
     public static boolean isSettingsVisible = false;
     public static boolean isNewPlaylistVisible = false;
     public static boolean isAboutVisible = false;
+    public static boolean isEditVisible = false;
 
     boolean isPlayerTransitioning = false;
 
@@ -387,6 +389,8 @@ public class HomeActivity extends AppCompatActivity
 
     static LocalTrack localSelectedTrack;
     static Track selectedTrack;
+
+    static LocalTrack editSong;
 
     static boolean localSelected = false;
     static boolean streamSelected = false;
@@ -1306,6 +1310,8 @@ public class HomeActivity extends AppCompatActivity
                 hidePlayer();
                 showTabs();
                 isPlayerVisible = false;
+            } else if (isEditVisible) {
+                hideFragment("Edit");
             } else if (isAlbumVisible) {
                 hideFragment("viewAlbum");
             } else if (isArtistVisible) {
@@ -2723,6 +2729,11 @@ public class HomeActivity extends AppCompatActivity
         showFragment("About");
     }
 
+    @Override
+    public void onEditSongSave() {
+        hideFragment("Edit");
+    }
+
     public class MyAsyncTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -3042,7 +3053,7 @@ public class HomeActivity extends AppCompatActivity
 
     public void showFragment(String type) {
 
-        if (!type.equals("viewAlbum") && !type.equals("folderContent") && !type.equals("viewArtist") && !type.equals("playlist") && !type.equals("newPlaylist") && !type.equals("About"))
+        if (!type.equals("viewAlbum") && !type.equals("folderContent") && !type.equals("viewArtist") && !type.equals("playlist") && !type.equals("newPlaylist") && !type.equals("About") && !type.equals("Edit"))
             hideAllFrags();
 
         if (!searchView.isIconified()) {
@@ -3348,6 +3359,29 @@ public class HomeActivity extends AppCompatActivity
                     .show(newFragment)
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
+        } else if (type.equals("Edit") && !isEditVisible) {
+            setTitle("Edit");
+            if (isAlbumVisible || isArtistVisible) {
+                setUpFragmentToolbar(themeColor, (String) getTitle());
+            } else {
+                setUpFragmentToolbar(themeColor, (String) getTitle());
+                switchToolbar(toolbar, fragmentToolbar, "left");
+            }
+            isEditVisible = true;
+            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+            EditLocalSongFragment newFragment = (EditLocalSongFragment) fm.findFragmentByTag("Edit");
+            if (newFragment == null) {
+                newFragment = new EditLocalSongFragment();
+            }
+            fm.beginTransaction()
+                    .setCustomAnimations(R.anim.slide_left,
+                            R.anim.slide_right,
+                            R.anim.slide_left,
+                            R.anim.slide_right)
+                    .add(R.id.content_frag, newFragment, "Edit")
+                    .show(newFragment)
+                    .addToBackStack(null)
+                    .commitAllowingStateLoss();
         }
     }
 
@@ -3533,6 +3567,26 @@ public class HomeActivity extends AppCompatActivity
             setUpFragmentToolbar(themeColor, "Settings");
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             android.support.v4.app.Fragment frag = fm.findFragmentByTag("About");
+            if (frag != null) {
+                fm.beginTransaction()
+                        .remove(frag)
+                        .commitAllowingStateLoss();
+            }
+        } else if (type.equals("Edit")) {
+            isEditVisible = false;
+            if (isAlbumVisible) {
+                setUpFragmentToolbar(themeColor, tempAlbum.getName());
+            } else if (isArtistVisible) {
+                setUpFragmentToolbar(themeColor, tempArtist.getName());
+            } else if (isLocalVisible) {
+                setTitle("Local");
+                switchToolbar(fragmentToolbar, toolbar, "instant");
+            } else {
+                setTitle("Music DNA");
+                switchToolbar(fragmentToolbar, toolbar, "instant");
+            }
+            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+            android.support.v4.app.Fragment frag = fm.findFragmentByTag("Edit");
             if (frag != null) {
                 fm.beginTransaction()
                         .remove(frag)
@@ -4811,6 +4865,10 @@ public class HomeActivity extends AppCompatActivity
         }
         if (action.equals("Share")) {
             shareLocalSong(ut.getLocalTrack().getPath());
+        }
+        if (action.equals("Edit")) {
+            editSong = ut.getLocalTrack();
+            showFragment("Edit");
         }
     }
 

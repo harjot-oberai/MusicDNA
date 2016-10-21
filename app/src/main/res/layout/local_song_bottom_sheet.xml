@@ -116,4 +116,17 @@
         android:text="Share"
         android:textSize="17sp" />
 
+    <TextView
+        android:id="@+id/local_song_bottom_sheet_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/local_song_bottom_sheet_share"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:text="Edit"
+        android:textSize="17sp" />
+
 </RelativeLayout>

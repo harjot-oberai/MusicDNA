@@ -206,6 +206,7 @@ public class HomeActivity extends AppCompatActivity
     static ImageView overflowMenuAB;
     static CircleImageView spImgAB;
     static TextView spTitleAB;
+    static TextView spArtistAB;
 
     static SwitchCompat equalizerSwitch;
 
@@ -887,6 +888,8 @@ public class HomeActivity extends AppCompatActivity
         });
         spTitleAB = (TextView) findViewById(R.id.selected_track_title_sp_AB);
         spTitleAB.setSelected(true);
+
+        spArtistAB = (TextView) findViewById(R.id.selected_track_artist_sp_AB);
 
         localBanner = (RelativeLayout) findViewById(R.id.localBanner);
         favBanner = (ImageView) findViewById(R.id.favBanner);

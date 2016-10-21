@@ -99,6 +99,7 @@ public class PlayerFragment extends Fragment implements
 
     public static ImageView selected_track_image;
     public static TextView selected_track_title;
+    public static TextView selected_track_artist;
     public static ImageView player_controller;
 
     static RelativeLayout smallPlayer;
@@ -556,6 +557,7 @@ public class PlayerFragment extends Fragment implements
 
         selected_track_image = (ImageView) view.findViewById(R.id.selected_track_image_sp);
         selected_track_title = (TextView) view.findViewById(R.id.selected_track_title_sp);
+        selected_track_artist = (TextView) view.findViewById(R.id.selected_track_artist_sp);
         player_controller = (ImageView) view.findViewById(R.id.player_control_sp);
 
         smallPlayer = (RelativeLayout) view.findViewById(R.id.smallPlayer);
@@ -746,8 +748,11 @@ public class PlayerFragment extends Fragment implements
             try {
                 homeActivity.spTitleAB.setText(track.getTitle());
                 selected_track_title.setText(track.getTitle());
+                selected_track_artist.setText("");
+                homeActivity.spArtistAB.setText("");
             } catch (Exception e) {
             }
+
         } else {
             try {
                 durationInMilliSec = (int) localTrack.getDuration();
@@ -764,9 +769,12 @@ public class PlayerFragment extends Fragment implements
             try {
                 homeActivity.spTitleAB.setText(localTrack.getTitle());
                 selected_track_title.setText(localTrack.getTitle());
+                selected_track_artist.setText(localTrack.getArtist());
+                homeActivity.spArtistAB.setText(localTrack.getArtist());
             } catch (Exception e) {
 
             }
+
         }
 
         temp = getTime(durationInMilliSec);
@@ -1141,6 +1149,8 @@ public class PlayerFragment extends Fragment implements
             try {
                 homeActivity.spTitleAB.setText(track.getTitle());
                 selected_track_title.setText(track.getTitle());
+                selected_track_artist.setText("");
+                homeActivity.spArtistAB.setText("");
             } catch (Exception e) {
             }
         } else {
@@ -1159,6 +1169,8 @@ public class PlayerFragment extends Fragment implements
             try {
                 homeActivity.spTitleAB.setText(localTrack.getTitle());
                 selected_track_title.setText(localTrack.getTitle());
+                selected_track_artist.setText(localTrack.getArtist());
+                homeActivity.spArtistAB.setText(localTrack.getArtist());
             } catch (Exception e) {
 
             }

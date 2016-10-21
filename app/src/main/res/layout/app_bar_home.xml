@@ -50,31 +50,45 @@
                         android:id="@+id/selected_track_title_sp_AB"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
+                        android:layout_marginTop="8dp"
                         android:layout_toEndOf="@+id/selected_track_image_sp_AB"
                         android:layout_toStartOf="@+id/menuIcon"
                         android:ellipsize="marquee"
                         android:fadingEdge="horizontal"
-                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:paddingLeft="5dp"
                         android:text="Title"
-                        android:textAlignment="center"
                         android:textColor="#FFFFFF"
                         android:textSize="17sp" />
+
+                    <TextView
+                        android:id="@+id/selected_track_artist_sp_AB"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/selected_track_title_sp_AB"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_toEndOf="@+id/selected_track_image_sp_AB"
+                        android:layout_toStartOf="@+id/menuIcon"
+                        android:maxLines="1"
+                        android:paddingLeft="5dp"
+                        android:text="Unknown"
+                        android:textColor="#CCCCCC"
+                        android:textSize="13sp" />
 
 
                     <ImageView
                         android:id="@+id/menuIcon"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:padding="4dp"
                         android:layout_marginRight="12dp"
-                        android:layout_marginTop="2dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:clickable="true"
+                        android:padding="8dp"
                         android:src="@drawable/menu_overflow" />
                 </RelativeLayout>
 
@@ -110,7 +124,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="10dp"
-                        app:theme="@style/CustomSwitch"/>
+                        app:theme="@style/CustomSwitch" />
                 </RelativeLayout>
             </android.support.v7.widget.Toolbar>
 
@@ -129,11 +143,11 @@
                         android:id="@+id/queue_toolbar_back_button_img"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:layout_marginLeft="-11dp"
-                        android:padding="12dp"
                         android:layout_centerVertical="true"
+                        android:layout_marginLeft="-11dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:clickable="true"
+                        android:padding="12dp"
                         android:src="@drawable/back2" />
 
 
@@ -147,20 +161,20 @@
                         android:layout_toRightOf="@+id/queue_toolbar_back_button_img"
                         android:ellipsize="end"
                         android:singleLine="true"
-                        android:text="Queue"/>
+                        android:text="Queue" />
 
                     <TextView
                         android:id="@+id/clear_queue_txt"
-                        android:layout_centerVertical="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:padding="10dp"
-                        android:textSize="17dp"
-                        android:textColor="#FFFFFF"
-                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:layout_centerVertical="true"
                         android:layout_marginRight="10dp"
-                        android:text="CLEAR"/>
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:padding="10dp"
+                        android:text="CLEAR"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17dp" />
 
                 </RelativeLayout>
             </android.support.v7.widget.Toolbar>
@@ -180,11 +194,11 @@
                         android:id="@+id/fragment_toolbar_back_button_img"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:layout_marginLeft="-11dp"
-                        android:padding="12dp"
                         android:layout_centerVertical="true"
+                        android:layout_marginLeft="-11dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:clickable="true"
+                        android:padding="12dp"
                         android:src="@drawable/back2" />
 
 
@@ -199,7 +213,9 @@
                         android:ellipsize="end"
                         android:singleLine="true" />
                 </RelativeLayout>
+
             </android.support.v7.widget.Toolbar>
+
         </FrameLayout>
 
     </android.support.design.widget.AppBarLayout>

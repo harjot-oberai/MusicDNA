@@ -283,6 +283,89 @@ public class PlayerFragment extends Fragment implements
             throw new ClassCastException(context.toString()
                     + " must implement OnHeadlineSelectedListener");
         }
+
+        mMediaPlayer = new MediaPlayer();
+        mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                completed = false;
+                pauseClicked = false;
+                isPrepared = true;
+                mCallback6.onPrepared();
+                if (homeActivity.isPlayerVisible) {
+                    player_controller.setVisibility(View.VISIBLE);
+                    player_controller.setImageResource(R.drawable.ic_queue_music_white_48dp);
+                } else {
+                    player_controller.setVisibility(View.VISIBLE);
+                    player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
+                }
+                togglePlayPause();
+                togglePlayPause();
+                togglePlayPause();
+                bufferingIndicator.setVisibility(View.GONE);
+                equalizerIcon.setVisibility(View.VISIBLE);
+
+                new HomeActivity.SaveQueue().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                new HomeActivity.SaveRecents().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+            }
+        });
+
+        mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                completed = true;
+                if (homeActivity.isPlayerVisible) {
+                    mainTrackController.setImageResource(R.drawable.ic_replay_white_48dp);
+                    player_controller.setImageResource(R.drawable.ic_replay_white_48dp);
+                    isReplayIconVisible = true;
+                } else {
+                    player_controller.setImageResource(R.drawable.ic_replay_white_48dp);
+                    mainTrackController.setImageResource(R.drawable.ic_replay_white_48dp);
+                    isReplayIconVisible = true;
+                }
+                new SaveDNA().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            }
+        });
+
+        mMediaPlayer.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
+            @Override
+            public void onBufferingUpdate(MediaPlayer mp, int percent) {
+                double ratio = percent / 100.0;
+                double bufferingLevel = (int) (mp.getDuration() * ratio);
+                if (progressBar != null) {
+                    progressBar.setSecondaryProgress((int) bufferingLevel);
+                }
+            }
+        });
+
+        mMediaPlayer.setOnErrorListener(
+                new MediaPlayer.OnErrorListener() {
+                    @Override
+                    public boolean onError(MediaPlayer mp, int what, int extra) {
+                        return true;
+                    }
+                }
+        );
+
+        mMediaPlayer.setOnInfoListener(new MediaPlayer.OnInfoListener() {
+            @Override
+            public boolean onInfo(MediaPlayer mp, int what, int extra) {
+                switch (what) {
+                    case MediaPlayer.MEDIA_INFO_BUFFERING_START:
+                        bufferingIndicator.setVisibility(View.VISIBLE);
+                        isPrepared = false;
+                        break;
+                    case MediaPlayer.MEDIA_INFO_BUFFERING_END:
+                        bufferingIndicator.setVisibility(View.GONE);
+                        isPrepared = true;
+                        break;
+                }
+                return true;
+            }
+        });
+
     }
 
     @Override
@@ -636,88 +719,6 @@ public class PlayerFragment extends Fragment implements
         );
 
         cpb = (CustomProgressBar) view.findViewById(R.id.customProgress);
-
-        mMediaPlayer = new MediaPlayer();
-        mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                completed = false;
-                pauseClicked = false;
-                isPrepared = true;
-                mCallback6.onPrepared();
-                if (homeActivity.isPlayerVisible) {
-                    player_controller.setVisibility(View.VISIBLE);
-                    player_controller.setImageResource(R.drawable.ic_queue_music_white_48dp);
-                } else {
-                    player_controller.setVisibility(View.VISIBLE);
-                    player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
-                }
-                togglePlayPause();
-                togglePlayPause();
-                togglePlayPause();
-                bufferingIndicator.setVisibility(View.GONE);
-                equalizerIcon.setVisibility(View.VISIBLE);
-
-                new HomeActivity.SaveQueue().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                new HomeActivity.SaveRecents().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
-            }
-        });
-
-        mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                completed = true;
-                if (homeActivity.isPlayerVisible) {
-                    mainTrackController.setImageResource(R.drawable.ic_replay_white_48dp);
-                    player_controller.setImageResource(R.drawable.ic_replay_white_48dp);
-                    isReplayIconVisible = true;
-                } else {
-                    player_controller.setImageResource(R.drawable.ic_replay_white_48dp);
-                    mainTrackController.setImageResource(R.drawable.ic_replay_white_48dp);
-                    isReplayIconVisible = true;
-                }
-                new SaveDNA().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-            }
-        });
-
-        mMediaPlayer.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
-            @Override
-            public void onBufferingUpdate(MediaPlayer mp, int percent) {
-                double ratio = percent / 100.0;
-                double bufferingLevel = (int) (mp.getDuration() * ratio);
-                if (progressBar != null) {
-                    progressBar.setSecondaryProgress((int) bufferingLevel);
-                }
-            }
-        });
-
-        mMediaPlayer.setOnErrorListener(
-                new MediaPlayer.OnErrorListener() {
-                    @Override
-                    public boolean onError(MediaPlayer mp, int what, int extra) {
-                        return true;
-                    }
-                }
-        );
-
-        mMediaPlayer.setOnInfoListener(new MediaPlayer.OnInfoListener() {
-            @Override
-            public boolean onInfo(MediaPlayer mp, int what, int extra) {
-                switch (what) {
-                    case MediaPlayer.MEDIA_INFO_BUFFERING_START:
-                        bufferingIndicator.setVisibility(View.VISIBLE);
-                        isPrepared = false;
-                        break;
-                    case MediaPlayer.MEDIA_INFO_BUFFERING_END:
-                        bufferingIndicator.setVisibility(View.GONE);
-                        isPrepared = true;
-                        break;
-                }
-                return true;
-            }
-        });
 
         smallPlayer.setOnClickListener(new View.OnClickListener() {
             @Override

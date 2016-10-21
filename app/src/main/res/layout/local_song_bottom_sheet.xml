@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="10dp"
+    android:paddingTop="10dp">
+
+    <ImageView
+        android:id="@+id/local_song_bottom_sheet_image"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="10dp"
+        android:background="#222" />
+
+    <TextView
+        android:id="@+id/local_song_bottom_sheet_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@id/local_song_bottom_sheet_image"
+        android:maxLines="1"
+        android:text="Title"
+        android:textColor="#000"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/local_song_bottom_sheet_artist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/local_song_bottom_sheet_title"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="2dp"
+        android:layout_toRightOf="@id/local_song_bottom_sheet_image"
+        android:text="Artist"
+        android:textColor="#444"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/local_song_bottom_sheet_play"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/local_song_bottom_sheet_image"
+        android:layout_marginTop="5dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:text="Play"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/local_song_bottom_sheet_play_next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/local_song_bottom_sheet_play"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:text="Play Next"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/local_song_bottom_sheet_add_to_queue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/local_song_bottom_sheet_play_next"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:text="Add to Queue"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/local_song_bottom_sheet_add_to_playlist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/local_song_bottom_sheet_add_to_queue"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:text="Add to Playlist"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/local_song_bottom_sheet_add_to_fav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/local_song_bottom_sheet_add_to_playlist"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:text="Add to Favourites"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/local_song_bottom_sheet_share"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/local_song_bottom_sheet_add_to_fav"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:text="Share"
+        android:textSize="17sp" />
+
+</RelativeLayout>

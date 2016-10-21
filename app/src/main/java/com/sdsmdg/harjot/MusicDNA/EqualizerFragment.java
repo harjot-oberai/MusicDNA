@@ -301,6 +301,8 @@ public class EqualizerFragment extends Fragment {
         paint.setStrokeWidth((float) (1.10 * HomeActivity.ratio));
 
         dataset.setColor(HomeActivity.themeColor);
+//        dataset.setGradientFill(new int[]{Color.TRANSPARENT, HomeActivity.themeColor, Color.WHITE, HomeActivity.themeColor, Color.TRANSPARENT}, new float[]{0.0f, 0.1f, 0.5f, 0.9f, 1.0f});
+//        dataset.setShadow(10, 0, 0, HomeActivity.themeColor);
         dataset.setSmooth(true);
         dataset.setThickness(5);
 

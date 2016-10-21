@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.sdsmdg.harjot.MusicDNA.CustomBottomSheetDialogs.CustomGeneralBottomSheetDialog;
 import com.sdsmdg.harjot.MusicDNA.Models.Track;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
 import com.squareup.leakcanary.RefWatcher;
@@ -100,78 +101,83 @@ public class StreamMusicFragment extends Fragment {
 
             @Override
             boolean onLongClick(RecyclerView parent, View view, final int position, long id) {
-                PopupMenu popup = new PopupMenu(getContext(), view);
-                popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
-
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        if (item.getTitle().equals("Add to Playlist")) {
-                            Track track = HomeActivity.streamingTrackList.get(position);
-                            mCallback.addToPlaylist(new UnifiedTrack(false, null, track));
-                            HomeActivity.pAdapter.notifyDataSetChanged();
-                        }
-                        if (item.getTitle().equals("Add to Queue")) {
-                            Track track = HomeActivity.streamingTrackList.get(position);
-                            HomeActivity.queue.getQueue().add(new UnifiedTrack(false, null, track));
-                        }
-                        if (item.getTitle().equals("Play")) {
-                            Track track = HomeActivity.streamingTrackList.get(position);
-                            if (HomeActivity.queue.getQueue().size() == 0) {
-                                HomeActivity.queueCurrentIndex = 0;
-                                HomeActivity.queue.getQueue().add(new UnifiedTrack(false, null, track));
-                            } else if (HomeActivity.queueCurrentIndex == HomeActivity.queue.getQueue().size() - 1) {
-                                HomeActivity.queueCurrentIndex++;
-                                HomeActivity.queue.getQueue().add(new UnifiedTrack(false, null, track));
-                            } else if (HomeActivity.isReloaded) {
-                                HomeActivity.isReloaded = false;
-                                HomeActivity.queueCurrentIndex = HomeActivity.queue.getQueue().size();
-                                HomeActivity.queue.getQueue().add(new UnifiedTrack(false, null, track));
-                            } else {
-                                HomeActivity.queue.getQueue().add(++HomeActivity.queueCurrentIndex, new UnifiedTrack(false, null, track));
-                            }
-                            HomeActivity.selectedTrack = track;
-                            HomeActivity.streamSelected = true;
-                            HomeActivity.localSelected = false;
-                            HomeActivity.queueCall = false;
-                            HomeActivity.isReloaded = false;
-                            mCallback.onTrackSelected(position);
-                        }
-                        if (item.getTitle().equals("Play Next")) {
-                            Track track = HomeActivity.streamingTrackList.get(position);
-                            if (HomeActivity.queue.getQueue().size() == 0) {
-                                HomeActivity.queueCurrentIndex = 0;
-                                HomeActivity.queue.getQueue().add(new UnifiedTrack(false, null, track));
-                                HomeActivity.selectedTrack = track;
-                                HomeActivity.streamSelected = true;
-                                HomeActivity.localSelected = false;
-                                HomeActivity.queueCall = false;
-                                HomeActivity.isReloaded = false;
-                                mCallback.onTrackSelected(position);
-                            } else if (HomeActivity.queueCurrentIndex == HomeActivity.queue.getQueue().size() - 1) {
-                                HomeActivity.queue.getQueue().add(new UnifiedTrack(false, null, track));
-                            } else if (HomeActivity.isReloaded) {
-                                HomeActivity.isReloaded = false;
-                                HomeActivity.queueCurrentIndex = HomeActivity.queue.getQueue().size();
-                                HomeActivity.queue.getQueue().add(new UnifiedTrack(false, null, track));
-                                HomeActivity.selectedTrack = track;
-                                HomeActivity.streamSelected = true;
-                                HomeActivity.localSelected = false;
-                                HomeActivity.queueCall = false;
-                                HomeActivity.isReloaded = false;
-                                mCallback.onTrackSelected(position);
-                            } else {
-                                HomeActivity.queue.getQueue().add(HomeActivity.queueCurrentIndex + 1, new UnifiedTrack(false, null, track));
-                            }
-                        }
-                        if (item.getTitle().equals("Add to Favourites")) {
-                            UnifiedTrack ut = new UnifiedTrack(false, null, HomeActivity.streamingTrackList.get(position));
-                            HomeActivity.addToFavourites(ut);
-                        }
-                        return true;
-                    }
-                });
-
-                popup.show();
+//                PopupMenu popup = new PopupMenu(getContext(), view);
+//                popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
+//
+//                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//                    public boolean onMenuItemClick(MenuItem item) {
+//                        if (item.getTitle().equals("Add to Playlist")) {
+//                            Track track = HomeActivity.streamingTrackList.get(position);
+//                            mCallback.addToPlaylist(new UnifiedTrack(false, null, track));
+//                            HomeActivity.pAdapter.notifyDataSetChanged();
+//                        }
+//                        if (item.getTitle().equals("Add to Queue")) {
+//                            Track track = HomeActivity.streamingTrackList.get(position);
+//                            HomeActivity.queue.getQueue().add(new UnifiedTrack(false, null, track));
+//                        }
+//                        if (item.getTitle().equals("Play")) {
+//                            Track track = HomeActivity.streamingTrackList.get(position);
+//                            if (HomeActivity.queue.getQueue().size() == 0) {
+//                                HomeActivity.queueCurrentIndex = 0;
+//                                HomeActivity.queue.getQueue().add(new UnifiedTrack(false, null, track));
+//                            } else if (HomeActivity.queueCurrentIndex == HomeActivity.queue.getQueue().size() - 1) {
+//                                HomeActivity.queueCurrentIndex++;
+//                                HomeActivity.queue.getQueue().add(new UnifiedTrack(false, null, track));
+//                            } else if (HomeActivity.isReloaded) {
+//                                HomeActivity.isReloaded = false;
+//                                HomeActivity.queueCurrentIndex = HomeActivity.queue.getQueue().size();
+//                                HomeActivity.queue.getQueue().add(new UnifiedTrack(false, null, track));
+//                            } else {
+//                                HomeActivity.queue.getQueue().add(++HomeActivity.queueCurrentIndex, new UnifiedTrack(false, null, track));
+//                            }
+//                            HomeActivity.selectedTrack = track;
+//                            HomeActivity.streamSelected = true;
+//                            HomeActivity.localSelected = false;
+//                            HomeActivity.queueCall = false;
+//                            HomeActivity.isReloaded = false;
+//                            mCallback.onTrackSelected(position);
+//                        }
+//                        if (item.getTitle().equals("Play Next")) {
+//                            Track track = HomeActivity.streamingTrackList.get(position);
+//                            if (HomeActivity.queue.getQueue().size() == 0) {
+//                                HomeActivity.queueCurrentIndex = 0;
+//                                HomeActivity.queue.getQueue().add(new UnifiedTrack(false, null, track));
+//                                HomeActivity.selectedTrack = track;
+//                                HomeActivity.streamSelected = true;
+//                                HomeActivity.localSelected = false;
+//                                HomeActivity.queueCall = false;
+//                                HomeActivity.isReloaded = false;
+//                                mCallback.onTrackSelected(position);
+//                            } else if (HomeActivity.queueCurrentIndex == HomeActivity.queue.getQueue().size() - 1) {
+//                                HomeActivity.queue.getQueue().add(new UnifiedTrack(false, null, track));
+//                            } else if (HomeActivity.isReloaded) {
+//                                HomeActivity.isReloaded = false;
+//                                HomeActivity.queueCurrentIndex = HomeActivity.queue.getQueue().size();
+//                                HomeActivity.queue.getQueue().add(new UnifiedTrack(false, null, track));
+//                                HomeActivity.selectedTrack = track;
+//                                HomeActivity.streamSelected = true;
+//                                HomeActivity.localSelected = false;
+//                                HomeActivity.queueCall = false;
+//                                HomeActivity.isReloaded = false;
+//                                mCallback.onTrackSelected(position);
+//                            } else {
+//                                HomeActivity.queue.getQueue().add(HomeActivity.queueCurrentIndex + 1, new UnifiedTrack(false, null, track));
+//                            }
+//                        }
+//                        if (item.getTitle().equals("Add to Favourites")) {
+//                            UnifiedTrack ut = new UnifiedTrack(false, null, HomeActivity.streamingTrackList.get(position));
+//                            HomeActivity.addToFavourites(ut);
+//                        }
+//                        return true;
+//                    }
+//                });
+//
+//                popup.show();
+                CustomGeneralBottomSheetDialog generalBottomSheetDialog = new CustomGeneralBottomSheetDialog();
+                generalBottomSheetDialog.setPosition(position);
+                generalBottomSheetDialog.setTrack(new UnifiedTrack(false, null, HomeActivity.streamingTrackList.get(position)));
+                generalBottomSheetDialog.setFragment("Stream");
+                generalBottomSheetDialog.show(getActivity().getSupportFragmentManager(), "general_bottom_sheet_dialog");
                 return true;
             }
 

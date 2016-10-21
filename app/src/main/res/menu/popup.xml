@@ -3,23 +3,18 @@
 
     <item
         android:id="@+id/play"
-        android:icon="@android:drawable/ic_menu_search"
         android:title="Play" />
     <item
         android:id="@+id/play_next"
-        android:icon="@android:drawable/ic_menu_add"
         android:title="Play Next" />
     <item
         android:id="@+id/add_to_queue"
-        android:icon="@android:drawable/ic_menu_edit"
         android:title="Add to Queue" />
     <item
         android:id="@+id/add_to_playlist"
-        android:icon="@android:drawable/ic_menu_edit"
         android:title="Add to Playlist" />
     <item
         android:id="@+id/add_to_favourites"
-        android:icon="@android:drawable/ic_menu_edit"
         android:title="Add to Favourites" />
 
 </menu>

@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.sdsmdg.harjot.MusicDNA.CustomBottomSheetDialogs.CustomGeneralBottomSheetDialog;
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
 import com.squareup.leakcanary.RefWatcher;
@@ -111,77 +112,84 @@ public class FolderContentFragment extends Fragment {
 
             @Override
             boolean onLongClick(RecyclerView parent, View view, final int position, long id) {
-                PopupMenu popup = new PopupMenu(getContext(), view);
-                popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
 
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        if (item.getTitle().equals("Add to Playlist")) {
-                            mCallback3.addToPlaylist(new UnifiedTrack(true, HomeActivity.tempMusicFolder.getLocalTracks().get(position), null));
-                            HomeActivity.pAdapter.notifyDataSetChanged();
-                        }
-                        if (item.getTitle().equals("Add to Queue")) {
-                            Log.d("QUEUE", "CALLED");
-                            HomeActivity.queue.getQueue().add(new UnifiedTrack(true, HomeActivity.tempMusicFolder.getLocalTracks().get(position), null));
-                        }
-                        if (item.getTitle().equals("Play")) {
-                            LocalTrack track = HomeActivity.tempMusicFolder.getLocalTracks().get(position);
-                            if (HomeActivity.queue.getQueue().size() == 0) {
-                                HomeActivity.queueCurrentIndex = 0;
-                                HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
-                            } else if (HomeActivity.queueCurrentIndex == HomeActivity.queue.getQueue().size() - 1) {
-                                HomeActivity.queueCurrentIndex++;
-                                HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
-                            } else if (HomeActivity.isReloaded) {
-                                HomeActivity.isReloaded = false;
-                                HomeActivity.queueCurrentIndex = HomeActivity.queue.getQueue().size();
-                                HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
-                            } else {
-                                HomeActivity.queue.getQueue().add(++HomeActivity.queueCurrentIndex, new UnifiedTrack(true, track, null));
-                            }
-                            HomeActivity.localSelectedTrack = track;
-                            HomeActivity.streamSelected = false;
-                            HomeActivity.localSelected = true;
-                            HomeActivity.queueCall = false;
-                            HomeActivity.isReloaded = false;
-                            mCallback2.onFolderContentItemClick(position);
-                        }
-                        if (item.getTitle().equals("Play Next")) {
-                            LocalTrack track = HomeActivity.tempMusicFolder.getLocalTracks().get(position);
-                            if (HomeActivity.queue.getQueue().size() == 0) {
-                                HomeActivity.queueCurrentIndex = 0;
-                                HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
-                                HomeActivity.localSelectedTrack = track;
-                                HomeActivity.streamSelected = false;
-                                HomeActivity.localSelected = true;
-                                HomeActivity.queueCall = false;
-                                HomeActivity.isReloaded = false;
-                                mCallback2.onFolderContentItemClick(position);
-                            } else if (HomeActivity.queueCurrentIndex == HomeActivity.queue.getQueue().size() - 1) {
-                                HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
-                            } else if (HomeActivity.isReloaded) {
-                                HomeActivity.isReloaded = false;
-                                HomeActivity.queueCurrentIndex = HomeActivity.queue.getQueue().size();
-                                HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
-                                HomeActivity.localSelectedTrack = track;
-                                HomeActivity.streamSelected = false;
-                                HomeActivity.localSelected = true;
-                                HomeActivity.queueCall = false;
-                                HomeActivity.isReloaded = false;
-                                mCallback2.onFolderContentItemClick(position);
-                            } else {
-                                HomeActivity.queue.getQueue().add(HomeActivity.queueCurrentIndex + 1, new UnifiedTrack(true, track, null));
-                            }
-                        }
-                        if (item.getTitle().equals("Add to Favourites")) {
-                            UnifiedTrack ut = new UnifiedTrack(true, HomeActivity.tempMusicFolder.getLocalTracks().get(position), null);
-                            HomeActivity.addToFavourites(ut);
-                        }
-                        return true;
-                    }
-                });
-
-                popup.show();
+                UnifiedTrack ut = new UnifiedTrack(true, HomeActivity.tempMusicFolder.getLocalTracks().get(position), null);
+//                PopupMenu popup = new PopupMenu(getContext(), view);
+//                popup.getMenuInflater().inflate(R.menu.popup, popup.getMenu());
+//
+//                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//                    public boolean onMenuItemClick(MenuItem item) {
+//                        if (item.getTitle().equals("Add to Playlist")) {
+//                            mCallback3.addToPlaylist(new UnifiedTrack(true, HomeActivity.tempMusicFolder.getLocalTracks().get(position), null));
+//                            HomeActivity.pAdapter.notifyDataSetChanged();
+//                        }
+//                        if (item.getTitle().equals("Add to Queue")) {
+//                            Log.d("QUEUE", "CALLED");
+//                            HomeActivity.queue.getQueue().add(new UnifiedTrack(true, HomeActivity.tempMusicFolder.getLocalTracks().get(position), null));
+//                        }
+//                        if (item.getTitle().equals("Play")) {
+//                            LocalTrack track = HomeActivity.tempMusicFolder.getLocalTracks().get(position);
+//                            if (HomeActivity.queue.getQueue().size() == 0) {
+//                                HomeActivity.queueCurrentIndex = 0;
+//                                HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
+//                            } else if (HomeActivity.queueCurrentIndex == HomeActivity.queue.getQueue().size() - 1) {
+//                                HomeActivity.queueCurrentIndex++;
+//                                HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
+//                            } else if (HomeActivity.isReloaded) {
+//                                HomeActivity.isReloaded = false;
+//                                HomeActivity.queueCurrentIndex = HomeActivity.queue.getQueue().size();
+//                                HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
+//                            } else {
+//                                HomeActivity.queue.getQueue().add(++HomeActivity.queueCurrentIndex, new UnifiedTrack(true, track, null));
+//                            }
+//                            HomeActivity.localSelectedTrack = track;
+//                            HomeActivity.streamSelected = false;
+//                            HomeActivity.localSelected = true;
+//                            HomeActivity.queueCall = false;
+//                            HomeActivity.isReloaded = false;
+//                            mCallback2.onFolderContentItemClick(position);
+//                        }
+//                        if (item.getTitle().equals("Play Next")) {
+//                            LocalTrack track = HomeActivity.tempMusicFolder.getLocalTracks().get(position);
+//                            if (HomeActivity.queue.getQueue().size() == 0) {
+//                                HomeActivity.queueCurrentIndex = 0;
+//                                HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
+//                                HomeActivity.localSelectedTrack = track;
+//                                HomeActivity.streamSelected = false;
+//                                HomeActivity.localSelected = true;
+//                                HomeActivity.queueCall = false;
+//                                HomeActivity.isReloaded = false;
+//                                mCallback2.onFolderContentItemClick(position);
+//                            } else if (HomeActivity.queueCurrentIndex == HomeActivity.queue.getQueue().size() - 1) {
+//                                HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
+//                            } else if (HomeActivity.isReloaded) {
+//                                HomeActivity.isReloaded = false;
+//                                HomeActivity.queueCurrentIndex = HomeActivity.queue.getQueue().size();
+//                                HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
+//                                HomeActivity.localSelectedTrack = track;
+//                                HomeActivity.streamSelected = false;
+//                                HomeActivity.localSelected = true;
+//                                HomeActivity.queueCall = false;
+//                                HomeActivity.isReloaded = false;
+//                                mCallback2.onFolderContentItemClick(position);
+//                            } else {
+//                                HomeActivity.queue.getQueue().add(HomeActivity.queueCurrentIndex + 1, new UnifiedTrack(true, track, null));
+//                            }
+//                        }
+//                        if (item.getTitle().equals("Add to Favourites")) {
+//                            UnifiedTrack ut = new UnifiedTrack(true, HomeActivity.tempMusicFolder.getLocalTracks().get(position), null);
+//                            HomeActivity.addToFavourites(ut);
+//                        }
+//                        return true;
+//                    }
+//                });
+//
+//                popup.show();
+                CustomGeneralBottomSheetDialog generalBottomSheetDialog = new CustomGeneralBottomSheetDialog();
+                generalBottomSheetDialog.setPosition(position);
+                generalBottomSheetDialog.setTrack(ut);
+                generalBottomSheetDialog.setFragment("Folder");
+                generalBottomSheetDialog.show(getActivity().getSupportFragmentManager(), "general_bottom_sheet_dialog");
                 return true;
             }
 

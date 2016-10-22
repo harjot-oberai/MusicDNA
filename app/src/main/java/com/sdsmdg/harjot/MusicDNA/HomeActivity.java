@@ -2730,8 +2730,33 @@ public class HomeActivity extends AppCompatActivity
     }
 
     @Override
-    public void onEditSongSave() {
+    public void onEditSongSave(boolean wasSaveSuccessful) {
         hideFragment("Edit");
+        if (!wasSaveSuccessful) {
+            return;
+        }
+        if (isAlbumVisible) {
+            ViewAlbumFragment albumFragment = (ViewAlbumFragment) getSupportFragmentManager().findFragmentByTag("viewAlbum");
+            if (albumFragment != null) {
+                albumFragment.updateList();
+            }
+        } else if (isArtistVisible) {
+            ViewArtistFragment artistFragment = (ViewArtistFragment) getSupportFragmentManager().findFragmentByTag("viewArtist");
+            if (artistFragment != null) {
+                artistFragment.updateData();
+            }
+        } else if (isLocalVisible) {
+            FullLocalMusicFragment flmFrag = (FullLocalMusicFragment) fragMan.findFragmentByTag("local");
+            LocalMusicFragment lFrag = null;
+            if (flmFrag != null) {
+                lFrag = (LocalMusicFragment) flmFrag.getFragmentByPosition(0);
+            }
+            if (lFrag != null) {
+                lFrag.updateAdapter();
+            }
+        } else {
+
+        }
     }
 
     public class MyAsyncTask extends AsyncTask<Void, Void, Void> {

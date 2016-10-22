@@ -294,4 +294,10 @@ public class ViewAlbumFragment extends Fragment {
         RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
         refWatcher.watch(this);
     }
+
+    public void updateList() {
+        if (aslAdapter != null) {
+            aslAdapter.notifyDataSetChanged();
+        }
+    }
 }

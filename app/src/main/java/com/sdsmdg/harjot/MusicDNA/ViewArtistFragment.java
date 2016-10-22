@@ -222,6 +222,12 @@ public class ViewArtistFragment extends Fragment {
         });
     }
 
+    public void updateData(){
+        if(lAdapter!=null){
+            lAdapter.notifyDataSetChanged();
+        }
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();

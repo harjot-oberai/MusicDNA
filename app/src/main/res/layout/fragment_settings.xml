@@ -131,10 +131,49 @@
                 android:layout_height="1dp"/>
 
             <RelativeLayout
-                android:id="@+id/about_card"
+                android:id="@+id/wifi_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/album_art_card"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="7dp"
+                    android:padding="5dp"
+                    android:textColor="#FFF"
+                    android:text="Stream over Wifi only"
+                    android:textSize="18dp" />
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/wifi_stream_toggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="1dp"
+                    android:checked="false"
+                    android:clickable="true"
+                    android:theme="@style/CustomSwitch"/>
+
+            </RelativeLayout>
+
+            <View
+                android:background="#232323"
+                android:layout_below="@+id/wifi_card"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+
+            <RelativeLayout
+                android:id="@+id/about_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/wifi_card"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:padding="5dp">

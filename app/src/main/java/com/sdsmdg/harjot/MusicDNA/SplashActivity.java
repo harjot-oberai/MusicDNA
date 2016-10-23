@@ -193,15 +193,15 @@ public class SplashActivity extends AppCompatActivity {
             perm6 = true;
         }
 
-        /*if (ContextCompat.checkSelfPermission(this, Manifest.permission.MEDIA_CONTENT_CONTROL) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED) {
             if (!perm7 && perm6 && perm5 && perm4 && perm3 && perm2 && perm1) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.MEDIA_CONTENT_CONTROL}, 6);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_NETWORK_STATE}, 6);
             }
         } else {
             perm7 = true;
-        }*/
+        }
 
-        if (perm1 && perm2 && perm3 && perm4 && perm5 && perm6) {
+        if (perm1 && perm2 && perm3 && perm4 && perm5 && perm6 && perm7) {
             GlideDrawableImageViewTarget imageViewTarget = new GlideDrawableImageViewTarget(img);
             Glide.with(this).load(R.raw.logo_gif).into(imageViewTarget);
             final Handler handler = new Handler();

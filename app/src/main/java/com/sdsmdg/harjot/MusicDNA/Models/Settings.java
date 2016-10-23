@@ -9,6 +9,7 @@ public class Settings {
     private int themeColor = Color.parseColor("#B24242");
     private float minAudioStrength;
     private boolean albumArtBackgroundEnabled = false;
+    private boolean streamOnlyOnWifiEnabled = false;
 
     public Settings() {
         this.minAudioStrength = 0.40f;
@@ -37,5 +38,13 @@ public class Settings {
 
     public void setAlbumArtBackgroundEnabled(boolean albumArtBackgroundEnabled) {
         this.albumArtBackgroundEnabled = albumArtBackgroundEnabled;
+    }
+
+    public void setStreamOnlyOnWifiEnabled(boolean streamOnlyOnWifiEnabled) {
+        this.streamOnlyOnWifiEnabled = streamOnlyOnWifiEnabled;
+    }
+
+    public boolean isStreamOnlyOnWifiEnabled() {
+        return streamOnlyOnWifiEnabled;
     }
 }

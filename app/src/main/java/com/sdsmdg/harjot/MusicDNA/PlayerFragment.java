@@ -1,6 +1,7 @@
 package com.sdsmdg.harjot.MusicDNA;
 
 
+import android.net.ConnectivityManager;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -781,12 +782,20 @@ public class PlayerFragment extends Fragment implements
         temp = getTime(durationInMilliSec);
         totalTime.setText(temp.first + ":" + temp.second);
 
+        homeActivity.mWifi = homeActivity.connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
         try {
             if (homeActivity.streamSelected) {
-                isPrepared = false;
-                mMediaPlayer.reset();
-                mMediaPlayer.setDataSource(track.getStreamURL() + "?client_id=" + Config.CLIENT_ID);
-                mMediaPlayer.prepareAsync();
+                if ((homeActivity.settings.isStreamOnlyOnWifiEnabled() && homeActivity.mWifi.isConnected()) || !homeActivity.settings.isStreamOnlyOnWifiEnabled()) {
+                    isPrepared = false;
+                    mMediaPlayer.reset();
+                    mMediaPlayer.setDataSource(track.getStreamURL() + "?client_id=" + Config.CLIENT_ID);
+                    mMediaPlayer.prepareAsync();
+                } else {
+                    mMediaPlayer.pause();
+                    homeActivity.nextControllerClicked = true;
+                    mCallback2.onComplete();
+                }
             } else {
                 isPrepared = false;
                 mMediaPlayer.reset();
@@ -1180,14 +1189,22 @@ public class PlayerFragment extends Fragment implements
         temp = getTime(durationInMilliSec);
         totalTime.setText(temp.first + ":" + temp.second);
 
+        homeActivity.mWifi = homeActivity.connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
         try {
             if (homeActivity.streamSelected) {
-                isPrepared = false;
-                mMediaPlayer.reset();
-                progressBar.setProgress(0);
-                progressBar.setSecondaryProgress(0);
-                mMediaPlayer.setDataSource(track.getStreamURL() + "?client_id=" + Config.CLIENT_ID);
-                mMediaPlayer.prepareAsync();
+                if ((homeActivity.settings.isStreamOnlyOnWifiEnabled() && homeActivity.mWifi.isConnected()) || !homeActivity.settings.isStreamOnlyOnWifiEnabled()) {
+                    isPrepared = false;
+                    mMediaPlayer.reset();
+                    progressBar.setProgress(0);
+                    progressBar.setSecondaryProgress(0);
+                    mMediaPlayer.setDataSource(track.getStreamURL() + "?client_id=" + Config.CLIENT_ID);
+                    mMediaPlayer.prepareAsync();
+                } else {
+                    mMediaPlayer.pause();
+                    homeActivity.nextControllerClicked = true;
+                    mCallback2.onComplete();
+                }
             } else {
                 isPrepared = false;
                 mMediaPlayer.reset();

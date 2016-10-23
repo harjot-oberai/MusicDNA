@@ -22,6 +22,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -219,6 +221,9 @@ public class HomeActivity extends AppCompatActivity
     static Gson gson;
 
     ImageLoader imgLoader;
+
+    ConnectivityManager connManager;
+    NetworkInfo mWifi;
 
     public static RecentlyPlayed recentlyPlayed;
     static Favourite favouriteTracks;
@@ -840,6 +845,9 @@ public class HomeActivity extends AppCompatActivity
             }
         });
 
+        connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
         phoneStateListener = new PhoneStateListener() {
             @Override
             public void onCallStateChanged(int state, String incomingNumber) {
@@ -1115,6 +1123,13 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void getLocalSongs() {
+
+        localTrackList.clear();
+        finalLocalSearchResultList.clear();
+        albums.clear();
+        finalAlbums.clear();
+        artists.clear();
+        finalArtists.clear();
 
         ContentResolver musicResolver = this.getContentResolver();
         Uri musicUri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
@@ -1533,70 +1548,75 @@ public class HomeActivity extends AppCompatActivity
 
     private void updateStreamingList(String query) {
 
-        new Thread(new CancelCall()).start();
+        mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        if ((settings.isStreamOnlyOnWifiEnabled() && mWifi.isConnected()) || (!settings.isStreamOnlyOnWifiEnabled())) {
+            new Thread(new CancelCall()).start();
 
-        if (isPlayerVisible) {
-            hidePlayer();
-        }
+            if (isPlayerVisible) {
+                hidePlayer();
+            }
 
         /*Update the Streaming List*/
 
-        if (!query.equals("")) {
+            if (!query.equals("")) {
             /*streamingTrackList.clear();
             if(sAdapter!=null){
                 streamingListView.getAdapter().notifyDataSetChanged();
             }*/
-            streamRecyclerContainer.setVisibility(View.VISIBLE);
-            startLoadingIndicator();
-            Retrofit client = new Retrofit.Builder()
-                    .baseUrl(Config.API_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-            StreamService ss = client.create(StreamService.class);
-            call = ss.getTracks(query, 75);
-            call.enqueue(new Callback<List<Track>>() {
+                streamRecyclerContainer.setVisibility(View.VISIBLE);
+                startLoadingIndicator();
+                Retrofit client = new Retrofit.Builder()
+                        .baseUrl(Config.API_URL)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+                StreamService ss = client.create(StreamService.class);
+                call = ss.getTracks(query, 75);
+                call.enqueue(new Callback<List<Track>>() {
 
-                @Override
-                public void onResponse(Response<List<Track>> response) {
+                    @Override
+                    public void onResponse(Response<List<Track>> response) {
 
-                    if (response.isSuccess()) {
-                        Log.d("RETRO", response.body() + "");
-                        streamingTrackList = response.body();
-                        sAdapter = new StreamTracksHorizontalAdapter(streamingTrackList, ctx);
-                        LinearLayoutManager mLayoutManager = new LinearLayoutManager(ctx, LinearLayoutManager.HORIZONTAL, false);
-                        streamingListView.setLayoutManager(mLayoutManager);
-                        streamingListView.setItemAnimator(new DefaultItemAnimator());
-                        streamingListView.setAdapter(sAdapter);
+                        if (response.isSuccess()) {
+                            Log.d("RETRO", response.body() + "");
+                            streamingTrackList = response.body();
+                            sAdapter = new StreamTracksHorizontalAdapter(streamingTrackList, ctx);
+                            LinearLayoutManager mLayoutManager = new LinearLayoutManager(ctx, LinearLayoutManager.HORIZONTAL, false);
+                            streamingListView.setLayoutManager(mLayoutManager);
+                            streamingListView.setItemAnimator(new DefaultItemAnimator());
+                            streamingListView.setAdapter(sAdapter);
 
-                        if (streamingTrackList.size() == 0) {
-                            streamRecyclerContainer.setVisibility(View.GONE);
+                            if (streamingTrackList.size() == 0) {
+                                streamRecyclerContainer.setVisibility(View.GONE);
+                            } else {
+                                streamRecyclerContainer.setVisibility(View.VISIBLE);
+                            }
+
+                            stopLoadingIndicator();
+                            (streamingListView.getAdapter()).notifyDataSetChanged();
+
+                            StreamMusicFragment sFrag = (StreamMusicFragment) fragMan.findFragmentByTag("stream");
+                            if (sFrag != null) {
+                                sFrag.dataChanged();
+                            }
                         } else {
-                            streamRecyclerContainer.setVisibility(View.VISIBLE);
+                            stopLoadingIndicator();
                         }
-
-                        stopLoadingIndicator();
-                        (streamingListView.getAdapter()).notifyDataSetChanged();
-
-                        StreamMusicFragment sFrag = (StreamMusicFragment) fragMan.findFragmentByTag("stream");
-                        if (sFrag != null) {
-                            sFrag.dataChanged();
-                        }
-                    } else {
-                        stopLoadingIndicator();
                     }
-                }
 
-                @Override
-                public void onFailure(Throwable t) {
-                    Log.d("RETRO", t.getMessage());
-                }
-            });
+                    @Override
+                    public void onFailure(Throwable t) {
+                        Log.d("RETRO", t.getMessage());
+                    }
+                });
 
+            } else {
+                stopLoadingIndicator();
+                streamRecyclerContainer.setVisibility(View.GONE);
+            }
         } else {
             stopLoadingIndicator();
             streamRecyclerContainer.setVisibility(View.GONE);
         }
-
     }
 
     public void hideTabs() {
@@ -2733,29 +2753,57 @@ public class HomeActivity extends AppCompatActivity
     public void onEditSongSave(boolean wasSaveSuccessful) {
         hideFragment("Edit");
         if (!wasSaveSuccessful) {
+            Toast.makeText(this, "Error in saving Data", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (isAlbumVisible) {
-            ViewAlbumFragment albumFragment = (ViewAlbumFragment) getSupportFragmentManager().findFragmentByTag("viewAlbum");
-            if (albumFragment != null) {
-                albumFragment.updateList();
-            }
-        } else if (isArtistVisible) {
-            ViewArtistFragment artistFragment = (ViewArtistFragment) getSupportFragmentManager().findFragmentByTag("viewArtist");
-            if (artistFragment != null) {
-                artistFragment.updateData();
-            }
-        } else if (isLocalVisible) {
-            FullLocalMusicFragment flmFrag = (FullLocalMusicFragment) fragMan.findFragmentByTag("local");
-            LocalMusicFragment lFrag = null;
-            if (flmFrag != null) {
-                lFrag = (LocalMusicFragment) flmFrag.getFragmentByPosition(0);
-            }
-            if (lFrag != null) {
-                lFrag.updateAdapter();
-            }
-        } else {
 
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        Toast.makeText(ctx, editSong.getPath(), Toast.LENGTH_SHORT).show();
+        File f = new File("file://" + editSong.getPath());
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        this.sendBroadcast(mediaScanIntent);
+
+        refreshAlbumAndArtists();
+
+        if (isAlbumVisible) {
+//            ViewAlbumFragment albumFragment = (ViewAlbumFragment) getSupportFragmentManager().findFragmentByTag("viewAlbum");
+//            if (albumFragment != null) {
+//                albumFragment.updateList();
+//            }
+            hideFragment("viewAlbum");
+
+        } else if (isArtistVisible) {
+//            ViewArtistFragment artistFragment = (ViewArtistFragment) getSupportFragmentManager().findFragmentByTag("viewArtist");
+//            if (artistFragment != null) {
+//                artistFragment.updateData();
+//            }
+            hideFragment("viewArtist");
+
+        }
+        FullLocalMusicFragment flmFrag = (FullLocalMusicFragment) fragMan.findFragmentByTag("local");
+        LocalMusicFragment lFrag = null;
+        if (flmFrag != null) {
+            lFrag = (LocalMusicFragment) flmFrag.getFragmentByPosition(0);
+        }
+        if (lFrag != null) {
+            lFrag.updateAdapter();
+        }
+
+        ArtistFragment artFrag = null;
+        if (flmFrag != null) {
+            artFrag = (ArtistFragment) flmFrag.getFragmentByPosition(2);
+        }
+        if (artFrag != null) {
+            artFrag.updateAdapter();
+        }
+
+        AlbumFragment albFrag = null;
+        if (flmFrag != null) {
+            albFrag = (AlbumFragment) flmFrag.getFragmentByPosition(1);
+        }
+        if (albFrag != null) {
+            albFrag.updateAdapter();
         }
     }
 
@@ -3832,11 +3880,12 @@ public class HomeActivity extends AppCompatActivity
 
         @Override
         public int compare(LocalTrack lhs, LocalTrack rhs) {
-            if (lhs.getTitle().toString().charAt(0) < rhs.getTitle().toString().charAt(0)) {
-                return -1;
-            } else {
-                return 1;
-            }
+            return lhs.getTitle().toString().compareTo(rhs.getTitle().toString());
+//            if (lhs.getTitle().toString().charAt(0) < rhs.getTitle().toString().charAt(0)) {
+//                return -1;
+//            } else {
+//                return 1;
+//            }
         }
     }
 
@@ -3844,11 +3893,12 @@ public class HomeActivity extends AppCompatActivity
 
         @Override
         public int compare(Album lhs, Album rhs) {
-            if (lhs.getName().toString().charAt(0) < rhs.getName().toString().charAt(0)) {
-                return -1;
-            } else {
-                return 1;
-            }
+            return lhs.getName().toString().compareTo(rhs.getName().toString());
+//            if (lhs.getName().toString().charAt(0) < rhs.getName().toString().charAt(0)) {
+//                return -1;
+//            } else {
+//                return 1;
+//            }
         }
     }
 
@@ -3856,11 +3906,12 @@ public class HomeActivity extends AppCompatActivity
 
         @Override
         public int compare(Artist lhs, Artist rhs) {
-            if (lhs.getName().toString().charAt(0) < rhs.getName().toString().charAt(0)) {
-                return -1;
-            } else {
-                return 1;
-            }
+            return lhs.getName().toString().compareTo(rhs.getName().toString());
+//            if (lhs.getName().toString().charAt(0) < rhs.getName().toString().charAt(0)) {
+//                return -1;
+//            } else {
+//                return 1;
+//            }
         }
     }
 
@@ -4895,6 +4946,82 @@ public class HomeActivity extends AppCompatActivity
             editSong = ut.getLocalTrack();
             showFragment("Edit");
         }
+    }
+
+    public void refreshAlbumAndArtists() {
+
+        albums.clear();
+        finalAlbums.clear();
+        artists.clear();
+        finalArtists.clear();
+
+        for (int i = 0; i < localTrackList.size(); i++) {
+            LocalTrack lt = localTrackList.get(i);
+
+            String thisAlbum = lt.getAlbum();
+
+            int pos = checkAlbum(thisAlbum);
+
+            if (pos != -1) {
+                albums.get(pos).getAlbumSongs().add(lt);
+            } else {
+                List<LocalTrack> llt = new ArrayList<>();
+                llt.add(lt);
+                Album ab = new Album(thisAlbum, llt);
+                albums.add(ab);
+            }
+
+            if (pos != -1) {
+                finalAlbums.get(pos).getAlbumSongs().add(lt);
+            } else {
+                List<LocalTrack> llt = new ArrayList<>();
+                llt.add(lt);
+                Album ab = new Album(thisAlbum, llt);
+                finalAlbums.add(ab);
+            }
+
+            String thisArtist = lt.getArtist();
+
+            pos = checkArtist(thisArtist);
+
+            if (pos != -1) {
+                artists.get(pos).getArtistSongs().add(lt);
+            } else {
+                List<LocalTrack> llt = new ArrayList<>();
+                llt.add(lt);
+                Artist ab = new Artist(thisArtist, llt);
+                artists.add(ab);
+            }
+
+            if (pos != -1) {
+                finalArtists.get(pos).getArtistSongs().add(lt);
+            } else {
+                List<LocalTrack> llt = new ArrayList<>();
+                llt.add(lt);
+                Artist ab = new Artist(thisArtist, llt);
+                finalArtists.add(ab);
+            }
+
+        }
+
+        System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
+        try {
+            if (localTrackList.size() > 0) {
+                Collections.sort(localTrackList, new localMusicComparator());
+                Collections.sort(finalLocalSearchResultList, new localMusicComparator());
+            }
+            if (albums.size() > 0) {
+                Collections.sort(albums, new albumComparator());
+                Collections.sort(finalAlbums, new albumComparator());
+            }
+            if (artists.size() > 0) {
+                Collections.sort(artists, new artistComparator());
+                Collections.sort(finalArtists, new artistComparator());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
 }

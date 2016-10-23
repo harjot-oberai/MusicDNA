@@ -37,8 +37,9 @@ import com.squareup.leakcanary.RefWatcher;
  */
 public class SettingsFragment extends Fragment {
 
-    RelativeLayout densitycard, themeCard, aboutCard, albumArtCard;
+    RelativeLayout densitycard, themeCard, aboutCard, albumArtCard, wifiCard;
     SwitchCompat albumArtToggle;
+    SwitchCompat wifiToggle;
     ImageView themeColorImg;
     SeekBar densitySeekbar;
     TextView densityTextDialog, densityText;
@@ -194,6 +195,23 @@ public class SettingsFragment extends Fragment {
                 mCallback.onAlbumArtBackgroundChangedVisibility(isChecked ? View.VISIBLE : View.GONE);
             }
         });
+
+        wifiCard = (RelativeLayout) view.findViewById(R.id.wifi_card);
+        wifiToggle = (SwitchCompat) view.findViewById(R.id.wifi_stream_toggle);
+        wifiToggle.setChecked(HomeActivity.settings.isStreamOnlyOnWifiEnabled());
+        wifiCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                wifiToggle.toggle();
+            }
+        });
+        wifiToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                HomeActivity.settings.setStreamOnlyOnWifiEnabled(isChecked);
+            }
+        });
+
 
         aboutCard = (RelativeLayout) view.findViewById(R.id.about_card);
         aboutCard.setOnClickListener(new View.OnClickListener() {

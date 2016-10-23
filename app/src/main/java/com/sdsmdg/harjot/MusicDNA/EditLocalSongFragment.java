@@ -3,10 +3,13 @@ package com.sdsmdg.harjot.MusicDNA;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -27,6 +30,10 @@ import org.jaudiotagger.tag.FieldDataInvalidException;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagException;
+import org.jaudiotagger.tag.TagOptionSingleton;
+import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
+import org.jaudiotagger.tag.id3.ID3v1Tag;
+import org.jaudiotagger.tag.id3.ID3v24Tag;
 
 import java.io.File;
 import java.io.IOException;
@@ -109,6 +116,7 @@ public class EditLocalSongFragment extends Fragment {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if (!titleText.getText().toString().trim().equals("")) {
                     HomeActivity.editSong.setTitle(titleText.getText().toString().trim());
                     isTitleNotNull = true;
@@ -132,13 +140,10 @@ public class EditLocalSongFragment extends Fragment {
                 }
                 if (isTitleNotNull && isArtistNotNull && isAlbumNotNull) {
 
-                    ProgressDialog progressDialog = new ProgressDialog(ctx);
-
                     Tag tag = mp3File.getTag();
-
-                    progressDialog.setMessage("Saving");
-                    progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                    progressDialog.setIndeterminate(true);
+                    ID3v1Tag id3v1Tag = mp3File.getID3v1Tag();
+                    AbstractID3v2Tag id3v2Tag = mp3File.getID3v2Tag();
+                    ID3v24Tag id3v24Tag = mp3File.getID3v2TagAsv24();
 
 //                    id3v2Tag.setTitle(titleText.getText().toString());
 //                    id3v2Tag.setArtist(artistText.getText().toString());
@@ -147,9 +152,42 @@ public class EditLocalSongFragment extends Fragment {
                     boolean error = false;
 
                     try {
-                        tag.setField(FieldKey.TITLE, titleText.getText().toString());
-                        tag.setField(FieldKey.ARTIST, artistText.getText().toString());
-                        tag.setField(FieldKey.ALBUM, albumText.getText().toString());
+                        if (tag != null) {
+                            tag.setField(FieldKey.TITLE, titleText.getText().toString().trim());
+                            tag.setField(FieldKey.ARTIST, artistText.getText().toString().trim());
+                            tag.setField(FieldKey.ALBUM, albumText.getText().toString().trim());
+                        }
+                    } catch (FieldDataInvalidException e) {
+                        error = true;
+                        e.printStackTrace();
+                    }
+
+                    try {
+                        if (id3v1Tag != null) {
+                            id3v1Tag.setField(FieldKey.TITLE, titleText.getText().toString().trim());
+                            id3v1Tag.setField(FieldKey.ARTIST, artistText.getText().toString().trim());
+                            id3v1Tag.setField(FieldKey.ALBUM, albumText.getText().toString().trim());
+                        }
+                    } catch (FieldDataInvalidException e) {
+                        error = true;
+                        e.printStackTrace();
+                    }
+
+                    try {
+                        id3v2Tag.setField(FieldKey.TITLE, titleText.getText().toString().trim());
+                        id3v2Tag.setField(FieldKey.ARTIST, artistText.getText().toString().trim());
+                        id3v2Tag.setField(FieldKey.ALBUM, albumText.getText().toString().trim());
+                    } catch (FieldDataInvalidException e) {
+                        error = true;
+                        e.printStackTrace();
+                    }
+
+                    try {
+                        if (id3v24Tag != null) {
+                            id3v24Tag.setField(FieldKey.TITLE, titleText.getText().toString().trim());
+                            id3v24Tag.setField(FieldKey.ARTIST, artistText.getText().toString().trim());
+                            id3v24Tag.setField(FieldKey.ALBUM, albumText.getText().toString().trim());
+                        }
                     } catch (FieldDataInvalidException e) {
                         error = true;
                         e.printStackTrace();
@@ -163,14 +201,13 @@ public class EditLocalSongFragment extends Fragment {
                     }
 
                     if (!error) {
+                        Toast.makeText(ctx, "Saved", Toast.LENGTH_SHORT).show();
                         HomeActivity.editSong.setTitle(titleText.getText().toString());
                         HomeActivity.editSong.setArtist(artistText.getText().toString());
                         HomeActivity.editSong.setAlbum(albumText.getText().toString());
                     }
 
-                    progressDialog.dismiss();
-
-                    mCallback.onEditSongSave(true);
+                    mCallback.onEditSongSave(!error);
                 }
             }
         });

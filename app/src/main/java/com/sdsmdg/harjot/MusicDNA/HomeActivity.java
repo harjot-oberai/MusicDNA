@@ -7,6 +7,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -1149,6 +1150,7 @@ public class HomeActivity extends AppCompatActivity
                     (android.provider.MediaStore.Audio.Media.DATA);
             int durationColumn = musicCursor.getColumnIndex
                     (MediaStore.Audio.Media.DURATION);
+
             //add songs to list
             do {
                 long thisId = musicCursor.getLong(idColumn);
@@ -2757,12 +2759,7 @@ public class HomeActivity extends AppCompatActivity
             return;
         }
 
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        Toast.makeText(ctx, editSong.getPath(), Toast.LENGTH_SHORT).show();
-        File f = new File("file://" + editSong.getPath());
-        Uri contentUri = Uri.fromFile(f);
-        mediaScanIntent.setData(contentUri);
-        this.sendBroadcast(mediaScanIntent);
+        updateMediaCache(editSong.getTitle(), editSong.getArtist(), editSong.getAlbum(), editSong.getId());
 
         refreshAlbumAndArtists();
 
@@ -5020,6 +5017,24 @@ public class HomeActivity extends AppCompatActivity
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+    }
+
+    public void updateMediaCache(String title, String artist, String album, long id) {
+
+        ContentResolver musicResolver = this.getContentResolver();
+        Uri musicUri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+
+        ContentValues newValues = new ContentValues();
+        newValues.put(android.provider.MediaStore.Audio.Media.TITLE, title);
+        newValues.put(android.provider.MediaStore.Audio.Media.ARTIST, artist);
+        newValues.put(MediaStore.Audio.Media.ALBUM, album);
+
+        int res = musicResolver.update(musicUri, newValues, android.provider.MediaStore.Audio.Media._ID + "=?", new String[]{String.valueOf(id)});
+
+        if (res > 0) {
+            Toast.makeText(this, "Updated MediaStore cache", Toast.LENGTH_SHORT).show();
         }
 
     }

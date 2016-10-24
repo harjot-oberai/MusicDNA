@@ -30,7 +30,6 @@ import org.jaudiotagger.tag.FieldDataInvalidException;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.TagException;
-import org.jaudiotagger.tag.TagOptionSingleton;
 import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
 import org.jaudiotagger.tag.id3.ID3v1Tag;
 import org.jaudiotagger.tag.id3.ID3v24Tag;
@@ -45,7 +44,7 @@ import java.io.IOException;
 public class EditLocalSongFragment extends Fragment {
 
     EditText titleText, artistText, albumText;
-    ImageView songImage;
+    ImageView songImage, backImage;
     Button saveButton;
 
     Context ctx;
@@ -57,9 +56,14 @@ public class EditLocalSongFragment extends Fragment {
     MP3File mp3File;
 
     onEditSongSaveListener mCallback;
+    newCoverListener mCallback2;
 
     public interface onEditSongSaveListener {
         public void onEditSongSave(boolean wasSaveSuccessful);
+    }
+
+    public interface newCoverListener {
+        public void getNewBitmap();
     }
 
     public EditLocalSongFragment() {
@@ -72,6 +76,7 @@ public class EditLocalSongFragment extends Fragment {
         ctx = context;
         try {
             mCallback = (onEditSongSaveListener) context;
+            mCallback2 = (newCoverListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnHeadlineSelectedListener");
@@ -97,6 +102,7 @@ public class EditLocalSongFragment extends Fragment {
 //        albumText.setText(HomeActivity.editSong.getAlbum());
 
         songImage = (ImageView) view.findViewById(R.id.edit_song_image);
+        backImage = (ImageView) view.findViewById(R.id.back_image);
 
         Bitmap bmp = null;
         try {
@@ -107,9 +113,18 @@ public class EditLocalSongFragment extends Fragment {
 
         if (bmp != null) {
             songImage.setImageBitmap(bmp);
+            backImage.setImageBitmap(bmp);
         } else {
             songImage.setImageResource(R.drawable.ic_default);
+            backImage.setImageResource(R.drawable.ic_default);
         }
+
+        songImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallback2.getNewBitmap();
+            }
+        });
 
         saveButton = (Button) view.findViewById(R.id.edit_song_save_button);
         saveButton.setBackgroundColor(HomeActivity.themeColor);
@@ -174,9 +189,11 @@ public class EditLocalSongFragment extends Fragment {
                     }
 
                     try {
-                        id3v2Tag.setField(FieldKey.TITLE, titleText.getText().toString().trim());
-                        id3v2Tag.setField(FieldKey.ARTIST, artistText.getText().toString().trim());
-                        id3v2Tag.setField(FieldKey.ALBUM, albumText.getText().toString().trim());
+                        if (id3v2Tag != null) {
+                            id3v2Tag.setField(FieldKey.TITLE, titleText.getText().toString().trim());
+                            id3v2Tag.setField(FieldKey.ARTIST, artistText.getText().toString().trim());
+                            id3v2Tag.setField(FieldKey.ALBUM, albumText.getText().toString().trim());
+                        }
                     } catch (FieldDataInvalidException e) {
                         error = true;
                         e.printStackTrace();
@@ -208,6 +225,7 @@ public class EditLocalSongFragment extends Fragment {
                     }
 
                     mCallback.onEditSongSave(!error);
+
                 }
             }
         });
@@ -246,9 +264,13 @@ public class EditLocalSongFragment extends Fragment {
 
         if (mp3File != null && mp3File.hasID3v2Tag()) {
             Tag tag = mp3File.getTag();
-            titleText.setText(tag.getFirst(FieldKey.TITLE));
-            artistText.setText(tag.getFirst(FieldKey.ARTIST));
-            albumText.setText(tag.getFirst(FieldKey.ALBUM));
+//            titleText.setText(tag.getFirst(FieldKey.TITLE));
+//            artistText.setText(tag.getFirst(FieldKey.ARTIST));
+//            albumText.setText(tag.getFirst(FieldKey.ALBUM));
+            titleText.setText(HomeActivity.editSong.getTitle());
+            artistText.setText(HomeActivity.editSong.getArtist());
+            albumText.setText(HomeActivity.editSong.getAlbum());
+
         }
     }
 
@@ -264,6 +286,13 @@ public class EditLocalSongFragment extends Fragment {
             return bitmap;
         } else {
             return null;
+        }
+    }
+
+    public void updateCoverArt(Bitmap bmp) {
+        if (bmp != null) {
+            songImage.setImageBitmap(bmp);
+            backImage.setImageBitmap(bmp);
         }
     }
 

@@ -504,7 +504,7 @@ public class PlayerFragment extends Fragment implements
         if (homeActivity.shuffleEnabled) {
             shuffleController.setImageResource(R.drawable.ic_shuffle_filled);
         } else {
-            shuffleController.setImageResource(R.drawable.ic_shuffle_outline);
+            shuffleController.setImageResource(R.drawable.ic_shuffle_alpha);
         }
 
         if (homeActivity.repeatEnabled) {
@@ -512,7 +512,7 @@ public class PlayerFragment extends Fragment implements
         } else if (homeActivity.repeatOnceEnabled) {
             repeatController.setImageResource(R.drawable.ic_repeat_once);
         } else {
-            repeatController.setImageResource(R.drawable.ic_repeat_outline);
+            repeatController.setImageResource(R.drawable.ic_repeat_alpha);
         }
 
         repeatController.setOnClickListener(new View.OnClickListener() {
@@ -520,7 +520,7 @@ public class PlayerFragment extends Fragment implements
             public void onClick(View v) {
                 if (homeActivity.repeatOnceEnabled) {
                     homeActivity.repeatOnceEnabled = false;
-                    repeatController.setImageResource(R.drawable.ic_repeat_outline);
+                    repeatController.setImageResource(R.drawable.ic_repeat_alpha);
                 } else if (homeActivity.repeatEnabled) {
                     homeActivity.repeatEnabled = false;
                     homeActivity.repeatOnceEnabled = true;
@@ -537,7 +537,7 @@ public class PlayerFragment extends Fragment implements
             public void onClick(View v) {
                 if (homeActivity.shuffleEnabled) {
                     homeActivity.shuffleEnabled = false;
-                    shuffleController.setImageResource(R.drawable.ic_shuffle_outline);
+                    shuffleController.setImageResource(R.drawable.ic_shuffle_alpha);
                     mCallback11.onShuffleDisabled();
                 } else {
                     homeActivity.shuffleEnabled = true;
@@ -560,7 +560,7 @@ public class PlayerFragment extends Fragment implements
         if (homeActivity.isSaveDNAEnabled) {
             saveDNAToggle.setImageResource(R.drawable.ic_save_filled);
         } else {
-            saveDNAToggle.setImageResource(R.drawable.ic_save_outline);
+            saveDNAToggle.setImageResource(R.drawable.ic_save_alpha);
         }
 
         saveDNAToggle.setOnClickListener(new View.OnClickListener() {
@@ -568,7 +568,7 @@ public class PlayerFragment extends Fragment implements
             public void onClick(View v) {
                 if (homeActivity.isSaveDNAEnabled) {
                     homeActivity.isSaveDNAEnabled = false;
-                    saveDNAToggle.setImageResource(R.drawable.ic_save_outline);
+                    saveDNAToggle.setImageResource(R.drawable.ic_save_alpha);
                 } else {
                     homeActivity.isSaveDNAEnabled = true;
                     saveDNAToggle.setImageResource(R.drawable.ic_save_filled);
@@ -590,8 +590,8 @@ public class PlayerFragment extends Fragment implements
             favControllerSp.setImageResource(R.drawable.ic_heart_filled_1);
             isFav = true;
         } else {
-            favouriteIcon.setImageResource(R.drawable.ic_heart_out_1);
-            favControllerSp.setImageResource(R.drawable.ic_heart_out_1);
+            favouriteIcon.setImageResource(R.drawable.ic_heart_alpha);
+            favControllerSp.setImageResource(R.drawable.ic_heart_alpha);
             isFav = false;
         }
 
@@ -599,8 +599,8 @@ public class PlayerFragment extends Fragment implements
             @Override
             public void onClick(View v) {
                 if (isFav) {
-                    favouriteIcon.setImageResource(R.drawable.ic_heart_out_1);
-                    favControllerSp.setImageResource(R.drawable.ic_heart_out_1);
+                    favouriteIcon.setImageResource(R.drawable.ic_heart_alpha);
+                    favControllerSp.setImageResource(R.drawable.ic_heart_alpha);
                     isFav = false;
                     removeFromFavourite();
                 } else {
@@ -617,8 +617,8 @@ public class PlayerFragment extends Fragment implements
             @Override
             public void onClick(View v) {
                 if (isFav) {
-                    favouriteIcon.setImageResource(R.drawable.ic_heart_out_1);
-                    favControllerSp.setImageResource(R.drawable.ic_heart_out_1);
+                    favouriteIcon.setImageResource(R.drawable.ic_heart_alpha);
+                    favControllerSp.setImageResource(R.drawable.ic_heart_alpha);
                     isFav = false;
                     removeFromFavourite();
                 } else {
@@ -1115,15 +1115,15 @@ public class PlayerFragment extends Fragment implements
             favControllerSp.setImageResource(R.drawable.ic_heart_filled_1);
             isFav = true;
         } else {
-            favouriteIcon.setImageResource(R.drawable.ic_heart_out_1);
-            favControllerSp.setImageResource(R.drawable.ic_heart_out_1);
+            favouriteIcon.setImageResource(R.drawable.ic_heart_alpha);
+            favControllerSp.setImageResource(R.drawable.ic_heart_alpha);
             isFav = false;
         }
 
         if (homeActivity.shuffleEnabled) {
             shuffleController.setImageResource(R.drawable.ic_shuffle_filled);
         } else {
-            shuffleController.setImageResource(R.drawable.ic_shuffle_outline);
+            shuffleController.setImageResource(R.drawable.ic_shuffle_alpha);
         }
 
         if (homeActivity.repeatEnabled) {
@@ -1131,13 +1131,13 @@ public class PlayerFragment extends Fragment implements
         } else if (homeActivity.repeatOnceEnabled) {
             repeatController.setImageResource(R.drawable.ic_repeat_once);
         } else {
-            repeatController.setImageResource(R.drawable.ic_repeat_outline);
+            repeatController.setImageResource(R.drawable.ic_repeat_alpha);
         }
 
         if (homeActivity.isSaveDNAEnabled) {
             saveDNAToggle.setImageResource(R.drawable.ic_save_filled);
         } else {
-            saveDNAToggle.setImageResource(R.drawable.ic_save_outline);
+            saveDNAToggle.setImageResource(R.drawable.ic_save_alpha);
         }
 
         equalizerIcon.setVisibility(View.INVISIBLE);

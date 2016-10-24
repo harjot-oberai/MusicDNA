@@ -8,7 +8,7 @@ import android.graphics.Color;
 public class Settings {
     private int themeColor = Color.parseColor("#B24242");
     private float minAudioStrength;
-    private boolean albumArtBackgroundEnabled = false;
+    private boolean albumArtBackgroundEnabled = true;
     private boolean streamOnlyOnWifiEnabled = false;
 
     public Settings() {

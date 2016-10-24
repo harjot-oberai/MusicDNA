@@ -127,6 +127,7 @@
         android:paddingLeft="10dp"
         android:paddingTop="10dp"
         android:text="Edit"
-        android:textSize="17sp" />
+        android:textSize="17sp"
+        android:visibility="gone" />
 
 </RelativeLayout>

@@ -19,6 +19,7 @@ import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -113,6 +114,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -175,6 +177,7 @@ public class HomeActivity extends AppCompatActivity
         AddToPlaylistFragment.newPlaylistListener,
         HeadSetReceiver.onHeadsetRemovedListener,
         EditLocalSongFragment.onEditSongSaveListener,
+        EditLocalSongFragment.newCoverListener,
         ServiceCallbacks {
 
 
@@ -216,6 +219,8 @@ public class HomeActivity extends AppCompatActivity
     static TextView spArtistAB;
 
     static SwitchCompat equalizerSwitch;
+
+    Bitmap selectedImage;
 
     SharedPreferences mPrefs;
     static SharedPreferences.Editor prefsEditor;
@@ -1386,6 +1391,30 @@ public class HomeActivity extends AppCompatActivity
                 }
             }
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            if (requestCode == 1) {
+                try {
+                    final Uri imageUri = data.getData();
+                    final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                    selectedImage = BitmapFactory.decodeStream(imageStream);
+
+                    EditLocalSongFragment editSongFragment = (EditLocalSongFragment) getSupportFragmentManager().findFragmentByTag("Edit");
+                    if (editSongFragment != null) {
+                        editSongFragment.updateCoverArt(selectedImage);
+                    }
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
     }
 
     @Override
@@ -2802,6 +2831,15 @@ public class HomeActivity extends AppCompatActivity
         if (albFrag != null) {
             albFrag.updateAdapter();
         }
+    }
+
+    @Override
+    public void getNewBitmap() {
+
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, 1);
+
     }
 
     public class MyAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -5029,7 +5067,7 @@ public class HomeActivity extends AppCompatActivity
         ContentValues newValues = new ContentValues();
         newValues.put(android.provider.MediaStore.Audio.Media.TITLE, title);
         newValues.put(android.provider.MediaStore.Audio.Media.ARTIST, artist);
-        newValues.put(MediaStore.Audio.Media.ALBUM, album);
+        newValues.put(android.provider.MediaStore.Audio.Media.ALBUM, album);
 
         int res = musicResolver.update(musicUri, newValues, android.provider.MediaStore.Audio.Media._ID + "=?", new String[]{String.valueOf(id)});
 

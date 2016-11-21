@@ -11,8 +11,6 @@ public class DNAModel {
     private boolean type;
     private LocalTrack localTrack;
     private Track track;
-    private List<Pair<Float, Float>> pts;
-    private List<Pair<Float, Pair<Integer, Integer>>> ptPaint;
     private byte[] byteArray;
 
     public DNAModel(boolean type, LocalTrack localTrack, Track track, byte[] byteArray) {
@@ -28,22 +26,6 @@ public class DNAModel {
 
     public void setType(boolean type) {
         this.type = type;
-    }
-
-    public List<Pair<Float, Float>> getPts() {
-        return pts;
-    }
-
-    public void setPts(List<Pair<Float, Float>> pts) {
-        this.pts = pts;
-    }
-
-    public List<Pair<Float, Pair<Integer, Integer>>> getPtPaint() {
-        return ptPaint;
-    }
-
-    public void setPtPaint(List<Pair<Float, Pair<Integer, Integer>>> ptPaint) {
-        this.ptPaint = ptPaint;
     }
 
     public LocalTrack getLocalTrack() {

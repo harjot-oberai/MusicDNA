@@ -435,16 +435,6 @@ public class HomeActivity extends AppCompatActivity
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             PlayerFragment newFragment = new PlayerFragment();
             if (frag == null) {
-//                PlayerFragment.mCallback = this;
-//                PlayerFragment.mCallback2 = this;
-//                PlayerFragment.mCallback3 = this;
-//                PlayerFragment.mCallback4 = this;
-//                PlayerFragment.mCallback5 = this;
-//                PlayerFragment.mCallback6 = this;
-//                PlayerFragment.mCallback8 = this;
-//                PlayerFragment.mCallback9 = this;
-                if (Build.VERSION.SDK_INT < 21)
-                    getPlayerFragment().mCallback7 = this;
                 int flag = 0;
                 for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
                     UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
@@ -457,6 +447,8 @@ public class HomeActivity extends AppCompatActivity
                 if (flag == 0) {
                     isFavourite = false;
                 }
+                PlayerFragment.localIsPlaying = false;
+                PlayerFragment.track = selectedTrack;
                 fm.beginTransaction()
                         .setCustomAnimations(R.anim.slide_up,
                                 R.anim.slide_down,
@@ -482,15 +474,14 @@ public class HomeActivity extends AppCompatActivity
                     if (flag == 0) {
                         isFavourite = false;
                     }
+                    PlayerFragment.localIsPlaying = false;
+                    PlayerFragment.track = selectedTrack;
                     frag.refresh();
                 }
             }
             if (!isQueueVisible)
                 showPlayer();
-            PlayerFragment.localIsPlaying = false;
-            PlayerFragment.track = selectedTrack;
         } else {
-
             PlayerFragment frag = (PlayerFragment) getSupportFragmentManager().findFragmentByTag("player");
             PlayerFragment.localIsPlaying = false;
             PlayerFragment.track = selectedTrack;
@@ -544,8 +535,8 @@ public class HomeActivity extends AppCompatActivity
         isReloaded = false;
         HideBottomFakeToolbar();
 
-
         if (!queueCall) {
+
             hideKeyboard();
 
             searchView.setQuery("", true);
@@ -559,8 +550,6 @@ public class HomeActivity extends AppCompatActivity
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             PlayerFragment newFragment = new PlayerFragment();
             if (frag == null) {
-                if (Build.VERSION.SDK_INT < 21)
-                    getPlayerFragment().mCallback7 = this;
                 int flag = 0;
                 for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
                     UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
@@ -573,6 +562,8 @@ public class HomeActivity extends AppCompatActivity
                 if (flag == 0) {
                     isFavourite = false;
                 }
+                PlayerFragment.localIsPlaying = true;
+                PlayerFragment.localTrack = localSelectedTrack;
                 fm.beginTransaction()
                         .setCustomAnimations(R.anim.slide_up,
                                 R.anim.slide_down,
@@ -597,14 +588,14 @@ public class HomeActivity extends AppCompatActivity
                     if (flag == 0) {
                         isFavourite = false;
                     }
+                    PlayerFragment.localIsPlaying = true;
+                    PlayerFragment.localTrack = localSelectedTrack;
                     frag.refresh();
                 }
             }
 
             if (!isQueueVisible)
                 showPlayer();
-            PlayerFragment.localIsPlaying = true;
-            PlayerFragment.localTrack = localSelectedTrack;
 
         } else {
             PlayerFragment frag = (PlayerFragment) getSupportFragmentManager().findFragmentByTag("player");
@@ -623,7 +614,6 @@ public class HomeActivity extends AppCompatActivity
             if (flag == 0) {
                 isFavourite = false;
             }
-
             frag.refresh();
         }
 
@@ -1108,20 +1098,28 @@ public class HomeActivity extends AppCompatActivity
     private void getSavedData() {
         try {
             Gson gson = new Gson();
+            Log.d("TIME","start");
             String json = mPrefs.getString("savedDNAs", "");
             savedDNAs = gson.fromJson(json, AllSavedDNA.class);
+            Log.d("TIME","savedDNAs");
             String json2 = mPrefs.getString("allPlaylists", "");
             allPlaylists = gson.fromJson(json2, AllPlaylists.class);
+            Log.d("TIME","allPlaylists");
             String json3 = mPrefs.getString("queue", "");
             queue = gson.fromJson(json3, Queue.class);
+            Log.d("TIME","queue");
             String json4 = mPrefs.getString("recentlyPlayed", "");
             recentlyPlayed = gson.fromJson(json4, RecentlyPlayed.class);
+            Log.d("TIME","recents");
             String json5 = mPrefs.getString("favouriteTracks", "");
             favouriteTracks = gson.fromJson(json5, Favourite.class);
+            Log.d("TIME","fav");
             String json6 = mPrefs.getString("queueCurrentIndex", "");
             queueCurrentIndex = gson.fromJson(json6, Integer.class);
+            Log.d("TIME","queueCurrentindex");
             String json8 = mPrefs.getString("settings", "");
             settings = gson.fromJson(json8, Settings.class);
+            Log.d("TIME","settings");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1401,12 +1399,14 @@ public class HomeActivity extends AppCompatActivity
             if (requestCode == 1) {
                 try {
                     final Uri imageUri = data.getData();
+                    String path = imageUri.getPath();
+                    Toast.makeText(this, path + "", Toast.LENGTH_SHORT).show();
                     final InputStream imageStream = getContentResolver().openInputStream(imageUri);
                     selectedImage = BitmapFactory.decodeStream(imageStream);
 
                     EditLocalSongFragment editSongFragment = (EditLocalSongFragment) getSupportFragmentManager().findFragmentByTag("Edit");
                     if (editSongFragment != null) {
-                        editSongFragment.updateCoverArt(selectedImage);
+                        editSongFragment.updateCoverArt(selectedImage, imageUri);
                     }
 
                 } catch (FileNotFoundException e) {
@@ -2840,6 +2840,19 @@ public class HomeActivity extends AppCompatActivity
         photoPickerIntent.setType("image/*");
         startActivityForResult(photoPickerIntent, 1);
 
+    }
+
+    @Override
+    public void deleteMediaStoreCache() {
+        File dir = new File(Environment.getExternalStorageDirectory() + "/Android/data/com.android.providers.media/albumthumbs");
+//        Toast.makeText(this, Environment.getExternalStorageDirectory() + "/Android/data/com.android.providers.media/albumthumbs/", Toast.LENGTH_SHORT).show();
+        if (dir.isDirectory()) {
+            Toast.makeText(this, "Clearing cache", Toast.LENGTH_SHORT).show();
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                new File(dir, children[i]).delete();
+            }
+        }
     }
 
     public class MyAsyncTask extends AsyncTask<Void, Void, Void> {

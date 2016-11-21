@@ -19,22 +19,11 @@ import java.util.List;
  */
 public class VisualizerView2 extends View {
 
-    public List<Pair<Float, Float>> pts;
-    public List<Pair<Float, Pair<Integer, Integer>>> ptPaint;
     public Bitmap bmp;
     public Paint mForePaint = new Paint();
     public Paint mTextPaint = new Paint();
     boolean textEnabled = false;
     String text;
-
-
-    public void setPts(List<Pair<Float, Float>> pts) {
-        this.pts = pts;
-    }
-
-    public void setPtPaint(List<Pair<Float, Pair<Integer, Integer>>> ptPaint) {
-        this.ptPaint = ptPaint;
-    }
 
     public void setBmp(Bitmap bmp) {
         this.bmp = bmp;
@@ -65,14 +54,11 @@ public class VisualizerView2 extends View {
         mTextPaint.setTextSize(40.0f * HomeActivity.ratio);
         if (SplashActivity.tf != null)
             mTextPaint.setTypeface(SplashActivity.tf);
-        pts = new ArrayList<>();
-        ptPaint = new ArrayList<>();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        int midY = canvas.getHeight() / 2;
         if (bmp != null) {
             canvas.drawBitmap(bmp, 0, -1 * (canvas.getHeight() / 13), null);
         }

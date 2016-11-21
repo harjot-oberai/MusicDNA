@@ -14,6 +14,8 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -122,8 +124,9 @@ public class ViewSavedDNA extends Fragment {
                     SavedDNA dna = HomeActivity.savedDNAs.getSavedDNAs().get(selectedDNA);
                     selectedDNA = 0;
                     HomeActivity.tempSavedDNA = dna;
-                    byte[] bArr = dna.getModel().getByteArray();
-                    Bitmap bmp = BitmapFactory.decodeByteArray(bArr, 0, bArr.length);
+                    Bitmap bmp = bitmapFromBase64String(dna.getBase64encodedBitmap());
+//                    byte[] bArr = dna.getModel().getByteArray();
+//                    Bitmap bmp = BitmapFactory.decodeByteArray(bArr, 0, bArr.length);
                     mVisualizerView2.setBmp(bmp);
                     mVisualizerView2.update();
                 }
@@ -139,10 +142,9 @@ public class ViewSavedDNA extends Fragment {
                 SavedDNA dna = HomeActivity.savedDNAs.getSavedDNAs().get(position);
                 selectedDNA = position;
                 HomeActivity.tempSavedDNA = dna;
-                mVisualizerView2.setPts(dna.getModel().getPts());
-                mVisualizerView2.setPtPaint(dna.getModel().getPtPaint());
-                byte[] bArr = dna.getModel().getByteArray();
-                Bitmap bmp = BitmapFactory.decodeByteArray(bArr, 0, bArr.length);
+                Bitmap bmp = bitmapFromBase64String(dna.getBase64encodedBitmap());
+//                    byte[] bArr = dna.getModel().getByteArray();
+//                    Bitmap bmp = BitmapFactory.decodeByteArray(bArr, 0, bArr.length);
                 mVisualizerView2.setBmp(bmp);
                 mVisualizerView2.update();
                 return true;
@@ -163,10 +165,9 @@ public class ViewSavedDNA extends Fragment {
                             SavedDNA dna = HomeActivity.savedDNAs.getSavedDNAs().get(position);
                             selectedDNA = position;
                             HomeActivity.tempSavedDNA = dna;
-                            mVisualizerView2.setPts(dna.getModel().getPts());
-                            mVisualizerView2.setPtPaint(dna.getModel().getPtPaint());
-                            byte[] bArr = dna.getModel().getByteArray();
-                            Bitmap bmp = BitmapFactory.decodeByteArray(bArr, 0, bArr.length);
+                            Bitmap bmp = bitmapFromBase64String(dna.getBase64encodedBitmap());
+//                    byte[] bArr = dna.getModel().getByteArray();
+//                    Bitmap bmp = BitmapFactory.decodeByteArray(bArr, 0, bArr.length);
                             mVisualizerView2.setBmp(bmp);
                             mVisualizerView2.update();
                         } else if (item.getTitle().equals("Delete")) {
@@ -188,10 +189,9 @@ public class ViewSavedDNA extends Fragment {
 
                                 SavedDNA dna = HomeActivity.savedDNAs.getSavedDNAs().get(selectedDNA);
                                 HomeActivity.tempSavedDNA = dna;
-                                mVisualizerView2.setPts(dna.getModel().getPts());
-                                mVisualizerView2.setPtPaint(dna.getModel().getPtPaint());
-                                byte[] bArr = dna.getModel().getByteArray();
-                                Bitmap bmp = BitmapFactory.decodeByteArray(bArr, 0, bArr.length);
+                                Bitmap bmp = bitmapFromBase64String(dna.getBase64encodedBitmap());
+//                    byte[] bArr = dna.getModel().getByteArray();
+//                    Bitmap bmp = BitmapFactory.decodeByteArray(bArr, 0, bArr.length);
                                 mVisualizerView2.setBmp(bmp);
                                 mVisualizerView2.update();
                             }
@@ -395,6 +395,11 @@ public class ViewSavedDNA extends Fragment {
 
     public int getSelectedDNAnumber() {
         return selectedDNA;
+    }
+
+    public Bitmap bitmapFromBase64String(String input) {
+        byte[] decodedBytes = Base64.decode(input, 0);
+        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
     }
 
 }

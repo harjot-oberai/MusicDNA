@@ -33,9 +33,12 @@ import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.id3.AbstractID3v2Tag;
 import org.jaudiotagger.tag.id3.ID3v1Tag;
 import org.jaudiotagger.tag.id3.ID3v24Tag;
+import org.jaudiotagger.tag.images.Artwork;
+import org.jaudiotagger.tag.images.ArtworkFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 
 
 /**
@@ -54,6 +57,10 @@ public class EditLocalSongFragment extends Fragment {
     boolean isAlbumNotNull = false;
 
     MP3File mp3File;
+    Tag tag;
+    ID3v1Tag id3v1Tag;
+    AbstractID3v2Tag id3v2Tag;
+    ID3v24Tag id3v24Tag;
 
     onEditSongSaveListener mCallback;
     newCoverListener mCallback2;
@@ -64,6 +71,8 @@ public class EditLocalSongFragment extends Fragment {
 
     public interface newCoverListener {
         public void getNewBitmap();
+
+        public void deleteMediaStoreCache();
     }
 
     public EditLocalSongFragment() {
@@ -93,6 +102,8 @@ public class EditLocalSongFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        Toast.makeText(ctx, HomeActivity.editSong.getId() + "", Toast.LENGTH_SHORT).show();
 
         titleText = (EditText) view.findViewById(R.id.edit_song_title);
 //        titleText.setText(HomeActivity.editSong.getTitle());
@@ -155,11 +166,6 @@ public class EditLocalSongFragment extends Fragment {
                 }
                 if (isTitleNotNull && isArtistNotNull && isAlbumNotNull) {
 
-                    Tag tag = mp3File.getTag();
-                    ID3v1Tag id3v1Tag = mp3File.getID3v1Tag();
-                    AbstractID3v2Tag id3v2Tag = mp3File.getID3v2Tag();
-                    ID3v24Tag id3v24Tag = mp3File.getID3v2TagAsv24();
-
 //                    id3v2Tag.setTitle(titleText.getText().toString());
 //                    id3v2Tag.setArtist(artistText.getText().toString());
 //                    id3v2Tag.setAlbum(albumText.getText().toString());
@@ -219,9 +225,9 @@ public class EditLocalSongFragment extends Fragment {
 
                     if (!error) {
                         Toast.makeText(ctx, "Saved", Toast.LENGTH_SHORT).show();
-                        HomeActivity.editSong.setTitle(titleText.getText().toString());
-                        HomeActivity.editSong.setArtist(artistText.getText().toString());
-                        HomeActivity.editSong.setAlbum(albumText.getText().toString());
+                        HomeActivity.editSong.setTitle(titleText.getText().toString().trim());
+                        HomeActivity.editSong.setArtist(artistText.getText().toString().trim());
+                        HomeActivity.editSong.setAlbum(albumText.getText().toString().trim());
                     }
 
                     mCallback.onEditSongSave(!error);
@@ -272,6 +278,12 @@ public class EditLocalSongFragment extends Fragment {
             albumText.setText(HomeActivity.editSong.getAlbum());
 
         }
+
+        tag = mp3File.getTag();
+        id3v1Tag = mp3File.getID3v1Tag();
+        id3v2Tag = mp3File.getID3v2Tag();
+        id3v24Tag = mp3File.getID3v2TagAsv24();
+
     }
 
     public Bitmap getBitmap(String url) {
@@ -289,11 +301,33 @@ public class EditLocalSongFragment extends Fragment {
         }
     }
 
-    public void updateCoverArt(Bitmap bmp) {
+    public void updateCoverArt(Bitmap bmp, Uri artUri) {
         if (bmp != null) {
             songImage.setImageBitmap(bmp);
             backImage.setImageBitmap(bmp);
         }
+
+        File file = new File(artUri.getPath());
+
+        if (file.exists()) {
+            Artwork cover = null;
+            try {
+                cover = ArtworkFactory.createArtworkFromFile(file);
+                tag.deleteArtworkField();
+                tag.createField(cover);
+                tag.setField(cover);
+                mp3File.commit();
+            } catch (FieldDataInvalidException e) {
+                e.printStackTrace();
+            } catch (CannotWriteException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        mCallback2.deleteMediaStoreCache();
+
     }
 
 }

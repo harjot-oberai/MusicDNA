@@ -5,6 +5,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.media.MediaMetadataRetriever;
 import android.os.AsyncTask;
 import android.support.v4.view.MotionEventCompat;
@@ -92,6 +93,7 @@ public class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdap
 
         if (HomeActivity.queueCurrentIndex == position && !HomeActivity.isReloaded) {
             holder.title.setTextColor(HomeActivity.themeColor);
+            holder.title.setTypeface(null, Typeface.BOLD);
             holder.indicator.setVisibility(View.VISIBLE);
             if (PlayerFragment.mMediaPlayer != null) {
                 if (PlayerFragment.mMediaPlayer.isPlaying()) {
@@ -102,6 +104,7 @@ public class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdap
             }
         } else {
             holder.title.setTextColor(Color.WHITE);
+            holder.title.setTypeface(null, Typeface.NORMAL);
             holder.indicator.setVisibility(View.INVISIBLE);
         }
 

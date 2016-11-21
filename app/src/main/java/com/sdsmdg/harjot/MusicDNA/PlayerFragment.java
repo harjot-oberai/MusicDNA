@@ -17,6 +17,7 @@ import android.media.audiofx.Visualizer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Base64;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -45,7 +46,6 @@ import com.squareup.leakcanary.RefWatcher;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -1305,24 +1305,34 @@ public class PlayerFragment extends Fragment implements
         protected Void doInBackground(Void... params) {
             if (homeActivity.isSaveDNAEnabled) {
                 Bitmap bmp = mVisualizerView.bmp;
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                byte[] byteArray = stream.toByteArray();
+                String base64encoded = getBase64encodedBitmap(bmp);
+//                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+//                byte[] byteArray = stream.toByteArray();
                 if (localIsPlaying) {
-                    DNAModel model = new DNAModel(true, localTrack, null, byteArray);
-                    SavedDNA sDna = new SavedDNA(localTrack.getTitle(), model);
-                    homeActivity.savedDNAs.getSavedDNAs().add(0, sDna);
+//                    DNAModel model = new DNAModel(true, localTrack, null, byteArray);
+//                    SavedDNA sDna = new SavedDNA(localTrack.getTitle(), model);
+                    SavedDNA savedDNA = new SavedDNA(localTrack.getTitle(), true, localTrack.getPath(), null, localTrack.getArtist(), base64encoded);
+//                    for (int i = 0; i < homeActivity.savedDNAs.getSavedDNAs().size(); i++) {
+//                        DNAModel dModel = homeActivity.savedDNAs.getSavedDNAs().get(i).getModel();
+//                        if (model.equals(dModel)) {
+//                            homeActivity.savedDNAs.getSavedDNAs().remove(i);
+//                            break;
+//                        }
+//                    }
+                    homeActivity.savedDNAs.getSavedDNAs().add(0, savedDNA);
                 } else {
-                    DNAModel model = new DNAModel(false, null, track, byteArray);
-                    SavedDNA sDna = new SavedDNA(track.getTitle(), model);
-                    for (int i = 0; i < homeActivity.savedDNAs.getSavedDNAs().size(); i++) {
-                        DNAModel dModel = homeActivity.savedDNAs.getSavedDNAs().get(i).getModel();
-                        if (model.equals(dModel)) {
-                            homeActivity.savedDNAs.getSavedDNAs().remove(i);
-                            break;
-                        }
-                    }
-                    homeActivity.savedDNAs.getSavedDNAs().add(0, sDna);
+//                    DNAModel model = new DNAModel(false, null, track, byteArray);
+//                    SavedDNA sDna = new SavedDNA(track.getTitle(), model);
+                    SavedDNA savedDNA = new SavedDNA(track.getTitle(), false, null, track.getArtworkURL(), "", base64encoded);
+//                    for (int i = 0; i < homeActivity.savedDNAs.getSavedDNAs().size(); i++) {
+//                        DNAModel dModel = homeActivity.savedDNAs.getSavedDNAs().get(i).getModel();
+//                        if (model.equals(dModel)) {
+//                            homeActivity.savedDNAs.getSavedDNAs().remove(i);
+//                            break;
+//                        }
+//                    }
+                    homeActivity.savedDNAs.getSavedDNAs().add(0, savedDNA);
                 }
                 if (homeActivity.savedDNAs.getSavedDNAs().size() > 10) {
                     homeActivity.savedDNAs.getSavedDNAs().remove(10);
@@ -1358,4 +1368,11 @@ public class PlayerFragment extends Fragment implements
     public void toggleAlbumArtBackground(int visibility) {
         currentAlbumArtHolder.setVisibility(visibility);
     }
+
+    public String getBase64encodedBitmap(Bitmap image) {
+        ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOS);
+        return Base64.encodeToString(byteArrayOS.toByteArray(), Base64.DEFAULT);
+    }
+
 }

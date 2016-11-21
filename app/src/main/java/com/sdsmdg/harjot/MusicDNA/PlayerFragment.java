@@ -35,7 +35,6 @@ import android.widget.Toast;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
-import com.sdsmdg.harjot.MusicDNA.Models.DNAModel;
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.Models.SavedDNA;
 import com.sdsmdg.harjot.MusicDNA.Models.Track;

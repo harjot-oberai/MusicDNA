@@ -90,7 +90,6 @@ import com.sdsmdg.harjot.MusicDNA.Interfaces.StreamService;
 import com.sdsmdg.harjot.MusicDNA.LocalMusicFragments.AlbumFragment;
 import com.sdsmdg.harjot.MusicDNA.LocalMusicFragments.ArtistFragment;
 import com.sdsmdg.harjot.MusicDNA.Models.Album;
-import com.sdsmdg.harjot.MusicDNA.Models.AllDNAModels;
 import com.sdsmdg.harjot.MusicDNA.Models.AllMusicFolders;
 import com.sdsmdg.harjot.MusicDNA.Models.AllPlaylists;
 import com.sdsmdg.harjot.MusicDNA.Models.AllSavedDNA;
@@ -242,7 +241,6 @@ public class HomeActivity extends AppCompatActivity
     static int tempPlaylistNumber;
     static int renamePlaylistNumber;
     static AllPlaylists allPlaylists;
-    static AllDNAModels allDNAs;
     static AllMusicFolders allMusicFolders;
 
     static AllSavedDNA savedDNAs;
@@ -4020,9 +4018,6 @@ public class HomeActivity extends AppCompatActivity
 
                     if (recentlyPlayed == null) {
                         recentlyPlayed = new RecentlyPlayed();
-                    }
-                    if (allDNAs == null) {
-                        allDNAs = new AllDNAModels();
                     }
                     if (allMusicFolders == null) {
                         allMusicFolders = new AllMusicFolders();

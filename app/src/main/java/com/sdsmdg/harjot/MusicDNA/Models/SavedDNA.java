@@ -13,7 +13,6 @@ public class SavedDNA {
     private String trackArtworkURL;
     private String artist;
     private String base64encodedBitmap;
-    private DNAModel model;
 
     public SavedDNA(String name, boolean type, String localPath, String trackArtworkURL, String artist, String base64encodedBitmap) {
         this.name = name;
@@ -23,12 +22,6 @@ public class SavedDNA {
         this.artist = artist;
         this.base64encodedBitmap = base64encodedBitmap;
     }
-
-    public SavedDNA(String name, DNAModel model) {
-        this.name = name;
-        this.model = model;
-    }
-
     public Boolean getType() {
         return type;
     }
@@ -55,13 +48,5 @@ public class SavedDNA {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public DNAModel getModel() {
-        return model;
-    }
-
-    public void setModel(DNAModel model) {
-        this.model = model;
     }
 }

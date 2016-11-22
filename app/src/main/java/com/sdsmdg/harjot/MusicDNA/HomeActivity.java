@@ -231,7 +231,7 @@ public class HomeActivity extends AppCompatActivity
 
     public static RecentlyPlayed recentlyPlayed;
     static Favourite favouriteTracks;
-    static Settings settings;
+    public static Settings settings;
 
     static Queue queue;
     static Queue originalQueue;
@@ -1095,28 +1095,28 @@ public class HomeActivity extends AppCompatActivity
     private void getSavedData() {
         try {
             Gson gson = new Gson();
-            Log.d("TIME","start");
+            Log.d("TIME", "start");
             String json = mPrefs.getString("savedDNAs", "");
             savedDNAs = gson.fromJson(json, AllSavedDNA.class);
-            Log.d("TIME","savedDNAs");
+            Log.d("TIME", "savedDNAs");
             String json2 = mPrefs.getString("allPlaylists", "");
             allPlaylists = gson.fromJson(json2, AllPlaylists.class);
-            Log.d("TIME","allPlaylists");
+            Log.d("TIME", "allPlaylists");
             String json3 = mPrefs.getString("queue", "");
             queue = gson.fromJson(json3, Queue.class);
-            Log.d("TIME","queue");
+            Log.d("TIME", "queue");
             String json4 = mPrefs.getString("recentlyPlayed", "");
             recentlyPlayed = gson.fromJson(json4, RecentlyPlayed.class);
-            Log.d("TIME","recents");
+            Log.d("TIME", "recents");
             String json5 = mPrefs.getString("favouriteTracks", "");
             favouriteTracks = gson.fromJson(json5, Favourite.class);
-            Log.d("TIME","fav");
+            Log.d("TIME", "fav");
             String json6 = mPrefs.getString("queueCurrentIndex", "");
             queueCurrentIndex = gson.fromJson(json6, Integer.class);
-            Log.d("TIME","queueCurrentindex");
+            Log.d("TIME", "queueCurrentindex");
             String json8 = mPrefs.getString("settings", "");
             settings = gson.fromJson(json8, Settings.class);
-            Log.d("TIME","settings");
+            Log.d("TIME", "settings");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1766,12 +1766,20 @@ public class HomeActivity extends AppCompatActivity
         PlayerFragment.player_controller.animate()
                 .alpha(1.0f);
 
-        PlayerFragment.currentAlbumArtHolder.animate()
+//        PlayerFragment.currentAlbumArtHolder.animate()
+//                .alpha(0.0f)
+//                .withEndAction(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        PlayerFragment.currentAlbumArtHolder.setVisibility(View.GONE);
+//                    }
+//                });
+        PlayerFragment.snappyRecyclerView.animate()
                 .alpha(0.0f)
                 .withEndAction(new Runnable() {
                     @Override
                     public void run() {
-                        PlayerFragment.currentAlbumArtHolder.setVisibility(View.GONE);
+                        PlayerFragment.snappyRecyclerView.setVisibility(View.GONE);
                     }
                 });
     }
@@ -1874,13 +1882,20 @@ public class HomeActivity extends AppCompatActivity
                     }
                 });
 
-        if (settings.isAlbumArtBackgroundEnabled()) {
-            if (PlayerFragment.currentAlbumArtHolder != null) {
-                PlayerFragment.currentAlbumArtHolder.setVisibility(View.VISIBLE);
-                PlayerFragment.currentAlbumArtHolder.animate()
-                        .alpha(0.1f)
-                        .setDuration(300);
-            }
+//        if (settings.isAlbumArtBackgroundEnabled()) {
+//            if (PlayerFragment.currentAlbumArtHolder != null) {
+//                PlayerFragment.currentAlbumArtHolder.setVisibility(View.VISIBLE);
+//                PlayerFragment.currentAlbumArtHolder.animate()
+//                        .alpha(0.1f)
+//                        .setDuration(300);
+//            }
+//        }
+
+        if (PlayerFragment.snappyRecyclerView != null) {
+            PlayerFragment.snappyRecyclerView.setVisibility(View.VISIBLE);
+            PlayerFragment.snappyRecyclerView.animate()
+                    .alpha(1.0f)
+                    .setDuration(300);
         }
 
         final Handler handler2 = new Handler();
@@ -2366,6 +2381,28 @@ public class HomeActivity extends AppCompatActivity
                 }
             }
         }, 500);
+    }
+
+    public void onQueueItemClicked2(int position){
+        queueCurrentIndex = position;
+        UnifiedTrack ut = queue.getQueue().get(position);
+        if (ut.getType()) {
+            LocalTrack track = ut.getLocalTrack();
+            localSelectedTrack = track;
+            streamSelected = false;
+            localSelected = true;
+            queueCall = true;
+            isReloaded = false;
+            onLocalTrackSelected(position);
+        } else {
+            Track track = ut.getStreamTrack();
+            selectedTrack = track;
+            streamSelected = true;
+            localSelected = false;
+            queueCall = true;
+            isReloaded = false;
+            onTrackSelected(position);
+        }
     }
 
     @Override

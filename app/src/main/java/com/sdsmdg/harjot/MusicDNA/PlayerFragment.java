@@ -1,6 +1,7 @@
 package com.sdsmdg.harjot.MusicDNA;
 
 
+import android.graphics.Canvas;
 import android.net.ConnectivityManager;
 import android.support.v4.app.Fragment;
 import android.content.Context;
@@ -17,6 +18,9 @@ import android.media.audiofx.Visualizer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.util.Log;
 import android.util.Pair;
@@ -35,6 +39,8 @@ import android.widget.Toast;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
+import com.sdsmdg.harjot.MusicDNA.CustomRecyclerView.CustomAdapter;
+import com.sdsmdg.harjot.MusicDNA.CustomRecyclerView.SnappyRecyclerView;
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.Models.SavedDNA;
 import com.sdsmdg.harjot.MusicDNA.Models.Track;
@@ -54,6 +60,9 @@ import java.util.TimerTask;
  */
 public class PlayerFragment extends Fragment implements
         AudioPlayerBroadcastReceiver.onCallbackListener {
+
+    public static SnappyRecyclerView snappyRecyclerView;
+    CustomAdapter customAdapter;
 
     public static VisualizerView mVisualizerView;
     public static MediaPlayer mMediaPlayer;
@@ -139,7 +148,7 @@ public class PlayerFragment extends Fragment implements
     HomeActivity homeActivity;
     public static Context ctx;
 
-    static ImageView currentAlbumArtHolder;
+//    static ImageView currentAlbumArtHolder;
 
     public boolean isStart = true;
 
@@ -306,6 +315,8 @@ public class PlayerFragment extends Fragment implements
                 bufferingIndicator.setVisibility(View.GONE);
                 equalizerIcon.setVisibility(View.VISIBLE);
 
+                snappyRecyclerView.setTransparency();
+
                 new HomeActivity.SaveQueue().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 new HomeActivity.SaveRecents().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
@@ -390,7 +401,11 @@ public class PlayerFragment extends Fragment implements
     @Override
     public void onResume() {
         super.onResume();
-        //mVisualizerView.onResumeMySurfaceView();
+        if (snappyRecyclerView.getCurrentPosition() != HomeActivity.queueCurrentIndex) {
+            snappyRecyclerView.scrollToPosition(HomeActivity.queueCurrentIndex);
+            snappyRecyclerView.setCurrentPosition(HomeActivity.queueCurrentIndex);
+            customAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -485,11 +500,23 @@ public class PlayerFragment extends Fragment implements
 
         rootView = (SlidingRelativeLayout) view.findViewById(R.id.root_view);
 
-        currentAlbumArtHolder = (ImageView) view.findViewById(R.id.current_album_art_holder);
+        snappyRecyclerView = (SnappyRecyclerView) view.findViewById(R.id.visualizer_recycler);
 
-        if (homeActivity.settings != null && homeActivity.settings.isAlbumArtBackgroundEnabled() && (currentAlbumArtHolder.getVisibility() == View.GONE || currentAlbumArtHolder.getVisibility() == View.INVISIBLE)) {
-            currentAlbumArtHolder.setVisibility(View.VISIBLE);
-        }
+        customAdapter = new CustomAdapter(getContext(), snappyRecyclerView, HomeActivity.queue.getQueue());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        snappyRecyclerView.setLayoutManager(linearLayoutManager);
+        snappyRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        snappyRecyclerView.setAdapter(customAdapter);
+//        snappyRecyclerView.setCurrentPosition(0);
+
+        snappyRecyclerView.setActivity(homeActivity);
+
+//        currentAlbumArtHolder = (ImageView) view.findViewById(R.id.current_album_art_holder);
+//        currentAlbumArtHolder = snappyRecyclerView.getAlbumArtImageView();
+
+//        if (homeActivity.settings != null && homeActivity.settings.isAlbumArtBackgroundEnabled() && (currentAlbumArtHolder.getVisibility() == View.GONE || currentAlbumArtHolder.getVisibility() == View.INVISIBLE)) {
+//            currentAlbumArtHolder.setVisibility(View.VISIBLE);
+//        }
 
         fullscreenExtraSpaceOccupier = view.findViewById(R.id.fullscreen_extra_space_occupier);
 
@@ -543,6 +570,16 @@ public class PlayerFragment extends Fragment implements
                     shuffleController.setImageResource(R.drawable.ic_shuffle_filled);
                     mCallback11.onShuffleEnabled();
                 }
+                snappyRecyclerView.scrollToPosition(HomeActivity.queueCurrentIndex);
+                snappyRecyclerView.setCurrentPosition(HomeActivity.queueCurrentIndex);
+                customAdapter.notifyDataSetChanged();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        snappyRecyclerView.setTransparency();
+                    }
+                }, 400);
             }
         });
 
@@ -662,9 +699,27 @@ public class PlayerFragment extends Fragment implements
 
         mVisualizerView = (VisualizerView) view.findViewById(R.id.myvisualizerview);
 
-        mVisualizerView.setOnLongClickListener(new View.OnLongClickListener() {
+        VisualizerView.w = HomeActivity.screen_width;
+        VisualizerView.h = HomeActivity.screen_width;
+        VisualizerView.conf = Bitmap.Config.ARGB_8888;
+        VisualizerView.bmp = Bitmap.createBitmap(VisualizerView.w, VisualizerView.h, VisualizerView.conf);
+        HomeActivity.cacheCanvas = new Canvas(VisualizerView.bmp);
+
+//        snappyRecyclerView.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View v) {
+//
+//            }
+//        });
+
+        snappyRecyclerView.addOnItemTouchListener(new ClickItemTouchListener(snappyRecyclerView) {
             @Override
-            public boolean onLongClick(View v) {
+            boolean onClick(RecyclerView parent, View view, int position, long id) {
+                return false;
+            }
+
+            @Override
+            boolean onLongClick(RecyclerView parent, View view, int position, long id) {
                 if (homeActivity.isFullScreenEnabled) {
                     homeActivity.isFullScreenEnabled = false;
                     bottomContainer.setVisibility(View.VISIBLE);
@@ -684,39 +739,12 @@ public class PlayerFragment extends Fragment implements
                 }
                 return true;
             }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+            }
         });
-
-        mVisualizerView.setOnTouchListener(
-                new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        switch (event.getAction()) {
-                            case MotionEvent.ACTION_DOWN:
-                                x1 = event.getX();
-                                break;
-                            case MotionEvent.ACTION_UP:
-                                x2 = event.getX();
-                                float deltaX = x2 - x1;
-
-                                if (Math.abs(deltaX) > MIN_DISTANCE) {
-                                    if (x2 > x1) {
-                                        mMediaPlayer.pause();
-                                        mCallback3.onPreviousTrack();
-                                        return false;
-                                    } else {
-                                        mMediaPlayer.pause();
-                                        homeActivity.nextControllerClicked = true;
-                                        mCallback2.onComplete();
-                                        return false;
-                                    }
-                                } else {
-                                    return false;
-                                }
-                        }
-                        return false;
-                    }
-                }
-        );
 
         cpb = (CustomProgressBar) view.findViewById(R.id.customProgress);
 
@@ -740,11 +768,11 @@ public class PlayerFragment extends Fragment implements
             if (track.getArtworkURL() != null) {
                 Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(selected_track_image);
                 Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(homeActivity.spImgAB);
-                Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(currentAlbumArtHolder);
+//                Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(currentAlbumArtHolder);
             } else {
                 selected_track_image.setImageResource(R.drawable.ic_default);
                 homeActivity.spImgAB.setImageResource(R.drawable.ic_default);
-                currentAlbumArtHolder.setImageResource(R.drawable.ic_default);
+//                currentAlbumArtHolder.setImageResource(R.drawable.ic_default);
             }
             try {
                 homeActivity.spTitleAB.setText(track.getTitle());
@@ -763,7 +791,7 @@ public class PlayerFragment extends Fragment implements
             try {
                 imgLoader.DisplayImage(localTrack.getPath(), homeActivity.spImgAB);
                 imgLoader.DisplayImage(localTrack.getPath(), selected_track_image);
-                imgLoader.DisplayImage(localTrack.getPath(), currentAlbumArtHolder);
+//                imgLoader.DisplayImage(localTrack.getPath(), currentAlbumArtHolder);
             } catch (Exception e) {
 
             }
@@ -878,13 +906,6 @@ public class PlayerFragment extends Fragment implements
         nextTrackController.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (!homeActivity.repeatEnabled && !homeActivity.repeatOnceEnabled && homeActivity.queueCurrentIndex == homeActivity.queue.getQueue().size() - 1) {
-//
-//                } else {
-//                    mMediaPlayer.pause();
-//                    homeActivity.nextControllerClicked = true;
-//                    mCallback2.onComplete();
-//                }
                 mMediaPlayer.pause();
                 homeActivity.nextControllerClicked = true;
                 mCallback2.onComplete();
@@ -1095,9 +1116,22 @@ public class PlayerFragment extends Fragment implements
         isRefreshed = true;
 
         mVisualizerView.clear();
+
         pauseClicked = false;
         completed = false;
         isTracking = false;
+
+        if (snappyRecyclerView.getCurrentPosition() != HomeActivity.queueCurrentIndex) {
+            snappyRecyclerView.scrollToPosition(HomeActivity.queueCurrentIndex);
+            snappyRecyclerView.setCurrentPosition(HomeActivity.queueCurrentIndex);
+            customAdapter.notifyDataSetChanged();
+        }
+
+        VisualizerView.w = HomeActivity.screen_width;
+        VisualizerView.h = HomeActivity.screen_width;
+        VisualizerView.conf = Bitmap.Config.ARGB_8888;
+        VisualizerView.bmp = Bitmap.createBitmap(VisualizerView.w, VisualizerView.h, VisualizerView.conf);
+        HomeActivity.cacheCanvas = new Canvas(VisualizerView.bmp);
 
         if (homeActivity.isPlayerVisible) {
             player_controller.setVisibility(View.VISIBLE);
@@ -1149,11 +1183,11 @@ public class PlayerFragment extends Fragment implements
             if (track.getArtworkURL() != null) {
                 Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(selected_track_image);
                 Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(homeActivity.spImgAB);
-                Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(currentAlbumArtHolder);
+//                Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(currentAlbumArtHolder);
             } else {
                 selected_track_image.setImageResource(R.drawable.ic_default);
                 homeActivity.spImgAB.setImageResource(R.drawable.ic_default);
-                currentAlbumArtHolder.setImageResource(R.drawable.ic_default);
+//                currentAlbumArtHolder.setImageResource(R.drawable.ic_default);
             }
             try {
                 homeActivity.spTitleAB.setText(track.getTitle());
@@ -1171,7 +1205,7 @@ public class PlayerFragment extends Fragment implements
             try {
                 imgLoader.DisplayImage(localTrack.getPath(), homeActivity.spImgAB);
                 imgLoader.DisplayImage(localTrack.getPath(), selected_track_image);
-                imgLoader.DisplayImage(localTrack.getPath(), currentAlbumArtHolder);
+//                imgLoader.DisplayImage(localTrack.getPath(), currentAlbumArtHolder);
             } catch (Exception e) {
 
             }
@@ -1365,7 +1399,8 @@ public class PlayerFragment extends Fragment implements
     }
 
     public void toggleAlbumArtBackground(int visibility) {
-        currentAlbumArtHolder.setVisibility(visibility);
+//        currentAlbumArtHolder.setVisibility(visibility);
+        snappyRecyclerView.setTransparency();
     }
 
     public String getBase64encodedBitmap(Bitmap image) {

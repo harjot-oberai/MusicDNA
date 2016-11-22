@@ -69,11 +69,11 @@ public class VisualizerView extends View {
         mForePaint1.setColor(Color.rgb(255, 128, 0));
         pts = new ArrayList<>();
         ptPaint = new ArrayList<>();
-        w = HomeActivity.screen_width;
-        h = HomeActivity.screen_width;
-        conf = Bitmap.Config.ARGB_8888;
-        bmp = Bitmap.createBitmap(w, h, conf);
-        HomeActivity.cacheCanvas = new Canvas(bmp);
+//        w = HomeActivity.screen_width;
+//        h = HomeActivity.screen_width;
+//        conf = Bitmap.Config.ARGB_8888;
+//        bmp = Bitmap.createBitmap(w, h, conf);
+//        HomeActivity.cacheCanvas = new Canvas(bmp);
     }
 
     public void updateVisualizer(byte[] bytes) {
@@ -108,8 +108,8 @@ public class VisualizerView extends View {
     }
 
     public void clear() {
-        bmp = Bitmap.createBitmap(w, h, conf);
-        HomeActivity.cacheCanvas = new Canvas(bmp);
+//        bmp = Bitmap.createBitmap(w, h, conf);
+//        HomeActivity.cacheCanvas = new Canvas(bmp);
         pts.clear();
         ptPaint.clear();
     }

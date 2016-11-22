@@ -1237,6 +1237,88 @@ public class HomeActivity extends AppCompatActivity
 
         }
 
+        List<UnifiedTrack> tmp = new ArrayList<>();
+        boolean queueCurrentIndexCollision = false;
+        int indexCorrection = 0;
+        for (int i = 0; i < queue.getQueue().size(); i++) {
+            UnifiedTrack ut = queue.getQueue().get(i);
+            if (ut.getType()) {
+                if (!checkTrack(ut.getLocalTrack())) {
+                    if (i == queueCurrentIndex) {
+                        queueCurrentIndexCollision = true;
+                    } else if (i < queueCurrentIndex) {
+                        indexCorrection++;
+                    }
+                    tmp.add(ut);
+                }
+            }
+        }
+        for (int i = 0; i < tmp.size(); i++) {
+            Toast.makeText(ctx, "Removing " + tmp.get(i).getLocalTrack().getTitle() + " from queue", Toast.LENGTH_SHORT).show();
+            queue.getQueue().remove(tmp.get(i));
+        }
+        if (queueCurrentIndexCollision) {
+            if (queue.getQueue().size() > 0) {
+                queueCurrentIndex = 0;
+            } else {
+                queue = new Queue();
+            }
+        } else {
+            queueCurrentIndex -= indexCorrection;
+        }
+
+        tmp.clear();
+
+        for (int i = 0; i < recentlyPlayed.getRecentlyPlayed().size(); i++) {
+            UnifiedTrack ut = recentlyPlayed.getRecentlyPlayed().get(i);
+            if (ut.getType()) {
+                if (!checkTrack(ut.getLocalTrack())) {
+                    tmp.add(ut);
+                }
+            }
+        }
+        for (int i = 0; i < tmp.size(); i++) {
+            Toast.makeText(ctx, "Removing " + tmp.get(i).getLocalTrack().getTitle() + " from recents", Toast.LENGTH_SHORT).show();
+            recentlyPlayed.getRecentlyPlayed().remove(tmp.get(i));
+        }
+
+        List<UnifiedTrack> temp = new ArrayList<>();
+        List<Playlist> tmpPL = new ArrayList<>();
+
+        for (int i = 0; i < allPlaylists.getPlaylists().size(); i++) {
+            Playlist pl = allPlaylists.getPlaylists().get(i);
+            for (int j = 0; j < pl.getSongList().size(); j++) {
+                UnifiedTrack ut = pl.getSongList().get(j);
+                if (ut.getType()) {
+                    if (!checkTrack(ut.getLocalTrack())) {
+                        temp.add(ut);
+                    }
+                }
+            }
+            for (int j = 0; j < temp.size(); j++) {
+                Toast.makeText(ctx, "Removing " + temp.get(j).getLocalTrack().getTitle() + " from playlist " + pl.getPlaylistName(), Toast.LENGTH_SHORT).show();
+                pl.getSongList().remove(temp.get(j));
+            }
+            temp.clear();
+            if (pl.getSongList().size() == 0) {
+                tmpPL.add(pl);
+            }
+        }
+        for (int i = 0; i < tmpPL.size(); i++) {
+            Toast.makeText(ctx, "Removing " + tmpPL.get(i).getPlaylistName() + " from playlists", Toast.LENGTH_SHORT).show();
+            allPlaylists.getPlaylists().remove(tmpPL.get(i));
+        }
+        tmpPL.clear();
+    }
+
+    public boolean checkTrack(LocalTrack lt) {
+        for (int i = 0; i < localTrackList.size(); i++) {
+            LocalTrack localTrack = localTrackList.get(i);
+            if (localTrack.getTitle().equals(lt.getTitle())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public int checkAlbum(String album) {
@@ -2383,7 +2465,7 @@ public class HomeActivity extends AppCompatActivity
         }, 500);
     }
 
-    public void onQueueItemClicked2(int position){
+    public void onQueueItemClicked2(int position) {
         queueCurrentIndex = position;
         UnifiedTrack ut = queue.getQueue().get(position);
         if (ut.getType()) {
@@ -4062,6 +4144,8 @@ public class HomeActivity extends AppCompatActivity
                         savedDNAs = new AllSavedDNA();
                     }
 
+                    getLocalSongs();
+
                     if (queue != null && queue.getQueue().size() != 0) {
                         UnifiedTrack utHome = queue.getQueue().get(queueCurrentIndex);
                         if (utHome.getType()) {
@@ -4074,8 +4158,6 @@ public class HomeActivity extends AppCompatActivity
                     } else {
                         bottomToolbar.setVisibility(View.GONE);
                     }
-
-                    getLocalSongs();
 
                     for (int i = 0; i < Math.min(10, recentlyPlayed.getRecentlyPlayed().size()); i++) {
                         continuePlayingList.add(recentlyPlayed.getRecentlyPlayed().get(i));

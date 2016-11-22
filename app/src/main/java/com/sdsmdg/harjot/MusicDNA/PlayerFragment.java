@@ -51,6 +51,7 @@ import com.squareup.leakcanary.RefWatcher;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -273,7 +274,7 @@ public class PlayerFragment extends Fragment implements
 
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(final Context context) {
         super.onAttach(context);
         homeActivity = (HomeActivity) context;
         ctx = context;
@@ -406,6 +407,7 @@ public class PlayerFragment extends Fragment implements
             snappyRecyclerView.setCurrentPosition(HomeActivity.queueCurrentIndex);
             customAdapter.notifyDataSetChanged();
         }
+        snappyRecyclerView.setTransparency();
     }
 
     @Override
@@ -507,16 +509,8 @@ public class PlayerFragment extends Fragment implements
         snappyRecyclerView.setLayoutManager(linearLayoutManager);
         snappyRecyclerView.setItemAnimator(new DefaultItemAnimator());
         snappyRecyclerView.setAdapter(customAdapter);
-//        snappyRecyclerView.setCurrentPosition(0);
 
         snappyRecyclerView.setActivity(homeActivity);
-
-//        currentAlbumArtHolder = (ImageView) view.findViewById(R.id.current_album_art_holder);
-//        currentAlbumArtHolder = snappyRecyclerView.getAlbumArtImageView();
-
-//        if (homeActivity.settings != null && homeActivity.settings.isAlbumArtBackgroundEnabled() && (currentAlbumArtHolder.getVisibility() == View.GONE || currentAlbumArtHolder.getVisibility() == View.INVISIBLE)) {
-//            currentAlbumArtHolder.setVisibility(View.VISIBLE);
-//        }
 
         fullscreenExtraSpaceOccupier = view.findViewById(R.id.fullscreen_extra_space_occupier);
 
@@ -705,13 +699,6 @@ public class PlayerFragment extends Fragment implements
         VisualizerView.bmp = Bitmap.createBitmap(VisualizerView.w, VisualizerView.h, VisualizerView.conf);
         HomeActivity.cacheCanvas = new Canvas(VisualizerView.bmp);
 
-//        snappyRecyclerView.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View v) {
-//
-//            }
-//        });
-
         snappyRecyclerView.addOnItemTouchListener(new ClickItemTouchListener(snappyRecyclerView) {
             @Override
             boolean onClick(RecyclerView parent, View view, int position, long id) {
@@ -826,8 +813,16 @@ public class PlayerFragment extends Fragment implements
             } else {
                 isPrepared = false;
                 mMediaPlayer.reset();
-                mMediaPlayer.setDataSource(localTrack.getPath());
-                mMediaPlayer.prepareAsync();
+                File f = new File(localTrack.getPath());
+                if (f.exists()) {
+                    mMediaPlayer.setDataSource(localTrack.getPath());
+                    mMediaPlayer.prepareAsync();
+                } else {
+                    Toast.makeText(getContext(), "Error playing " + localTrack.getTitle() + ". Skipping to next track", Toast.LENGTH_SHORT).show();
+                    mMediaPlayer.pause();
+                    homeActivity.nextControllerClicked = true;
+                    mCallback2.onComplete();
+                }
             }
             bufferingIndicator.setVisibility(View.VISIBLE);
         } catch (Exception e) {
@@ -1243,8 +1238,16 @@ public class PlayerFragment extends Fragment implements
                 mMediaPlayer.reset();
                 progressBar.setProgress(0);
                 progressBar.setSecondaryProgress(0);
-                mMediaPlayer.setDataSource(localTrack.getPath());
-                mMediaPlayer.prepareAsync();
+                File f = new File(localTrack.getPath());
+                if (f.exists()) {
+                    mMediaPlayer.setDataSource(localTrack.getPath());
+                    mMediaPlayer.prepareAsync();
+                } else {
+                    Toast.makeText(getContext(), "Error playing " + localTrack.getTitle() + ". Skipping to next track", Toast.LENGTH_SHORT).show();
+                    mMediaPlayer.pause();
+                    homeActivity.nextControllerClicked = true;
+                    mCallback2.onComplete();
+                }
             }
             bufferingIndicator.setVisibility(View.VISIBLE);
         } catch (Exception e) {

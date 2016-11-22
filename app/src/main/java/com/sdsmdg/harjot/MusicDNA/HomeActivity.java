@@ -36,7 +36,6 @@ import android.os.IBinder;
 import android.provider.MediaStore;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -288,8 +287,8 @@ public class HomeActivity extends AppCompatActivity
     SearchView searchView;
     MenuItem searchItem;
 
-    RecyclerView streamingListView;
-    RecyclerView localListView;
+    RecyclerView soundcloudRecyclerView;
+    RecyclerView localsongsRecyclerView;
     static RecyclerView playlistsRecycler;
     RecyclerView recentsRecycler;
 
@@ -1516,14 +1515,14 @@ public class HomeActivity extends AppCompatActivity
         }
 
         if (finalLocalSearchResultList.size() == 0) {
-            localListView.setVisibility(View.GONE);
+            localsongsRecyclerView.setVisibility(View.GONE);
             localNothingText.setVisibility(View.VISIBLE);
         } else {
-            localListView.setVisibility(View.VISIBLE);
+            localsongsRecyclerView.setVisibility(View.VISIBLE);
             localNothingText.setVisibility(View.INVISIBLE);
         }
 
-        (localListView.getAdapter()).notifyDataSetChanged();
+        (localsongsRecyclerView.getAdapter()).notifyDataSetChanged();
         if (lFrag != null)
             lFrag.updateAdapter();
         if (query.equals("")) {
@@ -1590,7 +1589,7 @@ public class HomeActivity extends AppCompatActivity
             if (!query.equals("")) {
             /*streamingTrackList.clear();
             if(sAdapter!=null){
-                streamingListView.getAdapter().notifyDataSetChanged();
+                soundcloudRecyclerView.getAdapter().notifyDataSetChanged();
             }*/
                 streamRecyclerContainer.setVisibility(View.VISIBLE);
                 startLoadingIndicator();
@@ -1606,13 +1605,12 @@ public class HomeActivity extends AppCompatActivity
                     public void onResponse(Response<List<Track>> response) {
 
                         if (response.isSuccess()) {
-                            Log.d("RETRO", response.body() + "");
                             streamingTrackList = response.body();
                             sAdapter = new StreamTracksHorizontalAdapter(streamingTrackList, ctx);
                             LinearLayoutManager mLayoutManager = new LinearLayoutManager(ctx, LinearLayoutManager.HORIZONTAL, false);
-                            streamingListView.setLayoutManager(mLayoutManager);
-                            streamingListView.setItemAnimator(new DefaultItemAnimator());
-                            streamingListView.setAdapter(sAdapter);
+                            soundcloudRecyclerView.setLayoutManager(mLayoutManager);
+                            soundcloudRecyclerView.setItemAnimator(new DefaultItemAnimator());
+                            soundcloudRecyclerView.setAdapter(sAdapter);
 
                             if (streamingTrackList.size() == 0) {
                                 streamRecyclerContainer.setVisibility(View.GONE);
@@ -1621,7 +1619,7 @@ public class HomeActivity extends AppCompatActivity
                             }
 
                             stopLoadingIndicator();
-                            (streamingListView.getAdapter()).notifyDataSetChanged();
+                            (soundcloudRecyclerView.getAdapter()).notifyDataSetChanged();
 
                             StreamMusicFragment sFrag = (StreamMusicFragment) fragMan.findFragmentByTag("stream");
                             if (sFrag != null) {
@@ -1630,11 +1628,12 @@ public class HomeActivity extends AppCompatActivity
                         } else {
                             stopLoadingIndicator();
                         }
+                        Log.d("RETRO", response.body() + "");
                     }
 
                     @Override
                     public void onFailure(Throwable t) {
-                        Log.d("RETRO", t.getMessage());
+                        Log.d("RETRO1", t.getMessage());
                     }
                 });
 
@@ -3158,13 +3157,13 @@ public class HomeActivity extends AppCompatActivity
 
     public void startLoadingIndicator() {
         findViewById(R.id.loadingIndicator).setVisibility(View.VISIBLE);
-        streamingListView.setVisibility(View.INVISIBLE);
+        soundcloudRecyclerView.setVisibility(View.INVISIBLE);
         streamNothingText.setVisibility(View.INVISIBLE);
     }
 
     public void stopLoadingIndicator() {
         findViewById(R.id.loadingIndicator).setVisibility(View.INVISIBLE);
-        streamingListView.setVisibility(View.VISIBLE);
+        soundcloudRecyclerView.setVisibility(View.VISIBLE);
         if (streamingTrackList.size() == 0) {
             streamNothingText.setVisibility(View.VISIBLE);
         }
@@ -4350,15 +4349,15 @@ public class HomeActivity extends AppCompatActivity
                     });
 
                     adapter = new LocalTracksHorizontalAdapter(finalLocalSearchResultList, ctx);
-                    localListView = (RecyclerView) findViewById(R.id.localMusicList_home);
+                    localsongsRecyclerView = (RecyclerView) findViewById(R.id.localMusicList_home);
                     LinearLayoutManager mLayoutManager = new LinearLayoutManager(ctx, LinearLayoutManager.HORIZONTAL, false);
-                    localListView.setLayoutManager(mLayoutManager);
-                    localListView.setItemAnimator(new DefaultItemAnimator());
+                    localsongsRecyclerView.setLayoutManager(mLayoutManager);
+                    localsongsRecyclerView.setItemAnimator(new DefaultItemAnimator());
                     AlphaInAnimationAdapter alphaAdapter = new AlphaInAnimationAdapter(adapter);
                     alphaAdapter.setFirstOnly(false);
-                    localListView.setAdapter(alphaAdapter);
+                    localsongsRecyclerView.setAdapter(alphaAdapter);
 
-                    localListView.addOnItemTouchListener(new ClickItemTouchListener(localListView) {
+                    localsongsRecyclerView.addOnItemTouchListener(new ClickItemTouchListener(localsongsRecyclerView) {
                         @Override
                         boolean onClick(RecyclerView parent, View view, int position, long id) {
                             LocalTrack track = finalLocalSearchResultList.get(position);
@@ -4473,9 +4472,9 @@ public class HomeActivity extends AppCompatActivity
                         }
                     });
 
-                    streamingListView = (RecyclerView) findViewById(R.id.trackList_home);
+                    soundcloudRecyclerView = (RecyclerView) findViewById(R.id.trackList_home);
 
-                    streamingListView.addOnItemTouchListener(new ClickItemTouchListener(streamingListView) {
+                    soundcloudRecyclerView.addOnItemTouchListener(new ClickItemTouchListener(soundcloudRecyclerView) {
                         @Override
                         boolean onClick(RecyclerView parent, View view, int position, long id) {
                             Track track = streamingTrackList.get(position);
@@ -4589,10 +4588,10 @@ public class HomeActivity extends AppCompatActivity
                     playerContainer = findViewById(R.id.player_frag_container);
 
                     if (finalLocalSearchResultList.size() == 0) {
-                        localListView.setVisibility(View.GONE);
+                        localsongsRecyclerView.setVisibility(View.GONE);
                         localNothingText.setVisibility(View.VISIBLE);
                     } else {
-                        localListView.setVisibility(View.VISIBLE);
+                        localsongsRecyclerView.setVisibility(View.VISIBLE);
                         localNothingText.setVisibility(View.INVISIBLE);
                     }
 

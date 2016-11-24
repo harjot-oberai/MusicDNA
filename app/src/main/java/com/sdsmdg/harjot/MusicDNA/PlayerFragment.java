@@ -76,9 +76,6 @@ public class PlayerFragment extends Fragment implements
 
     static boolean isPrepared = false;
 
-    private float x1, x2;
-    static final int MIN_DISTANCE = 200;
-
     View bufferingIndicator;
 
     static View fullscreenExtraSpaceOccupier;
@@ -314,8 +311,10 @@ public class PlayerFragment extends Fragment implements
                 togglePlayPause();
                 togglePlayPause();
                 bufferingIndicator.setVisibility(View.GONE);
+                mainTrackController.setVisibility(View.VISIBLE);
                 equalizerIcon.setVisibility(View.VISIBLE);
 
+                snappyRecyclerView.setCurrentPosition(HomeActivity.queueCurrentIndex);
                 snappyRecyclerView.setTransparency();
 
                 new HomeActivity.SaveQueue().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -367,10 +366,12 @@ public class PlayerFragment extends Fragment implements
                 switch (what) {
                     case MediaPlayer.MEDIA_INFO_BUFFERING_START:
                         bufferingIndicator.setVisibility(View.VISIBLE);
+                        mainTrackController.setVisibility(View.GONE);
                         isPrepared = false;
                         break;
                     case MediaPlayer.MEDIA_INFO_BUFFERING_END:
                         bufferingIndicator.setVisibility(View.GONE);
+                        mainTrackController.setVisibility(View.VISIBLE);
                         isPrepared = true;
                         break;
                 }
@@ -825,6 +826,7 @@ public class PlayerFragment extends Fragment implements
                 }
             }
             bufferingIndicator.setVisibility(View.VISIBLE);
+            mainTrackController.setVisibility(View.GONE);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1250,6 +1252,7 @@ public class PlayerFragment extends Fragment implements
                 }
             }
             bufferingIndicator.setVisibility(View.VISIBLE);
+            mainTrackController.setVisibility(View.GONE);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1402,7 +1405,6 @@ public class PlayerFragment extends Fragment implements
     }
 
     public void toggleAlbumArtBackground(int visibility) {
-//        currentAlbumArtHolder.setVisibility(visibility);
         snappyRecyclerView.setTransparency();
     }
 

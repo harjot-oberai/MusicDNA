@@ -83,6 +83,7 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_marginTop="20dp"
+                        android:padding="10dp"
                         android:thumb="@drawable/custom_equalizer_thumb"
                         app:seekBarRotation="CW270" />
                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
@@ -111,6 +112,7 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_marginTop="20dp"
+                        android:padding="10dp"
                         android:thumb="@drawable/custom_equalizer_thumb"
                         app:seekBarRotation="CW270" />
                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
@@ -139,6 +141,7 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_marginTop="20dp"
+                        android:padding="10dp"
                         android:thumb="@drawable/custom_equalizer_thumb"
                         app:seekBarRotation="CW270" />
                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
@@ -167,6 +170,7 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_marginTop="20dp"
+                        android:padding="10dp"
                         android:thumb="@drawable/custom_equalizer_thumb"
                         app:seekBarRotation="CW270" />
                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
@@ -195,6 +199,7 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_marginTop="20dp"
+                        android:padding="10dp"
                         android:thumb="@drawable/custom_equalizer_thumb"
                         app:seekBarRotation="CW270" />
                 </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>

@@ -121,16 +121,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp" />
 
-    <!--<ImageView-->
-    <!--android:id="@+id/current_album_art_holder"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_above="@+id/mainControllerContainer"-->
-    <!--android:layout_below="@+id/fullscreen_extra_space_occupier"-->
-    <!--android:layout_centerHorizontal="true"-->
-    <!--android:alpha="0.1"-->
-    <!--android:visibility="invisible" />-->
-
     <com.sdsmdg.harjot.MusicDNA.CustomRecyclerView.SnappyRecyclerView
         android:id="@+id/visualizer_recycler"
         android:layout_width="match_parent"
@@ -193,7 +183,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_centerInParent="true"
-            android:background="#000000"
+            android:layout_margin="10dp"
             android:clickable="true"
             android:visibility="invisible"
             app:indicator="BallSpinFadeLoader"
@@ -247,6 +237,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:padding="10dp"
             android:layout_marginLeft="3dp"
             android:layout_marginRight="3dp"
             android:layout_toEndOf="@+id/currTime"

@@ -187,7 +187,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(1, notification);
 
-//        updateMediaSession();
+        updateMediaSession();
 
     }
 
@@ -257,7 +257,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
 
         m_objMediaSession.setMetadata(metadataBuilder.build());
         PlaybackState.Builder stateBuilder = new PlaybackState.Builder();
-        stateBuilder.setActions(PlaybackState.ACTION_PLAY | PlaybackState.ACTION_PLAY_PAUSE | PlaybackState.ACTION_PAUSE | PlaybackState.ACTION_REWIND | PlaybackState.ACTION_FAST_FORWARD);
+        stateBuilder.setActions(PlaybackState.ACTION_PLAY | PlaybackState.ACTION_PLAY_PAUSE | PlaybackState.ACTION_PAUSE | PlaybackState.ACTION_SKIP_TO_NEXT | PlaybackState.ACTION_SKIP_TO_PREVIOUS);
         stateBuilder.setState(!PlayerFragment.mMediaPlayer.isPlaying() ? PlaybackState.STATE_PAUSED : PlaybackState.STATE_PLAYING, PlaybackState.PLAYBACK_POSITION_UNKNOWN, 1.0f);
         m_objMediaSession.setPlaybackState(stateBuilder.build());
         m_objMediaSession.setActive(true);
@@ -274,7 +274,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
 
         m_objMediaSession.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS | MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);
 
-        /*MediaMetadata.Builder metadataBuilder = new MediaMetadata.Builder();
+        MediaMetadata.Builder metadataBuilder = new MediaMetadata.Builder();
         if (PlayerFragment.localIsPlaying) {
             if (PlayerFragment.localTrack != null) {
                 metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, PlayerFragment.localTrack.getTitle());
@@ -295,9 +295,9 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
 
         m_objMediaSession.setMetadata(metadataBuilder.build());
         PlaybackState.Builder stateBuilder = new PlaybackState.Builder();
-        stateBuilder.setActions(PlaybackState.ACTION_PLAY | PlaybackState.ACTION_PLAY_PAUSE | PlaybackState.ACTION_PAUSE | PlaybackState.ACTION_FAST_FORWARD | PlaybackState.ACTION_REWIND);
+        stateBuilder.setActions(PlaybackState.ACTION_PLAY | PlaybackState.ACTION_PLAY_PAUSE | PlaybackState.ACTION_PAUSE | PlaybackState.ACTION_SKIP_TO_NEXT | PlaybackState.ACTION_SKIP_TO_PREVIOUS);
         stateBuilder.setState(!PlayerFragment.mMediaPlayer.isPlaying() ? PlaybackState.STATE_PAUSED : PlaybackState.STATE_PLAYING, PlaybackState.PLAYBACK_POSITION_UNKNOWN, 1.0f);
-        m_objMediaSession.setPlaybackState(stateBuilder.build());*/
+        m_objMediaSession.setPlaybackState(stateBuilder.build());
 
         m_objMediaSession.setActive(true);
         m_objMediaController = m_objMediaSession.getController();

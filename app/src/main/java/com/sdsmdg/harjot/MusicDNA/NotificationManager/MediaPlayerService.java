@@ -258,7 +258,13 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
         m_objMediaSession.setMetadata(metadataBuilder.build());
         PlaybackState.Builder stateBuilder = new PlaybackState.Builder();
         stateBuilder.setActions(PlaybackState.ACTION_PLAY | PlaybackState.ACTION_PLAY_PAUSE | PlaybackState.ACTION_PAUSE | PlaybackState.ACTION_SKIP_TO_NEXT | PlaybackState.ACTION_SKIP_TO_PREVIOUS);
-        stateBuilder.setState(!PlayerFragment.mMediaPlayer.isPlaying() ? PlaybackState.STATE_PAUSED : PlaybackState.STATE_PLAYING, PlaybackState.PLAYBACK_POSITION_UNKNOWN, 1.0f);
+        try {
+            if (PlayerFragment.mMediaPlayer != null) {
+                stateBuilder.setState(!PlayerFragment.mMediaPlayer.isPlaying() ? PlaybackState.STATE_PAUSED : PlaybackState.STATE_PLAYING, PlaybackState.PLAYBACK_POSITION_UNKNOWN, 1.0f);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         m_objMediaSession.setPlaybackState(stateBuilder.build());
         m_objMediaSession.setActive(true);
     }
@@ -296,7 +302,13 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
         m_objMediaSession.setMetadata(metadataBuilder.build());
         PlaybackState.Builder stateBuilder = new PlaybackState.Builder();
         stateBuilder.setActions(PlaybackState.ACTION_PLAY | PlaybackState.ACTION_PLAY_PAUSE | PlaybackState.ACTION_PAUSE | PlaybackState.ACTION_SKIP_TO_NEXT | PlaybackState.ACTION_SKIP_TO_PREVIOUS);
-        stateBuilder.setState(!PlayerFragment.mMediaPlayer.isPlaying() ? PlaybackState.STATE_PAUSED : PlaybackState.STATE_PLAYING, PlaybackState.PLAYBACK_POSITION_UNKNOWN, 1.0f);
+        try {
+            if (PlayerFragment.mMediaPlayer != null) {
+                stateBuilder.setState(!PlayerFragment.mMediaPlayer.isPlaying() ? PlaybackState.STATE_PAUSED : PlaybackState.STATE_PLAYING, PlaybackState.PLAYBACK_POSITION_UNKNOWN, 1.0f);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         m_objMediaSession.setPlaybackState(stateBuilder.build());
 
         m_objMediaSession.setActive(true);
@@ -438,7 +450,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
 
     @Override
     public void onPlayPause() {
-        if (PlayerFragment.mMediaPlayer.isPlaying()) {
+        if (PlayerFragment.mMediaPlayer!=null && PlayerFragment.mMediaPlayer.isPlaying()) {
             buildNotification(generateAction(android.R.drawable.ic_media_pause, "Pause", Constants.ACTION_PAUSE));
         } else {
             buildNotification(generateAction(android.R.drawable.ic_media_play, "Play", Constants.ACTION_PLAY));

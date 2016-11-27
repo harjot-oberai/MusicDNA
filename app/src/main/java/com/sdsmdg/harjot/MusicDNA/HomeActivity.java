@@ -191,7 +191,9 @@ public class HomeActivity extends AppCompatActivity
     public static List<Artist> finalArtists = new ArrayList<>();
     public static List<UnifiedTrack> continuePlayingList = new ArrayList<>();
 
-    String version;
+    String versionName;
+    int versionCode;
+    int prevVersionCode = -1;
     TextView copyrightText;
 
     static Canvas cacheCanvas;
@@ -669,7 +671,8 @@ public class HomeActivity extends AppCompatActivity
         PackageInfo pInfo = null;
         try {
             pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-            version = pInfo.versionName;
+            versionName = pInfo.versionName;
+            versionCode = pInfo.versionCode;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
@@ -685,7 +688,7 @@ public class HomeActivity extends AppCompatActivity
 
         copyrightText = (TextView) findViewById(R.id.copyright_text);
         copyrightText.setTypeface(SplashActivity.tf3);
-        copyrightText.setText("\nMusic DNA v" + version);
+        copyrightText.setText("\nMusic DNA v" + versionName);
 
         imgLoader = new ImageLoader(this);
         ctx = this;
@@ -1096,9 +1099,6 @@ public class HomeActivity extends AppCompatActivity
         try {
             Gson gson = new Gson();
             Log.d("TIME", "start");
-            String json = mPrefs.getString("savedDNAs", "");
-            savedDNAs = gson.fromJson(json, AllSavedDNA.class);
-            Log.d("TIME", "savedDNAs");
             String json2 = mPrefs.getString("allPlaylists", "");
             allPlaylists = gson.fromJson(json2, AllPlaylists.class);
             Log.d("TIME", "allPlaylists");
@@ -1117,7 +1117,18 @@ public class HomeActivity extends AppCompatActivity
             String json8 = mPrefs.getString("settings", "");
             settings = gson.fromJson(json8, Settings.class);
             Log.d("TIME", "settings");
+            String json = mPrefs.getString("savedDNAs", "");
+            savedDNAs = gson.fromJson(json, AllSavedDNA.class);
+            Log.d("TIME", "savedDNAs");
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try{
+            String json7 = mPrefs.getString("versionCode", "");
+            prevVersionCode = gson.fromJson(json7, Integer.class);
+            Log.d("TIME", "prevVersionCode");
+        } catch(Exception e){
             e.printStackTrace();
         }
 
@@ -2997,8 +3008,9 @@ public class HomeActivity extends AppCompatActivity
     protected void onPause() {
         super.onPause();
 
-        new SaveSettings().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new SaveVersionCode().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         new SaveData().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new SaveSettings().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         new SaveQueue().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         try {
@@ -4118,6 +4130,10 @@ public class HomeActivity extends AppCompatActivity
 
                     }
 
+                    if (prevVersionCode == -1 || prevVersionCode <= 30) {
+                        savedDNAs = null;
+                    }
+
                     if (allPlaylists == null) {
                         allPlaylists = new AllPlaylists();
                     }
@@ -4143,6 +4159,8 @@ public class HomeActivity extends AppCompatActivity
                     if (savedDNAs == null) {
                         savedDNAs = new AllSavedDNA();
                     }
+
+                    new SaveVersionCode().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
                     getLocalSongs();
 
@@ -4754,7 +4772,21 @@ public class HomeActivity extends AppCompatActivity
             } catch (Exception e) {
 
             }
-//            prefsEditor.commit();
+            return null;
+        }
+    }
+
+    public class SaveVersionCode extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            try {
+                String json7 = gson.toJson(versionCode);
+                prefsEditor.putString("versionCode", json7);
+            } catch (Exception e) {
+
+            }
             return null;
         }
     }

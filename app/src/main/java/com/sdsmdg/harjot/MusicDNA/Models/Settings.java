@@ -13,7 +13,7 @@ public class Settings {
 
     public Settings() {
         this.minAudioStrength = 0.40f;
-        albumArtBackgroundEnabled = false;
+        albumArtBackgroundEnabled = true;
     }
 
     public int getThemeColor() {

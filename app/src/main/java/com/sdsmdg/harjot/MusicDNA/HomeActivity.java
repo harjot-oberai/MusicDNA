@@ -1265,7 +1265,6 @@ public class HomeActivity extends AppCompatActivity
             }
         }
         for (int i = 0; i < tmp.size(); i++) {
-            Toast.makeText(ctx, "Removing " + tmp.get(i).getLocalTrack().getTitle() + " from queue", Toast.LENGTH_SHORT).show();
             queue.getQueue().remove(tmp.get(i));
         }
         if (queueCurrentIndexCollision) {
@@ -1289,7 +1288,6 @@ public class HomeActivity extends AppCompatActivity
             }
         }
         for (int i = 0; i < tmp.size(); i++) {
-            Toast.makeText(ctx, "Removing " + tmp.get(i).getLocalTrack().getTitle() + " from recents", Toast.LENGTH_SHORT).show();
             recentlyPlayed.getRecentlyPlayed().remove(tmp.get(i));
         }
 
@@ -1307,7 +1305,6 @@ public class HomeActivity extends AppCompatActivity
                 }
             }
             for (int j = 0; j < temp.size(); j++) {
-                Toast.makeText(ctx, "Removing " + temp.get(j).getLocalTrack().getTitle() + " from playlist " + pl.getPlaylistName(), Toast.LENGTH_SHORT).show();
                 pl.getSongList().remove(temp.get(j));
             }
             temp.clear();
@@ -1316,7 +1313,6 @@ public class HomeActivity extends AppCompatActivity
             }
         }
         for (int i = 0; i < tmpPL.size(); i++) {
-            Toast.makeText(ctx, "Removing " + tmpPL.get(i).getPlaylistName() + " from playlists", Toast.LENGTH_SHORT).show();
             allPlaylists.getPlaylists().remove(tmpPL.get(i));
         }
         tmpPL.clear();
@@ -2920,19 +2916,10 @@ public class HomeActivity extends AppCompatActivity
         refreshAlbumAndArtists();
 
         if (isAlbumVisible) {
-//            ViewAlbumFragment albumFragment = (ViewAlbumFragment) getSupportFragmentManager().findFragmentByTag("viewAlbum");
-//            if (albumFragment != null) {
-//                albumFragment.updateList();
-//            }
             hideFragment("viewAlbum");
 
         } else if (isArtistVisible) {
-//            ViewArtistFragment artistFragment = (ViewArtistFragment) getSupportFragmentManager().findFragmentByTag("viewArtist");
-//            if (artistFragment != null) {
-//                artistFragment.updateData();
-//            }
             hideFragment("viewArtist");
-
         }
         FullLocalMusicFragment flmFrag = (FullLocalMusicFragment) fragMan.findFragmentByTag("local");
         LocalMusicFragment lFrag = null;

@@ -269,7 +269,7 @@ public class EditLocalSongFragment extends Fragment {
         }
 
         if (mp3File != null && mp3File.hasID3v2Tag()) {
-            Tag tag = mp3File.getTag();
+//            Tag tag = mp3File.getTag();
 //            titleText.setText(tag.getFirst(FieldKey.TITLE));
 //            artistText.setText(tag.getFirst(FieldKey.ARTIST));
 //            albumText.setText(tag.getFirst(FieldKey.ALBUM));

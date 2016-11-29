@@ -11,6 +11,22 @@ MusicDNA combines the usefullness of a traditional Music Player app with the bea
 The Player allows users to play both **local music** as well as Stream Music directly from **SoundCloud**.
 The Player also packs a **Powerful Equalizer with** ***BassBoost and Reverb*** effects
 
+## Build Instructions
+
+After cloning the repo, create a file `Config.java` under `\app\src\main\java\com\sdsmdg\harjot\MusicDNA`
+Put the following code in it
+```
+package com.sdsmdg.harjot.MusicDNA;
+
+public class Config {
+    public static final String CLIENT_ID = "YOUR_SOUNDCLOUD_CLIENT_ID";
+    public static final String API_URL = "https://api.soundcloud.com";
+}
+```
+Replace `YOUR_SOUNDCLOUD_CLIENT_ID` with a client id received from SoundCloud.<br>
+You may grab one here : [https://developers.soundcloud.com/](https://developers.soundcloud.com/)<br>
+After that just import the project into Android Studio.
+
 ## The Player - *In Action*
 
 Video Demo : [http://sendvid.com/b2hhc1pi](http://sendvid.com/b2hhc1pi)<br>

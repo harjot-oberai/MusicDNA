@@ -205,20 +205,18 @@ public class HomeActivity extends AppCompatActivity
 
     static float ratio, ratio2;
 
-    AppBarLayout appBarLayout;
-
     Toolbar spHome;
     ImageView playerControllerHome;
-    static FrameLayout bottomToolbar;
+    FrameLayout bottomToolbar;
     CircleImageView spImgHome;
     TextView spTitleHome;
 
-    static ImageView overflowMenuAB;
+    ImageView overflowMenuAB;
     static CircleImageView spImgAB;
-    static TextView spTitleAB;
-    static TextView spArtistAB;
+    TextView spTitleAB;
+    TextView spArtistAB;
 
-    static SwitchCompat equalizerSwitch;
+    SwitchCompat equalizerSwitch;
 
     Bitmap selectedImage;
 
@@ -307,7 +305,7 @@ public class HomeActivity extends AppCompatActivity
 
     ImageView localBannerPlayAll;
 
-    static ImageView navImageView;
+    ImageView navImageView;
 
     TextView localViewAll, streamViewAll;
 
@@ -316,20 +314,20 @@ public class HomeActivity extends AppCompatActivity
     TextView localNothingText;
     TextView streamNothingText;
     TextView recentsNothingText;
-    static TextView playlistNothingText;
+    TextView playlistNothingText;
 
     static int screen_width;
     static int screen_height;
 
-    static Toolbar toolbar;
-    static Toolbar spToolbar;
-    static Toolbar equalizerToolbar;
+    Toolbar toolbar;
+    Toolbar spToolbar;
+    Toolbar equalizerToolbar;
 
     Toolbar queueToolbar;
     ImageView queueBackButton;
     TextView queueClearText;
 
-    static Toolbar fragmentToolbar;
+    Toolbar fragmentToolbar;
     ImageView fragmentBackButton;
     TextView fragmentToolbarTitle;
 
@@ -406,7 +404,6 @@ public class HomeActivity extends AppCompatActivity
     static boolean streamSelected = false;
 
     static short reverbPreset = -1, bassStrength = -1;
-    static int y = 0;
 
     Button mEndButton;
 
@@ -651,6 +648,7 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
 
         WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
@@ -668,7 +666,7 @@ public class HomeActivity extends AppCompatActivity
         IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
         registerReceiver(headSetReceiver, filter);
 
-        PackageInfo pInfo = null;
+        PackageInfo pInfo;
         try {
             pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
             versionName = pInfo.versionName;
@@ -786,7 +784,7 @@ public class HomeActivity extends AppCompatActivity
                         if (eqFrag != null)
                             eqFrag.setBlockerVisibility(View.GONE);
                     } catch (Exception e) {
-
+                        e.printStackTrace();
                     }
                 } else {
                     try {
@@ -822,7 +820,6 @@ public class HomeActivity extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.nav_home);
-
 
         View header = navigationView.getHeaderView(0);
         navImageView = (ImageView) header.findViewById(R.id.nav_image_view);
@@ -884,7 +881,6 @@ public class HomeActivity extends AppCompatActivity
         prefsEditor = mPrefs.edit();
         gson = new Gson();
 
-        appBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
         main = this;
 
         overflowMenuAB = (ImageView) findViewById(R.id.menuIcon);
@@ -1044,7 +1040,6 @@ public class HomeActivity extends AppCompatActivity
         progress.setContentView(R.layout.custom_progress_dialog);
         progress.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         progress.show();
-
 
         showCase = new ShowcaseView.Builder(this)
                 .blockAllTouches()

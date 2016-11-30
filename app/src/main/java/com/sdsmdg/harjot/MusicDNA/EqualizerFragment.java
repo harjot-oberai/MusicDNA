@@ -8,7 +8,6 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,9 +44,9 @@ public class EqualizerFragment extends Fragment {
     Paint paint;
     float[] points;
 
-    ImageView spinnerDropDownIcon;
+    int y = 0;
 
-    boolean correctPosition = true;
+    ImageView spinnerDropDownIcon;
 
     short numberOfFrequencyBands;
     LinearLayout mLinearLayout;
@@ -83,8 +82,6 @@ public class EqualizerFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-//        HomeActivity.isEqualizerEnabled = true;
 
         spinnerDropDownIcon = (ImageView) view.findViewById(R.id.spinner_dropdown_icon);
         spinnerDropDownIcon.setOnClickListener(new View.OnClickListener() {
@@ -122,30 +119,30 @@ public class EqualizerFragment extends Fragment {
         reverbController.invalidate();
 
         if (!HomeActivity.isEqualizerReloaded) {
-            int x = (int) ((PlayerFragment.bassBoost.getRoundedStrength() * 19) / 1000);
+            int x = ((PlayerFragment.bassBoost.getRoundedStrength() * 19) / 1000);
             if (x == 0) {
                 bassController.setProgress(1);
             } else {
                 bassController.setProgress(x);
             }
 
-            if (HomeActivity.y == 0) {
+            if (y == 0) {
                 reverbController.setProgress(1);
             } else {
-                reverbController.setProgress(HomeActivity.y);
+                reverbController.setProgress(y);
             }
         } else {
-            int x = (int) ((HomeActivity.bassStrength * 19) / 1000);
+            int x = ((HomeActivity.bassStrength * 19) / 1000);
             if (x == 0) {
                 bassController.setProgress(1);
             } else {
                 bassController.setProgress(x);
             }
 
-            if (HomeActivity.y == 0) {
+            if (y == 0) {
                 reverbController.setProgress(1);
             } else {
-                reverbController.setProgress(HomeActivity.y);
+                reverbController.setProgress(y);
             }
         }
 
@@ -162,19 +159,17 @@ public class EqualizerFragment extends Fragment {
             public void onProgressChanged(int progress) {
                 HomeActivity.reverbPreset = (short) ((progress * 6) / 19);
                 PlayerFragment.presetReverb.setPreset(HomeActivity.reverbPreset);
-                HomeActivity.y = progress;
+                y = progress;
             }
         });
 
         mLinearLayout = (LinearLayout) view.findViewById(R.id.equalizerContainer);
-//        mLinearLayout.setOrientation(LinearLayout.VERTICAL);
 
         TextView equalizerHeading = new TextView(getContext());
         equalizerHeading.setText("Equalizer");
         equalizerHeading.setTextSize(20);
         equalizerHeading.setGravity(Gravity.CENTER_HORIZONTAL);
 
-//        numberOfFrequencyBands = PlayerFragment.mEqualizer.getNumberOfBands();
         numberOfFrequencyBands = 5;
 
         points = new float[numberOfFrequencyBands];
@@ -192,7 +187,6 @@ public class EqualizerFragment extends Fragment {
             frequencyHeaderTextView.setGravity(Gravity.CENTER_HORIZONTAL);
             frequencyHeaderTextView.setTextColor(Color.parseColor("#FFFFFF"));
             frequencyHeaderTextView.setText((PlayerFragment.mEqualizer.getCenterFreq(equalizerBandIndex) / 1000) + "Hz");
-//            mLinearLayout.addView(frequencyHeaderTextView);
 
             LinearLayout seekBarRowLayout = new LinearLayout(getContext());
             seekBarRowLayout.setOrientation(LinearLayout.VERTICAL);
@@ -368,7 +362,7 @@ public class EqualizerFragment extends Fragment {
 
     public void equalizeSound() {
         ArrayList<String> equalizerPresetNames = new ArrayList<>();
-        ArrayAdapter<String> equalizerPresetSpinnerAdapter = new ArrayAdapter<String>(getContext(),
+        ArrayAdapter<String> equalizerPresetSpinnerAdapter = new ArrayAdapter<>(getContext(),
                 R.layout.spinner_item,
                 equalizerPresetNames);
         equalizerPresetSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -392,7 +386,6 @@ public class EqualizerFragment extends Fragment {
                     if (position != 0) {
                         PlayerFragment.mEqualizer.usePreset((short) (position - 1));
                         HomeActivity.presetPos = position;
-//                    short numberOfFreqBands = PlayerFragment.mEqualizer.getNumberOfBands();
                         short numberOfFreqBands = 5;
 
                         final short lowerEqualizerBandLevel = PlayerFragment.mEqualizer.getBandLevelRange()[0];
@@ -405,13 +398,10 @@ public class EqualizerFragment extends Fragment {
                         dataset.updateValues(points);
                         chart.notifyDataUpdate();
 
-                    } else {
-
                     }
                 } catch (Exception e) {
-//                    Toast.makeText(ctx, "Error while updating Equalizer", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ctx, "Error while updating Equalizer", Toast.LENGTH_SHORT).show();
                 }
-//                correctPosition = true;
 
             }
 

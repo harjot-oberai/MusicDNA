@@ -44,7 +44,6 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("ERROR", this.toString());
         setContentView(R.layout.activity_splash);
         img = (ImageView) findViewById(R.id.splash_img);
 
@@ -58,17 +57,20 @@ public class SplashActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= 23) {
             requestPermissions();
         } else {
-            GlideDrawableImageViewTarget imageViewTarget = new GlideDrawableImageViewTarget(img);
-            Glide.with(this).load(R.raw.logo_gif).into(imageViewTarget);
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Intent i = new Intent(SplashActivity.this, HomeActivity.class);
-                    startActivity(i);
-                    finish();
-                }
-            }, 1200);
+//            GlideDrawableImageViewTarget imageViewTarget = new GlideDrawableImageViewTarget(img);
+//            Glide.with(this).load(R.raw.logo_gif).into(imageViewTarget);
+//            final Handler handler = new Handler();
+//            handler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    Intent i = new Intent(SplashActivity.this, HomeActivity.class);
+//                    startActivity(i);
+//                    finish();
+//                }
+//            }, 1200);
+            Intent i = new Intent(SplashActivity.this, HomeActivity.class);
+            startActivity(i);
+            finish();
         }
     }
 
@@ -82,6 +84,7 @@ public class SplashActivity extends AppCompatActivity {
                     perm1 = true;
                     requestPermissions();
                 } else {
+                    finish();
                 }
                 break;
             }
@@ -91,6 +94,7 @@ public class SplashActivity extends AppCompatActivity {
                     perm2 = true;
                     requestPermissions();
                 } else {
+                    finish();
                 }
                 break;
             }
@@ -109,6 +113,7 @@ public class SplashActivity extends AppCompatActivity {
                     perm4 = true;
                     requestPermissions();
                 } else {
+                    finish();
                 }
                 break;
             }
@@ -118,6 +123,7 @@ public class SplashActivity extends AppCompatActivity {
                     perm5 = true;
                     requestPermissions();
                 } else {
+                    finish();
                 }
                 break;
             }
@@ -127,6 +133,7 @@ public class SplashActivity extends AppCompatActivity {
                     perm6 = true;
                     requestPermissions();
                 } else {
+                    finish();
                 }
                 break;
             }
@@ -136,6 +143,7 @@ public class SplashActivity extends AppCompatActivity {
                     perm7 = true;
                     requestPermissions();
                 } else {
+                    finish();
                 }
                 break;
             }
@@ -153,9 +161,7 @@ public class SplashActivity extends AppCompatActivity {
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             if (!perm2 && perm1) {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.RECORD_AUDIO},
-                        1);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 1);
             }
         } else {
             perm2 = true;
@@ -202,17 +208,20 @@ public class SplashActivity extends AppCompatActivity {
         }
 
         if (perm1 && perm2 && perm3 && perm4 && perm5 && perm6 && perm7) {
-            GlideDrawableImageViewTarget imageViewTarget = new GlideDrawableImageViewTarget(img);
-            Glide.with(this).load(R.raw.logo_gif).into(imageViewTarget);
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Intent i = new Intent(SplashActivity.this, HomeActivity.class);
-                    startActivity(i);
-                    finish();
-                }
-            }, 1200);
+//            GlideDrawableImageViewTarget imageViewTarget = new GlideDrawableImageViewTarget(img);
+//            Glide.with(this).load(R.raw.logo_gif).into(imageViewTarget);
+//            final Handler handler = new Handler();
+//            handler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    Intent i = new Intent(SplashActivity.this, HomeActivity.class);
+//                    startActivity(i);
+//                    finish();
+//                }
+//            }, 1200);
+            Intent i = new Intent(SplashActivity.this, HomeActivity.class);
+            startActivity(i);
+            finish();
         }
     }
 

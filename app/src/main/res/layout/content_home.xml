@@ -68,7 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/localRecyclerLabelContainer"
-            android:padding="5dp"></android.support.v7.widget.RecyclerView>
+            android:padding="5dp"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -194,7 +194,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/recentsRecyclerLabel"
-                    android:padding="5dp"></android.support.v7.widget.RecyclerView>
+                    android:padding="5dp"/>
             </RelativeLayout>
 
             <View
@@ -271,7 +271,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/playlist_label_container"
-                    android:padding="5dp"></android.support.v7.widget.RecyclerView>
+                    android:padding="5dp"/>
             </RelativeLayout>
 
             <View
@@ -397,14 +397,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/bottomMargin"
-        android:translationZ="10dp"></FrameLayout>
+        android:translationZ="10dp"/>
 
     <FrameLayout
         android:id="@+id/content_frag"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/bottomMargin"
-        android:translationZ="10dp"></FrameLayout>
+        android:translationZ="10dp"/>
 
     <FrameLayout
         android:id="@+id/bottomMargin"
@@ -475,13 +475,13 @@
         android:id="@+id/equalizer_queue_frag_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:translationZ="10dp"></FrameLayout>
+        android:translationZ="10dp"/>
 
     <FrameLayout
         android:id="@+id/player_frag_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:translationZ="10dp"></FrameLayout>
+        android:translationZ="10dp"/>
 
 </RelativeLayout>
 

@@ -43,6 +43,8 @@ public class SettingsFragment extends Fragment {
     ImageView themeColorImg;
     SeekBar densitySeekbar;
     TextView densityTextDialog, densityText;
+    
+    HomeActivity homeActivity;
 
     onAlbumArtBackgroundToggled mCallback;
     onColorChangedListener mCallback2;
@@ -67,6 +69,7 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        homeActivity = (HomeActivity) context;
         try {
             mCallback = (onAlbumArtBackgroundToggled) getContext();
             mCallback2 = (onColorChangedListener) getContext();
@@ -91,7 +94,7 @@ public class SettingsFragment extends Fragment {
 
         densitycard = (RelativeLayout) view.findViewById(R.id.density_card);
         densityText = (TextView) view.findViewById(R.id.density_value);
-        densityText.setText(String.valueOf(100 - (int) (HomeActivity.minAudioStrength * 100)));
+        densityText.setText(String.valueOf(100 - (int) (homeActivity.minAudioStrength * 100)));
 
         densitycard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,7 +104,7 @@ public class SettingsFragment extends Fragment {
 
                 dialog.setContentView(R.layout.density_dialog);
                 densitySeekbar = (SeekBar) dialog.findViewById(R.id.density_dialog_seekbar);
-                densitySeekbar.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(HomeActivity.themeColor, PorterDuff.Mode.SRC_IN));
+                densitySeekbar.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(homeActivity.themeColor, PorterDuff.Mode.SRC_IN));
                 densityTextDialog = (TextView) dialog.findViewById(R.id.density_dialog_value);
                 densitySeekbar.setMax(100);
                 densitySeekbar.setProgress(Integer.parseInt(densityText.getText().toString()));
@@ -109,8 +112,8 @@ public class SettingsFragment extends Fragment {
                 densitySeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        HomeActivity.minAudioStrength = 1.0f - ((float) progress / (float) 100);
-                        HomeActivity.settings.setMinAudioStrength(HomeActivity.minAudioStrength);
+                        homeActivity.minAudioStrength = 1.0f - ((float) progress / (float) 100);
+                        homeActivity.settings.setMinAudioStrength(homeActivity.minAudioStrength);
                         densityTextDialog.setText(String.valueOf(progress));
                         densityText.setText(String.valueOf(progress));
                     }
@@ -133,7 +136,7 @@ public class SettingsFragment extends Fragment {
 
         themeCard = (RelativeLayout) view.findViewById(R.id.theme_card);
         themeColorImg = (ImageView) view.findViewById(R.id.theme_color_img);
-        themeColorImg.setBackgroundColor(HomeActivity.themeColor);
+        themeColorImg.setBackgroundColor(homeActivity.themeColor);
         themeCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,10 +157,10 @@ public class SettingsFragment extends Fragment {
                         .setPositiveButton("ok", new ColorPickerClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int color, Integer[] allColors) {
-                                HomeActivity.settings.setThemeColor(color);
-                                HomeActivity.themeColor = color;
-                                HomeActivity.toolbar.setBackgroundColor(color);
-                                HomeActivity.fragmentToolbar.setBackgroundColor(color);
+                                homeActivity.settings.setThemeColor(color);
+                                homeActivity.themeColor = color;
+                                homeActivity.toolbar.setBackgroundColor(color);
+                                homeActivity.fragmentToolbar.setBackgroundColor(color);
                                 themeColorImg.setBackgroundColor(color);
                                 mCallback2.onColorChanged();
                                 if (Build.VERSION.SDK_INT >= 21) {
@@ -181,7 +184,7 @@ public class SettingsFragment extends Fragment {
 
         albumArtCard = (RelativeLayout) view.findViewById(R.id.album_art_card);
         albumArtToggle = (SwitchCompat) view.findViewById(R.id.album_art_toggle);
-        albumArtToggle.setChecked(HomeActivity.settings.isAlbumArtBackgroundEnabled());
+        albumArtToggle.setChecked(homeActivity.settings.isAlbumArtBackgroundEnabled());
         albumArtCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -191,14 +194,14 @@ public class SettingsFragment extends Fragment {
         albumArtToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                HomeActivity.settings.setAlbumArtBackgroundEnabled(isChecked);
+                homeActivity.settings.setAlbumArtBackgroundEnabled(isChecked);
                 mCallback.onAlbumArtBackgroundChangedVisibility(isChecked ? View.VISIBLE : View.GONE);
             }
         });
 
         wifiCard = (RelativeLayout) view.findViewById(R.id.wifi_card);
         wifiToggle = (SwitchCompat) view.findViewById(R.id.wifi_stream_toggle);
-        wifiToggle.setChecked(HomeActivity.settings.isStreamOnlyOnWifiEnabled());
+        wifiToggle.setChecked(homeActivity.settings.isStreamOnlyOnWifiEnabled());
         wifiCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -208,7 +211,7 @@ public class SettingsFragment extends Fragment {
         wifiToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                HomeActivity.settings.setStreamOnlyOnWifiEnabled(isChecked);
+                homeActivity.settings.setStreamOnlyOnWifiEnabled(isChecked);
             }
         });
 

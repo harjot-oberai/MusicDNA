@@ -168,9 +168,9 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
                 .setSmallIcon(R.drawable.ic_notification)
                 .setVisibility(Notification.VISIBILITY_PUBLIC)
                 .setDeleteIntent(pendingIntent)
-                .addAction(generateAction(android.R.drawable.ic_media_previous, "Previous", Constants.ACTION_PREVIOUS))
+                .addAction(generateAction(R.drawable.ic_skip_previous_notif, "Previous", Constants.ACTION_PREVIOUS))
                 .addAction(action)
-                .addAction(generateAction(android.R.drawable.ic_media_next, "Next", Constants.ACTION_NEXT))
+                .addAction(generateAction(R.drawable.ic_skip_next_notif, "Next", Constants.ACTION_NEXT))
                 .setContentTitle(PlayerFragment.selected_track_title.getText())
                 .setContentText(artist)
                 .setLargeIcon(bmp)
@@ -326,7 +326,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
                             pFrag.togglePlayPause();
                         }
                         pFrag.isStart = false;
-                        buildNotification(generateAction(android.R.drawable.ic_media_pause, "Pause", Constants.ACTION_PAUSE));
+                        buildNotification(generateAction(R.drawable.ic_pause_notif, "Pause", Constants.ACTION_PAUSE));
                     }
                 } catch (Exception e) {
 
@@ -340,7 +340,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
                     PlayerFragment pFrag = pFragment;
                     if (pFrag != null) {
                         pFrag.togglePlayPause();
-                        buildNotification(generateAction(android.R.drawable.ic_media_play, "Play", Constants.ACTION_PLAY));
+                        buildNotification(generateAction(R.drawable.ic_play_notif, "Play", Constants.ACTION_PLAY));
                     }
                 } catch (Exception e) {
 
@@ -357,7 +357,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                buildNotification(generateAction(android.R.drawable.ic_media_pause, "Pause", Constants.ACTION_PAUSE));
+                                buildNotification(generateAction(R.drawable.ic_pause_notif, "Pause", Constants.ACTION_PAUSE));
                             }
                         }, 100);
                     }
@@ -377,7 +377,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                buildNotification(generateAction(android.R.drawable.ic_media_pause, "Pause", Constants.ACTION_PAUSE));
+                                buildNotification(generateAction(R.drawable.ic_pause_notif, "Pause", Constants.ACTION_PAUSE));
                             }
                         }, 100);
                     }
@@ -397,7 +397,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        buildNotification(generateAction(android.R.drawable.ic_media_pause, "Pause", Constants.ACTION_PAUSE));
+                        buildNotification(generateAction(R.drawable.ic_pause_notif, "Pause", Constants.ACTION_PAUSE));
                     }
                 }, 100);
             }
@@ -412,7 +412,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        buildNotification(generateAction(android.R.drawable.ic_media_pause, "Pause", Constants.ACTION_PAUSE));
+                        buildNotification(generateAction(R.drawable.ic_pause_notif, "Pause", Constants.ACTION_PAUSE));
                     }
                 }, 100);
             }
@@ -422,9 +422,9 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
                 super.onStop();
 //                if (PlayerFragment.mMediaPlayer != null) {
 //                    if (PlayerFragment.mMediaPlayer.isPlaying()) {
-//                        buildNotification(generateAction(android.R.drawable.ic_media_pause, "Pause", Constants.ACTION_PAUSE));
+//                        buildNotification(generateAction(R.drawable.ic_pause_notif, "Pause", Constants.ACTION_PAUSE));
 //                    } else {
-//                        buildNotification(generateAction(android.R.drawable.ic_media_play, "Play", Constants.ACTION_PLAY));
+//                        buildNotification(generateAction(R.drawable.ic_play_notif, "Play", Constants.ACTION_PLAY));
 //                    }
 //                }
             }
@@ -451,9 +451,9 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
     @Override
     public void onPlayPause() {
         if (PlayerFragment.mMediaPlayer!=null && PlayerFragment.mMediaPlayer.isPlaying()) {
-            buildNotification(generateAction(android.R.drawable.ic_media_pause, "Pause", Constants.ACTION_PAUSE));
+            buildNotification(generateAction(R.drawable.ic_pause_notif, "Pause", Constants.ACTION_PAUSE));
         } else {
-            buildNotification(generateAction(android.R.drawable.ic_media_play, "Play", Constants.ACTION_PLAY));
+            buildNotification(generateAction(R.drawable.ic_play_notif, "Play", Constants.ACTION_PLAY));
         }
     }
 

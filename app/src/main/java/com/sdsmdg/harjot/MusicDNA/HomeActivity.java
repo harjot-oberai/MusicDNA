@@ -1122,7 +1122,7 @@ public class HomeActivity extends AppCompatActivity
         try{
             String json7 = mPrefs.getString("versionCode", "");
             prevVersionCode = gson.fromJson(json7, Integer.class);
-            Log.d("TIME", "prevVersionCode");
+            Log.d("TIME", "VersionCode : " + prevVersionCode + " : " + versionCode);
         } catch(Exception e){
             e.printStackTrace();
         }
@@ -2074,129 +2074,10 @@ public class HomeActivity extends AppCompatActivity
 
     public void updateVisualizer(byte[] bytes) {
         mBytes = bytes;
-//        updatePoints();
-//        PlayerFragment.mVisualizerView.updateVisualizer(mBytes);
         try {
             new MyAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } catch (Exception e) {
-
-        }
-    }
-
-    public static void updatePoints3() {
-
-        try {
-            PlayerFragment.mVisualizerView.outerRadius = (float) (Math.min(PlayerFragment.mVisualizerView.width, PlayerFragment.mVisualizerView.height) * 0.42);
-            PlayerFragment.mVisualizerView.normalizedPosition = ((float) (PlayerFragment.mMediaPlayer.getCurrentPosition()) / (float) (PlayerFragment.durationInMilliSec));
-            if (mBytes == null) {
-                return;
-            }
-            PlayerFragment.mVisualizerView.angle = (float) (Math.PI - PlayerFragment.mVisualizerView.normalizedPosition * PlayerFragment.mVisualizerView.TAU);
-            PlayerFragment.mVisualizerView.color = 0;
-            PlayerFragment.mVisualizerView.lnDataDistance = 0;
-            PlayerFragment.mVisualizerView.distance = 0;
-            PlayerFragment.mVisualizerView.size = 0;
-            PlayerFragment.mVisualizerView.volume = 0;
-            PlayerFragment.mVisualizerView.power = 0;
-        } catch (Exception e) {
-
-        }
-
-        float x, y;
-
-        int midx = (int) (PlayerFragment.mVisualizerView.width / 2);
-        int midy = (int) (PlayerFragment.mVisualizerView.height / 2);
-
-        // calculate min and max amplitude for current byte array
-        float max = Integer.MIN_VALUE, min = Integer.MAX_VALUE;
-//        for (int a = 16; a < (mBytes.length); a += 2) {
-//
-//            float amp = (float) (mBytes[a] + 128) / (float) 255;
-//            if (amp > max) {
-//                max = amp;
-//            }
-//            if (amp < min) {
-//                min = amp;
-//            }
-//        }
-
-        /**
-         * Number Fishing is all that is used here to get the best looking DNA
-         * Number fishing is HOW YOU WIN AT LIFE. -- paullewis :)
-         * **/
-
-        for (int a = 16; a < (mBytes.length); a++) {
-
-//            if (max <= 70) {
-//                break;
-//            }
-
-            // scale the amplitude to the range [0,1]
-            float amp = (float) Math.abs(mBytes[a]) / (float) 255;
-
-//            if (max != min)
-//                amp = (amp - min) / (max - min);
-//            else {
-//                amp = 0;
-//            }
-
-            PlayerFragment.mVisualizerView.volume = (amp);
-
-            // converting polar to cartesian (distance calculated afterwards acts as radius for polar co-ords)
-            x = (float) Math.sin(PlayerFragment.mVisualizerView.angle);
-            y = (float) Math.cos(PlayerFragment.mVisualizerView.angle);
-
-            // filtering low amplitude
-            if (PlayerFragment.mVisualizerView.volume < minAudioStrength) {
-                continue;
-            }
-
-            // color ( value of hue inn HSV ) calculated based on current progress of the song or audio clip
-            PlayerFragment.mVisualizerView.color = (float) (PlayerFragment.mVisualizerView.normalizedPosition - 0.12 + Math.random() * 0.24);
-            PlayerFragment.mVisualizerView.color = Math.round(PlayerFragment.mVisualizerView.color * 360);
-            seekBarColor = (float) (PlayerFragment.mVisualizerView.normalizedPosition);
-            seekBarColor = Math.round(seekBarColor * 360);
-
-            // calculating distance from center ( 'r' in polar coordinates)
-            PlayerFragment.mVisualizerView.lnDataDistance = (float) ((Math.log(a - 4) / PlayerFragment.mVisualizerView.LOG_MAX) - PlayerFragment.mVisualizerView.BASE);
-            PlayerFragment.mVisualizerView.distance = PlayerFragment.mVisualizerView.lnDataDistance * PlayerFragment.mVisualizerView.outerRadius;
-
-
-            // size of the circle to be rendered at the calculated position
-            PlayerFragment.mVisualizerView.size = ratio * ((float) (4.5 * PlayerFragment.mVisualizerView.volume * PlayerFragment.mVisualizerView.MAX_DOT_SIZE + Math.random() * 2));
-
-            // alpha also based on volume ( amplitude )
-            PlayerFragment.mVisualizerView.alpha = (float) (PlayerFragment.mVisualizerView.volume * 0.09);
-
-            // final cartesian coordinates for drawing on canvas
-            x = x * PlayerFragment.mVisualizerView.distance;
-            y = y * PlayerFragment.mVisualizerView.distance;
-
-
-            float[] hsv = new float[3];
-            hsv[0] = PlayerFragment.mVisualizerView.color;
-            hsv[1] = (float) 0.8;
-            hsv[2] = (float) 0.72;
-
-            // setting color of the Paint
-            PlayerFragment.mVisualizerView.mForePaint.setColor(Color.HSVToColor(hsv));
-
-            if (PlayerFragment.mVisualizerView.size >= 8.0 && PlayerFragment.mVisualizerView.size < 29.0) {
-                PlayerFragment.mVisualizerView.mForePaint.setAlpha(17);
-            } else if (PlayerFragment.mVisualizerView.size >= 29.0 && PlayerFragment.mVisualizerView.size <= 60.0) {
-                PlayerFragment.mVisualizerView.mForePaint.setAlpha(9);
-            } else if (PlayerFragment.mVisualizerView.size > 60.0) {
-                PlayerFragment.mVisualizerView.mForePaint.setAlpha(3);
-            } else {
-                PlayerFragment.mVisualizerView.mForePaint.setAlpha((int) (PlayerFragment.mVisualizerView.alpha * 1000));
-            }
-
-            // Add points and paint config to lists for redraw
-            PlayerFragment.mVisualizerView.pts.add(Pair.create(midx + x, midy + y));
-            PlayerFragment.mVisualizerView.ptPaint.add(Pair.create(PlayerFragment.mVisualizerView.size, Pair.create(PlayerFragment.mVisualizerView.mForePaint.getColor(), PlayerFragment.mVisualizerView.mForePaint.getAlpha())));
-
-            cacheCanvas.drawCircle(midx + x, midy + y, PlayerFragment.mVisualizerView.size, PlayerFragment.mVisualizerView.mForePaint);
-
+            e.printStackTrace();
         }
     }
 
@@ -2317,25 +2198,52 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onComplete() {
 
+        // Save the DNA if saving is enabled
         if (isSaveDNAEnabled) {
             new SaveTheDNAs().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
 
         QueueFragment qFrag = (QueueFragment) fragMan.findFragmentByTag("queue");
-
         queueCall = true;
+
         if (repeatOnceEnabled && !nextControllerClicked) {
+
+            /*
+            * Executed if repeat once is enabled and user did not click the next button from player.
+            */
+
+            // Set Progress bar to 0
             PlayerFragment.progressBar.setProgress(0);
             PlayerFragment.progressBar.setSecondaryProgress(0);
+
+            // Get Visualizer and Visualizer View to initial state
             PlayerFragment.mVisualizer.setEnabled(true);
+            VisualizerView.w = screen_width;
+            VisualizerView.h = screen_width;
+            VisualizerView.conf = Bitmap.Config.ARGB_8888;
+            VisualizerView.bmp = Bitmap.createBitmap(VisualizerView.w, VisualizerView.h, VisualizerView.conf);
+            cacheCanvas = new Canvas(VisualizerView.bmp);
             PlayerFragment.mVisualizerView.clear();
+
+            // Play the song again by seeking media player to 0
             PlayerFragment.mMediaPlayer.seekTo(0);
+
+            // Setup the icons
             PlayerFragment.mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
             PlayerFragment.isReplayIconVisible = false;
             PlayerFragment.player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
+
+            // Resume the MediaPlayer
             PlayerFragment.isPrepared = true;
             PlayerFragment.mMediaPlayer.start();
         } else {
+
+            /*
+            * Executed if repeat once is disabled.
+            * Execution depends on the current position in queue and whether the next button was clicked or not.
+            * If current position is at the end of the queue, then number of elements in the queue are checked.
+            */
+
             if (queueCurrentIndex < queue.getQueue().size() - 1) {
                 queueCurrentIndex++;
                 nextControllerClicked = false;
@@ -2411,6 +2319,10 @@ public class HomeActivity extends AppCompatActivity
     public void onPreviousTrack() {
 
         QueueFragment qFrag = (QueueFragment) fragMan.findFragmentByTag("queue");
+
+        /*
+        * Execution depends on the current position in the queue
+        */
 
         if (queueCurrentIndex > 0) {
             queueCall = true;
@@ -2995,10 +2907,12 @@ public class HomeActivity extends AppCompatActivity
         new SaveSettings().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         new SaveQueue().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
+        Toast.makeText(ctx, "Saving data", Toast.LENGTH_SHORT).show();
+
         try {
             prefsEditor.commit();
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
 
     }
@@ -4767,7 +4681,7 @@ public class HomeActivity extends AppCompatActivity
                 String json7 = gson.toJson(versionCode);
                 prefsEditor.putString("versionCode", json7);
             } catch (Exception e) {
-
+                e.printStackTrace();
             }
             return null;
         }
@@ -4972,14 +4886,6 @@ public class HomeActivity extends AppCompatActivity
         }
 //        return (pxToDp(result));
         return (result);
-    }
-
-    public int dpToPx(int dp) {
-        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
-    }
-
-    public int pxToDp(int px) {
-        return (int) (px / Resources.getSystem().getDisplayMetrics().density);
     }
 
     public boolean hasNavBar(Resources resources) {

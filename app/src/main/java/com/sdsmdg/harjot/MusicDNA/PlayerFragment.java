@@ -1180,11 +1180,9 @@ public class PlayerFragment extends Fragment implements
             if (track.getArtworkURL() != null) {
                 Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(selected_track_image);
                 Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(homeActivity.spImgAB);
-//                Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(currentAlbumArtHolder);
             } else {
                 selected_track_image.setImageResource(R.drawable.ic_default);
                 homeActivity.spImgAB.setImageResource(R.drawable.ic_default);
-//                currentAlbumArtHolder.setImageResource(R.drawable.ic_default);
             }
             try {
                 homeActivity.spTitleAB.setText(track.getTitle());
@@ -1202,7 +1200,6 @@ public class PlayerFragment extends Fragment implements
             try {
                 imgLoader.DisplayImage(localTrack.getPath(), homeActivity.spImgAB);
                 imgLoader.DisplayImage(localTrack.getPath(), selected_track_image);
-//                imgLoader.DisplayImage(localTrack.getPath(), currentAlbumArtHolder);
             } catch (Exception e) {
 
             }
@@ -1344,38 +1341,36 @@ public class PlayerFragment extends Fragment implements
         protected Void doInBackground(Void... params) {
             if (homeActivity.isSaveDNAEnabled) {
                 Bitmap bmp = mVisualizerView.bmp;
+
+                // Generate base64 encoded bitmap
                 String base64encoded = getBase64encodedBitmap(bmp);
-//                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-//                byte[] byteArray = stream.toByteArray();
+
+                // Create SavedDNA object with relevant values.
+                SavedDNA savedDNA;
                 if (localIsPlaying) {
-//                    DNAModel model = new DNAModel(true, localTrack, null, byteArray);
-//                    SavedDNA sDna = new SavedDNA(localTrack.getTitle(), model);
-                    SavedDNA savedDNA = new SavedDNA(localTrack.getTitle(), true, localTrack.getPath(), null, localTrack.getArtist(), base64encoded);
-//                    for (int i = 0; i < homeActivity.savedDNAs.getSavedDNAs().size(); i++) {
-//                        DNAModel dModel = homeActivity.savedDNAs.getSavedDNAs().get(i).getModel();
-//                        if (model.equals(dModel)) {
-//                            homeActivity.savedDNAs.getSavedDNAs().remove(i);
-//                            break;
-//                        }
-//                    }
-                    homeActivity.savedDNAs.getSavedDNAs().add(0, savedDNA);
+                    savedDNA = new SavedDNA(localTrack.getTitle(), true, localTrack.getPath(), null, localTrack.getArtist(), base64encoded);
                 } else {
-//                    DNAModel model = new DNAModel(false, null, track, byteArray);
-//                    SavedDNA sDna = new SavedDNA(track.getTitle(), model);
-                    SavedDNA savedDNA = new SavedDNA(track.getTitle(), false, null, track.getArtworkURL(), "", base64encoded);
-//                    for (int i = 0; i < homeActivity.savedDNAs.getSavedDNAs().size(); i++) {
-//                        DNAModel dModel = homeActivity.savedDNAs.getSavedDNAs().get(i).getModel();
-//                        if (model.equals(dModel)) {
-//                            homeActivity.savedDNAs.getSavedDNAs().remove(i);
-//                            break;
-//                        }
-//                    }
-                    homeActivity.savedDNAs.getSavedDNAs().add(0, savedDNA);
+                    savedDNA = new SavedDNA(track.getTitle(), false, null, track.getArtworkURL(), "", base64encoded);
                 }
+
+                // Check if a DNA exists for the current song, and remove it.
+                for (int i = 0; i < 10; i++) {
+                    if (homeActivity.savedDNAs.getSavedDNAs().get(i).getName().equals(savedDNA.getName())) {
+                        homeActivity.savedDNAs.getSavedDNAs().remove(i);
+                        break;
+                    }
+                }
+
+                // Add the DNA to the first position.
+                homeActivity.savedDNAs.getSavedDNAs().add(0, savedDNA);
+
+                // If number of DNAs get more than 10, then remove the 11th DNA to keep size as 10.
+                // Caution : 0-indexed arrays.
                 if (homeActivity.savedDNAs.getSavedDNAs().size() > 10) {
                     homeActivity.savedDNAs.getSavedDNAs().remove(10);
                 }
+
+                // Display Toast.
                 homeActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -1389,8 +1384,12 @@ public class PlayerFragment extends Fragment implements
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+
+            // Set flags to initial values.
             completed = false;
             isPrepared = false;
+
+            // Pause the MediaPlayer and call onComplete().
             mMediaPlayer.pause();
             mCallback2.onComplete();
         }

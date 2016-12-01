@@ -1354,7 +1354,7 @@ public class PlayerFragment extends Fragment implements
                 }
 
                 // Check if a DNA exists for the current song, and remove it.
-                for (int i = 0; i < 10; i++) {
+                for (int i = 0; i < homeActivity.savedDNAs.getSavedDNAs().size(); i++) {
                     if (homeActivity.savedDNAs.getSavedDNAs().get(i).getName().equals(savedDNA.getName())) {
                         homeActivity.savedDNAs.getSavedDNAs().remove(i);
                         break;

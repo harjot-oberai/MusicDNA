@@ -66,13 +66,12 @@ public class EditLocalSongFragment extends Fragment {
     newCoverListener mCallback2;
 
     public interface onEditSongSaveListener {
-        public void onEditSongSave(boolean wasSaveSuccessful);
+        void onEditSongSave(boolean wasSaveSuccessful);
     }
 
     public interface newCoverListener {
-        public void getNewBitmap();
-
-        public void deleteMediaStoreCache();
+        void getNewBitmap();
+        void deleteMediaStoreCache();
     }
 
     public EditLocalSongFragment() {
@@ -103,14 +102,11 @@ public class EditLocalSongFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Toast.makeText(ctx, HomeActivity.editSong.getId() + "", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(ctx, HomeActivity.editSong.getId() + "", Toast.LENGTH_SHORT).show();
 
         titleText = (EditText) view.findViewById(R.id.edit_song_title);
-//        titleText.setText(HomeActivity.editSong.getTitle());
         artistText = (EditText) view.findViewById(R.id.edit_song_artist);
-//        artistText.setText(HomeActivity.editSong.getArtist());
         albumText = (EditText) view.findViewById(R.id.edit_song_album);
-//        albumText.setText(HomeActivity.editSong.getAlbum());
 
         songImage = (ImageView) view.findViewById(R.id.edit_song_image);
         backImage = (ImageView) view.findViewById(R.id.back_image);
@@ -130,12 +126,12 @@ public class EditLocalSongFragment extends Fragment {
             backImage.setImageResource(R.drawable.ic_default);
         }
 
-        songImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCallback2.getNewBitmap();
-            }
-        });
+//        songImage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mCallback2.getNewBitmap();
+//            }
+//        });
 
         saveButton = (Button) view.findViewById(R.id.edit_song_save_button);
         saveButton.setBackgroundColor(HomeActivity.themeColor);
@@ -289,7 +285,7 @@ public class EditLocalSongFragment extends Fragment {
     public Bitmap getBitmap(String url) {
         android.media.MediaMetadataRetriever mmr = new MediaMetadataRetriever();
         mmr.setDataSource(url);
-        Bitmap bitmap = null;
+        Bitmap bitmap;
 
         byte[] data = mmr.getEmbeddedPicture();
 

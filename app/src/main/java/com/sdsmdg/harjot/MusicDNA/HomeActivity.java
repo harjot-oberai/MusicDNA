@@ -2907,8 +2907,6 @@ public class HomeActivity extends AppCompatActivity
         new SaveSettings().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         new SaveQueue().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-        Toast.makeText(ctx, "Saving data", Toast.LENGTH_SHORT).show();
-
         try {
             prefsEditor.commit();
         } catch (Exception e) {
@@ -5118,7 +5116,7 @@ public class HomeActivity extends AppCompatActivity
         int res = musicResolver.update(musicUri, newValues, android.provider.MediaStore.Audio.Media._ID + "=?", new String[]{String.valueOf(id)});
 
         if (res > 0) {
-            Toast.makeText(this, "Updated MediaStore cache", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "Updated MediaStore cache", Toast.LENGTH_SHORT).show();
         }
 
     }

@@ -292,7 +292,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
                 metadataBuilder.putString(MediaMetadata.METADATA_KEY_ARTIST, "");
             }
         }
-        if (PlayerFragment.selected_track_image != null) {
+        if (PlayerFragment.selected_track_image != null && PlayerFragment.selected_track_image.getDrawable() != null) {
             if (((BitmapDrawable) PlayerFragment.selected_track_image.getDrawable()).getBitmap() != null) {
                 metadataBuilder.putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART, ((BitmapDrawable) PlayerFragment.selected_track_image.getDrawable()).getBitmap());
             }
@@ -450,7 +450,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
 
     @Override
     public void onPlayPause() {
-        if (PlayerFragment.mMediaPlayer!=null && PlayerFragment.mMediaPlayer.isPlaying()) {
+        if (PlayerFragment.mMediaPlayer != null && PlayerFragment.mMediaPlayer.isPlaying()) {
             buildNotification(generateAction(R.drawable.ic_pause_notif, "Pause", Constants.ACTION_PAUSE));
         } else {
             buildNotification(generateAction(R.drawable.ic_play_notif, "Play", Constants.ACTION_PLAY));

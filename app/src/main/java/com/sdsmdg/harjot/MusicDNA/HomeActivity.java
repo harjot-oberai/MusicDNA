@@ -818,25 +818,29 @@ public class HomeActivity extends AppCompatActivity
         toggle.syncState();
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        if (navigationView != null) {
+            navigationView.setNavigationItemSelectedListener(this);
+        }
         navigationView.setCheckedItem(R.id.nav_home);
 
         View header = navigationView.getHeaderView(0);
         navImageView = (ImageView) header.findViewById(R.id.nav_image_view);
-        navImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PlayerFragment pFrag = getPlayerFragment();
-                if (pFrag != null) {
-                    if (pFrag.mMediaPlayer != null && pFrag.mMediaPlayer.isPlaying()) {
-                        onBackPressed();
-                        isPlayerVisible = true;
-                        hideTabs();
-                        showPlayer();
+        if (navImageView != null) {
+            navImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    PlayerFragment pFrag = getPlayerFragment();
+                    if (pFrag != null) {
+                        if (pFrag.mMediaPlayer != null && pFrag.mMediaPlayer.isPlaying()) {
+                            onBackPressed();
+                            isPlayerVisible = true;
+                            hideTabs();
+                            showPlayer();
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
 
         connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
@@ -1119,11 +1123,11 @@ public class HomeActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
-        try{
+        try {
             String json7 = mPrefs.getString("versionCode", "");
             prevVersionCode = gson.fromJson(json7, Integer.class);
             Log.d("TIME", "VersionCode : " + prevVersionCode + " : " + versionCode);
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -1170,44 +1174,45 @@ public class HomeActivity extends AppCompatActivity
                     localTrackList.add(lt);
                     finalLocalSearchResultList.add(lt);
 
-                    int pos = checkAlbum(thisAlbum);
-
-                    if (pos != -1) {
-                        albums.get(pos).getAlbumSongs().add(lt);
-                    } else {
-                        List<LocalTrack> llt = new ArrayList<>();
-                        llt.add(lt);
-                        Album ab = new Album(thisAlbum, llt);
-                        albums.add(ab);
+                    int pos;
+                    if(thisAlbum!=null) {
+                        pos = checkAlbum(thisAlbum);
+                        if (pos != -1) {
+                            albums.get(pos).getAlbumSongs().add(lt);
+                        } else {
+                            List<LocalTrack> llt = new ArrayList<>();
+                            llt.add(lt);
+                            Album ab = new Album(thisAlbum, llt);
+                            albums.add(ab);
+                        }
+                        if (pos != -1) {
+                            finalAlbums.get(pos).getAlbumSongs().add(lt);
+                        } else {
+                            List<LocalTrack> llt = new ArrayList<>();
+                            llt.add(lt);
+                            Album ab = new Album(thisAlbum, llt);
+                            finalAlbums.add(ab);
+                        }
                     }
 
-                    if (pos != -1) {
-                        finalAlbums.get(pos).getAlbumSongs().add(lt);
-                    } else {
-                        List<LocalTrack> llt = new ArrayList<>();
-                        llt.add(lt);
-                        Album ab = new Album(thisAlbum, llt);
-                        finalAlbums.add(ab);
-                    }
-
-                    pos = checkArtist(thisArtist);
-
-                    if (pos != -1) {
-                        artists.get(pos).getArtistSongs().add(lt);
-                    } else {
-                        List<LocalTrack> llt = new ArrayList<>();
-                        llt.add(lt);
-                        Artist ab = new Artist(thisArtist, llt);
-                        artists.add(ab);
-                    }
-
-                    if (pos != -1) {
-                        finalArtists.get(pos).getArtistSongs().add(lt);
-                    } else {
-                        List<LocalTrack> llt = new ArrayList<>();
-                        llt.add(lt);
-                        Artist ab = new Artist(thisArtist, llt);
-                        finalArtists.add(ab);
+                    if(thisArtist!=null) {
+                        pos = checkArtist(thisArtist);
+                        if (pos != -1) {
+                            artists.get(pos).getArtistSongs().add(lt);
+                        } else {
+                            List<LocalTrack> llt = new ArrayList<>();
+                            llt.add(lt);
+                            Artist ab = new Artist(thisArtist, llt);
+                            artists.add(ab);
+                        }
+                        if (pos != -1) {
+                            finalArtists.get(pos).getArtistSongs().add(lt);
+                        } else {
+                            List<LocalTrack> llt = new ArrayList<>();
+                            llt.add(lt);
+                            Artist ab = new Artist(thisArtist, llt);
+                            finalArtists.add(ab);
+                        }
                     }
 
                     File f = new File(path);
@@ -2380,24 +2385,26 @@ public class HomeActivity extends AppCompatActivity
     }
 
     public void onQueueItemClicked2(int position) {
-        queueCurrentIndex = position;
-        UnifiedTrack ut = queue.getQueue().get(position);
-        if (ut.getType()) {
-            LocalTrack track = ut.getLocalTrack();
-            localSelectedTrack = track;
-            streamSelected = false;
-            localSelected = true;
-            queueCall = true;
-            isReloaded = false;
-            onLocalTrackSelected(position);
-        } else {
-            Track track = ut.getStreamTrack();
-            selectedTrack = track;
-            streamSelected = true;
-            localSelected = false;
-            queueCall = true;
-            isReloaded = false;
-            onTrackSelected(position);
+        if (position <= (queue.getQueue().size() - 1)) {
+            queueCurrentIndex = position;
+            UnifiedTrack ut = queue.getQueue().get(position);
+            if (ut.getType()) {
+                LocalTrack track = ut.getLocalTrack();
+                localSelectedTrack = track;
+                streamSelected = false;
+                localSelected = true;
+                queueCall = true;
+                isReloaded = false;
+                onLocalTrackSelected(position);
+            } else {
+                Track track = ut.getStreamTrack();
+                selectedTrack = track;
+                streamSelected = true;
+                localSelected = false;
+                queueCall = true;
+                isReloaded = false;
+                onTrackSelected(position);
+            }
         }
     }
 
@@ -2891,8 +2898,10 @@ public class HomeActivity extends AppCompatActivity
                 @Override
                 public void run() {
                     PlayerFragment.mVisualizerView.updateVisualizer(mBytes);
-                    if (PlayerFragment.mVisualizerView.bmp != null)
-                        navImageView.setImageBitmap(PlayerFragment.mVisualizerView.bmp);
+                    if (PlayerFragment.mVisualizerView.bmp != null) {
+                        if (navImageView != null)
+                            navImageView.setImageBitmap(PlayerFragment.mVisualizerView.bmp);
+                    }
                 }
             });
         }

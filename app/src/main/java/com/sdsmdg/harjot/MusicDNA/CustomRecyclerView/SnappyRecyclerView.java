@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.sdsmdg.harjot.MusicDNA.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.VisualizerView;
@@ -145,11 +146,9 @@ public class SnappyRecyclerView extends RecyclerView {
         currentPosition = firstVisibleItemPosition;
         if (currentPosition > HomeActivity.queueCurrentIndex) {
             getAdapter().notifyDataSetChanged();
-//            homeActivity.onComplete();
             homeActivity.onQueueItemClicked2(currentPosition);
         } else if (currentPosition < HomeActivity.queueCurrentIndex) {
             getAdapter().notifyDataSetChanged();
-//            homeActivity.onPreviousTrack();
             homeActivity.onQueueItemClicked2(currentPosition);
         } else {
 //            setTransparency();

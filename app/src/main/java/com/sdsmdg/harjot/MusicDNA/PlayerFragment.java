@@ -505,14 +505,6 @@ public class PlayerFragment extends Fragment implements
 
         snappyRecyclerView = (SnappyRecyclerView) view.findViewById(R.id.visualizer_recycler);
 
-        customAdapter = new CustomAdapter(getContext(), snappyRecyclerView, HomeActivity.queue.getQueue());
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-        snappyRecyclerView.setLayoutManager(linearLayoutManager);
-        snappyRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        snappyRecyclerView.setAdapter(customAdapter);
-
-        snappyRecyclerView.setActivity(homeActivity);
-
         fullscreenExtraSpaceOccupier = view.findViewById(R.id.fullscreen_extra_space_occupier);
 
         bufferingIndicator = view.findViewById(R.id.bufferingIndicator);
@@ -699,6 +691,13 @@ public class PlayerFragment extends Fragment implements
         VisualizerView.conf = Bitmap.Config.ARGB_8888;
         VisualizerView.bmp = Bitmap.createBitmap(VisualizerView.w, VisualizerView.h, VisualizerView.conf);
         HomeActivity.cacheCanvas = new Canvas(VisualizerView.bmp);
+
+        customAdapter = new CustomAdapter(getContext(), snappyRecyclerView, HomeActivity.queue.getQueue());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        snappyRecyclerView.setLayoutManager(linearLayoutManager);
+        snappyRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        snappyRecyclerView.setAdapter(customAdapter);
+        snappyRecyclerView.setActivity(homeActivity);
 
         snappyRecyclerView.addOnItemTouchListener(new ClickItemTouchListener(snappyRecyclerView) {
             @Override

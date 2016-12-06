@@ -119,7 +119,10 @@ public class EqualizerFragment extends Fragment {
         reverbController.invalidate();
 
         if (!HomeActivity.isEqualizerReloaded) {
-            int x = ((PlayerFragment.bassBoost.getRoundedStrength() * 19) / 1000);
+            int x = 0;
+            if (PlayerFragment.bassBoost != null)
+                x = ((PlayerFragment.bassBoost.getRoundedStrength() * 19) / 1000);
+
             if (x == 0) {
                 bassController.setProgress(1);
             } else {

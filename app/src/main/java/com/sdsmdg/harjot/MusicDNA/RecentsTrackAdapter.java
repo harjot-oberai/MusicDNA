@@ -33,6 +33,8 @@ public class RecentsTrackAdapter extends RecyclerView.Adapter<RecentsTrackAdapte
     private Context ctx;
     ImageLoader imgLoader;
 
+    HomeActivity homeActivity;
+
     public interface OnDragStartListener {
         void onDragStarted(RecyclerView.ViewHolder viewHolder);
     }
@@ -43,6 +45,7 @@ public class RecentsTrackAdapter extends RecyclerView.Adapter<RecentsTrackAdapte
         this.songList = songList;
         mDragStartListener = listener;
         this.ctx = ctx;
+        homeActivity = (HomeActivity) ctx;
         imgLoader = new ImageLoader(ctx);
     }
 
@@ -64,7 +67,7 @@ public class RecentsTrackAdapter extends RecyclerView.Adapter<RecentsTrackAdapte
             for (int i = 0; i < Math.min(10, HomeActivity.recentlyPlayed.getRecentlyPlayed().size()); i++) {
                 HomeActivity.continuePlayingList.add(HomeActivity.recentlyPlayed.getRecentlyPlayed().get(i));
             }
-            HomeActivity.rAdapter.notifyDataSetChanged();
+            homeActivity.rAdapter.notifyDataSetChanged();
         }
 
         new HomeActivity.SaveRecents().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);

@@ -33,6 +33,7 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
     private List<UnifiedTrack> songList;
     private Context ctx;
     ImageLoader imgLoader;
+    HomeActivity homeActivity;
 
     public interface OnDragStartListener {
         void onDragStarted(RecyclerView.ViewHolder viewHolder);
@@ -50,6 +51,7 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
         mDragStartListener = listener;
         mCallback = (onPlaylistEmptyListener) ctx;
         this.ctx = ctx;
+        homeActivity = (HomeActivity) ctx;
         imgLoader = new ImageLoader(ctx);
     }
 
@@ -58,8 +60,8 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
         UnifiedTrack prev = songList.remove(fromPosition);
         songList.add(toPosition, prev);
         notifyItemMoved(fromPosition, toPosition);
-        if (HomeActivity.pAdapter != null)
-            HomeActivity.pAdapter.notifyDataSetChanged();
+        if (homeActivity.pAdapter != null)
+            homeActivity.pAdapter.notifyDataSetChanged();
 
         new HomeActivity.SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
@@ -70,10 +72,10 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
         notifyItemRemoved(position);
         if (songList.size() == 0) {
             ((HomeActivity) ctx).onBackPressed();
-            HomeActivity.allPlaylists.getPlaylists().remove(HomeActivity.tempPlaylistNumber);
+            homeActivity.allPlaylists.getPlaylists().remove(homeActivity.tempPlaylistNumber);
             mCallback.onPlaylistEmpty();
-        } else if (HomeActivity.pAdapter != null) {
-            HomeActivity.pAdapter.notifyDataSetChanged();
+        } else if (homeActivity.pAdapter != null) {
+            homeActivity.pAdapter.notifyDataSetChanged();
         }
 
         new HomeActivity.SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);

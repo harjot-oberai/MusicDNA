@@ -42,6 +42,8 @@ public class PlayListFragment extends Fragment {
 
     FloatingActionButton addPlaylistFAB;
 
+    HomeActivity homeActivity;
+
     public PlayListFragment() {
         // Required empty public constructor
     }
@@ -50,6 +52,7 @@ public class PlayListFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
+            homeActivity = (HomeActivity) context;
             mCallback = (onPlaylistTouchedListener) context;
             mCallback2 = (onPlaylistMenuPlayAllListener) context;
             mCallback3 = (onPlaylistRenameListener) context;
@@ -157,7 +160,7 @@ public class PlayListFragment extends Fragment {
                                 noPlaylistContent.setVisibility(View.VISIBLE);
                             }
                             new HomeActivity.SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                            HomeActivity.pAdapter.notifyItemRemoved(position);
+                            homeActivity.pAdapter.notifyItemRemoved(position);
                         } else if (item.getTitle().equals("Rename")) {
                             HomeActivity.renamePlaylistNumber = position;
                             mCallback3.onPlaylsitRename();

@@ -277,8 +277,8 @@ public class HomeActivity extends AppCompatActivity
 
     LocalTracksHorizontalAdapter adapter;
     StreamTracksHorizontalAdapter sAdapter;
-    static PlayListsHorizontalAdapter pAdapter;
-    static RecentsListHorizontalAdapter rAdapter;
+    PlayListsHorizontalAdapter pAdapter;
+    RecentsListHorizontalAdapter rAdapter;
 
     NavigationView navigationView;
 
@@ -289,7 +289,7 @@ public class HomeActivity extends AppCompatActivity
 
     RecyclerView soundcloudRecyclerView;
     RecyclerView localsongsRecyclerView;
-    static RecyclerView playlistsRecycler;
+    RecyclerView playlistsRecycler;
     RecyclerView recentsRecycler;
 
     RelativeLayout localRecyclerContainer;

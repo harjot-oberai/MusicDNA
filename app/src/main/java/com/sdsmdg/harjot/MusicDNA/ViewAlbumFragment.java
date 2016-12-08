@@ -23,7 +23,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.Blur.BlurringView;
 import com.sdsmdg.harjot.MusicDNA.CustomBottomSheetDialogs.CustomLocalBottomSheetDialog;
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
@@ -162,81 +161,6 @@ public class ViewAlbumFragment extends Fragment {
 
             @Override
             boolean onLongClick(RecyclerView parent, View view, final int position, long id) {
-//                PopupMenu popup = new PopupMenu(getContext(), view);
-//                popup.getMenuInflater().inflate(R.menu.popup_local, popup.getMenu());
-//
-//                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-//                    public boolean onMenuItemClick(MenuItem item) {
-//                        if (item.getTitle().equals("Add to Playlist")) {
-//                            mCallback.addToPlaylist(new UnifiedTrack(true, HomeActivity.tempAlbum.getAlbumSongs().get(position), null));
-//                            HomeActivity.pAdapter.notifyDataSetChanged();
-//                        }
-//                        if (item.getTitle().equals("Add to Queue")) {
-//                            Log.d("QUEUE", "CALLED");
-//                            HomeActivity.queue.getQueue().add(new UnifiedTrack(true, HomeActivity.tempAlbum.getAlbumSongs().get(position), null));
-//                        }
-//                        if (item.getTitle().equals("Play")) {
-//                            LocalTrack track = HomeActivity.tempAlbum.getAlbumSongs().get(position);
-//                            if (HomeActivity.queue.getQueue().size() == 0) {
-//                                HomeActivity.queueCurrentIndex = 0;
-//                                HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
-//                            } else if (HomeActivity.queueCurrentIndex == HomeActivity.queue.getQueue().size() - 1) {
-//                                HomeActivity.queueCurrentIndex++;
-//                                HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
-//                            } else if (HomeActivity.isReloaded) {
-//                                HomeActivity.isReloaded = false;
-//                                HomeActivity.queueCurrentIndex = HomeActivity.queue.getQueue().size();
-//                                HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
-//                            } else {
-//                                HomeActivity.queue.getQueue().add(++HomeActivity.queueCurrentIndex, new UnifiedTrack(true, track, null));
-//                            }
-//                            HomeActivity.localSelectedTrack = track;
-//                            HomeActivity.streamSelected = false;
-//                            HomeActivity.localSelected = true;
-//                            HomeActivity.queueCall = false;
-//                            HomeActivity.isReloaded = false;
-//                            mCallback.onAlbumSongClickListener();
-//                        }
-//                        if (item.getTitle().equals("Play Next")) {
-//                            LocalTrack track = HomeActivity.tempAlbum.getAlbumSongs().get(position);
-//                            if (HomeActivity.queue.getQueue().size() == 0) {
-//                                HomeActivity.queueCurrentIndex = 0;
-//                                HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
-//                                HomeActivity.localSelectedTrack = track;
-//                                HomeActivity.streamSelected = false;
-//                                HomeActivity.localSelected = true;
-//                                HomeActivity.queueCall = false;
-//                                HomeActivity.isReloaded = false;
-//                                mCallback.onAlbumSongClickListener();
-//                            } else if (HomeActivity.queueCurrentIndex == HomeActivity.queue.getQueue().size() - 1) {
-//                                HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
-//                            } else if (HomeActivity.isReloaded) {
-//                                HomeActivity.isReloaded = false;
-//                                HomeActivity.queueCurrentIndex = HomeActivity.queue.getQueue().size();
-//                                HomeActivity.queue.getQueue().add(new UnifiedTrack(true, track, null));
-//                                HomeActivity.localSelectedTrack = track;
-//                                HomeActivity.streamSelected = false;
-//                                HomeActivity.localSelected = true;
-//                                HomeActivity.queueCall = false;
-//                                HomeActivity.isReloaded = false;
-//                                mCallback.onAlbumSongClickListener();
-//                            } else {
-//                                HomeActivity.queue.getQueue().add(HomeActivity.queueCurrentIndex + 1, new UnifiedTrack(true, track, null));
-//                            }
-//                        }
-//                        if (item.getTitle().equals("Add to Favourites")) {
-//                            UnifiedTrack ut = new UnifiedTrack(true, HomeActivity.tempAlbum.getAlbumSongs().get(position), null);
-//                            HomeActivity.addToFavourites(ut);
-//                        }
-//                        if (item.getTitle().equals("Share")) {
-//                            ((HomeActivity) ctx).shareLocalSong(HomeActivity.tempAlbum.getAlbumSongs().get(position).getPath());
-//                        }
-//                        return true;
-//                    }
-//                });
-//
-//                popup.show();
-//                return true;
                 CustomLocalBottomSheetDialog localBottomSheetDialog = new CustomLocalBottomSheetDialog();
                 localBottomSheetDialog.setPosition(position);
                 localBottomSheetDialog.setLocalTrack(activity.tempAlbum.getAlbumSongs().get(position));

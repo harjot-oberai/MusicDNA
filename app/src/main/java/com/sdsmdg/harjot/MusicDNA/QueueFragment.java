@@ -209,10 +209,4 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
             qAdapter.notifyItemRemoved(i);
         }
     }
-
-    public void scrollToCurrentPosition() {
-//        if (queueRecycler != null) {
-//            ((LinearLayoutManager) (queueRecycler.getLayoutManager())).scrollToPositionWithOffset(HomeActivity.queueCurrentIndex, 20);
-//        }
-    }
 }

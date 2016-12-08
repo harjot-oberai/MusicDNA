@@ -186,7 +186,12 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
 
 
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(1, notification);
+
+        try {
+            notificationManager.notify(1, notification);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         updateMediaSession();
 
@@ -245,11 +250,15 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
 
         MediaMetadata.Builder metadataBuilder = new MediaMetadata.Builder();
         if (pFragment.localIsPlaying) {
-            metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, pFragment.localTrack.getTitle());
-            metadataBuilder.putString(MediaMetadata.METADATA_KEY_ARTIST, pFragment.localTrack.getArtist());
+            if (pFragment.localTrack != null) {
+                metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, pFragment.localTrack.getTitle());
+                metadataBuilder.putString(MediaMetadata.METADATA_KEY_ARTIST, pFragment.localTrack.getArtist());
+            }
         } else {
-            metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, pFragment.track.getTitle());
-            metadataBuilder.putString(MediaMetadata.METADATA_KEY_ARTIST, "");
+            if (pFragment.track != null) {
+                metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, pFragment.track.getTitle());
+                metadataBuilder.putString(MediaMetadata.METADATA_KEY_ARTIST, "");
+            }
         }
         if (((BitmapDrawable) pFragment.selected_track_image.getDrawable()).getBitmap() != null) {
 

@@ -34,7 +34,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.provider.MediaStore;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.GravityCompat;
@@ -248,6 +247,8 @@ public class HomeActivity extends AppCompatActivity
     static List<LocalTrack> tempFolderContent;
     static MusicFolder tempMusicFolder;
 
+    PlayerFragment playerFragment;
+
     static boolean shuffleEnabled = false;
     static boolean repeatEnabled = false;
     static boolean repeatOnceEnabled = false;
@@ -427,10 +428,11 @@ public class HomeActivity extends AppCompatActivity
             hideTabs();
             isPlayerVisible = true;
 
-            PlayerFragment frag = (PlayerFragment) getSupportFragmentManager().findFragmentByTag("player");
+            PlayerFragment frag = playerFragment;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             PlayerFragment newFragment = new PlayerFragment();
             if (frag == null) {
+                playerFragment = newFragment;
                 int flag = 0;
                 for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
                     UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
@@ -443,8 +445,8 @@ public class HomeActivity extends AppCompatActivity
                 if (flag == 0) {
                     isFavourite = false;
                 }
-                PlayerFragment.localIsPlaying = false;
-                PlayerFragment.track = selectedTrack;
+                playerFragment.localIsPlaying = false;
+                playerFragment.track = selectedTrack;
                 fm.beginTransaction()
                         .setCustomAnimations(R.anim.slide_up,
                                 R.anim.slide_down,
@@ -455,7 +457,7 @@ public class HomeActivity extends AppCompatActivity
                         .addToBackStack(null)
                         .commitAllowingStateLoss();
             } else {
-                if (PlayerFragment.track != null && !PlayerFragment.localIsPlaying && selectedTrack.getTitle() == PlayerFragment.track.getTitle()) {
+                if (playerFragment.track != null && !playerFragment.localIsPlaying && selectedTrack.getTitle() == playerFragment.track.getTitle()) {
 
                 } else {
                     int flag = 0;
@@ -470,17 +472,17 @@ public class HomeActivity extends AppCompatActivity
                     if (flag == 0) {
                         isFavourite = false;
                     }
-                    PlayerFragment.localIsPlaying = false;
-                    PlayerFragment.track = selectedTrack;
+                    playerFragment.localIsPlaying = false;
+                    playerFragment.track = selectedTrack;
                     frag.refresh();
                 }
             }
             if (!isQueueVisible)
                 showPlayer();
         } else {
-            PlayerFragment frag = (PlayerFragment) getSupportFragmentManager().findFragmentByTag("player");
-            PlayerFragment.localIsPlaying = false;
-            PlayerFragment.track = selectedTrack;
+            PlayerFragment frag = playerFragment;
+            playerFragment.localIsPlaying = false;
+            playerFragment.track = selectedTrack;
             int flag = 0;
             for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
                 UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
@@ -501,7 +503,7 @@ public class HomeActivity extends AppCompatActivity
             qFrag.updateQueueAdapter();
         }
 
-        UnifiedTrack track = new UnifiedTrack(false, null, PlayerFragment.track);
+        UnifiedTrack track = new UnifiedTrack(false, null, playerFragment.track);
         for (int i = 0; i < recentlyPlayed.getRecentlyPlayed().size(); i++) {
             if (!recentlyPlayed.getRecentlyPlayed().get(i).getType() && recentlyPlayed.getRecentlyPlayed().get(i).getStreamTrack().getTitle().equals(track.getStreamTrack().getTitle())) {
                 recentlyPlayed.getRecentlyPlayed().remove(i);
@@ -542,10 +544,11 @@ public class HomeActivity extends AppCompatActivity
             hideTabs();
             isPlayerVisible = true;
 
-            PlayerFragment frag = (PlayerFragment) getSupportFragmentManager().findFragmentByTag("player");
+            PlayerFragment frag = playerFragment;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             PlayerFragment newFragment = new PlayerFragment();
             if (frag == null) {
+                playerFragment = newFragment;
                 int flag = 0;
                 for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
                     UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
@@ -558,8 +561,8 @@ public class HomeActivity extends AppCompatActivity
                 if (flag == 0) {
                     isFavourite = false;
                 }
-                PlayerFragment.localIsPlaying = true;
-                PlayerFragment.localTrack = localSelectedTrack;
+                playerFragment.localIsPlaying = true;
+                playerFragment.localTrack = localSelectedTrack;
                 fm.beginTransaction()
                         .setCustomAnimations(R.anim.slide_up,
                                 R.anim.slide_down,
@@ -569,7 +572,7 @@ public class HomeActivity extends AppCompatActivity
                         .show(newFragment)
                         .commitAllowingStateLoss();
             } else {
-                if (PlayerFragment.localTrack != null && PlayerFragment.localIsPlaying && localSelectedTrack.getTitle() == PlayerFragment.localTrack.getTitle()) {
+                if (playerFragment.localTrack != null && playerFragment.localIsPlaying && localSelectedTrack.getTitle() == playerFragment.localTrack.getTitle()) {
 
                 } else {
                     int flag = 0;
@@ -584,8 +587,8 @@ public class HomeActivity extends AppCompatActivity
                     if (flag == 0) {
                         isFavourite = false;
                     }
-                    PlayerFragment.localIsPlaying = true;
-                    PlayerFragment.localTrack = localSelectedTrack;
+                    playerFragment.localIsPlaying = true;
+                    playerFragment.localTrack = localSelectedTrack;
                     frag.refresh();
                 }
             }
@@ -594,9 +597,9 @@ public class HomeActivity extends AppCompatActivity
                 showPlayer();
 
         } else {
-            PlayerFragment frag = (PlayerFragment) getSupportFragmentManager().findFragmentByTag("player");
-            PlayerFragment.localIsPlaying = true;
-            PlayerFragment.localTrack = localSelectedTrack;
+            PlayerFragment frag = playerFragment;
+            playerFragment.localIsPlaying = true;
+            playerFragment.localTrack = localSelectedTrack;
 
             int flag = 0;
             for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
@@ -618,7 +621,7 @@ public class HomeActivity extends AppCompatActivity
             qFrag.updateQueueAdapter();
         }
 
-        UnifiedTrack track = new UnifiedTrack(true, PlayerFragment.localTrack, null);
+        UnifiedTrack track = new UnifiedTrack(true, playerFragment.localTrack, null);
         for (int i = 0; i < recentlyPlayed.getRecentlyPlayed().size(); i++) {
             if (recentlyPlayed.getRecentlyPlayed().get(i).getType() && recentlyPlayed.getRecentlyPlayed().get(i).getLocalTrack().getTitle().equals(track.getLocalTrack().getTitle())) {
                 recentlyPlayed.getRecentlyPlayed().remove(i);
@@ -771,15 +774,15 @@ public class HomeActivity extends AppCompatActivity
                         isEqualizerEnabled = true;
                         int pos = presetPos;
                         if (pos != 0) {
-                            PlayerFragment.mEqualizer.usePreset((short) (pos - 1));
+                            playerFragment.mEqualizer.usePreset((short) (pos - 1));
                         } else {
                             for (short i = 0; i < 5; i++) {
-                                PlayerFragment.mEqualizer.setBandLevel(i, (short) seekbarpos[i]);
+                                playerFragment.mEqualizer.setBandLevel(i, (short) seekbarpos[i]);
                             }
                         }
                         if (bassStrength != -1 && reverbPreset != -1) {
-                            PlayerFragment.bassBoost.setStrength(bassStrength);
-                            PlayerFragment.presetReverb.setPreset(reverbPreset);
+                            playerFragment.bassBoost.setStrength(bassStrength);
+                            playerFragment.presetReverb.setPreset(reverbPreset);
                         }
                         if (eqFrag != null)
                             eqFrag.setBlockerVisibility(View.GONE);
@@ -789,9 +792,9 @@ public class HomeActivity extends AppCompatActivity
                 } else {
                     try {
                         isEqualizerEnabled = false;
-                        PlayerFragment.mEqualizer.usePreset((short) 0);
-                        PlayerFragment.bassBoost.setStrength((short) (((float) 1000 / 19) * (1)));
-                        PlayerFragment.presetReverb.setPreset((short) 0);
+                        playerFragment.mEqualizer.usePreset((short) 0);
+                        playerFragment.bassBoost.setStrength((short) (((float) 1000 / 19) * (1)));
+                        playerFragment.presetReverb.setPreset((short) 0);
                         if (eqFrag != null)
                             eqFrag.setBlockerVisibility(View.VISIBLE);
                     } catch (Exception e) {
@@ -849,28 +852,30 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onCallStateChanged(int state, String incomingNumber) {
 
-                PlayerFragment pFrag = (PlayerFragment) fragMan.findFragmentByTag("player");
+                PlayerFragment pFrag = playerFragment;
 
-                if (state == TelephonyManager.CALL_STATE_RINGING) {
-                    //Incoming call: Pause music
-                    if (pFrag.mMediaPlayer != null && pFrag.mMediaPlayer.isPlaying()) {
-                        wasMediaPlayerPlaying = true;
-                        pFrag.togglePlayPause();
-                    } else {
-                        wasMediaPlayerPlaying = false;
-                    }
-                } else if (state == TelephonyManager.CALL_STATE_IDLE) {
-                    //Not in call: Play music
-                    if (pFrag.mMediaPlayer != null && !pFrag.mMediaPlayer.isPlaying() && wasMediaPlayerPlaying) {
-                        pFrag.togglePlayPause();
-                    }
-                } else if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
-                    //A call is dialing, active or on hold
-                    if (PlayerFragment.mMediaPlayer != null && pFrag.mMediaPlayer.isPlaying()) {
-                        wasMediaPlayerPlaying = true;
-                        pFrag.togglePlayPause();
-                    } else {
-                        wasMediaPlayerPlaying = false;
+                if(playerFragment!=null) {
+                    if (state == TelephonyManager.CALL_STATE_RINGING) {
+                        //Incoming call: Pause music
+                        if (pFrag.mMediaPlayer != null && pFrag.mMediaPlayer.isPlaying()) {
+                            wasMediaPlayerPlaying = true;
+                            pFrag.togglePlayPause();
+                        } else {
+                            wasMediaPlayerPlaying = false;
+                        }
+                    } else if (state == TelephonyManager.CALL_STATE_IDLE) {
+                        //Not in call: Play music
+                        if (pFrag.mMediaPlayer != null && !pFrag.mMediaPlayer.isPlaying() && wasMediaPlayerPlaying) {
+                            pFrag.togglePlayPause();
+                        }
+                    } else if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
+                        //A call is dialing, active or on hold
+                        if (playerFragment.mMediaPlayer != null && pFrag.mMediaPlayer.isPlaying()) {
+                            wasMediaPlayerPlaying = true;
+                            pFrag.togglePlayPause();
+                        } else {
+                            wasMediaPlayerPlaying = false;
+                        }
                     }
                 }
                 super.onCallStateChanged(state, incomingNumber);
@@ -1175,7 +1180,7 @@ public class HomeActivity extends AppCompatActivity
                     finalLocalSearchResultList.add(lt);
 
                     int pos;
-                    if(thisAlbum!=null) {
+                    if (thisAlbum != null) {
                         pos = checkAlbum(thisAlbum);
                         if (pos != -1) {
                             albums.get(pos).getAlbumSongs().add(lt);
@@ -1195,7 +1200,7 @@ public class HomeActivity extends AppCompatActivity
                         }
                     }
 
-                    if(thisArtist!=null) {
+                    if (thisArtist != null) {
                         pos = checkArtist(thisArtist);
                         if (pos != -1) {
                             artists.get(pos).getArtistSongs().add(lt);
@@ -1230,6 +1235,8 @@ public class HomeActivity extends AppCompatActivity
             while (musicCursor.moveToNext());
         }
 
+        musicCursor.close();
+
         System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
         try {
             if (localTrackList.size() > 0) {
@@ -1245,7 +1252,7 @@ public class HomeActivity extends AppCompatActivity
                 Collections.sort(finalArtists, new artistComparator());
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
 
         List<UnifiedTrack> tmp = new ArrayList<>();
@@ -1362,7 +1369,7 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        PlayerFragment plFrag = (PlayerFragment) fragMan.findFragmentByTag("player");
+        PlayerFragment plFrag = playerFragment;
         FullLocalMusicFragment flmFrag = (FullLocalMusicFragment) fragMan.findFragmentByTag("local");
         LocalMusicFragment lFrag = null;
         if (flmFrag != null) {
@@ -1390,11 +1397,11 @@ public class HomeActivity extends AppCompatActivity
             vsdFrag.hideShowcase();
         } else if (isFullScreenEnabled) {
             isFullScreenEnabled = false;
-            PlayerFragment.bottomContainer.setVisibility(View.VISIBLE);
-            PlayerFragment.seekBarContainer.setVisibility(View.VISIBLE);
-            PlayerFragment.toggleContainer.setVisibility(View.VISIBLE);
+            plFrag.bottomContainer.setVisibility(View.VISIBLE);
+            plFrag.seekBarContainer.setVisibility(View.VISIBLE);
+            plFrag.toggleContainer.setVisibility(View.VISIBLE);
             spToolbar.setVisibility(View.VISIBLE);
-            PlayerFragment.fullscreenExtraSpaceOccupier.getLayoutParams().height = 0;
+            plFrag.fullscreenExtraSpaceOccupier.getLayoutParams().height = 0;
             onFullScreen();
         } else if (!searchView.isIconified()) {
             searchView.setQuery("", true);
@@ -1805,8 +1812,8 @@ public class HomeActivity extends AppCompatActivity
 
     public void hidePlayer() {
 
-        if (PlayerFragment.mVisualizerView != null)
-            PlayerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
+        if (playerFragment.mVisualizerView != null)
+            playerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
         if (Build.VERSION.SDK_INT >= 21) {
@@ -1818,23 +1825,23 @@ public class HomeActivity extends AppCompatActivity
 
         isPlayerVisible = false;
 
-        if (PlayerFragment.cpb != null) {
-            PlayerFragment.cpb.setAlpha(0.0f);
-            PlayerFragment.cpb.setVisibility(View.VISIBLE);
-            PlayerFragment.cpb.animate()
+        if (playerFragment.cpb != null) {
+            playerFragment.cpb.setAlpha(0.0f);
+            playerFragment.cpb.setVisibility(View.VISIBLE);
+            playerFragment.cpb.animate()
                     .alpha(1.0f);
         }
-        if (PlayerFragment.smallPlayer != null) {
-            PlayerFragment.smallPlayer.setAlpha(0.0f);
-            PlayerFragment.smallPlayer.setVisibility(View.VISIBLE);
-            PlayerFragment.smallPlayer.animate()
+        if (playerFragment.smallPlayer != null) {
+            playerFragment.smallPlayer.setAlpha(0.0f);
+            playerFragment.smallPlayer.setVisibility(View.VISIBLE);
+            playerFragment.smallPlayer.animate()
                     .alpha(1.0f);
         }
 
         playerContainer.setVisibility(View.VISIBLE);
 
         playerContainer.animate()
-                .translationY(playerContainer.getHeight() - PlayerFragment.smallPlayer.getHeight())
+                .translationY(playerContainer.getHeight() - playerFragment.smallPlayer.getHeight())
                 .setDuration(300);
 
         final Handler handler = new Handler();
@@ -1849,26 +1856,18 @@ public class HomeActivity extends AppCompatActivity
             }
         }, 350);
 
-        PlayerFragment.player_controller.setAlpha(0.0f);
-        PlayerFragment.player_controller.setImageDrawable(PlayerFragment.mainTrackController.getDrawable());
+        playerFragment.player_controller.setAlpha(0.0f);
+        playerFragment.player_controller.setImageDrawable(playerFragment.mainTrackController.getDrawable());
 
-        PlayerFragment.player_controller.animate()
+        playerFragment.player_controller.animate()
                 .alpha(1.0f);
 
-//        PlayerFragment.currentAlbumArtHolder.animate()
-//                .alpha(0.0f)
-//                .withEndAction(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        PlayerFragment.currentAlbumArtHolder.setVisibility(View.GONE);
-//                    }
-//                });
-        PlayerFragment.snappyRecyclerView.animate()
+        playerFragment.snappyRecyclerView.animate()
                 .alpha(0.0f)
                 .withEndAction(new Runnable() {
                     @Override
                     public void run() {
-                        PlayerFragment.snappyRecyclerView.setVisibility(View.GONE);
+                        playerFragment.snappyRecyclerView.setVisibility(View.GONE);
                     }
                 });
     }
@@ -1877,8 +1876,8 @@ public class HomeActivity extends AppCompatActivity
 
         isEqualizerVisible = true;
 
-        if (PlayerFragment.mVisualizerView != null)
-            PlayerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
+        if (playerFragment.mVisualizerView != null)
+            playerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
 
         final Handler handler2 = new Handler();
         handler2.postDelayed(new Runnable() {
@@ -1900,8 +1899,8 @@ public class HomeActivity extends AppCompatActivity
 
         isQueueVisible = true;
 
-        if (PlayerFragment.mVisualizerView != null)
-            PlayerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
+        if (playerFragment.mVisualizerView != null)
+            playerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
 
         setUpFragmentToolbar(Color.BLACK, "Queue");
         switchToolbar(spToolbar, queueToolbar, "left");
@@ -1940,22 +1939,22 @@ public class HomeActivity extends AppCompatActivity
 
 
         playerContainer.setVisibility(View.VISIBLE);
-        if (PlayerFragment.mVisualizerView != null)
-            PlayerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
+        if (playerFragment.mVisualizerView != null)
+            playerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
 
-        if (PlayerFragment.player_controller != null) {
-            PlayerFragment.player_controller.setAlpha(1.0f);
-            PlayerFragment.player_controller.animate()
+        if (playerFragment.player_controller != null) {
+            playerFragment.player_controller.setAlpha(1.0f);
+            playerFragment.player_controller.animate()
                     .setDuration(300)
                     .alpha(0.0f);
         }
 
-        if (PlayerFragment.cpb != null) {
-            PlayerFragment.cpb.animate()
+        if (playerFragment.cpb != null) {
+            playerFragment.cpb.animate()
                     .alpha(0.0f);
         }
-        if (PlayerFragment.smallPlayer != null) {
-            PlayerFragment.smallPlayer.animate()
+        if (playerFragment.smallPlayer != null) {
+            playerFragment.smallPlayer.animate()
                     .alpha(0.0f);
         }
 
@@ -1972,17 +1971,17 @@ public class HomeActivity extends AppCompatActivity
                 });
 
 //        if (settings.isAlbumArtBackgroundEnabled()) {
-//            if (PlayerFragment.currentAlbumArtHolder != null) {
-//                PlayerFragment.currentAlbumArtHolder.setVisibility(View.VISIBLE);
-//                PlayerFragment.currentAlbumArtHolder.animate()
+//            if (playerFragment.currentAlbumArtHolder != null) {
+//                playerFragment.currentAlbumArtHolder.setVisibility(View.VISIBLE);
+//                playerFragment.currentAlbumArtHolder.animate()
 //                        .alpha(0.1f)
 //                        .setDuration(300);
 //            }
 //        }
 
-        if (PlayerFragment.snappyRecyclerView != null) {
-            PlayerFragment.snappyRecyclerView.setVisibility(View.VISIBLE);
-            PlayerFragment.snappyRecyclerView.animate()
+        if (playerFragment.snappyRecyclerView != null) {
+            playerFragment.snappyRecyclerView.setVisibility(View.VISIBLE);
+            playerFragment.snappyRecyclerView.animate()
                     .alpha(1.0f)
                     .setDuration(300);
         }
@@ -1991,8 +1990,8 @@ public class HomeActivity extends AppCompatActivity
         handler2.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (PlayerFragment.mVisualizerView != null)
-                    PlayerFragment.mVisualizerView.setVisibility(View.VISIBLE);
+                if (playerFragment.mVisualizerView != null)
+                    playerFragment.mVisualizerView.setVisibility(View.VISIBLE);
             }
         }, 400);
 
@@ -2012,8 +2011,8 @@ public class HomeActivity extends AppCompatActivity
         }, 350);
 
         playerContainer.setVisibility(View.VISIBLE);
-        if (PlayerFragment.mVisualizerView != null)
-            PlayerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
+        if (playerFragment.mVisualizerView != null)
+            playerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
 
         isPlayerTransitioning = true;
 
@@ -2033,8 +2032,8 @@ public class HomeActivity extends AppCompatActivity
         handler2.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (PlayerFragment.mVisualizerView != null)
-                    PlayerFragment.mVisualizerView.setVisibility(View.VISIBLE);
+                if (playerFragment.mVisualizerView != null)
+                    playerFragment.mVisualizerView.setVisibility(View.VISIBLE);
             }
         }, 400);
 
@@ -2047,8 +2046,8 @@ public class HomeActivity extends AppCompatActivity
         isEqualizerVisible = false;
         isQueueVisible = false;
 
-        if (PlayerFragment.mVisualizerView != null)
-            PlayerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
+        if (playerFragment.mVisualizerView != null)
+            playerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
 
         isPlayerTransitioning = true;
 
@@ -2068,8 +2067,8 @@ public class HomeActivity extends AppCompatActivity
         handler2.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (PlayerFragment.mVisualizerView != null)
-                    PlayerFragment.mVisualizerView.setVisibility(View.VISIBLE);
+                if (playerFragment.mVisualizerView != null)
+                    playerFragment.mVisualizerView.setVisibility(View.VISIBLE);
                 hideFragment("queue");
             }
         }, 400);
@@ -2086,29 +2085,29 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    public static void updatePoints() {
+    public void updatePoints() {
 
         try {
-            PlayerFragment.mVisualizerView.outerRadius = (float) (Math.min(PlayerFragment.mVisualizerView.width, PlayerFragment.mVisualizerView.height) * 0.42);
-            PlayerFragment.mVisualizerView.normalizedPosition = ((float) (PlayerFragment.mMediaPlayer.getCurrentPosition()) / (float) (PlayerFragment.durationInMilliSec));
+            playerFragment.mVisualizerView.outerRadius = (float) (Math.min(playerFragment.mVisualizerView.width, playerFragment.mVisualizerView.height) * 0.42);
+            playerFragment.mVisualizerView.normalizedPosition = ((float) (playerFragment.mMediaPlayer.getCurrentPosition()) / (float) (playerFragment.durationInMilliSec));
             if (mBytes == null) {
                 return;
             }
-            PlayerFragment.mVisualizerView.angle = (float) (Math.PI - PlayerFragment.mVisualizerView.normalizedPosition * PlayerFragment.mVisualizerView.TAU);
-            PlayerFragment.mVisualizerView.color = 0;
-            PlayerFragment.mVisualizerView.lnDataDistance = 0;
-            PlayerFragment.mVisualizerView.distance = 0;
-            PlayerFragment.mVisualizerView.size = 0;
-            PlayerFragment.mVisualizerView.volume = 0;
-            PlayerFragment.mVisualizerView.power = 0;
+            playerFragment.mVisualizerView.angle = (float) (Math.PI - playerFragment.mVisualizerView.normalizedPosition * playerFragment.mVisualizerView.TAU);
+            playerFragment.mVisualizerView.color = 0;
+            playerFragment.mVisualizerView.lnDataDistance = 0;
+            playerFragment.mVisualizerView.distance = 0;
+            playerFragment.mVisualizerView.size = 0;
+            playerFragment.mVisualizerView.volume = 0;
+            playerFragment.mVisualizerView.power = 0;
         } catch (Exception e) {
 
         }
 
         float x, y;
 
-        int midx = (int) (PlayerFragment.mVisualizerView.width / 2);
-        int midy = (int) (PlayerFragment.mVisualizerView.height / 2);
+        int midx = (int) (playerFragment.mVisualizerView.width / 2);
+        int midy = (int) (playerFragment.mVisualizerView.height / 2);
 
         // calculate min and max amplitude for current byte array
         float max = Integer.MIN_VALUE, min = Integer.MAX_VALUE;
@@ -2141,62 +2140,62 @@ public class HomeActivity extends AppCompatActivity
                 amp = 0;
             }
 
-            PlayerFragment.mVisualizerView.volume = (amp);
+            playerFragment.mVisualizerView.volume = (amp);
 
             // converting polar to cartesian (distance calculated afterwards acts as radius for polar co-ords)
-            x = (float) Math.sin(PlayerFragment.mVisualizerView.angle);
-            y = (float) Math.cos(PlayerFragment.mVisualizerView.angle);
+            x = (float) Math.sin(playerFragment.mVisualizerView.angle);
+            y = (float) Math.cos(playerFragment.mVisualizerView.angle);
 
             // filtering low amplitude
-            if (PlayerFragment.mVisualizerView.volume < minAudioStrength) {
+            if (playerFragment.mVisualizerView.volume < minAudioStrength) {
                 continue;
             }
 
             // color ( value of hue inn HSV ) calculated based on current progress of the song or audio clip
-            PlayerFragment.mVisualizerView.color = (float) (PlayerFragment.mVisualizerView.normalizedPosition - 0.12 + Math.random() * 0.24);
-            PlayerFragment.mVisualizerView.color = Math.round(PlayerFragment.mVisualizerView.color * 360);
-            seekBarColor = (float) (PlayerFragment.mVisualizerView.normalizedPosition);
+            playerFragment.mVisualizerView.color = (float) (playerFragment.mVisualizerView.normalizedPosition - 0.12 + Math.random() * 0.24);
+            playerFragment.mVisualizerView.color = Math.round(playerFragment.mVisualizerView.color * 360);
+            seekBarColor = (float) (playerFragment.mVisualizerView.normalizedPosition);
             seekBarColor = Math.round(seekBarColor * 360);
 
             // calculating distance from center ( 'r' in polar coordinates)
-            PlayerFragment.mVisualizerView.lnDataDistance = (float) ((Math.log(a - 4) / PlayerFragment.mVisualizerView.LOG_MAX) - PlayerFragment.mVisualizerView.BASE);
-            PlayerFragment.mVisualizerView.distance = PlayerFragment.mVisualizerView.lnDataDistance * PlayerFragment.mVisualizerView.outerRadius;
+            playerFragment.mVisualizerView.lnDataDistance = (float) ((Math.log(a - 4) / playerFragment.mVisualizerView.LOG_MAX) - playerFragment.mVisualizerView.BASE);
+            playerFragment.mVisualizerView.distance = playerFragment.mVisualizerView.lnDataDistance * playerFragment.mVisualizerView.outerRadius;
 
 
             // size of the circle to be rendered at the calculated position
-            PlayerFragment.mVisualizerView.size = ratio * ((float) (4.5 * PlayerFragment.mVisualizerView.volume * PlayerFragment.mVisualizerView.MAX_DOT_SIZE + Math.random() * 2));
+            playerFragment.mVisualizerView.size = ratio * ((float) (4.5 * playerFragment.mVisualizerView.volume * playerFragment.mVisualizerView.MAX_DOT_SIZE + Math.random() * 2));
 
             // alpha also based on volume ( amplitude )
-            PlayerFragment.mVisualizerView.alpha = (float) (PlayerFragment.mVisualizerView.volume * 0.09);
+            playerFragment.mVisualizerView.alpha = (float) (playerFragment.mVisualizerView.volume * 0.09);
 
             // final cartesian coordinates for drawing on canvas
-            x = x * PlayerFragment.mVisualizerView.distance;
-            y = y * PlayerFragment.mVisualizerView.distance;
+            x = x * playerFragment.mVisualizerView.distance;
+            y = y * playerFragment.mVisualizerView.distance;
 
 
             float[] hsv = new float[3];
-            hsv[0] = PlayerFragment.mVisualizerView.color;
+            hsv[0] = playerFragment.mVisualizerView.color;
             hsv[1] = (float) 0.9;
             hsv[2] = (float) 0.9;
 
             // setting color of the Paint
-            PlayerFragment.mVisualizerView.mForePaint.setColor(Color.HSVToColor(hsv));
+            playerFragment.mVisualizerView.mForePaint.setColor(Color.HSVToColor(hsv));
 
-            if (PlayerFragment.mVisualizerView.size >= 8.0 && PlayerFragment.mVisualizerView.size < 29.0) {
-                PlayerFragment.mVisualizerView.mForePaint.setAlpha(17);
-            } else if (PlayerFragment.mVisualizerView.size >= 29.0 && PlayerFragment.mVisualizerView.size <= 60.0) {
-                PlayerFragment.mVisualizerView.mForePaint.setAlpha(9);
-            } else if (PlayerFragment.mVisualizerView.size > 60.0) {
-                PlayerFragment.mVisualizerView.mForePaint.setAlpha(3);
+            if (playerFragment.mVisualizerView.size >= 8.0 && playerFragment.mVisualizerView.size < 29.0) {
+                playerFragment.mVisualizerView.mForePaint.setAlpha(17);
+            } else if (playerFragment.mVisualizerView.size >= 29.0 && playerFragment.mVisualizerView.size <= 60.0) {
+                playerFragment.mVisualizerView.mForePaint.setAlpha(9);
+            } else if (playerFragment.mVisualizerView.size > 60.0) {
+                playerFragment.mVisualizerView.mForePaint.setAlpha(3);
             } else {
-                PlayerFragment.mVisualizerView.mForePaint.setAlpha((int) (PlayerFragment.mVisualizerView.alpha * 1000));
+                playerFragment.mVisualizerView.mForePaint.setAlpha((int) (playerFragment.mVisualizerView.alpha * 1000));
             }
 
             // Add points and paint config to lists for redraw
-            PlayerFragment.mVisualizerView.pts.add(Pair.create(midx + x, midy + y));
-            PlayerFragment.mVisualizerView.ptPaint.add(Pair.create(PlayerFragment.mVisualizerView.size, Pair.create(PlayerFragment.mVisualizerView.mForePaint.getColor(), PlayerFragment.mVisualizerView.mForePaint.getAlpha())));
+            playerFragment.mVisualizerView.pts.add(Pair.create(midx + x, midy + y));
+            playerFragment.mVisualizerView.ptPaint.add(Pair.create(playerFragment.mVisualizerView.size, Pair.create(playerFragment.mVisualizerView.mForePaint.getColor(), playerFragment.mVisualizerView.mForePaint.getAlpha())));
 
-            cacheCanvas.drawCircle(midx + x, midy + y, PlayerFragment.mVisualizerView.size, PlayerFragment.mVisualizerView.mForePaint);
+            cacheCanvas.drawCircle(midx + x, midy + y, playerFragment.mVisualizerView.size, playerFragment.mVisualizerView.mForePaint);
         }
     }
 
@@ -2211,6 +2210,8 @@ public class HomeActivity extends AppCompatActivity
         QueueFragment qFrag = (QueueFragment) fragMan.findFragmentByTag("queue");
         queueCall = true;
 
+        PlayerFragment plFrag = playerFragment;
+
         if (repeatOnceEnabled && !nextControllerClicked) {
 
             /*
@@ -2218,29 +2219,29 @@ public class HomeActivity extends AppCompatActivity
             */
 
             // Set Progress bar to 0
-            PlayerFragment.progressBar.setProgress(0);
-            PlayerFragment.progressBar.setSecondaryProgress(0);
+            plFrag.progressBar.setProgress(0);
+            plFrag.progressBar.setSecondaryProgress(0);
 
             // Get Visualizer and Visualizer View to initial state
-            PlayerFragment.mVisualizer.setEnabled(true);
+            plFrag.mVisualizer.setEnabled(true);
             VisualizerView.w = screen_width;
             VisualizerView.h = screen_width;
             VisualizerView.conf = Bitmap.Config.ARGB_8888;
             VisualizerView.bmp = Bitmap.createBitmap(VisualizerView.w, VisualizerView.h, VisualizerView.conf);
             cacheCanvas = new Canvas(VisualizerView.bmp);
-            PlayerFragment.mVisualizerView.clear();
+            plFrag.mVisualizerView.clear();
 
             // Play the song again by seeking media player to 0
-            PlayerFragment.mMediaPlayer.seekTo(0);
+            plFrag.mMediaPlayer.seekTo(0);
 
             // Setup the icons
-            PlayerFragment.mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
-            PlayerFragment.isReplayIconVisible = false;
-            PlayerFragment.player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
+            plFrag.mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
+            plFrag.isReplayIconVisible = false;
+            plFrag.player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
 
             // Resume the MediaPlayer
-            PlayerFragment.isPrepared = true;
-            PlayerFragment.mMediaPlayer.start();
+            plFrag.isPrepared = true;
+            plFrag.mMediaPlayer.start();
         } else {
 
             /*
@@ -2279,16 +2280,16 @@ public class HomeActivity extends AppCompatActivity
                 } else if ((repeatEnabled || repeatOnceEnabled) && (queue.getQueue().size() == 1)) {
                     nextControllerClicked = false;
                     hasQueueEnded = false;
-                    PlayerFragment.progressBar.setProgress(0);
-                    PlayerFragment.progressBar.setSecondaryProgress(0);
-                    PlayerFragment.mVisualizer.setEnabled(true);
-                    PlayerFragment.mVisualizerView.clear();
-                    PlayerFragment.mMediaPlayer.seekTo(0);
-                    PlayerFragment.mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
-                    PlayerFragment.isReplayIconVisible = false;
-                    PlayerFragment.player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
-                    PlayerFragment.isPrepared = true;
-                    PlayerFragment.mMediaPlayer.start();
+                    plFrag.progressBar.setProgress(0);
+                    plFrag.progressBar.setSecondaryProgress(0);
+                    plFrag.mVisualizer.setEnabled(true);
+                    plFrag.mVisualizerView.clear();
+                    plFrag.mMediaPlayer.seekTo(0);
+                    plFrag.mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
+                    plFrag.isReplayIconVisible = false;
+                    plFrag.player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
+                    plFrag.isPrepared = true;
+                    plFrag.mMediaPlayer.start();
                 } else {
                     if ((nextControllerClicked || hasQueueEnded) && (queue.getQueue().size() > 1)) {
                         nextControllerClicked = false;
@@ -2301,16 +2302,16 @@ public class HomeActivity extends AppCompatActivity
                     } else if ((nextControllerClicked || hasQueueEnded) && (queue.getQueue().size() == 1)) {
                         nextControllerClicked = false;
                         hasQueueEnded = false;
-                        PlayerFragment.progressBar.setProgress(0);
-                        PlayerFragment.progressBar.setSecondaryProgress(0);
-                        PlayerFragment.mVisualizer.setEnabled(true);
-                        PlayerFragment.mVisualizerView.clear();
-                        PlayerFragment.mMediaPlayer.seekTo(0);
-                        PlayerFragment.mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
-                        PlayerFragment.isReplayIconVisible = false;
-                        PlayerFragment.player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
-                        PlayerFragment.isPrepared = true;
-                        PlayerFragment.mMediaPlayer.start();
+                        plFrag.progressBar.setProgress(0);
+                        plFrag.progressBar.setSecondaryProgress(0);
+                        plFrag.mVisualizer.setEnabled(true);
+                        plFrag.mVisualizerView.clear();
+                        plFrag.mMediaPlayer.seekTo(0);
+                        plFrag.mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
+                        plFrag.isReplayIconVisible = false;
+                        plFrag.player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
+                        plFrag.isPrepared = true;
+                        plFrag.mMediaPlayer.start();
                     } else {
                         // keep queue at last track
                     }
@@ -2883,6 +2884,11 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    public PlayerFragment getPlayerFragment() {
+        return playerFragment;
+    }
+
     public class MyAsyncTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -2897,10 +2903,10 @@ public class HomeActivity extends AppCompatActivity
             main.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    PlayerFragment.mVisualizerView.updateVisualizer(mBytes);
-                    if (PlayerFragment.mVisualizerView.bmp != null) {
+                    playerFragment.mVisualizerView.updateVisualizer(mBytes);
+                    if (playerFragment.mVisualizerView.bmp != null) {
                         if (navImageView != null)
-                            navImageView.setImageBitmap(PlayerFragment.mVisualizerView.bmp);
+                            navImageView.setImageBitmap(playerFragment.mVisualizerView.bmp);
                     }
                 }
             });
@@ -3792,7 +3798,7 @@ public class HomeActivity extends AppCompatActivity
         PendingIntent pendingSwitchIntent = PendingIntent.getBroadcast(this, 100, switchIntent, 0);
         notificationView.setOnClickPendingIntent(R.id.btn_pause_play_in_notification, pendingSwitchIntent);
         try {
-            if (PlayerFragment.mMediaPlayer.isPlaying()) {
+            if (playerFragment.mMediaPlayer.isPlaying()) {
                 notificationView.setImageViewResource(R.id.btn_pause_play_in_notification, R.drawable.ic_pause_white_48dp);
             } else {
                 notificationView.setImageViewResource(R.id.btn_pause_play_in_notification, R.drawable.ic_play_arrow_white_48dp);
@@ -3808,7 +3814,7 @@ public class HomeActivity extends AppCompatActivity
 
         notificationViewSmall.setOnClickPendingIntent(R.id.btn_pause_play_in_notification, pendingSwitchIntent);
         try {
-            if (PlayerFragment.mMediaPlayer.isPlaying()) {
+            if (playerFragment.mMediaPlayer.isPlaying()) {
                 notificationViewSmall.setImageViewResource(R.id.btn_pause_play_in_notification, R.drawable.ic_pause_white_48dp);
             } else {
                 notificationViewSmall.setImageViewResource(R.id.btn_pause_play_in_notification, R.drawable.ic_play_arrow_white_48dp);
@@ -3827,29 +3833,29 @@ public class HomeActivity extends AppCompatActivity
                 .addAction(R.drawable.ic_skip_previous_white_48dp, "Prev", pendingSwitchIntent3)
                 .addAction(R.drawable.ic_play_arrow_white_48dp, "Play", pendingSwitchIntent)
                 .addAction(R.drawable.ic_skip_next_white_48dp, "Next", pendingSwitchIntent2)
-                .setLargeIcon(((BitmapDrawable) PlayerFragment.selected_track_image.getDrawable()).getBitmap())
+                .setLargeIcon(((BitmapDrawable) playerFragment.selected_track_image.getDrawable()).getBitmap())
                 .build();
         notification.priority = Notification.PRIORITY_MAX;
         notification.bigContentView = notificationView;
         notification.contentView = notificationViewSmall;
         notification.contentIntent = pendingNotificationIntent;
-        if (PlayerFragment.mMediaPlayer.isPlaying()) {
+        if (playerFragment.mMediaPlayer.isPlaying()) {
             notification.flags |= Notification.FLAG_ONGOING_EVENT;
         }
-        notificationView.setImageViewBitmap(R.id.image_in_notification, ((BitmapDrawable) PlayerFragment.selected_track_image.getDrawable()).getBitmap());
-        if (PlayerFragment.localIsPlaying) {
-            notificationView.setTextViewText(R.id.title_in_notification, PlayerFragment.localTrack.getTitle());
-            notificationView.setTextViewText(R.id.artist_in_notification, PlayerFragment.localTrack.getArtist());
+        notificationView.setImageViewBitmap(R.id.image_in_notification, ((BitmapDrawable) playerFragment.selected_track_image.getDrawable()).getBitmap());
+        if (playerFragment.localIsPlaying) {
+            notificationView.setTextViewText(R.id.title_in_notification, playerFragment.localTrack.getTitle());
+            notificationView.setTextViewText(R.id.artist_in_notification, playerFragment.localTrack.getArtist());
         } else {
-            notificationView.setTextViewText(R.id.title_in_notification, PlayerFragment.track.getTitle());
+            notificationView.setTextViewText(R.id.title_in_notification, playerFragment.track.getTitle());
             notificationView.setTextViewText(R.id.artist_in_notification, "");
         }
-        notificationViewSmall.setImageViewBitmap(R.id.image_in_notification, ((BitmapDrawable) PlayerFragment.selected_track_image.getDrawable()).getBitmap());
-        if (PlayerFragment.localIsPlaying) {
-            notificationViewSmall.setTextViewText(R.id.title_in_notification, PlayerFragment.localTrack.getTitle());
-            notificationViewSmall.setTextViewText(R.id.artist_in_notification, PlayerFragment.localTrack.getArtist());
+        notificationViewSmall.setImageViewBitmap(R.id.image_in_notification, ((BitmapDrawable) playerFragment.selected_track_image.getDrawable()).getBitmap());
+        if (playerFragment.localIsPlaying) {
+            notificationViewSmall.setTextViewText(R.id.title_in_notification, playerFragment.localTrack.getTitle());
+            notificationViewSmall.setTextViewText(R.id.artist_in_notification, playerFragment.localTrack.getArtist());
         } else {
-            notificationViewSmall.setTextViewText(R.id.title_in_notification, PlayerFragment.track.getTitle());
+            notificationViewSmall.setTextViewText(R.id.title_in_notification, playerFragment.track.getTitle());
             notificationViewSmall.setTextViewText(R.id.artist_in_notification, "");
         }
         getPlayerFragment().isStart = false;
@@ -4898,15 +4904,6 @@ public class HomeActivity extends AppCompatActivity
     public boolean hasNavBar(Resources resources) {
         int id = resources.getIdentifier("config_showNavigationBar", "bool", "android");
         return id > 0 && resources.getBoolean(id);
-    }
-
-    public PlayerFragment getPlayerFragment() {
-        try {
-            return (PlayerFragment) fragMan2.findFragmentByTag("player");
-        } catch (Exception e) {
-
-        }
-        return null;
     }
 
     public static Pair<String, String> getTime(int millsec) {

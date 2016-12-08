@@ -78,7 +78,7 @@ public class PlayerFragment extends Fragment implements
 
     View bufferingIndicator;
 
-    static View fullscreenExtraSpaceOccupier;
+    View fullscreenExtraSpaceOccupier;
 
     static CustomProgressBar cpb;
 
@@ -90,7 +90,7 @@ public class PlayerFragment extends Fragment implements
     public ImageView shuffleController;
 
     public ImageView equalizerIcon;
-    public static ImageView mainTrackController;
+    public ImageView mainTrackController;
     public ImageView nextTrackController;
     public ImageView previousTrackController;
     public ImageView favouriteIcon;
@@ -100,22 +100,22 @@ public class PlayerFragment extends Fragment implements
 
     boolean isFav = false;
 
-    static RelativeLayout bottomContainer;
-    static RelativeLayout seekBarContainer;
-    static RelativeLayout toggleContainer;
+    RelativeLayout bottomContainer;
+    RelativeLayout seekBarContainer;
+    RelativeLayout toggleContainer;
 
-    public static ImageView selected_track_image;
-    public static TextView selected_track_title;
-    public static TextView selected_track_artist;
-    public static ImageView player_controller;
+    public ImageView selected_track_image;
+    public TextView selected_track_title;
+    public TextView selected_track_artist;
+    public ImageView player_controller;
 
-    static RelativeLayout smallPlayer;
+    RelativeLayout smallPlayer;
 
     ImageView favControllerSp, nextControllerSp;
 
     ImageLoader imgLoader;
 
-    public static SeekBar progressBar;
+    public SeekBar progressBar;
 
     public static int durationInMilliSec;
     static boolean completed = false;

@@ -40,6 +40,7 @@ import android.widget.Toast;
 
 import com.sdsmdg.harjot.MusicDNA.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.Interfaces.ServiceCallbacks;
+import com.sdsmdg.harjot.MusicDNA.PlayListFragment;
 import com.sdsmdg.harjot.MusicDNA.PlayerFragment;
 import com.sdsmdg.harjot.MusicDNA.R;
 
@@ -143,8 +144,8 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
         PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), 1, intent, 0);
 
         String artist;
-        if (PlayerFragment.localIsPlaying) {
-            artist = PlayerFragment.localTrack.getArtist();
+        if (pFragment.localIsPlaying) {
+            artist = pFragment.localTrack.getArtist();
         } else {
             artist = "";
         }
@@ -155,7 +156,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
         Bitmap bmp = null;
 
         try {
-            bmp = ((BitmapDrawable) PlayerFragment.selected_track_image.getDrawable()).getBitmap();
+            bmp = ((BitmapDrawable) pFragment.selected_track_image.getDrawable()).getBitmap();
         } catch (Exception e) {
         }
 
@@ -171,7 +172,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
                 .addAction(generateAction(R.drawable.ic_skip_previous_notif, "Previous", Constants.ACTION_PREVIOUS))
                 .addAction(action)
                 .addAction(generateAction(R.drawable.ic_skip_next_notif, "Next", Constants.ACTION_NEXT))
-                .setContentTitle(PlayerFragment.selected_track_title.getText())
+                .setContentTitle(pFragment.selected_track_title.getText())
                 .setContentText(artist)
                 .setLargeIcon(bmp)
                 .build();
@@ -179,7 +180,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
         notification.contentIntent = pendingNotificationIntent;
         notification.priority = Notification.PRIORITY_MAX;
 
-        if (isSwipable || (PlayerFragment.mMediaPlayer != null && PlayerFragment.mMediaPlayer.isPlaying())) {
+        if (isSwipable || (pFragment.mMediaPlayer != null && pFragment.mMediaPlayer.isPlaying())) {
             notification.flags |= Notification.FLAG_ONGOING_EVENT;
         }
 
@@ -243,24 +244,24 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
         m_objMediaSession.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS | MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);
 
         MediaMetadata.Builder metadataBuilder = new MediaMetadata.Builder();
-        if (PlayerFragment.localIsPlaying) {
-            metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, PlayerFragment.localTrack.getTitle());
-            metadataBuilder.putString(MediaMetadata.METADATA_KEY_ARTIST, PlayerFragment.localTrack.getArtist());
+        if (pFragment.localIsPlaying) {
+            metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, pFragment.localTrack.getTitle());
+            metadataBuilder.putString(MediaMetadata.METADATA_KEY_ARTIST, pFragment.localTrack.getArtist());
         } else {
-            metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, PlayerFragment.track.getTitle());
+            metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, pFragment.track.getTitle());
             metadataBuilder.putString(MediaMetadata.METADATA_KEY_ARTIST, "");
         }
-        if (((BitmapDrawable) PlayerFragment.selected_track_image.getDrawable()).getBitmap() != null) {
+        if (((BitmapDrawable) pFragment.selected_track_image.getDrawable()).getBitmap() != null) {
 
-            metadataBuilder.putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART, ((BitmapDrawable) PlayerFragment.selected_track_image.getDrawable()).getBitmap());
+            metadataBuilder.putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART, ((BitmapDrawable) pFragment.selected_track_image.getDrawable()).getBitmap());
         }
 
         m_objMediaSession.setMetadata(metadataBuilder.build());
         PlaybackState.Builder stateBuilder = new PlaybackState.Builder();
         stateBuilder.setActions(PlaybackState.ACTION_PLAY | PlaybackState.ACTION_PLAY_PAUSE | PlaybackState.ACTION_PAUSE | PlaybackState.ACTION_SKIP_TO_NEXT | PlaybackState.ACTION_SKIP_TO_PREVIOUS);
         try {
-            if (PlayerFragment.mMediaPlayer != null) {
-                stateBuilder.setState(!PlayerFragment.mMediaPlayer.isPlaying() ? PlaybackState.STATE_PAUSED : PlaybackState.STATE_PLAYING, PlaybackState.PLAYBACK_POSITION_UNKNOWN, 1.0f);
+            if (pFragment.mMediaPlayer != null) {
+                stateBuilder.setState(!pFragment.mMediaPlayer.isPlaying() ? PlaybackState.STATE_PAUSED : PlaybackState.STATE_PLAYING, PlaybackState.PLAYBACK_POSITION_UNKNOWN, 1.0f);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -274,27 +275,27 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
         if (pFragment != null) {
             pFragment.mCallback7 = this;
         }
-        m_objMediaPlayer = PlayerFragment.mMediaPlayer;
+        m_objMediaPlayer = pFragment.mMediaPlayer;
         m_objMediaSessionManager = (MediaSessionManager) getSystemService(Context.MEDIA_SESSION_SERVICE);
         m_objMediaSession = new MediaSession(getApplicationContext(), "sample session");
 
         m_objMediaSession.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS | MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);
 
         MediaMetadata.Builder metadataBuilder = new MediaMetadata.Builder();
-        if (PlayerFragment.localIsPlaying) {
-            if (PlayerFragment.localTrack != null) {
-                metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, PlayerFragment.localTrack.getTitle());
-                metadataBuilder.putString(MediaMetadata.METADATA_KEY_ARTIST, PlayerFragment.localTrack.getArtist());
+        if (pFragment.localIsPlaying) {
+            if (pFragment.localTrack != null) {
+                metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, pFragment.localTrack.getTitle());
+                metadataBuilder.putString(MediaMetadata.METADATA_KEY_ARTIST, pFragment.localTrack.getArtist());
             }
         } else {
-            if (PlayerFragment.track != null) {
-                metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, PlayerFragment.track.getTitle());
+            if (pFragment.track != null) {
+                metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, pFragment.track.getTitle());
                 metadataBuilder.putString(MediaMetadata.METADATA_KEY_ARTIST, "");
             }
         }
-        if (PlayerFragment.selected_track_image != null && PlayerFragment.selected_track_image.getDrawable() != null) {
-            if (((BitmapDrawable) PlayerFragment.selected_track_image.getDrawable()).getBitmap() != null) {
-                metadataBuilder.putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART, ((BitmapDrawable) PlayerFragment.selected_track_image.getDrawable()).getBitmap());
+        if (pFragment.selected_track_image != null && pFragment.selected_track_image.getDrawable() != null) {
+            if (((BitmapDrawable) pFragment.selected_track_image.getDrawable()).getBitmap() != null) {
+                metadataBuilder.putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART, ((BitmapDrawable) pFragment.selected_track_image.getDrawable()).getBitmap());
             }
         }
 
@@ -303,8 +304,8 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
         PlaybackState.Builder stateBuilder = new PlaybackState.Builder();
         stateBuilder.setActions(PlaybackState.ACTION_PLAY | PlaybackState.ACTION_PLAY_PAUSE | PlaybackState.ACTION_PAUSE | PlaybackState.ACTION_SKIP_TO_NEXT | PlaybackState.ACTION_SKIP_TO_PREVIOUS);
         try {
-            if (PlayerFragment.mMediaPlayer != null) {
-                stateBuilder.setState(!PlayerFragment.mMediaPlayer.isPlaying() ? PlaybackState.STATE_PAUSED : PlaybackState.STATE_PLAYING, PlaybackState.PLAYBACK_POSITION_UNKNOWN, 1.0f);
+            if (pFragment.mMediaPlayer != null) {
+                stateBuilder.setState(!pFragment.mMediaPlayer.isPlaying() ? PlaybackState.STATE_PAUSED : PlaybackState.STATE_PLAYING, PlaybackState.PLAYBACK_POSITION_UNKNOWN, 1.0f);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -420,8 +421,8 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
             @Override
             public void onStop() {
                 super.onStop();
-//                if (PlayerFragment.mMediaPlayer != null) {
-//                    if (PlayerFragment.mMediaPlayer.isPlaying()) {
+//                if (pFragment.mMediaPlayer != null) {
+//                    if (pFragment.mMediaPlayer.isPlaying()) {
 //                        buildNotification(generateAction(R.drawable.ic_pause_notif, "Pause", Constants.ACTION_PAUSE));
 //                    } else {
 //                        buildNotification(generateAction(R.drawable.ic_play_notif, "Play", Constants.ACTION_PLAY));
@@ -450,7 +451,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
 
     @Override
     public void onPlayPause() {
-        if (PlayerFragment.mMediaPlayer != null && PlayerFragment.mMediaPlayer.isPlaying()) {
+        if (pFragment.mMediaPlayer != null && pFragment.mMediaPlayer.isPlaying()) {
             buildNotification(generateAction(R.drawable.ic_pause_notif, "Pause", Constants.ACTION_PAUSE));
         } else {
             buildNotification(generateAction(R.drawable.ic_play_notif, "Play", Constants.ACTION_PLAY));

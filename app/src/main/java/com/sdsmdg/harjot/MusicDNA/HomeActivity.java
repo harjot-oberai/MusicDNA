@@ -70,6 +70,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.RemoteViews;
@@ -77,9 +78,11 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aigestudio.wheelpicker.WheelPicker;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.gson.Gson;
+import com.lantouzi.wheelview.WheelView;
 import com.sdsmdg.harjot.MusicDNA.CustomBottomSheetDialogs.CustomGeneralBottomSheetDialog;
 import com.sdsmdg.harjot.MusicDNA.CustomBottomSheetDialogs.CustomLocalBottomSheetDialog;
 import com.sdsmdg.harjot.MusicDNA.HeadsetHandler.HeadSetReceiver;
@@ -126,6 +129,8 @@ import retrofit.Callback;
 import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
+
+import static android.view.View.GONE;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -412,6 +417,13 @@ public class HomeActivity extends AppCompatActivity
     static int navBarHeightSizeinDp;
     public static boolean hasSoftNavbar = false;
     static RelativeLayout.LayoutParams lps;
+
+    boolean isSleepTimerEnabled = false;
+    boolean isSleepTimerTimeout = false;
+    long timerSetTime = 0;
+    int timerTimeOutDuration = 0;
+    List<String> minuteList;
+    Handler sleepHandler;
 
     public void onTrackSelected(int position) {
 
@@ -715,6 +727,13 @@ public class HomeActivity extends AppCompatActivity
             }
         };
 
+        minuteList = new ArrayList<>();
+        for (int i = 1; i < 25; i++) {
+            minuteList.add(String.valueOf(i * 5));
+        }
+
+        sleepHandler = new Handler();
+
         lps = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         lps.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         lps.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
@@ -785,7 +804,7 @@ public class HomeActivity extends AppCompatActivity
                             playerFragment.presetReverb.setPreset(reverbPreset);
                         }
                         if (eqFrag != null)
-                            eqFrag.setBlockerVisibility(View.GONE);
+                            eqFrag.setBlockerVisibility(GONE);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -854,7 +873,7 @@ public class HomeActivity extends AppCompatActivity
 
                 PlayerFragment pFrag = playerFragment;
 
-                if(playerFragment!=null) {
+                if (playerFragment != null) {
                     if (state == TelephonyManager.CALL_STATE_RINGING) {
                         //Incoming call: Pause music
                         if (pFrag.mMediaPlayer != null && pFrag.mMediaPlayer.isPlaying()) {
@@ -1007,8 +1026,8 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    localRecyclerContainer.setVisibility(View.GONE);
-                    streamRecyclerContainer.setVisibility(View.GONE);
+                    localRecyclerContainer.setVisibility(GONE);
+                    streamRecyclerContainer.setVisibility(GONE);
                     if (!searchView.isIconified()) {
                         searchView.setQuery("", true);
                         searchView.setIconified(true);
@@ -1408,12 +1427,12 @@ public class HomeActivity extends AppCompatActivity
             searchView.setIconified(true);
             new Thread(new CancelCall()).start();
             if (localRecyclerContainer.getVisibility() == View.VISIBLE || streamRecyclerContainer.getVisibility() == View.VISIBLE) {
-                localRecyclerContainer.setVisibility(View.GONE);
-                streamRecyclerContainer.setVisibility(View.GONE);
+                localRecyclerContainer.setVisibility(GONE);
+                streamRecyclerContainer.setVisibility(GONE);
             }
         } else if (localRecyclerContainer.getVisibility() == View.VISIBLE || streamRecyclerContainer.getVisibility() == View.VISIBLE) {
-            localRecyclerContainer.setVisibility(View.GONE);
-            streamRecyclerContainer.setVisibility(View.GONE);
+            localRecyclerContainer.setVisibility(GONE);
+            streamRecyclerContainer.setVisibility(GONE);
         } else {
             if (isEqualizerVisible) {
                 showPlayer2();
@@ -1532,6 +1551,10 @@ public class HomeActivity extends AppCompatActivity
             showFragment("settings");
             return true;
         }
+        if (id == R.id.action_sleep) {
+            showSleepDialog();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -1611,7 +1634,7 @@ public class HomeActivity extends AppCompatActivity
         }
 
         if (finalLocalSearchResultList.size() == 0) {
-            localsongsRecyclerView.setVisibility(View.GONE);
+            localsongsRecyclerView.setVisibility(GONE);
             localNothingText.setVisibility(View.VISIBLE);
         } else {
             localsongsRecyclerView.setVisibility(View.VISIBLE);
@@ -1622,7 +1645,7 @@ public class HomeActivity extends AppCompatActivity
         if (lFrag != null)
             lFrag.updateAdapter();
         if (query.equals("")) {
-            localRecyclerContainer.setVisibility(View.GONE);
+            localRecyclerContainer.setVisibility(GONE);
         }
         if (query.equals("") && isLocalVisible) {
             if (lFrag != null)
@@ -1709,7 +1732,7 @@ public class HomeActivity extends AppCompatActivity
                             soundcloudRecyclerView.setAdapter(sAdapter);
 
                             if (streamingTrackList.size() == 0) {
-                                streamRecyclerContainer.setVisibility(View.GONE);
+                                streamRecyclerContainer.setVisibility(GONE);
                             } else {
                                 streamRecyclerContainer.setVisibility(View.VISIBLE);
                             }
@@ -1735,11 +1758,11 @@ public class HomeActivity extends AppCompatActivity
 
             } else {
                 stopLoadingIndicator();
-                streamRecyclerContainer.setVisibility(View.GONE);
+                streamRecyclerContainer.setVisibility(GONE);
             }
         } else {
             stopLoadingIndicator();
-            streamRecyclerContainer.setVisibility(View.GONE);
+            streamRecyclerContainer.setVisibility(GONE);
         }
     }
 
@@ -1786,7 +1809,7 @@ public class HomeActivity extends AppCompatActivity
                 .withEndAction(new Runnable() {
                     @Override
                     public void run() {
-                        spToolbar.setVisibility(View.GONE);
+                        spToolbar.setVisibility(GONE);
                     }
                 });
 
@@ -1867,7 +1890,7 @@ public class HomeActivity extends AppCompatActivity
                 .withEndAction(new Runnable() {
                     @Override
                     public void run() {
-                        playerFragment.snappyRecyclerView.setVisibility(View.GONE);
+                        playerFragment.snappyRecyclerView.setVisibility(GONE);
                     }
                 });
     }
@@ -2201,6 +2224,22 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onComplete() {
+
+        // Check for sleep timer and whether it has timed out
+        if (isSleepTimerEnabled && isSleepTimerTimeout) {
+            Toast.makeText(ctx, "Sleep timer timed out, closing app", Toast.LENGTH_SHORT).show();
+
+            if (playerFragment != null && playerFragment.t != null)
+                playerFragment.t.cancel();
+
+            // Remove the notification
+            notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.cancel(1);
+
+            // Finish the activity
+            finish();
+            return;
+        }
 
         // Save the DNA if saving is enabled
         if (isSaveDNAEnabled) {
@@ -2991,7 +3030,7 @@ public class HomeActivity extends AppCompatActivity
         final EditText newName = (EditText) dialog.findViewById(R.id.save_image_filename_text);
 
         CheckBox cb = (CheckBox) dialog.findViewById(R.id.text_checkbox);
-        cb.setVisibility(View.GONE);
+        cb.setVisibility(GONE);
 
         btn.setBackgroundColor(themeColor);
 
@@ -3050,7 +3089,7 @@ public class HomeActivity extends AppCompatActivity
         final EditText newName = (EditText) dialog.findViewById(R.id.save_image_filename_text);
 
         CheckBox cb = (CheckBox) dialog.findViewById(R.id.text_checkbox);
-        cb.setVisibility(View.GONE);
+        cb.setVisibility(GONE);
 
         newName.setText(oldName);
         btn.setBackgroundColor(themeColor);
@@ -3111,7 +3150,7 @@ public class HomeActivity extends AppCompatActivity
                 }
             });
         } else {
-            lv.setVisibility(View.GONE);
+            lv.setVisibility(GONE);
         }
 
         // set the custom dialog components - text, image and button
@@ -3156,7 +3195,7 @@ public class HomeActivity extends AppCompatActivity
         dialog.setTitle("Save Queue");
 
         ListView lv = (ListView) dialog.findViewById(R.id.playlist_list);
-        lv.setVisibility(View.GONE);
+        lv.setVisibility(GONE);
 
         // set the custom dialog components - text, image and button
         final EditText text = (EditText) dialog.findViewById(R.id.new_playlist_name);
@@ -3217,7 +3256,7 @@ public class HomeActivity extends AppCompatActivity
         if (!searchView.isIconified()) {
             searchView.setQuery("", true);
             searchView.setIconified(true);
-            streamRecyclerContainer.setVisibility(View.GONE);
+            streamRecyclerContainer.setVisibility(GONE);
             new Thread(new CancelCall()).start();
         }
 
@@ -4083,7 +4122,7 @@ public class HomeActivity extends AppCompatActivity
                             spTitleHome.setText(utHome.getStreamTrack().getTitle());
                         }
                     } else {
-                        bottomToolbar.setVisibility(View.GONE);
+                        bottomToolbar.setVisibility(GONE);
                     }
 
                     for (int i = 0; i < Math.min(10, recentlyPlayed.getRecentlyPlayed().size()); i++) {
@@ -4634,7 +4673,7 @@ public class HomeActivity extends AppCompatActivity
                     playerContainer = findViewById(R.id.player_frag_container);
 
                     if (finalLocalSearchResultList.size() == 0) {
-                        localsongsRecyclerView.setVisibility(View.GONE);
+                        localsongsRecyclerView.setVisibility(GONE);
                         localNothingText.setVisibility(View.VISIBLE);
                     } else {
                         localsongsRecyclerView.setVisibility(View.VISIBLE);
@@ -4642,7 +4681,7 @@ public class HomeActivity extends AppCompatActivity
                     }
 
                     if (recentlyPlayed.getRecentlyPlayed().size() == 0) {
-                        recentsRecycler.setVisibility(View.GONE);
+                        recentsRecycler.setVisibility(GONE);
                         recentsNothingText.setVisibility(View.VISIBLE);
                     } else {
                         recentsRecycler.setVisibility(View.VISIBLE);
@@ -4650,7 +4689,7 @@ public class HomeActivity extends AppCompatActivity
                     }
 
                     if (streamingTrackList.size() == 0) {
-                        streamRecyclerContainer.setVisibility(View.GONE);
+                        streamRecyclerContainer.setVisibility(GONE);
                         streamNothingText.setVisibility(View.VISIBLE);
                     } else {
                         streamRecyclerContainer.setVisibility(View.VISIBLE);
@@ -4658,7 +4697,7 @@ public class HomeActivity extends AppCompatActivity
                     }
 
                     if (allPlaylists.getPlaylists().size() == 0) {
-                        playlistsRecycler.setVisibility(View.GONE);
+                        playlistsRecycler.setVisibility(GONE);
                         playlistNothingText.setVisibility(View.VISIBLE);
                     } else {
                         playlistsRecycler.setVisibility(View.VISIBLE);
@@ -4819,7 +4858,7 @@ public class HomeActivity extends AppCompatActivity
                     .withEndAction(new Runnable() {
                         @Override
                         public void run() {
-                            t1.setVisibility(View.GONE);
+                            t1.setVisibility(GONE);
                         }
                     });
             if (!isFullScreenEnabled)
@@ -4836,7 +4875,7 @@ public class HomeActivity extends AppCompatActivity
                     .withEndAction(new Runnable() {
                         @Override
                         public void run() {
-                            t1.setVisibility(View.GONE);
+                            t1.setVisibility(GONE);
                         }
                     });
             if (!isFullScreenEnabled)
@@ -4847,7 +4886,7 @@ public class HomeActivity extends AppCompatActivity
                     .alpha(1.0f)
                     .translationX(0);
         } else {
-            t1.setVisibility(View.GONE);
+            t1.setVisibility(GONE);
             t2.setX(0);
             t2.setAlpha(1.0f);
             if (!isFullScreenEnabled)
@@ -5124,6 +5163,113 @@ public class HomeActivity extends AppCompatActivity
         if (res > 0) {
 //            Toast.makeText(this, "Updated MediaStore cache", Toast.LENGTH_SHORT).show();
         }
+
+    }
+
+    public void showSleepDialog() {
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.sleep_timer_dialog);
+
+        final WheelView wheelPicker = (WheelView) dialog.findViewById(R.id.wheelPicker);
+        wheelPicker.setItems(minuteList);
+
+        Button setBtn = (Button) dialog.findViewById(R.id.set_button);
+        Button cancelBtn = (Button) dialog.findViewById(R.id.cancel_button);
+        final Button removerBtn = (Button) dialog.findViewById(R.id.remove_timer_button);
+
+        final LinearLayout buttonWrapper = (LinearLayout) dialog.findViewById(R.id.button_wrapper);
+
+        final TextView timerSetText = (TextView) dialog.findViewById(R.id.timer_set_text);
+
+        setBtn.setBackgroundColor(themeColor);
+        removerBtn.setBackgroundColor(themeColor);
+        cancelBtn.setBackgroundColor(Color.WHITE);
+
+        if (isSleepTimerEnabled) {
+            wheelPicker.setVisibility(View.GONE);
+            buttonWrapper.setVisibility(View.GONE);
+            removerBtn.setVisibility(View.VISIBLE);
+            timerSetText.setVisibility(View.VISIBLE);
+
+            long currentTime = System.currentTimeMillis();
+            long difference = currentTime - timerSetTime;
+
+            int minutesLeft = (int) (timerTimeOutDuration - ((difference / 1000) / 60));
+            if (minutesLeft > 1) {
+                timerSetText.setText("Timer set for " + minutesLeft + " minutes from now.");
+            } else if (minutesLeft == 1) {
+                timerSetText.setText("Timer set for " + 1 + " minute from now.");
+            } else {
+                timerSetText.setText("Music will stop after completion of current song");
+            }
+
+        } else {
+            wheelPicker.setVisibility(View.VISIBLE);
+            buttonWrapper.setVisibility(View.VISIBLE);
+            removerBtn.setVisibility(View.GONE);
+            timerSetText.setVisibility(View.GONE);
+        }
+
+        removerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isSleepTimerEnabled = false;
+                isSleepTimerTimeout = false;
+                timerTimeOutDuration = 0;
+                timerSetTime = 0;
+                sleepHandler.removeCallbacksAndMessages(null);
+                Toast.makeText(ctx, "Timer removed", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+
+        setBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isSleepTimerEnabled = true;
+                int minutes = Integer.parseInt(wheelPicker.getItems().get(wheelPicker.getSelectedPosition()));
+                timerTimeOutDuration = minutes;
+                timerSetTime = System.currentTimeMillis();
+                sleepHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        isSleepTimerTimeout = true;
+                        if (playerFragment.mMediaPlayer == null || !playerFragment.mMediaPlayer.isPlaying()) {
+                            main.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(ctx, "Sleep timer timed out, closing app", Toast.LENGTH_SHORT).show();
+                                    if (playerFragment != null && playerFragment.t != null)
+                                        playerFragment.t.cancel();
+                                    notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                    try {
+                                        notificationManager.cancel(1);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    } finally {
+                                        finish();
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }, minutes * 60 * 1000);
+                Toast.makeText(ctx, "Timer set for " + minutes + " minutes", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isSleepTimerEnabled = false;
+                isSleepTimerTimeout = false;
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
 
     }
 

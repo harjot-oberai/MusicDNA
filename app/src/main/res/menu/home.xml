@@ -10,11 +10,17 @@
         android:orderInCategory="100"
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_sleep"
+        android:orderInCategory="200"
+        android:title="Sleep Timer"
+        app:showAsAction="never"/>
+
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="400"
         android:icon="@drawable/ic_settings_menu"
         android:title="@string/action_settings"
-        app:showAsAction="always" />
-
+        app:showAsAction="never" />
 </menu>

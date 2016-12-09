@@ -78,7 +78,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.aigestudio.wheelpicker.WheelPicker;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.gson.Gson;
@@ -177,7 +176,7 @@ public class HomeActivity extends AppCompatActivity
         SettingsFragment.onAlbumArtBackgroundToggled,
         SettingsFragment.onAboutClickedListener,
         AddToPlaylistFragment.newPlaylistListener,
-        HeadSetReceiver.onHeadsetRemovedListener,
+        HeadSetReceiver.onHeadsetEventListener,
         EditLocalSongFragment.onEditSongSaveListener,
         EditLocalSongFragment.newCoverListener,
         ServiceCallbacks {
@@ -2800,10 +2799,48 @@ public class HomeActivity extends AppCompatActivity
         PlayerFragment pFrag = getPlayerFragment();
         if (pFrag != null) {
             if (pFrag.mMediaPlayer != null && pFrag.mMediaPlayer.isPlaying()) {
-                if (!pFrag.pauseClicked) {
-                    pFrag.pauseClicked = true;
+                if (pFrag.isReplayIconVisible) {
+
+                } else {
+                    if (!pFrag.pauseClicked) {
+                        pFrag.pauseClicked = true;
+                    }
+                    pFrag.togglePlayPause();
                 }
-                pFrag.togglePlayPause();
+            }
+        }
+    }
+
+    @Override
+    public void onHeadsetNextClicked() {
+        PlayerFragment pFrag = getPlayerFragment();
+        if (pFrag != null) {
+            pFrag.nextTrackController.performClick();
+        }
+    }
+
+    @Override
+    public void onHeadsetPreviousClicked() {
+        PlayerFragment pFrag = getPlayerFragment();
+        if (pFrag != null) {
+            pFrag.previousTrackController.performClick();
+        }
+    }
+
+    @Override
+    public void onHeadsetPlayPauseClicked() {
+        PlayerFragment pFrag = getPlayerFragment();
+        if (pFrag != null) {
+            if (pFrag.mMediaPlayer != null && pFrag.mMediaPlayer.isPlaying()) {
+                if (pFrag.isReplayIconVisible) {
+                    hasQueueEnded = true;
+                    onComplete();
+                } else {
+                    if (!pFrag.pauseClicked) {
+                        pFrag.pauseClicked = true;
+                    }
+                    pFrag.togglePlayPause();
+                }
             }
         }
     }

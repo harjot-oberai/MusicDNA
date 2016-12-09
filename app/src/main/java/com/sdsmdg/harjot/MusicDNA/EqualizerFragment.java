@@ -123,6 +123,9 @@ public class EqualizerFragment extends Fragment {
             if (PlayerFragment.bassBoost != null)
                 x = ((PlayerFragment.bassBoost.getRoundedStrength() * 19) / 1000);
 
+            if (PlayerFragment.presetReverb != null)
+                y = (PlayerFragment.presetReverb.getPreset() * 19) / 6;
+
             if (x == 0) {
                 bassController.setProgress(1);
             } else {
@@ -136,6 +139,7 @@ public class EqualizerFragment extends Fragment {
             }
         } else {
             int x = ((HomeActivity.bassStrength * 19) / 1000);
+            y = (HomeActivity.reverbPreset * 19) / 6;
             if (x == 0) {
                 bassController.setProgress(1);
             } else {
@@ -154,6 +158,7 @@ public class EqualizerFragment extends Fragment {
             public void onProgressChanged(int progress) {
                 HomeActivity.bassStrength = (short) (((float) 1000 / 19) * (progress));
                 PlayerFragment.bassBoost.setStrength(HomeActivity.bassStrength);
+                HomeActivity.equalizerModel.setBassStrength(HomeActivity.bassStrength);
             }
         });
 
@@ -161,6 +166,7 @@ public class EqualizerFragment extends Fragment {
             @Override
             public void onProgressChanged(int progress) {
                 HomeActivity.reverbPreset = (short) ((progress * 6) / 19);
+                HomeActivity.equalizerModel.setReverbPreset(HomeActivity.reverbPreset);
                 PlayerFragment.presetReverb.setPreset(HomeActivity.reverbPreset);
                 y = progress;
             }
@@ -268,6 +274,7 @@ public class EqualizerFragment extends Fragment {
                     PlayerFragment.mEqualizer.setBandLevel(equalizerBandIndex, (short) (progress + lowerEqualizerBandLevel));
                     points[seekBar.getId()] = PlayerFragment.mEqualizer.getBandLevel(equalizerBandIndex) - lowerEqualizerBandLevel;
                     HomeActivity.seekbarpos[seekBar.getId()] = (progress + lowerEqualizerBandLevel);
+                    HomeActivity.equalizerModel.getSeekbarpos()[seekBar.getId()] = (progress + lowerEqualizerBandLevel);
                     dataset.updateValues(points);
                     chart.notifyDataUpdate();
                 }
@@ -276,6 +283,7 @@ public class EqualizerFragment extends Fragment {
                 public void onStartTrackingTouch(SeekBar seekBar) {
                     presetSpinner.setSelection(0);
                     HomeActivity.presetPos = 0;
+                    HomeActivity.equalizerModel.setPresetPos(0);
                 }
 
                 @Override
@@ -298,8 +306,6 @@ public class EqualizerFragment extends Fragment {
         paint.setStrokeWidth((float) (1.10 * HomeActivity.ratio));
 
         dataset.setColor(HomeActivity.themeColor);
-//        dataset.setGradientFill(new int[]{Color.TRANSPARENT, HomeActivity.themeColor, Color.WHITE, HomeActivity.themeColor, Color.TRANSPARENT}, new float[]{0.0f, 0.1f, 0.5f, 0.9f, 1.0f});
-//        dataset.setShadow(10, 0, 0, HomeActivity.themeColor);
         dataset.setSmooth(true);
         dataset.setThickness(5);
 
@@ -397,15 +403,15 @@ public class EqualizerFragment extends Fragment {
                             seekBarFinal[i].setProgress(PlayerFragment.mEqualizer.getBandLevel(i) - lowerEqualizerBandLevel);
                             points[i] = PlayerFragment.mEqualizer.getBandLevel(i) - lowerEqualizerBandLevel;
                             HomeActivity.seekbarpos[i] = PlayerFragment.mEqualizer.getBandLevel(i);
+                            HomeActivity.equalizerModel.getSeekbarpos()[i] = PlayerFragment.mEqualizer.getBandLevel(i);
                         }
                         dataset.updateValues(points);
                         chart.notifyDataUpdate();
-
                     }
                 } catch (Exception e) {
                     Toast.makeText(ctx, "Error while updating Equalizer", Toast.LENGTH_SHORT).show();
                 }
-
+                HomeActivity.equalizerModel.setPresetPos(position);
             }
 
             @Override

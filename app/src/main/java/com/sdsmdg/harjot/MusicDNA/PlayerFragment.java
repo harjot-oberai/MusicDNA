@@ -55,6 +55,8 @@ import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static android.view.View.GONE;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -168,13 +170,30 @@ public class PlayerFragment extends Fragment implements
             mEqualizer = new Equalizer(0, mMediaPlayer.getAudioSessionId());
             mEqualizer.setEnabled(true);
             mMediaPlayer.setAuxEffectSendLevel(1.0f);
+
+            try {
+                bassBoost = new BassBoost(0, mMediaPlayer.getAudioSessionId());
+                bassBoost.setEnabled(false);
+                BassBoost.Settings bassBoostSettingTemp = bassBoost.getProperties();
+                BassBoost.Settings bassBoostSetting = new BassBoost.Settings(bassBoostSettingTemp.toString());
+                bassBoostSetting.strength = (1000 / 19);
+                bassBoost.setProperties(bassBoostSetting);
+                mMediaPlayer.setAuxEffectSendLevel(1.0f);
+
+                presetReverb = new PresetReverb(0, mMediaPlayer.getAudioSessionId());
+                presetReverb.setPreset(PresetReverb.PRESET_NONE);
+                presetReverb.setEnabled(false);
+                mMediaPlayer.setAuxEffectSendLevel(1.0f);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         } catch (Exception e) {
 
         }
 
         if (homeActivity.isEqualizerEnabled) {
             try {
-                bassBoost = new BassBoost(0, mMediaPlayer.getAudioSessionId());
                 bassBoost.setEnabled(true);
                 BassBoost.Settings bassBoostSettingTemp = bassBoost.getProperties();
                 BassBoost.Settings bassBoostSetting = new BassBoost.Settings(bassBoostSettingTemp.toString());
@@ -186,7 +205,6 @@ public class PlayerFragment extends Fragment implements
                 bassBoost.setProperties(bassBoostSetting);
                 mMediaPlayer.setAuxEffectSendLevel(1.0f);
 
-                presetReverb = new PresetReverb(0, mMediaPlayer.getAudioSessionId());
                 if (homeActivity.reverbPreset == -1) {
                     presetReverb.setPreset(PresetReverb.PRESET_NONE);
                 } else {
@@ -195,7 +213,26 @@ public class PlayerFragment extends Fragment implements
                 presetReverb.setEnabled(true);
                 mMediaPlayer.setAuxEffectSendLevel(1.0f);
             } catch (Exception e) {
-
+                e.printStackTrace();
+            }
+        }
+        if(homeActivity.isEqualizerEnabled && homeActivity.isEqualizerReloaded){
+            try {
+                homeActivity.isEqualizerEnabled = true;
+                int pos = homeActivity.presetPos;
+                if (pos != 0) {
+                    mEqualizer.usePreset((short) (pos - 1));
+                } else {
+                    for (short i = 0; i < 5; i++) {
+                        mEqualizer.setBandLevel(i, (short) homeActivity.seekbarpos[i]);
+                    }
+                }
+                if (homeActivity.bassStrength != -1 && homeActivity.reverbPreset != -1) {
+                    bassBoost.setStrength(homeActivity.bassStrength);
+                    presetReverb.setPreset(homeActivity.reverbPreset);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 
@@ -214,7 +251,7 @@ public class PlayerFragment extends Fragment implements
                         }
                     }, Visualizer.getMaxCaptureRate() / 2, false, true);
         } catch (Exception e) {
-//            Log.d("VisualizerException", e.getMessage() + ":");
+            e.printStackTrace();
         }
     }
 

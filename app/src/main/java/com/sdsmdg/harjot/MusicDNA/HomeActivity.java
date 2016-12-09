@@ -94,6 +94,7 @@ import com.sdsmdg.harjot.MusicDNA.Models.AllMusicFolders;
 import com.sdsmdg.harjot.MusicDNA.Models.AllPlaylists;
 import com.sdsmdg.harjot.MusicDNA.Models.AllSavedDNA;
 import com.sdsmdg.harjot.MusicDNA.Models.Artist;
+import com.sdsmdg.harjot.MusicDNA.Models.EqualizerModel;
 import com.sdsmdg.harjot.MusicDNA.Models.Favourite;
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.Models.MusicFolder;
@@ -248,6 +249,8 @@ public class HomeActivity extends AppCompatActivity
     static AllSavedDNA savedDNAs;
     static SavedDNA tempSavedDNA;
 
+    static EqualizerModel equalizerModel;
+
     static List<LocalTrack> tempFolderContent;
     static MusicFolder tempMusicFolder;
 
@@ -358,7 +361,6 @@ public class HomeActivity extends AppCompatActivity
     private boolean bound = false;
 
     android.support.v4.app.FragmentManager fragMan;
-    android.support.v4.app.FragmentManager fragMan2;
 
     public static boolean isPlayerVisible = false;
     public static boolean isLocalVisible = false;
@@ -389,6 +391,7 @@ public class HomeActivity extends AppCompatActivity
     static boolean isSaveDNAsRunning = false;
     static boolean isSaveQueueRunning = false;
     static boolean isSavePLaylistsRunning = false;
+    static boolean isSaveEqualizerRunning = false;
 
     public static boolean hasQueueEnded = false;
 
@@ -397,6 +400,7 @@ public class HomeActivity extends AppCompatActivity
 
     static int[] seekbarpos = new int[5];
     static int presetPos;
+    static short reverbPreset = -1, bassStrength = -1;
 
     boolean isNotificationVisible = false;
 
@@ -408,7 +412,6 @@ public class HomeActivity extends AppCompatActivity
     static boolean localSelected = false;
     static boolean streamSelected = false;
 
-    static short reverbPreset = -1, bassStrength = -1;
 
     Button mEndButton;
 
@@ -740,7 +743,6 @@ public class HomeActivity extends AppCompatActivity
         lps.setMargins(margin, margin, margin, navBarHeightSizeinDp + ((Number) (getResources().getDisplayMetrics().density * 5)).intValue());
 
         fragMan = getSupportFragmentManager();
-        fragMan2 = getSupportFragmentManager();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         spToolbar = (Toolbar) findViewById(R.id.smallPlayer_AB);
@@ -781,8 +783,6 @@ public class HomeActivity extends AppCompatActivity
 
         equalizerToolbar = (Toolbar) findViewById(R.id.equalizerToolbar);
         equalizerSwitch = (SwitchCompat) findViewById(R.id.equalizerSwitch);
-        isEqualizerEnabled = true;
-        equalizerSwitch.setChecked(true);
         equalizerSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -799,11 +799,13 @@ public class HomeActivity extends AppCompatActivity
                             }
                         }
                         if (bassStrength != -1 && reverbPreset != -1) {
+                            playerFragment.presetReverb.setEnabled(true);
+                            playerFragment.bassBoost.setEnabled(true);
                             playerFragment.bassBoost.setStrength(bassStrength);
                             playerFragment.presetReverb.setPreset(reverbPreset);
                         }
                         if (eqFrag != null)
-                            eqFrag.setBlockerVisibility(GONE);
+                            eqFrag.setBlockerVisibility(View.GONE);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -816,9 +818,10 @@ public class HomeActivity extends AppCompatActivity
                         if (eqFrag != null)
                             eqFrag.setBlockerVisibility(View.VISIBLE);
                     } catch (Exception e) {
-
+                        e.printStackTrace();
                     }
                 }
+                equalizerModel.isEqualizerEnabled = isChecked;
             }
         });
 
@@ -1139,6 +1142,9 @@ public class HomeActivity extends AppCompatActivity
             String json8 = mPrefs.getString("settings", "");
             settings = gson.fromJson(json8, Settings.class);
             Log.d("TIME", "settings");
+            String json9 = mPrefs.getString("equalizer", "");
+            equalizerModel = gson.fromJson(json9, EqualizerModel.class);
+            Log.d("TIME", "equalizer");
             String json = mPrefs.getString("savedDNAs", "");
             savedDNAs = gson.fromJson(json, AllSavedDNA.class);
             Log.d("TIME", "savedDNAs");
@@ -3669,6 +3675,7 @@ public class HomeActivity extends AppCompatActivity
             }
         } else if (type.equals("equalizer")) {
             isEqualizerVisible = false;
+            new SaveEqualizer().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             android.support.v4.app.Fragment frag = fm.findFragmentByTag("equalizer");
             if (frag != null) {
@@ -4143,6 +4150,20 @@ public class HomeActivity extends AppCompatActivity
                     }
                     if (savedDNAs == null) {
                         savedDNAs = new AllSavedDNA();
+                    }
+
+                    if (equalizerModel == null) {
+                        isEqualizerEnabled = true;
+                        isEqualizerReloaded = false;
+                        equalizerModel = new EqualizerModel();
+                    } else {
+                        isEqualizerEnabled = equalizerModel.isEqualizerEnabled();
+                        equalizerSwitch.setChecked(isEqualizerEnabled);
+                        isEqualizerReloaded = true;
+                        seekbarpos = equalizerModel.getSeekbarpos();
+                        presetPos = equalizerModel.getPresetPos();
+                        reverbPreset = equalizerModel.getReverbPreset();
+                        bassStrength = equalizerModel.getBassStrength();
                     }
 
                     new SaveVersionCode().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -4882,6 +4903,24 @@ public class HomeActivity extends AppCompatActivity
 
                 }
                 isSavePLaylistsRunning = false;
+            }
+            return null;
+        }
+    }
+
+    public static class SaveEqualizer extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            if (!isSaveEqualizerRunning) {
+                isSaveEqualizerRunning = true;
+                try {
+                    String json2 = gson.toJson(equalizerModel);
+                    prefsEditor.putString("equalizer", json2);
+                } catch (Exception e) {
+
+                }
+                isSaveEqualizerRunning = false;
             }
             return null;
         }

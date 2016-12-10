@@ -1970,6 +1970,10 @@ public class HomeActivity extends AppCompatActivity
         if (playerFragment.mVisualizerView != null)
             playerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
 
+        if (playerFragment.snappyRecyclerView != null) {
+            playerFragment.snappyRecyclerView.setTransparency();
+        }
+
         if (playerFragment.player_controller != null) {
             playerFragment.player_controller.setAlpha(1.0f);
             playerFragment.player_controller.animate()

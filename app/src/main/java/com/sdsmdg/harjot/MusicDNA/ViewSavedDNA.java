@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -32,8 +33,6 @@ import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.sdsmdg.harjot.MusicDNA.Models.SavedDNA;
 import com.squareup.leakcanary.RefWatcher;
-
-import java.nio.ByteBuffer;
 
 
 /**
@@ -115,7 +114,6 @@ public class ViewSavedDNA extends Fragment {
         viewDnaRecycler.setItemAnimator(new DefaultItemAnimator());
         viewDnaRecycler.setAdapter(vdAdapter);
 
-
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -125,8 +123,6 @@ public class ViewSavedDNA extends Fragment {
                     selectedDNA = 0;
                     HomeActivity.tempSavedDNA = dna;
                     Bitmap bmp = bitmapFromBase64String(dna.getBase64encodedBitmap());
-//                    byte[] bArr = dna.getModel().getByteArray();
-//                    Bitmap bmp = BitmapFactory.decodeByteArray(bArr, 0, bArr.length);
                     mVisualizerView2.setBmp(bmp);
                     mVisualizerView2.update();
                 }

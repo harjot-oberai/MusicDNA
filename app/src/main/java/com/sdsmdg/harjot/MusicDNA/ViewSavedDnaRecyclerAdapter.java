@@ -43,22 +43,6 @@ public class ViewSavedDnaRecyclerAdapter extends RecyclerView.Adapter<ViewSavedD
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
         SavedDNA dna = savedDNAs.get(position);
-//        if (dna.getModel().getType()) {
-//            LocalTrack lt = dna.getModel().getLocalTrack();
-//            imgLoader.DisplayImage(lt.getPath(), holder.art);
-//            holder.title.setText(lt.getTitle());
-//            holder.artist.setText(lt.getArtist());
-//        } else {
-//            Track t = dna.getModel().getTrack();
-//            Picasso.with(ctx)
-//                    .load(t.getArtworkURL())
-//                    .resize(100, 100)
-//                    .error(R.drawable.ic_default)
-//                    .placeholder(R.drawable.ic_default)
-//                    .into(holder.art);
-//            holder.title.setText(t.getTitle());
-//            holder.artist.setText("");
-//        }
         if (dna.getType()) {
             imgLoader.DisplayImage(dna.getLocalPath(), holder.art);
             holder.title.setText(dna.getName());
@@ -91,14 +75,12 @@ public class ViewSavedDnaRecyclerAdapter extends RecyclerView.Adapter<ViewSavedD
 
         ImageView art;
         TextView title, artist;
-        RelativeLayout bottomHolder;
 
         public MyViewHolder(View view) {
             super(view);
             art = (ImageView) view.findViewById(R.id.backImage);
             title = (TextView) view.findViewById(R.id.card_title);
             artist = (TextView) view.findViewById(R.id.card_artist);
-            bottomHolder = (RelativeLayout) view.findViewById(R.id.bottomHolder);
         }
     }
 

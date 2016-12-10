@@ -40,10 +40,6 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-
-//    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4'
-
-
     compile('com.crashlytics.sdk.android:crashlytics:2.6.2@aar') {
         transitive = true;
     }

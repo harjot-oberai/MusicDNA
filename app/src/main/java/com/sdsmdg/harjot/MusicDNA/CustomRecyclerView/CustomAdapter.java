@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.mmin18.widget.RealtimeBlurView;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.R;
 import com.sdsmdg.harjot.MusicDNA.VisualizerView;
@@ -50,9 +51,10 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         UnifiedTrack ut = queue.get(position);
-        holder.albumArt.setAlpha(0.35f);
+        holder.blurredAlbumArt.setVisibility(View.GONE);
         if (ut.getType()) {
-            holder.albumArt.setImageBitmap(getBitmap(ut.getLocalTrack().getPath()));
+            Bitmap bmp = getBitmap(ut.getLocalTrack().getPath());
+            holder.albumArt.setImageBitmap(bmp);
         } else {
             Picasso.with(ctx).load(ut.getStreamTrack().getArtworkURL()).into(holder.albumArt);
         }
@@ -65,10 +67,12 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView albumArt;
+        public RealtimeBlurView blurredAlbumArt;
 
         public ViewHolder(View itemView) {
             super(itemView);
             albumArt = (ImageView) itemView.findViewById(R.id.album_art_container_v);
+            blurredAlbumArt = (RealtimeBlurView) itemView.findViewById(R.id.blurred_album_art);
         }
     }
 

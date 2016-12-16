@@ -2,6 +2,9 @@ package com.sdsmdg.harjot.MusicDNA.CustomRecyclerView;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +16,8 @@ import android.widget.Toast;
 import com.sdsmdg.harjot.MusicDNA.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.VisualizerView;
 
+import jp.wasabeef.blurry.Blurry;
+
 /**
  * Created by Harjot on 22-Nov-16.
  */
@@ -21,20 +26,24 @@ public class SnappyRecyclerView extends RecyclerView {
 
     private int currentPosition;
     HomeActivity homeActivity;
+    Context ctx;
 
     // Use it with a horizontal LinearLayoutManager
     // Based on http://stackoverflow.com/a/29171652/4034572
 
     public SnappyRecyclerView(Context context) {
         super(context);
+        ctx = context;
     }
 
     public SnappyRecyclerView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        ctx = context;
     }
 
     public SnappyRecyclerView(Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        ctx = context;
     }
 
     @Override
@@ -156,15 +165,31 @@ public class SnappyRecyclerView extends RecyclerView {
     }
 
     public void setTransparency() {
-        CustomAdapter.ViewHolder viewHolder = (CustomAdapter.ViewHolder) findViewHolderForAdapterPosition(currentPosition);
-        if (homeActivity.settings.isAlbumArtBackgroundEnabled()) {
-            if (viewHolder != null && viewHolder.albumArt != null)
-                viewHolder.albumArt.animate()
-                        .alpha(0.13f);
-        } else {
-            if (viewHolder != null && viewHolder.albumArt != null)
-                viewHolder.albumArt.animate()
-                        .alpha(0.0f);
+        final CustomAdapter.ViewHolder viewHolder = (CustomAdapter.ViewHolder) findViewHolderForAdapterPosition(currentPosition);
+        if (viewHolder != null && viewHolder.albumArt != null) {
+//            Handler handler = new Handler();
+//            handler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    viewHolder.blurredAlbumArt.setAlpha(0.0f);
+//                    viewHolder.blurredAlbumArt.setVisibility(VISIBLE);
+//                    viewHolder.blurredAlbumArt.animate().alpha(1.0f).setDuration(1000);
+//                }
+//            },1000);
+//            Blurry.with(ctx)
+//                    .radius(30)
+//                    .sampling(4)
+//                    .color(Color.argb(200, 0, 0, 0))
+//                    .async(new Blurry.ImageComposer.ImageComposerListener() {
+//                        @Override
+//                        public void onImageReady(BitmapDrawable drawable) {
+//                            viewHolder.blurredAlbumArt.setAlpha(0.0f);
+//                            viewHolder.blurredAlbumArt.setVisibility(VISIBLE);
+//                            viewHolder.blurredAlbumArt.animate().alpha(1.0f).setDuration(1000);
+//                        }
+//                    })
+//                    .capture(viewHolder.albumArt)
+//                    .into(viewHolder.blurredAlbumArt);
         }
     }
 

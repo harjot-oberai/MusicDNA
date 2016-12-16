@@ -25,76 +25,6 @@
                 app:layout_scrollFlags="scroll|enterAlways" />
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/smallPlayer_AB"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="#000000"
-                android:visibility="invisible">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:id="@+id/selected_track_image_sp_AB"
-                        android:layout_width="37dp"
-                        android:layout_height="37dp"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="0dp"
-                        android:visibility="visible"
-                        app:civ_border_color="#FF000000"
-                        app:civ_border_width="0dp" />
-
-                    <TextView
-                        android:id="@+id/selected_track_title_sp_AB"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_toEndOf="@+id/selected_track_image_sp_AB"
-                        android:layout_toStartOf="@+id/menuIcon"
-                        android:ellipsize="marquee"
-                        android:fadingEdge="horizontal"
-                        android:maxLines="1"
-                        android:paddingLeft="5dp"
-                        android:text="Title"
-                        android:textColor="#FFFFFF"
-                        android:textSize="17sp" />
-
-                    <TextView
-                        android:id="@+id/selected_track_artist_sp_AB"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/selected_track_title_sp_AB"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:layout_toEndOf="@+id/selected_track_image_sp_AB"
-                        android:layout_toStartOf="@+id/menuIcon"
-                        android:maxLines="1"
-                        android:paddingLeft="5dp"
-                        android:text="Unknown"
-                        android:textColor="#CCCCCC"
-                        android:textSize="13sp" />
-
-
-                    <ImageView
-                        android:id="@+id/menuIcon"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="12dp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:clickable="true"
-                        android:padding="8dp"
-                        android:src="@drawable/menu_overflow" />
-                </RelativeLayout>
-
-            </android.support.v7.widget.Toolbar>
-
-            <android.support.v7.widget.Toolbar
                 android:id="@+id/equalizerToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
@@ -221,5 +151,11 @@
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_home" />
+
+    <FrameLayout
+        android:id="@+id/player_frag_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:translationZ="10dp"/>
 
 </android.support.design.widget.CoordinatorLayout>

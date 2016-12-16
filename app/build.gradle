@@ -69,6 +69,7 @@ dependencies {
     compile 'com.github.amlcurran.showcaseview:library:5.4.3'
     compile 'cn.aigestudio.wheelpicker:WheelPicker:1.1.2'
     compile 'com.lantouzi.wheelview:library:1.1.2'
+    compile 'jp.wasabeef:blurry:2.0.3'
     testCompile 'junit:junit:4.12'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4'
     debugCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4'

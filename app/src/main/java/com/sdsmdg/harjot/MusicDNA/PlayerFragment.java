@@ -55,6 +55,8 @@ import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 import static android.view.View.GONE;
 
 
@@ -150,6 +152,12 @@ public class PlayerFragment extends Fragment implements
 
 //    static ImageView currentAlbumArtHolder;
 
+    RelativeLayout spToolbar;
+    ImageView overflowMenuAB;
+    CircleImageView spImgAB;
+    TextView spTitleAB;
+    TextView spArtistAB;
+
     public boolean isStart = true;
 
     ShowcaseView showCase;
@@ -216,7 +224,7 @@ public class PlayerFragment extends Fragment implements
                 e.printStackTrace();
             }
         }
-        if(homeActivity.isEqualizerEnabled && homeActivity.isEqualizerReloaded){
+        if (homeActivity.isEqualizerEnabled && homeActivity.isEqualizerReloaded) {
             try {
                 homeActivity.isEqualizerEnabled = true;
                 int pos = homeActivity.presetPos;
@@ -434,7 +442,6 @@ public class PlayerFragment extends Fragment implements
     @Override
     public void onPause() {
         super.onPause();
-        //mVisualizerView.onPauseMySurfaceView();
     }
 
     @Override
@@ -445,7 +452,6 @@ public class PlayerFragment extends Fragment implements
             snappyRecyclerView.setCurrentPosition(HomeActivity.queueCurrentIndex);
             customAdapter.notifyDataSetChanged();
         }
-        snappyRecyclerView.setTransparency();
     }
 
     @Override
@@ -550,6 +556,23 @@ public class PlayerFragment extends Fragment implements
 
         repeatController = (ImageView) view.findViewById(R.id.repeat_controller);
         shuffleController = (ImageView) view.findViewById(R.id.shuffle_controller);
+
+        spToolbar = (RelativeLayout) view.findViewById(R.id.smallPlayer_AB);
+
+        overflowMenuAB = (ImageView) view.findViewById(R.id.menuIcon);
+        spImgAB = (CircleImageView) view.findViewById(R.id.selected_track_image_sp_AB);
+        spImgAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                homeActivity.hidePlayer();
+                homeActivity.showTabs();
+                homeActivity.isPlayerVisible = false;
+            }
+        });
+        spTitleAB = (TextView) view.findViewById(R.id.selected_track_title_sp_AB);
+        spTitleAB.setSelected(true);
+
+        spArtistAB = (TextView) view.findViewById(R.id.selected_track_artist_sp_AB);
 
         if (homeActivity.shuffleEnabled) {
             shuffleController.setImageResource(R.drawable.ic_shuffle_filled);
@@ -749,7 +772,7 @@ public class PlayerFragment extends Fragment implements
                     bottomContainer.setVisibility(View.VISIBLE);
                     seekBarContainer.setVisibility(View.VISIBLE);
                     toggleContainer.setVisibility(View.VISIBLE);
-                    homeActivity.spToolbar.setVisibility(View.VISIBLE);
+                    spToolbar.setVisibility(View.VISIBLE);
                     fullscreenExtraSpaceOccupier.getLayoutParams().height = 0;
                     mCallback8.onFullScreen();
                 } else {
@@ -757,7 +780,7 @@ public class PlayerFragment extends Fragment implements
                     bottomContainer.setVisibility(View.INVISIBLE);
                     seekBarContainer.setVisibility(View.INVISIBLE);
                     toggleContainer.setVisibility(View.INVISIBLE);
-                    homeActivity.spToolbar.setVisibility(View.INVISIBLE);
+                    spToolbar.setVisibility(View.INVISIBLE);
                     fullscreenExtraSpaceOccupier.getLayoutParams().height = homeActivity.statusBarHeightinDp;
                     mCallback8.onFullScreen();
                 }
@@ -791,18 +814,16 @@ public class PlayerFragment extends Fragment implements
             }
             if (track.getArtworkURL() != null) {
                 Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(selected_track_image);
-                Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(homeActivity.spImgAB);
-//                Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(currentAlbumArtHolder);
+                Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(spImgAB);
             } else {
                 selected_track_image.setImageResource(R.drawable.ic_default);
-                homeActivity.spImgAB.setImageResource(R.drawable.ic_default);
-//                currentAlbumArtHolder.setImageResource(R.drawable.ic_default);
+                spImgAB.setImageResource(R.drawable.ic_default);
             }
             try {
-                homeActivity.spTitleAB.setText(track.getTitle());
+                spTitleAB.setText(track.getTitle());
                 selected_track_title.setText(track.getTitle());
                 selected_track_artist.setText("");
-                homeActivity.spArtistAB.setText("");
+                spArtistAB.setText("");
             } catch (Exception e) {
             }
 
@@ -813,17 +834,16 @@ public class PlayerFragment extends Fragment implements
 
             }
             try {
-                imgLoader.DisplayImage(localTrack.getPath(), homeActivity.spImgAB);
+                imgLoader.DisplayImage(localTrack.getPath(), spImgAB);
                 imgLoader.DisplayImage(localTrack.getPath(), selected_track_image);
-//                imgLoader.DisplayImage(localTrack.getPath(), currentAlbumArtHolder);
             } catch (Exception e) {
 
             }
             try {
-                homeActivity.spTitleAB.setText(localTrack.getTitle());
+                spTitleAB.setText(localTrack.getTitle());
                 selected_track_title.setText(localTrack.getTitle());
                 selected_track_artist.setText(localTrack.getArtist());
-                homeActivity.spArtistAB.setText(localTrack.getArtist());
+                spArtistAB.setText(localTrack.getArtist());
             } catch (Exception e) {
 
             }
@@ -867,10 +887,10 @@ public class PlayerFragment extends Fragment implements
             e.printStackTrace();
         }
 
-        homeActivity.overflowMenuAB.setOnClickListener(new View.OnClickListener() {
+        overflowMenuAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PopupMenu popMenu = new PopupMenu(getContext(), homeActivity.overflowMenuAB);
+                PopupMenu popMenu = new PopupMenu(getContext(), overflowMenuAB);
                 popMenu.getMenuInflater().inflate(R.menu.player_overflow_menu, popMenu.getMenu());
 
                 popMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -882,7 +902,7 @@ public class PlayerFragment extends Fragment implements
                                 bottomContainer.setVisibility(View.VISIBLE);
                                 seekBarContainer.setVisibility(View.VISIBLE);
                                 toggleContainer.setVisibility(View.VISIBLE);
-                                homeActivity.spToolbar.setVisibility(View.VISIBLE);
+                                spToolbar.setVisibility(View.VISIBLE);
                                 fullscreenExtraSpaceOccupier.getLayoutParams().height = 0;
                                 mCallback8.onFullScreen();
                             } else {
@@ -890,7 +910,7 @@ public class PlayerFragment extends Fragment implements
                                 bottomContainer.setVisibility(View.INVISIBLE);
                                 seekBarContainer.setVisibility(View.INVISIBLE);
                                 toggleContainer.setVisibility(View.INVISIBLE);
-                                homeActivity.spToolbar.setVisibility(View.INVISIBLE);
+                                spToolbar.setVisibility(View.INVISIBLE);
                                 fullscreenExtraSpaceOccupier.getLayoutParams().height = homeActivity.statusBarHeightinDp;
                                 mCallback8.onFullScreen();
                             }
@@ -1215,16 +1235,16 @@ public class PlayerFragment extends Fragment implements
             durationInMilliSec = track.getDuration();
             if (track.getArtworkURL() != null) {
                 Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(selected_track_image);
-                Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(homeActivity.spImgAB);
+                Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(spImgAB);
             } else {
                 selected_track_image.setImageResource(R.drawable.ic_default);
-                homeActivity.spImgAB.setImageResource(R.drawable.ic_default);
+                spImgAB.setImageResource(R.drawable.ic_default);
             }
             try {
-                homeActivity.spTitleAB.setText(track.getTitle());
+                spTitleAB.setText(track.getTitle());
                 selected_track_title.setText(track.getTitle());
                 selected_track_artist.setText("");
-                homeActivity.spArtistAB.setText("");
+                spArtistAB.setText("");
             } catch (Exception e) {
             }
         } else {
@@ -1234,16 +1254,16 @@ public class PlayerFragment extends Fragment implements
 
             }
             try {
-                imgLoader.DisplayImage(localTrack.getPath(), homeActivity.spImgAB);
+                imgLoader.DisplayImage(localTrack.getPath(), spImgAB);
                 imgLoader.DisplayImage(localTrack.getPath(), selected_track_image);
             } catch (Exception e) {
 
             }
             try {
-                homeActivity.spTitleAB.setText(localTrack.getTitle());
+                spTitleAB.setText(localTrack.getTitle());
                 selected_track_title.setText(localTrack.getTitle());
                 selected_track_artist.setText(localTrack.getArtist());
-                homeActivity.spArtistAB.setText(localTrack.getArtist());
+                spArtistAB.setText(localTrack.getArtist());
             } catch (Exception e) {
 
             }

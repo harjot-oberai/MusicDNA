@@ -477,11 +477,11 @@
         android:layout_height="match_parent"
         android:translationZ="10dp"/>
 
-    <FrameLayout
-        android:id="@+id/player_frag_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:translationZ="10dp"/>
+    <!--<FrameLayout-->
+        <!--android:id="@+id/player_frag_container"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:translationZ="10dp"/>-->
 
 </RelativeLayout>
 

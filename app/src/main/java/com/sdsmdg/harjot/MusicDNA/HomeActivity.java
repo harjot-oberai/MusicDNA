@@ -215,10 +215,10 @@ public class HomeActivity extends AppCompatActivity
     CircleImageView spImgHome;
     TextView spTitleHome;
 
-    ImageView overflowMenuAB;
-    static CircleImageView spImgAB;
-    TextView spTitleAB;
-    TextView spArtistAB;
+//    ImageView overflowMenuAB;
+//    static CircleImageView spImgAB;
+//    TextView spTitleAB;
+//    TextView spArtistAB;
 
     SwitchCompat equalizerSwitch;
 
@@ -328,7 +328,7 @@ public class HomeActivity extends AppCompatActivity
     static int screen_height;
 
     Toolbar toolbar;
-    Toolbar spToolbar;
+    //    Toolbar spToolbar;
     Toolbar equalizerToolbar;
 
     Toolbar queueToolbar;
@@ -562,6 +562,7 @@ public class HomeActivity extends AppCompatActivity
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             PlayerFragment newFragment = new PlayerFragment();
             if (frag == null) {
+
                 playerFragment = newFragment;
                 int flag = 0;
                 for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
@@ -575,6 +576,7 @@ public class HomeActivity extends AppCompatActivity
                 if (flag == 0) {
                     isFavourite = false;
                 }
+
                 playerFragment.localIsPlaying = true;
                 playerFragment.localTrack = localSelectedTrack;
                 fm.beginTransaction()
@@ -634,7 +636,6 @@ public class HomeActivity extends AppCompatActivity
         if (qFrag != null) {
             qFrag.updateQueueAdapter();
         }
-
         UnifiedTrack track = new UnifiedTrack(true, playerFragment.localTrack, null);
         for (int i = 0; i < recentlyPlayed.getRecentlyPlayed().size(); i++) {
             if (recentlyPlayed.getRecentlyPlayed().get(i).getType() && recentlyPlayed.getRecentlyPlayed().get(i).getLocalTrack().getTitle().equals(track.getLocalTrack().getTitle())) {
@@ -745,15 +746,6 @@ public class HomeActivity extends AppCompatActivity
         fragMan = getSupportFragmentManager();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        spToolbar = (Toolbar) findViewById(R.id.smallPlayer_AB);
-        spToolbar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hidePlayer();
-                showTabs();
-                isPlayerVisible = false;
-            }
-        });
 
         newPlaylistText = (TextView) findViewById(R.id.new_playlist_text);
         newPlaylistText.setOnClickListener(new View.OnClickListener() {
@@ -912,21 +904,6 @@ public class HomeActivity extends AppCompatActivity
         gson = new Gson();
 
         main = this;
-
-        overflowMenuAB = (ImageView) findViewById(R.id.menuIcon);
-        spImgAB = (CircleImageView) findViewById(R.id.selected_track_image_sp_AB);
-        spImgAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hidePlayer();
-                showTabs();
-                isPlayerVisible = false;
-            }
-        });
-        spTitleAB = (TextView) findViewById(R.id.selected_track_title_sp_AB);
-        spTitleAB.setSelected(true);
-
-        spArtistAB = (TextView) findViewById(R.id.selected_track_artist_sp_AB);
 
         localBanner = (RelativeLayout) findViewById(R.id.localBanner);
         favBanner = (ImageView) findViewById(R.id.favBanner);
@@ -1424,7 +1401,6 @@ public class HomeActivity extends AppCompatActivity
             plFrag.bottomContainer.setVisibility(View.VISIBLE);
             plFrag.seekBarContainer.setVisibility(View.VISIBLE);
             plFrag.toggleContainer.setVisibility(View.VISIBLE);
-            spToolbar.setVisibility(View.VISIBLE);
             plFrag.fullscreenExtraSpaceOccupier.getLayoutParams().height = 0;
             onFullScreen();
         } else if (!searchView.isIconified()) {
@@ -1794,29 +1770,9 @@ public class HomeActivity extends AppCompatActivity
                     }
                 });
 
-
-        if (!isFullScreenEnabled)
-            spToolbar.setVisibility(View.VISIBLE);
-        spToolbar.setAlpha(0.0f);
-        spToolbar.setY(spToolbar.getHeight());
-        spToolbar.animate()
-                .setDuration(300)
-                .translationY(0)
-                .alpha(1.0f);
-
     }
 
     public void showTabs() {
-        spToolbar.animate()
-                .setDuration(300)
-                .translationY(spToolbar.getHeight())
-                .alpha(0.0f)
-                .withEndAction(new Runnable() {
-                    @Override
-                    public void run() {
-                        spToolbar.setVisibility(GONE);
-                    }
-                });
 
         if (isFullScreenEnabled) {
             toolbar.setVisibility(View.INVISIBLE);
@@ -1866,8 +1822,18 @@ public class HomeActivity extends AppCompatActivity
                     .alpha(1.0f);
         }
 
-        playerContainer.setVisibility(View.VISIBLE);
+        if (playerFragment.spToolbar != null) {
+            playerFragment.spToolbar.animate()
+                    .alpha(0.0f)
+                    .withEndAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            playerFragment.spToolbar.setVisibility(GONE);
+                        }
+                    });
+        }
 
+        playerContainer.setVisibility(View.VISIBLE);
         playerContainer.animate()
                 .translationY(playerContainer.getHeight() - playerFragment.smallPlayer.getHeight())
                 .setDuration(300);
@@ -1911,7 +1877,7 @@ public class HomeActivity extends AppCompatActivity
         handler2.postDelayed(new Runnable() {
             @Override
             public void run() {
-                switchToolbar(spToolbar, equalizerToolbar, "right");
+                switchToolbar(toolbar, equalizerToolbar, "right");
 
                 playerContainer.animate()
                         .setInterpolator(new AccelerateDecelerateInterpolator())
@@ -1931,7 +1897,7 @@ public class HomeActivity extends AppCompatActivity
             playerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
 
         setUpFragmentToolbar(Color.BLACK, "Queue");
-        switchToolbar(spToolbar, queueToolbar, "left");
+        switchToolbar(toolbar, queueToolbar, "left");
 
         final Handler handler2 = new Handler();
         handler2.postDelayed(new Runnable() {
@@ -1970,10 +1936,6 @@ public class HomeActivity extends AppCompatActivity
         if (playerFragment.mVisualizerView != null)
             playerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
 
-        if (playerFragment.snappyRecyclerView != null) {
-            playerFragment.snappyRecyclerView.setTransparency();
-        }
-
         if (playerFragment.player_controller != null) {
             playerFragment.player_controller.setAlpha(1.0f);
             playerFragment.player_controller.animate()
@@ -1990,6 +1952,11 @@ public class HomeActivity extends AppCompatActivity
                     .alpha(0.0f);
         }
 
+        if (playerFragment.spToolbar != null) {
+            playerFragment.spToolbar.setVisibility(View.VISIBLE);
+            playerFragment.spToolbar.animate().alpha(1.0f);
+        }
+
         isPlayerTransitioning = true;
 
         playerContainer.animate()
@@ -2002,14 +1969,6 @@ public class HomeActivity extends AppCompatActivity
                     }
                 });
 
-//        if (settings.isAlbumArtBackgroundEnabled()) {
-//            if (playerFragment.currentAlbumArtHolder != null) {
-//                playerFragment.currentAlbumArtHolder.setVisibility(View.VISIBLE);
-//                playerFragment.currentAlbumArtHolder.animate()
-//                        .alpha(0.1f)
-//                        .setDuration(300);
-//            }
-//        }
 
         if (playerFragment.snappyRecyclerView != null) {
             playerFragment.snappyRecyclerView.setVisibility(View.VISIBLE);
@@ -2058,7 +2017,7 @@ public class HomeActivity extends AppCompatActivity
                     }
                 });
 
-        switchToolbar(equalizerToolbar, spToolbar, "left");
+        switchToolbar(equalizerToolbar, toolbar, "left");
 
         final Handler handler2 = new Handler();
         handler2.postDelayed(new Runnable() {
@@ -2093,7 +2052,7 @@ public class HomeActivity extends AppCompatActivity
                     }
                 });
 
-        switchToolbar(queueToolbar, spToolbar, "right");
+        switchToolbar(queueToolbar, toolbar, "right");
 
         final Handler handler2 = new Handler();
         handler2.postDelayed(new Runnable() {

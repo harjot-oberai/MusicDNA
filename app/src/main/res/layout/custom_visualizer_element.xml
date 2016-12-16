@@ -2,13 +2,22 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <ImageView
         android:id="@+id/album_art_container_v"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:alpha="0.45"
+        android:alpha="0.35"
         android:scaleType="centerCrop" />
 
+    <com.github.mmin18.widget.RealtimeBlurView
+        android:id="@+id/blurred_album_art"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:realtimeOverlayColor="#88000000"
+        app:realtimeBlurRadius="40dp"
+        app:realtimeDownsampleFactor="4"
+        android:visibility="gone" />
 </RelativeLayout>

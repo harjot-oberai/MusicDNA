@@ -66,7 +66,7 @@ import static android.view.View.GONE;
 public class PlayerFragment extends Fragment implements
         AudioPlayerBroadcastReceiver.onCallbackListener {
 
-    public static SnappyRecyclerView snappyRecyclerView;
+    SnappyRecyclerView snappyRecyclerView;
     CustomAdapter customAdapter;
 
     public static VisualizerView mVisualizerView;
@@ -452,6 +452,7 @@ public class PlayerFragment extends Fragment implements
             snappyRecyclerView.setCurrentPosition(HomeActivity.queueCurrentIndex);
             customAdapter.notifyDataSetChanged();
         }
+        snappyRecyclerView.setTransparency();
     }
 
     @Override

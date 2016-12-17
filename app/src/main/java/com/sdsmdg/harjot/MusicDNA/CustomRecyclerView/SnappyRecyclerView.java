@@ -166,7 +166,16 @@ public class SnappyRecyclerView extends RecyclerView {
 
     public void setTransparency() {
         final CustomAdapter.ViewHolder viewHolder = (CustomAdapter.ViewHolder) findViewHolderForAdapterPosition(currentPosition);
-        if (viewHolder != null && viewHolder.albumArt != null) {
+        if (homeActivity.settings.isAlbumArtBackgroundEnabled()) {
+            if (viewHolder != null && viewHolder.albumArt != null)
+                viewHolder.albumArt.animate()
+                        .alpha(0.20f);
+        } else {
+            if (viewHolder != null && viewHolder.albumArt != null)
+                viewHolder.albumArt.animate()
+                        .alpha(0.0f);
+        }
+//        if (viewHolder != null && viewHolder.albumArt != null) {
 //            Handler handler = new Handler();
 //            handler.postDelayed(new Runnable() {
 //                @Override
@@ -190,7 +199,7 @@ public class SnappyRecyclerView extends RecyclerView {
 //                    })
 //                    .capture(viewHolder.albumArt)
 //                    .into(viewHolder.blurredAlbumArt);
-        }
+//        }
     }
 
     public void setActivity(HomeActivity homeActivity) {

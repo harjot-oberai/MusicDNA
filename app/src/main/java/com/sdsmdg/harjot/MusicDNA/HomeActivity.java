@@ -5036,6 +5036,7 @@ public class HomeActivity extends AppCompatActivity
         }
         if (action.equals("Add to Queue")) {
             queue.getQueue().add(ut);
+            updateVisualizerRecycler();
         }
         if (action.equals("Play")) {
             if (queue.getQueue().size() == 0) {
@@ -5062,6 +5063,7 @@ public class HomeActivity extends AppCompatActivity
                 selectedTrack = ut.getStreamTrack();
                 onTrackSelected(position);
             }
+            updateVisualizerRecycler();
         }
         if (action.equals("Play Next")) {
             if (queue.getQueue().size() == 0) {
@@ -5098,6 +5100,7 @@ public class HomeActivity extends AppCompatActivity
             } else {
                 queue.getQueue().add(queueCurrentIndex + 1, ut);
             }
+            updateVisualizerRecycler();
         }
         if (action.equals("Add to Favourites")) {
             addToFavourites(ut);
@@ -5310,6 +5313,13 @@ public class HomeActivity extends AppCompatActivity
 
         dialog.show();
 
+    }
+
+    public void updateVisualizerRecycler() {
+        if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
+            playerFragment.snappyRecyclerView.getAdapter().notifyDataSetChanged();
+            playerFragment.snappyRecyclerView.setTransparency();
+        }
     }
 
 }

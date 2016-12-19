@@ -99,7 +99,9 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
         try {
             pFragment = ((HomeActivity) PlayerFragment.ctx).getPlayerFragment();
         } catch (Exception e) {
+            e.printStackTrace();
         }
+
         if (pFragment != null)
             pFragment.mCallback7 = this;
 
@@ -246,190 +248,192 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
     }
 
     void updateMediaSession() {
-        m_objMediaSession.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS | MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);
+        if (pFragment != null) {
+            m_objMediaSession.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS | MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);
 
-        MediaMetadata.Builder metadataBuilder = new MediaMetadata.Builder();
-        if (pFragment.localIsPlaying) {
-            if (pFragment.localTrack != null) {
-                metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, pFragment.localTrack.getTitle());
-                metadataBuilder.putString(MediaMetadata.METADATA_KEY_ARTIST, pFragment.localTrack.getArtist());
+            MediaMetadata.Builder metadataBuilder = new MediaMetadata.Builder();
+            if (pFragment.localIsPlaying) {
+                if (pFragment.localTrack != null) {
+                    metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, pFragment.localTrack.getTitle());
+                    metadataBuilder.putString(MediaMetadata.METADATA_KEY_ARTIST, pFragment.localTrack.getArtist());
+                }
+            } else {
+                if (pFragment.track != null) {
+                    metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, pFragment.track.getTitle());
+                    metadataBuilder.putString(MediaMetadata.METADATA_KEY_ARTIST, "");
+                }
             }
-        } else {
-            if (pFragment.track != null) {
-                metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, pFragment.track.getTitle());
-                metadataBuilder.putString(MediaMetadata.METADATA_KEY_ARTIST, "");
-            }
-        }
-        if (((BitmapDrawable) pFragment.selected_track_image.getDrawable()).getBitmap() != null) {
+            if (((BitmapDrawable) pFragment.selected_track_image.getDrawable()).getBitmap() != null) {
 
-            metadataBuilder.putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART, ((BitmapDrawable) pFragment.selected_track_image.getDrawable()).getBitmap());
-        }
-
-        m_objMediaSession.setMetadata(metadataBuilder.build());
-        PlaybackState.Builder stateBuilder = new PlaybackState.Builder();
-        stateBuilder.setActions(PlaybackState.ACTION_PLAY | PlaybackState.ACTION_PLAY_PAUSE | PlaybackState.ACTION_PAUSE | PlaybackState.ACTION_SKIP_TO_NEXT | PlaybackState.ACTION_SKIP_TO_PREVIOUS);
-        try {
-            if (pFragment.mMediaPlayer != null) {
-                stateBuilder.setState(!pFragment.mMediaPlayer.isPlaying() ? PlaybackState.STATE_PAUSED : PlaybackState.STATE_PLAYING, PlaybackState.PLAYBACK_POSITION_UNKNOWN, 1.0f);
+                metadataBuilder.putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART, ((BitmapDrawable) pFragment.selected_track_image.getDrawable()).getBitmap());
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+
+            m_objMediaSession.setMetadata(metadataBuilder.build());
+            PlaybackState.Builder stateBuilder = new PlaybackState.Builder();
+            stateBuilder.setActions(PlaybackState.ACTION_PLAY | PlaybackState.ACTION_PLAY_PAUSE | PlaybackState.ACTION_PAUSE | PlaybackState.ACTION_SKIP_TO_NEXT | PlaybackState.ACTION_SKIP_TO_PREVIOUS);
+            try {
+                if (pFragment.mMediaPlayer != null) {
+                    stateBuilder.setState(!pFragment.mMediaPlayer.isPlaying() ? PlaybackState.STATE_PAUSED : PlaybackState.STATE_PLAYING, PlaybackState.PLAYBACK_POSITION_UNKNOWN, 1.0f);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            m_objMediaSession.setPlaybackState(stateBuilder.build());
+            m_objMediaSession.setActive(true);
         }
-        m_objMediaSession.setPlaybackState(stateBuilder.build());
-        m_objMediaSession.setActive(true);
     }
 
     private void initMediaSessions() {
 
         if (pFragment != null) {
             pFragment.mCallback7 = this;
-        }
-        m_objMediaPlayer = pFragment.mMediaPlayer;
-        m_objMediaSessionManager = (MediaSessionManager) getSystemService(Context.MEDIA_SESSION_SERVICE);
-        m_objMediaSession = new MediaSession(getApplicationContext(), "sample session");
 
-        m_objMediaSession.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS | MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);
+            m_objMediaPlayer = pFragment.mMediaPlayer;
+            m_objMediaSessionManager = (MediaSessionManager) getSystemService(Context.MEDIA_SESSION_SERVICE);
+            m_objMediaSession = new MediaSession(getApplicationContext(), "sample session");
 
-        MediaMetadata.Builder metadataBuilder = new MediaMetadata.Builder();
-        if (pFragment.localIsPlaying) {
-            if (pFragment.localTrack != null) {
-                metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, pFragment.localTrack.getTitle());
-                metadataBuilder.putString(MediaMetadata.METADATA_KEY_ARTIST, pFragment.localTrack.getArtist());
+            m_objMediaSession.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS | MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);
+
+            MediaMetadata.Builder metadataBuilder = new MediaMetadata.Builder();
+            if (pFragment.localIsPlaying) {
+                if (pFragment.localTrack != null) {
+                    metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, pFragment.localTrack.getTitle());
+                    metadataBuilder.putString(MediaMetadata.METADATA_KEY_ARTIST, pFragment.localTrack.getArtist());
+                }
+            } else {
+                if (pFragment.track != null) {
+                    metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, pFragment.track.getTitle());
+                    metadataBuilder.putString(MediaMetadata.METADATA_KEY_ARTIST, "");
+                }
             }
-        } else {
-            if (pFragment.track != null) {
-                metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, pFragment.track.getTitle());
-                metadataBuilder.putString(MediaMetadata.METADATA_KEY_ARTIST, "");
+            if (pFragment.selected_track_image != null && pFragment.selected_track_image.getDrawable() != null) {
+                if (((BitmapDrawable) pFragment.selected_track_image.getDrawable()).getBitmap() != null) {
+                    metadataBuilder.putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART, ((BitmapDrawable) pFragment.selected_track_image.getDrawable()).getBitmap());
+                }
             }
-        }
-        if (pFragment.selected_track_image != null && pFragment.selected_track_image.getDrawable() != null) {
-            if (((BitmapDrawable) pFragment.selected_track_image.getDrawable()).getBitmap() != null) {
-                metadataBuilder.putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART, ((BitmapDrawable) pFragment.selected_track_image.getDrawable()).getBitmap());
+
+
+            m_objMediaSession.setMetadata(metadataBuilder.build());
+            PlaybackState.Builder stateBuilder = new PlaybackState.Builder();
+            stateBuilder.setActions(PlaybackState.ACTION_PLAY | PlaybackState.ACTION_PLAY_PAUSE | PlaybackState.ACTION_PAUSE | PlaybackState.ACTION_SKIP_TO_NEXT | PlaybackState.ACTION_SKIP_TO_PREVIOUS);
+            try {
+                if (pFragment.mMediaPlayer != null) {
+                    stateBuilder.setState(!pFragment.mMediaPlayer.isPlaying() ? PlaybackState.STATE_PAUSED : PlaybackState.STATE_PLAYING, PlaybackState.PLAYBACK_POSITION_UNKNOWN, 1.0f);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        }
+            m_objMediaSession.setPlaybackState(stateBuilder.build());
 
+            m_objMediaSession.setActive(true);
+            m_objMediaController = m_objMediaSession.getController();
+            m_objMediaSession.setCallback(new MediaSession.Callback() {
 
-        m_objMediaSession.setMetadata(metadataBuilder.build());
-        PlaybackState.Builder stateBuilder = new PlaybackState.Builder();
-        stateBuilder.setActions(PlaybackState.ACTION_PLAY | PlaybackState.ACTION_PLAY_PAUSE | PlaybackState.ACTION_PAUSE | PlaybackState.ACTION_SKIP_TO_NEXT | PlaybackState.ACTION_SKIP_TO_PREVIOUS);
-        try {
-            if (pFragment.mMediaPlayer != null) {
-                stateBuilder.setState(!pFragment.mMediaPlayer.isPlaying() ? PlaybackState.STATE_PAUSED : PlaybackState.STATE_PLAYING, PlaybackState.PLAYBACK_POSITION_UNKNOWN, 1.0f);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        m_objMediaSession.setPlaybackState(stateBuilder.build());
-
-        m_objMediaSession.setActive(true);
-        m_objMediaController = m_objMediaSession.getController();
-        m_objMediaSession.setCallback(new MediaSession.Callback() {
-
-            @Override
-            public void onPlay() {
-                super.onPlay();
-                try {
-                    Log.d(Constants.LOG_TAG, "onPlay");
-                    PlayerFragment pFrag = pFragment;
-                    if (pFrag != null) {
-                        if (!pFrag.isStart) {
-                            pFrag.togglePlayPause();
+                @Override
+                public void onPlay() {
+                    super.onPlay();
+                    try {
+                        Log.d(Constants.LOG_TAG, "onPlay");
+                        PlayerFragment pFrag = pFragment;
+                        if (pFrag != null) {
+                            if (!pFrag.isStart) {
+                                pFrag.togglePlayPause();
+                            }
+                            pFrag.isStart = false;
+                            buildNotification(generateAction(R.drawable.ic_pause_notif, "Pause", Constants.ACTION_PAUSE));
                         }
-                        pFrag.isStart = false;
-                        buildNotification(generateAction(R.drawable.ic_pause_notif, "Pause", Constants.ACTION_PAUSE));
+                    } catch (Exception e) {
+
                     }
-                } catch (Exception e) {
-
-                }
-            }
-
-            @Override
-            public void onPause() {
-                super.onPause();
-                try {
-                    PlayerFragment pFrag = pFragment;
-                    if (pFrag != null) {
-                        pFrag.togglePlayPause();
-                        buildNotification(generateAction(R.drawable.ic_play_notif, "Play", Constants.ACTION_PLAY));
-                    }
-                } catch (Exception e) {
-
-                }
-            }
-
-            @Override
-            public void onSkipToNext() {
-                super.onSkipToNext();
-                try {
-                    if (pFragment != null) {
-                        pFragment.onCallbackCalled(2);
-                        final Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                buildNotification(generateAction(R.drawable.ic_pause_notif, "Pause", Constants.ACTION_PAUSE));
-                            }
-                        }, 100);
-                    }
-                } catch (Exception e) {
-
                 }
 
-            }
+                @Override
+                public void onPause() {
+                    super.onPause();
+                    try {
+                        PlayerFragment pFrag = pFragment;
+                        if (pFrag != null) {
+                            pFrag.togglePlayPause();
+                            buildNotification(generateAction(R.drawable.ic_play_notif, "Play", Constants.ACTION_PLAY));
+                        }
+                    } catch (Exception e) {
 
-            @Override
-            public void onSkipToPrevious() {
-                super.onSkipToPrevious();
-                try {
-                    if (pFragment != null) {
-                        pFragment.onCallbackCalled(3);
-                        final Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                buildNotification(generateAction(R.drawable.ic_pause_notif, "Pause", Constants.ACTION_PAUSE));
-                            }
-                        }, 100);
                     }
-                } catch (Exception e) {
+                }
+
+                @Override
+                public void onSkipToNext() {
+                    super.onSkipToNext();
+                    try {
+                        if (pFragment != null) {
+                            pFragment.onCallbackCalled(2);
+                            final Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    buildNotification(generateAction(R.drawable.ic_pause_notif, "Pause", Constants.ACTION_PAUSE));
+                                }
+                            }, 100);
+                        }
+                    } catch (Exception e) {
+
+                    }
 
                 }
 
-            }
+                @Override
+                public void onSkipToPrevious() {
+                    super.onSkipToPrevious();
+                    try {
+                        if (pFragment != null) {
+                            pFragment.onCallbackCalled(3);
+                            final Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    buildNotification(generateAction(R.drawable.ic_pause_notif, "Pause", Constants.ACTION_PAUSE));
+                                }
+                            }, 100);
+                        }
+                    } catch (Exception e) {
 
-            @Override
-            public void onFastForward() {
-                super.onFastForward();
-                Log.d(Constants.LOG_TAG, "onFastForward");
-                if (pFragment != null)
-                    pFragment.mCallback2.onComplete();
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        buildNotification(generateAction(R.drawable.ic_pause_notif, "Pause", Constants.ACTION_PAUSE));
                     }
-                }, 100);
-            }
 
-            @Override
-            public void onRewind() {
-                super.onRewind();
-                Log.d(Constants.LOG_TAG, "onRewind");
-                if (pFragment != null)
-                    pFragment.mCallback3.onPreviousTrack();
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        buildNotification(generateAction(R.drawable.ic_pause_notif, "Pause", Constants.ACTION_PAUSE));
-                    }
-                }, 100);
-            }
+                }
 
-            @Override
-            public void onStop() {
-                super.onStop();
+                @Override
+                public void onFastForward() {
+                    super.onFastForward();
+                    Log.d(Constants.LOG_TAG, "onFastForward");
+                    if (pFragment != null)
+                        pFragment.mCallback2.onComplete();
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            buildNotification(generateAction(R.drawable.ic_pause_notif, "Pause", Constants.ACTION_PAUSE));
+                        }
+                    }, 100);
+                }
+
+                @Override
+                public void onRewind() {
+                    super.onRewind();
+                    Log.d(Constants.LOG_TAG, "onRewind");
+                    if (pFragment != null)
+                        pFragment.mCallback3.onPreviousTrack();
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            buildNotification(generateAction(R.drawable.ic_pause_notif, "Pause", Constants.ACTION_PAUSE));
+                        }
+                    }, 100);
+                }
+
+                @Override
+                public void onStop() {
+                    super.onStop();
 //                if (pFragment.mMediaPlayer != null) {
 //                    if (pFragment.mMediaPlayer.isPlaying()) {
 //                        buildNotification(generateAction(R.drawable.ic_pause_notif, "Pause", Constants.ACTION_PAUSE));
@@ -437,18 +441,19 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
 //                        buildNotification(generateAction(R.drawable.ic_play_notif, "Play", Constants.ACTION_PLAY));
 //                    }
 //                }
-            }
+                }
 
-            @Override
-            public void onSeekTo(long pos) {
-                super.onSeekTo(pos);
-            }
+                @Override
+                public void onSeekTo(long pos) {
+                    super.onSeekTo(pos);
+                }
 
-            @Override
-            public void onSetRating(Rating rating) {
-                super.onSetRating(rating);
-            }
-        });
+                @Override
+                public void onSetRating(Rating rating) {
+                    super.onSetRating(rating);
+                }
+            });
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -474,7 +479,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
             notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.cancel(1);
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 }

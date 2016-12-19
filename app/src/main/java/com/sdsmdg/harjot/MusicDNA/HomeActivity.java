@@ -215,10 +215,6 @@ public class HomeActivity extends AppCompatActivity
     CircleImageView spImgHome;
     TextView spTitleHome;
 
-//    ImageView overflowMenuAB;
-//    static CircleImageView spImgAB;
-//    TextView spTitleAB;
-//    TextView spArtistAB;
 
     SwitchCompat equalizerSwitch;
 
@@ -512,6 +508,11 @@ public class HomeActivity extends AppCompatActivity
             frag.refresh();
         }
 
+        if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
+            playerFragment.snappyRecyclerView.getAdapter().notifyDataSetChanged();
+            playerFragment.snappyRecyclerView.setTransparency();
+        }
+
         QueueFragment qFrag = (QueueFragment) fragMan.findFragmentByTag("queue");
         if (qFrag != null) {
             qFrag.updateQueueAdapter();
@@ -562,7 +563,6 @@ public class HomeActivity extends AppCompatActivity
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             PlayerFragment newFragment = new PlayerFragment();
             if (frag == null) {
-
                 playerFragment = newFragment;
                 int flag = 0;
                 for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
@@ -630,6 +630,11 @@ public class HomeActivity extends AppCompatActivity
                 isFavourite = false;
             }
             frag.refresh();
+        }
+
+        if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
+            playerFragment.snappyRecyclerView.getAdapter().notifyDataSetChanged();
+            playerFragment.snappyRecyclerView.setTransparency();
         }
 
         QueueFragment qFrag = (QueueFragment) fragMan.findFragmentByTag("queue");
@@ -1966,6 +1971,9 @@ public class HomeActivity extends AppCompatActivity
                     @Override
                     public void run() {
                         isPlayerTransitioning = false;
+                        if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
+                            playerFragment.snappyRecyclerView.setTransparency();
+                        }
                     }
                 });
 
@@ -2014,6 +2022,9 @@ public class HomeActivity extends AppCompatActivity
                     @Override
                     public void run() {
                         isPlayerTransitioning = false;
+                        if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
+                            playerFragment.snappyRecyclerView.setTransparency();
+                        }
                     }
                 });
 
@@ -2049,6 +2060,9 @@ public class HomeActivity extends AppCompatActivity
                     @Override
                     public void run() {
                         isPlayerTransitioning = false;
+                        if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
+                            playerFragment.snappyRecyclerView.setTransparency();
+                        }
                     }
                 });
 

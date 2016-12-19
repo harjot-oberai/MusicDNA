@@ -71,6 +71,7 @@ public class EditLocalSongFragment extends Fragment {
 
     public interface newCoverListener {
         void getNewBitmap();
+
         void deleteMediaStoreCache();
     }
 
@@ -243,15 +244,10 @@ public class EditLocalSongFragment extends Fragment {
         try {
             File f = new File(HomeActivity.editSong.getPath());
             mp3File = (MP3File) AudioFileIO.read(f);
-        } catch (IOException e) {
+        } catch (IOException | CannotReadException | InvalidAudioFrameException | TagException | ReadOnlyFileException e) {
             e.printStackTrace();
-        } catch (CannotReadException e) {
-            e.printStackTrace();
-        } catch (ReadOnlyFileException e) {
-            e.printStackTrace();
-        } catch (InvalidAudioFrameException e) {
-            e.printStackTrace();
-        } catch (TagException e) {
+        } catch (ClassCastException e) {
+            mp3File = null;
             e.printStackTrace();
         }
 

@@ -177,7 +177,6 @@ public class PlayerFragment extends Fragment implements
             mVisualizer = new Visualizer(mMediaPlayer.getAudioSessionId());
             mEqualizer = new Equalizer(0, mMediaPlayer.getAudioSessionId());
             mEqualizer.setEnabled(true);
-            mMediaPlayer.setAuxEffectSendLevel(1.0f);
 
             try {
                 bassBoost = new BassBoost(0, mMediaPlayer.getAudioSessionId());
@@ -197,7 +196,7 @@ public class PlayerFragment extends Fragment implements
             }
 
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
 
         if (homeActivity.isEqualizerEnabled) {
@@ -236,9 +235,12 @@ public class PlayerFragment extends Fragment implements
                     }
                 }
                 if (homeActivity.bassStrength != -1 && homeActivity.reverbPreset != -1) {
+                    bassBoost.setEnabled(true);
                     bassBoost.setStrength(homeActivity.bassStrength);
+                    presetReverb.setEnabled(true);
                     presetReverb.setPreset(homeActivity.reverbPreset);
                 }
+                mMediaPlayer.setAuxEffectSendLevel(1.0f);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -313,7 +315,6 @@ public class PlayerFragment extends Fragment implements
             }
         }
     }
-
 
     @Override
     public void onAttach(final Context context) {

@@ -679,7 +679,6 @@ public class HomeActivity extends AppCompatActivity
         screen_width = display.getWidth();
         screen_height = display.getHeight();
 
-        
 
         ratio = (float) screen_height / (float) 1920;
         ratio2 = (float) screen_width / (float) 1080;
@@ -798,11 +797,12 @@ public class HomeActivity extends AppCompatActivity
                             }
                         }
                         if (bassStrength != -1 && reverbPreset != -1) {
-                            playerFragment.presetReverb.setEnabled(true);
                             playerFragment.bassBoost.setEnabled(true);
                             playerFragment.bassBoost.setStrength(bassStrength);
+                            playerFragment.presetReverb.setEnabled(true);
                             playerFragment.presetReverb.setPreset(reverbPreset);
                         }
+                        playerFragment.mMediaPlayer.setAuxEffectSendLevel(1.0f);
                         if (eqFrag != null)
                             eqFrag.setBlockerVisibility(View.GONE);
                     } catch (Exception e) {
@@ -4135,6 +4135,7 @@ public class HomeActivity extends AppCompatActivity
                         isEqualizerEnabled = true;
                         isEqualizerReloaded = false;
                         equalizerModel = new EqualizerModel();
+                        equalizerSwitch.setChecked(true);
                     } else {
                         isEqualizerEnabled = equalizerModel.isEqualizerEnabled();
                         equalizerSwitch.setChecked(isEqualizerEnabled);

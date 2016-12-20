@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorDark"
-    android:padding="3dp"
     android:clickable="true"
+    android:padding="3dp"
     tools:context="com.sdsmdg.harjot.MusicDNA.FavouritesFragment">
 
     <android.support.v7.widget.RecyclerView
@@ -21,6 +21,8 @@
         android:layout_alignParentRight="true"
         android:layout_margin="16dp"
         android:clickable="true"
+        android:scaleX="0.0"
+        android:scaleY="0.0"
         android:src="@drawable/ic_play_arrow_white_48dp"
         app:backgroundTint="#D72638"
         app:borderWidth="0dp"

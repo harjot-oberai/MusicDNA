@@ -5,6 +5,7 @@ package com.sdsmdg.harjot.MusicDNA;
 
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.content.Context;
@@ -18,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
@@ -114,6 +116,7 @@ public class LocalMusicFragment extends Fragment {
                 }
             }
         });
+
         lv = (RecyclerView) view.findViewById(R.id.localMusicList);
         adapter = new LocalTrackListAdapter(HomeActivity.finalLocalSearchResultList, getContext());
         mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -207,6 +210,12 @@ public class LocalMusicFragment extends Fragment {
     public void onResume() {
         super.onResume();
         mLayoutManager2.scrollToPositionWithOffset(0, 0);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                shuffleFab.animate().scaleX(1.0f).scaleY(1.0f).setDuration(300).setInterpolator(new OvershootInterpolator());
+            }
+        }, 500);
     }
 
     public int getPosition(LocalTrack lt) {

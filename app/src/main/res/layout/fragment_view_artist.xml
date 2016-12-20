@@ -17,8 +17,8 @@
         android:ellipsize="marquee"
         android:fadingEdge="horizontal"
         android:singleLine="true"
-        android:textColor="#FFFFFF"
         android:text="Artist"
+        android:textColor="#FFFFFF"
         android:textSize="20dp" />
 
     <android.support.v7.widget.RecyclerView
@@ -26,7 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/artist_title"
-        android:background="@color/colorDark"></android.support.v7.widget.RecyclerView>
+        android:background="@color/colorDark" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/play_all_fab_artist"
@@ -36,6 +36,8 @@
         android:layout_alignParentRight="true"
         android:layout_margin="16dp"
         android:clickable="true"
+        android:scaleX="0.0"
+        android:scaleY="0.0"
         android:src="@drawable/ic_play_arrow_white_48dp"
         app:backgroundTint="#111111"
         app:borderWidth="0dp"

@@ -4,6 +4,7 @@ package com.sdsmdg.harjot.MusicDNA;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -13,6 +14,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -151,6 +153,12 @@ public class FavouritesFragment extends Fragment implements
     public void onResume() {
         super.onResume();
         mLayoutManager2.scrollToPositionWithOffset(0, 0);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                playAll.animate().scaleX(1.0f).scaleY(1.0f).setDuration(300).setInterpolator(new OvershootInterpolator());
+            }
+        }, 500);
     }
 
     @Override

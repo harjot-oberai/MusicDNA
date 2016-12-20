@@ -11,7 +11,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/view_recent_recycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/play_all_fab_recent"
@@ -21,6 +21,8 @@
         android:layout_alignParentRight="true"
         android:layout_margin="16dp"
         android:clickable="true"
+        android:scaleX="0.0"
+        android:scaleY="0.0"
         android:src="@drawable/ic_shuffle_white_48dp"
         app:backgroundTint="#111111"
         app:borderWidth="0dp"

@@ -4,6 +4,7 @@ package com.sdsmdg.harjot.MusicDNA;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 import android.widget.TextView;
 
 import com.sdsmdg.harjot.MusicDNA.CustomBottomSheetDialogs.CustomLocalBottomSheetDialog;
@@ -147,8 +149,19 @@ public class ViewArtistFragment extends Fragment {
         });
     }
 
-    public void updateData(){
-        if(lAdapter!=null){
+    @Override
+    public void onResume() {
+        super.onResume();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                playAllfab.animate().scaleX(1.0f).scaleY(1.0f).setDuration(300).setInterpolator(new OvershootInterpolator());
+            }
+        }, 500);
+    }
+
+    public void updateData() {
+        if (lAdapter != null) {
             lAdapter.notifyDataSetChanged();
         }
     }

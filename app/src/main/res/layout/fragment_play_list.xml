@@ -1,17 +1,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorDark"
     android:clickable="true"
-    android:padding="3dp"
     tools:context="com.sdsmdg.harjot.MusicDNA.PlayListFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/all_playlists_recycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent" />
 
     <LinearLayout
         android:id="@+id/noPlaylistContent"

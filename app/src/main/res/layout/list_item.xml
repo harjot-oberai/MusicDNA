@@ -88,16 +88,4 @@
         android:layout_width="match_parent"
         android:layout_height="1px"/>
 
-    <!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
-    <!--android:id="@+id/relItemContainer"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:background="#111"-->
-    <!--android:foreground="?android:attr/selectableItemBackground"-->
-    <!--android:longClickable="true"-->
-    <!--android:padding="10dp">-->
-
-    <!-- -->
-    <!--</RelativeLayout>-->
 </RelativeLayout>

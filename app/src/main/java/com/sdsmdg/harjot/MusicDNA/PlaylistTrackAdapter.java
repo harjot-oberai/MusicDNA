@@ -63,6 +63,8 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
         if (homeActivity.pAdapter != null)
             homeActivity.pAdapter.notifyDataSetChanged();
 
+        homeActivity.updateAllPlaylistFragment();
+
         new HomeActivity.SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
@@ -77,6 +79,8 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
         } else if (homeActivity.pAdapter != null) {
             homeActivity.pAdapter.notifyDataSetChanged();
         }
+
+        homeActivity.updateAllPlaylistFragment();
 
         new HomeActivity.SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
@@ -126,6 +130,8 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
     @Override
     public void onBindViewHolder(final PlaylistTrackAdapter.MyViewHolder holder, int position) {
         UnifiedTrack ut = songList.get(position);
+        if (SplashActivity.tf3 != null)
+            holder.title.setTypeface(SplashActivity.tf3);
         if (ut.getType()) {
             LocalTrack lt = ut.getLocalTrack();
             imgLoader.DisplayImage(lt.getPath(), holder.art);

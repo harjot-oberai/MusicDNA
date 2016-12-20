@@ -2571,12 +2571,6 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onPlaylistTouched(int pos) {
         tempPlaylist = allPlaylists.getPlaylists().get(pos);
-        /*Playlist tmp = allPlaylists.getPlaylists().get(pos);
-        tempPlaylist.setPlaylistName(tmp.getPlaylistName());
-        tempPlaylist.setSongList(new ArrayList<UnifiedTrack>());
-        for (int i = 0; i < tmp.getSongList().size(); i++) {
-            tempPlaylist.getSongList().add(tmp.getSongList().get(i));
-        }*/
         tempPlaylistNumber = pos;
         showFragment("playlist");
     }
@@ -5337,6 +5331,13 @@ public class HomeActivity extends AppCompatActivity
         if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
             playerFragment.snappyRecyclerView.getAdapter().notifyDataSetChanged();
             playerFragment.snappyRecyclerView.setTransparency();
+        }
+    }
+
+    public void updateAllPlaylistFragment() {
+        PlayListFragment playListFragment = (PlayListFragment) fragMan.findFragmentByTag("allPlaylists");
+        if (playListFragment != null && playListFragment.allPlaylistRecycler != null) {
+            playListFragment.allPlaylistRecycler.getAdapter().notifyDataSetChanged();
         }
     }
 

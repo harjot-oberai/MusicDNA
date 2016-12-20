@@ -1,158 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/item_card"
     android:layout_width="match_parent"
     android:layout_height="120dp"
     android:layout_margin="5dp"
+    android:background="@drawable/custom_ripple"
     android:clickable="true"
-    android:fadingEdgeLength="1dp"
+    android:clipToPadding="false"
     android:focusable="true"
-    android:foreground="?android:attr/selectableItemBackground"
     android:longClickable="true"
-    android:padding="5dp"
-    app:cardBackgroundColor="@color/colorPlaylistCardView"
-    app:cardCornerRadius="1dp"
-    app:cardElevation="2dp">
+    android:padding="5dp">
 
-    <RelativeLayout
+    <ImageView
+        android:id="@+id/image1"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:background="#151515"
+        android:elevation="10dp"
+        android:scaleType="centerCrop" />
+
+    <ImageView
+        android:id="@+id/image2"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="25dp"
+        android:background="#151515"
+        android:elevation="6dp"
+        android:scaleType="centerCrop" />
+
+    <ImageView
+        android:id="@+id/image3"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="45dp"
+        android:background="#151515"
+        android:elevation="2dp"
+        android:scaleType="centerCrop" />
+
+    <LinearLayout
+        android:id="@+id/names_holder"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="110dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/image3"
+        android:orientation="vertical"
+        android:padding="5dp">
 
-        <LinearLayout
-            android:id="@+id/custom_image_holder"
-            android:layout_width="110dp"
-            android:layout_height="110dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
-            android:orientation="vertical">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:id="@+id/image1"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="#151515"
-                        android:scaleType="centerCrop" />
-
-                    <ImageView
-                        android:id="@+id/image2"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="#151515"
-                        android:scaleType="centerCrop" />
-                </LinearLayout>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:id="@+id/image3"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="#151515"
-                        android:scaleType="centerCrop" />
-
-                    <ImageView
-                        android:id="@+id/image4"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="#151515"
-                        android:scaleType="centerCrop" />
-                </LinearLayout>
-            </RelativeLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/names_holder"
+        <TextView
+            android:id="@+id/name1"
             android:layout_width="match_parent"
-            android:layout_height="110dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@+id/custom_image_holder"
-            android:orientation="vertical"
-            android:padding="5dp">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="#CCC"
+            android:textSize="10sp" />
 
-            <TextView
-                android:id="@+id/playlist_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Playlist Name"
-                android:textColor="#FFF"
-                android:textSize="20sp" />
+        <TextView
+            android:id="@+id/name2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="#CCC"
+            android:textSize="10sp" />
 
-            <TextView
-                android:id="@+id/name1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:textColor="#CCC"
-                android:textSize="10sp" />
+        <TextView
+            android:id="@+id/name3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textColor="#CCC"
+            android:textSize="10sp" />
 
-            <TextView
-                android:id="@+id/name2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:textColor="#CCC"
-                android:textSize="10sp" />
+        <TextView
+            android:id="@+id/name5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:text="..."
+            android:textColor="#CCC"
+            android:textSize="10sp"
+            android:visibility="invisible" />
 
-            <TextView
-                android:id="@+id/name3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:textColor="#CCC"
-                android:textSize="10sp" />
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/name4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:textColor="#CCC"
-                android:textSize="10sp" />
+    <FrameLayout
+        android:layout_width="210dp"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true">
 
-            <TextView
-                android:id="@+id/name5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:text="..."
-                android:textColor="#CCC"
-                android:textSize="10sp"
-                android:visibility="invisible" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/title_back_1"
+            android:backgroundTint="#333333" />
 
-        </LinearLayout>
-    </RelativeLayout>
+        <TextView
+            android:id="@+id/playlist_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="5dp"
+            android:gravity="end|center_vertical"
+            android:singleLine="true"
+            android:text="Playlist Name"
+            android:textColor="#FFF"
+            android:textSize="15sp" />
 
+    </FrameLayout>
 
-</android.support.v7.widget.CardView>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="#333" />
+
+</RelativeLayout>

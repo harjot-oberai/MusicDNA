@@ -31,22 +31,20 @@ public class ViewAllPlaylistsRecyclerAdapter extends RecyclerView.Adapter<ViewAl
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView[] img = new ImageView[4];
+        ImageView[] img = new ImageView[3];
         TextView playListName;
         TextView continuedSymbol;
-        TextView[] name = new TextView[4];
+        TextView[] name = new TextView[3];
 
         public MyViewHolder(View itemView) {
             super(itemView);
             img[0] = (ImageView) itemView.findViewById(R.id.image1);
             img[1] = (ImageView) itemView.findViewById(R.id.image2);
             img[2] = (ImageView) itemView.findViewById(R.id.image3);
-            img[3] = (ImageView) itemView.findViewById(R.id.image4);
             playListName = (TextView) itemView.findViewById(R.id.playlist_name);
             name[0] = (TextView) itemView.findViewById(R.id.name1);
             name[1] = (TextView) itemView.findViewById(R.id.name2);
             name[2] = (TextView) itemView.findViewById(R.id.name3);
-            name[3] = (TextView) itemView.findViewById(R.id.name4);
             continuedSymbol = (TextView) itemView.findViewById(R.id.name5);
         }
     }
@@ -64,30 +62,32 @@ public class ViewAllPlaylistsRecyclerAdapter extends RecyclerView.Adapter<ViewAl
 
         Playlist p = playlists.get(position);
         List<UnifiedTrack> list = p.getSongList();
+        if (SplashActivity.tf3 != null)
+            holder.playListName.setTypeface(SplashActivity.tf3);
         holder.playListName.setText(p.getPlaylistName());
-        if (list.size() >= 4) {
-            String[] names = new String[4];
-            for(int i=0;i<4;i++){
-                if(list.get(i).getType()){
+        if (list.size() >= 3) {
+            String[] names = new String[3];
+            for (int i = 0; i < 3; i++) {
+                if (list.get(i).getType()) {
                     names[i] = list.get(i).getLocalTrack().getTitle();
-                    imgLoader.DisplayImage(list.get(i).getLocalTrack().getPath(),holder.img[i]);
-                }else{
+                    imgLoader.DisplayImage(list.get(i).getLocalTrack().getPath(), holder.img[i]);
+                } else {
                     names[i] = list.get(i).getStreamTrack().getTitle();
-                    imgLoader.DisplayImage(list.get(i).getStreamTrack().getArtworkURL(),holder.img[i]);
+                    imgLoader.DisplayImage(list.get(i).getStreamTrack().getArtworkURL(), holder.img[i]);
                 }
                 holder.name[i].setText(names[i]);
             }
             holder.continuedSymbol.setVisibility(View.VISIBLE);
         } else {
             int sz = list.size();
-            String[] names = new String[4];
-            for(int i=0;i<sz;i++){
-                if(list.get(i).getType()){
+            String[] names = new String[3];
+            for (int i = 0; i < sz; i++) {
+                if (list.get(i).getType()) {
                     names[i] = list.get(i).getLocalTrack().getTitle();
-                    imgLoader.DisplayImage(list.get(i).getLocalTrack().getPath(),holder.img[i]);
-                }else{
+                    imgLoader.DisplayImage(list.get(i).getLocalTrack().getPath(), holder.img[i]);
+                } else {
                     names[i] = list.get(i).getStreamTrack().getTitle();
-                    imgLoader.DisplayImage(list.get(i).getStreamTrack().getArtworkURL(),holder.img[i]);
+                    imgLoader.DisplayImage(list.get(i).getStreamTrack().getArtworkURL(), holder.img[i]);
                 }
                 holder.name[i].setText(names[i]);
             }

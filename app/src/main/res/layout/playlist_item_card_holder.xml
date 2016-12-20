@@ -4,74 +4,65 @@
     android:layout_width="115dp"
     android:layout_height="154dp"
     android:layout_margin="7dp"
+    android:background="@drawable/custom_ripple"
     android:clickable="true"
     android:focusable="true"
-    android:background="@drawable/custom_ripple"
     android:longClickable="true">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/custom_image_holder"
         android:layout_width="match_parent"
         android:layout_height="115dp"
-        android:layout_gravity="top"
-        android:orientation="vertical">
+        android:layout_gravity="top">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <View
+            android:id="@+id/center_view"
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_centerInParent="true" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/image1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="#151515"
-                    android:scaleType="centerCrop" />
-
-                <ImageView
-                    android:id="@+id/image2"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="#151515"
-                    android:scaleType="centerCrop" />
-            </LinearLayout>
-        </RelativeLayout>
-
-        <RelativeLayout
+        <ImageView
+            android:id="@+id/image1"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@+id/center_view"
+            android:layout_alignRight="@+id/center_view"
+            android:layout_weight="1"
+            android:background="#151515"
+            android:scaleType="centerCrop" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/image2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@+id/center_view"
+            android:layout_alignLeft="@+id/center_view"
+            android:layout_weight="1"
+            android:background="#151515"
+            android:scaleType="centerCrop" />
 
-                <ImageView
-                    android:id="@+id/image3"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="#151515"
-                    android:scaleType="centerCrop" />
+        <ImageView
+            android:id="@+id/image3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignRight="@+id/center_view"
+            android:layout_alignTop="@+id/center_view"
+            android:layout_weight="1"
+            android:background="#151515"
+            android:scaleType="centerCrop" />
 
-                <ImageView
-                    android:id="@+id/image4"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="#151515"
-                    android:scaleType="centerCrop" />
-            </LinearLayout>
-        </RelativeLayout>
-    </LinearLayout>
+        <ImageView
+            android:id="@+id/image4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignLeft="@+id/center_view"
+            android:layout_alignTop="@+id/center_view"
+            android:layout_weight="1"
+            android:background="#151515"
+            android:scaleType="centerCrop" />
+
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/playlist_bottomHolder"
@@ -105,4 +96,5 @@
             android:textSize="8dp" />
 
     </RelativeLayout>
+
 </RelativeLayout>

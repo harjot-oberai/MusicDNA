@@ -120,11 +120,21 @@ public class EqualizerFragment extends Fragment {
 
         if (!HomeActivity.isEqualizerReloaded) {
             int x = 0;
-            if (PlayerFragment.bassBoost != null)
-                x = ((PlayerFragment.bassBoost.getRoundedStrength() * 19) / 1000);
+            if (PlayerFragment.bassBoost != null) {
+                try {
+                    x = ((PlayerFragment.bassBoost.getRoundedStrength() * 19) / 1000);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
 
-            if (PlayerFragment.presetReverb != null)
-                y = (PlayerFragment.presetReverb.getPreset() * 19) / 6;
+            if (PlayerFragment.presetReverb != null) {
+                try {
+                    y = (PlayerFragment.presetReverb.getPreset() * 19) / 6;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
 
             if (x == 0) {
                 bassController.setProgress(1);
@@ -157,8 +167,12 @@ public class EqualizerFragment extends Fragment {
             @Override
             public void onProgressChanged(int progress) {
                 HomeActivity.bassStrength = (short) (((float) 1000 / 19) * (progress));
-                PlayerFragment.bassBoost.setStrength(HomeActivity.bassStrength);
-                HomeActivity.equalizerModel.setBassStrength(HomeActivity.bassStrength);
+                try {
+                    PlayerFragment.bassBoost.setStrength(HomeActivity.bassStrength);
+                    HomeActivity.equalizerModel.setBassStrength(HomeActivity.bassStrength);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -167,7 +181,11 @@ public class EqualizerFragment extends Fragment {
             public void onProgressChanged(int progress) {
                 HomeActivity.reverbPreset = (short) ((progress * 6) / 19);
                 HomeActivity.equalizerModel.setReverbPreset(HomeActivity.reverbPreset);
-                PlayerFragment.presetReverb.setPreset(HomeActivity.reverbPreset);
+                try {
+                    PlayerFragment.presetReverb.setPreset(HomeActivity.reverbPreset);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 y = progress;
             }
         });

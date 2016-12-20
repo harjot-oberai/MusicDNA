@@ -166,40 +166,17 @@ public class SnappyRecyclerView extends RecyclerView {
 
     public void setTransparency() {
         final CustomAdapter.ViewHolder viewHolder = (CustomAdapter.ViewHolder) findViewHolderForAdapterPosition(currentPosition);
-        if (homeActivity.settings.isAlbumArtBackgroundEnabled()) {
-            if (viewHolder != null && viewHolder.albumArt != null)
-                viewHolder.albumArt.animate()
-                        .alpha(0.20f);
-        } else {
-            if (viewHolder != null && viewHolder.albumArt != null)
-                viewHolder.albumArt.animate()
-                        .alpha(0.0f);
+        if (homeActivity.settings != null) {
+            if (homeActivity.settings.isAlbumArtBackgroundEnabled()) {
+                if (viewHolder != null && viewHolder.albumArt != null)
+                    viewHolder.albumArt.animate()
+                            .alpha(0.20f);
+            } else {
+                if (viewHolder != null && viewHolder.albumArt != null)
+                    viewHolder.albumArt.animate()
+                            .alpha(0.0f);
+            }
         }
-//        if (viewHolder != null && viewHolder.albumArt != null) {
-//            Handler handler = new Handler();
-//            handler.postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    viewHolder.blurredAlbumArt.setAlpha(0.0f);
-//                    viewHolder.blurredAlbumArt.setVisibility(VISIBLE);
-//                    viewHolder.blurredAlbumArt.animate().alpha(1.0f).setDuration(1000);
-//                }
-//            },1000);
-//            Blurry.with(ctx)
-//                    .radius(30)
-//                    .sampling(4)
-//                    .color(Color.argb(200, 0, 0, 0))
-//                    .async(new Blurry.ImageComposer.ImageComposerListener() {
-//                        @Override
-//                        public void onImageReady(BitmapDrawable drawable) {
-//                            viewHolder.blurredAlbumArt.setAlpha(0.0f);
-//                            viewHolder.blurredAlbumArt.setVisibility(VISIBLE);
-//                            viewHolder.blurredAlbumArt.animate().alpha(1.0f).setDuration(1000);
-//                        }
-//                    })
-//                    .capture(viewHolder.albumArt)
-//                    .into(viewHolder.blurredAlbumArt);
-//        }
     }
 
     public void setActivity(HomeActivity homeActivity) {

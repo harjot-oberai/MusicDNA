@@ -709,7 +709,11 @@ public class HomeActivity extends AppCompatActivity
         tp.setFakeBoldText(true);
 
         copyrightText = (TextView) findViewById(R.id.copyright_text);
-        copyrightText.setTypeface(SplashActivity.tf3);
+        try {
+            copyrightText.setTypeface(SplashActivity.tf3);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         copyrightText.setText("\nMusic DNA v" + versionName);
 
         imgLoader = new ImageLoader(this);
@@ -770,7 +774,11 @@ public class HomeActivity extends AppCompatActivity
             }
         });
         queueClearText = (TextView) findViewById(R.id.clear_queue_txt);
-        queueClearText.setTypeface(SplashActivity.tf3);
+        try {
+            queueClearText.setTypeface(SplashActivity.tf3);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         queueClearText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1024,8 +1032,12 @@ public class HomeActivity extends AppCompatActivity
         });
 
         if (SplashActivity.tf3 != null) {
-            ((TextView) findViewById(R.id.playListRecyclerLabel)).setTypeface(SplashActivity.tf3);
-            ((TextView) findViewById(R.id.recentsRecyclerLabel)).setTypeface(SplashActivity.tf3);
+            try {
+                ((TextView) findViewById(R.id.playListRecyclerLabel)).setTypeface(SplashActivity.tf3);
+                ((TextView) findViewById(R.id.recentsRecyclerLabel)).setTypeface(SplashActivity.tf3);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         localNothingText = (TextView) findViewById(R.id.localNothingText);
@@ -1804,7 +1816,7 @@ public class HomeActivity extends AppCompatActivity
 
     public void hidePlayer() {
 
-        if (playerFragment.mVisualizerView != null)
+        if (playerFragment != null && playerFragment.mVisualizerView != null)
             playerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
@@ -1817,20 +1829,20 @@ public class HomeActivity extends AppCompatActivity
 
         isPlayerVisible = false;
 
-        if (playerFragment.cpb != null) {
+        if (playerFragment != null && playerFragment.cpb != null) {
             playerFragment.cpb.setAlpha(0.0f);
             playerFragment.cpb.setVisibility(View.VISIBLE);
             playerFragment.cpb.animate()
                     .alpha(1.0f);
         }
-        if (playerFragment.smallPlayer != null) {
+        if (playerFragment != null && playerFragment.smallPlayer != null) {
             playerFragment.smallPlayer.setAlpha(0.0f);
             playerFragment.smallPlayer.setVisibility(View.VISIBLE);
             playerFragment.smallPlayer.animate()
                     .alpha(1.0f);
         }
 
-        if (playerFragment.spToolbar != null) {
+        if (playerFragment != null && playerFragment.spToolbar != null) {
             playerFragment.spToolbar.animate()
                     .alpha(0.0f)
                     .withEndAction(new Runnable() {
@@ -1842,36 +1854,34 @@ public class HomeActivity extends AppCompatActivity
         }
 
         playerContainer.setVisibility(View.VISIBLE);
-        playerContainer.animate()
-                .translationY(playerContainer.getHeight() - playerFragment.smallPlayer.getHeight())
-                .setDuration(300);
+        if (playerFragment != null) {
+            playerContainer.animate()
+                    .translationY(playerContainer.getHeight() - playerFragment.smallPlayer.getHeight())
+                    .setDuration(300);
+        } else {
+            playerContainer.animate()
+                    .translationY(playerContainer.getHeight() - playerFragment.smallPlayer.getHeight())
+                    .setDuration(300)
+                    .setStartDelay(500);
+        }
 
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (isAllSavedDnaVisisble) {
-                    ViewSavedDNA vsdFrag = (ViewSavedDNA) fragMan.findFragmentByTag("allSavedDNAs");
-                    if (vsdFrag != null)
-                        vsdFrag.setVisualizerVisibility(View.VISIBLE);
-                }
-            }
-        }, 350);
+        if (playerFragment != null) {
 
-        playerFragment.player_controller.setAlpha(0.0f);
-        playerFragment.player_controller.setImageDrawable(playerFragment.mainTrackController.getDrawable());
+            playerFragment.player_controller.setAlpha(0.0f);
+            playerFragment.player_controller.setImageDrawable(playerFragment.mainTrackController.getDrawable());
 
-        playerFragment.player_controller.animate()
-                .alpha(1.0f);
+            playerFragment.player_controller.animate()
+                    .alpha(1.0f);
 
-        playerFragment.snappyRecyclerView.animate()
-                .alpha(0.0f)
-                .withEndAction(new Runnable() {
-                    @Override
-                    public void run() {
-                        playerFragment.snappyRecyclerView.setVisibility(GONE);
-                    }
-                });
+            playerFragment.snappyRecyclerView.animate()
+                    .alpha(0.0f)
+                    .withEndAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            playerFragment.snappyRecyclerView.setVisibility(GONE);
+                        }
+                    });
+        }
     }
 
     public void hidePlayer2() {
@@ -1941,26 +1951,26 @@ public class HomeActivity extends AppCompatActivity
 
 
         playerContainer.setVisibility(View.VISIBLE);
-        if (playerFragment.mVisualizerView != null)
+        if (playerFragment != null && playerFragment.mVisualizerView != null)
             playerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
 
-        if (playerFragment.player_controller != null) {
+        if (playerFragment != null && playerFragment.player_controller != null) {
             playerFragment.player_controller.setAlpha(1.0f);
             playerFragment.player_controller.animate()
                     .setDuration(300)
                     .alpha(0.0f);
         }
 
-        if (playerFragment.cpb != null) {
+        if (playerFragment != null && playerFragment.cpb != null) {
             playerFragment.cpb.animate()
                     .alpha(0.0f);
         }
-        if (playerFragment.smallPlayer != null) {
+        if (playerFragment != null && playerFragment.smallPlayer != null) {
             playerFragment.smallPlayer.animate()
                     .alpha(0.0f);
         }
 
-        if (playerFragment.spToolbar != null) {
+        if (playerFragment != null && playerFragment.spToolbar != null) {
             playerFragment.spToolbar.setVisibility(View.VISIBLE);
             playerFragment.spToolbar.animate().alpha(1.0f);
         }
@@ -1981,7 +1991,7 @@ public class HomeActivity extends AppCompatActivity
                 });
 
 
-        if (playerFragment.snappyRecyclerView != null) {
+        if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
             playerFragment.snappyRecyclerView.setVisibility(View.VISIBLE);
             playerFragment.snappyRecyclerView.animate()
                     .alpha(1.0f)
@@ -1992,7 +2002,7 @@ public class HomeActivity extends AppCompatActivity
         handler2.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (playerFragment.mVisualizerView != null)
+                if (playerFragment != null && playerFragment.mVisualizerView != null)
                     playerFragment.mVisualizerView.setVisibility(View.VISIBLE);
             }
         }, 400);

@@ -264,8 +264,11 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
                 }
             }
             if (((BitmapDrawable) pFragment.selected_track_image.getDrawable()).getBitmap() != null) {
-
-                metadataBuilder.putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART, ((BitmapDrawable) pFragment.selected_track_image.getDrawable()).getBitmap());
+                try {
+                    metadataBuilder.putBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART, ((BitmapDrawable) pFragment.selected_track_image.getDrawable()).getBitmap());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             m_objMediaSession.setMetadata(metadataBuilder.build());

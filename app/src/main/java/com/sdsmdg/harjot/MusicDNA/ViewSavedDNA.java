@@ -32,7 +32,10 @@ import android.widget.TextView;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.sdsmdg.harjot.MusicDNA.Models.SavedDNA;
+import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
 import com.squareup.leakcanary.RefWatcher;
+
+import java.util.ArrayList;
 
 
 /**
@@ -108,7 +111,11 @@ public class ViewSavedDNA extends Fragment {
             viewDnaRecycler.setVisibility(View.VISIBLE);
         }
 
-        vdAdapter = new ViewSavedDnaRecyclerAdapter(HomeActivity.savedDNAs.getSavedDNAs(), getContext(), this);
+        if (HomeActivity.savedDNAs != null)
+            vdAdapter = new ViewSavedDnaRecyclerAdapter(HomeActivity.savedDNAs.getSavedDNAs(), getContext(), this);
+        else
+            vdAdapter = new ViewSavedDnaRecyclerAdapter(new ArrayList<SavedDNA>(), getContext(), this);
+
         mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         viewDnaRecycler.setLayoutManager(mLayoutManager2);
         viewDnaRecycler.setItemAnimator(new DefaultItemAnimator());

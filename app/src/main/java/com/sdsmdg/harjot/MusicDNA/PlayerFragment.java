@@ -277,13 +277,15 @@ public class PlayerFragment extends Fragment implements
                 mainTrackController.setImageResource(R.drawable.ic_play_arrow_white_48dp);
                 isReplayIconVisible = false;
             }
-            mVisualizer.setEnabled(false);
+            if (mVisualizer != null)
+                mVisualizer.setEnabled(false);
             if (!isStart && mCallback7 != null)
                 mCallback7.onPlayPause();
         } else {
             if (!completed) {
                 setupVisualizerFxAndUI();
-                mVisualizer.setEnabled(true);
+                if (mVisualizer != null)
+                    mVisualizer.setEnabled(true);
                 if (homeActivity.isPlayerVisible) {
                     mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
                     player_controller.setImageResource(R.drawable.ic_queue_music_white_48dp);
@@ -300,7 +302,8 @@ public class PlayerFragment extends Fragment implements
                 mVisualizerView.clear();
                 mMediaPlayer.seekTo(0);
                 setupVisualizerFxAndUI();
-                mVisualizer.setEnabled(true);
+                if (mVisualizer != null)
+                    mVisualizer.setEnabled(true);
                 mMediaPlayer.start();
                 completed = false;
                 if (homeActivity.isPlayerVisible) {

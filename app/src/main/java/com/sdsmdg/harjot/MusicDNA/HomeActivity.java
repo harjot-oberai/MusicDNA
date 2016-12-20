@@ -679,6 +679,8 @@ public class HomeActivity extends AppCompatActivity
         screen_width = display.getWidth();
         screen_height = display.getHeight();
 
+        
+
         ratio = (float) screen_height / (float) 1920;
         ratio2 = (float) screen_width / (float) 1080;
         ratio = Math.min(ratio, ratio2);

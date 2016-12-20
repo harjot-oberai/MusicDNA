@@ -131,16 +131,17 @@
         android:layout_alignParentTop="true"
         android:background="@drawable/transparent_gradient">
 
-        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        <ImageView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/selected_track_image_sp_AB"
             android:layout_width="37dp"
             android:layout_height="37dp"
+            android:padding="5dp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="12dp"
             android:visibility="visible"
-            app:civ_border_color="#FF000000"
-            app:civ_border_width="0dp" />
+            android:tint="#FFFFFF"
+            android:src="@drawable/dropdown_icon"/>
 
         <TextView
             android:id="@+id/selected_track_title_sp_AB"
@@ -171,7 +172,7 @@
             android:maxLines="1"
             android:paddingLeft="5dp"
             android:text="Unknown"
-            android:textColor="#CCCCCC"
+            android:textColor="#EEEEEE"
             android:textSize="13sp" />
 
 

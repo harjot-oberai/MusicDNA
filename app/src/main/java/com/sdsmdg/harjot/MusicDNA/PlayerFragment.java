@@ -154,7 +154,7 @@ public class PlayerFragment extends Fragment implements
 
     RelativeLayout spToolbar;
     ImageView overflowMenuAB;
-    CircleImageView spImgAB;
+    ImageView spImgAB;
     TextView spTitleAB;
     TextView spArtistAB;
 
@@ -561,7 +561,7 @@ public class PlayerFragment extends Fragment implements
         spToolbar = (RelativeLayout) view.findViewById(R.id.smallPlayer_AB);
 
         overflowMenuAB = (ImageView) view.findViewById(R.id.menuIcon);
-        spImgAB = (CircleImageView) view.findViewById(R.id.selected_track_image_sp_AB);
+        spImgAB = (ImageView) view.findViewById(R.id.selected_track_image_sp_AB);
         spImgAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -815,10 +815,8 @@ public class PlayerFragment extends Fragment implements
             }
             if (track.getArtworkURL() != null) {
                 Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(selected_track_image);
-                Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(spImgAB);
             } else {
                 selected_track_image.setImageResource(R.drawable.ic_default);
-                spImgAB.setImageResource(R.drawable.ic_default);
             }
             try {
                 spTitleAB.setText(track.getTitle());
@@ -835,7 +833,6 @@ public class PlayerFragment extends Fragment implements
 
             }
             try {
-                imgLoader.DisplayImage(localTrack.getPath(), spImgAB);
                 imgLoader.DisplayImage(localTrack.getPath(), selected_track_image);
             } catch (Exception e) {
 
@@ -1236,10 +1233,8 @@ public class PlayerFragment extends Fragment implements
             durationInMilliSec = track.getDuration();
             if (track.getArtworkURL() != null) {
                 Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(selected_track_image);
-                Picasso.with(getActivity()).load(track.getArtworkURL()).resize(100, 100).into(spImgAB);
             } else {
                 selected_track_image.setImageResource(R.drawable.ic_default);
-                spImgAB.setImageResource(R.drawable.ic_default);
             }
             try {
                 spTitleAB.setText(track.getTitle());
@@ -1255,7 +1250,6 @@ public class PlayerFragment extends Fragment implements
 
             }
             try {
-                imgLoader.DisplayImage(localTrack.getPath(), spImgAB);
                 imgLoader.DisplayImage(localTrack.getPath(), selected_track_image);
             } catch (Exception e) {
 

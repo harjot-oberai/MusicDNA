@@ -90,8 +90,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
     @Override
     public IBinder onBind(Intent intent) {
         startIntent = intent;
-        IBinder binder = new LocalBinder();
-        return binder;
+        return new LocalBinder();
     }
 
     @Override
@@ -118,19 +117,19 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
 
         String action = intent.getAction();
 
-        if (action.equalsIgnoreCase(Constants.ACTION_PLAY)) {
+        if (m_objMediaController != null && action.equalsIgnoreCase(Constants.ACTION_PLAY)) {
             m_objMediaController.getTransportControls().play();
-        } else if (action.equalsIgnoreCase(Constants.ACTION_PAUSE)) {
+        } else if (m_objMediaController != null && action.equalsIgnoreCase(Constants.ACTION_PAUSE)) {
             m_objMediaController.getTransportControls().pause();
-        } else if (action.equalsIgnoreCase(Constants.ACTION_FAST_FORWARD)) {
+        } else if (m_objMediaController != null && action.equalsIgnoreCase(Constants.ACTION_FAST_FORWARD)) {
             m_objMediaController.getTransportControls().fastForward();
-        } else if (action.equalsIgnoreCase(Constants.ACTION_REWIND)) {
+        } else if (m_objMediaController != null && action.equalsIgnoreCase(Constants.ACTION_REWIND)) {
             m_objMediaController.getTransportControls().rewind();
-        } else if (action.equalsIgnoreCase(Constants.ACTION_PREVIOUS)) {
+        } else if (m_objMediaController != null && action.equalsIgnoreCase(Constants.ACTION_PREVIOUS)) {
             m_objMediaController.getTransportControls().skipToPrevious();
-        } else if (action.equalsIgnoreCase(Constants.ACTION_NEXT)) {
+        } else if (m_objMediaController != null && action.equalsIgnoreCase(Constants.ACTION_NEXT)) {
             m_objMediaController.getTransportControls().skipToNext();
-        } else if (action.equalsIgnoreCase(Constants.ACTION_STOP)) {
+        } else if (m_objMediaController != null && action.equalsIgnoreCase(Constants.ACTION_STOP)) {
             m_objMediaController.getTransportControls().stop();
         }
     }
@@ -146,7 +145,8 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
         PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), 1, intent, 0);
 
         String artist;
-        if (pFragment.localIsPlaying) {
+
+        if (pFragment != null && pFragment.localIsPlaying) {
             artist = pFragment.localTrack.getArtist();
         } else {
             artist = "";
@@ -160,6 +160,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
         try {
             bmp = ((BitmapDrawable) pFragment.selected_track_image.getDrawable()).getBitmap();
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
         if (bmp == null) {

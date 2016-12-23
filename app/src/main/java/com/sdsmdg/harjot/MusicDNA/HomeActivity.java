@@ -629,7 +629,8 @@ public class HomeActivity extends AppCompatActivity
             if (flag == 0) {
                 isFavourite = false;
             }
-            frag.refresh();
+            if (frag != null)
+                frag.refresh();
         }
 
         if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
@@ -993,7 +994,7 @@ public class HomeActivity extends AppCompatActivity
             public void onClick(View v) {
                 if (queue != null && queue.getQueue().size() > 0) {
                     onQueueItemClicked(queueCurrentIndex);
-                    bottomToolbar.setVisibility(View.INVISIBLE);
+                    bottomToolbar.setVisibility(View.GONE);
                 }
             }
         });
@@ -1005,7 +1006,7 @@ public class HomeActivity extends AppCompatActivity
             public void onClick(View v) {
                 if (queue != null && queue.getQueue().size() > 0) {
                     onQueueItemClicked(queueCurrentIndex);
-                    bottomToolbar.setVisibility(View.INVISIBLE);
+                    bottomToolbar.setVisibility(View.GONE);
                 }
             }
         });
@@ -1818,6 +1819,7 @@ public class HomeActivity extends AppCompatActivity
 
         if (playerFragment != null && playerFragment.mVisualizerView != null)
             playerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
+
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
         if (Build.VERSION.SDK_INT >= 21) {
@@ -2803,7 +2805,7 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onHeadsetNextClicked() {
         PlayerFragment pFrag = getPlayerFragment();
-        if (pFrag != null) {
+        if (pFrag != null && !isReloaded) {
             pFrag.nextTrackController.performClick();
         }
     }
@@ -2811,7 +2813,7 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onHeadsetPreviousClicked() {
         PlayerFragment pFrag = getPlayerFragment();
-        if (pFrag != null) {
+        if (pFrag != null && !isReloaded) {
             pFrag.previousTrackController.performClick();
         }
     }
@@ -2819,7 +2821,7 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onHeadsetPlayPauseClicked() {
         PlayerFragment pFrag = getPlayerFragment();
-        if (pFrag != null) {
+        if (pFrag != null && !isReloaded) {
             if (pFrag.mMediaPlayer != null && pFrag.mMediaPlayer.isPlaying()) {
                 if (pFrag.isReplayIconVisible) {
                     hasQueueEnded = true;
@@ -3929,7 +3931,7 @@ public class HomeActivity extends AppCompatActivity
     }
 
     public void HideBottomFakeToolbar() {
-        bottomToolbar.setVisibility(View.INVISIBLE);
+        bottomToolbar.setVisibility(View.GONE);
     }
 
     public static void addToFavourites(UnifiedTrack ut) {
@@ -4136,9 +4138,9 @@ public class HomeActivity extends AppCompatActivity
                     }
 
                     if (equalizerModel == null) {
+                        equalizerModel = new EqualizerModel();
                         isEqualizerEnabled = true;
                         isEqualizerReloaded = false;
-                        equalizerModel = new EqualizerModel();
                         equalizerSwitch.setChecked(true);
                     } else {
                         isEqualizerEnabled = equalizerModel.isEqualizerEnabled();

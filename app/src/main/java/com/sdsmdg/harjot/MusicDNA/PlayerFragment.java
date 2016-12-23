@@ -551,6 +551,8 @@ public class PlayerFragment extends Fragment implements
 
         rootView = (SlidingRelativeLayout) view.findViewById(R.id.root_view);
 
+        smallPlayer = (RelativeLayout) view.findViewById(R.id.smallPlayer);
+
         snappyRecyclerView = (SnappyRecyclerView) view.findViewById(R.id.visualizer_recycler);
 
         fullscreenExtraSpaceOccupier = view.findViewById(R.id.fullscreen_extra_space_occupier);
@@ -569,9 +571,11 @@ public class PlayerFragment extends Fragment implements
         spImgAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                homeActivity.hidePlayer();
-                homeActivity.showTabs();
-                homeActivity.isPlayerVisible = false;
+                if (!homeActivity.isPlayerTransitioning) {
+                    homeActivity.hidePlayer();
+                    homeActivity.showTabs();
+                    homeActivity.isPlayerVisible = false;
+                }
             }
         });
         spTitleAB = (TextView) view.findViewById(R.id.selected_track_title_sp_AB);
@@ -731,8 +735,6 @@ public class PlayerFragment extends Fragment implements
         selected_track_title = (TextView) view.findViewById(R.id.selected_track_title_sp);
         selected_track_artist = (TextView) view.findViewById(R.id.selected_track_artist_sp);
         player_controller = (ImageView) view.findViewById(R.id.player_control_sp);
-
-        smallPlayer = (RelativeLayout) view.findViewById(R.id.smallPlayer);
 
         nextControllerSp = (ImageView) view.findViewById(R.id.next_controller_sp);
 

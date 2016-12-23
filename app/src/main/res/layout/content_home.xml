@@ -68,7 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/localRecyclerLabelContainer"
-            android:padding="5dp"/>
+            android:padding="5dp" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -194,7 +194,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/recentsRecyclerLabel"
-                    android:padding="5dp"/>
+                    android:padding="5dp" />
             </RelativeLayout>
 
             <View
@@ -271,7 +271,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/playlist_label_container"
-                    android:padding="5dp"/>
+                    android:padding="5dp" />
             </RelativeLayout>
 
             <View
@@ -297,8 +297,8 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:alpha="1"
                         android:layout_margin="5dp"
+                        android:alpha="1"
                         android:background="@drawable/local_card_3" />
 
                     <ImageView
@@ -332,16 +332,16 @@
                         android:id="@+id/favBanner"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
                         android:layout_margin="5dp"
+                        android:layout_weight="1"
                         android:background="@drawable/fav_card" />
 
                     <ImageView
                         android:id="@+id/recentBanner"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
                         android:layout_margin="5dp"
+                        android:layout_weight="1"
                         android:background="@drawable/recents_card" />
                 </LinearLayout>
 
@@ -357,16 +357,16 @@
                         android:id="@+id/folderBanner"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
                         android:layout_margin="5dp"
+                        android:layout_weight="1"
                         android:background="@drawable/folder_card" />
 
                     <ImageView
                         android:id="@+id/savedDNABanner"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
                         android:layout_margin="5dp"
+                        android:layout_weight="1"
                         android:background="@drawable/saved_card" />
                 </LinearLayout>
 
@@ -461,13 +461,13 @@
         android:id="@+id/equalizer_queue_frag_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:translationZ="8dp" />
+        android:translationZ="10dp" />
 
     <!--<FrameLayout-->
-        <!--android:id="@+id/player_frag_container"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:translationZ="10dp"/>-->
+    <!--android:id="@+id/player_frag_container"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:translationZ="10dp"/>-->
 
 </RelativeLayout>
 

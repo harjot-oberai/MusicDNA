@@ -98,7 +98,7 @@ public class ViewPlaylistFragment extends Fragment implements PlaylistTrackAdapt
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                getActivity().onBackPressed();
             }
         });
 

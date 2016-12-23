@@ -115,32 +115,17 @@
 
     <include layout="@layout/content_home" />
 
-    <RelativeLayout
+    <FrameLayout
+        android:id="@+id/fragContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:translationZ="5dp">
+        android:translationZ="5dp" />
 
-        <FrameLayout
-            android:id="@+id/fragContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/bottom_margin_layout" />
-
-        <FrameLayout
-            android:id="@+id/content_frag"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/bottom_margin_layout" />
-
-        <View
-            android:id="@+id/bottom_margin_layout"
-            android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/colorDark"
-            android:clickable="true" />
-
-    </RelativeLayout>
+    <FrameLayout
+        android:id="@+id/content_frag"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:translationZ="5dp" />
 
     <FrameLayout
         android:id="@+id/player_frag_container"

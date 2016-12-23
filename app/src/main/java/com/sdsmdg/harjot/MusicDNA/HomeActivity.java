@@ -2599,11 +2599,10 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onFolderContentPlayAll() {
-        List<UnifiedTrack> lut = new ArrayList<>();
+        queue.getQueue().clear();
         for (int i = 0; i < tempFolderContent.size(); i++) {
-            lut.add(new UnifiedTrack(true, tempFolderContent.get(i), null));
+            queue.getQueue().add(new UnifiedTrack(true, tempFolderContent.get(i), null));
         }
-        queue.setQueue(lut);
         queueCurrentIndex = 0;
         onPlaylistMenuPLayAll();
     }

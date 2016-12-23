@@ -11,13 +11,14 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/favouriteRecycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottom_margin_layout" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fav_play_all_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/bottom_margin_layout"
         android:layout_alignParentRight="true"
         android:layout_margin="16dp"
         android:clickable="true"
@@ -62,5 +63,13 @@
             android:textSize="15dp" />
 
     </LinearLayout>
+
+    <View
+        android:id="@+id/bottom_margin_layout"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorDark"
+        android:clickable="true" />
 
 </RelativeLayout>

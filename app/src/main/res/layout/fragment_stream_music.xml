@@ -3,14 +3,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorDark"
-    android:padding="5dp"
     android:clickable="true"
+    android:padding="5dp"
     tools:context="com.sdsmdg.harjot.MusicDNA.StreamMusicFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/trackList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorDark"></android.support.v7.widget.RecyclerView>
+        android:layout_above="@+id/bottom_margin_layout"
+        android:background="@color/colorDark" />
+
+    <View
+        android:id="@+id/bottom_margin_layout"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorDark"
+        android:clickable="true" />
 
 </RelativeLayout>

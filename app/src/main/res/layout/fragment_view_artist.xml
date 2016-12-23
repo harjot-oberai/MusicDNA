@@ -26,13 +26,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/artist_title"
-        android:background="@color/colorDark" />
+        android:background="@color/colorDark"
+        android:layout_above="@+id/bottom_margin_layout"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/play_all_fab_artist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/bottom_margin_layout"
         android:layout_alignParentRight="true"
         android:layout_margin="16dp"
         android:clickable="true"
@@ -44,5 +45,13 @@
         app:elevation="6dp"
         app:pressedTranslationZ="9dp"
         app:rippleColor="#888888" />
+
+    <View
+        android:id="@+id/bottom_margin_layout"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorDark"
+        android:clickable="true" />
 
 </RelativeLayout>

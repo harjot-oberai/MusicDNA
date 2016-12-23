@@ -101,11 +101,19 @@
         android:id="@+id/edit_song_save_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/bottom_margin_layout"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"
         android:text="SAVE"
         android:textColor="#FFF"
         android:textSize="17dp" />
+
+    <View
+        android:id="@+id/bottom_margin_layout"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorDark"
+        android:clickable="true" />
 
 </RelativeLayout>

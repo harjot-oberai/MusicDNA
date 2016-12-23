@@ -10,7 +10,8 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/all_playlists_recycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottom_margin_layout" />
 
     <LinearLayout
         android:id="@+id/noPlaylistContent"
@@ -49,7 +50,7 @@
         android:id="@+id/new_playlist_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/bottom_margin_layout"
         android:layout_alignParentRight="true"
         android:layout_margin="16dp"
         android:clickable="true"
@@ -60,5 +61,13 @@
         app:elevation="6dp"
         app:pressedTranslationZ="9dp"
         app:rippleColor="#888888" />
+
+    <View
+        android:id="@+id/bottom_margin_layout"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorDark"
+        android:clickable="true" />
 
 </RelativeLayout>

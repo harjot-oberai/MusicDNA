@@ -47,13 +47,13 @@
         android:layout_above="@+id/bottom_container"
         android:layout_below="@+id/search_container"
         android:layout_marginTop="3dp"
-        android:background="@color/colorDark"></android.support.v7.widget.RecyclerView>
+        android:background="@color/colorDark"/>
 
     <RelativeLayout
         android:id="@+id/bottom_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/bottom_margin_layout"
         android:background="#080808"
         android:padding="5dp">
 
@@ -113,5 +113,13 @@
         </LinearLayout>
 
     </RelativeLayout>
+
+    <View
+        android:id="@+id/bottom_margin_layout"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorDark"
+        android:clickable="true" />
 
 </RelativeLayout>

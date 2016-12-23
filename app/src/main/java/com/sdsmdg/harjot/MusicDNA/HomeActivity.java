@@ -324,16 +324,11 @@ public class HomeActivity extends AppCompatActivity
     static int screen_height;
 
     Toolbar toolbar;
-    //    Toolbar spToolbar;
     Toolbar equalizerToolbar;
 
     Toolbar queueToolbar;
     ImageView queueBackButton;
     TextView queueClearText;
-
-    Toolbar fragmentToolbar;
-    ImageView fragmentBackButton;
-    TextView fragmentToolbarTitle;
 
     static int themeColor = Color.parseColor("#B24242");
     static float minAudioStrength = 0.40f;
@@ -674,6 +669,7 @@ public class HomeActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
@@ -833,16 +829,6 @@ public class HomeActivity extends AppCompatActivity
             }
         });
 
-        fragmentToolbar = (Toolbar) findViewById(R.id.standard_fragment_toolbar);
-        fragmentBackButton = (ImageView) findViewById(R.id.fragment_toolbar_back_button_img);
-        fragmentBackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-        fragmentToolbarTitle = (TextView) findViewById(R.id.fragment_toolbar_title);
-
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -994,7 +980,7 @@ public class HomeActivity extends AppCompatActivity
             public void onClick(View v) {
                 if (queue != null && queue.getQueue().size() > 0) {
                     onQueueItemClicked(queueCurrentIndex);
-                    bottomToolbar.setVisibility(View.GONE);
+                    bottomToolbar.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -1006,7 +992,7 @@ public class HomeActivity extends AppCompatActivity
             public void onClick(View v) {
                 if (queue != null && queue.getQueue().size() > 0) {
                     onQueueItemClicked(queueCurrentIndex);
-                    bottomToolbar.setVisibility(View.GONE);
+                    bottomToolbar.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -1772,24 +1758,7 @@ public class HomeActivity extends AppCompatActivity
         toolbar.animate()
                 .setDuration(300)
                 .translationY(-1 * toolbar.getHeight())
-                .alpha(0.0f)
-                .withEndAction(new Runnable() {
-                    @Override
-                    public void run() {
-//                        toolbar.setVisibility(View.GONE);
-                    }
-                });
-
-        fragmentToolbar.animate()
-                .setDuration(300)
-                .translationY(-1 * fragmentToolbar.getHeight())
-                .alpha(0.0f)
-                .withEndAction(new Runnable() {
-                    @Override
-                    public void run() {
-//                        toolbar.setVisibility(View.GONE);
-                    }
-                });
+                .alpha(0.0f);
 
     }
 
@@ -1797,7 +1766,6 @@ public class HomeActivity extends AppCompatActivity
 
         if (isFullScreenEnabled) {
             toolbar.setVisibility(View.INVISIBLE);
-            fragmentToolbar.setVisibility(View.INVISIBLE);
         }
 
         toolbar.setAlpha(0.0f);
@@ -1805,14 +1773,6 @@ public class HomeActivity extends AppCompatActivity
                 .setDuration(300)
                 .translationY(0)
                 .alpha(1.0f);
-
-        fragmentToolbar.setAlpha(0.0f);
-        fragmentToolbar.animate()
-                .setDuration(300)
-                .translationY(0)
-                .alpha(1.0f);
-
-
     }
 
     public void hidePlayer() {
@@ -1916,7 +1876,7 @@ public class HomeActivity extends AppCompatActivity
         if (playerFragment.mVisualizerView != null)
             playerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
 
-        setUpFragmentToolbar(Color.BLACK, "Queue");
+//        setUpFragmentToolbar(Color.BLACK, "Queue");
         switchToolbar(toolbar, queueToolbar, "left");
 
         final Handler handler2 = new Handler();
@@ -2658,27 +2618,15 @@ public class HomeActivity extends AppCompatActivity
     public void onFullScreen() {
         if (isFullScreenEnabled) {
             Toast.makeText(this, "Long Press to Exit", Toast.LENGTH_SHORT).show();
-            View decorView = getWindow().getDecorView();
-//            int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-//                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-//                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-//                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-//                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-            int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
 
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
 
-//            decorView.setSystemUiVisibility(uiOptions);
             ActionBar actionBar = getSupportActionBar();
             actionBar.hide();
         } else {
-            View decorView = getWindow().getDecorView();
-            int uiOptions = View.SYSTEM_UI_FLAG_VISIBLE;
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-//            decorView.setSystemUiVisibility(uiOptions);
+//            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
             ActionBar actionBar = getSupportActionBar();
             actionBar.show();
         }
@@ -3289,7 +3237,6 @@ public class HomeActivity extends AppCompatActivity
         }
 
         if (type.equals("local") && !isLocalVisible) {
-            setTitle("Local");
             navigationView.setCheckedItem(R.id.nav_local);
             isLocalVisible = true;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
@@ -3320,9 +3267,6 @@ public class HomeActivity extends AppCompatActivity
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
         } else if (type.equals("stream") && !isStreamVisible) {
-            setTitle("SoundCloud");
-            setUpFragmentToolbar(themeColor, (String) getTitle());
-            switchToolbar(toolbar, fragmentToolbar, "left");
             isStreamVisible = true;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             StreamMusicFragment newFragment = (StreamMusicFragment) fm.findFragmentByTag("stream");
@@ -3339,10 +3283,6 @@ public class HomeActivity extends AppCompatActivity
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
         } else if (type.equals("playlist") && !isPlaylistVisible) {
-            setTitle(tempPlaylist.getPlaylistName());
-            setUpFragmentToolbar(themeColor, (String) getTitle());
-            if (!isAllPlaylistVisible)
-                switchToolbar(toolbar, fragmentToolbar, "left");
             isPlaylistVisible = true;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             ViewPlaylistFragment newFragment = (ViewPlaylistFragment) fm.findFragmentByTag("playlist");
@@ -3371,9 +3311,6 @@ public class HomeActivity extends AppCompatActivity
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
         } else if (type.equals("favourite") && !isFavouriteVisible) {
-            setTitle("Favourites");
-            setUpFragmentToolbar(themeColor, (String) getTitle());
-            switchToolbar(toolbar, fragmentToolbar, "left");
             navigationView.setCheckedItem(R.id.nav_fav);
             isFavouriteVisible = true;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
@@ -3391,10 +3328,6 @@ public class HomeActivity extends AppCompatActivity
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
         } else if (type.equals("newPlaylist") && !isNewPlaylistVisible) {
-            setTitle("Add to Playlist");
-            setUpFragmentToolbar(themeColor, (String) getTitle());
-            if (!isAllPlaylistVisible)
-                switchToolbar(toolbar, fragmentToolbar, "left");
             navigationView.setCheckedItem(R.id.nav_playlists);
             isNewPlaylistVisible = true;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
@@ -3412,9 +3345,6 @@ public class HomeActivity extends AppCompatActivity
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
         } else if (type.equals("allPlaylists") && !isAllPlaylistVisible) {
-            setTitle("All Playlists");
-            setUpFragmentToolbar(themeColor, (String) getTitle());
-            switchToolbar(toolbar, fragmentToolbar, "left");
             navigationView.setCheckedItem(R.id.nav_playlists);
             isAllPlaylistVisible = true;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
@@ -3432,8 +3362,6 @@ public class HomeActivity extends AppCompatActivity
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
         } else if (type.equals("folderContent") && !isFolderContentVisible) {
-            setTitle(tempMusicFolder.getFolderName());
-            setUpFragmentToolbar(themeColor, (String) getTitle());
             isFolderContentVisible = true;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             FolderContentFragment newFragment = (FolderContentFragment) fm.findFragmentByTag("folderContent");
@@ -3450,9 +3378,6 @@ public class HomeActivity extends AppCompatActivity
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
         } else if (type.equals("allFolders") && !isAllFolderVisible) {
-            setTitle("Folders");
-            setUpFragmentToolbar(themeColor, (String) getTitle());
-            switchToolbar(toolbar, fragmentToolbar, "left");
             navigationView.setCheckedItem(R.id.nav_folder);
             isAllFolderVisible = true;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
@@ -3470,9 +3395,6 @@ public class HomeActivity extends AppCompatActivity
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
         } else if (type.equals("allSavedDNAs") && !isAllSavedDnaVisisble) {
-            setTitle("Saved DNAs");
-            setUpFragmentToolbar(themeColor, (String) getTitle());
-            switchToolbar(toolbar, fragmentToolbar, "left");
             navigationView.setCheckedItem(R.id.nav_view);
             isAllSavedDnaVisisble = true;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
@@ -3490,9 +3412,6 @@ public class HomeActivity extends AppCompatActivity
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
         } else if (type.equals("viewAlbum") && !isAlbumVisible) {
-            setTitle(tempAlbum.getName());
-            setUpFragmentToolbar(themeColor, (String) getTitle());
-            switchToolbar(toolbar, fragmentToolbar, "left");
             isAlbumVisible = true;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             ViewAlbumFragment newFragment = (ViewAlbumFragment) fm.findFragmentByTag("viewAlbum");
@@ -3509,9 +3428,6 @@ public class HomeActivity extends AppCompatActivity
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
         } else if (type.equals("viewArtist") && !isArtistVisible) {
-            setTitle("Artist");
-            setUpFragmentToolbar(themeColor, (String) getTitle());
-            switchToolbar(toolbar, fragmentToolbar, "left");
             isArtistVisible = true;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             ViewArtistFragment newFragment = (ViewArtistFragment) fm.findFragmentByTag("viewArtist");
@@ -3528,10 +3444,7 @@ public class HomeActivity extends AppCompatActivity
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
         } else if (type.equals("recent") && !isRecentVisible) {
-            setTitle("Recently Played");
-            setUpFragmentToolbar(themeColor, (String) getTitle());
             navigationView.setCheckedItem(R.id.nav_recent);
-            switchToolbar(toolbar, fragmentToolbar, "left");
             isRecentVisible = true;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             RecentsFragment newFragment = (RecentsFragment) fm.findFragmentByTag("recent");
@@ -3548,9 +3461,6 @@ public class HomeActivity extends AppCompatActivity
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
         } else if (type.equals("settings") && !isSettingsVisible) {
-            setTitle("Settings");
-            setUpFragmentToolbar(themeColor, (String) getTitle());
-            switchToolbar(toolbar, fragmentToolbar, "left");
             isSettingsVisible = true;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             SettingsFragment newFragment = (SettingsFragment) fm.findFragmentByTag("settings");
@@ -3568,7 +3478,6 @@ public class HomeActivity extends AppCompatActivity
                     .commitAllowingStateLoss();
         } else if (type.equals("About") && !isAboutVisible) {
             setTitle("About");
-            setUpFragmentToolbar(themeColor, (String) getTitle());
             isAboutVisible = true;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             AboutFragment newFragment = (AboutFragment) fm.findFragmentByTag("About");
@@ -3585,13 +3494,6 @@ public class HomeActivity extends AppCompatActivity
                     .addToBackStack(null)
                     .commitAllowingStateLoss();
         } else if (type.equals("Edit") && !isEditVisible) {
-            setTitle("Edit");
-            if (isAlbumVisible || isArtistVisible) {
-                setUpFragmentToolbar(themeColor, (String) getTitle());
-            } else {
-                setUpFragmentToolbar(themeColor, (String) getTitle());
-                switchToolbar(toolbar, fragmentToolbar, "left");
-            }
             isEditVisible = true;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             EditLocalSongFragment newFragment = (EditLocalSongFragment) fm.findFragmentByTag("Edit");
@@ -3634,7 +3536,6 @@ public class HomeActivity extends AppCompatActivity
             }
         } else if (type.equals("stream")) {
             isStreamVisible = false;
-            switchToolbar(fragmentToolbar, toolbar, "instant");
             setTitle("Music DNA");
             navigationView.setCheckedItem(R.id.nav_home);
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
@@ -3646,11 +3547,6 @@ public class HomeActivity extends AppCompatActivity
             }
         } else if (type.equals("playlist")) {
             isPlaylistVisible = false;
-            if (!isAllPlaylistVisible) {
-                switchToolbar(fragmentToolbar, toolbar, "instant");
-            } else {
-                setUpFragmentToolbar(themeColor, "All Playlists");
-            }
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             android.support.v4.app.Fragment frag = fm.findFragmentByTag("playlist");
             if (frag != null) {
@@ -3670,7 +3566,6 @@ public class HomeActivity extends AppCompatActivity
             }
         } else if (type.equals("favourite")) {
             isFavouriteVisible = false;
-            switchToolbar(fragmentToolbar, toolbar, "instant");
             setTitle("Music DNA");
             navigationView.setCheckedItem(R.id.nav_home);
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
@@ -3682,12 +3577,6 @@ public class HomeActivity extends AppCompatActivity
             }
         } else if (type.equals("newPlaylist")) {
             isNewPlaylistVisible = false;
-            if (!isAllPlaylistVisible) {
-                switchToolbar(fragmentToolbar, toolbar, "instant");
-                setTitle("Music DNA");
-            } else {
-                setUpFragmentToolbar(themeColor, "All Playlists");
-            }
             navigationView.setCheckedItem(R.id.nav_home);
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             android.support.v4.app.Fragment frag = fm.findFragmentByTag("newPlaylist");
@@ -3698,7 +3587,6 @@ public class HomeActivity extends AppCompatActivity
             }
         } else if (type.equals("allPlaylists")) {
             isAllPlaylistVisible = false;
-            switchToolbar(fragmentToolbar, toolbar, "instant");
             setTitle("Music DNA");
             navigationView.setCheckedItem(R.id.nav_home);
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
@@ -3710,7 +3598,6 @@ public class HomeActivity extends AppCompatActivity
             }
         } else if (type.equals("folderContent")) {
             isFolderContentVisible = false;
-            setUpFragmentToolbar(themeColor, "Folders");
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             android.support.v4.app.Fragment frag = fm.findFragmentByTag("folderContent");
             if (frag != null) {
@@ -3720,7 +3607,6 @@ public class HomeActivity extends AppCompatActivity
             }
         } else if (type.equals("allFolders")) {
             isAllFolderVisible = false;
-            switchToolbar(fragmentToolbar, toolbar, "instant");
             setTitle("Music DNA");
             navigationView.setCheckedItem(R.id.nav_home);
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
@@ -3732,7 +3618,6 @@ public class HomeActivity extends AppCompatActivity
             }
         } else if (type.equals("allSavedDNAs")) {
             isAllSavedDnaVisisble = false;
-            switchToolbar(fragmentToolbar, toolbar, "instant");
             setTitle("Music DNA");
             navigationView.setCheckedItem(R.id.nav_home);
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
@@ -3744,8 +3629,6 @@ public class HomeActivity extends AppCompatActivity
             }
         } else if (type.equals("viewAlbum")) {
             isAlbumVisible = false;
-            switchToolbar(fragmentToolbar, toolbar, "instant");
-            setTitle("Local");
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             android.support.v4.app.Fragment frag = fm.findFragmentByTag("viewAlbum");
             if (frag != null) {
@@ -3755,8 +3638,6 @@ public class HomeActivity extends AppCompatActivity
             }
         } else if (type.equals("viewArtist")) {
             isArtistVisible = false;
-            switchToolbar(fragmentToolbar, toolbar, "instant");
-            setTitle("Local");
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             android.support.v4.app.Fragment frag = fm.findFragmentByTag("viewArtist");
             if (frag != null) {
@@ -3766,7 +3647,6 @@ public class HomeActivity extends AppCompatActivity
             }
         } else if (type.equals("recent")) {
             isRecentVisible = false;
-            switchToolbar(fragmentToolbar, toolbar, "instant");
             setTitle("Music DNA");
             navigationView.setCheckedItem(R.id.nav_home);
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
@@ -3778,7 +3658,6 @@ public class HomeActivity extends AppCompatActivity
             }
         } else if (type.equals("settings")) {
             isSettingsVisible = false;
-            switchToolbar(fragmentToolbar, toolbar, "instant");
             setTitle("Music DNA");
             navigationView.setCheckedItem(R.id.nav_home);
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
@@ -3790,7 +3669,6 @@ public class HomeActivity extends AppCompatActivity
             }
         } else if (type.equals("About")) {
             isAboutVisible = false;
-            setUpFragmentToolbar(themeColor, "Settings");
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             android.support.v4.app.Fragment frag = fm.findFragmentByTag("About");
             if (frag != null) {
@@ -3800,17 +3678,6 @@ public class HomeActivity extends AppCompatActivity
             }
         } else if (type.equals("Edit")) {
             isEditVisible = false;
-            if (isAlbumVisible) {
-                setUpFragmentToolbar(themeColor, tempAlbum.getName());
-            } else if (isArtistVisible) {
-                setUpFragmentToolbar(themeColor, tempArtist.getName());
-            } else if (isLocalVisible) {
-                setTitle("Local");
-                switchToolbar(fragmentToolbar, toolbar, "instant");
-            } else {
-                setTitle("Music DNA");
-                switchToolbar(fragmentToolbar, toolbar, "instant");
-            }
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             android.support.v4.app.Fragment frag = fm.findFragmentByTag("Edit");
             if (frag != null) {
@@ -3827,6 +3694,7 @@ public class HomeActivity extends AppCompatActivity
         hideFragment("stream");
         hideFragment("playlist");
         hideFragment("newPlaylist");
+        hideFragment("allPlaylists");
         hideFragment("equalizer");
         hideFragment("favourite");
         hideFragment("folderContent");
@@ -3931,7 +3799,7 @@ public class HomeActivity extends AppCompatActivity
     }
 
     public void HideBottomFakeToolbar() {
-        bottomToolbar.setVisibility(View.GONE);
+        bottomToolbar.setVisibility(View.INVISIBLE);
     }
 
     public static void addToFavourites(UnifiedTrack ut) {
@@ -4954,11 +4822,6 @@ public class HomeActivity extends AppCompatActivity
             if (!isFullScreenEnabled)
                 t2.setVisibility(View.VISIBLE);
         }
-    }
-
-    public void setUpFragmentToolbar(int color, String title) {
-        fragmentToolbar.setBackgroundColor(color);
-        fragmentToolbarTitle.setText(title);
     }
 
     public void clearQueue() {

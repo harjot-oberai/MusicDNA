@@ -160,7 +160,6 @@ public class SettingsFragment extends Fragment {
                                 homeActivity.settings.setThemeColor(color);
                                 homeActivity.themeColor = color;
                                 homeActivity.toolbar.setBackgroundColor(color);
-                                homeActivity.fragmentToolbar.setBackgroundColor(color);
                                 themeColorImg.setBackgroundColor(color);
                                 mCallback2.onColorChanged();
                                 if (Build.VERSION.SDK_INT >= 21) {

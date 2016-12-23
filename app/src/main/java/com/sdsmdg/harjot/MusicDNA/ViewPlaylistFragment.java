@@ -15,9 +15,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.sdsmdg.harjot.MusicDNA.Helpers.SimpleItemTouchHelperCallback;
+import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
+import com.sdsmdg.harjot.MusicDNA.Models.Track;
+import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
+import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
 import com.squareup.leakcanary.RefWatcher;
+import com.squareup.picasso.Picasso;
 
 
 /**
@@ -28,6 +35,11 @@ public class ViewPlaylistFragment extends Fragment implements PlaylistTrackAdapt
     RecyclerView playlistRecyler;
     PlaylistTrackAdapter plAdapter;
     FloatingActionButton playAll;
+
+    ImageView backdrop, backBtn;
+    TextView title;
+
+    ImageLoader imgLoader;
 
     ItemTouchHelper mItemTouchHelper;
 
@@ -56,6 +68,7 @@ public class ViewPlaylistFragment extends Fragment implements PlaylistTrackAdapt
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        imgLoader = new ImageLoader(context);
         try {
             mCallback = (onPLaylistItemClickedListener) context;
             mCallback2 = (onPlaylistPlayAllListener) context;
@@ -75,8 +88,36 @@ public class ViewPlaylistFragment extends Fragment implements PlaylistTrackAdapt
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        playlistRecyler = (RecyclerView) view.findViewById(R.id.view_playlist_recycler);
 
+        title = (TextView) view.findViewById(R.id.playlist_title);
+        if (SplashActivity.tf3 != null)
+            title.setTypeface(SplashActivity.tf3);
+        title.setText(HomeActivity.tempPlaylist.getPlaylistName());
+
+        backBtn = (ImageView) view.findViewById(R.id.view_playlist_back_btn);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        backdrop = (ImageView) view.findViewById(R.id.playlist_backdrop);
+        UnifiedTrack ut = HomeActivity.tempPlaylist.getSongList().get(0);
+        if (ut.getType()) {
+            LocalTrack lt = ut.getLocalTrack();
+            imgLoader.DisplayImage(lt.getPath(), backdrop);
+        } else {
+            Track t = ut.getStreamTrack();
+            Picasso.with(getContext())
+                    .load(t.getArtworkURL())
+                    .resize(100, 100)
+                    .error(R.drawable.ic_default)
+                    .placeholder(R.drawable.ic_default)
+                    .into(backdrop);
+        }
+
+        playlistRecyler = (RecyclerView) view.findViewById(R.id.view_playlist_recycler);
         plAdapter = new PlaylistTrackAdapter(HomeActivity.tempPlaylist.getSongList(), this, getContext());
         mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         playlistRecyler.setLayoutManager(mLayoutManager2);

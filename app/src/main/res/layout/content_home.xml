@@ -393,20 +393,6 @@
     </ScrollView>
 
     <FrameLayout
-        android:id="@+id/fragContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/bottomMargin"
-        android:translationZ="10dp"/>
-
-    <FrameLayout
-        android:id="@+id/content_frag"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/bottomMargin"
-        android:translationZ="10dp"/>
-
-    <FrameLayout
         android:id="@+id/bottomMargin"
         android:layout_width="match_parent"
         android:layout_height="65dp"
@@ -475,7 +461,7 @@
         android:id="@+id/equalizer_queue_frag_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:translationZ="10dp"/>
+        android:translationZ="8dp" />
 
     <!--<FrameLayout-->
         <!--android:id="@+id/player_frag_container"-->

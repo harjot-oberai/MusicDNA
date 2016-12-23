@@ -4,14 +4,61 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorDark"
-    android:padding="3dp"
     android:clickable="true"
     tools:context="com.sdsmdg.harjot.MusicDNA.ViewPlaylistFragment">
+
+    <RelativeLayout
+        android:id="@+id/playlist_header"
+        android:layout_width="match_parent"
+        android:layout_height="150dp">
+
+        <ImageView
+            android:id="@+id/playlist_backdrop"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/vertical_gradient" />
+
+        <RelativeLayout
+            android:id="@+id/playlist_action_container"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize">
+
+            <ImageView
+                android:id="@+id/view_playlist_back_btn"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:padding="12dp"
+                android:src="@drawable/back2" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/playlist_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/playlist_action_container"
+            android:gravity="center_vertical"
+            android:text="Playlist"
+            android:padding="12dp"
+            android:textColor="#FFFFFF"
+            android:textAlignment="gravity"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/view_playlist_recycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_below="@+id/playlist_header" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/play_all_fab"
@@ -21,9 +68,9 @@
         android:layout_alignParentRight="true"
         android:layout_margin="16dp"
         android:clickable="true"
-        android:src="@drawable/ic_play_arrow_white_48dp"
         android:scaleX="0.0"
         android:scaleY="0.0"
+        android:src="@drawable/ic_play_arrow_white_48dp"
         app:backgroundTint="#111111"
         app:borderWidth="0dp"
         app:elevation="6dp"

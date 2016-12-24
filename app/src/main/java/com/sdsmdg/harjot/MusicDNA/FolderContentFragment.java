@@ -17,11 +17,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.sdsmdg.harjot.MusicDNA.CustomBottomSheetDialogs.CustomGeneralBottomSheetDialog;
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
+import com.sdsmdg.harjot.MusicDNA.Models.Track;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
+import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
 import com.squareup.leakcanary.RefWatcher;
+import com.squareup.picasso.Picasso;
 
 
 /**
@@ -35,33 +40,37 @@ public class FolderContentFragment extends Fragment {
 
     FloatingActionButton playAllFAB;
 
-    onFolderContentPlayAllListener mCallback;
-    onFolderContentItemClickListener mCallback2;
-    folderContentAddToPlaylistListener mCallback3;
+    ImageLoader imgLoader;
+
+    ImageView backBtn, addToQueueIcon, backdrop;
+    TextView title, songsText, fragmentTitle;
+
+//    onFolderContentPlayAllListener mCallback;
+//    onFolderContentItemClickListener mCallback2;
+//    folderContentAddToPlaylistListener mCallback3;
+
+    folderCallbackListener mCallback;
 
     public FolderContentFragment() {
         // Required empty public constructor
     }
 
-    public interface onFolderContentPlayAllListener {
+    public interface folderCallbackListener {
         void onFolderContentPlayAll();
-    }
 
-    public interface onFolderContentItemClickListener {
         void onFolderContentItemClick(int position);
-    }
 
-    public interface folderContentAddToPlaylistListener {
-        public void addToPlaylist(UnifiedTrack ut);
+        void addToPlaylist(UnifiedTrack ut);
+
+        void folderAddToQueue();
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        imgLoader = new ImageLoader(context);
         try {
-            mCallback = (onFolderContentPlayAllListener) context;
-            mCallback2 = (onFolderContentItemClickListener) context;
-            mCallback3 = (folderContentAddToPlaylistListener) context;
+            mCallback = (folderCallbackListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnHeadlineSelectedListener");
@@ -78,6 +87,41 @@ public class FolderContentFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        fragmentTitle = (TextView) view.findViewById(R.id.folder_fragment_title);
+        if (SplashActivity.tf4 != null)
+            fragmentTitle.setTypeface(SplashActivity.tf4);
+
+        title = (TextView) view.findViewById(R.id.folder_title);
+        title.setText(HomeActivity.tempMusicFolder.getFolderName());
+
+        songsText = (TextView) view.findViewById(R.id.folder_tracks_text);
+        String s = "";
+        if (HomeActivity.tempMusicFolder.getLocalTracks().size() > 1)
+            s = "Songs";
+        else
+            s = "Song";
+        songsText.setText(HomeActivity.tempMusicFolder.getLocalTracks().size() + " " + s);
+
+        backBtn = (ImageView) view.findViewById(R.id.folder_content_back_btn);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
+
+        addToQueueIcon = (ImageView) view.findViewById(R.id.add_folder_to_queue_icon);
+        addToQueueIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallback.folderAddToQueue();
+            }
+        });
+
+        backdrop = (ImageView) view.findViewById(R.id.folder_backdrop);
+        LocalTrack lt = HomeActivity.tempFolderContent.get(0);
+        imgLoader.DisplayImage(lt.getPath(), backdrop);
 
         folderContentRecycler = (RecyclerView) view.findViewById(R.id.folder_content_recycler);
         fContentAdapter = new LocalTrackListAdapter(HomeActivity.tempFolderContent, getContext());
@@ -108,7 +152,7 @@ public class FolderContentFragment extends Fragment {
                 HomeActivity.localSelected = true;
                 HomeActivity.queueCall = false;
                 HomeActivity.isReloaded = false;
-                mCallback2.onFolderContentItemClick(position);
+                mCallback.onFolderContentItemClick(position);
                 return true;
             }
 

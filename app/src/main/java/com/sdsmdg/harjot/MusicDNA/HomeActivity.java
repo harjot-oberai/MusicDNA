@@ -159,9 +159,7 @@ public class HomeActivity extends AppCompatActivity
         PlayListFragment.newPlaylistListerner,
         PlaylistTrackAdapter.onPlaylistEmptyListener,
         FolderFragment.onFolderClickedListener,
-        FolderContentFragment.onFolderContentPlayAllListener,
-        FolderContentFragment.onFolderContentItemClickListener,
-        FolderContentFragment.folderContentAddToPlaylistListener,
+        FolderContentFragment.folderCallbackListener,
         ViewSavedDNA.onShareListener,
         AlbumFragment.onAlbumClickListener,
         ViewAlbumFragment.onAlbumSongClickListener,
@@ -2684,6 +2682,19 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void addToPlaylist(UnifiedTrack ut) {
         showAddToPlaylistDialog(ut);
+    }
+
+    @Override
+    public void folderAddToQueue() {
+        List<LocalTrack> list = tempFolderContent;
+        for (LocalTrack lt : list) {
+            HomeActivity.queue.addToQueue(new UnifiedTrack(true, lt, null));
+        }
+        if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
+            playerFragment.snappyRecyclerView.getAdapter().notifyDataSetChanged();
+            playerFragment.snappyRecyclerView.setTransparency();
+        }
+        Toast.makeText(ctx, "Added " + list.size() + " song(s) to queue", Toast.LENGTH_SHORT).show();
     }
 
     @Override

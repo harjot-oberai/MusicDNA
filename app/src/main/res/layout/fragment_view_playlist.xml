@@ -56,7 +56,7 @@
                 android:layout_toLeftOf="@+id/rename_playlist_icon"
                 android:clickable="true"
                 android:padding="14dp"
-                android:src="@drawable/ic_playlist_add_to_queue" />
+                android:src="@drawable/ic_add_to_queue" />
 
 
             <ImageView

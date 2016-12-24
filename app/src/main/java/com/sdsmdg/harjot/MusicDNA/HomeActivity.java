@@ -141,9 +141,8 @@ public class HomeActivity extends AppCompatActivity
         LocalMusicFragment.OnLocalTrackSelectedListener,
         StreamMusicFragment.OnTrackSelectedListener,
         QueueFragment.onQueueItemClickedListener,
-        ViewPlaylistFragment.onPLaylistItemClickedListener,
+        ViewPlaylistFragment.playlistCallbackListener,
         FavouritesFragment.onFavouriteItemClickedListener,
-        ViewPlaylistFragment.onPlaylistPlayAllListener,
         FavouritesFragment.onFavouritePlayAllListener,
         QueueFragment.onQueueSaveListener,
         PlayerFragment.onEqualizerClickedListener,
@@ -2454,6 +2453,25 @@ public class HomeActivity extends AppCompatActivity
     }
 
     @Override
+    public void playlistRename() {
+        renamePlaylistNumber = tempPlaylistNumber;
+        renamePlaylistDialog(tempPlaylist.getPlaylistName());
+    }
+
+    @Override
+    public void playlistAddToQueue() {
+        Playlist pl = HomeActivity.allPlaylists.getPlaylists().get(tempPlaylistNumber);
+        for (UnifiedTrack ut : pl.getSongList()) {
+            HomeActivity.queue.addToQueue(ut);
+        }
+        if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
+            playerFragment.snappyRecyclerView.getAdapter().notifyDataSetChanged();
+            playerFragment.snappyRecyclerView.setTransparency();
+        }
+        Toast.makeText(ctx, "Added " + pl.getSongList().size() + " song(s) to queue", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void onFavouriteItemClicked(int position) {
         UnifiedTrack ut = favouriteTracks.getFavourite().get(position);
         if (ut.getType()) {
@@ -3092,6 +3110,10 @@ public class HomeActivity extends AppCompatActivity
                         PlayListFragment plFrag = (PlayListFragment) fragMan.findFragmentByTag("allPlaylists");
                         if (plFrag != null) {
                             plFrag.itemChanged(renamePlaylistNumber);
+                        }
+                        if (isPlaylistVisible) {
+                            ViewPlaylistFragment vplFragment = (ViewPlaylistFragment) fragMan.findFragmentByTag("playlist");
+                            vplFragment.updateViewPlaylistFragment();
                         }
                         new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                         dialog.dismiss();
@@ -4842,8 +4864,10 @@ public class HomeActivity extends AppCompatActivity
                 i--;
             }
         }
-
-
+        if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
+            playerFragment.snappyRecyclerView.getAdapter().notifyDataSetChanged();
+            playerFragment.snappyRecyclerView.setTransparency();
+        }
     }
 
     public int getStatusBarHeight() {

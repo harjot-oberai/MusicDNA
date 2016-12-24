@@ -38,19 +38,75 @@
                 android:clickable="true"
                 android:padding="12dp"
                 android:src="@drawable/back2" />
+
+            <TextView
+                android:id="@+id/playlist_fragment_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="PLAYLIST"
+                android:textColor="#FFFFFF"
+                android:textSize="25sp" />
+
+            <ImageView
+                android:id="@+id/add_playlist_to_queue_icon"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/rename_playlist_icon"
+                android:clickable="true"
+                android:padding="14dp"
+                android:src="@drawable/ic_playlist_add_to_queue" />
+
+
+            <ImageView
+                android:id="@+id/rename_playlist_icon"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:padding="14dp"
+                android:src="@drawable/ic_edit" />
+
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/playlist_title"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/playlist_action_container"
-            android:gravity="center_vertical"
-            android:padding="12dp"
-            android:text="Playlist"
-            android:textAlignment="gravity"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/playlist_title"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:gravity="bottom"
+                android:paddingBottom="1dp"
+                android:paddingLeft="12dp"
+                android:text="Playlist"
+                android:textAlignment="gravity"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/playlist_tracks_text"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:gravity="top"
+                android:paddingLeft="12dp"
+                android:paddingTop="1dp"
+                android:text="Songs"
+                android:textAlignment="gravity"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp" />
+
+        </LinearLayout>
 
     </RelativeLayout>
 

@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.sdsmdg.harjot.MusicDNA.Helpers.SimpleItemTouchHelperCallback;
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
+import com.sdsmdg.harjot.MusicDNA.Models.Playlist;
 import com.sdsmdg.harjot.MusicDNA.Models.Track;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
@@ -30,14 +31,16 @@ import com.squareup.picasso.Picasso;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ViewPlaylistFragment extends Fragment implements PlaylistTrackAdapter.OnDragStartListener {
+public class ViewPlaylistFragment extends Fragment implements
+        PlaylistTrackAdapter.OnDragStartListener,
+        PlaylistTrackAdapter.OnMoveRemoveListener {
 
     RecyclerView playlistRecyler;
     PlaylistTrackAdapter plAdapter;
     FloatingActionButton playAll;
 
-    ImageView backdrop, backBtn;
-    TextView title;
+    ImageView backdrop, backBtn, renameIcon, addToQueueIcon;
+    TextView title, songsText, fragmentTitle;
 
     ImageLoader imgLoader;
 
@@ -45,20 +48,59 @@ public class ViewPlaylistFragment extends Fragment implements PlaylistTrackAdapt
 
     LinearLayoutManager mLayoutManager2;
 
-    onPLaylistItemClickedListener mCallback;
-    onPlaylistPlayAllListener mCallback2;
+    //    onPLaylistItemClickedListener mCallback;
+//    onPlaylistPlayAllListener mCallback2;
+    playlistCallbackListener mCallback;
 
     @Override
     public void onDragStarted(RecyclerView.ViewHolder viewHolder) {
         mItemTouchHelper.startDrag(viewHolder);
     }
 
-    public interface onPLaylistItemClickedListener {
-        public void onPLaylistItemClicked(int position);
+    @Override
+    public void updateViewPlaylistFragment() {
+
+        title.setText(HomeActivity.tempPlaylist.getPlaylistName());
+
+        String s = "";
+        if (HomeActivity.tempPlaylist.getSongList().size() > 1)
+            s = "Songs";
+        else
+            s = "Song";
+        songsText.setText(HomeActivity.tempPlaylist.getSongList().size() + " " + s);
+
+        UnifiedTrack ut = HomeActivity.tempPlaylist.getSongList().get(0);
+        if (ut.getType()) {
+            LocalTrack lt = ut.getLocalTrack();
+            imgLoader.DisplayImage(lt.getPath(), backdrop);
+        } else {
+            Track t = ut.getStreamTrack();
+            Picasso.with(getContext())
+                    .load(t.getArtworkURL())
+                    .resize(100, 100)
+                    .error(R.drawable.ic_default)
+                    .placeholder(R.drawable.ic_default)
+                    .into(backdrop);
+        }
+
     }
 
-    public interface onPlaylistPlayAllListener {
-        public void onPlaylistPLayAll();
+//    public interface onPLaylistItemClickedListener {
+//        public void onPLaylistItemClicked(int position);
+//    }
+//
+//    public interface onPlaylistPlayAllListener {
+//        public void onPlaylistPLayAll();
+//    }
+
+    public interface playlistCallbackListener {
+        void onPlaylistPLayAll();
+
+        void onPLaylistItemClicked(int position);
+
+        void playlistRename();
+
+        void playlistAddToQueue();
     }
 
     public ViewPlaylistFragment() {
@@ -70,8 +112,8 @@ public class ViewPlaylistFragment extends Fragment implements PlaylistTrackAdapt
         super.onAttach(context);
         imgLoader = new ImageLoader(context);
         try {
-            mCallback = (onPLaylistItemClickedListener) context;
-            mCallback2 = (onPlaylistPlayAllListener) context;
+            mCallback = (playlistCallbackListener) context;
+//            mCallback2 = (onPlaylistPlayAllListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnHeadlineSelectedListener");
@@ -89,16 +131,42 @@ public class ViewPlaylistFragment extends Fragment implements PlaylistTrackAdapt
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        fragmentTitle = (TextView) view.findViewById(R.id.playlist_fragment_title);
+        if (SplashActivity.tf4 != null)
+            fragmentTitle.setTypeface(SplashActivity.tf4);
+
         title = (TextView) view.findViewById(R.id.playlist_title);
-        if (SplashActivity.tf3 != null)
-            title.setTypeface(SplashActivity.tf3);
         title.setText(HomeActivity.tempPlaylist.getPlaylistName());
+
+        songsText = (TextView) view.findViewById(R.id.playlist_tracks_text);
+        String s = "";
+        if (HomeActivity.tempPlaylist.getSongList().size() > 1)
+            s = "Songs";
+        else
+            s = "Song";
+        songsText.setText(HomeActivity.tempPlaylist.getSongList().size() + " " + s);
 
         backBtn = (ImageView) view.findViewById(R.id.view_playlist_back_btn);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().onBackPressed();
+            }
+        });
+
+        renameIcon = (ImageView) view.findViewById(R.id.rename_playlist_icon);
+        renameIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallback.playlistRename();
+            }
+        });
+
+        addToQueueIcon = (ImageView) view.findViewById(R.id.add_playlist_to_queue_icon);
+        addToQueueIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallback.playlistAddToQueue();
             }
         });
 
@@ -156,7 +224,7 @@ public class ViewPlaylistFragment extends Fragment implements PlaylistTrackAdapt
                     HomeActivity.queue.addToQueue(HomeActivity.tempPlaylist.getSongList().get(i));
                 }
                 HomeActivity.queueCurrentIndex = 0;
-                mCallback2.onPlaylistPLayAll();
+                mCallback.onPlaylistPLayAll();
             }
         });
 

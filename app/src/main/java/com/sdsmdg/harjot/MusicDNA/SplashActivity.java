@@ -38,6 +38,7 @@ public class SplashActivity extends AppCompatActivity {
     static Typeface tf;
     static Typeface tf2;
     static Typeface tf3;
+    static Typeface tf4;
 
     ImageView img;
 
@@ -48,6 +49,9 @@ public class SplashActivity extends AppCompatActivity {
         img = (ImageView) findViewById(R.id.splash_img);
 
         try {
+            tf4 = Typeface.createFromAsset(getAssets(), "fonts/Intro_Cond_Light.otf");
+//            tf4 = Typeface.createFromAsset(getAssets(), "fonts/Moderne_Sans.ttf");
+//            tf4 = Typeface.createFromAsset(getAssets(), "fonts/Simplifica.ttf");
             tf3 = Typeface.createFromAsset(getAssets(), "fonts/Gidole-Regular.ttf");
             tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Regular.ttf");
             tf2 = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Medium.ttf");

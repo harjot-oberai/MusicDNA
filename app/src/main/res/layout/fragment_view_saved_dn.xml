@@ -57,7 +57,6 @@
         android:layout_width="match_parent"
         android:layout_height="135dp"
         android:layout_above="@+id/bottom_margin_layout"
-        android:layout_alignParentBottom="true"
         android:background="@color/colorDark"
         android:padding="1dp" />
 

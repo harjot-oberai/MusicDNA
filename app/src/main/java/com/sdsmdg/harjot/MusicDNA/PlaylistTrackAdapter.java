@@ -39,16 +39,23 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
         void onDragStarted(RecyclerView.ViewHolder viewHolder);
     }
 
+    public interface OnMoveRemoveListener {
+        void updateViewPlaylistFragment();
+    }
+
     public interface onPlaylistEmptyListener {
-        public void onPlaylistEmpty();
+        void onPlaylistEmpty();
     }
 
     private final OnDragStartListener mDragStartListener;
     public onPlaylistEmptyListener mCallback;
+    public OnMoveRemoveListener mCallback2;
 
-    public PlaylistTrackAdapter(List<UnifiedTrack> songList, OnDragStartListener listener, Context ctx) {
+    public PlaylistTrackAdapter(List<UnifiedTrack> songList, ViewPlaylistFragment fragContext, Context ctx) {
         this.songList = songList;
-        mDragStartListener = listener;
+        mDragStartListener = fragContext;
+        mCallback2 = fragContext;
+
         mCallback = (onPlaylistEmptyListener) ctx;
         this.ctx = ctx;
         homeActivity = (HomeActivity) ctx;
@@ -64,6 +71,7 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
             homeActivity.pAdapter.notifyDataSetChanged();
 
         homeActivity.updateAllPlaylistFragment();
+        mCallback2.updateViewPlaylistFragment();
 
         new HomeActivity.SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
@@ -78,6 +86,7 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
             mCallback.onPlaylistEmpty();
         } else if (homeActivity.pAdapter != null) {
             homeActivity.pAdapter.notifyDataSetChanged();
+            mCallback2.updateViewPlaylistFragment();
         }
 
         homeActivity.updateAllPlaylistFragment();

@@ -189,12 +189,6 @@
             android:src="@drawable/menu_overflow" />
     </RelativeLayout>
 
-    <View
-        android:id="@+id/fullscreen_extra_space_occupier"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_below="@+id/smallPlayer_AB" />
-
     <com.sdsmdg.harjot.MusicDNA.VisualizerView
         android:id="@+id/myvisualizerview"
         android:layout_width="match_parent"

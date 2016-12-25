@@ -82,8 +82,6 @@ public class PlayerFragment extends Fragment implements
 
     View bufferingIndicator;
 
-    View fullscreenExtraSpaceOccupier;
-
     static CustomProgressBar cpb;
 
     Pair<String, String> temp;
@@ -555,8 +553,6 @@ public class PlayerFragment extends Fragment implements
 
         snappyRecyclerView = (SnappyRecyclerView) view.findViewById(R.id.visualizer_recycler);
 
-        fullscreenExtraSpaceOccupier = view.findViewById(R.id.fullscreen_extra_space_occupier);
-
         bufferingIndicator = view.findViewById(R.id.bufferingIndicator);
         currTime = (TextView) view.findViewById(R.id.currTime);
         totalTime = (TextView) view.findViewById(R.id.totalTime);
@@ -780,7 +776,6 @@ public class PlayerFragment extends Fragment implements
                     seekBarContainer.setVisibility(View.VISIBLE);
                     toggleContainer.setVisibility(View.VISIBLE);
                     spToolbar.setVisibility(View.VISIBLE);
-                    fullscreenExtraSpaceOccupier.getLayoutParams().height = 0;
                     mCallback8.onFullScreen();
                 } else {
                     homeActivity.isFullScreenEnabled = true;
@@ -788,7 +783,6 @@ public class PlayerFragment extends Fragment implements
                     seekBarContainer.setVisibility(View.INVISIBLE);
                     toggleContainer.setVisibility(View.INVISIBLE);
                     spToolbar.setVisibility(View.INVISIBLE);
-                    fullscreenExtraSpaceOccupier.getLayoutParams().height = homeActivity.statusBarHeightinDp;
                     mCallback8.onFullScreen();
                 }
                 return true;
@@ -907,7 +901,6 @@ public class PlayerFragment extends Fragment implements
                                 seekBarContainer.setVisibility(View.VISIBLE);
                                 toggleContainer.setVisibility(View.VISIBLE);
                                 spToolbar.setVisibility(View.VISIBLE);
-                                fullscreenExtraSpaceOccupier.getLayoutParams().height = 0;
                                 mCallback8.onFullScreen();
                             } else {
                                 homeActivity.isFullScreenEnabled = true;
@@ -915,7 +908,6 @@ public class PlayerFragment extends Fragment implements
                                 seekBarContainer.setVisibility(View.INVISIBLE);
                                 toggleContainer.setVisibility(View.INVISIBLE);
                                 spToolbar.setVisibility(View.INVISIBLE);
-                                fullscreenExtraSpaceOccupier.getLayoutParams().height = homeActivity.statusBarHeightinDp;
                                 mCallback8.onFullScreen();
                             }
                         } else if (item.getTitle().equals("Settings")) {

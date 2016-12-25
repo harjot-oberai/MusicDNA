@@ -1405,7 +1405,6 @@ public class HomeActivity extends AppCompatActivity
             plFrag.seekBarContainer.setVisibility(View.VISIBLE);
             plFrag.toggleContainer.setVisibility(View.VISIBLE);
             plFrag.spToolbar.setVisibility(View.VISIBLE);
-            plFrag.fullscreenExtraSpaceOccupier.getLayoutParams().height = 0;
             onFullScreen();
         } else if (!searchView.isIconified()) {
             searchView.setQuery("", true);

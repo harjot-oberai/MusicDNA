@@ -15,11 +15,13 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.sdsmdg.harjot.MusicDNA.Models.Playlist;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
+import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
 import com.squareup.leakcanary.RefWatcher;
 
 
@@ -46,6 +48,12 @@ public class PlayListFragment extends Fragment {
 
     View bottomMarginLayout;
 
+    ImageView backBtn;
+    TextView allPlaylistFragmentTitle;
+    ImageView[] imgView = new ImageView[10];
+
+    ImageLoader imgLoader;
+
     public PlayListFragment() {
         // Required empty public constructor
     }
@@ -54,6 +62,8 @@ public class PlayListFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
+            imgLoader = new ImageLoader(context);
+            imgLoader.type = "all_playlist";
             homeActivity = (HomeActivity) context;
             mCallback = (onPlaylistTouchedListener) context;
             mCallback2 = (onPlaylistMenuPlayAllListener) context;
@@ -92,6 +102,20 @@ public class PlayListFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        backBtn = (ImageView) view.findViewById(R.id.all_playlist_back_btn);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
+
+        allPlaylistFragmentTitle = (TextView) view.findViewById(R.id.all_playlist_fragment_title);
+        if (SplashActivity.tf4 != null)
+            allPlaylistFragmentTitle.setTypeface(SplashActivity.tf4);
+
+        initializeHeaderImages(view);
 
         bottomMarginLayout = view.findViewById(R.id.bottom_margin_layout);
         if (HomeActivity.isReloaded)
@@ -228,6 +252,74 @@ public class PlayListFragment extends Fragment {
     public void itemRemoved(int position) {
         if (vpAdapter != null) {
             vpAdapter.notifyItemRemoved(position);
+        }
+    }
+
+    public void initializeHeaderImages(View v) {
+
+        imgView[0] = (ImageView) v.findViewById(R.id.all_playlist_img_1);
+        imgView[1] = (ImageView) v.findViewById(R.id.all_playlist_img_2);
+        imgView[2] = (ImageView) v.findViewById(R.id.all_playlist_img_3);
+        imgView[3] = (ImageView) v.findViewById(R.id.all_playlist_img_4);
+        imgView[4] = (ImageView) v.findViewById(R.id.all_playlist_img_5);
+        imgView[5] = (ImageView) v.findViewById(R.id.all_playlist_img_6);
+        imgView[6] = (ImageView) v.findViewById(R.id.all_playlist_img_7);
+        imgView[7] = (ImageView) v.findViewById(R.id.all_playlist_img_8);
+        imgView[8] = (ImageView) v.findViewById(R.id.all_playlist_img_9);
+        imgView[9] = (ImageView) v.findViewById(R.id.all_playlist_img_10);
+
+        int numPlaylists = HomeActivity.allPlaylists.getPlaylists().size();
+        Playlist pl1, pl2;
+        if (numPlaylists == 0) {
+            for (int i = 0; i < 10; i++) {
+                imgLoader.DisplayImage("all_playlist" + i, imgView[i]);
+            }
+        } else if (numPlaylists == 1) {
+            pl1 = HomeActivity.allPlaylists.getPlaylists().get(0);
+            for (int i = 0; i < Math.min(10, pl1.getSongList().size()); i++) {
+                UnifiedTrack ut = pl1.getSongList().get(i);
+                if (ut.getType())
+                    imgLoader.DisplayImage(ut.getLocalTrack().getPath(), imgView[i]);
+                else
+                    imgLoader.DisplayImage(ut.getStreamTrack().getArtworkURL(), imgView[i]);
+            }
+            if (pl1.getSongList().size() < 10) {
+                for (int i = pl1.getSongList().size(); i < 10; i++) {
+                    imgLoader.DisplayImage("all_playlist" + i, imgView[i]);
+                }
+            }
+        } else {
+            pl1 = HomeActivity.allPlaylists.getPlaylists().get(0);
+            pl2 = HomeActivity.allPlaylists.getPlaylists().get(1);
+            for (int i = 0; i < Math.min(10, pl1.getSongList().size()); i++) {
+                UnifiedTrack ut = pl1.getSongList().get(i);
+                if (ut.getType())
+                    imgLoader.DisplayImage(pl1.getSongList().get(i).getLocalTrack().getPath(), imgView[i]);
+                else
+                    imgLoader.DisplayImage(pl1.getSongList().get(i).getStreamTrack().getArtworkURL(), imgView[i]);
+            }
+            if (pl1.getSongList().size() < 10) {
+                if (pl2.getSongList().size() >= (10 - pl1.getSongList().size())) {
+                    for (int i = pl1.getSongList().size(); i < 10; i++) {
+                        UnifiedTrack ut = pl2.getSongList().get(i - pl1.getSongList().size());
+                        if (ut.getType())
+                            imgLoader.DisplayImage(ut.getLocalTrack().getPath(), imgView[i]);
+                        else
+                            imgLoader.DisplayImage(ut.getStreamTrack().getArtworkURL(), imgView[i]);
+                    }
+                } else {
+                    for (int i = pl1.getSongList().size(); i < 10 - pl2.getSongList().size() + 1; i++) {
+                        UnifiedTrack ut = pl2.getSongList().get(i - pl1.getSongList().size());
+                        if (ut.getType())
+                            imgLoader.DisplayImage(ut.getLocalTrack().getPath(), imgView[i]);
+                        else
+                            imgLoader.DisplayImage(ut.getStreamTrack().getArtworkURL(), imgView[i]);
+                    }
+                    for (int i = pl1.getSongList().size() + pl2.getSongList().size(); i < 10; i++) {
+                        imgLoader.DisplayImage("all_playlist" + i, imgView[i]);
+                    }
+                }
+            }
         }
     }
 

@@ -6,9 +6,11 @@ package com.sdsmdg.harjot.MusicDNA.imageLoader;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.media.MediaMetadataRetriever;
 import android.widget.ImageView;
 
@@ -25,6 +27,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Random;
 import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -37,23 +40,29 @@ public class ImageLoader {
     private Map<ImageView, String> imageViews = Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
     ExecutorService executorService;
     Context ctx;
+    public String type = "none";
+    Random random;
 
     public ImageLoader(Context context) {
         ctx = context;
         fileCache = new FileCache(context);
         executorService = Executors.newFixedThreadPool(5);
+        random = new Random();
     }
 
     final int stub_id = R.drawable.ic_default;
 
     public void DisplayImage(String url, ImageView imageView) {
         imageViews.put(imageView, url);
-        Bitmap bitmap = memoryCache.get(url);
+        Bitmap bitmap = null;
+        if (type.equals("none"))
+            bitmap = memoryCache.get(url);
         if (bitmap != null) {
             imageView.setImageBitmap(bitmap);
         } else {
             queuePhoto(url, imageView);
-            imageView.setImageResource(stub_id);
+            if (type.equals("none"))
+                imageView.setImageResource(stub_id);
         }
     }
 
@@ -64,8 +73,9 @@ public class ImageLoader {
 
     private Bitmap getBitmap(String url) {
         if (url == null) {
-//            return BitmapFactory.decodeResource(HomeActivity.ctx.getResources(), R.drawable.ic_default);
             return BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.ic_default);
+        } else if (url.contains("all_playlist")) {
+            return null;
         } else if (url.contains("https")) {
             File f = fileCache.getFile(url);
 
@@ -180,7 +190,8 @@ public class ImageLoader {
             if (imageViewReused(photoToLoad))
                 return;
             final Bitmap bmp = getBitmap(photoToLoad.url);
-            memoryCache.put(photoToLoad.url, bmp);
+            if (type.contains("none"))
+                memoryCache.put(photoToLoad.url, bmp);
             if (imageViewReused(photoToLoad)) {
                 return;
             }
@@ -194,7 +205,16 @@ public class ImageLoader {
                     if (bmp != null) {
                         photoToLoad.imageView.setImageBitmap(bmp);
                     } else {
-                        photoToLoad.imageView.setImageResource(stub_id);
+                        if (type.equals("none"))
+                            photoToLoad.imageView.setImageResource(stub_id);
+                        else if (type.equals("all_playlist")) {
+                            int r = random.nextInt(127) + 128;
+                            int g = random.nextInt(127) + 128;
+                            int b = random.nextInt(127) + 128;
+                            photoToLoad.imageView.setImageResource(R.drawable.ic_record_2);
+                            photoToLoad.imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                            photoToLoad.imageView.setImageTintList(ColorStateList.valueOf(Color.rgb(r, g, b)));
+                        }
                     }
                 }
             });
@@ -206,29 +226,6 @@ public class ImageLoader {
         if (tag == null || !tag.equals(photoToLoad.url))
             return true;
         return false;
-    }
-
-    //Used to display bitmap in the UI thread
-    class BitmapDisplayer implements Runnable {
-        Bitmap bitmap;
-        PhotoToLoad photoToLoad;
-
-        public BitmapDisplayer(Bitmap b, PhotoToLoad p) {
-            bitmap = b;
-            photoToLoad = p;
-        }
-
-        @Override
-        public void run() {
-            if (imageViewReused(photoToLoad)) {
-                return;
-            }
-            if (bitmap != null) {
-                photoToLoad.imageView.setImageBitmap(bitmap);
-            } else {
-                photoToLoad.imageView.setImageResource(stub_id);
-            }
-        }
     }
 
     public void clearCache() {

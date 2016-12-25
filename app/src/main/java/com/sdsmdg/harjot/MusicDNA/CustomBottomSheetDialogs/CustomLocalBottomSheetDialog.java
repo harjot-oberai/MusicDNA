@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.sdsmdg.harjot.MusicDNA.HomeActivity;
@@ -22,7 +23,7 @@ import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
 
 public class CustomLocalBottomSheetDialog extends BottomSheetDialogFragment implements View.OnClickListener {
 
-    TextView playText, playNextText, addToQueueText, addToPlaylistText, addToFavouriteText, shareText, editText;
+    LinearLayout playText, playNextText, addToQueueText, addToPlaylistText, addToFavouriteText, shareText, editText;
 
     ImageView localSongImage;
     TextView localSongTitle, localSongArtist;
@@ -73,19 +74,19 @@ public class CustomLocalBottomSheetDialog extends BottomSheetDialogFragment impl
         localSongTitle.setText(localTrack.getTitle());
         localSongArtist.setText(localTrack.getArtist());
 
-        playText = (TextView) view.findViewById(R.id.local_song_bottom_sheet_play);
+        playText = (LinearLayout) view.findViewById(R.id.local_song_bottom_sheet_play_wrapper);
         playText.setOnClickListener(this);
-        playNextText = (TextView) view.findViewById(R.id.local_song_bottom_sheet_play_next);
+        playNextText = (LinearLayout) view.findViewById(R.id.local_song_bottom_sheet_play_next_wrapper);
         playNextText.setOnClickListener(this);
-        addToQueueText = (TextView) view.findViewById(R.id.local_song_bottom_sheet_add_to_queue);
+        addToQueueText = (LinearLayout) view.findViewById(R.id.local_song_bottom_sheet_add_to_queue_wrapper);
         addToQueueText.setOnClickListener(this);
-        addToPlaylistText = (TextView) view.findViewById(R.id.local_song_bottom_sheet_add_to_playlist);
+        addToPlaylistText = (LinearLayout) view.findViewById(R.id.local_song_bottom_sheet_add_to_playlist_wrapper);
         addToPlaylistText.setOnClickListener(this);
-        addToFavouriteText = (TextView) view.findViewById(R.id.local_song_bottom_sheet_add_to_fav);
+        addToFavouriteText = (LinearLayout) view.findViewById(R.id.local_song_bottom_sheet_add_to_fav_wrapper);
         addToFavouriteText.setOnClickListener(this);
-        shareText = (TextView) view.findViewById(R.id.local_song_bottom_sheet_share);
+        shareText = (LinearLayout) view.findViewById(R.id.local_song_bottom_sheet_share_wrapper);
         shareText.setOnClickListener(this);
-        editText = (TextView) view.findViewById(R.id.local_song_bottom_sheet_edit);
+        editText = (LinearLayout) view.findViewById(R.id.local_song_bottom_sheet_edit_wrapper);
         editText.setOnClickListener(this);
 
     }
@@ -93,25 +94,25 @@ public class CustomLocalBottomSheetDialog extends BottomSheetDialogFragment impl
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.local_song_bottom_sheet_play:
+            case R.id.local_song_bottom_sheet_play_wrapper:
                 activity.bottomSheetListener(position, "Play", fragment, true);
                 break;
-            case R.id.local_song_bottom_sheet_play_next:
+            case R.id.local_song_bottom_sheet_play_next_wrapper:
                 activity.bottomSheetListener(position, "Play Next", fragment, true);
                 break;
-            case R.id.local_song_bottom_sheet_add_to_queue:
+            case R.id.local_song_bottom_sheet_add_to_queue_wrapper:
                 activity.bottomSheetListener(position, "Add to Queue", fragment, true);
                 break;
-            case R.id.local_song_bottom_sheet_add_to_playlist:
+            case R.id.local_song_bottom_sheet_add_to_playlist_wrapper:
                 activity.bottomSheetListener(position, "Add to Playlist", fragment, true);
                 break;
-            case R.id.local_song_bottom_sheet_add_to_fav:
+            case R.id.local_song_bottom_sheet_add_to_fav_wrapper:
                 activity.bottomSheetListener(position, "Add to Favourites", fragment, true);
                 break;
-            case R.id.local_song_bottom_sheet_share:
+            case R.id.local_song_bottom_sheet_share_wrapper:
                 activity.bottomSheetListener(position, "Share", fragment, true);
                 break;
-            case R.id.local_song_bottom_sheet_edit:
+            case R.id.local_song_bottom_sheet_edit_wrapper:
                 activity.bottomSheetListener(position, "Edit", fragment, true);
                 break;
         }

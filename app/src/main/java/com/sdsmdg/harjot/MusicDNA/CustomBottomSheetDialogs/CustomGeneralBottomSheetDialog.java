@@ -95,19 +95,19 @@ public class CustomGeneralBottomSheetDialog extends BottomSheetDialogFragment im
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.general_song_bottom_sheet_play:
+            case R.id.general_song_bottom_sheet_play_wrapper:
                 activity.bottomSheetListener(position, "Play", fragment, generalTrack.getType());
                 break;
-            case R.id.general_song_bottom_sheet_play_next:
+            case R.id.general_song_bottom_sheet_play_next_wrapper:
                 activity.bottomSheetListener(position, "Play Next", fragment, generalTrack.getType());
                 break;
-            case R.id.general_song_bottom_sheet_add_to_queue:
+            case R.id.general_song_bottom_sheet_add_to_queue_wrapper:
                 activity.bottomSheetListener(position, "Add to Queue", fragment, generalTrack.getType());
                 break;
-            case R.id.general_song_bottom_sheet_add_to_playlist:
+            case R.id.general_song_bottom_sheet_add_to_playlist_wrapper:
                 activity.bottomSheetListener(position, "Add to Playlist", fragment, generalTrack.getType());
                 break;
-            case R.id.general_song_bottom_sheet_add_to_fav:
+            case R.id.general_song_bottom_sheet_add_to_fav_wrapper:
                 activity.bottomSheetListener(position, "Add to Favourites", fragment, generalTrack.getType());
                 break;
         }

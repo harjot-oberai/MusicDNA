@@ -308,7 +308,7 @@ public class PlayListFragment extends Fragment {
                             imgLoader.DisplayImage(ut.getStreamTrack().getArtworkURL(), imgView[i]);
                     }
                 } else {
-                    for (int i = pl1.getSongList().size(); i < 10 - pl2.getSongList().size() + 1; i++) {
+                    for (int i = pl1.getSongList().size(); i < pl1.getSongList().size() + pl2.getSongList().size(); i++) {
                         UnifiedTrack ut = pl2.getSongList().get(i - pl1.getSongList().size());
                         if (ut.getType())
                             imgLoader.DisplayImage(ut.getLocalTrack().getPath(), imgView[i]);

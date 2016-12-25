@@ -74,7 +74,7 @@ public class ImageLoader {
     private Bitmap getBitmap(String url) {
         if (url == null) {
             return BitmapFactory.decodeResource(Resources.getSystem(), R.drawable.ic_default);
-        } else if (url.contains("all_playlist")) {
+        } else if (url.contains("all_playlist") || url.contains("folder")) {
             return null;
         } else if (url.contains("https")) {
             File f = fileCache.getFile(url);
@@ -207,7 +207,7 @@ public class ImageLoader {
                     } else {
                         if (type.equals("none"))
                             photoToLoad.imageView.setImageResource(stub_id);
-                        else if (type.equals("all_playlist")) {
+                        else {
                             int r = random.nextInt(127) + 128;
                             int g = random.nextInt(127) + 128;
                             int b = random.nextInt(127) + 128;

@@ -53,6 +53,8 @@ public class LocalMusicFragment extends Fragment {
 
     HomeActivity activity;
 
+    View bottomMarginLayout;
+
     public LocalMusicFragment() {
         // Required empty public constructor
     }
@@ -86,6 +88,12 @@ public class LocalMusicFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        bottomMarginLayout = view.findViewById(R.id.bottom_margin_layout);
+        if (HomeActivity.isReloaded)
+            bottomMarginLayout.getLayoutParams().height = 0;
+        else
+            bottomMarginLayout.getLayoutParams().height = ((HomeActivity) getContext()).dpTopx(65);
 
         shuffleFab = (FloatingActionButton) view.findViewById(R.id.play_all_fab_local);
 

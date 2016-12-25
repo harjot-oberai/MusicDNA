@@ -43,6 +43,8 @@ public class FavouritesFragment extends Fragment implements
 
     FloatingActionButton playAll;
 
+    View bottomMarginLayout;
+
     @Override
     public void onEmpty() {
         noFavouriteContent.setVisibility(View.VISIBLE);
@@ -76,6 +78,13 @@ public class FavouritesFragment extends Fragment implements
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        bottomMarginLayout = view.findViewById(R.id.bottom_margin_layout);
+        if (HomeActivity.isReloaded)
+            bottomMarginLayout.getLayoutParams().height = 0;
+        else
+            bottomMarginLayout.getLayoutParams().height = ((HomeActivity) getContext()).dpTopx(65);
+
         favouriteRecycler = (RecyclerView) view.findViewById(R.id.favouriteRecycler);
         noFavouriteContent = (LinearLayout) view.findViewById(R.id.noFavouriteContent);
         playAll = (FloatingActionButton) view.findViewById(R.id.fav_play_all_fab);

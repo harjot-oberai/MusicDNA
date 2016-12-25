@@ -400,12 +400,6 @@
         android:background="#000"
         android:translationZ="10dp">
 
-        <com.sdsmdg.harjot.MusicDNA.CustomProgressBar
-            android:id="@+id/customProgress"
-            android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:visibility="invisible" />
-
         <android.support.v7.widget.Toolbar
             android:id="@+id/smallPlayer_home"
             android:layout_width="match_parent"

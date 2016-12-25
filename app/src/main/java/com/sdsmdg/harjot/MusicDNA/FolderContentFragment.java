@@ -45,9 +45,7 @@ public class FolderContentFragment extends Fragment {
     ImageView backBtn, addToQueueIcon, backdrop;
     TextView title, songsText, fragmentTitle;
 
-//    onFolderContentPlayAllListener mCallback;
-//    onFolderContentItemClickListener mCallback2;
-//    folderContentAddToPlaylistListener mCallback3;
+    View bottomMarginLayout;
 
     folderCallbackListener mCallback;
 
@@ -87,6 +85,12 @@ public class FolderContentFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        bottomMarginLayout = view.findViewById(R.id.bottom_margin_layout);
+        if (HomeActivity.isReloaded)
+            bottomMarginLayout.getLayoutParams().height = 0;
+        else
+            bottomMarginLayout.getLayoutParams().height = ((HomeActivity) getContext()).dpTopx(65);
 
         fragmentTitle = (TextView) view.findViewById(R.id.folder_fragment_title);
         if (SplashActivity.tf4 != null)

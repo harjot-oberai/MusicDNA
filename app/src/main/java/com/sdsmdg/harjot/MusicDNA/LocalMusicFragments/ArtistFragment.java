@@ -28,6 +28,8 @@ public class ArtistFragment extends Fragment {
     public onArtistClickListener mCallback;
     LinearLayoutManager llManager;
 
+    View bottomMarginLayout;
+
     public ArtistFragment() {
         // Required empty public constructor
     }
@@ -57,6 +59,13 @@ public class ArtistFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        bottomMarginLayout = view.findViewById(R.id.bottom_margin_layout);
+        if (HomeActivity.isReloaded)
+            bottomMarginLayout.setVisibility(View.GONE);
+        else
+            bottomMarginLayout.setVisibility(View.VISIBLE);
+
         rv = (RecyclerView) view.findViewById(R.id.artists_recycler);
         arAdapter = new ArtistRecyclerAdapter(HomeActivity.finalArtists);
         llManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);

@@ -50,6 +50,8 @@ public class ViewAlbumFragment extends Fragment {
 
     HomeActivity activity;
 
+    View bottomMarginLayout;
+
     onAlbumSongClickListener mCallback;
     onAlbumPlayAllListener mCallback2;
 
@@ -92,6 +94,12 @@ public class ViewAlbumFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        bottomMarginLayout = view.findViewById(R.id.bottom_margin_layout);
+        if (HomeActivity.isReloaded)
+            bottomMarginLayout.getLayoutParams().height = 0;
+        else
+            bottomMarginLayout.getLayoutParams().height = ((HomeActivity) getContext()).dpTopx(65);
 
         albumDetails = (TextView) view.findViewById(R.id.album_details);
         int tmp = HomeActivity.tempAlbum.getAlbumSongs().size();

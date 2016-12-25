@@ -48,8 +48,8 @@ public class ViewPlaylistFragment extends Fragment implements
 
     LinearLayoutManager mLayoutManager2;
 
-    //    onPLaylistItemClickedListener mCallback;
-//    onPlaylistPlayAllListener mCallback2;
+    View bottomMarginLayout;
+
     playlistCallbackListener mCallback;
 
     @Override
@@ -130,6 +130,12 @@ public class ViewPlaylistFragment extends Fragment implements
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        bottomMarginLayout = view.findViewById(R.id.bottom_margin_layout);
+        if (HomeActivity.isReloaded)
+            bottomMarginLayout.getLayoutParams().height = 0;
+        else
+            bottomMarginLayout.getLayoutParams().height = ((HomeActivity) getContext()).dpTopx(65);
 
         fragmentTitle = (TextView) view.findViewById(R.id.playlist_fragment_title);
         if (SplashActivity.tf4 != null)

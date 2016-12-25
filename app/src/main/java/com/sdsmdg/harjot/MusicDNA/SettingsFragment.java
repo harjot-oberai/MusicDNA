@@ -46,6 +46,8 @@ public class SettingsFragment extends Fragment {
     
     HomeActivity homeActivity;
 
+    View bottomMarginLayout;
+
     onAlbumArtBackgroundToggled mCallback;
     onColorChangedListener mCallback2;
     onAboutClickedListener mCallback3;
@@ -91,6 +93,11 @@ public class SettingsFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        bottomMarginLayout = view.findViewById(R.id.bottom_margin_layout);
+        if (HomeActivity.isReloaded)
+            bottomMarginLayout.getLayoutParams().height = 0;
+        else
+            bottomMarginLayout.getLayoutParams().height = ((HomeActivity) getContext()).dpTopx(65);
 
         densitycard = (RelativeLayout) view.findViewById(R.id.density_card);
         densityText = (TextView) view.findViewById(R.id.density_value);

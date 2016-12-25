@@ -47,6 +47,8 @@ public class AddToPlaylistFragment extends Fragment {
 
     int numberSelected = 0;
 
+    View bottomMarginLayout;
+
     public newPlaylistListener mCallback;
 
     public interface newPlaylistListener {
@@ -87,6 +89,12 @@ public class AddToPlaylistFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        bottomMarginLayout = view.findViewById(R.id.bottom_margin_layout);
+        if (HomeActivity.isReloaded)
+            bottomMarginLayout.getLayoutParams().height = 0;
+        else
+            bottomMarginLayout.getLayoutParams().height = ((HomeActivity) getContext()).dpTopx(65);
 
         numberSelected = 0;
         HomeActivity.finalSelectedTracks.clear();

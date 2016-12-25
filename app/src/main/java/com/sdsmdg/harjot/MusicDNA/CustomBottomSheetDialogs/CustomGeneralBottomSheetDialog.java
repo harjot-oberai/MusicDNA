@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.sdsmdg.harjot.MusicDNA.HomeActivity;
@@ -21,7 +22,7 @@ import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
 
 public class CustomGeneralBottomSheetDialog extends BottomSheetDialogFragment implements View.OnClickListener {
 
-    TextView playText, playNextText, addToQueueText, addToPlaylistText, addToFavouriteText;
+    LinearLayout playText, playNextText, addToQueueText, addToPlaylistText, addToFavouriteText;
 
     ImageView generalSongImage;
     TextView generalSongTitle, generalSongArtist;
@@ -78,15 +79,15 @@ public class CustomGeneralBottomSheetDialog extends BottomSheetDialogFragment im
             generalSongArtist.setText("");
         }
 
-        playText = (TextView) view.findViewById(R.id.general_song_bottom_sheet_play);
+        playText = (LinearLayout) view.findViewById(R.id.general_song_bottom_sheet_play_wrapper);
         playText.setOnClickListener(this);
-        playNextText = (TextView) view.findViewById(R.id.general_song_bottom_sheet_play_next);
+        playNextText = (LinearLayout) view.findViewById(R.id.general_song_bottom_sheet_play_next_wrapper);
         playNextText.setOnClickListener(this);
-        addToQueueText = (TextView) view.findViewById(R.id.general_song_bottom_sheet_add_to_queue);
+        addToQueueText = (LinearLayout) view.findViewById(R.id.general_song_bottom_sheet_add_to_queue_wrapper);
         addToQueueText.setOnClickListener(this);
-        addToPlaylistText = (TextView) view.findViewById(R.id.general_song_bottom_sheet_add_to_playlist);
+        addToPlaylistText = (LinearLayout) view.findViewById(R.id.general_song_bottom_sheet_add_to_playlist_wrapper);
         addToPlaylistText.setOnClickListener(this);
-        addToFavouriteText = (TextView) view.findViewById(R.id.general_song_bottom_sheet_add_to_fav);
+        addToFavouriteText = (LinearLayout) view.findViewById(R.id.general_song_bottom_sheet_add_to_fav_wrapper);
         addToFavouriteText.setOnClickListener(this);
 
     }

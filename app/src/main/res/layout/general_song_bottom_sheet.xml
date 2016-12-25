@@ -10,97 +10,190 @@
         android:id="@+id/general_song_bottom_sheet_image"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginLeft="10dp"
-        android:background="#222" />
+        android:layout_marginLeft="20dp"
+        android:scaleType="centerCrop" />
 
     <TextView
         android:id="@+id/general_song_bottom_sheet_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="13dp"
         android:layout_marginTop="5dp"
         android:layout_toRightOf="@id/general_song_bottom_sheet_image"
         android:maxLines="1"
         android:text="Title"
         android:textColor="#000"
-        android:textSize="17sp" />
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/general_song_bottom_sheet_artist"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/general_song_bottom_sheet_title"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="13dp"
         android:layout_marginTop="2dp"
         android:layout_toRightOf="@id/general_song_bottom_sheet_image"
         android:text="Artist"
         android:textColor="#444"
         android:textSize="13sp" />
 
-    <TextView
-        android:id="@+id/general_song_bottom_sheet_play"
+    <LinearLayout
+        android:id="@+id/general_song_bottom_sheet_play_wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/general_song_bottom_sheet_image"
         android:layout_marginTop="5dp"
         android:background="?attr/selectableItemBackground"
         android:clickable="true"
-        android:paddingBottom="10dp"
-        android:paddingLeft="10dp"
-        android:paddingTop="10dp"
-        android:text="Play"
-        android:textSize="17sp" />
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/general_song_bottom_sheet_play_next"
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:padding="10dp"
+            android:src="@drawable/bs_play_2"
+            android:tint="#494949" />
+
+        <TextView
+            android:id="@+id/general_song_bottom_sheet_play"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:text="Play"
+            android:textAlignment="gravity"
+            android:textColor="#111111"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/general_song_bottom_sheet_play_next_wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/general_song_bottom_sheet_play"
+        android:layout_below="@+id/general_song_bottom_sheet_play_wrapper"
+        android:layout_marginTop="5dp"
         android:background="?attr/selectableItemBackground"
         android:clickable="true"
-        android:paddingBottom="10dp"
-        android:paddingLeft="10dp"
-        android:paddingTop="10dp"
-        android:text="Play Next"
-        android:textSize="17sp" />
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/general_song_bottom_sheet_add_to_queue"
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:padding="10dp"
+            android:src="@drawable/bs_play_2"
+            android:tint="#494949" />
+
+        <TextView
+            android:id="@+id/general_song_bottom_sheet_play_next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:text="Play Next"
+            android:textColor="#111111"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/general_song_bottom_sheet_add_to_queue_wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/general_song_bottom_sheet_play_next"
+        android:layout_below="@+id/general_song_bottom_sheet_play_next_wrapper"
+        android:layout_marginTop="5dp"
         android:background="?attr/selectableItemBackground"
         android:clickable="true"
-        android:paddingBottom="10dp"
-        android:paddingLeft="10dp"
-        android:paddingTop="10dp"
-        android:text="Add to Queue"
-        android:textSize="17sp" />
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/general_song_bottom_sheet_add_to_playlist"
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:paddingLeft="9dp"
+            android:paddingRight="11dp"
+            android:src="@drawable/ic_add_to_queue"
+            android:tint="#494949" />
+
+        <TextView
+            android:id="@+id/general_song_bottom_sheet_add_to_queue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:text="Add to Queue"
+            android:textColor="#111111"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/general_song_bottom_sheet_add_to_playlist_wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/general_song_bottom_sheet_add_to_queue"
+        android:layout_below="@+id/general_song_bottom_sheet_add_to_queue_wrapper"
+        android:layout_marginTop="5dp"
         android:background="?attr/selectableItemBackground"
         android:clickable="true"
-        android:paddingBottom="10dp"
-        android:paddingLeft="10dp"
-        android:paddingTop="10dp"
-        android:text="Add to Playlist"
-        android:textSize="17sp" />
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/general_song_bottom_sheet_add_to_fav"
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:paddingLeft="9dp"
+            android:paddingRight="6dp"
+            android:src="@drawable/ic_playlist_add_black_48dp"
+            android:tint="#494949" />
+
+        <TextView
+            android:id="@+id/general_song_bottom_sheet_add_to_playlist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:text="Add to Playlist"
+            android:textColor="#111111"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/general_song_bottom_sheet_add_to_fav_wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/general_song_bottom_sheet_add_to_playlist"
+        android:layout_below="@+id/general_song_bottom_sheet_add_to_playlist_wrapper"
+        android:layout_marginTop="5dp"
         android:background="?attr/selectableItemBackground"
         android:clickable="true"
-        android:paddingBottom="10dp"
-        android:paddingLeft="10dp"
-        android:paddingTop="10dp"
-        android:text="Add to Favourites"
-        android:textSize="17sp" />
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:padding="10dp"
+            android:src="@drawable/bs_fav_2"
+            android:tint="#494949" />
+
+        <TextView
+            android:id="@+id/general_song_bottom_sheet_add_to_fav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:text="Add to Favourites"
+            android:textColor="#111111"
+            android:textSize="18sp" />
+
+    </LinearLayout>
 
 </RelativeLayout>

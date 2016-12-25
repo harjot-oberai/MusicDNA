@@ -61,6 +61,8 @@ public class ViewSavedDNA extends Fragment {
 
     int selectedDNA = 0;
 
+    View bottomMarginLayout;
+
     public ViewSavedDNA() {
         // Required empty public constructor
     }
@@ -92,6 +94,12 @@ public class ViewSavedDNA extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        bottomMarginLayout = view.findViewById(R.id.bottom_margin_layout);
+        if (HomeActivity.isReloaded)
+            bottomMarginLayout.getLayoutParams().height = 0;
+        else
+            bottomMarginLayout.getLayoutParams().height = ((HomeActivity) getContext()).dpTopx(65);
 
         mVisualizerView2 = (VisualizerView2) view.findViewById(R.id.saved_dna_visualizer);
         viewDnaRecycler = (RecyclerView) view.findViewById(R.id.saved_dna_recycler);
@@ -146,8 +154,6 @@ public class ViewSavedDNA extends Fragment {
                 selectedDNA = position;
                 HomeActivity.tempSavedDNA = dna;
                 Bitmap bmp = bitmapFromBase64String(dna.getBase64encodedBitmap());
-//                    byte[] bArr = dna.getModel().getByteArray();
-//                    Bitmap bmp = BitmapFactory.decodeByteArray(bArr, 0, bArr.length);
                 mVisualizerView2.setBmp(bmp);
                 mVisualizerView2.update();
                 return true;
@@ -169,8 +175,6 @@ public class ViewSavedDNA extends Fragment {
                             selectedDNA = position;
                             HomeActivity.tempSavedDNA = dna;
                             Bitmap bmp = bitmapFromBase64String(dna.getBase64encodedBitmap());
-//                    byte[] bArr = dna.getModel().getByteArray();
-//                    Bitmap bmp = BitmapFactory.decodeByteArray(bArr, 0, bArr.length);
                             mVisualizerView2.setBmp(bmp);
                             mVisualizerView2.update();
                         } else if (item.getTitle().equals("Delete")) {
@@ -193,8 +197,6 @@ public class ViewSavedDNA extends Fragment {
                                 SavedDNA dna = HomeActivity.savedDNAs.getSavedDNAs().get(selectedDNA);
                                 HomeActivity.tempSavedDNA = dna;
                                 Bitmap bmp = bitmapFromBase64String(dna.getBase64encodedBitmap());
-//                    byte[] bArr = dna.getModel().getByteArray();
-//                    Bitmap bmp = BitmapFactory.decodeByteArray(bArr, 0, bArr.length);
                                 mVisualizerView2.setBmp(bmp);
                                 mVisualizerView2.update();
                             }

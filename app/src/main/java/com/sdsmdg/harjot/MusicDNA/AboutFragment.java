@@ -18,6 +18,8 @@ public class AboutFragment extends Fragment {
 
     Button linkBtn;
 
+    View bottomMarginLayout;
+
     public AboutFragment() {
         // Required empty public constructor
     }
@@ -33,6 +35,13 @@ public class AboutFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        bottomMarginLayout = view.findViewById(R.id.bottom_margin_layout);
+        if (HomeActivity.isReloaded)
+            bottomMarginLayout.getLayoutParams().height = 0;
+        else
+            bottomMarginLayout.getLayoutParams().height = ((HomeActivity) getContext()).dpTopx(65);
+
         linkBtn = (Button) view.findViewById(R.id.link_btn);
         linkBtn.setBackgroundColor(HomeActivity.themeColor);
         linkBtn.setOnClickListener(new View.OnClickListener() {

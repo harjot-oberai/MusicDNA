@@ -65,6 +65,8 @@ public class EditLocalSongFragment extends Fragment {
     onEditSongSaveListener mCallback;
     newCoverListener mCallback2;
 
+    View bottomMarginLayout;
+
     public interface onEditSongSaveListener {
         void onEditSongSave(boolean wasSaveSuccessful);
     }
@@ -103,7 +105,11 @@ public class EditLocalSongFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-//        Toast.makeText(ctx, HomeActivity.editSong.getId() + "", Toast.LENGTH_SHORT).show();
+        bottomMarginLayout = view.findViewById(R.id.bottom_margin_layout);
+        if (HomeActivity.isReloaded)
+            bottomMarginLayout.getLayoutParams().height = 0;
+        else
+            bottomMarginLayout.getLayoutParams().height = ((HomeActivity) getContext()).dpTopx(65);
 
         titleText = (EditText) view.findViewById(R.id.edit_song_title);
         artistText = (EditText) view.findViewById(R.id.edit_song_artist);

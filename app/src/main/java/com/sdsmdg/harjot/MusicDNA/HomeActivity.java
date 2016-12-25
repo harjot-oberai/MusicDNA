@@ -51,6 +51,7 @@ import android.support.v7.widget.Toolbar;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.text.TextPaint;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Pair;
 import android.view.Display;
@@ -211,7 +212,6 @@ public class HomeActivity extends AppCompatActivity
     FrameLayout bottomToolbar;
     CircleImageView spImgHome;
     TextView spTitleHome;
-
 
     SwitchCompat equalizerSwitch;
 
@@ -4897,6 +4897,11 @@ public class HomeActivity extends AppCompatActivity
         }
 //        return (pxToDp(result));
         return (result);
+    }
+
+    public int dpTopx(int dp){
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        return (int)((dp * displayMetrics.density) + 0.5);
     }
 
     public boolean hasNavBar(Resources resources) {

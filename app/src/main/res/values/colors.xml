@@ -6,8 +6,6 @@
     <color name="colorPrimary">#000000</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#555555</color>
-    <color name="colorControlActivated">#FFA036</color>
     <color name="colorDark">#111111</color>
     <color name="colorListItem">#111111</color>
-    <color name="colorPlaylistCardView">#333333</color>
 </resources>

@@ -52,8 +52,8 @@ public class VisualizerView2 extends View {
         mTextPaint.setColor(Color.WHITE);
         mTextPaint.setTextAlign(Paint.Align.CENTER);
         mTextPaint.setTextSize(40.0f * HomeActivity.ratio);
-        if (SplashActivity.tf != null)
-            mTextPaint.setTypeface(SplashActivity.tf);
+        if (SplashActivity.tf3 != null)
+            mTextPaint.setTypeface(SplashActivity.tf3);
     }
 
     @Override

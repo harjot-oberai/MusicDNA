@@ -50,28 +50,13 @@ public class SplashActivity extends AppCompatActivity {
 
         try {
             tf4 = Typeface.createFromAsset(getAssets(), "fonts/Intro_Cond_Light.otf");
-//            tf4 = Typeface.createFromAsset(getAssets(), "fonts/Moderne_Sans.ttf");
-//            tf4 = Typeface.createFromAsset(getAssets(), "fonts/Simplifica.ttf");
             tf3 = Typeface.createFromAsset(getAssets(), "fonts/Gidole-Regular.ttf");
-            tf = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Regular.ttf");
-            tf2 = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Medium.ttf");
         } catch (Exception e) {
         }
 
         if (Build.VERSION.SDK_INT >= 23) {
             requestPermissions();
         } else {
-//            GlideDrawableImageViewTarget imageViewTarget = new GlideDrawableImageViewTarget(img);
-//            Glide.with(this).load(R.raw.logo_gif).into(imageViewTarget);
-//            final Handler handler = new Handler();
-//            handler.postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    Intent i = new Intent(SplashActivity.this, HomeActivity.class);
-//                    startActivity(i);
-//                    finish();
-//                }
-//            }, 1200);
             Intent i = new Intent(SplashActivity.this, HomeActivity.class);
             startActivity(i);
             finish();

@@ -167,8 +167,8 @@ public class FavouritesFragment extends Fragment implements
         favouriteRecycler = (RecyclerView) view.findViewById(R.id.favouriteRecycler);
         noFavouriteContent = (LinearLayout) view.findViewById(R.id.noFavouriteContent);
         playAll = (FloatingActionButton) view.findViewById(R.id.fav_play_all_fab);
-        if (SplashActivity.tf2 != null)
-            ((TextView) view.findViewById(R.id.favNoContentText)).setTypeface(SplashActivity.tf2);
+        if (SplashActivity.tf4 != null)
+            ((TextView) view.findViewById(R.id.favNoContentText)).setTypeface(SplashActivity.tf4);
 
         if (HomeActivity.favouriteTracks.getFavourite().size() == 0) {
             favouriteRecycler.setVisibility(View.INVISIBLE);

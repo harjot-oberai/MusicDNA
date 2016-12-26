@@ -142,8 +142,8 @@ public class PlayListFragment extends Fragment {
             }
         });
 
-        if (SplashActivity.tf2 != null)
-            ((TextView) view.findViewById(R.id.noPlaylistContentText)).setTypeface(SplashActivity.tf2);
+        if (SplashActivity.tf4 != null)
+            ((TextView) view.findViewById(R.id.noPlaylistContentText)).setTypeface(SplashActivity.tf4);
 
         if (HomeActivity.allPlaylists.getPlaylists().size() == 0) {
             allPlaylistRecycler.setVisibility(View.INVISIBLE);

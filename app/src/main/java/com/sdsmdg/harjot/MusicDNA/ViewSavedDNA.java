@@ -121,8 +121,8 @@ public class ViewSavedDNA extends Fragment {
 
         noSavedContent = (LinearLayout) view.findViewById(R.id.no_saved_dnas);
 
-        if (SplashActivity.tf2 != null)
-            ((TextView) view.findViewById(R.id.no_saved_content_text)).setTypeface(SplashActivity.tf2);
+        if (SplashActivity.tf4 != null)
+            ((TextView) view.findViewById(R.id.no_saved_content_text)).setTypeface(SplashActivity.tf4);
 
         if (HomeActivity.savedDNAs == null || HomeActivity.savedDNAs.getSavedDNAs().size() == 0) {
             noSavedContent.setVisibility(View.VISIBLE);

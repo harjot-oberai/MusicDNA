@@ -167,8 +167,7 @@ public class HomeActivity extends AppCompatActivity
         ArtistFragment.onArtistClickListener,
         ViewArtistFragment.onArtistSongClickListener,
         ViewArtistFragment.onArtistPlayAllListener,
-        RecentsFragment.onRecentItemClickedListener,
-        RecentsFragment.onRepeatListener,
+        RecentsFragment.recentsCallbackListener,
         MediaPlayerService.onCallbackListener,
         SettingsFragment.onColorChangedListener,
         SettingsFragment.onAlbumArtBackgroundToggled,
@@ -2645,6 +2644,18 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onRecent(int pos) {
         onQueueItemClicked(pos);
+    }
+
+    @Override
+    public void addRecentsToQueue() {
+        for (UnifiedTrack ut : recentlyPlayed.getRecentlyPlayed()) {
+            queue.addToQueue(ut);
+        }
+        if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
+            playerFragment.snappyRecyclerView.getAdapter().notifyDataSetChanged();
+            playerFragment.snappyRecyclerView.setTransparency();
+        }
+        Toast.makeText(ctx, "Added " + recentlyPlayed.getRecentlyPlayed().size() + " song(s) to queue", Toast.LENGTH_SHORT).show();
     }
 
     @Override

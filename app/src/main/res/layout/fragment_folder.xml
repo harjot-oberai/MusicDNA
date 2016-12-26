@@ -143,9 +143,17 @@
             android:layout_below="@+id/all_folder_action_container"
             android:layout_centerHorizontal="true"
             android:paddingBottom="10dp"
-            android:src="@drawable/folder_frag_icon"/>
+            android:src="@drawable/folder_frag_icon" />
 
     </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/all_folders_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottom_margin_layout"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/all_folder_header" />
 
     <View
         android:id="@+id/bottom_margin_layout"
@@ -154,12 +162,5 @@
         android:layout_alignParentBottom="true"
         android:background="@color/colorDark"
         android:clickable="true" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/all_folders_recycler"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/all_folder_header"
-        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

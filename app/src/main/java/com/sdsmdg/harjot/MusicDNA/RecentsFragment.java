@@ -1,8 +1,11 @@
 package com.sdsmdg.harjot.MusicDNA;
 
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -18,14 +21,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.sdsmdg.harjot.MusicDNA.CustomBottomSheetDialogs.CustomGeneralBottomSheetDialog;
 import com.sdsmdg.harjot.MusicDNA.Helpers.SimpleItemTouchHelperCallback;
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.Models.Track;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
+import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
 import com.squareup.leakcanary.RefWatcher;
+import com.squareup.picasso.Picasso;
 
 import java.util.Random;
 
@@ -33,7 +40,9 @@ import java.util.Random;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RecentsFragment extends Fragment implements RecentsTrackAdapter.OnDragStartListener {
+public class RecentsFragment extends Fragment implements
+        RecentsTrackAdapter.OnDragStartListener,
+        RecentsTrackAdapter.onRemoveListener {
 
     RecyclerView recentRecycler;
     RecentsTrackAdapter rtAdpater;
@@ -43,33 +52,59 @@ public class RecentsFragment extends Fragment implements RecentsTrackAdapter.OnD
 
     ItemTouchHelper mItemTouchHelper;
 
-    onRecentItemClickedListener mCallback;
-    onRepeatListener mCallback2;
+    recentsCallbackListener mCallback;
 
     FloatingActionButton shuffleFab;
 
     View bottomMarginLayout;
 
+    ImageView backdrop;
+    TextView fragTitle;
+    ImageView backBtn, addToQueueIcon, fragIcon;
+
+    ImageLoader imgLoader;
+
     public RecentsFragment() {
         // Required empty public constructor
     }
 
-    public interface onRecentItemClickedListener {
-        public void onRecentItemClicked(boolean isLocal);
-
-        public void addToPlaylist(UnifiedTrack ut);
+    @Override
+    public void updateRecentsFragment() {
+        if (HomeActivity.recentlyPlayed.getRecentlyPlayed().size() > 0) {
+            UnifiedTrack ut = HomeActivity.recentlyPlayed.getRecentlyPlayed().get(0);
+            if (ut.getType()) {
+                LocalTrack lt = ut.getLocalTrack();
+                imgLoader.DisplayImage(lt.getPath(), backdrop);
+            } else {
+                Track t = ut.getStreamTrack();
+                Picasso.with(getContext())
+                        .load(t.getArtworkURL())
+                        .resize(100, 100)
+                        .error(R.drawable.ic_default)
+                        .placeholder(R.drawable.ic_default)
+                        .into(backdrop);
+            }
+        } else {
+            backdrop.setBackground(new ColorDrawable(Color.parseColor("#111111")));
+        }
     }
 
-    public interface onRepeatListener {
-        public void onRecent(int pos);
+    public interface recentsCallbackListener {
+        void onRecentItemClicked(boolean isLocal);
+
+        void addToPlaylist(UnifiedTrack ut);
+
+        void onRecent(int pos);
+
+        void addRecentsToQueue();
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            mCallback = (onRecentItemClickedListener) context;
-            mCallback2 = (onRepeatListener) context;
+            imgLoader = new ImageLoader(context);
+            mCallback = (recentsCallbackListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnHeadlineSelectedListener");
@@ -86,6 +121,46 @@ public class RecentsFragment extends Fragment implements RecentsTrackAdapter.OnD
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        backBtn = (ImageView) view.findViewById(R.id.recents_back_btn);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
+
+        fragIcon = (ImageView) view.findViewById(R.id.recents_frag_icon);
+        fragIcon.setImageTintList(ColorStateList.valueOf(HomeActivity.themeColor));
+
+        fragTitle = (TextView) view.findViewById(R.id.recents_fragment_title);
+        if (SplashActivity.tf4 != null)
+            fragTitle.setTypeface(SplashActivity.tf4);
+
+        addToQueueIcon = (ImageView) view.findViewById(R.id.add_recents_to_queue_icon);
+        addToQueueIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallback.addRecentsToQueue();
+            }
+        });
+
+        backdrop = (ImageView) view.findViewById(R.id.recents_backdrop);
+        if (HomeActivity.recentlyPlayed.getRecentlyPlayed().size() > 0) {
+            UnifiedTrack ut = HomeActivity.recentlyPlayed.getRecentlyPlayed().get(0);
+            if (ut.getType()) {
+                LocalTrack lt = ut.getLocalTrack();
+                imgLoader.DisplayImage(lt.getPath(), backdrop);
+            } else {
+                Track t = ut.getStreamTrack();
+                Picasso.with(getContext())
+                        .load(t.getArtworkURL())
+                        .resize(100, 100)
+                        .error(R.drawable.ic_default)
+                        .placeholder(R.drawable.ic_default)
+                        .into(backdrop);
+            }
+        }
 
         bottomMarginLayout = view.findViewById(R.id.bottom_margin_layout);
         if (HomeActivity.isReloaded)
@@ -166,7 +241,7 @@ public class RecentsFragment extends Fragment implements RecentsTrackAdapter.OnD
                         mCallback.onRecentItemClicked(false);
                     }
                 } else {
-                    mCallback2.onRecent(pos);
+                    mCallback.onRecent(pos);
                 }
 
                 return true;
@@ -174,12 +249,14 @@ public class RecentsFragment extends Fragment implements RecentsTrackAdapter.OnD
 
             @Override
             boolean onLongClick(RecyclerView parent, View view, int position, long id) {
-                final UnifiedTrack ut = HomeActivity.recentlyPlayed.getRecentlyPlayed().get(position);
-                CustomGeneralBottomSheetDialog generalBottomSheetDialog = new CustomGeneralBottomSheetDialog();
-                generalBottomSheetDialog.setPosition(position);
-                generalBottomSheetDialog.setTrack(ut);
-                generalBottomSheetDialog.setFragment("Recents");
-                generalBottomSheetDialog.show(getActivity().getSupportFragmentManager(), "general_bottom_sheet_dialog");
+                if (position != -1) {
+                    final UnifiedTrack ut = HomeActivity.recentlyPlayed.getRecentlyPlayed().get(position);
+                    CustomGeneralBottomSheetDialog generalBottomSheetDialog = new CustomGeneralBottomSheetDialog();
+                    generalBottomSheetDialog.setPosition(position);
+                    generalBottomSheetDialog.setTrack(ut);
+                    generalBottomSheetDialog.setFragment("Recents");
+                    generalBottomSheetDialog.show(getActivity().getSupportFragmentManager(), "general_bottom_sheet_dialog");
+                }
                 return true;
             }
 
@@ -209,7 +286,7 @@ public class RecentsFragment extends Fragment implements RecentsTrackAdapter.OnD
                         HomeActivity.queue.getQueue().add(HomeActivity.recentlyPlayed.getRecentlyPlayed().get(i));
                     }
                     Random r = new Random();
-                    mCallback2.onRecent(r.nextInt(HomeActivity.queue.getQueue().size()));
+                    mCallback.onRecent(r.nextInt(HomeActivity.queue.getQueue().size()));
                 }
             }
         });

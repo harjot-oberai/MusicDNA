@@ -39,11 +39,17 @@ public class RecentsTrackAdapter extends RecyclerView.Adapter<RecentsTrackAdapte
         void onDragStarted(RecyclerView.ViewHolder viewHolder);
     }
 
-    private final OnDragStartListener mDragStartListener;
+    public interface onRemoveListener {
+        void updateRecentsFragment();
+    }
 
-    public RecentsTrackAdapter(List<UnifiedTrack> songList, OnDragStartListener listener, Context ctx) {
+    private final OnDragStartListener mDragStartListener;
+    onRemoveListener mCallback;
+
+    public RecentsTrackAdapter(List<UnifiedTrack> songList, RecentsFragment recentsContext, Context ctx) {
         this.songList = songList;
-        mDragStartListener = listener;
+        mDragStartListener = recentsContext;
+        mCallback = recentsContext;
         this.ctx = ctx;
         homeActivity = (HomeActivity) ctx;
         imgLoader = new ImageLoader(ctx);
@@ -69,6 +75,8 @@ public class RecentsTrackAdapter extends RecyclerView.Adapter<RecentsTrackAdapte
             }
             homeActivity.rAdapter.notifyDataSetChanged();
         }
+
+        mCallback.updateRecentsFragment();
 
         new HomeActivity.SaveRecents().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }

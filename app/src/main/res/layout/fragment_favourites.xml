@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:background="@color/colorDark"
     android:clickable="true"
-    android:padding="3dp"
     tools:context="com.sdsmdg.harjot.MusicDNA.FavouritesFragment">
 
     <RelativeLayout

@@ -5,14 +5,77 @@
     android:layout_height="match_parent"
     android:background="@color/colorDark"
     android:clickable="true"
-    android:padding="3dp"
     tools:context="com.sdsmdg.harjot.MusicDNA.RecentsFragment">
+
+    <RelativeLayout
+        android:id="@+id/recents_header"
+        android:layout_width="match_parent"
+        android:layout_height="150dp">
+
+        <ImageView
+            android:id="@+id/recents_backdrop"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
+
+        <com.sdsmdg.harjot.MusicDNA.CustomLinearGradient
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <RelativeLayout
+            android:id="@+id/recents_action_container"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize">
+
+            <ImageView
+                android:id="@+id/recents_back_btn"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:padding="12dp"
+                android:src="@drawable/back2" />
+
+            <TextView
+                android:id="@+id/recents_fragment_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="RECENT"
+                android:textColor="#FFFFFF"
+                android:textSize="25sp" />
+
+            <ImageView
+                android:id="@+id/add_recents_to_queue_icon"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:clickable="true"
+                android:padding="14dp"
+                android:src="@drawable/ic_add_to_queue" />
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/recents_frag_icon"
+            android:layout_width="55dp"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/recents_action_container"
+            android:layout_centerHorizontal="true"
+            android:paddingBottom="10dp"
+            android:src="@drawable/recents_frag_icon" />
+
+    </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/view_recent_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bottom_margin_layout" />
+        android:layout_above="@+id/bottom_margin_layout"
+        android:layout_below="@+id/recents_header" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/play_all_fab_recent"
@@ -52,14 +115,14 @@
             android:src="@drawable/ic_error_white_48dp" />
 
         <TextView
-            android:id="@+id/favNoContentText"
+            android:id="@+id/recentsNoContentText"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center"
             android:layout_marginTop="30dp"
             android:layout_weight="5"
             android:gravity="top|center_horizontal"
-            android:text="No Favourites"
+            android:text="No Recent Songs"
             android:textColor="#DDDDDD"
             android:textSize="15dp" />
 

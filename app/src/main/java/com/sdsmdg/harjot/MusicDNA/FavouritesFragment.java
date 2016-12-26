@@ -15,11 +15,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.sdsmdg.harjot.MusicDNA.Helpers.SimpleItemTouchHelperCallback;
+import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
+import com.sdsmdg.harjot.MusicDNA.Models.Track;
+import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
+import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
 import com.squareup.leakcanary.RefWatcher;
+import com.squareup.picasso.Picasso;
 
 
 /**
@@ -27,7 +33,8 @@ import com.squareup.leakcanary.RefWatcher;
  */
 public class FavouritesFragment extends Fragment implements
         FavouriteTrackAdapter.OnDragStartListener,
-        FavouriteTrackAdapter.onEmptyListener {
+        FavouriteTrackAdapter.onEmptyListener,
+        FavouriteTrackAdapter.onMoveRemoveistener {
 
 
     RecyclerView favouriteRecycler;
@@ -36,8 +43,7 @@ public class FavouritesFragment extends Fragment implements
 
     ItemTouchHelper mItemTouchHelper;
 
-    onFavouriteItemClickedListener mCallback;
-    onFavouritePlayAllListener mCallback2;
+    favouriteFragmentCallback mCallback;
 
     LinearLayout noFavouriteContent;
 
@@ -45,10 +51,35 @@ public class FavouritesFragment extends Fragment implements
 
     View bottomMarginLayout;
 
+    ImageView backdrop;
+    TextView fragTitle;
+    ImageView backBtn, addToQueueIcon, fragIcon;
+
+    ImageLoader imgLoader;
+
     @Override
     public void onEmpty() {
         noFavouriteContent.setVisibility(View.VISIBLE);
         playAll.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void updateFavFragment() {
+        if (HomeActivity.favouriteTracks.getFavourite().size() > 0) {
+            UnifiedTrack ut = HomeActivity.favouriteTracks.getFavourite().get(0);
+            if (ut.getType()) {
+                LocalTrack lt = ut.getLocalTrack();
+                imgLoader.DisplayImage(lt.getPath(), backdrop);
+            } else {
+                Track t = ut.getStreamTrack();
+                Picasso.with(getContext())
+                        .load(t.getArtworkURL())
+                        .resize(100, 100)
+                        .error(R.drawable.ic_default)
+                        .placeholder(R.drawable.ic_default)
+                        .into(backdrop);
+            }
+        }
     }
 
     public interface onFavouriteItemClickedListener {
@@ -59,6 +90,14 @@ public class FavouritesFragment extends Fragment implements
         public void onFavouritePlayAll();
     }
 
+    public interface favouriteFragmentCallback {
+        void onFavouriteItemClicked(int position);
+
+        void onFavouritePlayAll();
+
+        void addFavToQueue();
+    }
+
     public FavouritesFragment() {
         // Required empty public constructor
     }
@@ -67,8 +106,8 @@ public class FavouritesFragment extends Fragment implements
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            mCallback = (onFavouriteItemClickedListener) context;
-            mCallback2 = (onFavouritePlayAllListener) context;
+            mCallback = (favouriteFragmentCallback) context;
+            imgLoader = new ImageLoader(context);
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnHeadlineSelectedListener");
@@ -78,6 +117,46 @@ public class FavouritesFragment extends Fragment implements
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        backBtn = (ImageView) view.findViewById(R.id.fav_back_btn);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
+
+        fragIcon = (ImageView) view.findViewById(R.id.fav_frag_icon);
+        fragIcon.setImageTintList(ColorStateList.valueOf(HomeActivity.themeColor));
+
+        fragTitle = (TextView) view.findViewById(R.id.fav_fragment_title);
+        if (SplashActivity.tf4 != null)
+            fragTitle.setTypeface(SplashActivity.tf4);
+
+        addToQueueIcon = (ImageView) view.findViewById(R.id.add_fav_to_queue_icon);
+        addToQueueIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallback.addFavToQueue();
+            }
+        });
+
+        backdrop = (ImageView) view.findViewById(R.id.fav_backdrop);
+        if (HomeActivity.favouriteTracks.getFavourite().size() > 0) {
+            UnifiedTrack ut = HomeActivity.favouriteTracks.getFavourite().get(0);
+            if (ut.getType()) {
+                LocalTrack lt = ut.getLocalTrack();
+                imgLoader.DisplayImage(lt.getPath(), backdrop);
+            } else {
+                Track t = ut.getStreamTrack();
+                Picasso.with(getContext())
+                        .load(t.getArtworkURL())
+                        .resize(100, 100)
+                        .error(R.drawable.ic_default)
+                        .placeholder(R.drawable.ic_default)
+                        .into(backdrop);
+            }
+        }
 
         bottomMarginLayout = view.findViewById(R.id.bottom_margin_layout);
         if (HomeActivity.isReloaded)
@@ -101,7 +180,7 @@ public class FavouritesFragment extends Fragment implements
             noFavouriteContent.setVisibility(View.INVISIBLE);
         }
 
-        fAdapter = new FavouriteTrackAdapter(HomeActivity.favouriteTracks.getFavourite(), this, this, getContext());
+        fAdapter = new FavouriteTrackAdapter(HomeActivity.favouriteTracks.getFavourite(), this, getContext());
         mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         favouriteRecycler.setLayoutManager(mLayoutManager2);
         favouriteRecycler.setItemAnimator(new DefaultItemAnimator());
@@ -140,7 +219,7 @@ public class FavouritesFragment extends Fragment implements
                         HomeActivity.queue.getQueue().add(HomeActivity.favouriteTracks.getFavourite().get(i));
                     }
                     HomeActivity.queueCurrentIndex = 0;
-                    mCallback2.onFavouritePlayAll();
+                    mCallback.onFavouritePlayAll();
                 }
             }
         });

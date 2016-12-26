@@ -36,15 +36,21 @@ public class FavouriteTrackAdapter extends RecyclerView.Adapter<FavouriteTrackAd
     }
 
     public interface onEmptyListener {
-        public void onEmpty();
+        void onEmpty();
+    }
+
+    public interface onMoveRemoveistener {
+        void updateFavFragment();
     }
 
     private final OnDragStartListener mDragStartListener;
     private onEmptyListener mCallback;
+    private onMoveRemoveistener mCallback2;
 
-    public FavouriteTrackAdapter(List<UnifiedTrack> favouriteList, OnDragStartListener mDragStartListener, onEmptyListener mCallback, Context ctx) {
-        this.mDragStartListener = mDragStartListener;
-        this.mCallback = mCallback;
+    public FavouriteTrackAdapter(List<UnifiedTrack> favouriteList, FavouritesFragment favContext, Context ctx) {
+        this.mDragStartListener = favContext;
+        this.mCallback = favContext;
+        this.mCallback2 = favContext;
         this.favouriteList = favouriteList;
         this.ctx = ctx;
         imgLoader = new ImageLoader(ctx);
@@ -128,6 +134,8 @@ public class FavouriteTrackAdapter extends RecyclerView.Adapter<FavouriteTrackAd
         favouriteList.add(toPosition, prev);
         notifyItemMoved(fromPosition, toPosition);
 
+        mCallback2.updateFavFragment();
+
         new HomeActivity.SaveFavourites().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
@@ -138,6 +146,8 @@ public class FavouriteTrackAdapter extends RecyclerView.Adapter<FavouriteTrackAd
 
         if (favouriteList.size() == 0) {
             mCallback.onEmpty();
+        } else {
+            mCallback2.updateFavFragment();
         }
 
         new HomeActivity.SaveFavourites().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);

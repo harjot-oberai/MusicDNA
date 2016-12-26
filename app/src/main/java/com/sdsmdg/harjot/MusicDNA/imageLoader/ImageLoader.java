@@ -208,10 +208,10 @@ public class ImageLoader {
                         if (type.equals("none"))
                             photoToLoad.imageView.setImageResource(stub_id);
                         else {
-                            int r = random.nextInt(127) + 128;
-                            int g = random.nextInt(127) + 128;
-                            int b = random.nextInt(127) + 128;
-                            photoToLoad.imageView.setImageResource(R.drawable.ic_record_2);
+                            int r = random.nextInt(210) + 45;
+                            int g = random.nextInt(210) + 45;
+                            int b = random.nextInt(210) + 45;
+                            photoToLoad.imageView.setImageResource(R.drawable.ic_record_3);
                             photoToLoad.imageView.setScaleType(ImageView.ScaleType.FIT_XY);
                             photoToLoad.imageView.setImageTintList(ColorStateList.valueOf(Color.rgb(r, g, b)));
                         }

@@ -171,7 +171,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:layout_marginTop="10dp"
-                    android:text="Recently Played"
+                    android:text="Recent"
                     android:textColor="#FFF"
                     android:textSize="16dp"
                     android:textStyle="bold" />
@@ -188,6 +188,17 @@
                     android:textColor="#888"
                     android:textSize="13dp"
                     android:visibility="invisible" />
+
+                <TextView
+                    android:id="@+id/recents_view_all"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/recentsRecyclerLabel"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="15dp"
+                    android:text="VIEW ALL"
+                    android:textColor="#FFF"
+                    android:textSize="13sp" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recentsMusicList_home"
@@ -215,49 +226,23 @@
                 android:layout_marginTop="3dp">
 
 
-                <RelativeLayout
-                    android:id="@+id/playlist_label_container"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/playListRecyclerLabel"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
                     android:layout_marginLeft="15dp"
-                    android:layout_marginTop="10dp">
-
-                    <TextView
-                        android:id="@+id/playListRecyclerLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:text="Playlists"
-                        android:textColor="#FFF"
-                        android:textSize="15dp"
-                        android:textStyle="bold" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="15dp"
-                        android:background="#FFF"
-                        android:padding="1dp">
-
-                        <TextView
-                            android:id="@+id/new_playlist_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@color/colorDark"
-                            android:paddingLeft="4dp"
-                            android:paddingRight="4dp"
-                            android:text="NEW"
-                            android:textColor="#FFF" />
-                    </LinearLayout>
-
-                </RelativeLayout>
+                    android:layout_marginTop="10dp"
+                    android:text="Playlists"
+                    android:textColor="#FFF"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/playlistNothingText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/playlist_label_container"
+                    android:layout_below="@+id/playListRecyclerLabel"
                     android:layout_centerInParent="true"
                     android:layout_marginBottom="25dp"
                     android:layout_marginTop="25dp"
@@ -266,11 +251,23 @@
                     android:textSize="13dp"
                     android:visibility="invisible" />
 
+
+                <TextView
+                    android:id="@+id/playlists_view_all"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/playListRecyclerLabel"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="15dp"
+                    android:text="VIEW ALL"
+                    android:textColor="#FFF"
+                    android:textSize="13sp" />
+
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/playlist_home"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/playlist_label_container"
+                    android:layout_below="@+id/playListRecyclerLabel"
                     android:padding="5dp" />
             </RelativeLayout>
 
@@ -372,21 +369,15 @@
 
             </RelativeLayout>
 
-            <RelativeLayout
+            <TextView
+                android:id="@+id/copyright_text"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_alignParentBottom="true"
-                android:layout_below="@+id/bannerContainer">
-
-                <TextView
-                    android:id="@+id/copyright_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:text="\nMusic DNA\n© 2016"
-                    android:textAlignment="center"
-                    android:textColor="#888" />
-            </RelativeLayout>
+                android:layout_height="40dp"
+                android:layout_below="@+id/bannerContainer"
+                android:gravity="center"
+                android:text="Music DNA"
+                android:textAlignment="gravity"
+                android:textColor="#888" />
 
         </RelativeLayout>
 

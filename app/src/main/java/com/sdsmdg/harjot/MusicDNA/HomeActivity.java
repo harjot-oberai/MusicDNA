@@ -143,8 +143,7 @@ public class HomeActivity extends AppCompatActivity
         StreamMusicFragment.OnTrackSelectedListener,
         QueueFragment.onQueueItemClickedListener,
         ViewPlaylistFragment.playlistCallbackListener,
-        FavouritesFragment.onFavouriteItemClickedListener,
-        FavouritesFragment.onFavouritePlayAllListener,
+        FavouritesFragment.favouriteFragmentCallback,
         QueueFragment.onQueueSaveListener,
         PlayerFragment.onEqualizerClickedListener,
         PlayerFragment.onQueueClickListener,
@@ -310,8 +309,6 @@ public class HomeActivity extends AppCompatActivity
 
     TextView localViewAll, streamViewAll;
 
-    TextView newPlaylistText;
-
     TextView localNothingText;
     TextView streamNothingText;
     TextView recentsNothingText;
@@ -326,6 +323,8 @@ public class HomeActivity extends AppCompatActivity
     Toolbar queueToolbar;
     ImageView queueBackButton;
     TextView queueClearText;
+
+    TextView recentsViewAll, playlistssViewAll;
 
     static int themeColor = Color.parseColor("#B24242");
     static float minAudioStrength = 0.40f;
@@ -399,7 +398,6 @@ public class HomeActivity extends AppCompatActivity
 
     static boolean localSelected = false;
     static boolean streamSelected = false;
-
 
     Button mEndButton;
 
@@ -702,13 +700,32 @@ public class HomeActivity extends AppCompatActivity
         tp.setTextSize(65 * ratio);
         tp.setFakeBoldText(true);
 
+        recentsViewAll = (TextView) findViewById(R.id.recents_view_all);
+        recentsViewAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFragment("recent");
+            }
+        });
+
+        playlistssViewAll = (TextView) findViewById(R.id.playlists_view_all);
+        playlistssViewAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFragment("allPlaylists");
+            }
+        });
+
         copyrightText = (TextView) findViewById(R.id.copyright_text);
-        try {
-            copyrightText.setTypeface(SplashActivity.tf3);
-        } catch (Exception e) {
-            e.printStackTrace();
+        copyrightText.setText("Music DNA v" + versionName);
+
+        if (SplashActivity.tf4 != null) {
+            try {
+                copyrightText.setTypeface(SplashActivity.tf4);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        copyrightText.setText("\nMusic DNA v" + versionName);
 
         imgLoader = new ImageLoader(this);
         ctx = this;
@@ -751,14 +768,6 @@ public class HomeActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        newPlaylistText = (TextView) findViewById(R.id.new_playlist_text);
-        newPlaylistText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFragment("newPlaylist");
-            }
-        });
-
         queueToolbar = (Toolbar) findViewById(R.id.queue_toolbar);
         queueBackButton = (ImageView) findViewById(R.id.queue_toolbar_back_button_img);
         queueBackButton.setOnClickListener(new View.OnClickListener() {
@@ -768,10 +777,12 @@ public class HomeActivity extends AppCompatActivity
             }
         });
         queueClearText = (TextView) findViewById(R.id.clear_queue_txt);
-        try {
-            queueClearText.setTypeface(SplashActivity.tf3);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (SplashActivity.tf4 != null) {
+            try {
+                queueClearText.setTypeface(SplashActivity.tf4);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         queueClearText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1015,10 +1026,10 @@ public class HomeActivity extends AppCompatActivity
             }
         });
 
-        if (SplashActivity.tf3 != null) {
+        if (SplashActivity.tf4 != null) {
             try {
-                ((TextView) findViewById(R.id.playListRecyclerLabel)).setTypeface(SplashActivity.tf3);
-                ((TextView) findViewById(R.id.recentsRecyclerLabel)).setTypeface(SplashActivity.tf3);
+                ((TextView) findViewById(R.id.playListRecyclerLabel)).setTypeface(SplashActivity.tf4);
+                ((TextView) findViewById(R.id.recentsRecyclerLabel)).setTypeface(SplashActivity.tf4);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -2529,6 +2540,18 @@ public class HomeActivity extends AppCompatActivity
             onQueueItemClicked(0);
             hideFragment("favourite");
         }
+    }
+
+    @Override
+    public void addFavToQueue() {
+        for (UnifiedTrack ut : favouriteTracks.getFavourite()) {
+            queue.addToQueue(ut);
+        }
+        if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
+            playerFragment.snappyRecyclerView.getAdapter().notifyDataSetChanged();
+            playerFragment.snappyRecyclerView.setTransparency();
+        }
+        Toast.makeText(ctx, "Added " + favouriteTracks.getFavourite().size() + " song(s) to queue", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -4899,9 +4922,9 @@ public class HomeActivity extends AppCompatActivity
         return (result);
     }
 
-    public int dpTopx(int dp){
+    public int dpTopx(int dp) {
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-        return (int)((dp * displayMetrics.density) + 0.5);
+        return (int) ((dp * displayMetrics.density) + 0.5);
     }
 
     public boolean hasNavBar(Resources resources) {

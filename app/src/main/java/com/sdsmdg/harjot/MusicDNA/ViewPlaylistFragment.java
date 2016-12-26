@@ -85,14 +85,6 @@ public class ViewPlaylistFragment extends Fragment implements
 
     }
 
-//    public interface onPLaylistItemClickedListener {
-//        public void onPLaylistItemClicked(int position);
-//    }
-//
-//    public interface onPlaylistPlayAllListener {
-//        public void onPlaylistPLayAll();
-//    }
-
     public interface playlistCallbackListener {
         void onPlaylistPLayAll();
 
@@ -113,7 +105,6 @@ public class ViewPlaylistFragment extends Fragment implements
         imgLoader = new ImageLoader(context);
         try {
             mCallback = (playlistCallbackListener) context;
-//            mCallback2 = (onPlaylistPlayAllListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnHeadlineSelectedListener");

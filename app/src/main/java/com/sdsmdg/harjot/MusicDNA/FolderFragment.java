@@ -2,6 +2,7 @@ package com.sdsmdg.harjot.MusicDNA;
 
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.design.widget.FloatingActionButton;
@@ -36,6 +37,8 @@ public class FolderFragment extends Fragment {
     ImageView backBtn;
     TextView fragmentTitle;
     ImageView[] imgView = new ImageView[10];
+
+    ImageView fragIcon;
 
     ImageLoader imgLoader;
 
@@ -82,6 +85,9 @@ public class FolderFragment extends Fragment {
         fragmentTitle = (TextView) view.findViewById(R.id.all_folder_fragment_title);
         if (SplashActivity.tf4 != null)
             fragmentTitle.setTypeface(SplashActivity.tf4);
+
+        fragIcon = (ImageView) view.findViewById(R.id.all_folder_frag_icon);
+        fragIcon.setImageTintList(ColorStateList.valueOf(HomeActivity.themeColor));
 
         initializeHeaderImages(view);
 

@@ -52,6 +52,8 @@ public class PlayListFragment extends Fragment {
     TextView allPlaylistFragmentTitle;
     ImageView[] imgView = new ImageView[10];
 
+    ImageView playlistFragIcon;
+
     ImageLoader imgLoader;
 
     public PlayListFragment() {
@@ -114,6 +116,10 @@ public class PlayListFragment extends Fragment {
         allPlaylistFragmentTitle = (TextView) view.findViewById(R.id.all_playlist_fragment_title);
         if (SplashActivity.tf4 != null)
             allPlaylistFragmentTitle.setTypeface(SplashActivity.tf4);
+
+
+        playlistFragIcon = (ImageView) view.findViewById(R.id.all_playlist_frag_icon);
+        playlistFragIcon.setImageTintList(ColorStateList.valueOf(HomeActivity.themeColor));
 
         initializeHeaderImages(view);
 

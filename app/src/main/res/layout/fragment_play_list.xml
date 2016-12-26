@@ -105,10 +105,10 @@
 
         </LinearLayout>
 
-        <View
+        <com.sdsmdg.harjot.MusicDNA.CustomLinearGradient
+            android:id="@+id/linear_gradient"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/vertical_gradient" />
+            android:layout_height="match_parent" />
 
         <RelativeLayout
             android:id="@+id/all_playlist_action_container"
@@ -136,6 +136,15 @@
                 android:textSize="25sp" />
 
         </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/all_playlist_frag_icon"
+            android:layout_width="55dp"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/all_playlist_action_container"
+            android:layout_centerHorizontal="true"
+            android:paddingBottom="10dp"
+            android:src="@drawable/playlist_frag_icon" />
 
     </RelativeLayout>
 

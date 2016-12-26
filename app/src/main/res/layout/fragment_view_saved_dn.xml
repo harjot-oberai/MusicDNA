@@ -19,7 +19,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:background="?attr/selectableItemBackgroundBorderless"
+            android:background="@drawable/custom_ripple_2"
             android:clickable="true"
             android:padding="12dp"
             android:src="@drawable/back2" />

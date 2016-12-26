@@ -43,7 +43,7 @@ public class SettingsFragment extends Fragment {
     ImageView themeColorImg;
     SeekBar densitySeekbar;
     TextView densityTextDialog, densityText;
-    
+
     HomeActivity homeActivity;
 
     View bottomMarginLayout;
@@ -51,6 +51,9 @@ public class SettingsFragment extends Fragment {
     onAlbumArtBackgroundToggled mCallback;
     onColorChangedListener mCallback2;
     onAboutClickedListener mCallback3;
+
+    ImageView backBtn;
+    TextView fragTitle;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -92,6 +95,18 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        backBtn = (ImageView) view.findViewById(R.id.settings_back_btn);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
+
+        fragTitle = (TextView) view.findViewById(R.id.settings_fragment_title);
+        if (SplashActivity.tf4 != null)
+            fragTitle.setTypeface(SplashActivity.tf4);
 
         bottomMarginLayout = view.findViewById(R.id.bottom_margin_layout);
         if (HomeActivity.isReloaded)

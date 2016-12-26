@@ -9,10 +9,15 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
@@ -33,6 +38,12 @@ public class FullLocalMusicFragment extends Fragment {
     MyPageAdapter adapter;
     TabLayout tabLayout;
 
+    ImageView backBtn, searchIcon;
+    TextView fragTitle;
+    EditText searchBox;
+
+    boolean isSearchboxVisible = false;
+
     public FullLocalMusicFragment() {
         // Required empty public constructor
     }
@@ -48,6 +59,52 @@ public class FullLocalMusicFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        backBtn = (ImageView) view.findViewById(R.id.local_fragment_back_btn);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
+
+        fragTitle = (TextView) view.findViewById(R.id.local_fragment_title);
+        if (SplashActivity.tf4 != null)
+            fragTitle.setTypeface(SplashActivity.tf4);
+
+        searchBox = (EditText) view.findViewById(R.id.local_fragment_search_box);
+        searchBox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                ((HomeActivity) getActivity()).onQueryTextChange(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        searchIcon = (ImageView) view.findViewById(R.id.local_fragment_search_icon);
+        searchIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isSearchboxVisible) {
+                    searchBox.setText("");
+                    searchBox.setVisibility(View.INVISIBLE);
+                    fragTitle.setVisibility(View.VISIBLE);
+                } else {
+                    searchBox.setVisibility(View.VISIBLE);
+                    fragTitle.setVisibility(View.INVISIBLE);
+                }
+                isSearchboxVisible = !isSearchboxVisible;
+            }
+        });
 
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         tabLayout = (TabLayout) view.findViewById(R.id.tabs);

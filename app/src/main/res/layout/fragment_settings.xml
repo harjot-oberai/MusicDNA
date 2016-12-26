@@ -7,10 +7,39 @@
     android:clickable="true"
     tools:context="com.sdsmdg.harjot.MusicDNA.SettingsFragment">
 
+    <RelativeLayout
+        android:id="@+id/settings_action_container"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#111111">
+
+        <ImageView
+            android:id="@+id/settings_back_btn"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/custom_ripple"
+            android:clickable="true"
+            android:padding="12dp"
+            android:src="@drawable/back2" />
+
+        <TextView
+            android:id="@+id/settings_fragment_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="SETTINGS"
+            android:textColor="#FFFFFF"
+            android:textSize="25sp" />
+
+    </RelativeLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bottom_margin_layout">
+        android:layout_above="@+id/bottom_margin_layout"
+        android:layout_below="@+id/settings_action_container">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -21,48 +50,48 @@
                 android:id="@+id/density_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                android:background="@drawable/custom_ripple"
                 android:clickable="true"
                 android:padding="5dp">
 
                 <TextView
-                    android:layout_toLeftOf="@+id/density_value"
                     android:id="@+id/density_setting_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentTop="true"
                     android:layout_margin="7dp"
+                    android:layout_toLeftOf="@+id/density_value"
                     android:padding="5dp"
-                    android:textColor="#FFF"
                     android:text="DNA Density"
+                    android:textColor="#FFF"
                     android:textSize="18dp" />
 
                 <TextView
-                    android:textColor="#FFF"
-                    android:text="100"
                     android:id="@+id/density_value"
-                    android:textSize="18dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_marginRight="10dp"
+                    android:text="100"
+                    android:textColor="#FFF"
+                    android:textSize="18dp" />
 
             </RelativeLayout>
-            
+
             <View
-                android:background="#232323"
-                android:layout_below="@+id/density_card"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"/>
+                android:layout_height="1dp"
+                android:layout_below="@+id/density_card"
+                android:background="#232323" />
 
             <RelativeLayout
                 android:id="@+id/theme_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/density_card"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                android:background="@drawable/custom_ripple"
                 android:clickable="true"
                 android:padding="5dp">
 
@@ -87,17 +116,17 @@
             </RelativeLayout>
 
             <View
-                android:background="#232323"
-                android:layout_below="@+id/theme_card"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"/>
+                android:layout_height="1dp"
+                android:layout_below="@+id/theme_card"
+                android:background="#232323" />
 
             <RelativeLayout
                 android:id="@+id/album_art_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/theme_card"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                android:background="@drawable/custom_ripple"
                 android:clickable="true"
                 android:padding="5dp">
 
@@ -108,8 +137,8 @@
                     android:layout_centerVertical="true"
                     android:layout_margin="7dp"
                     android:padding="5dp"
-                    android:textColor="#FFF"
                     android:text="Art behind the DNA"
+                    android:textColor="#FFF"
                     android:textSize="18dp" />
 
                 <android.support.v7.widget.SwitchCompat
@@ -121,22 +150,22 @@
                     android:layout_marginRight="1dp"
                     android:checked="false"
                     android:clickable="true"
-                    android:theme="@style/CustomSwitch"/>
+                    android:theme="@style/CustomSwitch" />
 
             </RelativeLayout>
 
             <View
-                android:background="#232323"
-                android:layout_below="@+id/album_art_card"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"/>
+                android:layout_height="1dp"
+                android:layout_below="@+id/album_art_card"
+                android:background="#232323" />
 
             <RelativeLayout
                 android:id="@+id/wifi_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/album_art_card"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                android:background="@drawable/custom_ripple"
                 android:clickable="true"
                 android:padding="5dp">
 
@@ -147,8 +176,8 @@
                     android:layout_centerVertical="true"
                     android:layout_margin="7dp"
                     android:padding="5dp"
-                    android:textColor="#FFF"
                     android:text="Stream over Wifi only"
+                    android:textColor="#FFF"
                     android:textSize="18dp" />
 
                 <android.support.v7.widget.SwitchCompat
@@ -160,22 +189,22 @@
                     android:layout_marginRight="1dp"
                     android:checked="false"
                     android:clickable="true"
-                    android:theme="@style/CustomSwitch"/>
+                    android:theme="@style/CustomSwitch" />
 
             </RelativeLayout>
 
             <View
-                android:background="#232323"
-                android:layout_below="@+id/wifi_card"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"/>
+                android:layout_height="1dp"
+                android:layout_below="@+id/wifi_card"
+                android:background="#232323" />
 
             <RelativeLayout
                 android:id="@+id/about_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/wifi_card"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                android:background="@drawable/custom_ripple"
                 android:clickable="true"
                 android:padding="5dp">
 
@@ -185,17 +214,17 @@
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_margin="7dp"
-                    android:textColor="#FFF"
                     android:padding="5dp"
                     android:text="About"
+                    android:textColor="#FFF"
                     android:textSize="18dp" />
             </RelativeLayout>
 
             <View
-                android:background="#232323"
-                android:layout_below="@+id/about_card"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"/>
+                android:layout_height="1dp"
+                android:layout_below="@+id/about_card"
+                android:background="#232323" />
 
         </RelativeLayout>
 

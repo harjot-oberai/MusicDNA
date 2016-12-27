@@ -34,8 +34,11 @@
                     android:id="@+id/local_fragment_search_box"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginRight="10dp"
                     android:layout_toLeftOf="@+id/local_fragment_search_icon"
                     android:layout_toRightOf="@+id/local_fragment_back_btn"
+                    android:hint="Search"
+                    android:paddingLeft="5dp"
                     android:visibility="invisible" />
 
                 <TextView
@@ -43,11 +46,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginLeft="5dp"
                     android:layout_toRightOf="@+id/local_fragment_back_btn"
                     android:text="LOCAL"
                     android:textColor="#FFFFFF"
-                    android:textSize="25sp" />
+                    android:textSize="23sp" />
 
                 <ImageView
                     android:id="@+id/local_fragment_search_icon"

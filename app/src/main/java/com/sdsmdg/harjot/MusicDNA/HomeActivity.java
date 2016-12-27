@@ -1416,6 +1416,22 @@ public class HomeActivity extends AppCompatActivity
             plFrag.toggleContainer.setVisibility(View.VISIBLE);
             plFrag.spToolbar.setVisibility(View.VISIBLE);
             onFullScreen();
+        } else if (isEqualizerVisible) {
+            showPlayer2();
+        } else if (isQueueVisible) {
+            showPlayer3();
+        } else if (isPlayerVisible && !isPlayerTransitioning) {
+            hidePlayer();
+            showTabs();
+            isPlayerVisible = false;
+        } else if (isLocalVisible && flmFrag != null && flmFrag.searchBox != null && flmFrag.isSearchboxVisible) {
+            flmFrag.searchBox.setText("");
+            flmFrag.searchBox.setVisibility(View.INVISIBLE);
+            flmFrag.isSearchboxVisible = false;
+            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+            flmFrag.searchIcon.setImageResource(R.drawable.ic_search);
+            flmFrag.fragTitle.setVisibility(View.VISIBLE);
         } else if (!searchView.isIconified()) {
             searchView.setQuery("", true);
             searchView.setIconified(true);
@@ -1428,15 +1444,7 @@ public class HomeActivity extends AppCompatActivity
             localRecyclerContainer.setVisibility(GONE);
             streamRecyclerContainer.setVisibility(GONE);
         } else {
-            if (isEqualizerVisible) {
-                showPlayer2();
-            } else if (isQueueVisible) {
-                showPlayer3();
-            } else if (isPlayerVisible && !isPlayerTransitioning) {
-                hidePlayer();
-                showTabs();
-                isPlayerVisible = false;
-            } else if (isEditVisible) {
+            if (isEditVisible) {
                 hideFragment("Edit");
             } else if (isAlbumVisible) {
                 hideFragment("viewAlbum");
@@ -1602,9 +1610,6 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void updateLocalList(String query) {
-        if (isPlayerVisible) {
-            hidePlayer();
-        }
 
         FullLocalMusicFragment flmFrag = (FullLocalMusicFragment) fragMan.findFragmentByTag("local");
         LocalMusicFragment lFrag = null;
@@ -1616,7 +1621,9 @@ public class HomeActivity extends AppCompatActivity
 
         /*Update the Local List*/
 
-        localRecyclerContainer.setVisibility(View.VISIBLE);
+        if (!isLocalVisible)
+            localRecyclerContainer.setVisibility(View.VISIBLE);
+
         finalLocalSearchResultList.clear();
         for (int i = 0; i < localTrackList.size(); i++) {
             LocalTrack lt = localTrackList.get(i);
@@ -1627,17 +1634,20 @@ public class HomeActivity extends AppCompatActivity
             }
         }
 
-        if (finalLocalSearchResultList.size() == 0) {
-            localsongsRecyclerView.setVisibility(GONE);
-            localNothingText.setVisibility(View.VISIBLE);
-        } else {
-            localsongsRecyclerView.setVisibility(View.VISIBLE);
-            localNothingText.setVisibility(View.INVISIBLE);
+        if (!isLocalVisible) {
+            if (finalLocalSearchResultList.size() == 0) {
+                localsongsRecyclerView.setVisibility(GONE);
+                localNothingText.setVisibility(View.VISIBLE);
+            } else {
+                localsongsRecyclerView.setVisibility(View.VISIBLE);
+                localNothingText.setVisibility(View.INVISIBLE);
+            }
+            (localsongsRecyclerView.getAdapter()).notifyDataSetChanged();
         }
 
-        (localsongsRecyclerView.getAdapter()).notifyDataSetChanged();
         if (lFrag != null)
             lFrag.updateAdapter();
+
         if (query.equals("")) {
             localRecyclerContainer.setVisibility(GONE);
         }
@@ -1689,74 +1699,71 @@ public class HomeActivity extends AppCompatActivity
 
     private void updateStreamingList(String query) {
 
-        mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        if ((settings.isStreamOnlyOnWifiEnabled() && mWifi.isConnected()) || (!settings.isStreamOnlyOnWifiEnabled())) {
-            new Thread(new CancelCall()).start();
+        if (!isLocalVisible) {
 
-            if (isPlayerVisible) {
-                hidePlayer();
-            }
+            mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            if ((settings.isStreamOnlyOnWifiEnabled() && mWifi.isConnected()) || (!settings.isStreamOnlyOnWifiEnabled())) {
+                new Thread(new CancelCall()).start();
 
-        /*Update the Streaming List*/
 
-            if (!query.equals("")) {
-            /*streamingTrackList.clear();
-            if(sAdapter!=null){
-                soundcloudRecyclerView.getAdapter().notifyDataSetChanged();
-            }*/
-                streamRecyclerContainer.setVisibility(View.VISIBLE);
-                startLoadingIndicator();
-                Retrofit client = new Retrofit.Builder()
-                        .baseUrl(Config.API_URL)
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-                StreamService ss = client.create(StreamService.class);
-                call = ss.getTracks(query, 75);
-                call.enqueue(new Callback<List<Track>>() {
+                /*Update the Streaming List*/
 
-                    @Override
-                    public void onResponse(Response<List<Track>> response) {
+                if (!query.equals("")) {
+                    streamRecyclerContainer.setVisibility(View.VISIBLE);
 
-                        if (response.isSuccess()) {
-                            streamingTrackList = response.body();
-                            sAdapter = new StreamTracksHorizontalAdapter(streamingTrackList, ctx);
-                            LinearLayoutManager mLayoutManager = new LinearLayoutManager(ctx, LinearLayoutManager.HORIZONTAL, false);
-                            soundcloudRecyclerView.setLayoutManager(mLayoutManager);
-                            soundcloudRecyclerView.setItemAnimator(new DefaultItemAnimator());
-                            soundcloudRecyclerView.setAdapter(sAdapter);
+                    startLoadingIndicator();
+                    Retrofit client = new Retrofit.Builder()
+                            .baseUrl(Config.API_URL)
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+                    StreamService ss = client.create(StreamService.class);
+                    call = ss.getTracks(query, 75);
+                    call.enqueue(new Callback<List<Track>>() {
 
-                            if (streamingTrackList.size() == 0) {
-                                streamRecyclerContainer.setVisibility(GONE);
+                        @Override
+                        public void onResponse(Response<List<Track>> response) {
+
+                            if (response.isSuccess()) {
+                                streamingTrackList = response.body();
+                                sAdapter = new StreamTracksHorizontalAdapter(streamingTrackList, ctx);
+                                LinearLayoutManager mLayoutManager = new LinearLayoutManager(ctx, LinearLayoutManager.HORIZONTAL, false);
+                                soundcloudRecyclerView.setLayoutManager(mLayoutManager);
+                                soundcloudRecyclerView.setItemAnimator(new DefaultItemAnimator());
+                                soundcloudRecyclerView.setAdapter(sAdapter);
+
+                                if (streamingTrackList.size() == 0) {
+                                    streamRecyclerContainer.setVisibility(GONE);
+                                } else {
+                                    streamRecyclerContainer.setVisibility(View.VISIBLE);
+                                }
+
+                                stopLoadingIndicator();
+                                (soundcloudRecyclerView.getAdapter()).notifyDataSetChanged();
+
+                                StreamMusicFragment sFrag = (StreamMusicFragment) fragMan.findFragmentByTag("stream");
+                                if (sFrag != null) {
+                                    sFrag.dataChanged();
+                                }
                             } else {
-                                streamRecyclerContainer.setVisibility(View.VISIBLE);
+                                stopLoadingIndicator();
                             }
-
-                            stopLoadingIndicator();
-                            (soundcloudRecyclerView.getAdapter()).notifyDataSetChanged();
-
-                            StreamMusicFragment sFrag = (StreamMusicFragment) fragMan.findFragmentByTag("stream");
-                            if (sFrag != null) {
-                                sFrag.dataChanged();
-                            }
-                        } else {
-                            stopLoadingIndicator();
+                            Log.d("RETRO", response.body() + "");
                         }
-                        Log.d("RETRO", response.body() + "");
-                    }
 
-                    @Override
-                    public void onFailure(Throwable t) {
-                        Log.d("RETRO1", t.getMessage());
-                    }
-                });
+                        @Override
+                        public void onFailure(Throwable t) {
+                            Log.d("RETRO1", t.getMessage());
+                        }
+                    });
 
+                } else {
+                    stopLoadingIndicator();
+                    streamRecyclerContainer.setVisibility(GONE);
+                }
             } else {
                 stopLoadingIndicator();
                 streamRecyclerContainer.setVisibility(GONE);
             }
-        } else {
-            stopLoadingIndicator();
-            streamRecyclerContainer.setVisibility(GONE);
         }
     }
 
@@ -1882,7 +1889,6 @@ public class HomeActivity extends AppCompatActivity
         if (playerFragment.mVisualizerView != null)
             playerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
 
-//        setUpFragmentToolbar(Color.BLACK, "Queue");
         switchToolbar(toolbar, queueToolbar, "left");
 
         final Handler handler2 = new Handler();
@@ -2951,7 +2957,6 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void deleteMediaStoreCache() {
         File dir = new File(Environment.getExternalStorageDirectory() + "/Android/data/com.android.providers.media/albumthumbs");
-//        Toast.makeText(this, Environment.getExternalStorageDirectory() + "/Android/data/com.android.providers.media/albumthumbs/", Toast.LENGTH_SHORT).show();
         if (dir.isDirectory()) {
             Toast.makeText(this, "Clearing cache", Toast.LENGTH_SHORT).show();
             String[] children = dir.list();

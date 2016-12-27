@@ -14,6 +14,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -60,6 +61,9 @@ public class FullLocalMusicFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        ((HomeActivity) getActivity()).onQueryTextChange("");
+        isSearchboxVisible = false;
+
         backBtn = (ImageView) view.findViewById(R.id.local_fragment_back_btn);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,9 +101,16 @@ public class FullLocalMusicFragment extends Fragment {
                 if (isSearchboxVisible) {
                     searchBox.setText("");
                     searchBox.setVisibility(View.INVISIBLE);
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                    searchIcon.setImageResource(R.drawable.ic_search);
                     fragTitle.setVisibility(View.VISIBLE);
                 } else {
                     searchBox.setVisibility(View.VISIBLE);
+                    searchBox.requestFocus();
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                    searchIcon.setImageResource(R.drawable.ic_cross_white);
                     fragTitle.setVisibility(View.INVISIBLE);
                 }
                 isSearchboxVisible = !isSearchboxVisible;

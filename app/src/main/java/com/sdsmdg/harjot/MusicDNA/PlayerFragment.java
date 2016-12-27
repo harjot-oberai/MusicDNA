@@ -750,7 +750,7 @@ public class PlayerFragment extends Fragment implements
         mVisualizerView = (VisualizerView) view.findViewById(R.id.myvisualizerview);
 
         VisualizerView.w = HomeActivity.screen_width;
-        VisualizerView.h = HomeActivity.screen_width;
+        VisualizerView.h = HomeActivity.screen_height;
         VisualizerView.conf = Bitmap.Config.ARGB_8888;
         VisualizerView.bmp = Bitmap.createBitmap(VisualizerView.w, VisualizerView.h, VisualizerView.conf);
         HomeActivity.cacheCanvas = new Canvas(VisualizerView.bmp);
@@ -1177,7 +1177,7 @@ public class PlayerFragment extends Fragment implements
         }
 
         VisualizerView.w = HomeActivity.screen_width;
-        VisualizerView.h = HomeActivity.screen_width;
+        VisualizerView.h = HomeActivity.screen_height;
         VisualizerView.conf = Bitmap.Config.ARGB_8888;
         VisualizerView.bmp = Bitmap.createBitmap(VisualizerView.w, VisualizerView.h, VisualizerView.conf);
         HomeActivity.cacheCanvas = new Canvas(VisualizerView.bmp);

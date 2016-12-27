@@ -69,11 +69,6 @@ public class VisualizerView extends View {
         mForePaint1.setColor(Color.rgb(255, 128, 0));
         pts = new ArrayList<>();
         ptPaint = new ArrayList<>();
-//        w = HomeActivity.screen_width;
-//        h = HomeActivity.screen_width;
-//        conf = Bitmap.Config.ARGB_8888;
-//        bmp = Bitmap.createBitmap(w, h, conf);
-//        HomeActivity.cacheCanvas = new Canvas(bmp);
     }
 
     public void updateVisualizer(byte[] bytes) {
@@ -89,27 +84,12 @@ public class VisualizerView extends View {
         // Redraw previous points
         if (HomeActivity.isPlayerVisible) {
             if (PlayerFragment.mVisualizerView != null && (PlayerFragment.mVisualizerView.getVisibility() == View.VISIBLE)) {
-                if (bmp != null)
-                    canvas.drawBitmap(bmp, 0, 0, null);
-                for (int i = 0; i < pts.size(); i++) {
-                    try {
-                        canvas.drawCircle(pts.get(i).first, pts.get(i).second, ptPaint.get(i).first, mForePaint);
-                        pts.clear();
-                        ptPaint.clear();
-                        mForePaint.setColor(ptPaint.get(i).second.first);
-                        mForePaint.setAlpha(ptPaint.get(i).second.second);
-                    } catch (Exception e) {
-
-                    }
-                }
                 canvas.drawBitmap(bmp, 0, 0, null);
             }
         }
     }
 
     public void clear() {
-//        bmp = Bitmap.createBitmap(w, h, conf);
-//        HomeActivity.cacheCanvas = new Canvas(bmp);
         pts.clear();
         ptPaint.clear();
     }

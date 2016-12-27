@@ -668,7 +668,6 @@ public class HomeActivity extends AppCompatActivity
         screen_width = display.getWidth();
         screen_height = display.getHeight();
 
-
         ratio = (float) screen_height / (float) 1920;
         ratio2 = (float) screen_width / (float) 1080;
         ratio = Math.min(ratio, ratio2);
@@ -2102,7 +2101,7 @@ public class HomeActivity extends AppCompatActivity
         // calculate min and max amplitude for current byte array
         float max = Integer.MIN_VALUE, min = Integer.MAX_VALUE;
         for (int a = 16; a < (mBytes.length / 2); a++) {
-            float amp = mBytes[(a * 2) + 0] * mBytes[(a * 2) + 0] + mBytes[(a * 2) + 1] * mBytes[(a * 2) + 1];
+            float amp = mBytes[(a * 2)] * mBytes[(a * 2)] + mBytes[(a * 2) + 1] * mBytes[(a * 2) + 1];
             if (amp > max) {
                 max = amp;
             }
@@ -2231,7 +2230,7 @@ public class HomeActivity extends AppCompatActivity
             // Get Visualizer and Visualizer View to initial state
             plFrag.mVisualizer.setEnabled(true);
             VisualizerView.w = screen_width;
-            VisualizerView.h = screen_width;
+            VisualizerView.h = screen_height;
             VisualizerView.conf = Bitmap.Config.ARGB_8888;
             VisualizerView.bmp = Bitmap.createBitmap(VisualizerView.w, VisualizerView.h, VisualizerView.conf);
             cacheCanvas = new Canvas(VisualizerView.bmp);
@@ -3011,8 +3010,14 @@ public class HomeActivity extends AppCompatActivity
                 public void run() {
                     playerFragment.mVisualizerView.updateVisualizer(mBytes);
                     if (playerFragment.mVisualizerView.bmp != null) {
-                        if (navImageView != null)
-                            navImageView.setImageBitmap(playerFragment.mVisualizerView.bmp);
+                        if (navImageView != null) {
+                            try {
+                                Bitmap croppedBmp = Bitmap.createBitmap(playerFragment.mVisualizerView.bmp, 0, (int) (75 * ratio), screen_width, screen_width);
+                                navImageView.setImageBitmap(croppedBmp);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
                     }
                 }
             });

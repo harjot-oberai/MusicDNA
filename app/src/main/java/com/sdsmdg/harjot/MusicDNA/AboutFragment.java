@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 
 /**
@@ -17,6 +19,9 @@ import android.widget.Button;
 public class AboutFragment extends Fragment {
 
     Button linkBtn;
+
+    ImageView backBtn;
+    TextView fragTitle;
 
     View bottomMarginLayout;
 
@@ -35,6 +40,18 @@ public class AboutFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        backBtn = (ImageView) view.findViewById(R.id.about_back_btn);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
+
+        fragTitle = (TextView) view.findViewById(R.id.about_fragment_title);
+        if (SplashActivity.tf4 != null)
+            fragTitle.setTypeface(SplashActivity.tf4);
 
         bottomMarginLayout = view.findViewById(R.id.bottom_margin_layout);
         if (HomeActivity.isReloaded)

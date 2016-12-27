@@ -5,6 +5,34 @@
     android:background="@color/colorDark"
     tools:context="com.sdsmdg.harjot.MusicDNA.AboutFragment">
 
+    <RelativeLayout
+        android:id="@+id/about_action_container"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#111111">
+
+        <ImageView
+            android:id="@+id/about_back_btn"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/custom_ripple"
+            android:clickable="true"
+            android:padding="12dp"
+            android:src="@drawable/back2" />
+
+        <TextView
+            android:id="@+id/about_fragment_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="ABOUT"
+            android:textColor="#FFFFFF"
+            android:textSize="25sp" />
+
+    </RelativeLayout>
+
     <ImageView
         android:id="@+id/mdg_logo"
         android:layout_width="140dp"

@@ -7,27 +7,105 @@
     android:clickable="true"
     tools:context="com.sdsmdg.harjot.MusicDNA.ViewArtistFragment">
 
-    <TextView
-        android:id="@+id/artist_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
-        android:ellipsize="marquee"
-        android:fadingEdge="horizontal"
-        android:singleLine="true"
-        android:text="Artist"
-        android:textColor="#FFFFFF"
-        android:textSize="20dp" />
+    <RelativeLayout
+        android:id="@+id/artist_header"
+        android:layout_width="match_parent"
+        android:layout_height="200dp">
+
+        <ImageView
+            android:id="@+id/artist_backdrop"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/vertical_gradient" />
+
+        <RelativeLayout
+            android:id="@+id/artist_action_container"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize">
+
+            <ImageView
+                android:id="@+id/view_artist_back_btn"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:padding="12dp"
+                android:src="@drawable/back2" />
+
+            <TextView
+                android:id="@+id/artist_fragment_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="artist"
+                android:textColor="#FFFFFF"
+                android:textSize="25sp" />
+
+            <ImageView
+                android:id="@+id/add_artist_to_queue_icon"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:clickable="true"
+                android:padding="14dp"
+                android:src="@drawable/ic_add_to_queue" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/artist_action_container"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/artist_title"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:gravity="bottom"
+                android:maxLines="1"
+                android:paddingBottom="1dp"
+                android:paddingLeft="12dp"
+                android:text="artist"
+                android:textAlignment="gravity"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/artist_tracks_text"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:gravity="top"
+                android:paddingLeft="12dp"
+                android:paddingTop="1dp"
+                android:text="Songs"
+                android:textAlignment="gravity"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/artist_songs_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/artist_title"
-        android:background="@color/colorDark"
-        android:layout_above="@+id/bottom_margin_layout"/>
+        android:layout_above="@+id/bottom_margin_layout"
+        android:layout_below="@+id/artist_header"
+        android:background="@color/colorDark" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/play_all_fab_artist"

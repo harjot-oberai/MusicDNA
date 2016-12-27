@@ -162,11 +162,9 @@ public class HomeActivity extends AppCompatActivity
         FolderContentFragment.folderCallbackListener,
         ViewSavedDNA.onShareListener,
         AlbumFragment.onAlbumClickListener,
-        ViewAlbumFragment.onAlbumSongClickListener,
-        ViewAlbumFragment.onAlbumPlayAllListener,
+        ViewAlbumFragment.albumCallbackListener,
         ArtistFragment.onArtistClickListener,
-        ViewArtistFragment.onArtistSongClickListener,
-        ViewArtistFragment.onArtistPlayAllListener,
+        ViewArtistFragment.artistCallbackListener,
         RecentsFragment.recentsCallbackListener,
         MediaPlayerService.onCallbackListener,
         SettingsFragment.onColorChangedListener,
@@ -2639,6 +2637,19 @@ public class HomeActivity extends AppCompatActivity
     }
 
     @Override
+    public void addAlbumToQueue() {
+        List<LocalTrack> list = tempAlbum.getAlbumSongs();
+        for (LocalTrack lt : list) {
+            HomeActivity.queue.addToQueue(new UnifiedTrack(true, lt, null));
+        }
+        if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
+            playerFragment.snappyRecyclerView.getAdapter().notifyDataSetChanged();
+            playerFragment.snappyRecyclerView.setTransparency();
+        }
+        Toast.makeText(ctx, "Added " + list.size() + " song(s) to queue", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void onRecentItemClicked(boolean isLocal) {
         if (isLocal) {
             onLocalTrackSelected(-1);
@@ -2698,6 +2709,19 @@ public class HomeActivity extends AppCompatActivity
     public void onArtistPlayAll() {
         onQueueItemClicked(0);
         showPlayer();
+    }
+
+    @Override
+    public void addArtistToQueue() {
+        List<LocalTrack> list = tempArtist.getArtistSongs();
+        for (LocalTrack lt : list) {
+            HomeActivity.queue.addToQueue(new UnifiedTrack(true, lt, null));
+        }
+        if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
+            playerFragment.snappyRecyclerView.getAdapter().notifyDataSetChanged();
+            playerFragment.snappyRecyclerView.setTransparency();
+        }
+        Toast.makeText(ctx, "Added " + list.size() + " song(s) to queue", Toast.LENGTH_SHORT).show();
     }
 
     @Override

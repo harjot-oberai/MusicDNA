@@ -17,11 +17,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sdsmdg.harjot.MusicDNA.CustomBottomSheetDialogs.CustomLocalBottomSheetDialog;
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
+import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
 import com.squareup.leakcanary.RefWatcher;
 
 
@@ -33,30 +35,34 @@ public class ViewArtistFragment extends Fragment {
     RecyclerView rv;
     LocalTrackListAdapter lAdapter;
 
-    onArtistSongClickListener mCallback;
-    onArtistPlayAllListener mCallback2;
+    artistCallbackListener mCallback;
 
     FloatingActionButton playAllfab;
     Context ctx;
 
     HomeActivity activity;
 
-    TextView title, albumDetails;
+    TextView title;
 
     View bottomMarginLayout;
+
+    ImageLoader imgLoader;
+
+    ImageView backBtn, backdrop, addToQueueIcon;
+    TextView fragTitle, artistTitle, artistTrackText;
 
     public ViewArtistFragment() {
         // Required empty public constructor
     }
 
-    public interface onArtistSongClickListener {
-        public void onArtistSongClick();
+    public interface artistCallbackListener {
+        void onArtistSongClick();
 
-        public void addToPlaylist(UnifiedTrack ut);
-    }
+        void addToPlaylist(UnifiedTrack ut);
 
-    public interface onArtistPlayAllListener {
-        public void onArtistPlayAll();
+        void onArtistPlayAll();
+
+        void addArtistToQueue();
     }
 
     @Override
@@ -65,8 +71,8 @@ public class ViewArtistFragment extends Fragment {
         ctx = context;
         activity = (HomeActivity) context;
         try {
-            mCallback = (onArtistSongClickListener) context;
-            mCallback2 = (onArtistPlayAllListener) context;
+            imgLoader = new ImageLoader(context);
+            mCallback = (artistCallbackListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnHeadlineSelectedListener");
@@ -84,14 +90,47 @@ public class ViewArtistFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        backBtn = (ImageView) view.findViewById(R.id.view_artist_back_btn);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
+
+        backdrop = (ImageView) view.findViewById(R.id.artist_backdrop);
+        imgLoader.DisplayImage(HomeActivity.tempArtist.getArtistSongs().get(0).getPath(), backdrop);
+
+        fragTitle = (TextView) view.findViewById(R.id.artist_fragment_title);
+        if (SplashActivity.tf4 != null)
+            fragTitle.setTypeface(SplashActivity.tf4);
+
+        artistTitle = (TextView) view.findViewById(R.id.artist_title);
+        artistTitle.setText(HomeActivity.tempArtist.getName());
+
+        artistTrackText = (TextView) view.findViewById(R.id.artist_tracks_text);
+        int tmp = HomeActivity.tempArtist.getArtistSongs().size();
+        String details1;
+        if (tmp == 1) {
+            details1 = "1 Song ";
+        } else {
+            details1 = tmp + " Songs ";
+        }
+        artistTrackText.setText(details1);
+
+        addToQueueIcon = (ImageView) view.findViewById(R.id.add_artist_to_queue_icon);
+        addToQueueIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallback.addArtistToQueue();
+            }
+        });
+
         bottomMarginLayout = view.findViewById(R.id.bottom_margin_layout);
         if (HomeActivity.isReloaded)
             bottomMarginLayout.getLayoutParams().height = 0;
         else
             bottomMarginLayout.getLayoutParams().height = ((HomeActivity) getContext()).dpTopx(65);
-
-        title = (TextView) view.findViewById(R.id.artist_title);
-        title.setText(HomeActivity.tempArtist.getName());
 
         rv = (RecyclerView) view.findViewById(R.id.artist_songs_recycler);
         lAdapter = new LocalTrackListAdapter(HomeActivity.tempArtist.getArtistSongs(), getContext());
@@ -152,7 +191,7 @@ public class ViewArtistFragment extends Fragment {
                     UnifiedTrack ut = new UnifiedTrack(true, HomeActivity.tempArtist.getArtistSongs().get(i), null);
                     HomeActivity.queue.getQueue().add(ut);
                 }
-                mCallback2.onArtistPlayAll();
+                mCallback.onArtistPlayAll();
             }
         });
     }

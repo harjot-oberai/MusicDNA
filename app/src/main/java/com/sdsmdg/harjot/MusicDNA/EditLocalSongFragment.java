@@ -18,7 +18,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
 
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
@@ -47,10 +50,14 @@ import java.net.URI;
 public class EditLocalSongFragment extends Fragment {
 
     EditText titleText, artistText, albumText;
-    ImageView songImage, backImage;
     Button saveButton;
 
+    ImageView backBtn, backdrop;
+    TextView fragTitle;
+
     Context ctx;
+
+    ImageLoader imgLoader;
 
     boolean isTitleNotNull = false;
     boolean isArtistNotNull = false;
@@ -86,6 +93,7 @@ public class EditLocalSongFragment extends Fragment {
         super.onAttach(context);
         ctx = context;
         try {
+            imgLoader = new ImageLoader(context);
             mCallback = (onEditSongSaveListener) context;
             mCallback2 = (newCoverListener) context;
         } catch (ClassCastException e) {
@@ -105,6 +113,21 @@ public class EditLocalSongFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        backBtn = (ImageView) view.findViewById(R.id.edit_song_back_btn);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
+
+        fragTitle = (TextView) view.findViewById(R.id.edit_song_fragment_title);
+        if (SplashActivity.tf4 != null)
+            fragTitle.setTypeface(SplashActivity.tf4);
+
+        backdrop = (ImageView) view.findViewById(R.id.edit_song_backdrop);
+        imgLoader.DisplayImage(HomeActivity.editSong.getPath(), backdrop);
+
         bottomMarginLayout = view.findViewById(R.id.bottom_margin_layout);
         if (HomeActivity.isReloaded)
             bottomMarginLayout.getLayoutParams().height = 0;
@@ -115,30 +138,6 @@ public class EditLocalSongFragment extends Fragment {
         artistText = (EditText) view.findViewById(R.id.edit_song_artist);
         albumText = (EditText) view.findViewById(R.id.edit_song_album);
 
-        songImage = (ImageView) view.findViewById(R.id.edit_song_image);
-        backImage = (ImageView) view.findViewById(R.id.back_image);
-
-        Bitmap bmp = null;
-        try {
-            bmp = getBitmap(HomeActivity.editSong.getPath());
-        } catch (Exception e) {
-
-        }
-
-        if (bmp != null) {
-            songImage.setImageBitmap(bmp);
-            backImage.setImageBitmap(bmp);
-        } else {
-            songImage.setImageResource(R.drawable.ic_default);
-            backImage.setImageResource(R.drawable.ic_default);
-        }
-
-//        songImage.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mCallback2.getNewBitmap();
-//            }
-//        });
 
         saveButton = (Button) view.findViewById(R.id.edit_song_save_button);
         saveButton.setBackgroundColor(HomeActivity.themeColor);
@@ -168,10 +167,6 @@ public class EditLocalSongFragment extends Fragment {
                     isAlbumNotNull = false;
                 }
                 if (isTitleNotNull && isArtistNotNull && isAlbumNotNull) {
-
-//                    id3v2Tag.setTitle(titleText.getText().toString());
-//                    id3v2Tag.setArtist(artistText.getText().toString());
-//                    id3v2Tag.setAlbum(albumText.getText().toString());
 
                     boolean error = false;
 
@@ -267,10 +262,6 @@ public class EditLocalSongFragment extends Fragment {
         }
 
         if (mp3File != null && mp3File.hasID3v2Tag()) {
-//            Tag tag = mp3File.getTag();
-//            titleText.setText(tag.getFirst(FieldKey.TITLE));
-//            artistText.setText(tag.getFirst(FieldKey.ARTIST));
-//            albumText.setText(tag.getFirst(FieldKey.ALBUM));
             titleText.setText(HomeActivity.editSong.getTitle());
             artistText.setText(HomeActivity.editSong.getArtist());
             albumText.setText(HomeActivity.editSong.getAlbum());
@@ -300,31 +291,31 @@ public class EditLocalSongFragment extends Fragment {
     }
 
     public void updateCoverArt(Bitmap bmp, Uri artUri) {
-        if (bmp != null) {
-            songImage.setImageBitmap(bmp);
-            backImage.setImageBitmap(bmp);
-        }
-
-        File file = new File(artUri.getPath());
-
-        if (file.exists()) {
-            Artwork cover = null;
-            try {
-                cover = ArtworkFactory.createArtworkFromFile(file);
-                tag.deleteArtworkField();
-                tag.createField(cover);
-                tag.setField(cover);
-                mp3File.commit();
-            } catch (FieldDataInvalidException e) {
-                e.printStackTrace();
-            } catch (CannotWriteException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        mCallback2.deleteMediaStoreCache();
+//        if (bmp != null) {
+//            songImage.setImageBitmap(bmp);
+//            backImage.setImageBitmap(bmp);
+//        }
+//
+//        File file = new File(artUri.getPath());
+//
+//        if (file.exists()) {
+//            Artwork cover = null;
+//            try {
+//                cover = ArtworkFactory.createArtworkFromFile(file);
+//                tag.deleteArtworkField();
+//                tag.createField(cover);
+//                tag.setField(cover);
+//                mp3File.commit();
+//            } catch (FieldDataInvalidException e) {
+//                e.printStackTrace();
+//            } catch (CannotWriteException e) {
+//                e.printStackTrace();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//        mCallback2.deleteMediaStoreCache();
 
     }
 

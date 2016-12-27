@@ -7,95 +7,104 @@
     android:clickable="true"
     tools:context="com.sdsmdg.harjot.MusicDNA.EditLocalSongFragment">
 
-    <ScrollView
+    <RelativeLayout
+        android:id="@+id/edit_song_header"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="140dp">
+
+        <ImageView
+            android:id="@+id/edit_song_backdrop"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/vertical_gradient" />
 
         <RelativeLayout
+            android:id="@+id/edit_song_action_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="?attr/actionBarSize">
 
-            <FrameLayout
-                android:id="@+id/image_container"
-                android:layout_width="match_parent"
-                android:layout_height="200dp">
+            <ImageView
+                android:id="@+id/edit_song_back_btn"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:padding="12dp"
+                android:src="@drawable/back2" />
 
-                <ImageView
-                    android:id="@+id/back_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop" />
-
-                <com.github.mmin18.widget.RealtimeBlurView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:realtimeBlurRadius="10dp"
-                    app:realtimeOverlayColor="#4000" />
-
-                <ImageView
-                    android:id="@+id/edit_song_image"
-                    android:layout_width="160dp"
-                    android:layout_height="160dp"
-                    android:layout_gravity="center"
-                    android:background="#333"
-                    android:scaleType="centerCrop" />
-            </FrameLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/edit_song_title_wrapper"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/edit_song_fragment_title"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/image_container"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:textColorHint="#DDD">
-
-                <EditText
-                    android:id="@+id/edit_song_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Title"
-                    android:text="Title"
-                    android:textColor="#FFF" />
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/edit_song_artist_wrapper"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/edit_song_title_wrapper"
-                android:layout_marginLeft="10dp"
-                android:textColorHint="#DDD">
-
-                <EditText
-                    android:id="@+id/edit_song_artist"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Artist"
-                    android:text="Artist"
-                    android:textColor="#FFF" />
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/edit_song_album_wrapper"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/edit_song_artist_wrapper"
-                android:layout_marginLeft="10dp"
-                android:textColorHint="#DDD">
-
-                <EditText
-                    android:id="@+id/edit_song_album"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Album"
-                    android:text="Album"
-                    android:textColor="#FFF" />
-            </android.support.design.widget.TextInputLayout>
+                android:layout_centerInParent="true"
+                android:text="EDIT"
+                android:textColor="#FFFFFF"
+                android:textSize="25sp" />
 
         </RelativeLayout>
 
-    </ScrollView>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottom_margin_layout"
+        android:layout_below="@+id/edit_song_header"
+        android:orientation="vertical">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/edit_song_title_wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:textColorHint="#DDD">
+
+            <EditText
+                android:id="@+id/edit_song_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Title"
+                android:textColor="#FFF" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/edit_song_artist_wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:textColorHint="#DDD">
+
+            <EditText
+                android:id="@+id/edit_song_artist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Artist"
+                android:textColor="#FFF" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/edit_song_album_wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:textColorHint="#DDD">
+
+            <EditText
+                android:id="@+id/edit_song_album"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Album"
+                android:textColor="#FFF" />
+        </android.support.design.widget.TextInputLayout>
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/edit_song_save_button"

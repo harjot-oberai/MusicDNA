@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/album_art_container_v"
@@ -16,8 +15,8 @@
         android:id="@+id/blurred_album_art"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:realtimeOverlayColor="#88000000"
+        android:visibility="gone"
         app:realtimeBlurRadius="40dp"
         app:realtimeDownsampleFactor="4"
-        android:visibility="gone" />
+        app:realtimeOverlayColor="#88000000" />
 </RelativeLayout>

@@ -4,9 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="154dp"
     android:layout_margin="7dp"
+    android:background="@drawable/custom_ripple"
     android:clickable="true"
     android:focusable="true"
-    android:background="@drawable/custom_ripple"
     android:longClickable="true">
 
     <ImageView
@@ -15,6 +15,7 @@
         android:layout_height="115dp"
         android:layout_centerHorizontal="true"
         android:layout_gravity="top"
+        android:background="#222222"
         android:scaleType="centerCrop" />
 
     <RelativeLayout

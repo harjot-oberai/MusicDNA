@@ -1,48 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="115dp"
     android:layout_height="154dp"
     android:layout_margin="7dp"
+    android:background="@drawable/custom_ripple"
     android:clickable="true"
     android:focusable="true"
-    android:longClickable="true"
-    android:background="@drawable/custom_ripple"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:longClickable="true">
 
     <ImageView
         android:id="@+id/backImage"
-        android:layout_gravity="top"
-        android:layout_height="115dp"
         android:layout_width="match_parent"
+        android:layout_height="115dp"
+        android:layout_gravity="top"
+        android:background="#222222"
         android:scaleType="centerCrop" />
 
     <RelativeLayout
         android:id="@+id/bottomHolder"
+        android:layout_width="match_parent"
+        android:layout_height="47dp"
         android:layout_alignParentBottom="true"
         android:layout_below="@+id/backImage"
-        android:layout_gravity="bottom"
-        android:layout_height="47dp"
-        android:layout_width="match_parent">
+        android:layout_gravity="bottom">
 
         <TextView
-            android:ellipsize="end"
             android:id="@+id/card_title"
-            android:layout_height="22dp"
             android:layout_width="match_parent"
-            android:singleLine="true"
+            android:layout_height="22dp"
             android:layout_marginTop="5dp"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:text="Title"
             android:textColor="#FFF"
             android:textSize="13dp" />
 
         <TextView
-            android:ellipsize="end"
             android:id="@+id/card_artist"
-            android:layout_below="@+id/card_title"
-            android:layout_height="19dp"
             android:layout_width="match_parent"
+            android:layout_height="19dp"
+            android:layout_below="@+id/card_title"
             android:layout_marginTop="-5dp"
+            android:ellipsize="end"
             android:singleLine="true"
             android:text="Artist"
             android:textColor="#EEE"

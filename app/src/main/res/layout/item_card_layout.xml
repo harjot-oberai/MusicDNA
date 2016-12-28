@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="100dp"
     android:layout_height="127dp"
     android:layout_margin="5dp"
+    android:background="@drawable/custom_ripple"
     android:clickable="true"
     android:focusable="true"
-    android:background="@drawable/custom_ripple"
     android:longClickable="true">
 
     <ImageView
@@ -15,6 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_gravity="top"
+        android:background="#222222"
         android:scaleType="centerCrop" />
 
     <RelativeLayout

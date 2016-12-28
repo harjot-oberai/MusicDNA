@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorDark"
+    android:clipToPadding="false"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.sdsmdg.harjot.MusicDNA.HomeActivity"
     tools:showIn="@layout/app_bar_home">
@@ -389,7 +390,7 @@
         android:layout_height="65dp"
         android:layout_alignParentBottom="true"
         android:background="#000"
-        android:translationZ="10dp">
+        android:elevation="12dp">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/smallPlayer_home"
@@ -447,12 +448,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:translationZ="10dp" />
-
-    <!--<FrameLayout-->
-    <!--android:id="@+id/player_frag_container"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:translationZ="10dp"/>-->
 
 </RelativeLayout>
 

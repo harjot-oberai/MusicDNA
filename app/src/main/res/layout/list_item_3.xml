@@ -15,30 +15,29 @@
         android:layout_height="55dp"
         android:layout_centerVertical="true"
         android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
         android:scaleType="fitXY"
-        android:src="@drawable/handle"
-        android:tint="#FFA036" />
+        android:src="@drawable/handle" />
 
     <ImageView
         android:id="@+id/img"
         android:layout_width="56dp"
         android:layout_height="56dp"
-        android:layout_marginLeft="5dp"
         android:layout_marginBottom="10dp"
+        android:layout_marginLeft="5dp"
         android:layout_marginTop="10dp"
         android:layout_toRightOf="@+id/holderImage"
-        android:background="#FFF"
+        android:background="#222"
         android:scaleType="centerCrop" />
 
     <LinearLayout
         android:id="@+id/row_item_holder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="14dp"
         android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
         android:layout_toLeftOf="@+id/currently_playing_indicator"
         android:layout_toRightOf="@+id/img"
@@ -76,12 +75,12 @@
         android:visibility="invisible" />
 
     <View
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="#333"/>
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:background="#333" />
 
 </RelativeLayout>

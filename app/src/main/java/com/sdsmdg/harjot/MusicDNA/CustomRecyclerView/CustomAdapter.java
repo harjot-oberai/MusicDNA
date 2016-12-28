@@ -54,7 +54,13 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         holder.albumArt.setAlpha(0.35f);
         if (ut.getType()) {
             Bitmap bmp = getBitmap(ut.getLocalTrack().getPath());
-            holder.albumArt.setImageBitmap(bmp);
+            if (bmp != null) {
+                holder.albumArt.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                holder.albumArt.setImageBitmap(bmp);
+            } else {
+                holder.albumArt.setScaleType(ImageView.ScaleType.CENTER);
+                holder.albumArt.setImageResource(R.drawable.ic_default);
+            }
         } else {
             Picasso.with(ctx).load(ut.getStreamTrack().getArtworkURL()).into(holder.albumArt);
         }

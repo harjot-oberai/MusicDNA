@@ -84,7 +84,10 @@ public class VisualizerView extends View {
         // Redraw previous points
         if (HomeActivity.isPlayerVisible) {
             if (PlayerFragment.mVisualizerView != null && (PlayerFragment.mVisualizerView.getVisibility() == View.VISIBLE)) {
-                canvas.drawBitmap(bmp, 0, 0, null);
+                if (bmp != null)
+                    canvas.drawBitmap(bmp, 0, 0, null);
+                pts.clear();
+                ptPaint.clear();
             }
         }
     }

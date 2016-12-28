@@ -33,11 +33,6 @@ public class VisualizerView extends View {
     public static Paint mForePaint1 = new Paint();
     public static float width, height, angle, color, lnDataDistance, distance, size, volume, power, outerRadius, alpha;
     public static float normalizedPosition;
-    public static List<Pair<Float, Float>> pts;
-    public static List<Pair<Float, Pair<Integer, Integer>>> ptPaint;
-
-    public static List<Pair<Float, Float>> pts2;
-    public static List<Pair<Float, Pair<Integer, Integer>>> ptPaint2;
 
     static int w;
     static int h;
@@ -67,8 +62,6 @@ public class VisualizerView extends View {
         mForePaint1.setStrokeWidth(1f);
         mForePaint1.setAntiAlias(true);
         mForePaint1.setColor(Color.rgb(255, 128, 0));
-        pts = new ArrayList<>();
-        ptPaint = new ArrayList<>();
     }
 
     public void updateVisualizer(byte[] bytes) {
@@ -86,14 +79,7 @@ public class VisualizerView extends View {
             if (PlayerFragment.mVisualizerView != null && (PlayerFragment.mVisualizerView.getVisibility() == View.VISIBLE)) {
                 if (bmp != null)
                     canvas.drawBitmap(bmp, 0, 0, null);
-                pts.clear();
-                ptPaint.clear();
             }
         }
-    }
-
-    public void clear() {
-        pts.clear();
-        ptPaint.clear();
     }
 }

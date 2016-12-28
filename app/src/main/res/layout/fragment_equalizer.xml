@@ -7,22 +7,60 @@
     android:clickable="true"
     tools:context="com.sdsmdg.harjot.MusicDNA.EqualizerFragment">
 
+    <RelativeLayout
+        android:id="@+id/equalizer_action_container"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#000000">
+
+        <ImageView
+            android:id="@+id/equalizer_back_btn"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/custom_ripple_2"
+            android:clickable="true"
+            android:padding="12dp"
+            android:src="@drawable/back2" />
+
+        <TextView
+            android:id="@+id/equalizer_fragment_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="equalizer"
+            android:textColor="#FFFFFF"
+            android:textSize="25sp" />
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/equalizer_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            app:theme="@style/CustomSwitch" />
+
+    </RelativeLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/equalizer_action_container"
         android:orientation="vertical">
 
         <com.db.chart.view.LineChartView
-            android:paddingBottom="5dp"
-            android:paddingRight="15dp"
-            android:paddingLeft="15dp"
             android:id="@+id/lineChart"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_above="@+id/equalizerContainer"
             android:layout_alignParentTop="true"
             android:layout_weight="3"
-            android:background="@drawable/graph_back_2" />
+            android:background="@drawable/graph_back_2"
+            android:paddingBottom="5dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -45,7 +83,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
                 android:layout_toLeftOf="@+id/spinner_dropdown_icon"
-                android:background="#111"/>
+                android:background="#111" />
 
             <ImageView
                 android:id="@+id/spinner_dropdown_icon"
@@ -122,7 +160,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:textSize="10dp"/>
+                    android:textSize="10dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -151,7 +189,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:textSize="10dp"/>
+                    android:textSize="10dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -180,7 +218,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:textSize="10dp"/>
+                    android:textSize="10dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -209,7 +247,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:textSize="10dp"/>
+                    android:textSize="10dp" />
             </LinearLayout>
 
         </LinearLayout>
@@ -244,9 +282,10 @@
         android:id="@+id/equalizerBlocker"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/equalizer_action_container"
         android:alpha="0.7"
         android:background="#000000"
         android:clickable="true"
-        android:visibility="invisible"></FrameLayout>
+        android:visibility="invisible" />
 
 </RelativeLayout>

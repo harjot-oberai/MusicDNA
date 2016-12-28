@@ -17,7 +17,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
@@ -33,6 +35,10 @@ import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
  */
 public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDragStartListener {
 
+    ImageView backBtn;
+    TextView fragTitle;
+    TextView clearText;
+
     RecyclerView queueRecycler;
     QueueRecyclerAdapter qAdapter;
     LinearLayoutManager mLayoutManager2;
@@ -41,17 +47,16 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
 
     FloatingActionButton saveQueue;
 
-    onQueueItemClickedListener mCallback;
-    onQueueSaveListener mCallback2;
+    queueCallbackListener mCallback;
 
     ShowcaseView showCase;
 
-    public interface onQueueItemClickedListener {
-        public void onQueueItemClicked(int position);
-    }
+    public interface queueCallbackListener {
+        void onQueueItemClicked(int position);
 
-    public interface onQueueSaveListener {
-        public void onQueueSave();
+        void onQueueSave();
+
+        void onQueueClear();
     }
 
     public QueueFragment() {
@@ -62,8 +67,7 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            mCallback = (onQueueItemClickedListener) context;
-            mCallback2 = (onQueueSaveListener) context;
+            mCallback = (queueCallbackListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnHeadlineSelectedListener");
@@ -80,6 +84,27 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        backBtn = (ImageView) view.findViewById(R.id.queue_back_btn);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
+
+        fragTitle = (TextView) view.findViewById(R.id.queue_fragment_title);
+        if (SplashActivity.tf4 != null)
+            fragTitle.setTypeface(SplashActivity.tf4);
+
+        clearText = (TextView) view.findViewById(R.id.queue_clear_text);
+        clearText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallback.onQueueClear();
+            }
+        });
+
         queueRecycler = (RecyclerView) view.findViewById(R.id.queueRecycler);
 
         qAdapter = new QueueRecyclerAdapter(HomeActivity.queue.getQueue(), getContext(), this);
@@ -111,7 +136,7 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
         saveQueue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallback2.onQueueSave();
+                mCallback.onQueueSave();
             }
         });
 

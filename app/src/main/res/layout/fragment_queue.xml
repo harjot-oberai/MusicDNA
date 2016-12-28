@@ -11,14 +11,55 @@
         android:id="@+id/queue_alt_showcase"
         android:layout_width="100dp"
         android:layout_height="?attr/actionBarSize"
-        android:layout_marginTop="-35dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"/>
+        android:layout_centerHorizontal="true" />
+
+    <RelativeLayout
+        android:id="@+id/queue_action_container"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+
+        <ImageView
+            android:id="@+id/queue_back_btn"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/custom_ripple_2"
+            android:clickable="true"
+            android:padding="12dp"
+            android:src="@drawable/back2" />
+
+        <TextView
+            android:id="@+id/queue_fragment_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="QUEUE"
+            android:textColor="#FFFFFF"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/queue_clear_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/custom_ripple_2"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:text="CLEAR"
+            android:textAlignment="gravity"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/queueRecycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent"
+        android:layout_below="@+id/queue_action_container" />
 
 
     <android.support.design.widget.FloatingActionButton

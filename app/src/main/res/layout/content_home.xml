@@ -443,12 +443,6 @@
         </android.support.v7.widget.Toolbar>
     </FrameLayout>
 
-    <FrameLayout
-        android:id="@+id/equalizer_queue_frag_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:translationZ="10dp" />
-
 </RelativeLayout>
 
 

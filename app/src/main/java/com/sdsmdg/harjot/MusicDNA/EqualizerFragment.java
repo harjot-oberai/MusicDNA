@@ -8,6 +8,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.SwitchCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,11 +16,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +41,10 @@ import java.util.ArrayList;
  * A simple {@link Fragment} subclass.
  */
 public class EqualizerFragment extends Fragment {
+
+    ImageView backBtn;
+    TextView fragTitle;
+    SwitchCompat equalizerSwitch;
 
     LineSet dataset;
     LineChartView chart;
@@ -63,6 +70,12 @@ public class EqualizerFragment extends Fragment {
 
     Context ctx;
 
+    onCheckChangedListener mCallback;
+
+    interface onCheckChangedListener {
+        void onCheckChanged(boolean isChecked);
+    }
+
     public EqualizerFragment() {
         // Required empty public constructor
     }
@@ -71,6 +84,7 @@ public class EqualizerFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         ctx = context;
+        mCallback = (onCheckChangedListener) context;
     }
 
     @Override
@@ -82,6 +96,27 @@ public class EqualizerFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        backBtn = (ImageView) view.findViewById(R.id.equalizer_back_btn);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
+
+        fragTitle = (TextView) view.findViewById(R.id.equalizer_fragment_title);
+        if (SplashActivity.tf4 != null)
+            fragTitle.setTypeface(SplashActivity.tf4);
+
+        equalizerSwitch = (SwitchCompat) view.findViewById(R.id.equalizer_switch);
+        equalizerSwitch.setChecked(HomeActivity.isEqualizerEnabled);
+        equalizerSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mCallback.onCheckChanged(isChecked);
+            }
+        });
 
         spinnerDropDownIcon = (ImageView) view.findViewById(R.id.spinner_dropdown_icon);
         spinnerDropDownIcon.setOnClickListener(new View.OnClickListener() {

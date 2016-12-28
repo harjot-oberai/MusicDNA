@@ -141,10 +141,10 @@ public class HomeActivity extends AppCompatActivity
         PlayerFragment.onPreviousTrackListener,
         LocalMusicFragment.OnLocalTrackSelectedListener,
         StreamMusicFragment.OnTrackSelectedListener,
-        QueueFragment.onQueueItemClickedListener,
+        QueueFragment.queueCallbackListener,
         ViewPlaylistFragment.playlistCallbackListener,
         FavouritesFragment.favouriteFragmentCallback,
-        QueueFragment.onQueueSaveListener,
+        EqualizerFragment.onCheckChangedListener,
         PlayerFragment.onEqualizerClickedListener,
         PlayerFragment.onQueueClickListener,
         PlayerFragment.onPreparedLsitener,
@@ -208,8 +208,6 @@ public class HomeActivity extends AppCompatActivity
     FrameLayout bottomToolbar;
     CircleImageView spImgHome;
     TextView spTitleHome;
-
-    SwitchCompat equalizerSwitch;
 
     Bitmap selectedImage;
 
@@ -315,11 +313,13 @@ public class HomeActivity extends AppCompatActivity
     static int screen_height;
 
     Toolbar toolbar;
-    Toolbar equalizerToolbar;
 
-    Toolbar queueToolbar;
-    ImageView queueBackButton;
-    TextView queueClearText;
+//    Toolbar equalizerToolbar;
+//    SwitchCompat equalizerSwitch;
+//
+//    Toolbar queueToolbar;
+//    ImageView queueBackButton;
+//    TextView queueClearText;
 
     TextView recentsViewAll, playlistssViewAll;
 
@@ -763,75 +763,6 @@ public class HomeActivity extends AppCompatActivity
         fragMan = getSupportFragmentManager();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        queueToolbar = (Toolbar) findViewById(R.id.queue_toolbar);
-        queueBackButton = (ImageView) findViewById(R.id.queue_toolbar_back_button_img);
-        queueBackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-        queueClearText = (TextView) findViewById(R.id.clear_queue_txt);
-        if (SplashActivity.tf4 != null) {
-            try {
-                queueClearText.setTypeface(SplashActivity.tf4);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        queueClearText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clearQueue();
-                new SaveQueue().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-            }
-        });
-
-        equalizerToolbar = (Toolbar) findViewById(R.id.equalizerToolbar);
-        equalizerSwitch = (SwitchCompat) findViewById(R.id.equalizerSwitch);
-        equalizerSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                EqualizerFragment eqFrag = (EqualizerFragment) fragMan.findFragmentByTag("equalizer");
-                if (isChecked) {
-                    try {
-                        isEqualizerEnabled = true;
-                        int pos = presetPos;
-                        if (pos != 0) {
-                            playerFragment.mEqualizer.usePreset((short) (pos - 1));
-                        } else {
-                            for (short i = 0; i < 5; i++) {
-                                playerFragment.mEqualizer.setBandLevel(i, (short) seekbarpos[i]);
-                            }
-                        }
-                        if (bassStrength != -1 && reverbPreset != -1) {
-                            playerFragment.bassBoost.setEnabled(true);
-                            playerFragment.bassBoost.setStrength(bassStrength);
-                            playerFragment.presetReverb.setEnabled(true);
-                            playerFragment.presetReverb.setPreset(reverbPreset);
-                        }
-                        playerFragment.mMediaPlayer.setAuxEffectSendLevel(1.0f);
-                        if (eqFrag != null)
-                            eqFrag.setBlockerVisibility(View.GONE);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    try {
-                        isEqualizerEnabled = false;
-                        playerFragment.mEqualizer.usePreset((short) 0);
-                        playerFragment.bassBoost.setStrength((short) (((float) 1000 / 19) * (1)));
-                        playerFragment.presetReverb.setPreset((short) 0);
-                        if (eqFrag != null)
-                            eqFrag.setBlockerVisibility(View.VISIBLE);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                equalizerModel.isEqualizerEnabled = isChecked;
-            }
-        });
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -1867,8 +1798,6 @@ public class HomeActivity extends AppCompatActivity
         handler2.postDelayed(new Runnable() {
             @Override
             public void run() {
-                switchToolbar(toolbar, equalizerToolbar, "right");
-
                 playerContainer.animate()
                         .setInterpolator(new AccelerateDecelerateInterpolator())
                         .translationX(playerContainer.getWidth());
@@ -1885,8 +1814,6 @@ public class HomeActivity extends AppCompatActivity
 
         if (playerFragment.mVisualizerView != null)
             playerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
-
-        switchToolbar(toolbar, queueToolbar, "left");
 
         final Handler handler2 = new Handler();
         handler2.postDelayed(new Runnable() {
@@ -2012,8 +1939,6 @@ public class HomeActivity extends AppCompatActivity
                     }
                 });
 
-        switchToolbar(equalizerToolbar, toolbar, "left");
-
         final Handler handler2 = new Handler();
         handler2.postDelayed(new Runnable() {
             @Override
@@ -2049,8 +1974,6 @@ public class HomeActivity extends AppCompatActivity
                         }
                     }
                 });
-
-        switchToolbar(queueToolbar, toolbar, "right");
 
         final Handler handler2 = new Handler();
         handler2.postDelayed(new Runnable() {
@@ -2180,11 +2103,9 @@ public class HomeActivity extends AppCompatActivity
                 playerFragment.mVisualizerView.mForePaint.setAlpha((int) (playerFragment.mVisualizerView.alpha * 1000));
             }
 
-            // Add points and paint config to lists for redraw
-            playerFragment.mVisualizerView.pts.add(Pair.create(midx + x, midy + y));
-            playerFragment.mVisualizerView.ptPaint.add(Pair.create(playerFragment.mVisualizerView.size, Pair.create(playerFragment.mVisualizerView.mForePaint.getColor(), playerFragment.mVisualizerView.mForePaint.getAlpha())));
-
+            // Draw to the *temp* canvas, this is done to deal with gaps in rendering, when canvas is out of focus
             cacheCanvas.drawCircle(midx + x, midy + y, playerFragment.mVisualizerView.size, playerFragment.mVisualizerView.mForePaint);
+
         }
     }
 
@@ -2234,7 +2155,6 @@ public class HomeActivity extends AppCompatActivity
             VisualizerView.conf = Bitmap.Config.ARGB_8888;
             VisualizerView.bmp = Bitmap.createBitmap(VisualizerView.w, VisualizerView.h, VisualizerView.conf);
             cacheCanvas = new Canvas(VisualizerView.bmp);
-            plFrag.mVisualizerView.clear();
 
             // Play the song again by seeking media player to 0
             plFrag.mMediaPlayer.seekTo(0);
@@ -2288,7 +2208,6 @@ public class HomeActivity extends AppCompatActivity
                     plFrag.progressBar.setProgress(0);
                     plFrag.progressBar.setSecondaryProgress(0);
                     plFrag.mVisualizer.setEnabled(true);
-                    plFrag.mVisualizerView.clear();
                     plFrag.mMediaPlayer.seekTo(0);
                     plFrag.mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
                     plFrag.isReplayIconVisible = false;
@@ -2310,7 +2229,6 @@ public class HomeActivity extends AppCompatActivity
                         plFrag.progressBar.setProgress(0);
                         plFrag.progressBar.setSecondaryProgress(0);
                         plFrag.mVisualizer.setEnabled(true);
-                        plFrag.mVisualizerView.clear();
                         plFrag.mMediaPlayer.seekTo(0);
                         plFrag.mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
                         plFrag.isReplayIconVisible = false;
@@ -2318,7 +2236,7 @@ public class HomeActivity extends AppCompatActivity
                         plFrag.isPrepared = true;
                         plFrag.mMediaPlayer.start();
                     } else {
-                        // keep queue at last track
+                        // keep queue at last track or you are doomed
                     }
                 }
             }
@@ -2559,6 +2477,12 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void onQueueSave() {
         showSaveQueueDialog();
+    }
+
+    @Override
+    public void onQueueClear() {
+        clearQueue();
+        new SaveQueue().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
@@ -2992,6 +2916,47 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public PlayerFragment getPlayerFragment() {
         return playerFragment;
+    }
+
+    @Override
+    public void onCheckChanged(boolean isChecked) {
+        EqualizerFragment eqFrag = (EqualizerFragment) fragMan.findFragmentByTag("equalizer");
+        if (isChecked) {
+            try {
+                isEqualizerEnabled = true;
+                int pos = presetPos;
+                if (pos != 0) {
+                    playerFragment.mEqualizer.usePreset((short) (pos - 1));
+                } else {
+                    for (short i = 0; i < 5; i++) {
+                        playerFragment.mEqualizer.setBandLevel(i, (short) seekbarpos[i]);
+                    }
+                }
+                if (bassStrength != -1 && reverbPreset != -1) {
+                    playerFragment.bassBoost.setEnabled(true);
+                    playerFragment.bassBoost.setStrength(bassStrength);
+                    playerFragment.presetReverb.setEnabled(true);
+                    playerFragment.presetReverb.setPreset(reverbPreset);
+                }
+                playerFragment.mMediaPlayer.setAuxEffectSendLevel(1.0f);
+                if (eqFrag != null)
+                    eqFrag.setBlockerVisibility(View.GONE);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                isEqualizerEnabled = false;
+                playerFragment.mEqualizer.usePreset((short) 0);
+                playerFragment.bassBoost.setStrength((short) (((float) 1000 / 19) * (1)));
+                playerFragment.presetReverb.setPreset((short) 0);
+                if (eqFrag != null)
+                    eqFrag.setBlockerVisibility(View.VISIBLE);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        equalizerModel.isEqualizerEnabled = isChecked;
     }
 
     public class MyAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -4015,11 +3980,6 @@ public class HomeActivity extends AppCompatActivity
         @Override
         public int compare(Album lhs, Album rhs) {
             return lhs.getName().toString().compareTo(rhs.getName().toString());
-//            if (lhs.getName().toString().charAt(0) < rhs.getName().toString().charAt(0)) {
-//                return -1;
-//            } else {
-//                return 1;
-//            }
         }
     }
 
@@ -4028,11 +3988,6 @@ public class HomeActivity extends AppCompatActivity
         @Override
         public int compare(Artist lhs, Artist rhs) {
             return lhs.getName().toString().compareTo(rhs.getName().toString());
-//            if (lhs.getName().toString().charAt(0) < rhs.getName().toString().charAt(0)) {
-//                return -1;
-//            } else {
-//                return 1;
-//            }
         }
     }
 
@@ -4109,10 +4064,8 @@ public class HomeActivity extends AppCompatActivity
                         equalizerModel = new EqualizerModel();
                         isEqualizerEnabled = true;
                         isEqualizerReloaded = false;
-                        equalizerSwitch.setChecked(true);
                     } else {
                         isEqualizerEnabled = equalizerModel.isEqualizerEnabled();
-                        equalizerSwitch.setChecked(isEqualizerEnabled);
                         isEqualizerReloaded = true;
                         seekbarpos = equalizerModel.getSeekbarpos();
                         presetPos = equalizerModel.getPresetPos();

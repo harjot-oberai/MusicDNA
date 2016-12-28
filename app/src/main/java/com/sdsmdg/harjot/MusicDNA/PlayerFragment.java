@@ -297,7 +297,6 @@ public class PlayerFragment extends Fragment implements
                 if (!isStart && mCallback7 != null)
                     mCallback7.onPlayPause();
             } else {
-                mVisualizerView.clear();
                 mMediaPlayer.seekTo(0);
                 setupVisualizerFxAndUI();
                 if (mVisualizer != null)
@@ -1163,8 +1162,6 @@ public class PlayerFragment extends Fragment implements
     public void refresh() {
 
         isRefreshed = true;
-
-        mVisualizerView.clear();
 
         pauseClicked = false;
         completed = false;

@@ -1,18 +1,50 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorDark"
     android:clickable="true"
+    android:clipToPadding="false"
     tools:context="com.sdsmdg.harjot.MusicDNA.AddToPlaylistFragment">
+
+    <RelativeLayout
+        android:id="@+id/add_to_playlist_action_container"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#111111"
+        android:elevation="12dp">
+
+        <ImageView
+            android:id="@+id/add_to_playlist_back_btn"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/custom_ripple"
+            android:clickable="true"
+            android:padding="12dp"
+            android:src="@drawable/back2" />
+
+        <TextView
+            android:id="@+id/add_to_playlist_fragment_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="NEW PLAYLIST"
+            android:textColor="#FFFFFF"
+            android:textSize="22sp" />
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/search_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="3dp">
+        android:layout_below="@+id/add_to_playlist_action_container"
+        android:background="#111111"
+        android:elevation="12dp"
+        android:paddingLeft="15dp">
 
         <EditText
             android:id="@+id/add_to_playlist_search"
@@ -23,7 +55,7 @@
             android:layout_toLeftOf="@+id/clear_search_btn"
             android:hint="Search"
             android:textColor="#FFFFFF"
-            android:textColorHint="#BBBBBB"
+            android:textColorHint="#676767"
             android:textSize="18dp" />
 
         <ImageView
@@ -32,85 +64,72 @@
             android:layout_height="32dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:background="?attr/selectableItemBackgroundBorderless"
+            android:background="@drawable/custom_ripple"
             android:padding="10dp"
             android:src="@drawable/ic_cross"
             android:tint="#FFF" />
 
     </RelativeLayout>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/save_playlist_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/number_selected_songs_wrapper"
+        android:layout_alignParentRight="true"
+        android:layout_margin="16dp"
+        android:clickable="true"
+        android:scaleX="0.0"
+        android:scaleY="0.0"
+        android:src="@drawable/ic_tick"
+        app:backgroundTint="#111111"
+        app:borderWidth="0dp"
+        app:elevation="6dp"
+        app:pressedTranslationZ="9dp"
+        app:rippleColor="#888888" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/add_to_playlist_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/bottom_container"
+        android:layout_above="@+id/number_selected_songs_wrapper"
         android:layout_below="@+id/search_container"
         android:layout_marginTop="3dp"
-        android:background="@color/colorDark"/>
+        android:background="@color/colorDark" />
 
     <RelativeLayout
-        android:id="@+id/bottom_container"
-        android:layout_width="match_parent"
+        android:id="@+id/number_selected_songs_wrapper"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/bottom_margin_layout"
-        android:background="#080808"
-        android:padding="5dp">
+        android:background="#222222"
+        android:elevation="6dp"
+        android:gravity="center_vertical"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp">
 
         <TextView
             android:id="@+id/number_selected_songs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
-            android:padding="5dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="16dp"
             android:text="0 selected"
-            android:textColor="#FFF"
-            android:textSize="13dp" />
+            android:textAlignment="gravity"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@+id/done_text_container"
-            android:background="#FFF"
-            android:orientation="horizontal"
-            android:padding="1dp">
-
-            <TextView
-                android:id="@+id/cancel_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#000"
-                android:padding="4dp"
-                android:text="CLEAR"
-                android:textColor="#FFF"
-                android:textSize="13dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/done_text_container"
+        <TextView
+            android:id="@+id/clear_selected_songs_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="5dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/done_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:background="#345676"
-                android:padding="6dp"
-                android:text=" DONE "
-                android:textColor="#FFF"
-                android:textSize="13dp" />
-        </LinearLayout>
+            android:background="?attr/selectableItemBackground"
+            android:paddingRight="16dp"
+            android:text="CLEAR"
+            android:textColor="#BCBCBC"
+            android:textSize="17sp" />
 
     </RelativeLayout>
 

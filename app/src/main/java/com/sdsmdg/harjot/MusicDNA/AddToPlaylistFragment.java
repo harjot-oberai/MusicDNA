@@ -4,7 +4,10 @@ package com.sdsmdg.harjot.MusicDNA;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -35,9 +39,12 @@ public class AddToPlaylistFragment extends Fragment {
     RecyclerView rv;
     AddToPlaylistAdapter atpAdapter;
 
+    ImageView backBtn, backDrop;
+
     EditText searchBox;
 
-    TextView doneText, numberSelectedSongs, cancelText;
+    TextView numberSelectedSongs, fragTitle, clearText;
+    FloatingActionButton savePlaylist;
 
     List<LocalTrack> finalList;
 
@@ -89,6 +96,27 @@ public class AddToPlaylistFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        backBtn = (ImageView) view.findViewById(R.id.add_to_playlist_back_btn);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
+
+        fragTitle = (TextView) view.findViewById(R.id.add_to_playlist_fragment_title);
+        if (SplashActivity.tf4 != null)
+            fragTitle.setTypeface(SplashActivity.tf4);
+
+        savePlaylist = (FloatingActionButton) view.findViewById(R.id.save_playlist_fab);
+        savePlaylist.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));
+        savePlaylist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallback.onDone();
+            }
+        });
 
         bottomMarginLayout = view.findViewById(R.id.bottom_margin_layout);
         if (HomeActivity.isReloaded)
@@ -146,26 +174,16 @@ public class AddToPlaylistFragment extends Fragment {
             }
         });
 
-        doneText = (TextView) view.findViewById(R.id.done_text);
-        cancelText = (TextView) view.findViewById(R.id.cancel_text);
         numberSelectedSongs = (TextView) view.findViewById(R.id.number_selected_songs);
 
-        doneText.setBackgroundColor(HomeActivity.themeColor);
-
-        cancelText.setOnClickListener(new View.OnClickListener() {
+        clearText = (TextView) view.findViewById(R.id.clear_selected_songs_text);
+        clearText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mCallback.onCancel();
                 atpAdapter.notifyDataSetChanged();
                 numberSelected = 0;
                 numberSelectedSongs.setText(String.valueOf(numberSelected) + " selected");
-            }
-        });
-
-        doneText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCallback.onDone();
             }
         });
 
@@ -214,6 +232,12 @@ public class AddToPlaylistFragment extends Fragment {
     public void onResume() {
         super.onResume();
         mLayoutManager2.scrollToPositionWithOffset(0, 0);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                savePlaylist.animate().scaleX(1.0f).scaleY(1.0f).setDuration(300).setInterpolator(new OvershootInterpolator());
+            }
+        }, 500);
     }
 
     public void hideKeyboard() {

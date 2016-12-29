@@ -5,13 +5,15 @@
     android:layout_height="match_parent"
     android:background="@color/colorDark"
     android:clickable="true"
+    android:clipToPadding="false"
     tools:context="com.sdsmdg.harjot.MusicDNA.SettingsFragment">
 
     <RelativeLayout
         android:id="@+id/settings_action_container"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#111111">
+        android:background="#111111"
+        android:elevation="12dp">
 
         <ImageView
             android:id="@+id/settings_back_btn"

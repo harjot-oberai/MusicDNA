@@ -3,13 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorDark"
+    android:clipToPadding="false"
     tools:context="com.sdsmdg.harjot.MusicDNA.AboutFragment">
 
     <RelativeLayout
         android:id="@+id/about_action_container"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#111111">
+        android:background="#111111"
+        android:elevation="12dp">
 
         <ImageView
             android:id="@+id/about_back_btn"

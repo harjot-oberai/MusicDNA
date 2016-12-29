@@ -8,10 +8,11 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/dialog_title_text"
-        android:layout_width="match_parent"
+        android:id="@+id/sleep_dialog_title_text"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:padding="10dp"
         android:text="Sleep Timer"
         android:textColor="#000000"

@@ -5162,6 +5162,10 @@ public class HomeActivity extends AppCompatActivity
         final WheelView wheelPicker = (WheelView) dialog.findViewById(R.id.wheelPicker);
         wheelPicker.setItems(minuteList);
 
+        TextView title = (TextView) dialog.findViewById(R.id.sleep_dialog_title_text);
+        if (SplashActivity.tf4 != null)
+            title.setTypeface(SplashActivity.tf4);
+
         Button setBtn = (Button) dialog.findViewById(R.id.set_button);
         Button cancelBtn = (Button) dialog.findViewById(R.id.cancel_button);
         final Button removerBtn = (Button) dialog.findViewById(R.id.remove_timer_button);

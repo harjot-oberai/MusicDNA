@@ -190,7 +190,7 @@ public class ImageLoader {
             if (imageViewReused(photoToLoad))
                 return;
             final Bitmap bmp = getBitmap(photoToLoad.url);
-            if (type.contains("none"))
+            if (type.contains("none") && photoToLoad.url != null)
                 memoryCache.put(photoToLoad.url, bmp);
             if (imageViewReused(photoToLoad)) {
                 return;

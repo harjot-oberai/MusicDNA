@@ -2,7 +2,6 @@ package com.sdsmdg.harjot.MusicDNA;
 
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -181,7 +180,9 @@ public class SettingsFragment extends Fragment {
                             public void onClick(DialogInterface dialog, int color, Integer[] allColors) {
                                 homeActivity.settings.setThemeColor(color);
                                 homeActivity.themeColor = color;
-                                homeActivity.toolbar.setBackgroundColor(color);
+                                homeActivity.collapsingToolbar.setContentScrimColor(color);
+                                homeActivity.customLinearGradient.setStartColor(color);
+                                homeActivity.customLinearGradient.invalidate();
                                 themeColorImg.setBackgroundColor(color);
                                 mCallback2.onColorChanged();
                                 if (Build.VERSION.SDK_INT >= 21) {

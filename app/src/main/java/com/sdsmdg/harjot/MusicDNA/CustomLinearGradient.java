@@ -17,6 +17,7 @@ public class CustomLinearGradient extends View {
 
     Paint paint;
     int startColor, midColor, endColor;
+    int alpha;
 
     public CustomLinearGradient(Context context) {
         super(context);
@@ -35,9 +36,14 @@ public class CustomLinearGradient extends View {
 
     void init() {
         paint = new Paint();
-        startColor = Color.argb(140, Color.red(HomeActivity.themeColor), Color.green(HomeActivity.themeColor), Color.blue(HomeActivity.themeColor));
+        alpha = 140;
+        startColor = Color.argb(alpha, Color.red(HomeActivity.themeColor), Color.green(HomeActivity.themeColor), Color.blue(HomeActivity.themeColor));
         midColor = Color.parseColor("#88111111");
         endColor = Color.parseColor("#FF111111");
+    }
+
+    public void setAlpha(int alpha) {
+        this.alpha = alpha;
     }
 
     void setStartColor(int color) {
@@ -51,6 +57,9 @@ public class CustomLinearGradient extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        startColor = Color.argb(alpha, Color.red(HomeActivity.themeColor), Color.green(HomeActivity.themeColor), Color.blue(HomeActivity.themeColor));
+        midColor = Color.parseColor("#88111111");
+        endColor = Color.parseColor("#FF111111");
 //        paint.setShader(new LinearGradient(0, 0, 0, getHeight(), new int[]{startColor, midColor, endColor}, new float[]{0.0f, 0.35f, 1.0f}, Shader.TileMode.MIRROR));
         paint.setShader(new LinearGradient(0, 0, 0, getHeight(), startColor, endColor, Shader.TileMode.CLAMP));
         canvas.drawPaint(paint);

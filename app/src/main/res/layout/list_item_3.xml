@@ -32,7 +32,6 @@
         android:scaleType="centerCrop" />
 
     <LinearLayout
-        android:id="@+id/row_item_holder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"

@@ -24,7 +24,6 @@
             android:background="@drawable/vertical_gradient" />
 
         <RelativeLayout
-            android:id="@+id/edit_song_action_container"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize">
 
@@ -60,7 +59,6 @@
         android:orientation="vertical">
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/edit_song_title_wrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -75,7 +73,6 @@
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/edit_song_artist_wrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -90,7 +87,6 @@
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/edit_song_album_wrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"

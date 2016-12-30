@@ -106,7 +106,6 @@
         </LinearLayout>
 
         <com.sdsmdg.harjot.MusicDNA.CustomLinearGradient
-            android:id="@+id/linear_gradient"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

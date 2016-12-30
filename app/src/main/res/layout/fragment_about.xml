@@ -7,7 +7,6 @@
     tools:context="com.sdsmdg.harjot.MusicDNA.AboutFragment">
 
     <RelativeLayout
-        android:id="@+id/about_action_container"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="#111111"
@@ -36,7 +35,6 @@
     </RelativeLayout>
 
     <ImageView
-        android:id="@+id/mdg_logo"
         android:layout_width="140dp"
         android:layout_height="70dp"
         android:layout_above="@+id/version_text"

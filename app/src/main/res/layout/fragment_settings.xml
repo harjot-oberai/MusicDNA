@@ -57,7 +57,6 @@
                 android:padding="5dp">
 
                 <TextView
-                    android:id="@+id/density_setting_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"

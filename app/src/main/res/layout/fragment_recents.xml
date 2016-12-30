@@ -115,7 +115,6 @@
             android:src="@drawable/ic_error_white_48dp" />
 
         <TextView
-            android:id="@+id/recentsNoContentText"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center"

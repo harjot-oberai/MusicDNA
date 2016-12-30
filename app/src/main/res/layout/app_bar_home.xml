@@ -7,7 +7,6 @@
     tools:context="com.sdsmdg.harjot.MusicDNA.HomeActivity">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
@@ -147,7 +146,6 @@
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/scroll_root"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/colorDark"
@@ -340,7 +338,6 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/linearBanner2"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:layout_below="@+id/linearBanner1"
@@ -411,7 +408,6 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/localRecyclerLabel"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="10"
@@ -483,7 +479,6 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/streamRecyclerLabel"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="10"

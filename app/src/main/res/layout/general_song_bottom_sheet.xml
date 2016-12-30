@@ -56,7 +56,6 @@
             android:tint="#494949" />
 
         <TextView
-            android:id="@+id/general_song_bottom_sheet_play"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -89,7 +88,6 @@
             android:tint="#494949" />
 
         <TextView
-            android:id="@+id/general_song_bottom_sheet_play_next"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -121,7 +119,6 @@
             android:tint="#494949" />
 
         <TextView
-            android:id="@+id/general_song_bottom_sheet_add_to_queue"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -153,7 +150,6 @@
             android:tint="#494949" />
 
         <TextView
-            android:id="@+id/general_song_bottom_sheet_add_to_playlist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -184,7 +180,6 @@
             android:tint="#494949" />
 
         <TextView
-            android:id="@+id/general_song_bottom_sheet_add_to_fav"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"

@@ -51,7 +51,6 @@
         android:background="#000000" />
 
     <RelativeLayout
-        android:id="@+id/action_button_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/saved_dna_recycler"

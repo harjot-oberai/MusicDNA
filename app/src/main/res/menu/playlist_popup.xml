@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/play"
         android:icon="@android:drawable/ic_menu_search"
         android:title="Play" />
 
     <item
-        android:id="@+id/add_playlist_to_queue"
         android:icon="@android:drawable/ic_menu_search"
         android:title="Add to Queue" />
 
     <item
-        android:id="@+id/play_next"
         android:icon="@android:drawable/ic_menu_add"
         android:title="Delete" />
 
     <item
-        android:id="@+id/rename"
         android:icon="@android:drawable/ic_menu_add"
         android:title="Rename" />
 </menu>

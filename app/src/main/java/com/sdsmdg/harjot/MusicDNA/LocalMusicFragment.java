@@ -136,29 +136,33 @@ public class LocalMusicFragment extends Fragment {
             @Override
             boolean onClick(RecyclerView parent, View view, int position, long id) {
 
-                HomeActivity.queue.getQueue().clear();
-                for (int i = 0; i < HomeActivity.localTrackList.size(); i++) {
-                    UnifiedTrack ut = new UnifiedTrack(true, HomeActivity.localTrackList.get(i), null);
-                    HomeActivity.queue.getQueue().add(ut);
+                if (position >= 0) {
+                    HomeActivity.queue.getQueue().clear();
+                    for (int i = 0; i < HomeActivity.localTrackList.size(); i++) {
+                        UnifiedTrack ut = new UnifiedTrack(true, HomeActivity.localTrackList.get(i), null);
+                        HomeActivity.queue.getQueue().add(ut);
+                    }
+                    HomeActivity.queueCurrentIndex = getPosition(HomeActivity.finalLocalSearchResultList.get(position));
+                    LocalTrack track = HomeActivity.finalLocalSearchResultList.get(position);
+                    HomeActivity.localSelectedTrack = track;
+                    HomeActivity.streamSelected = false;
+                    HomeActivity.localSelected = true;
+                    HomeActivity.queueCall = false;
+                    HomeActivity.isReloaded = false;
+                    mCallback.onLocalTrackSelected(-1);
                 }
-                HomeActivity.queueCurrentIndex = getPosition(HomeActivity.finalLocalSearchResultList.get(position));
-                LocalTrack track = HomeActivity.finalLocalSearchResultList.get(position);
-                HomeActivity.localSelectedTrack = track;
-                HomeActivity.streamSelected = false;
-                HomeActivity.localSelected = true;
-                HomeActivity.queueCall = false;
-                HomeActivity.isReloaded = false;
-                mCallback.onLocalTrackSelected(-1);
 
                 return true;
             }
 
             @Override
             boolean onLongClick(RecyclerView parent, View view, final int position, long id) {
-                CustomLocalBottomSheetDialog localBottomSheetDialog = new CustomLocalBottomSheetDialog();
-                localBottomSheetDialog.setPosition(position);
-                localBottomSheetDialog.setLocalTrack(activity.finalLocalSearchResultList.get(position));
-                localBottomSheetDialog.show(activity.getSupportFragmentManager(), "local_song_bottom_sheet");
+                if (position >= 0) {
+                    CustomLocalBottomSheetDialog localBottomSheetDialog = new CustomLocalBottomSheetDialog();
+                    localBottomSheetDialog.setPosition(position);
+                    localBottomSheetDialog.setLocalTrack(activity.finalLocalSearchResultList.get(position));
+                    localBottomSheetDialog.show(activity.getSupportFragmentManager(), "local_song_bottom_sheet");
+                }
                 return true;
             }
 

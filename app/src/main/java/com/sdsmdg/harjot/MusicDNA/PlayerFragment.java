@@ -52,6 +52,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -754,7 +755,11 @@ public class PlayerFragment extends Fragment implements
         VisualizerView.bmp = Bitmap.createBitmap(VisualizerView.w, VisualizerView.h, VisualizerView.conf);
         HomeActivity.cacheCanvas = new Canvas(VisualizerView.bmp);
 
-        customAdapter = new CustomAdapter(getContext(), snappyRecyclerView, HomeActivity.queue.getQueue());
+        if (HomeActivity.queue != null) {
+            customAdapter = new CustomAdapter(getContext(), snappyRecyclerView, HomeActivity.queue.getQueue());
+        } else {
+            customAdapter = new CustomAdapter(getContext(), snappyRecyclerView, new ArrayList<UnifiedTrack>());
+        }
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         snappyRecyclerView.setLayoutManager(linearLayoutManager);
         snappyRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -792,6 +797,7 @@ public class PlayerFragment extends Fragment implements
 
             }
         });
+
 
         cpb = (CustomProgressBar) view.findViewById(R.id.customProgress);
 

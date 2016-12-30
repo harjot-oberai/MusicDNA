@@ -345,12 +345,6 @@ public class EqualizerFragment extends Fragment {
                 }
             });
 
-            /*seekBarRowLayout.addView(upperEqualizerBandLevelTextView);
-            seekBarRowLayout.addView(seekBar);
-            seekBarRowLayout.addView(lowerEqualizerBandLevelTextView);
-
-            mLinearLayout.addView(seekBarRowLayout);*/
-
         }
 
         equalizeSound();

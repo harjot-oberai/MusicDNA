@@ -73,7 +73,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.RemoteViews;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -500,7 +499,7 @@ public class HomeActivity extends AppCompatActivity
         for (int i = 0; i < recentlyPlayed.getRecentlyPlayed().size(); i++) {
             if (!recentlyPlayed.getRecentlyPlayed().get(i).getType() && recentlyPlayed.getRecentlyPlayed().get(i).getStreamTrack().getTitle().equals(track.getStreamTrack().getTitle())) {
                 recentlyPlayed.getRecentlyPlayed().remove(i);
-                rAdapter.notifyItemRemoved(i);
+//                rAdapter.notifyItemRemoved(i);
                 break;
             }
         }
@@ -515,6 +514,8 @@ public class HomeActivity extends AppCompatActivity
             continuePlayingList.add(recentlyPlayed.getRecentlyPlayed().get(i));
         }
         rAdapter.notifyDataSetChanged();
+        refreshHeaderImages();
+
         RecentsFragment rFrag = (RecentsFragment) fragMan.findFragmentByTag("recent");
         if (rFrag != null && rFrag.rtAdpater != null) {
             rFrag.rtAdpater.notifyDataSetChanged();
@@ -624,7 +625,7 @@ public class HomeActivity extends AppCompatActivity
         for (int i = 0; i < recentlyPlayed.getRecentlyPlayed().size(); i++) {
             if (recentlyPlayed.getRecentlyPlayed().get(i).getType() && recentlyPlayed.getRecentlyPlayed().get(i).getLocalTrack().getTitle().equals(track.getLocalTrack().getTitle())) {
                 recentlyPlayed.getRecentlyPlayed().remove(i);
-                rAdapter.notifyItemRemoved(i);
+//                rAdapter.notifyItemRemoved(i);
                 break;
             }
         }
@@ -639,6 +640,7 @@ public class HomeActivity extends AppCompatActivity
             continuePlayingList.add(recentlyPlayed.getRecentlyPlayed().get(i));
         }
         rAdapter.notifyDataSetChanged();
+        refreshHeaderImages();
 
         RecentsFragment rFrag = (RecentsFragment) fragMan.findFragmentByTag("recent");
         if (rFrag != null && rFrag.rtAdpater != null) {
@@ -716,6 +718,8 @@ public class HomeActivity extends AppCompatActivity
 
         imgLoader = new ImageLoader(this);
         ctx = this;
+
+        initializeHeaderImages();
 
         hasSoftNavbar = hasNavBar(getResources());
         statusBarHeightinDp = getStatusBarHeight();
@@ -4062,7 +4066,7 @@ public class HomeActivity extends AppCompatActivity
                     new SaveVersionCode().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
                     getLocalSongs();
-                    initializeHeaderImages();
+                    refreshHeaderImages();
 
                     if (queue != null && queue.getQueue().size() != 0) {
                         UnifiedTrack utHome = queue.getQueue().get(queueCurrentIndex);
@@ -5140,22 +5144,53 @@ public class HomeActivity extends AppCompatActivity
         imgView[7] = (ImageView) findViewById(R.id.home_header_img_8);
         imgView[8] = (ImageView) findViewById(R.id.home_header_img_9);
         imgView[9] = (ImageView) findViewById(R.id.home_header_img_10);
+    }
 
+    public void refreshHeaderImages() {
         int numSongs = localTrackList.size();
-        if (numSongs == 0) {
-            for (int i = 0; i < 10; i++) {
-                imgLoader.DisplayImage(null, imgView[i]);
+        int numRecents = recentlyPlayed.getRecentlyPlayed().size();
+        if (numRecents == 0) {
+            if (numSongs == 0) {
+                for (int i = 0; i < 10; i++) {
+                    imgLoader.DisplayImage(null, imgView[i]);
+                }
+            } else if (numSongs < 10) {
+                for (int i = 0; i < numSongs; i++) {
+                    imgLoader.DisplayImage(localTrackList.get(i).getPath(), imgView[i]);
+                }
+                for (int i = numSongs; i < 10; i++) {
+                    imgLoader.DisplayImage(null, imgView[i]);
+                }
+            } else {
+                for (int i = 0; i < 10; i++) {
+                    imgLoader.DisplayImage(localTrackList.get(i).getPath(), imgView[i]);
+                }
             }
-        } else if (numSongs < 10) {
-            for (int i = 0; i < numSongs; i++) {
-                imgLoader.DisplayImage(localTrackList.get(i).getPath(), imgView[i]);
+        } else if (numRecents < 10) {
+            UnifiedTrack ut;
+            for (int i = 0; i < numRecents; i++) {
+                ut = recentlyPlayed.getRecentlyPlayed().get(i);
+                if (ut.getType())
+                    imgLoader.DisplayImage(ut.getLocalTrack().getPath(), imgView[i]);
+                else
+                    imgLoader.DisplayImage(ut.getStreamTrack().getArtworkURL(), imgView[i]);
             }
-            for (int i = numSongs; i < 10; i++) {
-                imgLoader.DisplayImage(null, imgView[i]);
+            for (int i = numRecents; i < Math.min(numRecents + numSongs, 10); i++) {
+                imgLoader.DisplayImage(localTrackList.get(i - numRecents).getPath(), imgView[i]);
+            }
+            if (numRecents + numSongs < 10) {
+                for (int i = numRecents + numSongs; i < 10; i++) {
+                    imgLoader.DisplayImage(null, imgView[i]);
+                }
             }
         } else {
+            UnifiedTrack ut;
             for (int i = 0; i < 10; i++) {
-                imgLoader.DisplayImage(localTrackList.get(i).getPath(), imgView[i]);
+                ut = recentlyPlayed.getRecentlyPlayed().get(i);
+                if (ut.getType())
+                    imgLoader.DisplayImage(ut.getLocalTrack().getPath(), imgView[i]);
+                else
+                    imgLoader.DisplayImage(ut.getStreamTrack().getArtworkURL(), imgView[i]);
             }
         }
     }

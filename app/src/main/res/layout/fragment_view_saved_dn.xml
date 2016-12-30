@@ -40,7 +40,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="120dp" />
+        android:layout_marginTop="170dp" />
 
     <com.sdsmdg.harjot.MusicDNA.VisualizerView2
         android:id="@+id/saved_dna_visualizer"
@@ -115,11 +115,23 @@
             android:layout_height="0dp"
             android:layout_gravity="center"
             android:layout_marginTop="30dp"
-            android:layout_weight="5"
+            android:layout_weight="2"
             android:gravity="top|center_horizontal"
             android:text="No Saved DNAs"
             android:textColor="#DDDDDD"
             android:textSize="15dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="4"
+            android:gravity="top|center_horizontal"
+            android:padding="7dp"
+            android:text="To save DNAs select the save option in the bottom of the player. DNA will automatically be saved at the end of the song."
+            android:textAlignment="gravity"
+            android:textColor="#DDDDDD" />
 
     </LinearLayout>
 

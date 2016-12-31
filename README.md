@@ -40,3 +40,7 @@ Credits for combining audio and video [Piyush Mehrotra](https://github.com/hm98)
 <img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/savedDNA.png" width = "300">
 <img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/albums_artists.png" width = "600">
 <img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/fav_recents.png" width = "600">
+
+## License
+MusicStreamer (MusicDNA) is under MIT 2016 License.
+

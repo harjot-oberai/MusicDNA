@@ -46,11 +46,11 @@ public class Playlist {
 
         if(track.getType()){
 
-            long id = track.getLocalTrack().getId();
+            long idd = track.getLocalTrack().getId();
 
             for(UnifiedTrack songs : songList){
 
-                if(songs.getLocalTrack().getId() == id){
+                if(songs.getLocalTrack().getId() == idd){
                     
                     index = songs.get();
                     break;

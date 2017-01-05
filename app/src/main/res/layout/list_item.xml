@@ -48,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:singleLine="true"
+            android:maxLines="1"
             android:text="Title"
             android:textColor="#FFF"
             android:textSize="14dp" />
@@ -60,7 +60,7 @@
             android:layout_marginBottom="10dp"
             android:layout_marginTop="1dp"
             android:ellipsize="end"
-            android:singleLine="true"
+            android:maxLines="1"
             android:text="Artist"
             android:textColor="#EEE"
             android:textSize="11dp" />
@@ -74,8 +74,8 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="20dp"
         android:visibility="invisible"
-        app:indicator="LineScale"
-        app:indicator_color="#3F334D" />
+        app:indicatorName="LineScale"
+        app:indicatorColor="#3F334D" />
 
     <View
         android:layout_marginTop="10dp"

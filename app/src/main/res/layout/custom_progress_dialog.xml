@@ -14,8 +14,8 @@
         android:layout_centerHorizontal="true"
         android:visibility="visible"
         android:layout_marginTop="10dp"
-        app:indicator="BallTrianglePath"
-        app:indicator_color="#FF8800" />
+        app:indicatorName="BallTrianglePath"
+        app:indicatorColor="#FF8800" />
 
     <TextView
         android:layout_width="wrap_content"

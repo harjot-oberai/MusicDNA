@@ -122,11 +122,12 @@ import java.util.Random;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.GsonConverterFactory;
-import retrofit.Response;
-import retrofit.Retrofit;
+import retrofit2.Call;
+import retrofit2.Callback;
+//import retrofit2.GsonConverterFactory;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.view.View.GONE;
 
@@ -1638,9 +1639,8 @@ public class HomeActivity extends AppCompatActivity
                     call.enqueue(new Callback<List<Track>>() {
 
                         @Override
-                        public void onResponse(Response<List<Track>> response) {
-
-                            if (response.isSuccess()) {
+                        public void onResponse(Call<List<Track>> call, Response<List<Track>> response) {
+                            if (response.isSuccessful()) {
                                 streamingTrackList = response.body();
                                 sAdapter = new StreamTracksHorizontalAdapter(streamingTrackList, ctx);
                                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(ctx, LinearLayoutManager.HORIZONTAL, false);
@@ -1668,7 +1668,7 @@ public class HomeActivity extends AppCompatActivity
                         }
 
                         @Override
-                        public void onFailure(Throwable t) {
+                        public void onFailure(Call<List<Track>> call, Throwable t) {
                             Log.d("RETRO1", t.getMessage());
                         }
                     });

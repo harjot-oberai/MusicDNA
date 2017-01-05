@@ -1146,6 +1146,7 @@ public class PlayerFragment extends Fragment implements
 
     @Override
     public void onDestroyView() {
+        super.onDestroyView();
         super.onDestroy();
         RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
         refWatcher.watch(this);

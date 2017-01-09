@@ -2643,7 +2643,7 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onSettingsClicked() {
-        if(playerFragment.smallPlayer!=null) {
+        if (playerFragment.smallPlayer != null) {
             hidePlayer();
             showTabs();
             isPlayerVisible = false;
@@ -2843,7 +2843,7 @@ public class HomeActivity extends AppCompatActivity
     public void onEditSongSave(boolean wasSaveSuccessful) {
         hideFragment("Edit");
         if (!wasSaveSuccessful) {
-            Toast.makeText(this, "Error in saving Data", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Error occured while editing", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -2971,6 +2971,8 @@ public class HomeActivity extends AppCompatActivity
                                 Bitmap croppedBmp = Bitmap.createBitmap(playerFragment.mVisualizerView.bmp, 0, (int) (75 * ratio), screen_width, screen_width);
                                 navImageView.setImageBitmap(croppedBmp);
                             } catch (Exception e) {
+                                e.printStackTrace();
+                            } catch (OutOfMemoryError e) {
                                 e.printStackTrace();
                             }
                         }

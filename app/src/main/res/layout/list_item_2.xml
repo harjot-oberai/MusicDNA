@@ -7,8 +7,7 @@
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
-    android:longClickable="true"
-    android:orientation="horizontal">
+    android:longClickable="true">
 
     <ImageView
         android:id="@+id/img_2"
@@ -28,7 +27,6 @@
         android:layout_marginLeft="14dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:layout_toLeftOf="@+id/currently_playing_indicator_2"
         android:layout_toRightOf="@+id/img_2"
         android:orientation="vertical">
 
@@ -53,17 +51,6 @@
             android:textColor="#EEE"
             android:textSize="11dp" />
     </LinearLayout>
-
-    <com.wang.avi.AVLoadingIndicatorView
-        android:id="@+id/currently_playing_indicator_2"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="20dp"
-        android:visibility="invisible"
-        app:indicator="LineScale"
-        app:indicator_color="#3F334D" />
 
     <View
         android:layout_width="match_parent"

@@ -567,7 +567,7 @@ public class PlayerFragment extends Fragment implements
         spImgAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!homeActivity.isPlayerTransitioning) {
+                if (!homeActivity.isPlayerTransitioning && smallPlayer != null) {
                     homeActivity.hidePlayer();
                     homeActivity.showTabs();
                     homeActivity.isPlayerVisible = false;

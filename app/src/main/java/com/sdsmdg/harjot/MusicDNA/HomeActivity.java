@@ -1337,7 +1337,7 @@ public class HomeActivity extends AppCompatActivity
             showPlayer2();
         } else if (isQueueVisible) {
             showPlayer3();
-        } else if (isPlayerVisible && !isPlayerTransitioning) {
+        } else if (isPlayerVisible && !isPlayerTransitioning && playerFragment.smallPlayer != null) {
             hidePlayer();
             showTabs();
             isPlayerVisible = false;
@@ -2643,10 +2643,12 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onSettingsClicked() {
-        hidePlayer();
-        showTabs();
-        isPlayerVisible = false;
-        showFragment("settings");
+        if(playerFragment.smallPlayer!=null) {
+            hidePlayer();
+            showTabs();
+            isPlayerVisible = false;
+            showFragment("settings");
+        }
     }
 
     @Override

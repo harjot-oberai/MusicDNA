@@ -39,7 +39,6 @@
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="14dp"
         android:layout_marginRight="10dp"
-        android:layout_toLeftOf="@+id/currently_playing_indicator"
         android:layout_toRightOf="@+id/img"
         android:orientation="vertical">
 
@@ -65,17 +64,6 @@
             android:textColor="#EEE"
             android:textSize="11dp" />
     </LinearLayout>
-
-    <com.wang.avi.AVLoadingIndicatorView
-        android:id="@+id/currently_playing_indicator"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="20dp"
-        android:visibility="invisible"
-        app:indicator="LineScale"
-        app:indicator_color="#3F334D" />
 
     <View
         android:layout_marginTop="10dp"

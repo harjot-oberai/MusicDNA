@@ -1551,7 +1551,7 @@ public class HomeActivity extends AppCompatActivity
             }
         }
 
-        if (!isLocalVisible) {
+        if (!isLocalVisible && localsongsRecyclerView != null) {
             if (finalLocalSearchResultList.size() == 0) {
                 localsongsRecyclerView.setVisibility(GONE);
                 localNothingText.setVisibility(View.VISIBLE);
@@ -2217,7 +2217,8 @@ public class HomeActivity extends AppCompatActivity
                         hasQueueEnded = false;
                         plFrag.progressBar.setProgress(0);
                         plFrag.progressBar.setSecondaryProgress(0);
-                        plFrag.mVisualizer.setEnabled(true);
+                        if (plFrag.mVisualizer != null)
+                            plFrag.mVisualizer.setEnabled(true);
                         plFrag.mMediaPlayer.seekTo(0);
                         plFrag.mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
                         plFrag.isReplayIconVisible = false;

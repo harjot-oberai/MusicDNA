@@ -244,8 +244,8 @@
             android:layout_margin="10dp"
             android:clickable="true"
             android:visibility="invisible"
-            app:indicator="BallSpinFadeLoader"
-            app:indicator_color="#FFFFFF" />
+            app:indicatorName="BallSpinFadeLoader"
+            app:indicatorColor="#FFFFFF" />
 
         <ImageView
             android:id="@+id/next"

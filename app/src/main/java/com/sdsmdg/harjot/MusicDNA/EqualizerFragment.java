@@ -22,12 +22,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.db.chart.model.LineSet;
-import com.db.chart.view.AxisController;
+import com.db.chart.renderer.AxisRenderer;
 import com.db.chart.view.ChartView;
 import com.db.chart.view.LineChartView;
 import com.github.amlcurran.showcaseview.ShowcaseView;
@@ -359,8 +358,8 @@ public class EqualizerFragment extends Fragment {
         chart.setXAxis(false);
         chart.setYAxis(false);
 
-        chart.setYLabels(AxisController.LabelPosition.NONE);
-        chart.setXLabels(AxisController.LabelPosition.NONE);
+        chart.setYLabels(AxisRenderer.LabelPosition.NONE);
+        chart.setXLabels(AxisRenderer.LabelPosition.NONE);
         chart.setGrid(ChartView.GridType.NONE, 7, 10, paint);
 
         chart.setAxisBorderValues(-300, 3300);

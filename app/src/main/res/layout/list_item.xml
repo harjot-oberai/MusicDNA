@@ -47,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:singleLine="true"
+            android:maxLines="1"
             android:text="Title"
             android:textColor="#FFF"
             android:textSize="14dp" />
@@ -59,12 +59,12 @@
             android:layout_marginBottom="10dp"
             android:layout_marginTop="1dp"
             android:ellipsize="end"
-            android:singleLine="true"
+            android:maxLines="1"
             android:text="Artist"
             android:textColor="#EEE"
             android:textSize="11dp" />
     </LinearLayout>
-
+  
     <View
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"

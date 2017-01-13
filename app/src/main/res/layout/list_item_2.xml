@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:singleLine="true"
+            android:maxLines="1"
             android:text="Title"
             android:textColor="#FFF"
             android:textSize="14dp" />
@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:ellipsize="end"
-            android:singleLine="true"
+            android:maxLines="1"
             android:text="Artist"
             android:textColor="#EEE"
             android:textSize="11dp" />

@@ -467,8 +467,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:visibility="invisible"
-                app:indicator="BallPulse"
-                app:indicator_color="#FFF" />
+                app:indicatorName="BallPulse"
+                app:indicatorColor="#FFF" />
 
             <LinearLayout
                 android:id="@+id/streamRecyclerLabelContainer"

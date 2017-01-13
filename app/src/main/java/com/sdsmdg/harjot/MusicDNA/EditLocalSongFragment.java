@@ -256,7 +256,7 @@ public class EditLocalSongFragment extends Fragment {
             Toast.makeText(ctx, "Error in loading the file", Toast.LENGTH_SHORT).show();
             mCallback.onEditSongSave(false);
         }
-        if (!mp3File.hasID3v2Tag()) {
+        if (mp3File != null && !mp3File.hasID3v2Tag()) {
             Toast.makeText(ctx, "No Tags Found", Toast.LENGTH_SHORT).show();
             mCallback.onEditSongSave(false);
         }
@@ -268,10 +268,16 @@ public class EditLocalSongFragment extends Fragment {
 
         }
 
-        tag = mp3File.getTag();
-        id3v1Tag = mp3File.getID3v1Tag();
-        id3v2Tag = mp3File.getID3v2Tag();
-        id3v24Tag = mp3File.getID3v2TagAsv24();
+        try {
+            tag = mp3File.getTag();
+            id3v1Tag = mp3File.getID3v1Tag();
+            id3v2Tag = mp3File.getID3v2Tag();
+            id3v24Tag = mp3File.getID3v2TagAsv24();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(ctx, "Error in finding tags", Toast.LENGTH_SHORT).show();
+            mCallback.onEditSongSave(false);
+        }
 
     }
 

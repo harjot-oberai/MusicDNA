@@ -1338,7 +1338,7 @@ public class HomeActivity extends AppCompatActivity
             showPlayer2();
         } else if (isQueueVisible) {
             showPlayer3();
-        } else if (isPlayerVisible && !isPlayerTransitioning) {
+        } else if (isPlayerVisible && !isPlayerTransitioning && playerFragment.smallPlayer != null) {
             hidePlayer();
             showTabs();
             isPlayerVisible = false;
@@ -1552,7 +1552,7 @@ public class HomeActivity extends AppCompatActivity
             }
         }
 
-        if (!isLocalVisible) {
+        if (!isLocalVisible && localsongsRecyclerView != null) {
             if (finalLocalSearchResultList.size() == 0) {
                 localsongsRecyclerView.setVisibility(GONE);
                 localNothingText.setVisibility(View.VISIBLE);
@@ -2217,7 +2217,8 @@ public class HomeActivity extends AppCompatActivity
                         hasQueueEnded = false;
                         plFrag.progressBar.setProgress(0);
                         plFrag.progressBar.setSecondaryProgress(0);
-                        plFrag.mVisualizer.setEnabled(true);
+                        if (plFrag.mVisualizer != null)
+                            plFrag.mVisualizer.setEnabled(true);
                         plFrag.mMediaPlayer.seekTo(0);
                         plFrag.mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
                         plFrag.isReplayIconVisible = false;
@@ -2643,10 +2644,12 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onSettingsClicked() {
-        hidePlayer();
-        showTabs();
-        isPlayerVisible = false;
-        showFragment("settings");
+        if (playerFragment.smallPlayer != null) {
+            hidePlayer();
+            showTabs();
+            isPlayerVisible = false;
+            showFragment("settings");
+        }
     }
 
     @Override
@@ -2841,7 +2844,7 @@ public class HomeActivity extends AppCompatActivity
     public void onEditSongSave(boolean wasSaveSuccessful) {
         hideFragment("Edit");
         if (!wasSaveSuccessful) {
-            Toast.makeText(this, "Error in saving Data", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Error occured while editing", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -2969,6 +2972,8 @@ public class HomeActivity extends AppCompatActivity
                                 Bitmap croppedBmp = Bitmap.createBitmap(playerFragment.mVisualizerView.bmp, 0, (int) (75 * ratio), screen_width, screen_width);
                                 navImageView.setImageBitmap(croppedBmp);
                             } catch (Exception e) {
+                                e.printStackTrace();
+                            } catch (OutOfMemoryError e) {
                                 e.printStackTrace();
                             }
                         }

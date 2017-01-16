@@ -413,7 +413,7 @@ public class HomeActivity extends AppCompatActivity
             searchView.setIconified(true);
             new Thread(new CancelCall()).start();
 
-            hideTabs();
+//            hideTabs();
             isPlayerVisible = true;
 
             PlayerFragment frag = playerFragment;
@@ -536,7 +536,7 @@ public class HomeActivity extends AppCompatActivity
             searchView.setIconified(true);
             new Thread(new CancelCall()).start();
 
-            hideTabs();
+//            hideTabs();
             isPlayerVisible = true;
 
             PlayerFragment frag = playerFragment;
@@ -793,7 +793,7 @@ public class HomeActivity extends AppCompatActivity
                         if (pFrag.mMediaPlayer != null && pFrag.mMediaPlayer.isPlaying()) {
                             onBackPressed();
                             isPlayerVisible = true;
-                            hideTabs();
+//                            hideTabs();
                             showPlayer();
                         }
                     }
@@ -1340,7 +1340,7 @@ public class HomeActivity extends AppCompatActivity
             showPlayer3();
         } else if (isPlayerVisible && !isPlayerTransitioning && playerFragment.smallPlayer != null) {
             hidePlayer();
-            showTabs();
+//            showTabs();
             isPlayerVisible = false;
         } else if (isLocalVisible && flmFrag != null && flmFrag.searchBox != null && flmFrag.isSearchboxVisible) {
             flmFrag.searchBox.setText("");
@@ -1684,26 +1684,26 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    public void hideTabs() {
-        toolbar.animate()
-                .setDuration(300)
-                .translationY(-1 * toolbar.getHeight())
-                .alpha(0.0f);
+//    public void hideTabs() {
+//        toolbar.animate()
+//                .setDuration(300)
+//                .translationY(-1 * toolbar.getHeight())
+//                .alpha(0.0f);
+//
+//    }
 
-    }
-
-    public void showTabs() {
-
-        if (isFullScreenEnabled) {
-            toolbar.setVisibility(View.INVISIBLE);
-        }
-
-        toolbar.setAlpha(0.0f);
-        toolbar.animate()
-                .setDuration(300)
-                .translationY(0)
-                .alpha(1.0f);
-    }
+//    public void showTabs() {
+//
+//        if (isFullScreenEnabled) {
+//            toolbar.setVisibility(View.INVISIBLE);
+//        }
+//
+//        toolbar.setAlpha(0.0f);
+//        toolbar.animate()
+//                .setDuration(300)
+//                .translationY(0)
+//                .alpha(1.0f);
+//    }
 
     public void hidePlayer() {
 
@@ -2646,7 +2646,7 @@ public class HomeActivity extends AppCompatActivity
     public void onSettingsClicked() {
         if (playerFragment.smallPlayer != null) {
             hidePlayer();
-            showTabs();
+//            showTabs();
             isPlayerVisible = false;
             showFragment("settings");
         }
@@ -3026,11 +3026,11 @@ public class HomeActivity extends AppCompatActivity
     public void onSmallPlayerTouched() {
         if (!isPlayerVisible) {
             isPlayerVisible = true;
-            hideTabs();
+//            hideTabs();
             showPlayer();
         } else {
             isPlayerVisible = false;
-            showTabs();
+//            showTabs();
             hidePlayer();
         }
     }

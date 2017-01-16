@@ -569,7 +569,7 @@ public class PlayerFragment extends Fragment implements
             public void onClick(View v) {
                 if (!homeActivity.isPlayerTransitioning && smallPlayer != null) {
                     homeActivity.hidePlayer();
-                    homeActivity.showTabs();
+//                    homeActivity.showTabs();
                     homeActivity.isPlayerVisible = false;
                 }
             }

@@ -238,14 +238,13 @@
 
         <com.wang.avi.AVLoadingIndicatorView
             android:id="@+id/bufferingIndicator"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_centerInParent="true"
-            android:layout_margin="10dp"
             android:clickable="true"
-            android:visibility="invisible"
-            app:indicatorName="BallSpinFadeLoader"
-            app:indicatorColor="#FFFFFF" />
+            android:padding="10dp"
+            app:indicatorColor="#FFFFFF"
+            app:indicatorName="BallSpinFadeLoaderIndicator" />
 
         <ImageView
             android:id="@+id/next"

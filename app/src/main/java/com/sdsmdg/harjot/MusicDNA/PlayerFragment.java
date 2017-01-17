@@ -49,6 +49,7 @@ import com.sdsmdg.harjot.MusicDNA.NotificationManager.AudioPlayerBroadcastReceiv
 import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
 import com.squareup.leakcanary.RefWatcher;
 import com.squareup.picasso.Picasso;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -81,7 +82,7 @@ public class PlayerFragment extends Fragment implements
 
     static boolean isPrepared = false;
 
-    View bufferingIndicator;
+    AVLoadingIndicatorView bufferingIndicator;
 
     static CustomProgressBar cpb;
 
@@ -553,7 +554,7 @@ public class PlayerFragment extends Fragment implements
 
         snappyRecyclerView = (SnappyRecyclerView) view.findViewById(R.id.visualizer_recycler);
 
-        bufferingIndicator = view.findViewById(R.id.bufferingIndicator);
+        bufferingIndicator = (AVLoadingIndicatorView) view.findViewById(R.id.bufferingIndicator);
         currTime = (TextView) view.findViewById(R.id.currTime);
         totalTime = (TextView) view.findViewById(R.id.totalTime);
 

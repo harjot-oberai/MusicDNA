@@ -227,7 +227,7 @@ public class Lyrics3v1 extends AbstractLyrics3
         else
         {
             // check the end of the file for a lyrics tag incase an ID3
-            // tag wasn't placed after it.
+            // tag wasn'timer placed after it.
             file.seek(file.length() - 9);
             file.read(buffer, 0, 9);
             lyricsEnd = new String(buffer, 0, 9);

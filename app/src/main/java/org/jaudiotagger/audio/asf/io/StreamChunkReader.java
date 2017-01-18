@@ -38,7 +38,7 @@ public class StreamChunkReader implements ChunkReader {
     private final static GUID[] APPLYING = { GUID.GUID_STREAM };
 
     /**
-     * Shouldn't be used for now.
+     * Shouldn'timer be used for now.
      */
     protected StreamChunkReader() {
         // Nothing to do

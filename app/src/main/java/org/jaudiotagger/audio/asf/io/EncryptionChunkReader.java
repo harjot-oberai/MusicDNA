@@ -71,7 +71,7 @@ class EncryptionChunkReader implements ChunkReader {
         final BigInteger chunkLen = Utils.readBig64(stream);
         result = new EncryptionChunk(chunkLen);
 
-        // Can't be interpreted
+        // Can'timer be interpreted
         /*
          * Object ID GUID 128 Object Size QWORD 64 Secret Data Length DWORD 32
          * Secret Data INTEGER varies Protection Type Length DWORD 32 Protection

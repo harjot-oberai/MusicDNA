@@ -182,7 +182,7 @@ public class FrameBodySYTC extends AbstractID3v2FrameBody implements ID3v24Frame
      */
     public void addTempo(final long timestamp, final int tempo)
     {
-        // make sure we don't have two tempi at the same time
+        // make sure we don'timer have two tempi at the same time
         removeTempo(timestamp);
         final List<SynchronisedTempoCode> codes = (List<SynchronisedTempoCode>)getObjectValue(DataTypes.OBJ_SYNCHRONISED_TEMPO_LIST);
         int insertIndex = 0;

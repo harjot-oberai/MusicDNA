@@ -84,7 +84,7 @@ public class Chunk {
         }
         if (pos < 0) {
             throw new IllegalArgumentException(
-                    "Position of header can't be negative.");
+                    "Position of header can'timer be negative.");
         }
         if (chunkLen == null || chunkLen.compareTo(BigInteger.ZERO) < 0) {
             throw new IllegalArgumentException(

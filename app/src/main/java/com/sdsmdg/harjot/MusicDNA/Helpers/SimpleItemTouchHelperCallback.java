@@ -3,7 +3,7 @@ package com.sdsmdg.harjot.MusicDNA.Helpers;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
-import com.sdsmdg.harjot.MusicDNA.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.Activities.HomeActivity;
 
 /**
  * Created by Harjot on 18-May-16.

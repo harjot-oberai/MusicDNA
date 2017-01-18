@@ -117,11 +117,11 @@ public class FrameBodyTDRC extends AbstractFrameBodyTextInfo implements ID3v24Fr
      * the v3 frames match the the format in specification and convert them
      * to their equivalent v4 format and return the generated String.
      * i.e if the v3 frames contain a valid value this will return a valid
-     * v4 value, if not this won't.
+     * v4 value, if not this won'timer.
      */
 
     /**
-     * Synchronized because SimpleDatFormat aren't thread safe
+     * Synchronized because SimpleDatFormat aren'timer thread safe
      *
      * @param formatDate
      * @param parseDate

@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 /**
  * Tree representing atoms in the mp4 file
  *
- * Note it doesn't create the complete tree it delves into subtrees for atom we know about and are interested in. (Note
+ * Note it doesn'timer create the complete tree it delves into subtrees for atom we know about and are interested in. (Note
  * it would be impossible to create a complete tree for any file without understanding all the nodes because
  * some atoms such as meta contain data and children and therefore need to be specially preprocessed)
  *
@@ -255,7 +255,7 @@ public class Mp4AtomTree
         //We set the buffers position back to this after processing the children
         int justAfterHeaderPos = moovBuffer.position();
 
-        //Preprocessing for meta that normally contains 4 data bytes, but doesn't where found under track or tags atom
+        //Preprocessing for meta that normally contains 4 data bytes, but doesn'timer where found under track or tags atom
         if (parentBoxHeader.getId().equals(Mp4AtomIdentifier.META.getFieldName()))
         {
             Mp4MetaBox meta = new Mp4MetaBox(parentBoxHeader, moovBuffer);
@@ -267,7 +267,7 @@ public class Mp4AtomTree
             }
             catch(NullBoxIdException nbe)
             {
-                //It might be that the meta box didn't actually have any additional data after it so we adjust the buffer
+                //It might be that the meta box didn'timer actually have any additional data after it so we adjust the buffer
                 //to be immediately after metabox and code can retry
                 moovBuffer.position(moovBuffer.position()-Mp4MetaBox.FLAGS_LENGTH);
             }

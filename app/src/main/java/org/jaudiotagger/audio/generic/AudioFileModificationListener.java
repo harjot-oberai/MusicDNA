@@ -52,7 +52,7 @@ public interface AudioFileModificationListener
      * @param original  The original file on which the operation was started.
      * @param temporary The modified copy. (It may be of zero size if the original was
      *                  modified)
-     * @throws ModifyVetoException If the Results doesn't fit the expectations of the listener,
+     * @throws ModifyVetoException If the Results doesn'timer fit the expectations of the listener,
      *                             it can prevent the replacement of the original by temporary.<br>
      *                             If the original is already modified, this exception results
      *                             in nothing.

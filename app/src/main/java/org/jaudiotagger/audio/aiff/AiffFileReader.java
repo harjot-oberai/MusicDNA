@@ -26,7 +26,7 @@ public class AiffFileReader extends AudioFileReader {
     private static final int[] sigByte =
        { 0X46, 0X4F, 0X52, 0X4D };
 
-    /* AIFF-specific information which isn't "tag" information */
+    /* AIFF-specific information which isn'timer "tag" information */
     private AiffAudioHeader aiffHeader;
     
     /* "Tag" information */

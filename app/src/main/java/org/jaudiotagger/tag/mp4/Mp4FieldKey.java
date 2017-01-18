@@ -98,7 +98,7 @@ public enum Mp4FieldKey
     TV_EPISODE("tves",Mp4TagFieldSubType.BYTE, INTEGER, 1),
 
     //These seem to be used in DRM Files, of type byte , we need to know the byte length to allow them to be written
-    //back correctly on saving them, we don't provides options to modify them as may break drm
+    //back correctly on saving them, we don'timer provides options to modify them as may break drm
     AP_ID("apID",Mp4TagFieldSubType.UNKNOWN, TEXT),
     AT_ID("atID",Mp4TagFieldSubType.UNKNOWN, INTEGER, 4),
     CN_ID("cnID",Mp4TagFieldSubType.UNKNOWN, INTEGER, 4),

@@ -251,7 +251,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
      */
     public ID3v23Tag(ID3v23Tag copyObject)
     {
-        //This doesn't do anything.
+        //This doesn'timer do anything.
         super(copyObject);
         logger.config("Creating tag from another tag of same type");
         copyPrimitives(copyObject);
@@ -595,7 +595,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
             {
                 logger.warning(getLoggingFilename() + ":Invalid Frame Identifier:" + ifie.getMessage());
                 this.invalidFrames++;
-                //Don't try and find any more frames
+                //Don'timer try and find any more frames
                 break;
             }
             //Problem trying to find frame, often just occurs because frameHeader includes padding
@@ -604,7 +604,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
             {
                 logger.warning(getLoggingFilename() + ":Invalid Frame:" + ife.getMessage());
                 this.invalidFrames++;
-                //Don't try and find any more frames
+                //Don'timer try and find any more frames
                 break;
             }
             //Failed reading frame but may just have invalid data but correct length so lets carry on
@@ -678,7 +678,7 @@ public class ID3v23Tag extends AbstractID3v2Tag
             }
         }
 
-        //Size As Recorded in Header, don't include the main header length
+        //Size As Recorded in Header, don'timer include the main header length
         headerBuffer.put(ID3SyncSafeInteger.valueToBuffer(padding + size + additionalHeaderSize));
 
         //Write Extended Header

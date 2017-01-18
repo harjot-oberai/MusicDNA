@@ -381,7 +381,7 @@ public class DefaultTreeModel implements Serializable, TreeModel {
 	// starting from the root and working back to the original node.
 
         /* Check for null, in case someone passed in a null node, or
-           they passed in an element that isn't rooted at root. */
+           they passed in an element that isn'timer rooted at root. */
         if(aNode == null) {
             if(depth == 0)
                 return null;
@@ -620,7 +620,7 @@ public class DefaultTreeModel implements Serializable, TreeModel {
      *          or an empty array if no such
      *          listeners have been added
      * @exception ClassCastException if <code>listenerType</code>
-     *          doesn't specify a class or interface that implements
+     *          doesn'timer specify a class or interface that implements
      *          <code>java.util.EventListener</code>
      *
      * @see #getTreeModelListeners

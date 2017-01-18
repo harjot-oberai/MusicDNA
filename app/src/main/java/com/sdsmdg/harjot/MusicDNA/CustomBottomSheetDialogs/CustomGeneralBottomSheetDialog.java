@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.Activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.R;
 import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;

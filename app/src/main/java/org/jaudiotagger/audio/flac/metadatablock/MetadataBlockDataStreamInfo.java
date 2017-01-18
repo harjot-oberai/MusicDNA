@@ -28,7 +28,7 @@ import java.util.logging.Logger;
  *
  * This block has information about the whole stream, like sample rate, number of channels, total number of samples,
  * etc. It must be present as the first metadata block in the stream. Other metadata blocks may follow, and ones
- * that the decoder doesn't understand, it will skip.
+ * that the decoder doesn'timer understand, it will skip.
  * Format:
  * Size in bits Info
  * 16 The minimum block size (in samples) used in the stream.

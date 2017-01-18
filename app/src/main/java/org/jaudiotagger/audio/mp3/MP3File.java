@@ -160,7 +160,7 @@ public class MP3File extends AudioFile
     /**
      * Read V2tag if exists
      *
-     * TODO:shouldn't we be handing TagExceptions:when will they be thrown
+     * TODO:shouldn'timer we be handing TagExceptions:when will they be thrown
      *
      * @param file
      * @param loadOptions
@@ -366,7 +366,7 @@ public class MP3File extends AudioFile
         else
         {
 
-            //We get a different value if read from start, can't guarantee 100% correct lets do some more checks
+            //We get a different value if read from start, can'timer guarantee 100% correct lets do some more checks
             logger.config((ErrorMessage.MP3_RECALCULATED_POSSIBLE_START_OF_MP3_AUDIO.getMsg(file.getPath(),
                             Hex.asHex(headerOne.getMp3StartByte()))));
 
@@ -679,7 +679,7 @@ public class MP3File extends AudioFile
     }
 
     /**
-     * Set v2 tag ,don't need to set v24 tag because saving
+     * Set v2 tag ,don'timer need to set v24 tag because saving
      *
 
      * @param id3v2tag
@@ -1088,7 +1088,7 @@ public class MP3File extends AudioFile
 
 
     /**
-     * Get the ID3v2 tag and convert to preferred version or if the file doesn't have one at all
+     * Get the ID3v2 tag and convert to preferred version or if the file doesn'timer have one at all
      * create a default tag of preferred version and set it. The file may already contain a ID3v1 tag but because
      * this is not terribly useful the v1tag is not considered for this problem.
      *

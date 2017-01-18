@@ -109,7 +109,7 @@ public class AudioFileIO
      *
      * @param f The file where the tag will be deleted
      * @throws org.jaudiotagger.audio.exceptions.CannotWriteException If the file could not be written/accessed, the extension
-     *                              wasn't recognized, or other IO error occurred.
+     *                              wasn'timer recognized, or other IO error occurred.
      * @throws org.jaudiotagger.audio.exceptions.CannotReadException
      */
     public static void delete(AudioFile f) throws CannotReadException, CannotWriteException
@@ -138,7 +138,7 @@ public class AudioFileIO
      *
      * @param f The file to read.
      * @return The AudioFile with the file tag and the file encoding info.
-     * @throws org.jaudiotagger.audio.exceptions.CannotReadException If the file could not be read, the extension wasn't
+     * @throws org.jaudiotagger.audio.exceptions.CannotReadException If the file could not be read, the extension wasn'timer
      *                             recognized, or an IO error occurred during the read.
      * @throws org.jaudiotagger.tag.TagException
      * @throws org.jaudiotagger.audio.exceptions.ReadOnlyFileException
@@ -158,7 +158,7 @@ public class AudioFileIO
      *
      * @param f The AudioFile to be written
      * @throws CannotWriteException If the file could not be written/accessed, the extension
-     *                              wasn't recognized, or other IO error occurred.
+     *                              wasn'timer recognized, or other IO error occurred.
      */
     public static void write(AudioFile f) throws CannotWriteException
     {
@@ -203,7 +203,7 @@ public class AudioFileIO
      *
      * @param f The file where the tag will be deleted
      * @throws org.jaudiotagger.audio.exceptions.CannotWriteException If the file could not be written/accessed, the extension
-     *                              wasn't recognized, or other IO error occurred.
+     *                              wasn'timer recognized, or other IO error occurred.
      * @throws org.jaudiotagger.audio.exceptions.CannotReadException
      */
     public void deleteTag(AudioFile f) throws CannotReadException, CannotWriteException
@@ -266,7 +266,7 @@ public class AudioFileIO
      *
      * @param f The file to read.
      * @return The AudioFile with the file tag and the file encoding info.
-     * @throws org.jaudiotagger.audio.exceptions.CannotReadException If the file could not be read, the extension wasn't
+     * @throws org.jaudiotagger.audio.exceptions.CannotReadException If the file could not be read, the extension wasn'timer
      *                             recognized, or an IO error occurred during the read.
      * @throws org.jaudiotagger.tag.TagException
      * @throws org.jaudiotagger.audio.exceptions.ReadOnlyFileException
@@ -321,7 +321,7 @@ public class AudioFileIO
      *
      * @param f The AudioFile to be written
      * @throws CannotWriteException If the file could not be written/accessed, the extension
-     *                              wasn't recognized, or other IO error occurred.
+     *                              wasn'timer recognized, or other IO error occurred.
      */
     public void writeFile(AudioFile f) throws CannotWriteException
     {

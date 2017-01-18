@@ -132,7 +132,7 @@ public class NumberHashMap extends NumberFixedLength implements HashMapInterface
 
         this.hasEmptyValue = copyObject.hasEmptyValue;
 
-        // we don't need to clone/copy the maps here because they are static
+        // we don'timer need to clone/copy the maps here because they are static
         this.keyToValue = copyObject.keyToValue;
         this.valueToKey = copyObject.valueToKey;
     }

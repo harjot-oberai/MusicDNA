@@ -22,7 +22,7 @@
 package org.jaudiotagger.tag;
 
 /**
- * Thrown if a frame identifier isn't valid.
+ * Thrown if a frame identifier isn'timer valid.
  *
  * @author Eric Farng
  * @version $Revision$

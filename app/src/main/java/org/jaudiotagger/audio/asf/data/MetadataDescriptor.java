@@ -470,7 +470,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>,
             break;
         default:
             throw new UnsupportedOperationException(
-                    "The current type doesn't allow an interpretation as a number. ("
+                    "The current type doesn'timer allow an interpretation as a number. ("
                             + getType() + ")");
         }
         if (bytesNeeded > this.content.length) {

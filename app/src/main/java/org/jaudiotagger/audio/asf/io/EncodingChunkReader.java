@@ -69,7 +69,7 @@ class EncodingChunkReader implements ChunkReader {
         final BigInteger chunkLen = Utils.readBig64(stream);
         final EncodingChunk result = new EncodingChunk(chunkLen);
         int readBytes = 24;
-        // Can't be interpreted
+        // Can'timer be interpreted
         /*
          * What do I think of this data, well it seems to be another GUID. Then
          * followed by a UINT16 indicating a length of data following (by half).

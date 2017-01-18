@@ -1,4 +1,4 @@
-<com.sdsmdg.harjot.MusicDNA.SlidingRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root_view"
     android:layout_width="match_parent"
@@ -108,7 +108,7 @@
 
         </RelativeLayout>
 
-        <com.sdsmdg.harjot.MusicDNA.CustomProgressBar
+        <com.sdsmdg.harjot.MusicDNA.CustomViews.CustomProgressBar
             android:id="@+id/customProgress"
             android:layout_width="match_parent"
             android:layout_height="4dp"
@@ -188,7 +188,7 @@
             android:src="@drawable/menu_overflow" />
     </RelativeLayout>
 
-    <com.sdsmdg.harjot.MusicDNA.VisualizerView
+    <com.sdsmdg.harjot.MusicDNA.VisualizerViews.VisualizerView
         android:id="@+id/myvisualizerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -377,4 +377,4 @@
 
     </RelativeLayout>
 
-</com.sdsmdg.harjot.MusicDNA.SlidingRelativeLayout>
+</RelativeLayout>

@@ -8,7 +8,6 @@ import android.annotation.TargetApi;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaMetadata;
 import android.media.Rating;
@@ -19,32 +18,21 @@ import android.os.Handler;
 import android.util.Log;
 
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
-import android.media.Rating;
 import android.media.session.MediaController;
 import android.media.session.MediaSession;
-import android.media.session.MediaSession.Callback;
 import android.media.session.MediaSessionManager;
 import android.os.IBinder;
-import android.support.v4.media.session.MediaSessionCompat;
-import android.util.Log;
-import android.widget.Toast;
 
-import com.sdsmdg.harjot.MusicDNA.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.Activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.Interfaces.ServiceCallbacks;
-import com.sdsmdg.harjot.MusicDNA.PlayListFragment;
-import com.sdsmdg.harjot.MusicDNA.PlayerFragment;
+import com.sdsmdg.harjot.MusicDNA.Fragments.PlayerFragment.PlayerFragment;
 import com.sdsmdg.harjot.MusicDNA.R;
-
-import java.util.logging.LogRecord;
 
 public class MediaPlayerService extends Service implements PlayerFragment.onPlayPauseListener {
 

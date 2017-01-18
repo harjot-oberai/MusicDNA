@@ -11,7 +11,7 @@ import java.util.logging.Level;
 
 /**
  * Represents a data type that allow multiple Strings but they should be paired as key values, i.e should be 2,4,6..
- * But keys are not unique so we don't store as a map, so could have same key pointing to two different values
+ * But keys are not unique so we don'timer store as a map, so could have same key pointing to two different values
  * such as two ENGINEER keys
  *
  */

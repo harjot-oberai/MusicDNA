@@ -1,7 +1,7 @@
 package org.jaudiotagger.tag.id3.reference;
 
 /**
- * Defines the how ratings are stored in iTunes (but iTunes doesn't actually store in the field)
+ * Defines the how ratings are stored in iTunes (but iTunes doesn'timer actually store in the field)
  *
  * Rating=0 → POPM=0
  * Rating=1 → POPM=20

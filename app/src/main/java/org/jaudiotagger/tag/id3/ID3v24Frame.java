@@ -446,7 +446,7 @@ public class ID3v24Frame extends AbstractID3v2Frame
                         //no data found so assume entered padding in which case assume it is last
                         //frame and we are ok
                     }
-                    //haven't found identifier so maybe not syncsafe or maybe there are no more frames, just padding
+                    //haven'timer found identifier so maybe not syncsafe or maybe there are no more frames, just padding
                     else
                     {
                         //Ok lets try using a non-syncsafe integer
@@ -478,8 +478,8 @@ public class ID3v24Frame extends AbstractID3v2Frame
                                     logger.warning(getLoggingFilename() + ":" + "Assuming frame size is NOT stored as a sync safe integer:" + identifier);
                                 }
                                 //no data found so assume entered padding in which case assume it is last
-                                //frame and we are ok whereas we didn't hit padding when using syncsafe integer
-                                //or we wouldn't have got to this point. So assume syncsafe integer ended within
+                                //frame and we are ok whereas we didn'timer hit padding when using syncsafe integer
+                                //or we wouldn'timer have got to this point. So assume syncsafe integer ended within
                                 //the frame data whereas this has reached end of frames.
                                 else if (ID3SyncSafeInteger.isBufferEmpty(readAheadbuffer))
                                 {

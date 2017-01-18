@@ -60,7 +60,7 @@ public class Mp4DataBox extends AbstractMp4Box
             throw new RuntimeException("Unable to process data box because identifier is:" + header.getId());
         }
 
-        //Make slice so operations here don't effect position of main buffer
+        //Make slice so operations here don'timer effect position of main buffer
         this.dataBuffer = dataBuffer.slice();
 
         //Type

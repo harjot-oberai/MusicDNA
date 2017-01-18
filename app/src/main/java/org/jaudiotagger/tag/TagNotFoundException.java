@@ -22,7 +22,7 @@
 package org.jaudiotagger.tag;
 
 /**
- * Thrown if the tag o isn't found. This is different from
+ * Thrown if the tag o isn'timer found. This is different from
  * the <code>InvalidTagException</code>. Each tag  has an
  * ID string or some way saying that it simply exists. If this string is
  * missing, <code>TagNotFoundException</code> is thrown. If the ID string

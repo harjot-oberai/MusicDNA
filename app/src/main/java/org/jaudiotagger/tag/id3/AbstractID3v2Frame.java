@@ -373,7 +373,7 @@ public abstract class AbstractID3v2Frame extends AbstractTagFrame implements Tag
     /**
      * This creates a new body based of type identifier but populated by the data
      * in the body. This is a different type to the body being created which is why
-     * TagUtility.copyObject() can't be used. This is used when converting between
+     * TagUtility.copyObject() can'timer be used. This is used when converting between
      * different versions of a tag for frames that have a non-trivial mapping such
      * as TYER in v3 to TDRC in v4. This will only work where appropriate constructors
      * exist in the frame body to be created, for example a FrameBodyTYER requires a constructor

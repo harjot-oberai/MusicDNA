@@ -495,7 +495,7 @@ public class ID3v22Tag extends AbstractID3v2Tag
 
         headerBuffer.put(flags);
 
-        //Size As Recorded in Header, don't include the main header length
+        //Size As Recorded in Header, don'timer include the main header length
         headerBuffer.put(ID3SyncSafeInteger.valueToBuffer(padding + size));
         headerBuffer.flip();
         return headerBuffer;

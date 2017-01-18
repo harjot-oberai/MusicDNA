@@ -71,7 +71,7 @@ public class ID3Unsynchronization
                 // if byte is $FF, we must check the following byte if there is one
                 if (input.available() > 0)
                 {
-                    input.mark(1);  // remember where we were, if we don't need to unsynchronize
+                    input.mark(1);  // remember where we were, if we don'timer need to unsynchronize
                     int secondByte = input.read();
                     if ((secondByte & MPEGFrameHeader.SYNC_BYTE2) == MPEGFrameHeader.SYNC_BYTE2)
                     {

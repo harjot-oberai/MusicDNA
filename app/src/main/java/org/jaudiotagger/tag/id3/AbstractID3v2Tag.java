@@ -429,7 +429,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
      * Retrieve the first tag field that exists for this identifier
      *
      * @param identifier
-     * @return tag field or null if doesn't exist
+     * @return tag field or null if doesn'timer exist
      */
     public AbstractID3v2Frame getFirstField(String identifier)
     {
@@ -889,7 +889,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
     /**
      * Return all frames which start with the identifier, this
      * can be more than one which is useful if trying to retrieve
-     * similar frames e.g TIT1,TIT2,TIT3 ... and don't know exactly
+     * similar frames e.g TIT1,TIT2,TIT3 ... and don'timer know exactly
      * which ones there are.
      *
      * Warning the match is only done against the identifier so if a tag contains a frame with an unsupported body
@@ -1528,7 +1528,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
             boolean deleteResult = originalFileBackup.delete();
             if (!deleteResult)
             {
-                //Not a disaster but can't deleteField the backup so make a warning
+                //Not a disaster but can'timer deleteField the backup so make a warning
                 logger.warning(ErrorMessage.GENERAL_WRITE_WARNING_UNABLE_TO_DELETE_BACKUP_FILE.getMsg(originalFileBackup.getAbsolutePath()));
             }
         }
@@ -1929,7 +1929,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         //Iterator of each different frameId in this tag
         final Iterator<Map.Entry<String, Object>> it = this.frameMap.entrySet().iterator();
 
-        //Iterator used by hasNext() so doesn't effect next()
+        //Iterator used by hasNext() so doesn'timer effect next()
         final Iterator<Map.Entry<String, Object>> itHasNext = this.frameMap.entrySet().iterator();
 
 
@@ -1954,7 +1954,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
                     if (e.getValue() instanceof List)
                     {
                         List<TagField> l = (List<TagField>) e.getValue();
-                        //If list is empty (which it shouldn't be) we skip over this entry
+                        //If list is empty (which it shouldn'timer be) we skip over this entry
                         if (l.size() == 0)
                         {
                             continue;
@@ -2003,7 +2003,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
 
             public TagField next()
             {
-                //Hasn't been initialized yet
+                //Hasn'timer been initialized yet
                 if (fieldsIt == null)
                 {
                     changeIt();
@@ -2724,7 +2724,7 @@ public abstract class AbstractID3v2Tag extends AbstractID3Tag implements Tag
         }
         FrameAndSubId formatKey = getFrameAndSubIdFromGenericKey(genericKey);
 
-        //Get list of frames that this uses, as we are going to remove entries we don't want take a copy
+        //Get list of frames that this uses, as we are going to remove entries we don'timer want take a copy
         List<TagField> list = getFields(formatKey.getFrameId());
         List<TagField> filteredList = new ArrayList<TagField>();
         String subFieldId = formatKey.getSubId();

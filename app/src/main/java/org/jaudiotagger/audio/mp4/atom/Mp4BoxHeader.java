@@ -40,7 +40,7 @@ import java.util.logging.Logger;
  *
  * The length includes the length of the box including the identifier and the length itself.
  * Then they may contain data and/or sub boxes, if they contain subboxes they are known as a parent box. Parent boxes
- * shouldn't really contain data, but sometimes they do.
+ * shouldn'timer really contain data, but sometimes they do.
  *
  * Parent boxes length includes the length of their immediate sub boxes
  *
@@ -303,7 +303,7 @@ public class Mp4BoxHeader
     /**
      * Seek for box with the specified id starting from the current location of filepointer,
      *
-     * Note it won't find the box if it is contained with a level below the current level, nor if we are
+     * Note it won'timer find the box if it is contained with a level below the current level, nor if we are
      * at a parent atom that also contains data and we havent yet processed the data. It will work
      * if we are at the start of a child box even if it not the required box as long as the box we are
      * looking for is the same level (or the level above in some cases).

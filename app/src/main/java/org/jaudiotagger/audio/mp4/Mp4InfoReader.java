@@ -283,7 +283,7 @@ public class Mp4InfoReader
                 }
             }
         }
-        //Set default channels if couldn't calculate it
+        //Set default channels if couldn'timer calculate it
         if (info.getChannelNumber() == -1)
         {
             info.setChannelNumber(2);
@@ -295,7 +295,7 @@ public class Mp4InfoReader
             info.setBitrate(128);
         }
         
-        //Set default bits per sample if couldn't calculate it
+        //Set default bits per sample if couldn'timer calculate it
         if (info.getBitsPerSample() == -1)
         {
         	info.setBitsPerSample(16);
@@ -311,7 +311,7 @@ public class Mp4InfoReader
 
         //Level 2-Searching for others "trak" within "moov", if we find any traks containing video
         //then reject it if no track if not video then we allow it because many encoders seem to contain all sorts
-        //of stuff that you wouldn't expect in an audio track
+        //of stuff that you wouldn'timer expect in an audio track
         mvhdBuffer.position(endOfFirstTrackInBuffer);
         while(mvhdBuffer.hasRemaining())
         {

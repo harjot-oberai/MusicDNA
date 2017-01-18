@@ -139,7 +139,7 @@ public class Utils
 
     /*
      * Computes a number whereby the 1st byte is the least significant and the last
-     * byte is the most significant. This version doesn't take a length,
+     * byte is the most significant. This version doesn'timer take a length,
      * and it returns an int rather than a long.
      * 
      * @param b The byte array. Maximum length for valid results is 4 bytes.
@@ -333,7 +333,7 @@ public class Utils
 
     /**
      * Reads a 32-bit integer and returns it as a (signed) int.
-     * Does overflow checking since java can't handle unsigned numbers.
+     * Does overflow checking since java can'timer handle unsigned numbers.
      * @param di  The input source
      * 
      * @throws java.io.IOException

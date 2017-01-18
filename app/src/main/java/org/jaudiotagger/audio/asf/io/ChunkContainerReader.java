@@ -122,7 +122,7 @@ abstract class ChunkContainerReader<ChunkType extends ChunkContainer>
     }
 
     /**
-     * Tests whether {@link #getReader(GUID)} won't return <code>null</code>.<br>
+     * Tests whether {@link #getReader(GUID)} won'timer return <code>null</code>.<br>
      * 
      * @param guid
      *            GUID which identifies the chunk to be read.
@@ -149,7 +149,7 @@ abstract class ChunkContainerReader<ChunkType extends ChunkContainer>
      * @throws IllegalArgumentException
      *             If one used {@link ChunkReader} could
      *             {@linkplain ChunkReader#canFail() fail} and the stream source
-     *             doesn't support mark/reset.
+     *             doesn'timer support mark/reset.
      */
     public ChunkType read(final GUID guid, final InputStream stream,
             final long chunkStart) throws IOException, IllegalArgumentException {

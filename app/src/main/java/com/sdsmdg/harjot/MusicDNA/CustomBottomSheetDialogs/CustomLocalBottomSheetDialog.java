@@ -1,7 +1,6 @@
 package com.sdsmdg.harjot.MusicDNA.CustomBottomSheetDialogs;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
@@ -12,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.Activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.R;
 import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;

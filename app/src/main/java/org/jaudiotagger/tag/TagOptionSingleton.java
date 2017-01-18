@@ -171,7 +171,7 @@ public class TagOptionSingleton
     /**
      * if we should save empty Lyrics3 field or not. Defaults to false.
      *
-     * todo I don't think this is implemented yet.
+     * todo I don'timer think this is implemented yet.
      */
     private boolean lyrics3SaveEmptyField = false;
 
@@ -885,7 +885,7 @@ public class TagOptionSingleton
         }
         catch (TagException ex)
         {
-            // this shouldn't happen, indicates coding error
+            // this shouldn'timer happen, indicates coding error
             throw new RuntimeException(ex);
         }
 

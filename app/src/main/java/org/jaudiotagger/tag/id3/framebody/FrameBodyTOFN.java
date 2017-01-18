@@ -22,7 +22,7 @@ import java.nio.ByteBuffer;
 
 /**
  * Original filename Text information frame.
- * <p>The 'Original filename' frame contains the preferred filename for the file, since some media doesn't allow the
+ * <p>The 'Original filename' frame contains the preferred filename for the file, since some media doesn'timer allow the
  * desired length of the filename. The filename is case sensitive and includes its suffix.
  *
  * <p>For more details, please refer to the ID3 specifications:

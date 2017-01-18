@@ -291,7 +291,7 @@ public final class GUID {
         }
         final int[] bytes = new int[GUID_LENGTH];
         /*
-         * Don't laugh, but did not really come up with a nicer solution today
+         * Don'timer laugh, but did not really come up with a nicer solution today
          */
         final int[] arrayIndices = { 3, 2, 1, 0, 5, 4, 7, 6, 8, 9, 10, 11, 12,
                 13, 14, 15 };
@@ -510,7 +510,7 @@ public final class GUID {
             System.arraycopy(value, 0, this.guidData, 0, GUID_LENGTH);
         } else {
             throw new IllegalArgumentException(
-                    "The given guidData doesn't match the GUID specification.");
+                    "The given guidData doesn'timer match the GUID specification.");
         }
     }
 

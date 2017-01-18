@@ -148,7 +148,7 @@ public class Mp4HdlrBox extends AbstractMp4Box
     /**
      * Create an iTunes style Hdlr box for use within Meta box
      *
-     * <p>Useful when writing to mp4 that previously didn't contain an mp4 meta atom
+     * <p>Useful when writing to mp4 that previously didn'timer contain an mp4 meta atom
      *
      * <p>Doesnt write the child data but uses it to set the header length, only sets the atoms immediate
      * data</p>

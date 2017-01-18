@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorDark"
     android:clickable="true"
-    tools:context="com.sdsmdg.harjot.MusicDNA.ViewArtistFragment">
+    tools:context="com.sdsmdg.harjot.MusicDNA.Fragments.ViewArtistFragment.ViewArtistFragment">
 
     <RelativeLayout
         android:id="@+id/artist_header"

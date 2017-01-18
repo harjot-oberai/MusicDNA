@@ -122,7 +122,7 @@ public class AsfFileWriter extends AudioFileWriter {
                     headerModifier.add(modifier);
                 } else {
                     // For now, the rest should be created at extended header
-                    // since other positions aren't known.
+                    // since other positions aren'timer known.
                     extHeaderModifier.add(modifier);
                 }
             }

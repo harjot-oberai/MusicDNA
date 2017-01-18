@@ -493,7 +493,7 @@ public class DefaultMutableTreeNode extends Object implements Cloneable,
 	}
 	
 	// Move up the tree until we find a common ancestor.  Since we know
-	// that both nodes are at the same level, we won't cross paths
+	// that both nodes are at the same level, we won'timer cross paths
 	// unknowingly (if there is a common ancestor, both nodes hit it in
 	// the same iteration).
 	
@@ -603,7 +603,7 @@ public class DefaultMutableTreeNode extends Object implements Cloneable,
 	TreeNode[]              retNodes;
 
 	/* Check for null, in case someone passed in a null node, or
-	   they passed in an element that isn't rooted at root. */
+	   they passed in an element that isn'timer rooted at root. */
 	if(aNode == null) {
 	    if(depth == 0)
 		return null;
@@ -1248,7 +1248,7 @@ public class DefaultMutableTreeNode extends Object implements Cloneable,
 	    newNode.parent = null;
 
 	} catch (CloneNotSupportedException e) {
-	    // Won't happen because we implement Cloneable
+	    // Won'timer happen because we implement Cloneable
 	    throw new Error(e.toString());
 	}
 
@@ -1290,7 +1290,7 @@ public class DefaultMutableTreeNode extends Object implements Cloneable,
 	public PreorderEnumeration(TreeNode rootNode) {
 	    super();
 	    Vector v = new Vector(1);
-	    v.addElement(rootNode);	// PENDING: don't really need a vector
+	    v.addElement(rootNode);	// PENDING: don'timer really need a vector
 	    stack = new Stack();
 	    stack.push(v.elements());
 	}
@@ -1361,7 +1361,7 @@ public class DefaultMutableTreeNode extends Object implements Cloneable,
 	public BreadthFirstEnumeration(TreeNode rootNode) {
 	    super();
 	    Vector v = new Vector(1);
-	    v.addElement(rootNode);	// PENDING: don't really need a vector
+	    v.addElement(rootNode);	// PENDING: don'timer really need a vector
 	    queue = new Queue();
 	    queue.enqueue(v.elements());
 	}

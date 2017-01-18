@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#111"
-    tools:context="com.sdsmdg.harjot.MusicDNA.SplashActivity">
+    tools:context="com.sdsmdg.harjot.MusicDNA.Activities.SplashActivity">
 
     <ImageView
         android:id="@+id/splash_img"

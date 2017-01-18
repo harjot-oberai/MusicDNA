@@ -160,7 +160,7 @@ public interface Tag {
      * <p>Can be used to retrieve fields with any identifier, useful if the identifier is not within {@link FieldKey}
      *
      * @param id audio specific key
-     * @return tag field or null if doesn't exist
+     * @return tag field or null if doesn'timer exist
      */
     public TagField getFirstField(String id);
 

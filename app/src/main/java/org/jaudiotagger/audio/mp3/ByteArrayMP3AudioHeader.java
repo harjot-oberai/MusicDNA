@@ -38,7 +38,7 @@ public class ByteArrayMP3AudioHeader extends MP3AudioHeader
                         catch (InvalidAudioFrameException ex)
                         {
                             // We Ignore because even if Xing Header is corrupted
-                            // doesn't mean file is corrupted
+                            // doesn'timer mean file is corrupted
                         }
                         break;
                     }

@@ -9,8 +9,8 @@ package org.jaudiotagger.audio.aiff;
  * Thus, we have to unpack the number and convert it to a double by
  * hand.  There is, of course, loss of precision.
  * 
- * This isn't designed for high-precision work; as the standard
- * disclaimer says, don't use it for life support systems or nuclear
+ * This isn'timer designed for high-precision work; as the standard
+ * disclaimer says, don'timer use it for life support systems or nuclear
  * power plants.
  * 
  * Lifted bodily from JHOVE.
@@ -36,7 +36,7 @@ public class ExtDouble {
 
         /**  Convert the value to a Java double.  This results in
          *   loss of precision.  If the number is out of range,
-         *   results aren't guaranteed.
+         *   results aren'timer guaranteed.
          */
         public double toDouble ()
         {

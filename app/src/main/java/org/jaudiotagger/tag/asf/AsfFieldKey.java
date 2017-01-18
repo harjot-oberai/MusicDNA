@@ -40,7 +40,7 @@ import java.util.Map;
 public enum AsfFieldKey
 {
     /*
-     * Keys are arbitrary because these fields don't have 'keys' internally because they are stored in preset contents descriptor
+     * Keys are arbitrary because these fields don'timer have 'keys' internally because they are stored in preset contents descriptor
      */
     
     // Content Description Object keys
@@ -265,7 +265,7 @@ public enum AsfFieldKey
      * @param lowest
      *              fields must be stored at least in this container.
      * @param highest
-     *              fields aren't allowed to be stored in better containers than
+     *              fields aren'timer allowed to be stored in better containers than
      *              this.
      */
     private AsfFieldKey(final String asfFieldName, final boolean multiValue,

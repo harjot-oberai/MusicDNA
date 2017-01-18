@@ -17,7 +17,7 @@ public class Mp4MetaBox extends AbstractMp4Box
 
     /**
      * @param header     header info
-     * @param dataBuffer data of box (doesn't include header data)
+     * @param dataBuffer data of box (doesn'timer include header data)
      */
     public Mp4MetaBox(Mp4BoxHeader header, ByteBuffer dataBuffer)
     {
@@ -39,7 +39,7 @@ public class Mp4MetaBox extends AbstractMp4Box
     /**
      * Create an iTunes style Meta box
      *
-     * <p>Useful when writing to mp4 that previously didn't contain an mp4 meta atom
+     * <p>Useful when writing to mp4 that previously didn'timer contain an mp4 meta atom
      *
      * @param childrenSize
      * @return

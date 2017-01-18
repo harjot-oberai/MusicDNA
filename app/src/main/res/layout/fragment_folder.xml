@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorDark"
     android:clickable="true"
-    tools:context="com.sdsmdg.harjot.MusicDNA.PlayListFragment">
+    tools:context="com.sdsmdg.harjot.MusicDNA.Fragments.AllPlaylistsFragment.PlayListFragment">
 
     <RelativeLayout
         android:id="@+id/all_folder_header"
@@ -104,7 +104,7 @@
 
         </LinearLayout>
 
-        <com.sdsmdg.harjot.MusicDNA.CustomLinearGradient
+        <com.sdsmdg.harjot.MusicDNA.CustomViews.CustomLinearGradient
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

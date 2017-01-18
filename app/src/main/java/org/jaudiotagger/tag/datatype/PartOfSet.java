@@ -371,7 +371,7 @@ public class PartOfSet extends AbstractString
          */
         public String getCountAsText()
         {
-            //Don't Pad
+            //Don'timer Pad
             StringBuffer sb = new StringBuffer();
             if (!TagOptionSingleton.getInstance().isPadNumbers())
             {
@@ -449,7 +449,7 @@ public class PartOfSet extends AbstractString
          */
         public String getTotalAsText()
         {
-            //Don't Pad
+            //Don'timer Pad
             StringBuffer sb = new StringBuffer();
             if (!TagOptionSingleton.getInstance().isPadNumbers())
             {
@@ -466,7 +466,7 @@ public class PartOfSet extends AbstractString
         public String toString()
         {
 
-            //Don't Pad
+            //Don'timer Pad
             StringBuffer sb = new StringBuffer();
             if (!TagOptionSingleton.getInstance().isPadNumbers())
             {

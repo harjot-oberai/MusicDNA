@@ -109,7 +109,7 @@ public class AudioFile
     /**
      * <p>Write the tag contained in this AudioFile in the actual file on the disk, this is the same as calling the <code>AudioFileIO.write(this)</code> method.
      *
-     * @throws CannotWriteException If the file could not be written/accessed, the extension wasn't recognized, or other IO error occured.
+     * @throws CannotWriteException If the file could not be written/accessed, the extension wasn'timer recognized, or other IO error occured.
      * @see AudioFileIO
      */
     public void commit() throws CannotWriteException
@@ -304,7 +304,7 @@ public class AudioFile
     }
 
     /**
-     * Get the tag or if the file doesn't have one at all, create a default tag  and return
+     * Get the tag or if the file doesn'timer have one at all, create a default tag  and return
      *
      * @return
      */
@@ -319,7 +319,7 @@ public class AudioFile
     }
 
      /**
-     * Get the tag or if the file doesn't have one at all, create a default tag and set it
+     * Get the tag or if the file doesn'timer have one at all, create a default tag and set it
      *
      * @return
      */

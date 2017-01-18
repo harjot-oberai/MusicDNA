@@ -175,7 +175,7 @@ public class FlacTagWriter
             //Jump over Id3 (if exists) Flac and StreamInfoBlock
             raf.seek(flacStream.getStartOfFlacInFile() + FlacStreamReader.FLAC_STREAM_IDENTIFIER_LENGTH);
 
-            //Write StreamInfo, we always write this first even if wasn't first in original spec
+            //Write StreamInfo, we always write this first even if wasn'timer first in original spec
             raf.write(blockInfo.streamInfoBlock.getHeader().getBytesWithoutIsLastBlockFlag());
             raf.write(blockInfo.streamInfoBlock.getData().getBytes());
 

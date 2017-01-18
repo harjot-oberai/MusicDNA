@@ -30,7 +30,7 @@ import java.util.Map;
  * Genre list
  *
  * <p>This is the IDv1 list with additional values as defined by Winamp, this list is also used in Mp4
- * files, note iTunes doesn't understand genres above MAX_STANDARD_GENRE_ID, Winamp does
+ * files, note iTunes doesn'timer understand genres above MAX_STANDARD_GENRE_ID, Winamp does
  */
 public class GenreTypes extends AbstractIntStringValuePair
 {

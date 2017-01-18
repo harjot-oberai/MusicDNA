@@ -139,7 +139,7 @@ public final class AsfHeader extends ChunkContainer {
 
     /**
      * Returns the amount of chunks, when this instance was created.<br>
-     * If chunks have been added, this won't be reflected with this call.<br>
+     * If chunks have been added, this won'timer be reflected with this call.<br>
      * For that use {@link #getChunks()}.
      * 
      * @return Chunkcount at instance creation.

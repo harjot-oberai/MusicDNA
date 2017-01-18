@@ -3,24 +3,19 @@ package com.sdsmdg.harjot.MusicDNA.CustomRecyclerView;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.media.MediaMetadataRetriever;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.github.mmin18.widget.RealtimeBlurView;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.R;
-import com.sdsmdg.harjot.MusicDNA.VisualizerView;
 import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
 import com.squareup.picasso.Picasso;
 
-import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.util.List;
 
 /**

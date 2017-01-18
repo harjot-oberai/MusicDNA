@@ -45,7 +45,7 @@ import org.jaudiotagger.tag.id3.ID3v23Frames;
  * </table><p>
  * The increment/decrement bit is 1 for increment and 0 for decrement.
  * The equalisation bands should be ordered increasingly with reference
- * to frequency. All frequencies don't have to be declared. The
+ * to frequency. All frequencies don'timer have to be declared. The
  * equalisation curve in the reading software should be interpolated
  * between the values in this frame. Three equal adjustments for three
  * subsequent frequencies. A frequency should only be described once in

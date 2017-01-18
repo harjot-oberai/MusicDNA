@@ -356,7 +356,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
         else if (frameSize == 0)
         {
             logger.warning(getLoggingFilename() + ":Empty Frame Size:" + identifier);
-            //We don't process this frame or add to frameMap because contains no useful information
+            //We don'timer process this frame or add to frameMap because contains no useful information
             //Skip the two flag bytes so in correct position for subsequent frames
             byteBuffer.get();
             byteBuffer.get();
@@ -394,7 +394,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
         logger.fine(getLoggingFilename() + ":Identifier was:" + identifier + " reading using:" + id + "with frame size:" + frameSize);
 
         //Read extra bits appended to frame header for various encodings
-        //These are not included in header size but are included in frame size but won't be read when we actually
+        //These are not included in header size but are included in frame size but won'timer be read when we actually
         //try to read the frame body data
         int extraHeaderBytesCount = 0;
         int decompressedFrameSize = -1;
@@ -471,7 +471,7 @@ public class ID3v23Frame extends AbstractID3v2Frame
                 frameBody = readBody(id, frameBodyBuffer, realFrameSize);
             }
             //TODO code seems to assume that if the frame created is not a v23FrameBody
-            //it should be deprecated, but what about if somehow a V24Frame has been put into a V23 Tag, shouldn't
+            //it should be deprecated, but what about if somehow a V24Frame has been put into a V23 Tag, shouldn'timer
             //it then be created as FrameBodyUnsupported
             if (!(frameBody instanceof ID3v23FrameBody))
             {

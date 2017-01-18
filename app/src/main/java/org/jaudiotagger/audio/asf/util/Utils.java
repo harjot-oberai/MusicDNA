@@ -54,7 +54,7 @@ public class Utils {
     /**
      * This method checks given string will not exceed limit in bytes[] when
      * converted UTF-16LE encoding (2 bytes per character) and checks whether
-     * the length doesn't exceed 65535 bytes. <br>
+     * the length doesn'timer exceed 65535 bytes. <br>
      * 
      * @param value
      *            The string to check.
@@ -196,7 +196,7 @@ public class Utils {
       at 10-4 by 10,000 convert it to 10 -3
     public static GregorianCalendar getDateOf(final BigInteger fileTime) {
         final GregorianCalendar result = new GregorianCalendar(1601, 0, 1);
-        // lose anything beyond milliseconds, because calendar can't handle
+        // lose anything beyond milliseconds, because calendar can'timer handle
         // less value
         BigInteger time = fileTime.divide(new BigInteger("10000")); //$NON-NLS-1$
         final BigInteger maxInt = new BigInteger(String
@@ -360,7 +360,7 @@ public class Utils {
             return new String(strBytes, "UTF-16LE");
         }
         throw new IllegalStateException(
-                "Couldn't read the necessary amount of bytes.");
+                "Couldn'timer read the necessary amount of bytes.");
     }
 
     /**

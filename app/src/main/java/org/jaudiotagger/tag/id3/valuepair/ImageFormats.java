@@ -81,7 +81,7 @@ public class  ImageFormats
             imageMimeTypeToFormat.put(value, key);
         }
 
-        //The mapping isn't one-one lets add other mimetypes
+        //The mapping isn'timer one-one lets add other mimetypes
         imageMimeTypeToFormat.put(MIME_TYPE_JPG, V22_JPG_FORMAT);
     }
 

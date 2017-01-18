@@ -210,7 +210,7 @@ public class OggVorbisTagReader
 
     /**
      * The Vorbis Setup Header may span multiple(2) pages, athough it doesnt normally. We pass the start of the
-     * file offset of the OggPage it belongs on, it probably won't be first packet.
+     * file offset of the OggPage it belongs on, it probably won'timer be first packet.
      * @param fileOffsetOfStartingOggPage
      * @param raf
      * @throws org.jaudiotagger.audio.exceptions.CannotReadException
@@ -296,7 +296,7 @@ public class OggVorbisTagReader
 
     /**
      * The Vorbis Setup Header may span multiple(2) pages, athough it doesnt normally. We pass the start of the
-     * file offset of the OggPage it belongs on, it probably won't be first packet, also returns any addditional
+     * file offset of the OggPage it belongs on, it probably won'timer be first packet, also returns any addditional
      * packets that immediately follow the setup header in original file
      * @param fileOffsetOfStartingOggPage
      * @param raf

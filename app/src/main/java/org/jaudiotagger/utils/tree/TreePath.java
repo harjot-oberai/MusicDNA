@@ -238,7 +238,7 @@ public class TreePath extends Object implements Serializable {
 	    int                 oPathLength = aTreePath.getPathCount();
 
 	    if(oPathLength < pathLength)
-		// Can't be a descendant, has fewer components in the path.
+		// Can'timer be a descendant, has fewer components in the path.
 		return false;
 	    while(oPathLength-- > pathLength)
 		aTreePath = aTreePath.getParentPath();

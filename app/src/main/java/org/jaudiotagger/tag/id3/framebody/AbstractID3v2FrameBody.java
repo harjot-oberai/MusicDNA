@@ -143,8 +143,8 @@ public abstract class AbstractID3v2FrameBody extends AbstractTagFrameBody
      * @param byteBuffer file to read
      * @throws InvalidFrameException if unable to construct a frameBody from the ByteBuffer
      */
-    //TODO why don't we just slice byteBuffer, set limit to size and convert readByteArray to take a ByteBuffer
-    //then we wouldn't have to temporary allocate space for the buffer, using lots of needless memory
+    //TODO why don'timer we just slice byteBuffer, set limit to size and convert readByteArray to take a ByteBuffer
+    //then we wouldn'timer have to temporary allocate space for the buffer, using lots of needless memory
     //and providing extra work for the garbage collector.
     public void read(ByteBuffer byteBuffer) throws InvalidTagException
     {

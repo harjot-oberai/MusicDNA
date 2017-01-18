@@ -165,7 +165,7 @@ public class TextEncodedStringNullTerminated extends AbstractString
         setSize(size);
 
         //Decode buffer if runs into problems should throw exception which we
-        //catch and then set value to empty string. (We don't read the null terminator
+        //catch and then set value to empty string. (We don'timer read the null terminator
         //because we dont want to display this)
         bufferSize = endPosition - offset;
         logger.finest("Text size is:" + bufferSize);

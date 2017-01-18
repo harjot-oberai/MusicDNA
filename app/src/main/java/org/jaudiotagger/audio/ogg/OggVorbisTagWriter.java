@@ -479,7 +479,7 @@ public class OggVorbisTagWriter
         //TODO could we do any other checks to check data written correctly ?
         if ((raf.length() - startAudio) != (rafTemp.length() - startAudioWritten))
         {
-            throw new CannotWriteException("File written counts don't match, file not written");
+            throw new CannotWriteException("File written counts don'timer match, file not written");
         }
     }
     public void writeRemainingPagesOld(int pageSequence, RandomAccessFile raf, RandomAccessFile rafTemp) throws IOException, CannotReadException, CannotWriteException
@@ -511,7 +511,7 @@ public class OggVorbisTagWriter
         }
         if ((raf.length() - startAudio) != (rafTemp.length() - startAudioWritten))
         {
-            throw new CannotWriteException("File written counts don't match, file not written");
+            throw new CannotWriteException("File written counts don'timer match, file not written");
         }
     }
 

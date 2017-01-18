@@ -34,7 +34,7 @@ public class Mp4NameBox extends AbstractMp4Box
             throw new RuntimeException("Unable to process name box because identifier is:" + header.getId());
         }
 
-        //Make slice so operations here don't effect position of main buffer
+        //Make slice so operations here don'timer effect position of main buffer
         this.dataBuffer = dataBuffer.slice();
 
         //issuer

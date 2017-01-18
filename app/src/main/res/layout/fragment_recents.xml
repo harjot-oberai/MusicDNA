@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorDark"
     android:clickable="true"
-    tools:context="com.sdsmdg.harjot.MusicDNA.RecentsFragment">
+    tools:context="com.sdsmdg.harjot.MusicDNA.Fragments.RecentsFragment.RecentsFragment">
 
     <RelativeLayout
         android:id="@+id/recents_header"
@@ -18,7 +18,7 @@
             android:layout_height="match_parent"
             android:scaleType="centerCrop" />
 
-        <com.sdsmdg.harjot.MusicDNA.CustomLinearGradient
+        <com.sdsmdg.harjot.MusicDNA.CustomViews.CustomLinearGradient
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

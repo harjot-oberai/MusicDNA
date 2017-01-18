@@ -185,7 +185,7 @@ public enum ContainerType
     /**
      * Checks if the values for a {@linkplain MetadataDescriptor content
      * descriptor} match the contraints of the container type, and returns a
-     * {@link RuntimeException} if the requirements aren't met.
+     * {@link RuntimeException} if the requirements aren'timer met.
      * 
      * @param name
      *            name of the descriptor

@@ -572,7 +572,7 @@ public abstract class AudioFileWriter
                 boolean deleteResult = originalFileBackup.delete();
                 if (!deleteResult)
                 {
-                    // Not a disaster but can't delete the backup so make a
+                    // Not a disaster but can'timer delete the backup so make a
                     // warning
                     logger
                             .warning(ErrorMessage.GENERAL_WRITE_WARNING_UNABLE_TO_DELETE_BACKUP_FILE
@@ -595,7 +595,7 @@ public abstract class AudioFileWriter
         }
         else
         {
-            // Delete the temporary file that wasn't ever used
+            // Delete the temporary file that wasn'timer ever used
             if (!newFile.delete())
             {
                 // Non critical failed deletion

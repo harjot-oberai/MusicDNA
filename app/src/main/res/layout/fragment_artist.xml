@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorDark"
     android:clickable="true"
-    tools:context="com.sdsmdg.harjot.MusicDNA.LocalMusicFragments.ArtistFragment">
+    tools:context=".Fragments.LocalMusicFragments.ArtistFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/artists_recycler"

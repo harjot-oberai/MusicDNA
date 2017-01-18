@@ -1,7 +1,7 @@
 package org.jaudiotagger.audio.exceptions;
 
 /**
- * Thrown if when trying to read box id the length doesn't make any sense
+ * Thrown if when trying to read box id the length doesn'timer make any sense
  */
 public class InvalidBoxHeaderException extends RuntimeException
 {

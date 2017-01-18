@@ -42,7 +42,7 @@ public abstract class Chunk {
      *  WAVE chunks, and might have uses elsewhere.
      *  If a string is shorter than its fixed allocation, we're
      *  guaranteed only that there is a null terminating the string,
-     *  and noise could follow it.  So we can't use the byte buffer
+     *  and noise could follow it.  So we can'timer use the byte buffer
      *  constructor for a string.
      */
     protected String byteBufString (byte[] b)

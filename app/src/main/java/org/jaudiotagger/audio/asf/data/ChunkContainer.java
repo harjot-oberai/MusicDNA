@@ -127,7 +127,7 @@ public class ChunkContainer extends Chunk {
      * @param instanceOf
      *            The class which must additionally be matched.
      * @return <code>null</code> if no chunk was found, or the stored instance
-     *         doesn't match.
+     *         doesn'timer match.
      */
     protected Chunk getFirst(final GUID lookFor,
             final Class<? extends Chunk> instanceOf) {

@@ -89,11 +89,11 @@ public class CommonChunk extends Chunk {
                 compressionName = "PCM 32-bit integer";
             }
             else {
-                aiffHeader.setLossless(false);    // We don't know, so we have to assume lossy
+                aiffHeader.setLossless(false);    // We don'timer know, so we have to assume lossy
             }
             aiffHeader.setAudioEncoding (compressionName);
 
-                // The size of the data after compression isn't available
+                // The size of the data after compression isn'timer available
                 // from the Common chunk, so we mark it as "unknown."
                 // With a bit more sophistication, we could combine the
                 // information from here and the Sound Data chunk to get

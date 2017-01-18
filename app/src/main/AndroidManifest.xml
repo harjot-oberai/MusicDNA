@@ -21,7 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/MyMaterialTheme">
         <activity
-            android:name=".HomeActivity"
+            android:name=".Activities.HomeActivity"
             android:label="@string/title_activity_home"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
@@ -56,7 +56,7 @@
         </provider>
 
         <activity
-            android:name=".SplashActivity"
+            android:name=".Activities.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

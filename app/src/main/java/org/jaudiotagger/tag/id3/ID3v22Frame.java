@@ -131,7 +131,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
             else if(bodyIdentifier.equals("CRM"))
             {
                 //Do not convert.
-                //TODO we don't have a way of converting this to v23 which is why its not in the ForceMap
+                //TODO we don'timer have a way of converting this to v23 which is why its not in the ForceMap
             }
             //TODO Improve messy fix for datetime
             //TODO need to check in case v22 body does exist before using V23 body(e.g PIC)
@@ -139,7 +139,7 @@ public class ID3v22Frame extends AbstractID3v2Frame
             {
                 bodyIdentifier = ID3v24Frames.FRAME_ID_YEAR;
             }
-            // Have to check for v22 because most don't have own body they use v23 or v24
+            // Have to check for v22 because most don'timer have own body they use v23 or v24
             // body to hold the data, the frame is identified by its identifier, the body identifier
             // is just to create a body suitable for writing the data to
             else if (ID3Tags.isID3v22FrameIdentifier(bodyIdentifier))

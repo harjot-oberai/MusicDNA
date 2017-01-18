@@ -309,7 +309,7 @@ public class Lyrics3v2 extends AbstractLyrics3
         else
         {
             // check the end of the file for a lyrics tag incase an ID3
-            // tag wasn't placed after it.
+            // tag wasn'timer placed after it.
             file.seek(file.length() - 9);
             file.read(buffer, 0, 9);
             lyricEnd = new String(buffer, 0, 9);
@@ -440,7 +440,7 @@ public class Lyrics3v2 extends AbstractLyrics3
 
         if (this.getSize() != size)
         {
-            //logger.config("Lyrics3v2 size didn't match up while writing.");
+            //logger.config("Lyrics3v2 size didn'timer match up while writing.");
             //logger.config("this.getsize()     = " + this.getSize());
             //logger.config("size (filePointer) = " + size);
         }
@@ -502,7 +502,7 @@ public class Lyrics3v2 extends AbstractLyrics3
         else
         {
             // check the end of the file for a lyrics tag incase an ID3
-            // tag wasn't placed after it.
+            // tag wasn'timer placed after it.
             file.seek(file.length() - 9);
             file.read(buffer, 0, 9);
             lyricEnd = new String(buffer, 0, 9);

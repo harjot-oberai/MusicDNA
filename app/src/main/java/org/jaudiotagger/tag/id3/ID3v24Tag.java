@@ -359,9 +359,9 @@ public class ID3v24Tag extends AbstractID3v2Tag
        * Copy frame into map, whilst accounting for multiple frames of same type which can occur even if there were
        * not frames of the dame type in the original tag
        *
-       * The frame already exists this shouldn't normally happen because frames
-       * that are allowed to be multiple don't call this method. Frames that
-       * aren't allowed to be multiple aren't added to hashMap in first place when
+       * The frame already exists this shouldn'timer normally happen because frames
+       * that are allowed to be multiple don'timer call this method. Frames that
+       * aren'timer allowed to be multiple aren'timer added to hashMap in first place when
        * originally added.
        *
        * We only want to allow one of the frames going forward but we try and merge
@@ -898,7 +898,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
             {
                 logger.config(getLoggingFilename() + ":" + "Invalid Frame Identifier:" + ifie.getMessage());
                 this.invalidFrames++;
-                //Don't try and find any more frames
+                //Don'timer try and find any more frames
                 break;
             }
             //Problem trying to find frame
@@ -906,7 +906,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
             {
                 logger.warning(getLoggingFilename() + ":" + "Invalid Frame:" + ife.getMessage());
                 this.invalidFrames++;
-                //Don't try and find any more frames
+                //Don'timer try and find any more frames
                 break;
             }
             //Failed reading frame but may just have invalid data but correct length so lets carry on
@@ -975,7 +975,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
         }
         headerBuffer.put(flagsByte);
 
-        //Size As Recorded in Header, don't include the main header length
+        //Size As Recorded in Header, don'timer include the main header length
         //Additional Header Size,(for completeness we never actually write the extended header, or footer)
         int additionalHeaderSize = 0;
         if (extended)
@@ -995,7 +995,7 @@ public class ID3v24Tag extends AbstractID3v2Tag
             }
         }
 
-        //Size As Recorded in Header, don't include the main header length
+        //Size As Recorded in Header, don'timer include the main header length
         headerBuffer.put(ID3SyncSafeInteger.valueToBuffer(padding + size + additionalHeaderSize));
 
         //Write Extended Header

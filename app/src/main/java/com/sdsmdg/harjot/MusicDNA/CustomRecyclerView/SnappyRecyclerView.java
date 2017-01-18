@@ -2,21 +2,13 @@ package com.sdsmdg.harjot.MusicDNA.CustomRecyclerView;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.sdsmdg.harjot.MusicDNA.HomeActivity;
-import com.sdsmdg.harjot.MusicDNA.VisualizerView;
-
-import jp.wasabeef.blurry.Blurry;
+import com.sdsmdg.harjot.MusicDNA.Activities.HomeActivity;
 
 /**
  * Created by Harjot on 22-Nov-16.

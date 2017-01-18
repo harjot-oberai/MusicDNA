@@ -170,7 +170,7 @@ public class MP3AudioHeader implements AudioHeader
         //Update filePointerCount
         filePointerCount = startByte;
 
-        //Read from here into the byte buffer , doesn't move location of filepointer
+        //Read from here into the byte buffer , doesn'timer move location of filepointer
         fc.read(bb, startByte);
         bb.flip();
 
@@ -179,7 +179,7 @@ public class MP3AudioHeader implements AudioHeader
         {
             do
             {
-                //TODO remaining() is quite an expensive operation, isn't there a way we can work this out without
+                //TODO remaining() is quite an expensive operation, isn'timer there a way we can work this out without
                 //interrogating the bytebuffer. Also this is rarely going to be true, and could be made less true
                 //by increasing FILE_BUFFER_SIZE
                 if (bb.remaining() <= MIN_BUFFER_REMAINING_REQUIRED)
@@ -222,7 +222,7 @@ public class MP3AudioHeader implements AudioHeader
                             catch (InvalidAudioFrameException ex)
                             {
                                 // We Ignore because even if Xing Header is corrupted
-                                //doesn't mean file is corrupted
+                                //doesn'timer mean file is corrupted
                             }
                             break;
                         }
@@ -240,7 +240,7 @@ public class MP3AudioHeader implements AudioHeader
                             catch (InvalidAudioFrameException ex)
                             {
                                 // We Ignore because even if Vbri Header is corrupted
-                                //doesn't mean file is corrupted
+                                //doesn'timer mean file is corrupted
                             }
                             break;
                         }
@@ -269,7 +269,7 @@ public class MP3AudioHeader implements AudioHeader
                     }
                 }
 
-                //TODO position() is quite an expensive operation, isn't there a way we can work this out without
+                //TODO position() is quite an expensive operation, isn'timer there a way we can work this out without
                 //interrogating the bytebuffer
                 bb.position(bb.position() + 1);
                 filePointerCount++;

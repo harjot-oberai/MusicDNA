@@ -218,7 +218,7 @@ public class Mp4TagWriter
            //Write channel for writing to new file
            FileChannel fileWriteChannel = rafTemp.getChannel();
 
-           //TODO we shouldn't need all these variables, and some are very badly named - used by new and old methods
+           //TODO we shouldn'timer need all these variables, and some are very badly named - used by new and old methods
            int oldIlstSize = 0;
            int relativeIlstposition;
            int startIlstWithinFile;
@@ -481,7 +481,7 @@ public class Mp4TagWriter
                //There is not enough padding in the metadata free atom anyway
                //Size meta needs to be increased by (if not writing a free atom)
                //Special Case this could actually be negative (upto -8)if is actually enough space but would
-               //not be able to write free atom properly, it doesn't matter the parent atoms would still
+               //not be able to write free atom properly, it doesn'timer matter the parent atoms would still
                //need their sizes adjusted.
                else
                {
@@ -511,7 +511,7 @@ public class Mp4TagWriter
                               || ((topLevelFreeSize - Mp4BoxHeader.HEADER_LENGTH < additionalMetaSizeThatWontFitWithinMetaAtom)
                               && (topLevelFreeSize != additionalMetaSizeThatWontFitWithinMetaAtom)))
                        {
-                          //We don't bother using the top level free atom coz not big enough anyway, we need to adjust offsets
+                          //We don'timer bother using the top level free atom coz not big enough anyway, we need to adjust offsets
                           //by the amount mdat is going to be shifted
                           if (mdatHeader.getFilePos() > moovHeader.getFilePos())
                           {
@@ -557,7 +557,7 @@ public class Mp4TagWriter
                               || ((topLevelFreeSize - Mp4BoxHeader.HEADER_LENGTH < additionalMetaSizeThatWontFitWithinMetaAtom)
                               && (topLevelFreeSize != additionalMetaSizeThatWontFitWithinMetaAtom)))
                        {
-                          //We don't bother using the top level free atom coz not big enough anyway, we need to adjust offsets
+                          //We don'timer bother using the top level free atom coz not big enough anyway, we need to adjust offsets
                           //by the amount mdat is going to be shifted
                           if (mdatHeader.getFilePos() > moovHeader.getFilePos())
                           {
@@ -592,7 +592,7 @@ public class Mp4TagWriter
                                || ((topLevelFreeSize - Mp4BoxHeader.HEADER_LENGTH < additionalMetaSizeThatWontFitWithinMetaAtom)
                                && (topLevelFreeSize != additionalMetaSizeThatWontFitWithinMetaAtom)))
                        {
-                           //We don't bother using the top level free atom coz not big enough anyway, we need to adjust offsets
+                           //We don'timer bother using the top level free atom coz not big enough anyway, we need to adjust offsets
                            //by the amount mdat is going to be shifted
                            if (mdatHeader.getFilePos() > moovHeader.getFilePos())
                            {
@@ -644,7 +644,7 @@ public class Mp4TagWriter
                    if (topLevelFreeAtomComesBeforeMdatAtomAndAfterMetadata&&(topLevelFreePosition>=startIlstWithinFile))
                    {
                        //If the shift is less than the space available in this second free atom data size we should
-                       //minimize the free atom accordingly (then we don't have to update stco atom)
+                       //minimize the free atom accordingly (then we don'timer have to update stco atom)
                        //note could be a double negative as additionalMetaSizeThatWontFitWithinMetaAtom could be -1 to -8 but thats ok stills works
                        //ok
                        if (topLevelFreeSize - Mp4BoxHeader.HEADER_LENGTH >= additionalMetaSizeThatWontFitWithinMetaAtom)
@@ -774,7 +774,7 @@ public class Mp4TagWriter
         }
         else
         {
-            //Now write the rest of the file which won't have changed
+            //Now write the rest of the file which won'timer have changed
             writeDataInChunks(fileReadChannel,fileWriteChannel);
         }
     }

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="#000"
     android:clickable="true"
-    tools:context="com.sdsmdg.harjot.MusicDNA.EqualizerFragment">
+    tools:context="com.sdsmdg.harjot.MusicDNA.Fragments.EqualizerFragment.EqualizerFragment">
 
     <RelativeLayout
         android:id="@+id/equalizer_action_container"
@@ -260,14 +260,14 @@
             android:background="#777777"
             android:orientation="horizontal">
 
-            <com.sdsmdg.harjot.MusicDNA.AnalogController
+            <com.sdsmdg.harjot.MusicDNA.CustomViews.AnalogController
                 android:id="@+id/controllerBass"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="#000000" />
 
-            <com.sdsmdg.harjot.MusicDNA.AnalogController
+            <com.sdsmdg.harjot.MusicDNA.CustomViews.AnalogController
                 android:id="@+id/controller3D"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

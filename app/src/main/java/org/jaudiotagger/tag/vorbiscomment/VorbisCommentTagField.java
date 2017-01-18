@@ -64,7 +64,7 @@ public class VorbisCommentTagField implements TagTextField
      * Creates an instance.
      *
      * @param raw Raw byte data of the tagfield.
-     * @throws UnsupportedEncodingException If the data doesn't conform "UTF-8" specification.
+     * @throws UnsupportedEncodingException If the data doesn'timer conform "UTF-8" specification.
      */
     public VorbisCommentTagField(byte[] raw) throws UnsupportedEncodingException
     {

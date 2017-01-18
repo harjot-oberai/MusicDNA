@@ -137,22 +137,11 @@ public class PlayerFragment extends Fragment implements
 
     static boolean isRefreshed = false;
 
-    public onSmallPlayerTouchedListener mCallback;
-    public onCompleteListener mCallback2;
-    public onPreviousTrackListener mCallback3;
-    public onEqualizerClickedListener mCallback4;
-    public onQueueClickListener mCallback5;
-    public onPreparedLsitener mCallback6;
+    public PlayerFragmentCallbackListener mCallback;
     public onPlayPauseListener mCallback7;
-    public fullScreenListener mCallback8;
-    public onSettingsClickedListener mCallback9;
-    public onFavouritesListener mCallback10;
-    public onShuffleListener mCallback11;
 
     HomeActivity homeActivity;
     public static Context ctx;
-
-//    static ImageView currentAlbumArtHolder;
 
     public RelativeLayout spToolbar;
     ImageView overflowMenuAB;
@@ -279,7 +268,7 @@ public class PlayerFragment extends Fragment implements
             }
             if (mVisualizer != null)
                 mVisualizer.setEnabled(false);
-            if (!isStart && mCallback7 != null)
+            if (!isStart && mCallback != null)
                 mCallback7.onPlayPause();
         } else {
             if (!completed) {
@@ -296,7 +285,7 @@ public class PlayerFragment extends Fragment implements
                     isReplayIconVisible = false;
                 }
                 mMediaPlayer.start();
-                if (!isStart && mCallback7 != null)
+                if (!isStart && mCallback != null)
                     mCallback7.onPlayPause();
             } else {
                 mMediaPlayer.seekTo(0);
@@ -324,16 +313,7 @@ public class PlayerFragment extends Fragment implements
         homeActivity = (HomeActivity) context;
         ctx = context;
         try {
-            mCallback = (onSmallPlayerTouchedListener) context;
-            mCallback2 = (onCompleteListener) context;
-            mCallback3 = (onPreviousTrackListener) context;
-            mCallback4 = (onEqualizerClickedListener) context;
-            mCallback5 = (onQueueClickListener) context;
-            mCallback6 = (onPreparedLsitener) context;
-            mCallback8 = (fullScreenListener) context;
-            mCallback9 = (onSettingsClickedListener) context;
-            mCallback10 = (onFavouritesListener) context;
-            mCallback11 = (onShuffleListener) context;
+            mCallback = (PlayerFragmentCallbackListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnHeadlineSelectedListener");
@@ -347,7 +327,7 @@ public class PlayerFragment extends Fragment implements
                 completed = false;
                 pauseClicked = false;
                 isPrepared = true;
-                mCallback6.onPrepared();
+                mCallback.onPrepared();
                 if (homeActivity.isPlayerVisible) {
                     player_controller.setVisibility(View.VISIBLE);
                     player_controller.setImageResource(R.drawable.ic_queue_music_white_48dp);
@@ -462,18 +442,18 @@ public class PlayerFragment extends Fragment implements
     public void onCallbackCalled(int i) {
         switch (i) {
             case 6:
-                mCallback6.onPrepared();
+                mCallback.onPrepared();
                 break;
             case 3:
                 if (homeActivity.queueCurrentIndex != 0) {
                     mMediaPlayer.pause();
-                    mCallback3.onPreviousTrack();
+                    mCallback.onPreviousTrack();
                 }
                 break;
             case 2:
                 mMediaPlayer.pause();
                 homeActivity.nextControllerClicked = true;
-                mCallback2.onComplete();
+                mCallback.onComplete();
                 break;
         }
     }
@@ -498,48 +478,33 @@ public class PlayerFragment extends Fragment implements
         return mMediaPlayer;
     }
 
-    public interface onCompleteListener {
-        public void onComplete();
-    }
+    public interface PlayerFragmentCallbackListener {
+        void onComplete();
 
-    public interface onPreviousTrackListener {
-        public void onPreviousTrack();
-    }
+        void onPreviousTrack();
 
-    public interface onEqualizerClickedListener {
-        public void onEqualizerClicked();
-    }
+        void onEqualizerClicked();
 
-    public interface onQueueClickListener {
-        public void onQueueClicked();
-    }
+        void onQueueClicked();
 
-    public interface onPreparedLsitener {
-        public void onPrepared();
-    }
+        void onPrepared();
 
-    public interface onPlayPauseListener {
-        public void onPlayPause();
-    }
+        void onFullScreen();
 
-    public interface fullScreenListener {
-        public void onFullScreen();
-    }
+        void onSettingsClicked();
 
-    public interface onSettingsClickedListener {
-        public void onSettingsClicked();
-    }
-
-    public interface onFavouritesListener {
         void onAddedtoFavfromPlayer();
 
-        void onRemovedfromFavfromPlayer();
+        void onShuffleEnabled();
+
+        void onShuffleDisabled();
+
+        void onSmallPlayerTouched();
     }
 
-    public interface onShuffleListener {
-        public void onShuffleEnabled();
+    public interface onPlayPauseListener{
 
-        public void onShuffleDisabled();
+        void onPlayPause();
     }
 
     @Override
@@ -615,11 +580,11 @@ public class PlayerFragment extends Fragment implements
                 if (homeActivity.shuffleEnabled) {
                     homeActivity.shuffleEnabled = false;
                     shuffleController.setImageResource(R.drawable.ic_shuffle_alpha);
-                    mCallback11.onShuffleDisabled();
+                    mCallback.onShuffleDisabled();
                 } else {
                     homeActivity.shuffleEnabled = true;
                     shuffleController.setImageResource(R.drawable.ic_shuffle_filled);
-                    mCallback11.onShuffleEnabled();
+                    mCallback.onShuffleEnabled();
                 }
                 snappyRecyclerView.scrollToPosition(HomeActivity.queueCurrentIndex);
                 snappyRecyclerView.setCurrentPosition(HomeActivity.queueCurrentIndex);
@@ -638,7 +603,7 @@ public class PlayerFragment extends Fragment implements
         equalizerIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallback4.onEqualizerClicked();
+                mCallback.onEqualizerClicked();
             }
         });
         equalizerIcon.setVisibility(View.INVISIBLE);
@@ -722,7 +687,7 @@ public class PlayerFragment extends Fragment implements
         queueIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallback5.onQueueClicked();
+                mCallback.onQueueClicked();
             }
         });
 
@@ -738,7 +703,7 @@ public class PlayerFragment extends Fragment implements
             public void onClick(View v) {
                 mMediaPlayer.pause();
                 homeActivity.nextControllerClicked = true;
-                mCallback2.onComplete();
+                mCallback.onComplete();
             }
         });
 
@@ -779,14 +744,14 @@ public class PlayerFragment extends Fragment implements
                     seekBarContainer.setVisibility(View.VISIBLE);
                     toggleContainer.setVisibility(View.VISIBLE);
                     spToolbar.setVisibility(View.VISIBLE);
-                    mCallback8.onFullScreen();
+                    mCallback.onFullScreen();
                 } else {
                     homeActivity.isFullScreenEnabled = true;
                     bottomContainer.setVisibility(View.INVISIBLE);
                     seekBarContainer.setVisibility(View.INVISIBLE);
                     toggleContainer.setVisibility(View.INVISIBLE);
                     spToolbar.setVisibility(View.INVISIBLE);
-                    mCallback8.onFullScreen();
+                    mCallback.onFullScreen();
                 }
                 return true;
             }
@@ -867,7 +832,7 @@ public class PlayerFragment extends Fragment implements
                 } else {
                     mMediaPlayer.pause();
                     homeActivity.nextControllerClicked = true;
-                    mCallback2.onComplete();
+                    mCallback.onComplete();
                 }
             } else {
                 isPrepared = false;
@@ -880,7 +845,7 @@ public class PlayerFragment extends Fragment implements
                     Toast.makeText(getContext(), "Error playing " + localTrack.getTitle() + ". Skipping to next track", Toast.LENGTH_SHORT).show();
                     mMediaPlayer.pause();
                     homeActivity.nextControllerClicked = true;
-                    mCallback2.onComplete();
+                    mCallback.onComplete();
                 }
             }
             bufferingIndicator.setVisibility(View.VISIBLE);
@@ -905,17 +870,17 @@ public class PlayerFragment extends Fragment implements
                                 seekBarContainer.setVisibility(View.VISIBLE);
                                 toggleContainer.setVisibility(View.VISIBLE);
                                 spToolbar.setVisibility(View.VISIBLE);
-                                mCallback8.onFullScreen();
+                                mCallback.onFullScreen();
                             } else {
                                 homeActivity.isFullScreenEnabled = true;
                                 bottomContainer.setVisibility(View.INVISIBLE);
                                 seekBarContainer.setVisibility(View.INVISIBLE);
                                 toggleContainer.setVisibility(View.INVISIBLE);
                                 spToolbar.setVisibility(View.INVISIBLE);
-                                mCallback8.onFullScreen();
+                                mCallback.onFullScreen();
                             }
                         } else if (item.getTitle().equals("Settings")) {
-                            mCallback9.onSettingsClicked();
+                            mCallback.onSettingsClicked();
                         }
                         return true;
                     }
@@ -931,7 +896,7 @@ public class PlayerFragment extends Fragment implements
             public void onClick(View v) {
                 if (isReplayIconVisible) {
                     homeActivity.hasQueueEnded = true;
-                    mCallback2.onComplete();
+                    mCallback.onComplete();
                 } else {
                     if (!pauseClicked) {
                         pauseClicked = true;
@@ -946,7 +911,7 @@ public class PlayerFragment extends Fragment implements
             public void onClick(View v) {
                 if (isReplayIconVisible) {
                     homeActivity.hasQueueEnded = true;
-                    mCallback2.onComplete();
+                    mCallback.onComplete();
                 } else {
                     if (!pauseClicked) {
                         pauseClicked = true;
@@ -961,7 +926,7 @@ public class PlayerFragment extends Fragment implements
             public void onClick(View v) {
                 mMediaPlayer.pause();
                 homeActivity.nextControllerClicked = true;
-                mCallback2.onComplete();
+                mCallback.onComplete();
             }
         });
 
@@ -970,7 +935,7 @@ public class PlayerFragment extends Fragment implements
             public void onClick(View v) {
                 if (homeActivity.queueCurrentIndex != 0) {
                     mMediaPlayer.pause();
-                    mCallback3.onPreviousTrack();
+                    mCallback.onPreviousTrack();
                 }
             }
         });
@@ -1107,7 +1072,7 @@ public class PlayerFragment extends Fragment implements
             ut = new UnifiedTrack(false, null, track);
 
         homeActivity.favouriteTracks.getFavourite().add(ut);
-        mCallback10.onAddedtoFavfromPlayer();
+        mCallback.onAddedtoFavfromPlayer();
     }
 
     public void removeFromFavourite() {
@@ -1133,7 +1098,7 @@ public class PlayerFragment extends Fragment implements
                 }
             }
         }
-        mCallback10.onAddedtoFavfromPlayer();
+        mCallback.onAddedtoFavfromPlayer();
     }
 
     @Override
@@ -1159,10 +1124,6 @@ public class PlayerFragment extends Fragment implements
         if (mVisualizer != null) {
             mVisualizer.release();
         }
-    }
-
-    public interface onSmallPlayerTouchedListener {
-        void onSmallPlayerTouched();
     }
 
     public void refresh() {
@@ -1282,7 +1243,7 @@ public class PlayerFragment extends Fragment implements
                 } else {
                     mMediaPlayer.pause();
                     homeActivity.nextControllerClicked = true;
-                    mCallback2.onComplete();
+                    mCallback.onComplete();
                 }
             } else {
                 isPrepared = false;
@@ -1297,7 +1258,7 @@ public class PlayerFragment extends Fragment implements
                     Toast.makeText(getContext(), "Error playing " + localTrack.getTitle() + ". Skipping to next track", Toast.LENGTH_SHORT).show();
                     mMediaPlayer.pause();
                     homeActivity.nextControllerClicked = true;
-                    mCallback2.onComplete();
+                    mCallback.onComplete();
                 }
             }
             bufferingIndicator.setVisibility(View.VISIBLE);
@@ -1443,7 +1404,7 @@ public class PlayerFragment extends Fragment implements
 
             // Pause the MediaPlayer and call onComplete().
             mMediaPlayer.pause();
-            mCallback2.onComplete();
+            mCallback.onComplete();
         }
     }
 
@@ -1455,7 +1416,7 @@ public class PlayerFragment extends Fragment implements
         showCase.hide();
     }
 
-    public void toggleAlbumArtBackground(int visibility) {
+    public void toggleAlbumArtBackground() {
         snappyRecyclerView.setTransparency();
     }
 

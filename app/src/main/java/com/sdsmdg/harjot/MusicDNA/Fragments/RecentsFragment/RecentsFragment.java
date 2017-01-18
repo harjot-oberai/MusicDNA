@@ -94,8 +94,6 @@ public class RecentsFragment extends Fragment implements
     public interface recentsCallbackListener {
         void onRecentItemClicked(boolean isLocal);
 
-        void addToPlaylist(UnifiedTrack ut);
-
         void onRecent(int pos);
 
         void addRecentsToQueue();

@@ -49,13 +49,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
 
     PlayerFragment pFragment;
 
-    onCallbackListener callback;
-
     private boolean isSwipable = false;
-
-    public interface onCallbackListener {
-        public PlayerFragment getPlayerFragmentFromHome();
-    }
 
     public class LocalBinder extends Binder {
         public MediaPlayerService getService() {
@@ -193,47 +187,6 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
         intent.setAction(intentAction);
         PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), 1, intent, 0);
         return new Notification.Action.Builder(icon, title, pendingIntent).build();
-    }
-
-    private PendingIntent retreivePlaybackAction(int which) {
-        Intent action;
-        PendingIntent pendingIntent;
-        final ComponentName serviceName = new ComponentName(this, MediaPlayerService.class);
-        switch (which) {
-            case 1:
-                // Play and pause
-                action = new Intent(Constants.ACTION_PLAY);
-                action.setComponent(serviceName);
-                pendingIntent = PendingIntent.getService(this, 1, action, 0);
-                return pendingIntent;
-            case 2:
-                // Skip tracks
-                action = new Intent(Constants.ACTION_NEXT);
-                action.setComponent(serviceName);
-                pendingIntent = PendingIntent.getService(this, 2, action, 0);
-                return pendingIntent;
-            case 3:
-                // Previous tracks
-                action = new Intent(Constants.ACTION_PREVIOUS);
-                action.setComponent(serviceName);
-                pendingIntent = PendingIntent.getService(this, 3, action, 0);
-                return pendingIntent;
-            case 4:
-                //fast forward tracks
-                action = new Intent(Constants.ACTION_FAST_FORWARD);
-                action.setComponent(serviceName);
-                pendingIntent = PendingIntent.getService(this, 4, action, 0);
-                return pendingIntent;
-            case 5:
-                //rewind tracks
-                action = new Intent(Constants.ACTION_REWIND);
-                action.setComponent(serviceName);
-                pendingIntent = PendingIntent.getService(this, 5, action, 0);
-                return pendingIntent;
-            default:
-                break;
-        }
-        return null;
     }
 
     void updateMediaSession() {
@@ -398,7 +351,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
                     super.onFastForward();
                     Log.d(Constants.LOG_TAG, "onFastForward");
                     if (pFragment != null)
-                        pFragment.mCallback2.onComplete();
+                        pFragment.mCallback.onComplete();
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -413,7 +366,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
                     super.onRewind();
                     Log.d(Constants.LOG_TAG, "onRewind");
                     if (pFragment != null)
-                        pFragment.mCallback3.onPreviousTrack();
+                        pFragment.mCallback.onPreviousTrack();
                     final Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
@@ -448,7 +401,6 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public boolean onUnbind(Intent intent) {
         m_objMediaSession.release();

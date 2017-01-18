@@ -60,8 +60,6 @@ public class FolderContentFragment extends Fragment {
 
         void onFolderContentItemClick(int position);
 
-        void addToPlaylist(UnifiedTrack ut);
-
         void folderAddToQueue();
     }
 

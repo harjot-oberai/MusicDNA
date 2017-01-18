@@ -2,12 +2,9 @@ package com.sdsmdg.harjot.MusicDNA.Activities;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -16,13 +13,11 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -36,7 +31,6 @@ import android.os.IBinder;
 import android.provider.MediaStore;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
-import android.support.v4.content.FileProvider;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -51,7 +45,6 @@ import android.support.v7.widget.Toolbar;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.text.TextPaint;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
@@ -71,7 +64,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -146,13 +138,9 @@ import com.squareup.leakcanary.RefWatcher;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -170,23 +158,14 @@ import static android.view.View.GONE;
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         SearchView.OnQueryTextListener,
-        PlayerFragment.onSmallPlayerTouchedListener,
-        PlayerFragment.onCompleteListener,
-        PlayerFragment.onPreviousTrackListener,
+        PlayerFragment.PlayerFragmentCallbackListener,
+        PlayerFragment.onPlayPauseListener,
         LocalMusicFragment.OnLocalTrackSelectedListener,
         StreamMusicFragment.OnTrackSelectedListener,
         QueueFragment.queueCallbackListener,
         ViewPlaylistFragment.playlistCallbackListener,
         FavouritesFragment.favouriteFragmentCallback,
         EqualizerFragment.onCheckChangedListener,
-        PlayerFragment.onEqualizerClickedListener,
-        PlayerFragment.onQueueClickListener,
-        PlayerFragment.onPreparedLsitener,
-        PlayerFragment.onPlayPauseListener,
-        PlayerFragment.fullScreenListener,
-        PlayerFragment.onSettingsClickedListener,
-        PlayerFragment.onFavouritesListener,
-        PlayerFragment.onShuffleListener,
         PlayListFragment.onPlaylistTouchedListener,
         PlayListFragment.onPlaylistMenuPlayAllListener,
         PlayListFragment.onPlaylistRenameListener,
@@ -200,7 +179,6 @@ public class HomeActivity extends AppCompatActivity
         ArtistFragment.onArtistClickListener,
         ViewArtistFragment.artistCallbackListener,
         RecentsFragment.recentsCallbackListener,
-        MediaPlayerService.onCallbackListener,
         SettingsFragment.onColorChangedListener,
         SettingsFragment.onAlbumArtBackgroundToggled,
         SettingsFragment.onAboutClickedListener,
@@ -1722,27 +1700,6 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-//    public void hideTabs() {
-//        toolbar.animate()
-//                .setDuration(300)
-//                .translationY(-1 * toolbar.getHeight())
-//                .alpha(0.0f);
-//
-//    }
-
-//    public void showTabs() {
-//
-//        if (isFullScreenEnabled) {
-//            toolbar.setVisibility(View.INVISIBLE);
-//        }
-//
-//        toolbar.setAlpha(0.0f);
-//        toolbar.animate()
-//                .setDuration(300)
-//                .translationY(0)
-//                .alpha(1.0f);
-//    }
-
     public void hidePlayer() {
 
         if (playerFragment != null && playerFragment.mVisualizerView != null)
@@ -2303,39 +2260,6 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public void onQueueItemClicked(final int position) {
-
-        if (isPlayerVisible && isQueueVisible)
-            showPlayer3();
-
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                queueCurrentIndex = position;
-                UnifiedTrack ut = queue.getQueue().get(position);
-                if (ut.getType()) {
-                    LocalTrack track = ut.getLocalTrack();
-                    localSelectedTrack = track;
-                    streamSelected = false;
-                    localSelected = true;
-                    queueCall = false;
-                    isReloaded = false;
-                    onLocalTrackSelected(position);
-                } else {
-                    Track track = ut.getStreamTrack();
-                    selectedTrack = track;
-                    streamSelected = true;
-                    localSelected = false;
-                    queueCall = false;
-                    isReloaded = false;
-                    onTrackSelected(position);
-                }
-            }
-        }, 500);
-    }
-
     public void onQueueItemClicked2(int position) {
         if (position <= (queue.getQueue().size() - 1)) {
             queueCurrentIndex = position;
@@ -2360,8 +2284,21 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*
+     * ViewPlaylistFragment callbacks start
+     */
+
     @Override
-    public void onPLaylistItemClicked(int position) {
+    public void onPlaylistPlayAll() {
+        onQueueItemClicked(0);
+        hideFragment("playlist");
+        setTitle("Music DNA");
+    }
+
+    @Override
+    public void onPlaylistItemClicked(int position) {
         UnifiedTrack ut = tempPlaylist.getSongList().get(position);
         if (ut.getType()) {
             LocalTrack track = ut.getLocalTrack();
@@ -2427,6 +2364,16 @@ public class HomeActivity extends AppCompatActivity
         Toast.makeText(ctx, "Added " + pl.getSongList().size() + " song(s) to queue", Toast.LENGTH_SHORT).show();
     }
 
+    /*
+     * ViewPlaylistFragment callbacks end
+     */
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*
+     *  FavouriteFragment callbacks start
+     */
+
     @Override
     public void onFavouriteItemClicked(int position) {
         UnifiedTrack ut = favouriteTracks.getFavourite().get(position);
@@ -2476,13 +2423,6 @@ public class HomeActivity extends AppCompatActivity
     }
 
     @Override
-    public void onPlaylistPLayAll() {
-        onQueueItemClicked(0);
-        hideFragment("playlist");
-        setTitle("Music DNA");
-    }
-
-    @Override
     public void onFavouritePlayAll() {
         if (queue.getQueue().size() > 0) {
             onQueueItemClicked(0);
@@ -2502,6 +2442,48 @@ public class HomeActivity extends AppCompatActivity
         Toast.makeText(ctx, "Added " + favouriteTracks.getFavourite().size() + " song(s) to queue", Toast.LENGTH_SHORT).show();
     }
 
+    /*
+     *  FavouriteFragment callbacks end
+     */
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*
+     *  QueueFragment callbacks start
+     */
+    @Override
+    public void onQueueItemClicked(final int position) {
+
+        if (isPlayerVisible && isQueueVisible)
+            showPlayer3();
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                queueCurrentIndex = position;
+                UnifiedTrack ut = queue.getQueue().get(position);
+                if (ut.getType()) {
+                    LocalTrack track = ut.getLocalTrack();
+                    localSelectedTrack = track;
+                    streamSelected = false;
+                    localSelected = true;
+                    queueCall = false;
+                    isReloaded = false;
+                    onLocalTrackSelected(position);
+                } else {
+                    Track track = ut.getStreamTrack();
+                    selectedTrack = track;
+                    streamSelected = true;
+                    localSelected = false;
+                    queueCall = false;
+                    isReloaded = false;
+                    onTrackSelected(position);
+                }
+            }
+        }, 500);
+    }
+
     @Override
     public void onQueueSave() {
         showSaveQueueDialog();
@@ -2512,6 +2494,12 @@ public class HomeActivity extends AppCompatActivity
         clearQueue();
         new SaveQueue().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
+
+    /*
+     *  QueueFragment callbacks end
+     */
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
     public void onEqualizerClicked() {
@@ -2541,7 +2529,7 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onPlaylistMenuPLayAll() {
-        onPlaylistPLayAll();
+        onPlaylistPlayAll();
     }
 
     @Override
@@ -2550,6 +2538,12 @@ public class HomeActivity extends AppCompatActivity
         tempFolderContent = tempMusicFolder.getLocalTracks();
         showFragment("folderContent");
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*
+     * FolderContentFragment callbacks start
+     */
 
     @Override
     public void onFolderContentPlayAll() {
@@ -2565,6 +2559,25 @@ public class HomeActivity extends AppCompatActivity
     public void onFolderContentItemClick(int position) {
         onLocalTrackSelected(position);
     }
+
+    @Override
+    public void folderAddToQueue() {
+        List<LocalTrack> list = tempFolderContent;
+        for (LocalTrack lt : list) {
+            HomeActivity.queue.addToQueue(new UnifiedTrack(true, lt, null));
+        }
+        if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
+            playerFragment.snappyRecyclerView.getAdapter().notifyDataSetChanged();
+            playerFragment.snappyRecyclerView.setTransparency();
+        }
+        Toast.makeText(ctx, "Added " + list.size() + " song(s) to queue", Toast.LENGTH_SHORT).show();
+    }
+
+    /*
+     * FolderContentFragment callbacks end
+     */
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
     public void onShare(Bitmap bmp, String fileName) {
@@ -2696,29 +2709,6 @@ public class HomeActivity extends AppCompatActivity
     }
 
     @Override
-    public void addToPlaylist(UnifiedTrack ut) {
-        showAddToPlaylistDialog(ut);
-    }
-
-    @Override
-    public void folderAddToQueue() {
-        List<LocalTrack> list = tempFolderContent;
-        for (LocalTrack lt : list) {
-            HomeActivity.queue.addToQueue(new UnifiedTrack(true, lt, null));
-        }
-        if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
-            playerFragment.snappyRecyclerView.getAdapter().notifyDataSetChanged();
-            playerFragment.snappyRecyclerView.setTransparency();
-        }
-        Toast.makeText(ctx, "Added " + list.size() + " song(s) to queue", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public PlayerFragment getPlayerFragmentFromHome() {
-        return getPlayerFragment();
-    }
-
-    @Override
     public void onColorChanged() {
         navigationView.setItemIconTintList(ColorStateList.valueOf(themeColor));
     }
@@ -2727,7 +2717,7 @@ public class HomeActivity extends AppCompatActivity
     public void onAlbumArtBackgroundChangedVisibility(int visibility) {
         PlayerFragment plFrag = getPlayerFragment();
         if (plFrag != null) {
-            plFrag.toggleAlbumArtBackground(visibility);
+            plFrag.toggleAlbumArtBackground();
         }
     }
 
@@ -2764,14 +2754,6 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onAddedtoFavfromPlayer() {
-        FavouritesFragment favouritesFragment = (FavouritesFragment) fragMan.findFragmentByTag("favourite");
-        if (favouritesFragment != null) {
-            favouritesFragment.updateData();
-        }
-    }
-
-    @Override
-    public void onRemovedfromFavfromPlayer() {
         FavouritesFragment favouritesFragment = (FavouritesFragment) fragMan.findFragmentByTag("favourite");
         if (favouritesFragment != null) {
             favouritesFragment.updateData();
@@ -2948,6 +2930,10 @@ public class HomeActivity extends AppCompatActivity
         return playerFragment;
     }
 
+    /*
+     * EqualizerFragment callbacks start
+     */
+
     @Override
     public void onCheckChanged(boolean isChecked) {
         EqualizerFragment eqFrag = (EqualizerFragment) fragMan.findFragmentByTag("equalizer");
@@ -2988,6 +2974,10 @@ public class HomeActivity extends AppCompatActivity
         }
         equalizerModel.isEqualizerEnabled = isChecked;
     }
+
+    /*
+     * EqualizerFragment callbacks end
+     */
 
     public class MyAsyncTask extends AsyncTask<Void, Void, Void> {
 
@@ -4083,7 +4073,7 @@ public class HomeActivity extends AppCompatActivity
                                         }
 
                                         queueCurrentIndex = 0;
-                                        onPlaylistPLayAll();
+                                        onPlaylistPlayAll();
                                     } else if (item.getTitle().equals("Add to Queue")) {
                                         Playlist pl = allPlaylists.getPlaylists().get(position);
                                         for (UnifiedTrack ut : pl.getSongList()) {

@@ -40,9 +40,7 @@ public class StreamMusicFragment extends Fragment {
     }
 
     public interface OnTrackSelectedListener {
-        public void onTrackSelected(int position);
-
-        public void addToPlaylist(UnifiedTrack ut);
+        void onTrackSelected(int position);
     }
 
     @Override

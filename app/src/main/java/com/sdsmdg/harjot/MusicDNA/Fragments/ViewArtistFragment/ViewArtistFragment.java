@@ -62,8 +62,6 @@ public class ViewArtistFragment extends Fragment {
     public interface artistCallbackListener {
         void onArtistSongClick();
 
-        void addToPlaylist(UnifiedTrack ut);
-
         void onArtistPlayAll();
 
         void addArtistToQueue();

@@ -61,8 +61,6 @@ public class LocalMusicFragment extends Fragment {
 
     public interface OnLocalTrackSelectedListener {
         void onLocalTrackSelected(int position);
-
-        void addToPlaylist(UnifiedTrack ut);
     }
 
     @Override

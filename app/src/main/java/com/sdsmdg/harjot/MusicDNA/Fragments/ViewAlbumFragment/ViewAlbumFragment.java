@@ -65,8 +65,6 @@ public class ViewAlbumFragment extends Fragment {
     public interface albumCallbackListener {
         void onAlbumSongClickListener();
 
-        void addToPlaylist(UnifiedTrack ut);
-
         void onAlbumPlayAll();
 
         void addAlbumToQueue();

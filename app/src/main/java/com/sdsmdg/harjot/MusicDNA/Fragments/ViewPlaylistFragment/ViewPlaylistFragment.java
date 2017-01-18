@@ -91,9 +91,9 @@ public class ViewPlaylistFragment extends Fragment implements
     }
 
     public interface playlistCallbackListener {
-        void onPlaylistPLayAll();
+        void onPlaylistPlayAll();
 
-        void onPLaylistItemClicked(int position);
+        void onPlaylistItemClicked(int position);
 
         void playlistRename();
 
@@ -197,7 +197,7 @@ public class ViewPlaylistFragment extends Fragment implements
         playlistRecyler.addOnItemTouchListener(new ClickItemTouchListener(playlistRecyler) {
             @Override
             public boolean onClick(RecyclerView parent, View view, int position, long id) {
-                mCallback.onPLaylistItemClicked(position);
+                mCallback.onPlaylistItemClicked(position);
                 return true;
             }
 
@@ -226,7 +226,7 @@ public class ViewPlaylistFragment extends Fragment implements
                     HomeActivity.queue.addToQueue(HomeActivity.tempPlaylist.getSongList().get(i));
                 }
                 HomeActivity.queueCurrentIndex = 0;
-                mCallback.onPlaylistPLayAll();
+                mCallback.onPlaylistPlayAll();
             }
         });
 

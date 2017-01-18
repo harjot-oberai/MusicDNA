@@ -27,6 +27,7 @@ import com.sdsmdg.harjot.MusicDNA.Activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.R;
 import com.sdsmdg.harjot.MusicDNA.Activities.SplashActivity;
+import com.sdsmdg.harjot.MusicDNA.Utilities.CommonUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -123,7 +124,7 @@ public class AddToPlaylistFragment extends Fragment {
         if (HomeActivity.isReloaded)
             bottomMarginLayout.getLayoutParams().height = 0;
         else
-            bottomMarginLayout.getLayoutParams().height = ((HomeActivity) getContext()).dpTopx(65);
+            bottomMarginLayout.getLayoutParams().height = CommonUtils.dpTopx(65, getContext());
 
         numberSelected = 0;
         HomeActivity.finalSelectedTracks.clear();

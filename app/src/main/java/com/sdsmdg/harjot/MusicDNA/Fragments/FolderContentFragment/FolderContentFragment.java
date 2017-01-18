@@ -26,6 +26,7 @@ import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
 import com.sdsmdg.harjot.MusicDNA.R;
 import com.sdsmdg.harjot.MusicDNA.Activities.SplashActivity;
+import com.sdsmdg.harjot.MusicDNA.Utilities.CommonUtils;
 import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -91,7 +92,7 @@ public class FolderContentFragment extends Fragment {
         if (HomeActivity.isReloaded)
             bottomMarginLayout.getLayoutParams().height = 0;
         else
-            bottomMarginLayout.getLayoutParams().height = ((HomeActivity) getContext()).dpTopx(65);
+            bottomMarginLayout.getLayoutParams().height = CommonUtils.dpTopx(65, getContext());
 
         fragmentTitle = (TextView) view.findViewById(R.id.folder_fragment_title);
         if (SplashActivity.tf4 != null)

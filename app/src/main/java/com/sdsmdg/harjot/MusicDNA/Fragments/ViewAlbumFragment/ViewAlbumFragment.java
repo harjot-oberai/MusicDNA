@@ -29,6 +29,7 @@ import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
 import com.sdsmdg.harjot.MusicDNA.R;
 import com.sdsmdg.harjot.MusicDNA.Activities.SplashActivity;
+import com.sdsmdg.harjot.MusicDNA.Utilities.CommonUtils;
 import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -129,7 +130,7 @@ public class ViewAlbumFragment extends Fragment {
         if (HomeActivity.isReloaded)
             bottomMarginLayout.getLayoutParams().height = 0;
         else
-            bottomMarginLayout.getLayoutParams().height = ((HomeActivity) getContext()).dpTopx(65);
+            bottomMarginLayout.getLayoutParams().height = CommonUtils.dpTopx(65, getContext());
 
 
         int tmp = HomeActivity.tempAlbum.getAlbumSongs().size();

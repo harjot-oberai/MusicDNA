@@ -35,6 +35,8 @@ import com.sdsmdg.harjot.MusicDNA.Models.SavedDNA;
 import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
 import com.sdsmdg.harjot.MusicDNA.R;
 import com.sdsmdg.harjot.MusicDNA.Activities.SplashActivity;
+import com.sdsmdg.harjot.MusicDNA.Utilities.CommonUtils;
+import com.sdsmdg.harjot.MusicDNA.Utilities.FileUtils;
 import com.sdsmdg.harjot.MusicDNA.VisualizerViews.VisualizerView2;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -117,7 +119,7 @@ public class ViewSavedDNA extends Fragment {
         if (HomeActivity.isReloaded)
             bottomMarginLayout.getLayoutParams().height = 0;
         else
-            bottomMarginLayout.getLayoutParams().height = ((HomeActivity) getContext()).dpTopx(65);
+            bottomMarginLayout.getLayoutParams().height = CommonUtils.dpTopx(65, getContext());
 
         mVisualizerView2 = (VisualizerView2) view.findViewById(R.id.saved_dna_visualizer);
         viewDnaRecycler = (RecyclerView) view.findViewById(R.id.saved_dna_recycler);
@@ -340,7 +342,7 @@ public class ViewSavedDNA extends Fragment {
                     } else {
                         mVisualizerView2.drawText(text.getText().toString(), addTextToImage);
                         mVisualizerView2.setDrawingCacheEnabled(true);
-                        HomeActivity.saveBitmapAsImage(mVisualizerView2.getDrawingCache(), text.getText().toString());
+                        FileUtils.saveBitmapAsImage(mVisualizerView2.getDrawingCache(), text.getText().toString());
                         mVisualizerView2.dropText();
                         mVisualizerView2.setDrawingCacheEnabled(false);
                         dialog.dismiss();

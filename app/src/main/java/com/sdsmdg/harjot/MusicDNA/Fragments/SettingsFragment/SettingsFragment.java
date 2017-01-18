@@ -32,6 +32,7 @@ import com.sdsmdg.harjot.MusicDNA.Activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
 import com.sdsmdg.harjot.MusicDNA.R;
 import com.sdsmdg.harjot.MusicDNA.Activities.SplashActivity;
+import com.sdsmdg.harjot.MusicDNA.Utilities.CommonUtils;
 import com.squareup.leakcanary.RefWatcher;
 
 
@@ -115,7 +116,7 @@ public class SettingsFragment extends Fragment {
         if (HomeActivity.isReloaded)
             bottomMarginLayout.getLayoutParams().height = 0;
         else
-            bottomMarginLayout.getLayoutParams().height = ((HomeActivity) getContext()).dpTopx(65);
+            bottomMarginLayout.getLayoutParams().height = CommonUtils.dpTopx(65, getContext());
 
         densitycard = (RelativeLayout) view.findViewById(R.id.density_card);
         densityText = (TextView) view.findViewById(R.id.density_value);

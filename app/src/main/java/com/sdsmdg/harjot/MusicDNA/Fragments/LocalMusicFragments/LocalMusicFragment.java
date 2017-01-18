@@ -29,6 +29,7 @@ import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
 import com.sdsmdg.harjot.MusicDNA.R;
+import com.sdsmdg.harjot.MusicDNA.Utilities.CommonUtils;
 import com.squareup.leakcanary.RefWatcher;
 
 import java.util.Random;
@@ -92,7 +93,7 @@ public class LocalMusicFragment extends Fragment {
         if (HomeActivity.isReloaded)
             bottomMarginLayout.getLayoutParams().height = 0;
         else
-            bottomMarginLayout.getLayoutParams().height = ((HomeActivity) getContext()).dpTopx(65);
+            bottomMarginLayout.getLayoutParams().height = CommonUtils.dpTopx(65, getContext());
 
         shuffleFab = (FloatingActionButton) view.findViewById(R.id.play_all_fab_local);
 

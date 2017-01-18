@@ -134,6 +134,12 @@ import com.sdsmdg.harjot.MusicDNA.NotificationManager.Constants;
 import com.sdsmdg.harjot.MusicDNA.NotificationManager.MediaPlayerService;
 import com.sdsmdg.harjot.MusicDNA.Fragments.PlayerFragment.PlayerFragment;
 import com.sdsmdg.harjot.MusicDNA.R;
+import com.sdsmdg.harjot.MusicDNA.Utilities.CommonUtils;
+import com.sdsmdg.harjot.MusicDNA.Utilities.Comparators.AlbumComparator;
+import com.sdsmdg.harjot.MusicDNA.Utilities.Comparators.ArtistComparator;
+import com.sdsmdg.harjot.MusicDNA.Utilities.Comparators.LocalMusicComparator;
+import com.sdsmdg.harjot.MusicDNA.Utilities.FileUtils;
+import com.sdsmdg.harjot.MusicDNA.Utilities.MediaCacheUtils;
 import com.sdsmdg.harjot.MusicDNA.VisualizerViews.VisualizerView;
 import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
 import com.squareup.leakcanary.RefWatcher;
@@ -754,9 +760,9 @@ public class HomeActivity extends AppCompatActivity
 
         initializeHeaderImages();
 
-        hasSoftNavbar = hasNavBar(getResources());
-        statusBarHeightinDp = getStatusBarHeight();
-        navBarHeightSizeinDp = hasSoftNavbar ? getNavBarHeight() : 0;
+        hasSoftNavbar = CommonUtils.hasNavBar(this);
+        statusBarHeightinDp = CommonUtils.getStatusBarHeight(this);
+        navBarHeightSizeinDp = hasSoftNavbar ? CommonUtils.getNavBarHeight(this) : 0;
 
         serviceConnection = new ServiceConnection() {
 
@@ -1204,16 +1210,16 @@ public class HomeActivity extends AppCompatActivity
         System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
         try {
             if (localTrackList.size() > 0) {
-                Collections.sort(localTrackList, new localMusicComparator());
-                Collections.sort(finalLocalSearchResultList, new localMusicComparator());
+                Collections.sort(localTrackList, new LocalMusicComparator());
+                Collections.sort(finalLocalSearchResultList, new LocalMusicComparator());
             }
             if (albums.size() > 0) {
-                Collections.sort(albums, new albumComparator());
-                Collections.sort(finalAlbums, new albumComparator());
+                Collections.sort(albums, new AlbumComparator());
+                Collections.sort(finalAlbums, new AlbumComparator());
             }
             if (artists.size() > 0) {
-                Collections.sort(artists, new artistComparator());
-                Collections.sort(finalArtists, new artistComparator());
+                Collections.sort(artists, new ArtistComparator());
+                Collections.sort(finalArtists, new ArtistComparator());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -1748,7 +1754,7 @@ public class HomeActivity extends AppCompatActivity
             Window window = ((Activity) (ctx)).getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(getDarkColor(themeColor));
+            window.setStatusBarColor(CommonUtils.getDarkColor(themeColor));
         }
 
         isPlayerVisible = false;
@@ -2562,7 +2568,7 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onShare(Bitmap bmp, String fileName) {
-        shareBitmapAsImage(bmp, fileName);
+        FileUtils.shareBitmapAsImage(bmp, fileName, this);
     }
 
     @Override
@@ -2880,7 +2886,7 @@ public class HomeActivity extends AppCompatActivity
             return;
         }
 
-        updateMediaCache(editSong.getTitle(), editSong.getArtist(), editSong.getAlbum(), editSong.getId());
+        MediaCacheUtils.updateMediaCache(editSong.getTitle(), editSong.getArtist(), editSong.getAlbum(), editSong.getId(), this);
 
         refreshAlbumAndArtists();
 
@@ -3805,86 +3811,9 @@ public class HomeActivity extends AppCompatActivity
         if (!isNotificationVisible) {
             Intent intent = new Intent(this, MediaPlayerService.class);
             intent.setAction(Constants.ACTION_PLAY);
-//            bindService(intent, serviceConnection, BIND_AUTO_CREATE);
             startService(intent);
             isNotificationVisible = true;
         }
-    }
-
-    public void setNotification() {
-        Notification notification;
-        String ns = Context.NOTIFICATION_SERVICE;
-        notificationManager = (NotificationManager) getSystemService(ns);
-        RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.notification_view);
-        RemoteViews notificationViewSmall = new RemoteViews(getPackageName(), R.layout.notification_view_small);
-        Intent notificationIntent = new Intent(this, getClass());
-        PendingIntent pendingNotificationIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-        Intent switchIntent = new Intent("com.sdsmdg.harjot.MusicDNA.ACTION_PLAY_PAUSE");
-        PendingIntent pendingSwitchIntent = PendingIntent.getBroadcast(this, 100, switchIntent, 0);
-        notificationView.setOnClickPendingIntent(R.id.btn_pause_play_in_notification, pendingSwitchIntent);
-        try {
-            if (playerFragment.mMediaPlayer.isPlaying()) {
-                notificationView.setImageViewResource(R.id.btn_pause_play_in_notification, R.drawable.ic_pause_white_48dp);
-            } else {
-                notificationView.setImageViewResource(R.id.btn_pause_play_in_notification, R.drawable.ic_play_arrow_white_48dp);
-            }
-        } catch (Exception e) {
-        }
-        Intent switchIntent2 = new Intent("com.sdsmdg.harjot.MusicDNA.ACTION_NEXT");
-        PendingIntent pendingSwitchIntent2 = PendingIntent.getBroadcast(this, 100, switchIntent2, 0);
-        notificationView.setOnClickPendingIntent(R.id.btn_next_in_notification, pendingSwitchIntent2);
-        Intent switchIntent3 = new Intent("com.sdsmdg.harjot.MusicDNA.ACTION_PREV");
-        PendingIntent pendingSwitchIntent3 = PendingIntent.getBroadcast(this, 100, switchIntent3, 0);
-        notificationView.setOnClickPendingIntent(R.id.btn_prev_in_notification, pendingSwitchIntent3);
-
-        notificationViewSmall.setOnClickPendingIntent(R.id.btn_pause_play_in_notification, pendingSwitchIntent);
-        try {
-            if (playerFragment.mMediaPlayer.isPlaying()) {
-                notificationViewSmall.setImageViewResource(R.id.btn_pause_play_in_notification, R.drawable.ic_pause_white_48dp);
-            } else {
-                notificationViewSmall.setImageViewResource(R.id.btn_pause_play_in_notification, R.drawable.ic_play_arrow_white_48dp);
-            }
-        } catch (Exception e) {
-        }
-        notificationViewSmall.setOnClickPendingIntent(R.id.btn_next_in_notification, pendingSwitchIntent2);
-        notificationViewSmall.setOnClickPendingIntent(R.id.btn_prev_in_notification, pendingSwitchIntent3);
-
-        Notification.Builder builder = new Notification.Builder(this);
-        notification = builder.setContentTitle("MusicDNA")
-                .setContentText("Slide down on note to expand")
-                .setSmallIcon(R.drawable.ic_default)
-                .setContentTitle("Title")
-                .setContentText("Artist")
-                .addAction(R.drawable.ic_skip_previous_white_48dp, "Prev", pendingSwitchIntent3)
-                .addAction(R.drawable.ic_play_arrow_white_48dp, "Play", pendingSwitchIntent)
-                .addAction(R.drawable.ic_skip_next_white_48dp, "Next", pendingSwitchIntent2)
-                .setLargeIcon(((BitmapDrawable) playerFragment.selected_track_image.getDrawable()).getBitmap())
-                .build();
-        notification.priority = Notification.PRIORITY_MAX;
-        notification.bigContentView = notificationView;
-        notification.contentView = notificationViewSmall;
-        notification.contentIntent = pendingNotificationIntent;
-        if (playerFragment.mMediaPlayer.isPlaying()) {
-            notification.flags |= Notification.FLAG_ONGOING_EVENT;
-        }
-        notificationView.setImageViewBitmap(R.id.image_in_notification, ((BitmapDrawable) playerFragment.selected_track_image.getDrawable()).getBitmap());
-        if (playerFragment.localIsPlaying) {
-            notificationView.setTextViewText(R.id.title_in_notification, playerFragment.localTrack.getTitle());
-            notificationView.setTextViewText(R.id.artist_in_notification, playerFragment.localTrack.getArtist());
-        } else {
-            notificationView.setTextViewText(R.id.title_in_notification, playerFragment.track.getTitle());
-            notificationView.setTextViewText(R.id.artist_in_notification, "");
-        }
-        notificationViewSmall.setImageViewBitmap(R.id.image_in_notification, ((BitmapDrawable) playerFragment.selected_track_image.getDrawable()).getBitmap());
-        if (playerFragment.localIsPlaying) {
-            notificationViewSmall.setTextViewText(R.id.title_in_notification, playerFragment.localTrack.getTitle());
-            notificationViewSmall.setTextViewText(R.id.artist_in_notification, playerFragment.localTrack.getArtist());
-        } else {
-            notificationViewSmall.setTextViewText(R.id.title_in_notification, playerFragment.track.getTitle());
-            notificationViewSmall.setTextViewText(R.id.artist_in_notification, "");
-        }
-        getPlayerFragment().isStart = false;
-        notificationManager.notify(1, notification);
     }
 
     public void HideBottomFakeToolbar() {
@@ -3911,108 +3840,6 @@ public class HomeActivity extends AppCompatActivity
         if (!isRepeat)
             favouriteTracks.getFavourite().add(ut);
 
-    }
-
-    public static void saveBitmapAsImage(Bitmap bmp, String fileName) {
-        String path = Environment.getExternalStorageDirectory().toString() + "/SavedDNAs/";
-        File f = new File(path);
-        f.mkdirs();
-        OutputStream fOut = null;
-        File file = new File(path, fileName + ".png");
-        try {
-            fOut = new FileOutputStream(file);
-            Bitmap pictureBitmap = bmp;
-            pictureBitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
-        } catch (FileNotFoundException e) {
-            Log.e("DNA Save ERROR", e.getMessage());
-            e.printStackTrace();
-        }
-        try {
-            fOut.flush();
-            fOut.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void shareBitmapAsImage(Bitmap bmp, String fileName) {
-        try {
-            File cachePath = new File(ctx.getCacheDir(), "images");
-            if (cachePath.exists())
-                deleteRecursive(cachePath);
-            cachePath.mkdirs(); // don'timer forget to make the directory
-            FileOutputStream stream = new FileOutputStream(cachePath + "/" + fileName + ".png"); // overwrites this image every time
-            bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-            stream.close();
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        File imagePath = new File(ctx.getCacheDir(), "images");
-        File newFile = new File(imagePath, fileName + ".png");
-        Uri contentUri = FileProvider.getUriForFile(ctx, "com.sdsmdg.harjot.MusicDNA.fileprovider", newFile);
-
-        if (contentUri != null) {
-            Intent shareIntent = new Intent();
-            shareIntent.setAction(Intent.ACTION_SEND);
-            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // temp permission for receiving app to read this file
-            shareIntent.setDataAndType(contentUri, getContentResolver().getType(contentUri));
-            shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
-            startActivity(Intent.createChooser(shareIntent, "Choose an app"));
-        }
-
-    }
-
-    public void deleteRecursive(File fileOrDirectory) {
-        if (fileOrDirectory.isDirectory())
-            for (File child : fileOrDirectory.listFiles())
-                deleteRecursive(child);
-
-        fileOrDirectory.delete();
-    }
-
-    public void shareLocalSong(String path) {
-        Uri contentUri = Uri.parse("file:///" + path);
-
-        if (contentUri != null) {
-            Intent shareIntent = new Intent();
-            shareIntent.setAction(Intent.ACTION_SEND);
-            shareIntent.setType("audio/*");
-            shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
-            main.startActivity(Intent.createChooser(shareIntent, "Choose an app"));
-        }
-    }
-
-    public class localMusicComparator implements Comparator<LocalTrack> {
-
-        @Override
-        public int compare(LocalTrack lhs, LocalTrack rhs) {
-            return lhs.getTitle().toString().compareTo(rhs.getTitle().toString());
-//            if (lhs.getTitle().toString().charAt(0) < rhs.getTitle().toString().charAt(0)) {
-//                return -1;
-//            } else {
-//                return 1;
-//            }
-        }
-    }
-
-    public class albumComparator implements Comparator<Album> {
-
-        @Override
-        public int compare(Album lhs, Album rhs) {
-            return lhs.getName().toString().compareTo(rhs.getName().toString());
-        }
-    }
-
-    public class artistComparator implements Comparator<Artist> {
-
-        @Override
-        public int compare(Artist lhs, Artist rhs) {
-            return lhs.getName().toString().compareTo(rhs.getName().toString());
-        }
     }
 
     public class loadSavedData extends AsyncTask<String, Void, String> {
@@ -4049,7 +3876,7 @@ public class HomeActivity extends AppCompatActivity
                             Window window = ((Activity) ctx).getWindow();
                             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                            window.setStatusBarColor(getDarkColor(themeColor));
+                            window.setStatusBarColor(CommonUtils.getDarkColor(themeColor));
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -4603,47 +4430,6 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    public int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return (result);
-    }
-
-    public int getNavBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("navigation_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-//        return (pxToDp(result));
-        return (result);
-    }
-
-    public int dpTopx(int dp) {
-        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-        return (int) ((dp * displayMetrics.density) + 0.5);
-    }
-
-    public boolean hasNavBar(Resources resources) {
-        int id = resources.getIdentifier("config_showNavigationBar", "bool", "android");
-        return id > 0 && resources.getBoolean(id);
-    }
-
-    public int getDarkColor(int color) {
-        int darkColor = 0;
-
-        int r = Math.max(Color.red(color) - 25, 0);
-        int g = Math.max(Color.green(color) - 25, 0);
-        int b = Math.max(Color.blue(color) - 25, 0);
-
-        darkColor = Color.rgb(r, g, b);
-
-        return darkColor;
-    }
-
     public void bottomSheetListener(int position, String action, String fragment, boolean type) {
 
         UnifiedTrack ut = null;
@@ -4739,7 +4525,7 @@ public class HomeActivity extends AppCompatActivity
             addToFavourites(ut);
         }
         if (action.equals("Share")) {
-            shareLocalSong(ut.getLocalTrack().getPath());
+            FileUtils.shareLocalSong(ut.getLocalTrack().getPath(), this);
         }
         if (action.equals("Edit")) {
             editSong = ut.getLocalTrack();
@@ -4806,37 +4592,19 @@ public class HomeActivity extends AppCompatActivity
         System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
         try {
             if (localTrackList.size() > 0) {
-                Collections.sort(localTrackList, new localMusicComparator());
-                Collections.sort(finalLocalSearchResultList, new localMusicComparator());
+                Collections.sort(localTrackList, new LocalMusicComparator());
+                Collections.sort(finalLocalSearchResultList, new LocalMusicComparator());
             }
             if (albums.size() > 0) {
-                Collections.sort(albums, new albumComparator());
-                Collections.sort(finalAlbums, new albumComparator());
+                Collections.sort(albums, new AlbumComparator());
+                Collections.sort(finalAlbums, new AlbumComparator());
             }
             if (artists.size() > 0) {
-                Collections.sort(artists, new artistComparator());
-                Collections.sort(finalArtists, new artistComparator());
+                Collections.sort(artists, new ArtistComparator());
+                Collections.sort(finalArtists, new ArtistComparator());
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-
-    }
-
-    public void updateMediaCache(String title, String artist, String album, long id) {
-
-        ContentResolver musicResolver = this.getContentResolver();
-        Uri musicUri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-
-        ContentValues newValues = new ContentValues();
-        newValues.put(android.provider.MediaStore.Audio.Media.TITLE, title);
-        newValues.put(android.provider.MediaStore.Audio.Media.ARTIST, artist);
-        newValues.put(android.provider.MediaStore.Audio.Media.ALBUM, album);
-
-        int res = musicResolver.update(musicUri, newValues, android.provider.MediaStore.Audio.Media._ID + "=?", new String[]{String.valueOf(id)});
-
-        if (res > 0) {
-//            Toast.makeText(this, "Updated MediaStore cache", Toast.LENGTH_SHORT).show();
         }
 
     }

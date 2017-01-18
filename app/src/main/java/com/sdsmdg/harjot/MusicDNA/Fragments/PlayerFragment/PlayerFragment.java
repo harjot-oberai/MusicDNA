@@ -140,6 +140,34 @@ public class PlayerFragment extends Fragment implements
     public PlayerFragmentCallbackListener mCallback;
     public onPlayPauseListener mCallback7;
 
+    public interface PlayerFragmentCallbackListener {
+        void onComplete();
+
+        void onPreviousTrack();
+
+        void onEqualizerClicked();
+
+        void onQueueClicked();
+
+        void onPrepared();
+
+        void onFullScreen();
+
+        void onSettingsClicked();
+
+        void onAddedtoFavfromPlayer();
+
+        void onShuffleEnabled();
+
+        void onShuffleDisabled();
+
+        void onSmallPlayerTouched();
+    }
+
+    public interface onPlayPauseListener{
+        void onPlayPause();
+    }
+
     HomeActivity homeActivity;
     public static Context ctx;
 
@@ -476,35 +504,6 @@ public class PlayerFragment extends Fragment implements
     @Override
     public MediaPlayer getMediaPlayer() {
         return mMediaPlayer;
-    }
-
-    public interface PlayerFragmentCallbackListener {
-        void onComplete();
-
-        void onPreviousTrack();
-
-        void onEqualizerClicked();
-
-        void onQueueClicked();
-
-        void onPrepared();
-
-        void onFullScreen();
-
-        void onSettingsClicked();
-
-        void onAddedtoFavfromPlayer();
-
-        void onShuffleEnabled();
-
-        void onShuffleDisabled();
-
-        void onSmallPlayerTouched();
-    }
-
-    public interface onPlayPauseListener{
-
-        void onPlayPause();
     }
 
     @Override

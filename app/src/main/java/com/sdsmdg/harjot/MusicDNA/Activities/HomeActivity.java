@@ -78,13 +78,13 @@ import com.sdsmdg.harjot.MusicDNA.CustomBottomSheetDialogs.CustomGeneralBottomSh
 import com.sdsmdg.harjot.MusicDNA.CustomBottomSheetDialogs.CustomLocalBottomSheetDialog;
 import com.sdsmdg.harjot.MusicDNA.CustomViews.CustomLinearGradient;
 import com.sdsmdg.harjot.MusicDNA.Fragments.AboutFragment.AboutFragment;
-import com.sdsmdg.harjot.MusicDNA.Fragments.AllPlaylistsFragment.PlayListFragment;
+import com.sdsmdg.harjot.MusicDNA.Fragments.AllPlaylistsFragment.AllPlaylistsFragment;
 import com.sdsmdg.harjot.MusicDNA.Fragments.EditSongFragment.EditLocalSongFragment;
 import com.sdsmdg.harjot.MusicDNA.Fragments.EqualizerFragment.EqualizerFragment;
 import com.sdsmdg.harjot.MusicDNA.Fragments.FavouritesFragment.FavouritesFragment;
 import com.sdsmdg.harjot.MusicDNA.Fragments.FolderContentFragment.FolderContentFragment;
 import com.sdsmdg.harjot.MusicDNA.Fragments.AllFoldersFragment.FolderFragment;
-import com.sdsmdg.harjot.MusicDNA.Fragments.NewPlaylistFragment.AddToPlaylistFragment;
+import com.sdsmdg.harjot.MusicDNA.Fragments.NewPlaylistFragment.NewPlaylistFragment;
 import com.sdsmdg.harjot.MusicDNA.Fragments.QueueFragment.QueueFragment;
 import com.sdsmdg.harjot.MusicDNA.Fragments.RecentsFragment.RecentsFragment;
 import com.sdsmdg.harjot.MusicDNA.Fragments.SettingsFragment.SettingsFragment;
@@ -166,26 +166,19 @@ public class HomeActivity extends AppCompatActivity
         ViewPlaylistFragment.playlistCallbackListener,
         FavouritesFragment.favouriteFragmentCallback,
         EqualizerFragment.onCheckChangedListener,
-        PlayListFragment.onPlaylistTouchedListener,
-        PlayListFragment.onPlaylistMenuPlayAllListener,
-        PlayListFragment.onPlaylistRenameListener,
-        PlayListFragment.newPlaylistListerner,
+        AllPlaylistsFragment.allPlaylistCallbackListener,
         PlaylistTrackAdapter.onPlaylistEmptyListener,
         FolderFragment.onFolderClickedListener,
         FolderContentFragment.folderCallbackListener,
-        ViewSavedDNA.onShareListener,
         AlbumFragment.onAlbumClickListener,
         ViewAlbumFragment.albumCallbackListener,
         ArtistFragment.onArtistClickListener,
         ViewArtistFragment.artistCallbackListener,
         RecentsFragment.recentsCallbackListener,
-        SettingsFragment.onColorChangedListener,
-        SettingsFragment.onAlbumArtBackgroundToggled,
-        SettingsFragment.onAboutClickedListener,
-        AddToPlaylistFragment.newPlaylistListener,
+        SettingsFragment.SettingsFragmentCallbackListener,
+        NewPlaylistFragment.NewPlaylistFragmentCallbackListener,
         HeadSetReceiver.onHeadsetEventListener,
-        EditLocalSongFragment.onEditSongSaveListener,
-        EditLocalSongFragment.newCoverListener,
+        EditLocalSongFragment.EditFragmentCallbackListener,
         ServiceCallbacks {
 
     public static List<LocalTrack> localTrackList = new ArrayList<>();
@@ -416,255 +409,6 @@ public class HomeActivity extends AppCompatActivity
     int timerTimeOutDuration = 0;
     List<String> minuteList;
     Handler sleepHandler;
-
-    public void onTrackSelected(int position) {
-
-        isReloaded = false;
-        HideBottomFakeToolbar();
-
-        if (!queueCall) {
-            hideKeyboard();
-
-            searchView.setQuery("", false);
-            searchView.setIconified(true);
-            new Thread(new CancelCall()).start();
-
-//            hideTabs();
-            isPlayerVisible = true;
-
-            PlayerFragment frag = playerFragment;
-            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-            PlayerFragment newFragment = new PlayerFragment();
-            if (frag == null) {
-                playerFragment = newFragment;
-                int flag = 0;
-                for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
-                    UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
-                    if (!ut.getType() && ut.getStreamTrack().getTitle().equals(selectedTrack.getTitle())) {
-                        flag = 1;
-                        isFavourite = true;
-                        break;
-                    }
-                }
-                if (flag == 0) {
-                    isFavourite = false;
-                }
-                playerFragment.localIsPlaying = false;
-                playerFragment.track = selectedTrack;
-                fm.beginTransaction()
-                        .setCustomAnimations(R.anim.slide_up,
-                                R.anim.slide_down,
-                                R.anim.slide_up,
-                                R.anim.slide_down)
-                        .add(R.id.player_frag_container, newFragment, "player")
-                        .show(newFragment)
-                        .addToBackStack(null)
-                        .commitAllowingStateLoss();
-            } else {
-                if (playerFragment.track != null && !playerFragment.localIsPlaying && selectedTrack.getTitle() == playerFragment.track.getTitle()) {
-
-                } else {
-                    int flag = 0;
-                    for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
-                        UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
-                        if (!ut.getType() && ut.getStreamTrack().getTitle().equals(selectedTrack.getTitle())) {
-                            flag = 1;
-                            isFavourite = true;
-                            break;
-                        }
-                    }
-                    if (flag == 0) {
-                        isFavourite = false;
-                    }
-                    playerFragment.localIsPlaying = false;
-                    playerFragment.track = selectedTrack;
-                    frag.refresh();
-                }
-            }
-            if (!isQueueVisible)
-                showPlayer();
-        } else {
-            PlayerFragment frag = playerFragment;
-            playerFragment.localIsPlaying = false;
-            playerFragment.track = selectedTrack;
-            int flag = 0;
-            for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
-                UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
-                if (!ut.getType() && ut.getStreamTrack().getTitle().equals(selectedTrack.getTitle())) {
-                    flag = 1;
-                    isFavourite = true;
-                    break;
-                }
-            }
-            if (flag == 0) {
-                isFavourite = false;
-            }
-            frag.refresh();
-        }
-
-        if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
-            playerFragment.snappyRecyclerView.getAdapter().notifyDataSetChanged();
-            playerFragment.snappyRecyclerView.setTransparency();
-        }
-
-        QueueFragment qFrag = (QueueFragment) fragMan.findFragmentByTag("queue");
-        if (qFrag != null) {
-            qFrag.updateQueueAdapter();
-        }
-
-        UnifiedTrack track = new UnifiedTrack(false, null, playerFragment.track);
-        for (int i = 0; i < recentlyPlayed.getRecentlyPlayed().size(); i++) {
-            if (!recentlyPlayed.getRecentlyPlayed().get(i).getType() && recentlyPlayed.getRecentlyPlayed().get(i).getStreamTrack().getTitle().equals(track.getStreamTrack().getTitle())) {
-                recentlyPlayed.getRecentlyPlayed().remove(i);
-//                rAdapter.notifyItemRemoved(i);
-                break;
-            }
-        }
-        recentlyPlayed.getRecentlyPlayed().add(0, track);
-        if (recentlyPlayed.getRecentlyPlayed().size() > 50) {
-            recentlyPlayed.getRecentlyPlayed().remove(50);
-        }
-        recentsRecycler.setVisibility(View.VISIBLE);
-        recentsNothingText.setVisibility(View.INVISIBLE);
-        continuePlayingList.clear();
-        for (int i = 0; i < Math.min(10, recentlyPlayed.getRecentlyPlayed().size()); i++) {
-            continuePlayingList.add(recentlyPlayed.getRecentlyPlayed().get(i));
-        }
-        rAdapter.notifyDataSetChanged();
-        refreshHeaderImages();
-
-        RecentsFragment rFrag = (RecentsFragment) fragMan.findFragmentByTag("recent");
-        if (rFrag != null && rFrag.rtAdpater != null) {
-            rFrag.rtAdpater.notifyDataSetChanged();
-        }
-    }
-
-    public void onLocalTrackSelected(int position) {
-
-        isReloaded = false;
-        HideBottomFakeToolbar();
-
-        if (!queueCall) {
-
-            hideKeyboard();
-
-            searchView.setQuery("", true);
-            searchView.setIconified(true);
-            new Thread(new CancelCall()).start();
-
-//            hideTabs();
-            isPlayerVisible = true;
-
-            PlayerFragment frag = playerFragment;
-            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-            PlayerFragment newFragment = new PlayerFragment();
-            if (frag == null) {
-                playerFragment = newFragment;
-                int flag = 0;
-                for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
-                    UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
-                    if (ut.getType() && ut.getLocalTrack().getTitle().equals(localSelectedTrack.getTitle())) {
-                        flag = 1;
-                        isFavourite = true;
-                        break;
-                    }
-                }
-                if (flag == 0) {
-                    isFavourite = false;
-                }
-
-                playerFragment.localIsPlaying = true;
-                playerFragment.localTrack = localSelectedTrack;
-                fm.beginTransaction()
-                        .setCustomAnimations(R.anim.slide_up,
-                                R.anim.slide_down,
-                                R.anim.slide_up,
-                                R.anim.slide_down)
-                        .add(R.id.player_frag_container, newFragment, "player")
-                        .show(newFragment)
-                        .commitAllowingStateLoss();
-            } else {
-                if (playerFragment.localTrack != null && playerFragment.localIsPlaying && localSelectedTrack.getTitle() == playerFragment.localTrack.getTitle()) {
-
-                } else {
-                    int flag = 0;
-                    for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
-                        UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
-                        if (ut.getType() && ut.getLocalTrack().getTitle().equals(localSelectedTrack.getTitle())) {
-                            flag = 1;
-                            isFavourite = true;
-                            break;
-                        }
-                    }
-                    if (flag == 0) {
-                        isFavourite = false;
-                    }
-                    playerFragment.localIsPlaying = true;
-                    playerFragment.localTrack = localSelectedTrack;
-                    frag.refresh();
-                }
-            }
-
-            if (!isQueueVisible)
-                showPlayer();
-
-        } else {
-            PlayerFragment frag = playerFragment;
-            playerFragment.localIsPlaying = true;
-            playerFragment.localTrack = localSelectedTrack;
-
-            int flag = 0;
-            for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
-                UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
-                if (ut.getType() && ut.getLocalTrack().getTitle().equals(localSelectedTrack.getTitle())) {
-                    flag = 1;
-                    isFavourite = true;
-                    break;
-                }
-            }
-            if (flag == 0) {
-                isFavourite = false;
-            }
-            if (frag != null)
-                frag.refresh();
-        }
-
-        if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
-            playerFragment.snappyRecyclerView.getAdapter().notifyDataSetChanged();
-            playerFragment.snappyRecyclerView.setTransparency();
-        }
-
-        QueueFragment qFrag = (QueueFragment) fragMan.findFragmentByTag("queue");
-        if (qFrag != null) {
-            qFrag.updateQueueAdapter();
-        }
-        UnifiedTrack track = new UnifiedTrack(true, playerFragment.localTrack, null);
-        for (int i = 0; i < recentlyPlayed.getRecentlyPlayed().size(); i++) {
-            if (recentlyPlayed.getRecentlyPlayed().get(i).getType() && recentlyPlayed.getRecentlyPlayed().get(i).getLocalTrack().getTitle().equals(track.getLocalTrack().getTitle())) {
-                recentlyPlayed.getRecentlyPlayed().remove(i);
-//                rAdapter.notifyItemRemoved(i);
-                break;
-            }
-        }
-        recentlyPlayed.getRecentlyPlayed().add(0, track);
-        if (recentlyPlayed.getRecentlyPlayed().size() == 51) {
-            recentlyPlayed.getRecentlyPlayed().remove(50);
-        }
-        recentsRecycler.setVisibility(View.VISIBLE);
-        recentsNothingText.setVisibility(View.INVISIBLE);
-        continuePlayingList.clear();
-        for (int i = 0; i < Math.min(10, recentlyPlayed.getRecentlyPlayed().size()); i++) {
-            continuePlayingList.add(recentlyPlayed.getRecentlyPlayed().get(i));
-        }
-        rAdapter.notifyDataSetChanged();
-        refreshHeaderImages();
-
-        RecentsFragment rFrag = (RecentsFragment) fragMan.findFragmentByTag("recent");
-        if (rFrag != null && rFrag.rtAdpater != null) {
-            rFrag.rtAdpater.notifyDataSetChanged();
-        }
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1044,6 +788,678 @@ public class HomeActivity extends AppCompatActivity
 
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*
+     * Methods for playing selected songs
+     * onTrackSelected -> Used to stream tracks from soundcloud
+     * onLocalTrackSelected -> Used to play local songs
+     */
+
+    public void onTrackSelected(int position) {
+
+        isReloaded = false;
+        HideBottomFakeToolbar();
+
+        if (!queueCall) {
+            CommonUtils.hideKeyboard(this);
+
+            searchView.setQuery("", false);
+            searchView.setIconified(true);
+            new Thread(new CancelCall()).start();
+
+            isPlayerVisible = true;
+
+            PlayerFragment frag = playerFragment;
+            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+            PlayerFragment newFragment = new PlayerFragment();
+            if (frag == null) {
+                playerFragment = newFragment;
+                int flag = 0;
+                for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
+                    UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
+                    if (!ut.getType() && ut.getStreamTrack().getTitle().equals(selectedTrack.getTitle())) {
+                        flag = 1;
+                        isFavourite = true;
+                        break;
+                    }
+                }
+                if (flag == 0) {
+                    isFavourite = false;
+                }
+                playerFragment.localIsPlaying = false;
+                playerFragment.track = selectedTrack;
+                fm.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_up,
+                                R.anim.slide_down,
+                                R.anim.slide_up,
+                                R.anim.slide_down)
+                        .add(R.id.player_frag_container, newFragment, "player")
+                        .show(newFragment)
+                        .addToBackStack(null)
+                        .commitAllowingStateLoss();
+            } else {
+                if (playerFragment.track != null && !playerFragment.localIsPlaying && selectedTrack.getTitle() == playerFragment.track.getTitle()) {
+
+                } else {
+                    int flag = 0;
+                    for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
+                        UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
+                        if (!ut.getType() && ut.getStreamTrack().getTitle().equals(selectedTrack.getTitle())) {
+                            flag = 1;
+                            isFavourite = true;
+                            break;
+                        }
+                    }
+                    if (flag == 0) {
+                        isFavourite = false;
+                    }
+                    playerFragment.localIsPlaying = false;
+                    playerFragment.track = selectedTrack;
+                    frag.refresh();
+                }
+            }
+            if (!isQueueVisible)
+                showPlayer();
+        } else {
+            PlayerFragment frag = playerFragment;
+            playerFragment.localIsPlaying = false;
+            playerFragment.track = selectedTrack;
+            int flag = 0;
+            for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
+                UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
+                if (!ut.getType() && ut.getStreamTrack().getTitle().equals(selectedTrack.getTitle())) {
+                    flag = 1;
+                    isFavourite = true;
+                    break;
+                }
+            }
+            if (flag == 0) {
+                isFavourite = false;
+            }
+            frag.refresh();
+        }
+
+        if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
+            playerFragment.snappyRecyclerView.getAdapter().notifyDataSetChanged();
+            playerFragment.snappyRecyclerView.setTransparency();
+        }
+
+        QueueFragment qFrag = (QueueFragment) fragMan.findFragmentByTag("queue");
+        if (qFrag != null) {
+            qFrag.updateQueueAdapter();
+        }
+
+        UnifiedTrack track = new UnifiedTrack(false, null, playerFragment.track);
+        for (int i = 0; i < recentlyPlayed.getRecentlyPlayed().size(); i++) {
+            if (!recentlyPlayed.getRecentlyPlayed().get(i).getType() && recentlyPlayed.getRecentlyPlayed().get(i).getStreamTrack().getTitle().equals(track.getStreamTrack().getTitle())) {
+                recentlyPlayed.getRecentlyPlayed().remove(i);
+//                rAdapter.notifyItemRemoved(i);
+                break;
+            }
+        }
+        recentlyPlayed.getRecentlyPlayed().add(0, track);
+        if (recentlyPlayed.getRecentlyPlayed().size() > 50) {
+            recentlyPlayed.getRecentlyPlayed().remove(50);
+        }
+        recentsRecycler.setVisibility(View.VISIBLE);
+        recentsNothingText.setVisibility(View.INVISIBLE);
+        continuePlayingList.clear();
+        for (int i = 0; i < Math.min(10, recentlyPlayed.getRecentlyPlayed().size()); i++) {
+            continuePlayingList.add(recentlyPlayed.getRecentlyPlayed().get(i));
+        }
+        rAdapter.notifyDataSetChanged();
+        refreshHeaderImages();
+
+        RecentsFragment rFrag = (RecentsFragment) fragMan.findFragmentByTag("recent");
+        if (rFrag != null && rFrag.rtAdpater != null) {
+            rFrag.rtAdpater.notifyDataSetChanged();
+        }
+    }
+
+    public void onLocalTrackSelected(int position) {
+
+        isReloaded = false;
+        HideBottomFakeToolbar();
+
+        if (!queueCall) {
+
+            CommonUtils.hideKeyboard(this);
+
+            searchView.setQuery("", true);
+            searchView.setIconified(true);
+            new Thread(new CancelCall()).start();
+
+//            hideTabs();
+            isPlayerVisible = true;
+
+            PlayerFragment frag = playerFragment;
+            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+            PlayerFragment newFragment = new PlayerFragment();
+            if (frag == null) {
+                playerFragment = newFragment;
+                int flag = 0;
+                for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
+                    UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
+                    if (ut.getType() && ut.getLocalTrack().getTitle().equals(localSelectedTrack.getTitle())) {
+                        flag = 1;
+                        isFavourite = true;
+                        break;
+                    }
+                }
+                if (flag == 0) {
+                    isFavourite = false;
+                }
+
+                playerFragment.localIsPlaying = true;
+                playerFragment.localTrack = localSelectedTrack;
+                fm.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_up,
+                                R.anim.slide_down,
+                                R.anim.slide_up,
+                                R.anim.slide_down)
+                        .add(R.id.player_frag_container, newFragment, "player")
+                        .show(newFragment)
+                        .commitAllowingStateLoss();
+            } else {
+                if (playerFragment.localTrack != null && playerFragment.localIsPlaying && localSelectedTrack.getTitle() == playerFragment.localTrack.getTitle()) {
+
+                } else {
+                    int flag = 0;
+                    for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
+                        UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
+                        if (ut.getType() && ut.getLocalTrack().getTitle().equals(localSelectedTrack.getTitle())) {
+                            flag = 1;
+                            isFavourite = true;
+                            break;
+                        }
+                    }
+                    if (flag == 0) {
+                        isFavourite = false;
+                    }
+                    playerFragment.localIsPlaying = true;
+                    playerFragment.localTrack = localSelectedTrack;
+                    frag.refresh();
+                }
+            }
+
+            if (!isQueueVisible)
+                showPlayer();
+
+        } else {
+            PlayerFragment frag = playerFragment;
+            playerFragment.localIsPlaying = true;
+            playerFragment.localTrack = localSelectedTrack;
+
+            int flag = 0;
+            for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
+                UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
+                if (ut.getType() && ut.getLocalTrack().getTitle().equals(localSelectedTrack.getTitle())) {
+                    flag = 1;
+                    isFavourite = true;
+                    break;
+                }
+            }
+            if (flag == 0) {
+                isFavourite = false;
+            }
+            if (frag != null)
+                frag.refresh();
+        }
+
+        if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
+            playerFragment.snappyRecyclerView.getAdapter().notifyDataSetChanged();
+            playerFragment.snappyRecyclerView.setTransparency();
+        }
+
+        QueueFragment qFrag = (QueueFragment) fragMan.findFragmentByTag("queue");
+        if (qFrag != null) {
+            qFrag.updateQueueAdapter();
+        }
+        UnifiedTrack track = new UnifiedTrack(true, playerFragment.localTrack, null);
+        for (int i = 0; i < recentlyPlayed.getRecentlyPlayed().size(); i++) {
+            if (recentlyPlayed.getRecentlyPlayed().get(i).getType() && recentlyPlayed.getRecentlyPlayed().get(i).getLocalTrack().getTitle().equals(track.getLocalTrack().getTitle())) {
+                recentlyPlayed.getRecentlyPlayed().remove(i);
+//                rAdapter.notifyItemRemoved(i);
+                break;
+            }
+        }
+        recentlyPlayed.getRecentlyPlayed().add(0, track);
+        if (recentlyPlayed.getRecentlyPlayed().size() == 51) {
+            recentlyPlayed.getRecentlyPlayed().remove(50);
+        }
+        recentsRecycler.setVisibility(View.VISIBLE);
+        recentsNothingText.setVisibility(View.INVISIBLE);
+        continuePlayingList.clear();
+        for (int i = 0; i < Math.min(10, recentlyPlayed.getRecentlyPlayed().size()); i++) {
+            continuePlayingList.add(recentlyPlayed.getRecentlyPlayed().get(i));
+        }
+        rAdapter.notifyDataSetChanged();
+        refreshHeaderImages();
+
+        RecentsFragment rFrag = (RecentsFragment) fragMan.findFragmentByTag("recent");
+        if (rFrag != null && rFrag.rtAdpater != null) {
+            rFrag.rtAdpater.notifyDataSetChanged();
+        }
+
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*
+     * Methods and Classes for loading local songs, albums, artists and folder
+     * loadSavedData -> AsyncTask that executes getSavedData() in background.
+     * getSavedData() -> Method that actually gets the saved data from sharedPreferences.
+     * getLocalSongs()-> Loads local songs.
+     * checkTrack() / checkArtist() / checkAlbum -> checks if localtrack, artist or album already exists.
+     * getFolder() -> gets MusicFolder based on folder name.
+     */
+
+    public class loadSavedData extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            getSavedData();
+            return "done";
+        }
+
+        @Override
+        protected void onPostExecute(String aVoid) {
+            super.onPostExecute(aVoid);
+            progress.dismiss();
+            main.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                    if (settings == null) {
+                        settings = new Settings();
+                    }
+
+                    themeColor = settings.getThemeColor();
+                    minAudioStrength = settings.getMinAudioStrength();
+
+
+                    navigationView.setItemIconTintList(ColorStateList.valueOf(themeColor));
+                    collapsingToolbar.setContentScrimColor(themeColor);
+                    customLinearGradient.setStartColor(themeColor);
+                    customLinearGradient.invalidate();
+
+                    try {
+                        if (Build.VERSION.SDK_INT >= 21) {
+                            Window window = ((Activity) ctx).getWindow();
+                            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                            window.setStatusBarColor(CommonUtils.getDarkColor(themeColor));
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    if (prevVersionCode == -1 || prevVersionCode <= 30) {
+                        savedDNAs = null;
+                    }
+
+                    if (allPlaylists == null) {
+                        allPlaylists = new AllPlaylists();
+                    }
+
+                    if (tempPlaylist == null) {
+                        tempPlaylist = new Playlist(null, null);
+                    }
+
+                    if (queue == null) {
+                        queue = new Queue();
+                    }
+
+                    if (favouriteTracks == null) {
+                        favouriteTracks = new Favourite();
+                    }
+
+                    if (recentlyPlayed == null) {
+                        recentlyPlayed = new RecentlyPlayed();
+                    }
+                    if (allMusicFolders == null) {
+                        allMusicFolders = new AllMusicFolders();
+                    }
+                    if (savedDNAs == null) {
+                        savedDNAs = new AllSavedDNA();
+                    }
+
+                    if (equalizerModel == null) {
+                        equalizerModel = new EqualizerModel();
+                        isEqualizerEnabled = true;
+                        isEqualizerReloaded = false;
+                    } else {
+                        isEqualizerEnabled = equalizerModel.isEqualizerEnabled();
+                        isEqualizerReloaded = true;
+                        seekbarpos = equalizerModel.getSeekbarpos();
+                        presetPos = equalizerModel.getPresetPos();
+                        reverbPreset = equalizerModel.getReverbPreset();
+                        bassStrength = equalizerModel.getBassStrength();
+                    }
+
+                    new SaveVersionCode().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+                    getLocalSongs();
+                    refreshHeaderImages();
+
+                    if (queue != null && queue.getQueue().size() != 0) {
+                        UnifiedTrack utHome = queue.getQueue().get(queueCurrentIndex);
+                        if (utHome.getType()) {
+                            imgLoader.DisplayImage(utHome.getLocalTrack().getPath(), spImgHome);
+                            spTitleHome.setText(utHome.getLocalTrack().getTitle());
+                        } else {
+                            imgLoader.DisplayImage(utHome.getStreamTrack().getArtworkURL(), spImgHome);
+                            spTitleHome.setText(utHome.getStreamTrack().getTitle());
+                        }
+                    } else {
+                        bottomToolbar.setVisibility(GONE);
+                    }
+
+                    for (int i = 0; i < Math.min(10, recentlyPlayed.getRecentlyPlayed().size()); i++) {
+                        continuePlayingList.add(recentlyPlayed.getRecentlyPlayed().get(i));
+                    }
+
+                    rAdapter = new RecentsListHorizontalAdapter(continuePlayingList, ctx);
+                    recentsRecycler = (RecyclerView) findViewById(R.id.recentsMusicList_home);
+                    recentsRecycler.setNestedScrollingEnabled(false);
+                    LinearLayoutManager mLayoutManager3 = new LinearLayoutManager(ctx, LinearLayoutManager.HORIZONTAL, false);
+                    recentsRecycler.setLayoutManager(mLayoutManager3);
+                    recentsRecycler.setItemAnimator(new DefaultItemAnimator());
+                    AlphaInAnimationAdapter alphaAdapter3 = new AlphaInAnimationAdapter(rAdapter);
+                    alphaAdapter3.setFirstOnly(false);
+                    recentsRecycler.setAdapter(alphaAdapter3);
+
+                    recentsRecycler.addOnItemTouchListener(new ClickItemTouchListener(recentsRecycler) {
+                        @Override
+                        public boolean onClick(RecyclerView parent, View view, final int position, long id) {
+                            UnifiedTrack ut = continuePlayingList.get(position);
+                            boolean isRepeat = false;
+                            int pos = 0;
+                            for (int i = 0; i < queue.getQueue().size(); i++) {
+                                UnifiedTrack ut1 = queue.getQueue().get(i);
+                                if (ut1.getType() && ut.getType() && ut1.getLocalTrack().getTitle().equals(ut.getLocalTrack().getTitle())) {
+                                    isRepeat = true;
+                                    pos = i;
+                                    break;
+                                }
+                                if (!ut1.getType() && !ut.getType() && ut1.getStreamTrack().getTitle().equals(ut.getStreamTrack().getTitle())) {
+                                    isRepeat = true;
+                                    pos = i;
+                                    break;
+                                }
+                            }
+                            if (!isRepeat) {
+                                if (ut.getType()) {
+                                    LocalTrack track = ut.getLocalTrack();
+                                    if (queue.getQueue().size() == 0) {
+                                        queueCurrentIndex = 0;
+                                        queue.getQueue().add(new UnifiedTrack(true, track, null));
+                                    } else if (queueCurrentIndex == queue.getQueue().size() - 1) {
+                                        queueCurrentIndex++;
+                                        queue.getQueue().add(new UnifiedTrack(true, track, null));
+                                    } else if (isReloaded) {
+                                        isReloaded = false;
+                                        queueCurrentIndex = queue.getQueue().size();
+                                        queue.getQueue().add(new UnifiedTrack(true, track, null));
+                                    } else {
+                                        queue.getQueue().add(++queueCurrentIndex, new UnifiedTrack(true, track, null));
+                                    }
+                                    localSelectedTrack = track;
+                                    streamSelected = false;
+                                    localSelected = true;
+                                    queueCall = false;
+                                    isReloaded = false;
+                                    onLocalTrackSelected(position);
+                                } else {
+                                    Track track = ut.getStreamTrack();
+                                    if (queue.getQueue().size() == 0) {
+                                        queueCurrentIndex = 0;
+                                        queue.getQueue().add(new UnifiedTrack(false, null, track));
+                                    } else if (queueCurrentIndex == queue.getQueue().size() - 1) {
+                                        queueCurrentIndex++;
+                                        queue.getQueue().add(new UnifiedTrack(false, null, track));
+                                    } else if (isReloaded) {
+                                        isReloaded = false;
+                                        queueCurrentIndex = queue.getQueue().size();
+                                        queue.getQueue().add(new UnifiedTrack(false, null, track));
+                                    } else {
+                                        queue.getQueue().add(++queueCurrentIndex, new UnifiedTrack(false, null, track));
+                                    }
+                                    selectedTrack = track;
+                                    streamSelected = true;
+                                    localSelected = false;
+                                    queueCall = false;
+                                    isReloaded = false;
+                                    onTrackSelected(position);
+                                }
+                            } else {
+                                onQueueItemClicked(pos);
+                            }
+
+                            return true;
+                        }
+
+                        @Override
+                        public boolean onLongClick(RecyclerView parent, View view, final int position, long id) {
+                            final UnifiedTrack ut = continuePlayingList.get(position);
+                            CustomGeneralBottomSheetDialog generalBottomSheetDialog = new CustomGeneralBottomSheetDialog();
+                            generalBottomSheetDialog.setPosition(position);
+                            generalBottomSheetDialog.setTrack(ut);
+                            generalBottomSheetDialog.setFragment("RecentHorizontalList");
+                            generalBottomSheetDialog.show(getSupportFragmentManager(), "general_bottom_sheet_dialog");
+                            return true;
+                        }
+
+                        @Override
+                        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+                        }
+                    });
+
+                    pAdapter = new PlayListsHorizontalAdapter(allPlaylists.getPlaylists(), ctx);
+                    playlistsRecycler = (RecyclerView) findViewById(R.id.playlist_home);
+                    playlistsRecycler.setNestedScrollingEnabled(false);
+                    LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(ctx, LinearLayoutManager.HORIZONTAL, false);
+                    playlistsRecycler.setLayoutManager(mLayoutManager2);
+                    playlistsRecycler.setItemAnimator(new DefaultItemAnimator());
+                    AlphaInAnimationAdapter alphaAdapter2 = new AlphaInAnimationAdapter(pAdapter);
+                    alphaAdapter2.setFirstOnly(false);
+                    playlistsRecycler.setAdapter(alphaAdapter2);
+
+                    playlistsRecycler.addOnItemTouchListener(new ClickItemTouchListener(playlistsRecycler) {
+                        @Override
+                        public boolean onClick(RecyclerView parent, View view, final int position, long id) {
+                            tempPlaylist = allPlaylists.getPlaylists().get(position);
+                            tempPlaylistNumber = position;
+                            showFragment("playlist");
+                            return true;
+                        }
+
+                        @Override
+                        public boolean onLongClick(RecyclerView parent, View view, final int position, long id) {
+                            PopupMenu popup = new PopupMenu(ctx, view);
+                            popup.getMenuInflater().inflate(R.menu.playlist_popup, popup.getMenu());
+
+                            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                                @Override
+                                public boolean onMenuItemClick(MenuItem item) {
+                                    if (item.getTitle().equals("Play")) {
+
+                                        tempPlaylist = allPlaylists.getPlaylists().get(position);
+                                        tempPlaylistNumber = position;
+
+                                        int size = tempPlaylist.getSongList().size();
+                                        queue.getQueue().clear();
+                                        for (int i = 0; i < size; i++) {
+                                            queue.addToQueue(tempPlaylist.getSongList().get(i));
+                                        }
+
+                                        queueCurrentIndex = 0;
+                                        onPlaylistPlayAll();
+                                    } else if (item.getTitle().equals("Add to Queue")) {
+                                        Playlist pl = allPlaylists.getPlaylists().get(position);
+                                        for (UnifiedTrack ut : pl.getSongList()) {
+                                            queue.addToQueue(ut);
+                                        }
+                                    } else if (item.getTitle().equals("Delete")) {
+                                        allPlaylists.getPlaylists().remove(position);
+                                        AllPlaylistsFragment plFrag = (AllPlaylistsFragment) fragMan.findFragmentByTag("allPlaylists");
+                                        if (plFrag != null) {
+                                            plFrag.itemRemoved(position);
+                                        }
+                                        pAdapter.notifyItemRemoved(position);
+                                        new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                                    } else if (item.getTitle().equals("Rename")) {
+                                        renamePlaylistNumber = position;
+                                        renamePlaylistDialog(allPlaylists.getPlaylists().get(position).getPlaylistName());
+                                    }
+                                    return true;
+                                }
+                            });
+                            popup.show();
+                            return true;
+                        }
+
+                        @Override
+                        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+                        }
+                    });
+
+                    adapter = new LocalTracksHorizontalAdapter(finalLocalSearchResultList, ctx);
+                    localsongsRecyclerView = (RecyclerView) findViewById(R.id.localMusicList_home);
+                    LinearLayoutManager mLayoutManager = new LinearLayoutManager(ctx, LinearLayoutManager.HORIZONTAL, false);
+                    localsongsRecyclerView.setLayoutManager(mLayoutManager);
+                    localsongsRecyclerView.setItemAnimator(new DefaultItemAnimator());
+                    AlphaInAnimationAdapter alphaAdapter = new AlphaInAnimationAdapter(adapter);
+                    alphaAdapter.setFirstOnly(false);
+                    localsongsRecyclerView.setAdapter(alphaAdapter);
+
+                    localsongsRecyclerView.addOnItemTouchListener(new ClickItemTouchListener(localsongsRecyclerView) {
+                        @Override
+                        public boolean onClick(RecyclerView parent, View view, int position, long id) {
+                            LocalTrack track = finalLocalSearchResultList.get(position);
+                            if (queue.getQueue().size() == 0) {
+                                queueCurrentIndex = 0;
+                                queue.getQueue().add(new UnifiedTrack(true, track, null));
+                            } else if (queueCurrentIndex == queue.getQueue().size() - 1) {
+                                queueCurrentIndex++;
+                                queue.getQueue().add(new UnifiedTrack(true, track, null));
+                            } else if (isReloaded) {
+                                isReloaded = false;
+                                queueCurrentIndex = queue.getQueue().size();
+                                queue.getQueue().add(new UnifiedTrack(true, track, null));
+                            } else {
+                                queue.getQueue().add(++queueCurrentIndex, new UnifiedTrack(true, track, null));
+                            }
+                            localSelectedTrack = track;
+                            streamSelected = false;
+                            localSelected = true;
+                            queueCall = false;
+                            isReloaded = false;
+                            onLocalTrackSelected(position);
+                            return true;
+                        }
+
+                        @Override
+                        public boolean onLongClick(RecyclerView parent, View view, final int position, long id) {
+                            CustomLocalBottomSheetDialog localBottomSheetDialog = new CustomLocalBottomSheetDialog();
+                            localBottomSheetDialog.setPosition(position);
+                            localBottomSheetDialog.setLocalTrack(finalLocalSearchResultList.get(position));
+                            localBottomSheetDialog.show(getSupportFragmentManager(), "local_song_bottom_sheet");
+                            return true;
+                        }
+
+                        @Override
+                        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+                        }
+                    });
+
+                    soundcloudRecyclerView = (RecyclerView) findViewById(R.id.trackList_home);
+
+                    soundcloudRecyclerView.addOnItemTouchListener(new ClickItemTouchListener(soundcloudRecyclerView) {
+                        @Override
+                        public boolean onClick(RecyclerView parent, View view, int position, long id) {
+                            Track track = streamingTrackList.get(position);
+                            if (queue.getQueue().size() == 0) {
+                                queueCurrentIndex = 0;
+                                queue.getQueue().add(new UnifiedTrack(false, null, track));
+                            } else if (queueCurrentIndex == queue.getQueue().size() - 1) {
+                                queueCurrentIndex++;
+                                queue.getQueue().add(new UnifiedTrack(false, null, track));
+                            } else if (isReloaded) {
+                                isReloaded = false;
+                                queueCurrentIndex = queue.getQueue().size();
+                                queue.getQueue().add(new UnifiedTrack(false, null, track));
+                            } else {
+                                queue.getQueue().add(++queueCurrentIndex, new UnifiedTrack(false, null, track));
+                            }
+                            selectedTrack = track;
+                            streamSelected = true;
+                            localSelected = false;
+                            queueCall = false;
+                            isReloaded = false;
+                            onTrackSelected(position);
+                            return true;
+                        }
+
+                        @Override
+                        public boolean onLongClick(RecyclerView parent, View view, final int position, long id) {
+                            CustomGeneralBottomSheetDialog generalBottomSheetDialog = new CustomGeneralBottomSheetDialog();
+                            generalBottomSheetDialog.setPosition(position);
+                            generalBottomSheetDialog.setTrack(new UnifiedTrack(false, null, streamingTrackList.get(position)));
+                            generalBottomSheetDialog.setFragment("Stream");
+                            generalBottomSheetDialog.show(getSupportFragmentManager(), "general_bottom_sheet_dialog");
+                            return true;
+                        }
+
+                        @Override
+                        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+                        }
+                    });
+
+                    playerContainer = findViewById(R.id.player_frag_container);
+
+                    if (finalLocalSearchResultList.size() == 0) {
+                        localsongsRecyclerView.setVisibility(GONE);
+                        localNothingText.setVisibility(View.VISIBLE);
+                    } else {
+                        localsongsRecyclerView.setVisibility(View.VISIBLE);
+                        localNothingText.setVisibility(View.INVISIBLE);
+                    }
+
+                    if (recentlyPlayed.getRecentlyPlayed().size() == 0) {
+                        recentsRecycler.setVisibility(GONE);
+                        recentsNothingText.setVisibility(View.VISIBLE);
+                    } else {
+                        recentsRecycler.setVisibility(View.VISIBLE);
+                        recentsNothingText.setVisibility(View.INVISIBLE);
+                    }
+
+                    if (streamingTrackList.size() == 0) {
+                        streamRecyclerContainer.setVisibility(GONE);
+                        streamNothingText.setVisibility(View.VISIBLE);
+                    } else {
+                        streamRecyclerContainer.setVisibility(View.VISIBLE);
+                        streamNothingText.setVisibility(View.INVISIBLE);
+                    }
+
+                    if (allPlaylists.getPlaylists().size() == 0) {
+                        playlistsRecycler.setVisibility(GONE);
+                        playlistNothingText.setVisibility(View.VISIBLE);
+                    } else {
+                        playlistsRecycler.setVisibility(View.VISIBLE);
+                        playlistNothingText.setVisibility(View.INVISIBLE);
+                    }
+
+                }
+            });
+        }
+    }
+
     private void getSavedData() {
         try {
             Gson gson = new Gson();
@@ -1315,6 +1731,12 @@ public class HomeActivity extends AppCompatActivity
         return mf;
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*
+     * Standard Activity methods
+     */
+
     @Override
     public void onBackPressed() {
         PlayerFragment plFrag = playerFragment;
@@ -1440,32 +1862,6 @@ public class HomeActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == RESULT_OK) {
-            if (requestCode == 1) {
-                try {
-                    final Uri imageUri = data.getData();
-                    String path = imageUri.getPath();
-                    Toast.makeText(this, path + "", Toast.LENGTH_SHORT).show();
-                    final InputStream imageStream = getContentResolver().openInputStream(imageUri);
-                    selectedImage = BitmapFactory.decodeStream(imageStream);
-
-                    EditLocalSongFragment editSongFragment = (EditLocalSongFragment) getSupportFragmentManager().findFragmentByTag("Edit");
-                    if (editSongFragment != null) {
-                        editSongFragment.updateCoverArt(selectedImage, imageUri);
-                    }
-
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
@@ -1525,8 +1921,83 @@ public class HomeActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            if (requestCode == 1) {
+                try {
+                    final Uri imageUri = data.getData();
+                    String path = imageUri.getPath();
+                    Toast.makeText(this, path + "", Toast.LENGTH_SHORT).show();
+                    final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                    selectedImage = BitmapFactory.decodeStream(imageStream);
+
+                    EditLocalSongFragment editSongFragment = (EditLocalSongFragment) getSupportFragmentManager().findFragmentByTag("Edit");
+                    if (editSongFragment != null) {
+                        editSongFragment.updateCoverArt(selectedImage, imageUri);
+                    }
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        new SaveVersionCode().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new SaveData().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new SaveSettings().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new SaveQueue().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+        try {
+            prefsEditor.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(headSetReceiver);
+        RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(this);
+        refWatcher.watch(this);
+        TelephonyManager mgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+        if (mgr != null) {
+            mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE);
+        }
+        if (bound) {
+            myService.setCallbacks(null); // unregister
+            unbindService(serviceConnection);
+            bound = false;
+        }
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*
+     * Query change listeners for searchview and required methods for searching and updating recycler views.
+     * onQueryTextSubmit(String query) -> updates lists based on query when entered is pressed on keyboard.
+     * onQueryTextChange(String query) -> updates lists based on query while text is being entered into the search view.
+     * updateLocalList() / updateAlbumList() / updateArtistList() / updateStreamingList() -> helper methods to update corresponding recyclers.
+     */
+
+    @Override
     public boolean onQueryTextSubmit(String query) {
-        hideKeyboard();
+        CommonUtils.hideKeyboard(this);
         updateLocalList(query.trim());
         updateStreamingList(query.trim());
         updateAlbumList(query.trim());
@@ -1700,6 +2171,15 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*
+     * Methods to control the transitions of the player fragment
+     * hidePlayer() / showPlayer()  -> the vertical animation to hide/show the visualizer
+     * hidePlayer2() / showPlayer2()  -> the horizontal animation to hide/show the equalizer
+     * hidePlayer3() / showPlayer3()  -> the horizontal animation to hide/show the queue
+     */
+
     public void hidePlayer() {
 
         if (playerFragment != null && playerFragment.mVisualizerView != null)
@@ -1769,48 +2249,6 @@ public class HomeActivity extends AppCompatActivity
                         }
                     });
         }
-    }
-
-    public void hidePlayer2() {
-
-        isEqualizerVisible = true;
-
-        if (playerFragment.mVisualizerView != null)
-            playerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
-
-        final Handler handler2 = new Handler();
-        handler2.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                playerContainer.animate()
-                        .setInterpolator(new AccelerateDecelerateInterpolator())
-                        .translationX(playerContainer.getWidth());
-            }
-        }, 50);
-
-        playerContainer.setVisibility(View.VISIBLE);
-
-    }
-
-    public void hidePlayer3() {
-
-        isQueueVisible = true;
-
-        if (playerFragment.mVisualizerView != null)
-            playerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
-
-        final Handler handler2 = new Handler();
-        handler2.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                playerContainer.animate()
-                        .setInterpolator(new AccelerateDecelerateInterpolator())
-                        .translationX(-1 * playerContainer.getWidth());
-            }
-        }, 50);
-
-        playerContainer.setVisibility(View.VISIBLE);
-
     }
 
     public void showPlayer() {
@@ -1891,6 +2329,27 @@ public class HomeActivity extends AppCompatActivity
 
     }
 
+    public void hidePlayer2() {
+
+        isEqualizerVisible = true;
+
+        if (playerFragment.mVisualizerView != null)
+            playerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
+
+        final Handler handler2 = new Handler();
+        handler2.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                playerContainer.animate()
+                        .setInterpolator(new AccelerateDecelerateInterpolator())
+                        .translationX(playerContainer.getWidth());
+            }
+        }, 50);
+
+        playerContainer.setVisibility(View.VISIBLE);
+
+    }
+
     public void showPlayer2() {
 
         isPlayerVisible = true;
@@ -1935,6 +2394,27 @@ public class HomeActivity extends AppCompatActivity
 
     }
 
+    public void hidePlayer3() {
+
+        isQueueVisible = true;
+
+        if (playerFragment.mVisualizerView != null)
+            playerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
+
+        final Handler handler2 = new Handler();
+        handler2.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                playerContainer.animate()
+                        .setInterpolator(new AccelerateDecelerateInterpolator())
+                        .translationX(-1 * playerContainer.getWidth());
+            }
+        }, 50);
+
+        playerContainer.setVisibility(View.VISIBLE);
+
+    }
+
     public void showPlayer3() {
 
         isPlayerVisible = true;
@@ -1972,12 +2452,50 @@ public class HomeActivity extends AppCompatActivity
 
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*
+     * Methods and classes for updating visualizer.
+     * MyAsyncTask -> AsyncTask to update visualiser in background thread.
+     * updatePoints() -> Actual method to render the DNA.
+     */
+
     public void updateVisualizer(byte[] bytes) {
         mBytes = bytes;
         try {
             new MyAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public class MyAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            updatePoints();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            main.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    playerFragment.mVisualizerView.updateVisualizer(mBytes);
+                    if (playerFragment.mVisualizerView.bmp != null) {
+                        if (navImageView != null) {
+                            try {
+                                Bitmap croppedBmp = Bitmap.createBitmap(playerFragment.mVisualizerView.bmp, 0, (int) (75 * ratio), screen_width, screen_width);
+                                navImageView.setImageBitmap(croppedBmp);
+                            } catch (Exception | OutOfMemoryError e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
+            });
         }
     }
 
@@ -2092,6 +2610,12 @@ public class HomeActivity extends AppCompatActivity
 
         }
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*
+     * PlayerFragment callbacks START
+     */
 
     @Override
     public void onComplete() {
@@ -2260,34 +2784,126 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    public void onQueueItemClicked2(int position) {
-        if (position <= (queue.getQueue().size() - 1)) {
-            queueCurrentIndex = position;
-            UnifiedTrack ut = queue.getQueue().get(position);
-            if (ut.getType()) {
-                LocalTrack track = ut.getLocalTrack();
-                localSelectedTrack = track;
-                streamSelected = false;
-                localSelected = true;
-                queueCall = true;
-                isReloaded = false;
-                onLocalTrackSelected(position);
-            } else {
-                Track track = ut.getStreamTrack();
-                selectedTrack = track;
-                streamSelected = true;
-                localSelected = false;
-                queueCall = true;
-                isReloaded = false;
-                onTrackSelected(position);
+    @Override
+    public void onEqualizerClicked() {
+        hideAllFrags();
+        hidePlayer2();
+        showFragment("equalizer");
+    }
+
+    @Override
+    public void onQueueClicked() {
+        hideAllFrags();
+        hidePlayer3();
+        showFragment("queue");
+    }
+
+    @Override
+    public void onPrepared() {
+        showNotification();
+    }
+
+    @Override
+    public void onFullScreen() {
+        if (isFullScreenEnabled) {
+            Toast.makeText(this, "Long Press to Exit", Toast.LENGTH_SHORT).show();
+
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.hide();
+        } else {
+//            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.show();
+        }
+    }
+
+    @Override
+    public void onSettingsClicked() {
+        if (playerFragment.smallPlayer != null) {
+            hidePlayer();
+            isPlayerVisible = false;
+            showFragment("settings");
+        }
+    }
+
+    @Override
+    public void onAddedtoFavfromPlayer() {
+        FavouritesFragment favouritesFragment = (FavouritesFragment) fragMan.findFragmentByTag("favourite");
+        if (favouritesFragment != null) {
+            favouritesFragment.updateData();
+        }
+    }
+
+    @Override
+    public void onShuffleEnabled() {
+        originalQueue = new Queue();
+        for (UnifiedTrack ut : queue.getQueue()) {
+            originalQueue.addToQueue(ut);
+        }
+        originalQueueIndex = queueCurrentIndex;
+        UnifiedTrack ut = queue.getQueue().get(queueCurrentIndex);
+        Collections.shuffle(queue.getQueue());
+        for (int i = 0; i < queue.getQueue().size(); i++) {
+            if (ut.equals(queue.getQueue().get(i))) {
+                queue.getQueue().remove(i);
+                break;
             }
         }
+        queue.getQueue().add(0, ut);
+        queueCurrentIndex = 0;
+
+        new SaveQueue().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    @Override
+    public void onShuffleDisabled() {
+        UnifiedTrack ut1 = queue.getQueue().get(queueCurrentIndex);
+        for (int i = 0; i < queue.getQueue().size(); i++) {
+            UnifiedTrack ut = queue.getQueue().get(i);
+            if (!originalQueue.getQueue().contains(ut)) {
+                originalQueue.getQueue().add(ut);
+            }
+        }
+        queue.getQueue().clear();
+        for (UnifiedTrack ut : originalQueue.getQueue()) {
+            queue.addToQueue(ut);
+        }
+        for (int i = 0; i < queue.getQueue().size(); i++) {
+            if (ut1.equals(queue.getQueue().get(i))) {
+                queueCurrentIndex = i;
+                break;
+            }
+        }
+
+        new SaveQueue().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    @Override
+    public void onSmallPlayerTouched() {
+        if (!isPlayerVisible) {
+            isPlayerVisible = true;
+//            hideTabs();
+            showPlayer();
+        } else {
+            isPlayerVisible = false;
+//            showTabs();
+            hidePlayer();
+        }
+    }
+
+    @Override
+    public void onPlayPause() {
+        showNotification();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     /*
-     * ViewPlaylistFragment callbacks start
+     * ViewPlaylistFragment callbacks START
      */
 
     @Override
@@ -2364,14 +2980,21 @@ public class HomeActivity extends AppCompatActivity
         Toast.makeText(ctx, "Added " + pl.getSongList().size() + " song(s) to queue", Toast.LENGTH_SHORT).show();
     }
 
-    /*
-     * ViewPlaylistFragment callbacks end
-     */
+    @Override
+    public void onPlaylistEmpty() {
+        AllPlaylistsFragment plFrag = (AllPlaylistsFragment) fragMan.findFragmentByTag("allPlaylists");
+        if (plFrag != null && plFrag.vpAdapter != null) {
+            plFrag.vpAdapter.notifyItemRemoved(tempPlaylistNumber);
+        }
+        if (pAdapter != null) {
+            pAdapter.notifyItemRemoved(tempPlaylistNumber);
+        }
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     /*
-     *  FavouriteFragment callbacks start
+     *  FavouriteFragment callbacks START
      */
 
     @Override
@@ -2442,15 +3065,12 @@ public class HomeActivity extends AppCompatActivity
         Toast.makeText(ctx, "Added " + favouriteTracks.getFavourite().size() + " song(s) to queue", Toast.LENGTH_SHORT).show();
     }
 
-    /*
-     *  FavouriteFragment callbacks end
-     */
-
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     /*
-     *  QueueFragment callbacks start
+     *  QueueFragment callbacks START
      */
+
     @Override
     public void onQueueItemClicked(final int position) {
 
@@ -2495,30 +3115,11 @@ public class HomeActivity extends AppCompatActivity
         new SaveQueue().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    /*
-     *  QueueFragment callbacks end
-     */
-
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    @Override
-    public void onEqualizerClicked() {
-        hideAllFrags();
-        hidePlayer2();
-        showFragment("equalizer");
-    }
-
-    @Override
-    public void onQueueClicked() {
-        hideAllFrags();
-        hidePlayer3();
-        showFragment("queue");
-    }
-
-    @Override
-    public void onPrepared() {
-        showNotification();
-    }
+    /*
+     *  AllPlaylistsFragment callbacks START
+     */
 
     @Override
     public void onPlaylistTouched(int pos) {
@@ -2533,6 +3134,22 @@ public class HomeActivity extends AppCompatActivity
     }
 
     @Override
+    public void onPlaylistRename() {
+        renamePlaylistDialog(allPlaylists.getPlaylists().get(renamePlaylistNumber).getPlaylistName());
+    }
+
+    @Override
+    public void newPlaylistListener() {
+        showFragment("newPlaylist");
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*
+     * FolderFragment callbacks START
+     */
+
+    @Override
     public void onFolderClicked(int pos) {
         tempMusicFolder = allMusicFolders.getMusicFolders().get(pos);
         tempFolderContent = tempMusicFolder.getLocalTracks();
@@ -2542,7 +3159,7 @@ public class HomeActivity extends AppCompatActivity
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     /*
-     * FolderContentFragment callbacks start
+     * FolderContentFragment callbacks START
      */
 
     @Override
@@ -2573,21 +3190,22 @@ public class HomeActivity extends AppCompatActivity
         Toast.makeText(ctx, "Added " + list.size() + " song(s) to queue", Toast.LENGTH_SHORT).show();
     }
 
-    /*
-     * FolderContentFragment callbacks end
-     */
-
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    @Override
-    public void onShare(Bitmap bmp, String fileName) {
-        FileUtils.shareBitmapAsImage(bmp, fileName, this);
-    }
+    /*
+     * AlbumFragment callbacks START
+     */
 
     @Override
     public void onAlbumClick() {
         showFragment("viewAlbum");
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*
+     * ViewAlbumFragment callbacks START
+     */
 
     @Override
     public void onAlbumSongClickListener() {
@@ -2612,6 +3230,55 @@ public class HomeActivity extends AppCompatActivity
         }
         Toast.makeText(ctx, "Added " + list.size() + " song(s) to queue", Toast.LENGTH_SHORT).show();
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*
+     * ArtistFragment callbacks START
+     */
+
+    @Override
+    public void onArtistClick() {
+        searchView.setQuery("", true);
+        searchView.setIconified(true);
+        showFragment("viewArtist");
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*
+     * ViewArtistFragment callbacks START
+     */
+
+    @Override
+    public void onArtistPlayAll() {
+        onQueueItemClicked(0);
+        showPlayer();
+    }
+
+    @Override
+    public void addArtistToQueue() {
+        List<LocalTrack> list = tempArtist.getArtistSongs();
+        for (LocalTrack lt : list) {
+            HomeActivity.queue.addToQueue(new UnifiedTrack(true, lt, null));
+        }
+        if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
+            playerFragment.snappyRecyclerView.getAdapter().notifyDataSetChanged();
+            playerFragment.snappyRecyclerView.setTransparency();
+        }
+        Toast.makeText(ctx, "Added " + list.size() + " song(s) to queue", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onArtistSongClick() {
+        onLocalTrackSelected(-1);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*
+     * RecentsFragment callbacks START
+     */
 
     @Override
     public void onRecentItemClicked(boolean isLocal) {
@@ -2639,74 +3306,11 @@ public class HomeActivity extends AppCompatActivity
         Toast.makeText(ctx, "Added " + recentlyPlayed.getRecentlyPlayed().size() + " song(s) to queue", Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void onPlayPause() {
-        showNotification();
-    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    @Override
-    public void onFullScreen() {
-        if (isFullScreenEnabled) {
-            Toast.makeText(this, "Long Press to Exit", Toast.LENGTH_SHORT).show();
-
-//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-//            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-
-            ActionBar actionBar = getSupportActionBar();
-            actionBar.hide();
-        } else {
-//            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-            ActionBar actionBar = getSupportActionBar();
-            actionBar.show();
-        }
-    }
-
-    @Override
-    public void onArtistClick() {
-        searchView.setQuery("", true);
-        searchView.setIconified(true);
-        showFragment("viewArtist");
-    }
-
-    @Override
-    public void onArtistPlayAll() {
-        onQueueItemClicked(0);
-        showPlayer();
-    }
-
-    @Override
-    public void addArtistToQueue() {
-        List<LocalTrack> list = tempArtist.getArtistSongs();
-        for (LocalTrack lt : list) {
-            HomeActivity.queue.addToQueue(new UnifiedTrack(true, lt, null));
-        }
-        if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
-            playerFragment.snappyRecyclerView.getAdapter().notifyDataSetChanged();
-            playerFragment.snappyRecyclerView.setTransparency();
-        }
-        Toast.makeText(ctx, "Added " + list.size() + " song(s) to queue", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onArtistSongClick() {
-        onLocalTrackSelected(-1);
-    }
-
-    @Override
-    public void onSettingsClicked() {
-        if (playerFragment.smallPlayer != null) {
-            hidePlayer();
-//            showTabs();
-            isPlayerVisible = false;
-            showFragment("settings");
-        }
-    }
-
-    @Override
-    public void onPlaylsitRename() {
-        renamePlaylistDialog(allPlaylists.getPlaylists().get(renamePlaylistNumber).getPlaylistName());
-    }
+    /*
+     * SettingsFragment callbacks START
+     */
 
     @Override
     public void onColorChanged() {
@@ -2722,20 +3326,15 @@ public class HomeActivity extends AppCompatActivity
     }
 
     @Override
-    public void newPlaylistListener() {
-        showFragment("newPlaylist");
+    public void onAboutClicked() {
+        showFragment("About");
     }
 
-    @Override
-    public void onPlaylistEmpty() {
-        PlayListFragment plFrag = (PlayListFragment) fragMan.findFragmentByTag("allPlaylists");
-        if (plFrag != null && plFrag.vpAdapter != null) {
-            plFrag.vpAdapter.notifyItemRemoved(tempPlaylistNumber);
-        }
-        if (pAdapter != null) {
-            pAdapter.notifyItemRemoved(tempPlaylistNumber);
-        }
-    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*
+     * NewPlaylistFragment callbacks START
+     */
 
     @Override
     public void onCancel() {
@@ -2752,13 +3351,11 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public void onAddedtoFavfromPlayer() {
-        FavouritesFragment favouritesFragment = (FavouritesFragment) fragMan.findFragmentByTag("favourite");
-        if (favouritesFragment != null) {
-            favouritesFragment.updateData();
-        }
-    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*
+     * HeadsetReciever callbacks START
+     */
 
     @Override
     public void onHeadsetRemoved() {
@@ -2811,54 +3408,11 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public void onShuffleEnabled() {
-        originalQueue = new Queue();
-        for (UnifiedTrack ut : queue.getQueue()) {
-            originalQueue.addToQueue(ut);
-        }
-        originalQueueIndex = queueCurrentIndex;
-        UnifiedTrack ut = queue.getQueue().get(queueCurrentIndex);
-        Collections.shuffle(queue.getQueue());
-        for (int i = 0; i < queue.getQueue().size(); i++) {
-            if (ut.equals(queue.getQueue().get(i))) {
-                queue.getQueue().remove(i);
-                break;
-            }
-        }
-        queue.getQueue().add(0, ut);
-        queueCurrentIndex = 0;
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
-        new SaveQueue().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    }
-
-    @Override
-    public void onShuffleDisabled() {
-        UnifiedTrack ut1 = queue.getQueue().get(queueCurrentIndex);
-        for (int i = 0; i < queue.getQueue().size(); i++) {
-            UnifiedTrack ut = queue.getQueue().get(i);
-            if (!originalQueue.getQueue().contains(ut)) {
-                originalQueue.getQueue().add(ut);
-            }
-        }
-        queue.getQueue().clear();
-        for (UnifiedTrack ut : originalQueue.getQueue()) {
-            queue.addToQueue(ut);
-        }
-        for (int i = 0; i < queue.getQueue().size(); i++) {
-            if (ut1.equals(queue.getQueue().get(i))) {
-                queueCurrentIndex = i;
-                break;
-            }
-        }
-
-        new SaveQueue().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    }
-
-    @Override
-    public void onAboutClicked() {
-        showFragment("About");
-    }
+    /*
+     * EditSongFragment callbacks START
+     */
 
     @Override
     public void onEditSongSave(boolean wasSaveSuccessful) {
@@ -2905,15 +3459,6 @@ public class HomeActivity extends AppCompatActivity
     }
 
     @Override
-    public void getNewBitmap() {
-
-        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-        photoPickerIntent.setType("image/*");
-        startActivityForResult(photoPickerIntent, 1);
-
-    }
-
-    @Override
     public void deleteMediaStoreCache() {
         File dir = new File(Environment.getExternalStorageDirectory() + "/Android/data/com.android.providers.media/albumthumbs");
         if (dir.isDirectory()) {
@@ -2926,12 +3471,18 @@ public class HomeActivity extends AppCompatActivity
     }
 
     @Override
-    public PlayerFragment getPlayerFragment() {
-        return playerFragment;
+    public void getNewBitmap() {
+
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, 1);
+
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
     /*
-     * EqualizerFragment callbacks start
+     * EqualizerFragment callbacks START
      */
 
     @Override
@@ -2975,99 +3526,20 @@ public class HomeActivity extends AppCompatActivity
         equalizerModel.isEqualizerEnabled = isChecked;
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
     /*
-     * EqualizerFragment callbacks end
+     * ServiceCallbacks callbacks START
      */
 
-    public class MyAsyncTask extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            updatePoints();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            main.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    playerFragment.mVisualizerView.updateVisualizer(mBytes);
-                    if (playerFragment.mVisualizerView.bmp != null) {
-                        if (navImageView != null) {
-                            try {
-                                Bitmap croppedBmp = Bitmap.createBitmap(playerFragment.mVisualizerView.bmp, 0, (int) (75 * ratio), screen_width, screen_width);
-                                navImageView.setImageBitmap(croppedBmp);
-                            } catch (Exception | OutOfMemoryError e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                }
-            });
-        }
-    }
-
     @Override
-    protected void onPause() {
-        super.onPause();
-
-        new SaveVersionCode().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        new SaveData().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        new SaveSettings().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        new SaveQueue().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
-        try {
-            prefsEditor.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+    public PlayerFragment getPlayerFragment() {
+        return playerFragment;
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unregisterReceiver(headSetReceiver);
-        RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(this);
-        refWatcher.watch(this);
-        TelephonyManager mgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-        if (mgr != null) {
-            mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE);
-        }
-        if (bound) {
-            myService.setCallbacks(null); // unregister
-            unbindService(serviceConnection);
-            bound = false;
-        }
-    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
 
-    @Override
-    public void onSmallPlayerTouched() {
-        if (!isPlayerVisible) {
-            isPlayerVisible = true;
-//            hideTabs();
-            showPlayer();
-        } else {
-            isPlayerVisible = false;
-//            showTabs();
-            hidePlayer();
-        }
-    }
-
-    public void hideKeyboard() {
-        View view = this.getCurrentFocus();
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
-    }
 
     class CancelCall implements Runnable {
 
@@ -3075,6 +3547,30 @@ public class HomeActivity extends AppCompatActivity
         public void run() {
             if (call != null)
                 call.cancel();
+        }
+    }
+
+    public void onQueueItemClicked2(int position) {
+        if (position <= (queue.getQueue().size() - 1)) {
+            queueCurrentIndex = position;
+            UnifiedTrack ut = queue.getQueue().get(position);
+            if (ut.getType()) {
+                LocalTrack track = ut.getLocalTrack();
+                localSelectedTrack = track;
+                streamSelected = false;
+                localSelected = true;
+                queueCall = true;
+                isReloaded = false;
+                onLocalTrackSelected(position);
+            } else {
+                Track track = ut.getStreamTrack();
+                selectedTrack = track;
+                streamSelected = true;
+                localSelected = false;
+                queueCall = true;
+                isReloaded = false;
+                onTrackSelected(position);
+            }
         }
     }
 
@@ -3121,7 +3617,7 @@ public class HomeActivity extends AppCompatActivity
                                 playlistNothingText.setVisibility(View.INVISIBLE);
                             }
                         }
-                        PlayListFragment plFrag = (PlayListFragment) fragMan.findFragmentByTag("allPlaylists");
+                        AllPlaylistsFragment plFrag = (AllPlaylistsFragment) fragMan.findFragmentByTag("allPlaylists");
                         if (plFrag != null) {
                             plFrag.dataChanged();
                         }
@@ -3170,7 +3666,7 @@ public class HomeActivity extends AppCompatActivity
                         if (pAdapter != null) {
                             pAdapter.notifyItemChanged(renamePlaylistNumber);
                         }
-                        PlayListFragment plFrag = (PlayListFragment) fragMan.findFragmentByTag("allPlaylists");
+                        AllPlaylistsFragment plFrag = (AllPlaylistsFragment) fragMan.findFragmentByTag("allPlaylists");
                         if (plFrag != null) {
                             plFrag.itemChanged(renamePlaylistNumber);
                         }
@@ -3416,9 +3912,9 @@ public class HomeActivity extends AppCompatActivity
             navigationView.setCheckedItem(R.id.nav_playlists);
             isNewPlaylistVisible = true;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-            AddToPlaylistFragment newFragment = (AddToPlaylistFragment) fm.findFragmentByTag("newPlaylist");
+            NewPlaylistFragment newFragment = (NewPlaylistFragment) fm.findFragmentByTag("newPlaylist");
             if (newFragment == null) {
-                newFragment = new AddToPlaylistFragment();
+                newFragment = new NewPlaylistFragment();
             }
             fm.beginTransaction()
                     .setCustomAnimations(R.anim.slide_left,
@@ -3433,9 +3929,9 @@ public class HomeActivity extends AppCompatActivity
             navigationView.setCheckedItem(R.id.nav_playlists);
             isAllPlaylistVisible = true;
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-            PlayListFragment newFragment = (PlayListFragment) fm.findFragmentByTag("allPlaylists");
+            AllPlaylistsFragment newFragment = (AllPlaylistsFragment) fm.findFragmentByTag("allPlaylists");
             if (newFragment == null) {
-                newFragment = new PlayListFragment();
+                newFragment = new AllPlaylistsFragment();
             }
             fm.beginTransaction()
                     .setCustomAnimations(R.anim.slide_left,
@@ -3830,411 +4326,6 @@ public class HomeActivity extends AppCompatActivity
         if (!isRepeat)
             favouriteTracks.getFavourite().add(ut);
 
-    }
-
-    public class loadSavedData extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-            getSavedData();
-            return "done";
-        }
-
-        @Override
-        protected void onPostExecute(String aVoid) {
-            super.onPostExecute(aVoid);
-            progress.dismiss();
-            main.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-
-                    if (settings == null) {
-                        settings = new Settings();
-                    }
-
-                    themeColor = settings.getThemeColor();
-                    minAudioStrength = settings.getMinAudioStrength();
-
-
-                    navigationView.setItemIconTintList(ColorStateList.valueOf(themeColor));
-                    collapsingToolbar.setContentScrimColor(themeColor);
-                    customLinearGradient.setStartColor(themeColor);
-                    customLinearGradient.invalidate();
-
-                    try {
-                        if (Build.VERSION.SDK_INT >= 21) {
-                            Window window = ((Activity) ctx).getWindow();
-                            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-                            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                            window.setStatusBarColor(CommonUtils.getDarkColor(themeColor));
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    if (prevVersionCode == -1 || prevVersionCode <= 30) {
-                        savedDNAs = null;
-                    }
-
-                    if (allPlaylists == null) {
-                        allPlaylists = new AllPlaylists();
-                    }
-
-                    if (tempPlaylist == null) {
-                        tempPlaylist = new Playlist(null, null);
-                    }
-
-                    if (queue == null) {
-                        queue = new Queue();
-                    }
-
-                    if (favouriteTracks == null) {
-                        favouriteTracks = new Favourite();
-                    }
-
-                    if (recentlyPlayed == null) {
-                        recentlyPlayed = new RecentlyPlayed();
-                    }
-                    if (allMusicFolders == null) {
-                        allMusicFolders = new AllMusicFolders();
-                    }
-                    if (savedDNAs == null) {
-                        savedDNAs = new AllSavedDNA();
-                    }
-
-                    if (equalizerModel == null) {
-                        equalizerModel = new EqualizerModel();
-                        isEqualizerEnabled = true;
-                        isEqualizerReloaded = false;
-                    } else {
-                        isEqualizerEnabled = equalizerModel.isEqualizerEnabled();
-                        isEqualizerReloaded = true;
-                        seekbarpos = equalizerModel.getSeekbarpos();
-                        presetPos = equalizerModel.getPresetPos();
-                        reverbPreset = equalizerModel.getReverbPreset();
-                        bassStrength = equalizerModel.getBassStrength();
-                    }
-
-                    new SaveVersionCode().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
-                    getLocalSongs();
-                    refreshHeaderImages();
-
-                    if (queue != null && queue.getQueue().size() != 0) {
-                        UnifiedTrack utHome = queue.getQueue().get(queueCurrentIndex);
-                        if (utHome.getType()) {
-                            imgLoader.DisplayImage(utHome.getLocalTrack().getPath(), spImgHome);
-                            spTitleHome.setText(utHome.getLocalTrack().getTitle());
-                        } else {
-                            imgLoader.DisplayImage(utHome.getStreamTrack().getArtworkURL(), spImgHome);
-                            spTitleHome.setText(utHome.getStreamTrack().getTitle());
-                        }
-                    } else {
-                        bottomToolbar.setVisibility(GONE);
-                    }
-
-                    for (int i = 0; i < Math.min(10, recentlyPlayed.getRecentlyPlayed().size()); i++) {
-                        continuePlayingList.add(recentlyPlayed.getRecentlyPlayed().get(i));
-                    }
-
-                    rAdapter = new RecentsListHorizontalAdapter(continuePlayingList, ctx);
-                    recentsRecycler = (RecyclerView) findViewById(R.id.recentsMusicList_home);
-                    recentsRecycler.setNestedScrollingEnabled(false);
-                    LinearLayoutManager mLayoutManager3 = new LinearLayoutManager(ctx, LinearLayoutManager.HORIZONTAL, false);
-                    recentsRecycler.setLayoutManager(mLayoutManager3);
-                    recentsRecycler.setItemAnimator(new DefaultItemAnimator());
-                    AlphaInAnimationAdapter alphaAdapter3 = new AlphaInAnimationAdapter(rAdapter);
-                    alphaAdapter3.setFirstOnly(false);
-                    recentsRecycler.setAdapter(alphaAdapter3);
-
-                    recentsRecycler.addOnItemTouchListener(new ClickItemTouchListener(recentsRecycler) {
-                        @Override
-                        public boolean onClick(RecyclerView parent, View view, final int position, long id) {
-                            UnifiedTrack ut = continuePlayingList.get(position);
-                            boolean isRepeat = false;
-                            int pos = 0;
-                            for (int i = 0; i < queue.getQueue().size(); i++) {
-                                UnifiedTrack ut1 = queue.getQueue().get(i);
-                                if (ut1.getType() && ut.getType() && ut1.getLocalTrack().getTitle().equals(ut.getLocalTrack().getTitle())) {
-                                    isRepeat = true;
-                                    pos = i;
-                                    break;
-                                }
-                                if (!ut1.getType() && !ut.getType() && ut1.getStreamTrack().getTitle().equals(ut.getStreamTrack().getTitle())) {
-                                    isRepeat = true;
-                                    pos = i;
-                                    break;
-                                }
-                            }
-                            if (!isRepeat) {
-                                if (ut.getType()) {
-                                    LocalTrack track = ut.getLocalTrack();
-                                    if (queue.getQueue().size() == 0) {
-                                        queueCurrentIndex = 0;
-                                        queue.getQueue().add(new UnifiedTrack(true, track, null));
-                                    } else if (queueCurrentIndex == queue.getQueue().size() - 1) {
-                                        queueCurrentIndex++;
-                                        queue.getQueue().add(new UnifiedTrack(true, track, null));
-                                    } else if (isReloaded) {
-                                        isReloaded = false;
-                                        queueCurrentIndex = queue.getQueue().size();
-                                        queue.getQueue().add(new UnifiedTrack(true, track, null));
-                                    } else {
-                                        queue.getQueue().add(++queueCurrentIndex, new UnifiedTrack(true, track, null));
-                                    }
-                                    localSelectedTrack = track;
-                                    streamSelected = false;
-                                    localSelected = true;
-                                    queueCall = false;
-                                    isReloaded = false;
-                                    onLocalTrackSelected(position);
-                                } else {
-                                    Track track = ut.getStreamTrack();
-                                    if (queue.getQueue().size() == 0) {
-                                        queueCurrentIndex = 0;
-                                        queue.getQueue().add(new UnifiedTrack(false, null, track));
-                                    } else if (queueCurrentIndex == queue.getQueue().size() - 1) {
-                                        queueCurrentIndex++;
-                                        queue.getQueue().add(new UnifiedTrack(false, null, track));
-                                    } else if (isReloaded) {
-                                        isReloaded = false;
-                                        queueCurrentIndex = queue.getQueue().size();
-                                        queue.getQueue().add(new UnifiedTrack(false, null, track));
-                                    } else {
-                                        queue.getQueue().add(++queueCurrentIndex, new UnifiedTrack(false, null, track));
-                                    }
-                                    selectedTrack = track;
-                                    streamSelected = true;
-                                    localSelected = false;
-                                    queueCall = false;
-                                    isReloaded = false;
-                                    onTrackSelected(position);
-                                }
-                            } else {
-                                onQueueItemClicked(pos);
-                            }
-
-                            return true;
-                        }
-
-                        @Override
-                        public boolean onLongClick(RecyclerView parent, View view, final int position, long id) {
-                            final UnifiedTrack ut = continuePlayingList.get(position);
-                            CustomGeneralBottomSheetDialog generalBottomSheetDialog = new CustomGeneralBottomSheetDialog();
-                            generalBottomSheetDialog.setPosition(position);
-                            generalBottomSheetDialog.setTrack(ut);
-                            generalBottomSheetDialog.setFragment("RecentHorizontalList");
-                            generalBottomSheetDialog.show(getSupportFragmentManager(), "general_bottom_sheet_dialog");
-                            return true;
-                        }
-
-                        @Override
-                        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-                        }
-                    });
-
-                    pAdapter = new PlayListsHorizontalAdapter(allPlaylists.getPlaylists(), ctx);
-                    playlistsRecycler = (RecyclerView) findViewById(R.id.playlist_home);
-                    playlistsRecycler.setNestedScrollingEnabled(false);
-                    LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(ctx, LinearLayoutManager.HORIZONTAL, false);
-                    playlistsRecycler.setLayoutManager(mLayoutManager2);
-                    playlistsRecycler.setItemAnimator(new DefaultItemAnimator());
-                    AlphaInAnimationAdapter alphaAdapter2 = new AlphaInAnimationAdapter(pAdapter);
-                    alphaAdapter2.setFirstOnly(false);
-                    playlistsRecycler.setAdapter(alphaAdapter2);
-
-                    playlistsRecycler.addOnItemTouchListener(new ClickItemTouchListener(playlistsRecycler) {
-                        @Override
-                        public boolean onClick(RecyclerView parent, View view, final int position, long id) {
-                            tempPlaylist = allPlaylists.getPlaylists().get(position);
-                            tempPlaylistNumber = position;
-                            showFragment("playlist");
-                            return true;
-                        }
-
-                        @Override
-                        public boolean onLongClick(RecyclerView parent, View view, final int position, long id) {
-                            PopupMenu popup = new PopupMenu(ctx, view);
-                            popup.getMenuInflater().inflate(R.menu.playlist_popup, popup.getMenu());
-
-                            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                                @Override
-                                public boolean onMenuItemClick(MenuItem item) {
-                                    if (item.getTitle().equals("Play")) {
-
-                                        tempPlaylist = allPlaylists.getPlaylists().get(position);
-                                        tempPlaylistNumber = position;
-
-                                        int size = tempPlaylist.getSongList().size();
-                                        queue.getQueue().clear();
-                                        for (int i = 0; i < size; i++) {
-                                            queue.addToQueue(tempPlaylist.getSongList().get(i));
-                                        }
-
-                                        queueCurrentIndex = 0;
-                                        onPlaylistPlayAll();
-                                    } else if (item.getTitle().equals("Add to Queue")) {
-                                        Playlist pl = allPlaylists.getPlaylists().get(position);
-                                        for (UnifiedTrack ut : pl.getSongList()) {
-                                            queue.addToQueue(ut);
-                                        }
-                                    } else if (item.getTitle().equals("Delete")) {
-                                        allPlaylists.getPlaylists().remove(position);
-                                        PlayListFragment plFrag = (PlayListFragment) fragMan.findFragmentByTag("allPlaylists");
-                                        if (plFrag != null) {
-                                            plFrag.itemRemoved(position);
-                                        }
-                                        pAdapter.notifyItemRemoved(position);
-                                        new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                                    } else if (item.getTitle().equals("Rename")) {
-                                        renamePlaylistNumber = position;
-                                        renamePlaylistDialog(allPlaylists.getPlaylists().get(position).getPlaylistName());
-                                    }
-                                    return true;
-                                }
-                            });
-                            popup.show();
-                            return true;
-                        }
-
-                        @Override
-                        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-                        }
-                    });
-
-                    adapter = new LocalTracksHorizontalAdapter(finalLocalSearchResultList, ctx);
-                    localsongsRecyclerView = (RecyclerView) findViewById(R.id.localMusicList_home);
-                    LinearLayoutManager mLayoutManager = new LinearLayoutManager(ctx, LinearLayoutManager.HORIZONTAL, false);
-                    localsongsRecyclerView.setLayoutManager(mLayoutManager);
-                    localsongsRecyclerView.setItemAnimator(new DefaultItemAnimator());
-                    AlphaInAnimationAdapter alphaAdapter = new AlphaInAnimationAdapter(adapter);
-                    alphaAdapter.setFirstOnly(false);
-                    localsongsRecyclerView.setAdapter(alphaAdapter);
-
-                    localsongsRecyclerView.addOnItemTouchListener(new ClickItemTouchListener(localsongsRecyclerView) {
-                        @Override
-                        public boolean onClick(RecyclerView parent, View view, int position, long id) {
-                            LocalTrack track = finalLocalSearchResultList.get(position);
-                            if (queue.getQueue().size() == 0) {
-                                queueCurrentIndex = 0;
-                                queue.getQueue().add(new UnifiedTrack(true, track, null));
-                            } else if (queueCurrentIndex == queue.getQueue().size() - 1) {
-                                queueCurrentIndex++;
-                                queue.getQueue().add(new UnifiedTrack(true, track, null));
-                            } else if (isReloaded) {
-                                isReloaded = false;
-                                queueCurrentIndex = queue.getQueue().size();
-                                queue.getQueue().add(new UnifiedTrack(true, track, null));
-                            } else {
-                                queue.getQueue().add(++queueCurrentIndex, new UnifiedTrack(true, track, null));
-                            }
-                            localSelectedTrack = track;
-                            streamSelected = false;
-                            localSelected = true;
-                            queueCall = false;
-                            isReloaded = false;
-                            onLocalTrackSelected(position);
-                            return true;
-                        }
-
-                        @Override
-                        public boolean onLongClick(RecyclerView parent, View view, final int position, long id) {
-                            CustomLocalBottomSheetDialog localBottomSheetDialog = new CustomLocalBottomSheetDialog();
-                            localBottomSheetDialog.setPosition(position);
-                            localBottomSheetDialog.setLocalTrack(finalLocalSearchResultList.get(position));
-                            localBottomSheetDialog.show(getSupportFragmentManager(), "local_song_bottom_sheet");
-                            return true;
-                        }
-
-                        @Override
-                        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-                        }
-                    });
-
-                    soundcloudRecyclerView = (RecyclerView) findViewById(R.id.trackList_home);
-
-                    soundcloudRecyclerView.addOnItemTouchListener(new ClickItemTouchListener(soundcloudRecyclerView) {
-                        @Override
-                        public boolean onClick(RecyclerView parent, View view, int position, long id) {
-                            Track track = streamingTrackList.get(position);
-                            if (queue.getQueue().size() == 0) {
-                                queueCurrentIndex = 0;
-                                queue.getQueue().add(new UnifiedTrack(false, null, track));
-                            } else if (queueCurrentIndex == queue.getQueue().size() - 1) {
-                                queueCurrentIndex++;
-                                queue.getQueue().add(new UnifiedTrack(false, null, track));
-                            } else if (isReloaded) {
-                                isReloaded = false;
-                                queueCurrentIndex = queue.getQueue().size();
-                                queue.getQueue().add(new UnifiedTrack(false, null, track));
-                            } else {
-                                queue.getQueue().add(++queueCurrentIndex, new UnifiedTrack(false, null, track));
-                            }
-                            selectedTrack = track;
-                            streamSelected = true;
-                            localSelected = false;
-                            queueCall = false;
-                            isReloaded = false;
-                            onTrackSelected(position);
-                            return true;
-                        }
-
-                        @Override
-                        public boolean onLongClick(RecyclerView parent, View view, final int position, long id) {
-                            CustomGeneralBottomSheetDialog generalBottomSheetDialog = new CustomGeneralBottomSheetDialog();
-                            generalBottomSheetDialog.setPosition(position);
-                            generalBottomSheetDialog.setTrack(new UnifiedTrack(false, null, streamingTrackList.get(position)));
-                            generalBottomSheetDialog.setFragment("Stream");
-                            generalBottomSheetDialog.show(getSupportFragmentManager(), "general_bottom_sheet_dialog");
-                            return true;
-                        }
-
-                        @Override
-                        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-                        }
-                    });
-
-                    playerContainer = findViewById(R.id.player_frag_container);
-
-                    if (finalLocalSearchResultList.size() == 0) {
-                        localsongsRecyclerView.setVisibility(GONE);
-                        localNothingText.setVisibility(View.VISIBLE);
-                    } else {
-                        localsongsRecyclerView.setVisibility(View.VISIBLE);
-                        localNothingText.setVisibility(View.INVISIBLE);
-                    }
-
-                    if (recentlyPlayed.getRecentlyPlayed().size() == 0) {
-                        recentsRecycler.setVisibility(GONE);
-                        recentsNothingText.setVisibility(View.VISIBLE);
-                    } else {
-                        recentsRecycler.setVisibility(View.VISIBLE);
-                        recentsNothingText.setVisibility(View.INVISIBLE);
-                    }
-
-                    if (streamingTrackList.size() == 0) {
-                        streamRecyclerContainer.setVisibility(GONE);
-                        streamNothingText.setVisibility(View.VISIBLE);
-                    } else {
-                        streamRecyclerContainer.setVisibility(View.VISIBLE);
-                        streamNothingText.setVisibility(View.INVISIBLE);
-                    }
-
-                    if (allPlaylists.getPlaylists().size() == 0) {
-                        playlistsRecycler.setVisibility(GONE);
-                        playlistNothingText.setVisibility(View.VISIBLE);
-                    } else {
-                        playlistsRecycler.setVisibility(View.VISIBLE);
-                        playlistNothingText.setVisibility(View.INVISIBLE);
-                    }
-
-                }
-            });
-        }
     }
 
     public class SaveData extends AsyncTask<Void, Void, Void> {
@@ -4718,7 +4809,7 @@ public class HomeActivity extends AppCompatActivity
     }
 
     public void updateAllPlaylistFragment() {
-        PlayListFragment playListFragment = (PlayListFragment) fragMan.findFragmentByTag("allPlaylists");
+        AllPlaylistsFragment playListFragment = (AllPlaylistsFragment) fragMan.findFragmentByTag("allPlaylists");
         if (playListFragment != null && playListFragment.allPlaylistRecycler != null) {
             playListFragment.allPlaylistRecycler.getAdapter().notifyDataSetChanged();
         }

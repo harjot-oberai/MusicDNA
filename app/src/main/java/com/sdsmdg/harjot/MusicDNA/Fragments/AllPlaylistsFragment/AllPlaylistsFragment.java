@@ -34,17 +34,14 @@ import com.squareup.leakcanary.RefWatcher;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PlayListFragment extends Fragment {
+public class AllPlaylistsFragment extends Fragment {
 
     public RecyclerView allPlaylistRecycler;
     public ViewAllPlaylistsRecyclerAdapter vpAdapter;
 
     LinearLayout noPlaylistContent;
 
-    onPlaylistTouchedListener mCallback;
-    onPlaylistMenuPlayAllListener mCallback2;
-    onPlaylistRenameListener mCallback3;
-    newPlaylistListerner mCallback4;
+    allPlaylistCallbackListener mCallback;
 
     LinearLayoutManager mLayoutManager2;
 
@@ -60,9 +57,19 @@ public class PlayListFragment extends Fragment {
 
     ImageView playlistFragIcon;
 
+    public interface allPlaylistCallbackListener {
+        void onPlaylistTouched(int pos);
+
+        void onPlaylistMenuPLayAll();
+
+        void onPlaylistRename();
+
+        void newPlaylistListener();
+    }
+
     ImageLoader imgLoader;
 
-    public PlayListFragment() {
+    public AllPlaylistsFragment() {
         // Required empty public constructor
     }
 
@@ -73,31 +80,11 @@ public class PlayListFragment extends Fragment {
             imgLoader = new ImageLoader(context);
             imgLoader.type = "all_playlist";
             homeActivity = (HomeActivity) context;
-            mCallback = (onPlaylistTouchedListener) context;
-            mCallback2 = (onPlaylistMenuPlayAllListener) context;
-            mCallback3 = (onPlaylistRenameListener) context;
-            mCallback4 = (newPlaylistListerner) context;
+            mCallback = (allPlaylistCallbackListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnHeadlineSelectedListener");
         }
-    }
-
-    public interface onPlaylistTouchedListener {
-        public void onPlaylistTouched(int pos);
-    }
-
-    public interface onPlaylistMenuPlayAllListener {
-        public void onPlaylistMenuPLayAll();
-    }
-
-    public interface onPlaylistRenameListener {
-        public void onPlaylsitRename();
-    }
-
-
-    public interface newPlaylistListerner {
-        public void newPlaylistListener();
     }
 
     @Override
@@ -144,7 +131,7 @@ public class PlayListFragment extends Fragment {
         addPlaylistFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallback4.newPlaylistListener();
+                mCallback.newPlaylistListener();
             }
         });
 
@@ -189,7 +176,7 @@ public class PlayListFragment extends Fragment {
                             }
                             HomeActivity.queueCurrentIndex = 0;
 
-                            mCallback2.onPlaylistMenuPLayAll();
+                            mCallback.onPlaylistMenuPLayAll();
                         } else if (item.getTitle().equals("Add to Queue")) {
                             Playlist pl = HomeActivity.allPlaylists.getPlaylists().get(position);
                             for (UnifiedTrack ut : pl.getSongList()) {
@@ -207,7 +194,7 @@ public class PlayListFragment extends Fragment {
                             homeActivity.pAdapter.notifyItemRemoved(position);
                         } else if (item.getTitle().equals("Rename")) {
                             HomeActivity.renamePlaylistNumber = position;
-                            mCallback3.onPlaylsitRename();
+                            mCallback.onPlaylistRename();
                         }
                         return true;
                     }

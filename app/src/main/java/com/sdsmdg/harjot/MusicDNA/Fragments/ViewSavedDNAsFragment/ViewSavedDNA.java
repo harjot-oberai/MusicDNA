@@ -58,8 +58,6 @@ public class ViewSavedDNA extends Fragment {
 
     LinearLayout noSavedContent;
 
-    onShareListener mCallback;
-
     ShowcaseView showCase;
 
     boolean addTextToImage = false;
@@ -75,20 +73,9 @@ public class ViewSavedDNA extends Fragment {
         // Required empty public constructor
     }
 
-    public interface onShareListener {
-        void onShare(Bitmap bmp, String fileName);
-    }
-
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        try {
-            mCallback = (onShareListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
-                    + " must implement OnHeadlineSelectedListener");
-        }
     }
 
     @Override
@@ -381,7 +368,7 @@ public class ViewSavedDNA extends Fragment {
                     } else {
                         mVisualizerView2.drawText(text.getText().toString(), addTextToImage);
                         mVisualizerView2.setDrawingCacheEnabled(true);
-                        mCallback.onShare(mVisualizerView2.getDrawingCache(), text.getText().toString());
+                        FileUtils.shareBitmapAsImage(mVisualizerView2.getDrawingCache(), text.getText().toString(), getContext());
                         mVisualizerView2.dropText();
                         mVisualizerView2.setDrawingCacheEnabled(false);
                         dialog.dismiss();

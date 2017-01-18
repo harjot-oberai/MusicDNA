@@ -67,16 +67,13 @@ public class EditLocalSongFragment extends Fragment {
     AbstractID3v2Tag id3v2Tag;
     ID3v24Tag id3v24Tag;
 
-    onEditSongSaveListener mCallback;
-    newCoverListener mCallback2;
+    EditFragmentCallbackListener mCallback;
 
     View bottomMarginLayout;
 
-    public interface onEditSongSaveListener {
+    public interface EditFragmentCallbackListener{
         void onEditSongSave(boolean wasSaveSuccessful);
-    }
 
-    public interface newCoverListener {
         void getNewBitmap();
 
         void deleteMediaStoreCache();
@@ -92,8 +89,7 @@ public class EditLocalSongFragment extends Fragment {
         ctx = context;
         try {
             imgLoader = new ImageLoader(context);
-            mCallback = (onEditSongSaveListener) context;
-            mCallback2 = (newCoverListener) context;
+            mCallback = (EditFragmentCallbackListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnHeadlineSelectedListener");

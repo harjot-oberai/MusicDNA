@@ -6,7 +6,7 @@
     android:background="@color/colorDark"
     android:clickable="true"
     android:clipToPadding="false"
-    tools:context="com.sdsmdg.harjot.MusicDNA.Fragments.NewPlaylistFragment.AddToPlaylistFragment">
+    tools:context="com.sdsmdg.harjot.MusicDNA.Fragments.NewPlaylistFragment.NewPlaylistFragment">
 
     <RelativeLayout
         android:id="@+id/add_to_playlist_action_container"

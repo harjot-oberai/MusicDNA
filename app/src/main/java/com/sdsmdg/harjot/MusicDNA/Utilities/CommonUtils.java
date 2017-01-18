@@ -1,9 +1,14 @@
 package com.sdsmdg.harjot.MusicDNA.Utilities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.util.DisplayMetrics;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+
+import com.sdsmdg.harjot.MusicDNA.Activities.HomeActivity;
 
 /**
  * Created by Harjot on 18-Jan-17.
@@ -49,6 +54,14 @@ public class CommonUtils {
         darkColor = Color.rgb(r, g, b);
 
         return darkColor;
+    }
+
+    public static void hideKeyboard(Context ctx) {
+        View view = ((HomeActivity) ctx).getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) ctx.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
 }

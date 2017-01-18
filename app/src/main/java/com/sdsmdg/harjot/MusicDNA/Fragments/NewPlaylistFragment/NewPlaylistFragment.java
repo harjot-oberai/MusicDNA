@@ -36,10 +36,10 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AddToPlaylistFragment extends Fragment {
+public class NewPlaylistFragment extends Fragment {
 
     RecyclerView rv;
-    AddToPlaylistAdapter atpAdapter;
+    NewPlaylistRecyclerAdapter atpAdapter;
 
     ImageView backBtn, backDrop;
 
@@ -58,15 +58,15 @@ public class AddToPlaylistFragment extends Fragment {
 
     View bottomMarginLayout;
 
-    public newPlaylistListener mCallback;
+    public NewPlaylistFragmentCallbackListener mCallback;
 
-    public interface newPlaylistListener {
-        public void onCancel();
+    public interface NewPlaylistFragmentCallbackListener {
+        void onCancel();
 
-        public void onDone();
+        void onDone();
     }
 
-    public AddToPlaylistFragment() {
+    public NewPlaylistFragment() {
         // Required empty public constructor
     }
 
@@ -81,7 +81,7 @@ public class AddToPlaylistFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            mCallback = (newPlaylistListener) context;
+            mCallback = (NewPlaylistFragmentCallbackListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnHeadlineSelectedListener");
@@ -91,7 +91,7 @@ public class AddToPlaylistFragment extends Fragment {
             finalList.add(HomeActivity.localTrackList.get(i));
         }
 
-        atpAdapter = new AddToPlaylistAdapter(finalList, getContext());
+        atpAdapter = new NewPlaylistRecyclerAdapter(finalList, getContext());
 
     }
 

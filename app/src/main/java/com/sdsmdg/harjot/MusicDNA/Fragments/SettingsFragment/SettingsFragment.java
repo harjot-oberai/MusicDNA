@@ -35,6 +35,8 @@ import com.sdsmdg.harjot.MusicDNA.Activities.SplashActivity;
 import com.sdsmdg.harjot.MusicDNA.Utilities.CommonUtils;
 import com.squareup.leakcanary.RefWatcher;
 
+import java.util.Set;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -52,9 +54,7 @@ public class SettingsFragment extends Fragment {
 
     View bottomMarginLayout;
 
-    onAlbumArtBackgroundToggled mCallback;
-    onColorChangedListener mCallback2;
-    onAboutClickedListener mCallback3;
+    SettingsFragmentCallbackListener mCallback;
 
     ImageView backBtn;
     TextView fragTitle;
@@ -63,16 +63,12 @@ public class SettingsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public interface onColorChangedListener {
-        public void onColorChanged();
-    }
+    public interface SettingsFragmentCallbackListener {
+        void onColorChanged();
 
-    public interface onAlbumArtBackgroundToggled {
-        public void onAlbumArtBackgroundChangedVisibility(int visibility);
-    }
+        void onAlbumArtBackgroundChangedVisibility(int visibility);
 
-    public interface onAboutClickedListener {
-        public void onAboutClicked();
+        void onAboutClicked();
     }
 
     @Override
@@ -80,9 +76,7 @@ public class SettingsFragment extends Fragment {
         super.onAttach(context);
         homeActivity = (HomeActivity) context;
         try {
-            mCallback = (onAlbumArtBackgroundToggled) getContext();
-            mCallback2 = (onColorChangedListener) getContext();
-            mCallback3 = (onAboutClickedListener) getContext();
+            mCallback = (SettingsFragmentCallbackListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnHeadlineSelectedListener");
@@ -189,7 +183,7 @@ public class SettingsFragment extends Fragment {
                                 homeActivity.customLinearGradient.setStartColor(color);
                                 homeActivity.customLinearGradient.invalidate();
                                 themeColorImg.setBackgroundColor(color);
-                                mCallback2.onColorChanged();
+                                mCallback.onColorChanged();
                                 if (Build.VERSION.SDK_INT >= 21) {
                                     Window window = ((Activity) (getContext())).getWindow();
                                     window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -247,7 +241,7 @@ public class SettingsFragment extends Fragment {
         aboutCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCallback3.onAboutClicked();
+                mCallback.onAboutClicked();
             }
         });
 

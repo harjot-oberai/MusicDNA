@@ -19,13 +19,13 @@ import java.util.List;
 /**
  * Created by Harjot on 30-Sep-16.
  */
-public class AddToPlaylistAdapter extends RecyclerView.Adapter<AddToPlaylistAdapter.MyViewHolder> {
+public class NewPlaylistRecyclerAdapter extends RecyclerView.Adapter<NewPlaylistRecyclerAdapter.MyViewHolder> {
 
     private List<LocalTrack> localTracks;
     private Context ctx;
     ImageLoader imgLoader;
 
-    public AddToPlaylistAdapter(List<LocalTrack> localTracks, Context ctx) {
+    public NewPlaylistRecyclerAdapter(List<LocalTrack> localTracks, Context ctx) {
         this.localTracks = localTracks;
         this.ctx = ctx;
         this.imgLoader = new ImageLoader(ctx);

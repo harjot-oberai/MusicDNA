@@ -5,13 +5,25 @@
     android:orientation="vertical"
     android:padding="0dp">
 
+    <TextView
+        android:id="@+id/dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="Text"
+        android:textColor="#000000"
+        android:textSize="22sp" />
+
     <EditText
         android:id="@+id/save_image_filename_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_below="@+id/dialog_title"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="13dp"
         android:text=""
         android:textSize="15dp" />
 
@@ -20,11 +32,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/save_image_filename_text"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="15dp"
-        android:text="Add Text to Image also"
-        android:checked="false"/>
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:buttonTint="@color/colorPrimary"
+        android:checked="false"
+        android:text="Add Text to Image also" />
 
     <Button
         android:id="@+id/save_image_btn"
@@ -32,7 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/text_checkbox"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="15dp"
         android:background="@color/colorPrimary"
         android:text="Save"
         android:textColor="#FFFFFF"

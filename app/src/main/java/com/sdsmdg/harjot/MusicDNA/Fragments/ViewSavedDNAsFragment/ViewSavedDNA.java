@@ -3,6 +3,7 @@ package com.sdsmdg.harjot.MusicDNA.Fragments.ViewSavedDNAsFragment;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -19,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -302,17 +304,25 @@ public class ViewSavedDNA extends Fragment {
     public void showDialog(int type) {
         if (type == 0) {
             final Dialog dialog = new Dialog(getContext());
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.save_image_dialog);
-            dialog.setTitle("Save as Image");
+
+            TextView titleText = (TextView) dialog.findViewById(R.id.dialog_title);
+            titleText.setText("Save as Image");
+            if (SplashActivity.tf4 != null)
+                titleText.setTypeface(SplashActivity.tf4);
 
             // set the custom dialog components - text, image and button
             final EditText text = (EditText) dialog.findViewById(R.id.save_image_filename_text);
             text.setText(HomeActivity.tempSavedDNA.getName());
+            text.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));
+
             Button btn = (Button) dialog.findViewById(R.id.save_image_btn);
             btn.setBackgroundColor(HomeActivity.themeColor);
 
             CheckBox cb = (CheckBox) dialog.findViewById(R.id.text_checkbox);
             cb.setChecked(addTextToImage);
+            cb.setButtonTintList(ColorStateList.valueOf(HomeActivity.themeColor));
             cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -340,18 +350,26 @@ public class ViewSavedDNA extends Fragment {
             dialog.show();
         } else if (type == 1) {
             final Dialog dialog = new Dialog(getContext());
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.save_image_dialog);
-            dialog.setTitle("Share as Image");
+
+            TextView titleText = (TextView) dialog.findViewById(R.id.dialog_title);
+            titleText.setText("Share as Image");
+            if (SplashActivity.tf4 != null)
+                titleText.setTypeface(SplashActivity.tf4);
 
             // set the custom dialog components - text, image and button
             final EditText text = (EditText) dialog.findViewById(R.id.save_image_filename_text);
             text.setText(HomeActivity.tempSavedDNA.getName());
+            text.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));
+
             Button btn = (Button) dialog.findViewById(R.id.save_image_btn);
             btn.setBackgroundColor(HomeActivity.themeColor);
             btn.setText("SHARE");
 
             CheckBox cb = (CheckBox) dialog.findViewById(R.id.text_checkbox);
             cb.setChecked(addTextToImage);
+            cb.setButtonTintList(ColorStateList.valueOf(HomeActivity.themeColor));
             cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

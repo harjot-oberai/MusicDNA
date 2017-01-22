@@ -94,7 +94,7 @@ public class RecentsFragment extends Fragment implements
     public interface recentsCallbackListener {
         void onRecentItemClicked(boolean isLocal);
 
-        void onRecent(int pos);
+        void onRecentFromQueue(int pos);
 
         void addRecentsToQueue();
     }
@@ -241,7 +241,7 @@ public class RecentsFragment extends Fragment implements
                         mCallback.onRecentItemClicked(false);
                     }
                 } else {
-                    mCallback.onRecent(pos);
+                    mCallback.onRecentFromQueue(pos);
                 }
 
                 return true;
@@ -286,7 +286,7 @@ public class RecentsFragment extends Fragment implements
                         HomeActivity.queue.getQueue().add(HomeActivity.recentlyPlayed.getRecentlyPlayed().get(i));
                     }
                     Random r = new Random();
-                    mCallback.onRecent(r.nextInt(HomeActivity.queue.getQueue().size()));
+                    mCallback.onRecentFromQueue(r.nextInt(HomeActivity.queue.getQueue().size()));
                 }
             }
         });

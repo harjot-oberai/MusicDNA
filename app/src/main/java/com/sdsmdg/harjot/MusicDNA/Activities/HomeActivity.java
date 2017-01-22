@@ -2615,6 +2615,17 @@ public class HomeActivity extends AppCompatActivity
 
     /*
      * PlayerFragment callbacks START
+     * onComplete() -> called when a song ends or next button is clicked in player or notification.
+     * onPreviousTrack() -> called when previous button is clicked in player or notification.
+     * onEqualizerClicked() -> called when equalizer icon is clicked.
+     * onQueueCLicked() -> called when queue icon is clicked.
+     * onPrepared() -> called when media player prepareAsync() is completed.
+     * onSettingsClicked() -> called when settings menu item is selected.
+     * onFullScreen() -> called when fullscreen menu item is selected or player is long pressed.
+     * onAddedtoFavfromPlayer() -> called when favourite icon is clicked.
+     * onShuffleEnabled() / onShuffleEnabled() -> shuffle enebled or disabled.
+     * onSmallPlayerTouched() -> called when the down icon at the top of the player ic clicked to hide the player.
+     *
      */
 
     @Override
@@ -2886,11 +2897,9 @@ public class HomeActivity extends AppCompatActivity
     public void onSmallPlayerTouched() {
         if (!isPlayerVisible) {
             isPlayerVisible = true;
-//            hideTabs();
             showPlayer();
         } else {
             isPlayerVisible = false;
-//            showTabs();
             hidePlayer();
         }
     }
@@ -2904,6 +2913,11 @@ public class HomeActivity extends AppCompatActivity
 
     /*
      * ViewPlaylistFragment callbacks START
+     * onPlaylistPlayAll() -> when play all fab is clciked in a playlist.
+     * onPlaylistItemClicked() -> when a song is selected from a playlist.
+     * playlistRename() -> when playlist rename is selected.
+     * playlistAddToQueue() -> when playlist add to queue is selected.
+     * onPlaylistEmpty() -> called when playlist becomes empty due to swipin out of last element.
      */
 
     @Override
@@ -2995,6 +3009,9 @@ public class HomeActivity extends AppCompatActivity
 
     /*
      *  FavouriteFragment callbacks START
+     *  onFavouriteItemClicked() -> when a song is selected from favourites.
+     *  onFavouritePlayAll() -> when favourite play all fab is selected.
+     *  addFavToQueue() -> when `add favourite to queue` is selected.
      */
 
     @Override
@@ -3069,6 +3086,9 @@ public class HomeActivity extends AppCompatActivity
 
     /*
      *  QueueFragment callbacks START
+     *  onQueueItemClicked() -> when a song is selected from queue.
+     *  onQueueSave() -> queue save as playlist fab is clicked.
+     *  onQueueClear() -> when queue clear option is selected.
      */
 
     @Override
@@ -3122,7 +3142,7 @@ public class HomeActivity extends AppCompatActivity
      */
 
     @Override
-    public void onPlaylistTouched(int pos) {
+    public void onPlaylistSelected(int pos) {
         tempPlaylist = allPlaylists.getPlaylists().get(pos);
         tempPlaylistNumber = pos;
         showFragment("playlist");
@@ -3194,6 +3214,7 @@ public class HomeActivity extends AppCompatActivity
 
     /*
      * AlbumFragment callbacks START
+     * onAlbumClick() -> a particular album is selected from all albums list.
      */
 
     @Override
@@ -3205,12 +3226,10 @@ public class HomeActivity extends AppCompatActivity
 
     /*
      * ViewAlbumFragment callbacks START
+     * onAlbumPlayAll() -> play all fab is selected in view album fragment.
+     * addAlbumToQueue() -> add to queue button is selected in view album fragment.
+     * onAlbumSongClick() -> a song is selected in view album fragment.
      */
-
-    @Override
-    public void onAlbumSongClickListener() {
-        onLocalTrackSelected(-1);
-    }
 
     @Override
     public void onAlbumPlayAll() {
@@ -3231,10 +3250,16 @@ public class HomeActivity extends AppCompatActivity
         Toast.makeText(ctx, "Added " + list.size() + " song(s) to queue", Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void onAlbumSongClick() {
+        onLocalTrackSelected(-1);
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     /*
      * ArtistFragment callbacks START
+     * onArtistClick() -> a particular artist is selected from all artists list.
      */
 
     @Override
@@ -3248,6 +3273,9 @@ public class HomeActivity extends AppCompatActivity
 
     /*
      * ViewArtistFragment callbacks START
+     * onArtistPlayAll() -> play all fab is selected in view artist fragment.
+     * addArtistToQueue() -> add to queue button is selected in view artist fragment.
+     * onArtistSongClick() -> a song is selected in view artist fragment.
      */
 
     @Override
@@ -3278,6 +3306,9 @@ public class HomeActivity extends AppCompatActivity
 
     /*
      * RecentsFragment callbacks START
+     * onRecentItemClicked() -> a song is selected from the recents fragment.
+     * onRecentFromQueue() -> when a song is selected from recents that is already in queue.
+     * addRecentsToQueue() -> add recents to queue option is selcted
      */
 
     @Override
@@ -3290,7 +3321,7 @@ public class HomeActivity extends AppCompatActivity
     }
 
     @Override
-    public void onRecent(int pos) {
+    public void onRecentFromQueue(int pos) {
         onQueueItemClicked(pos);
     }
 
@@ -3310,6 +3341,9 @@ public class HomeActivity extends AppCompatActivity
 
     /*
      * SettingsFragment callbacks START
+     * onColorChanged() -> called when theme color is selected from the colorPicker
+     * onAlbumArtBackgroundChangedVisibility() -> callback to handle toggling of album art behind DNA
+     * onAboutClicked() -> callback to show the about fragment.
      */
 
     @Override
@@ -3334,6 +3368,8 @@ public class HomeActivity extends AppCompatActivity
 
     /*
      * NewPlaylistFragment callbacks START
+     * onCancel() -> callback to handle cancellation of creating new playlist.
+     * onDone() -> callback to handle completion of creating new playlist.
      */
 
     @Override
@@ -3354,7 +3390,11 @@ public class HomeActivity extends AppCompatActivity
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     /*
-     * HeadsetReciever callbacks START
+     * HeadsetReceiver callbacks START
+     * onHeadsetRemoved() -> callback to check when the headset is removed from the device.
+     * onHeadsetNextClicked() -> callback to handle the next button click on a headset.
+     * onHeadsetPreviousClicked() -> callback to handle the previous button click on a headset.
+     * onHeadsetPlayPauseClicked() -> callback to handle the play/pause button click on a headset.
      */
 
     @Override
@@ -3412,6 +3452,9 @@ public class HomeActivity extends AppCompatActivity
 
     /*
      * EditSongFragment callbacks START
+     * onEditSongSave() -> called when save is clicked to store edited fields.
+     * deleteMediaStoreCache() -> used to delete the media store cache so that it is rebuilt and new album art is cached.
+     * getNewBitmap() -> called to statr the image picker intent for album art.
      */
 
     @Override
@@ -3483,6 +3526,7 @@ public class HomeActivity extends AppCompatActivity
 
     /*
      * EqualizerFragment callbacks START
+     * onCheckChanged() -> when equalizer switch state is changed.
      */
 
     @Override
@@ -3530,6 +3574,7 @@ public class HomeActivity extends AppCompatActivity
 
     /*
      * ServiceCallbacks callbacks START
+     * getPlayerFragment() -> returns an instance of the player fragment.
      */
 
     @Override

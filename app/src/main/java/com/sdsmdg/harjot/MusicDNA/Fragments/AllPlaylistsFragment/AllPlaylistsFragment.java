@@ -58,7 +58,7 @@ public class AllPlaylistsFragment extends Fragment {
     ImageView playlistFragIcon;
 
     public interface allPlaylistCallbackListener {
-        void onPlaylistTouched(int pos);
+        void onPlaylistSelected(int pos);
 
         void onPlaylistMenuPLayAll();
 
@@ -154,7 +154,7 @@ public class AllPlaylistsFragment extends Fragment {
         allPlaylistRecycler.addOnItemTouchListener(new ClickItemTouchListener(allPlaylistRecycler) {
             @Override
             public boolean onClick(RecyclerView parent, View view, int position, long id) {
-                mCallback.onPlaylistTouched(position);
+                mCallback.onPlaylistSelected(position);
                 return true;
             }
 

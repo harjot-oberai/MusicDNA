@@ -63,7 +63,7 @@ public class ViewAlbumFragment extends Fragment {
     }
 
     public interface albumCallbackListener {
-        void onAlbumSongClickListener();
+        void onAlbumSongClick();
 
         void onAlbumPlayAll();
 
@@ -185,7 +185,7 @@ public class ViewAlbumFragment extends Fragment {
                 HomeActivity.localSelected = true;
                 HomeActivity.queueCall = false;
                 HomeActivity.isReloaded = false;
-                mCallback.onAlbumSongClickListener();
+                mCallback.onAlbumSongClick();
                 return true;
             }
 

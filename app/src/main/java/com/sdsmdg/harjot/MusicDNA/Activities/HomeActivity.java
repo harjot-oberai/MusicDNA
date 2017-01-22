@@ -47,6 +47,7 @@ import android.telephony.TelephonyManager;
 import android.text.TextPaint;
 import android.util.Log;
 import android.view.Display;
+import android.view.HapticFeedbackConstants;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -78,13 +79,18 @@ import com.sdsmdg.harjot.MusicDNA.CustomBottomSheetDialogs.CustomGeneralBottomSh
 import com.sdsmdg.harjot.MusicDNA.CustomBottomSheetDialogs.CustomLocalBottomSheetDialog;
 import com.sdsmdg.harjot.MusicDNA.CustomViews.CustomLinearGradient;
 import com.sdsmdg.harjot.MusicDNA.Fragments.AboutFragment.AboutFragment;
+import com.sdsmdg.harjot.MusicDNA.Fragments.AllFoldersFragment.FolderFragment;
 import com.sdsmdg.harjot.MusicDNA.Fragments.AllPlaylistsFragment.AllPlaylistsFragment;
 import com.sdsmdg.harjot.MusicDNA.Fragments.EditSongFragment.EditLocalSongFragment;
 import com.sdsmdg.harjot.MusicDNA.Fragments.EqualizerFragment.EqualizerFragment;
 import com.sdsmdg.harjot.MusicDNA.Fragments.FavouritesFragment.FavouritesFragment;
 import com.sdsmdg.harjot.MusicDNA.Fragments.FolderContentFragment.FolderContentFragment;
-import com.sdsmdg.harjot.MusicDNA.Fragments.AllFoldersFragment.FolderFragment;
+import com.sdsmdg.harjot.MusicDNA.Fragments.LocalMusicFragments.AlbumFragment;
+import com.sdsmdg.harjot.MusicDNA.Fragments.LocalMusicFragments.ArtistFragment;
+import com.sdsmdg.harjot.MusicDNA.Fragments.LocalMusicFragments.LocalMusicFragment;
+import com.sdsmdg.harjot.MusicDNA.Fragments.LocalMusicFragments.LocalMusicViewPagerFragment;
 import com.sdsmdg.harjot.MusicDNA.Fragments.NewPlaylistFragment.NewPlaylistFragment;
+import com.sdsmdg.harjot.MusicDNA.Fragments.PlayerFragment.PlayerFragment;
 import com.sdsmdg.harjot.MusicDNA.Fragments.QueueFragment.QueueFragment;
 import com.sdsmdg.harjot.MusicDNA.Fragments.RecentsFragment.RecentsFragment;
 import com.sdsmdg.harjot.MusicDNA.Fragments.SettingsFragment.SettingsFragment;
@@ -94,7 +100,6 @@ import com.sdsmdg.harjot.MusicDNA.Fragments.ViewArtistFragment.ViewArtistFragmen
 import com.sdsmdg.harjot.MusicDNA.Fragments.ViewPlaylistFragment.PlaylistTrackAdapter;
 import com.sdsmdg.harjot.MusicDNA.Fragments.ViewPlaylistFragment.ViewPlaylistFragment;
 import com.sdsmdg.harjot.MusicDNA.Fragments.ViewSavedDNAsFragment.ViewSavedDNA;
-import com.sdsmdg.harjot.MusicDNA.Fragments.LocalMusicFragments.LocalMusicViewPagerFragment;
 import com.sdsmdg.harjot.MusicDNA.HeadsetHandler.HeadSetReceiver;
 import com.sdsmdg.harjot.MusicDNA.HorizontalRecyclerViewAdapters.LocalTracksHorizontalAdapter;
 import com.sdsmdg.harjot.MusicDNA.HorizontalRecyclerViewAdapters.PlayListsHorizontalAdapter;
@@ -102,9 +107,6 @@ import com.sdsmdg.harjot.MusicDNA.HorizontalRecyclerViewAdapters.RecentsListHori
 import com.sdsmdg.harjot.MusicDNA.HorizontalRecyclerViewAdapters.StreamTracksHorizontalAdapter;
 import com.sdsmdg.harjot.MusicDNA.Interfaces.ServiceCallbacks;
 import com.sdsmdg.harjot.MusicDNA.Interfaces.StreamService;
-import com.sdsmdg.harjot.MusicDNA.Fragments.LocalMusicFragments.AlbumFragment;
-import com.sdsmdg.harjot.MusicDNA.Fragments.LocalMusicFragments.ArtistFragment;
-import com.sdsmdg.harjot.MusicDNA.Fragments.LocalMusicFragments.LocalMusicFragment;
 import com.sdsmdg.harjot.MusicDNA.Models.Album;
 import com.sdsmdg.harjot.MusicDNA.Models.AllMusicFolders;
 import com.sdsmdg.harjot.MusicDNA.Models.AllPlaylists;
@@ -124,7 +126,6 @@ import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
 import com.sdsmdg.harjot.MusicDNA.NotificationManager.Constants;
 import com.sdsmdg.harjot.MusicDNA.NotificationManager.MediaPlayerService;
-import com.sdsmdg.harjot.MusicDNA.Fragments.PlayerFragment.PlayerFragment;
 import com.sdsmdg.harjot.MusicDNA.R;
 import com.sdsmdg.harjot.MusicDNA.Utilities.CommonUtils;
 import com.sdsmdg.harjot.MusicDNA.Utilities.Comparators.AlbumComparator;
@@ -148,12 +149,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import retrofit2.Call;
 import retrofit2.Callback;
-//import retrofit2.GsonConverterFactory;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.view.View.GONE;
+
+//import retrofit2.GsonConverterFactory;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -2816,6 +2818,12 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onFullScreen() {
+
+        //Adds Haptic Feedback(Vibration) on entering and exiting full screen mode of video player
+        View view = findViewById(R.id.root_view);
+        view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+
+
         if (isFullScreenEnabled) {
             Toast.makeText(this, "Long Press to Exit", Toast.LENGTH_SHORT).show();
 

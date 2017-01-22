@@ -66,6 +66,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.view.HapticFeedbackConstants;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
@@ -2816,6 +2817,12 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onFullScreen() {
+
+        //Adds Haptic Feedback(Vibration) on entering and exiting full screen mode of video player
+        View view = findViewById(R.id.root_view);
+        view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+
+
         if (isFullScreenEnabled) {
             Toast.makeText(this, "Long Press to Exit", Toast.LENGTH_SHORT).show();
 

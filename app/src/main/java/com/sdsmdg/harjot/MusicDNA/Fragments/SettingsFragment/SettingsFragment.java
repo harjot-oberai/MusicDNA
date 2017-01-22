@@ -12,6 +12,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -160,10 +161,10 @@ public class SettingsFragment extends Fragment {
         themeCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ColorPickerDialogBuilder
+                final AlertDialog dialog = ColorPickerDialogBuilder
                         .with(getContext())
                         .setTitle("Choose color")
-                        .initialColor(((ColorDrawable) themeColorImg.getBackground()).getColor())
+                        .initialColor(HomeActivity.themeColor)
                         .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
                         .density(9)
                         .showColorPreview(true)
@@ -171,7 +172,6 @@ public class SettingsFragment extends Fragment {
                         .setOnColorSelectedListener(new OnColorSelectedListener() {
                             @Override
                             public void onColorSelected(int color) {
-
                             }
                         })
                         .setPositiveButton("ok", new ColorPickerClickListener() {
@@ -198,8 +198,17 @@ public class SettingsFragment extends Fragment {
                                 dialog.dismiss();
                             }
                         })
-                        .build()
-                        .show();
+                        .build();
+
+                dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialogInterface) {
+                        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(HomeActivity.themeColor);
+                        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(HomeActivity.themeColor);
+                    }
+                });
+
+                dialog.show();
             }
         });
 

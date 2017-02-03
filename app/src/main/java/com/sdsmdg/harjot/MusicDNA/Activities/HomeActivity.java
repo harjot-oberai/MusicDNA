@@ -2907,6 +2907,11 @@ public class HomeActivity extends AppCompatActivity
     }
 
     @Override
+    public void addCurrentSongtoPlaylist(UnifiedTrack ut) {
+        showAddToPlaylistDialog(ut);
+    }
+
+    @Override
     public void onPlayPause() {
         showNotification();
     }
@@ -3744,12 +3749,28 @@ public class HomeActivity extends AppCompatActivity
             lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    allPlaylists.getPlaylists().get(position).addSong(track);
-                    playlistsRecycler.setVisibility(View.VISIBLE);
-                    playlistNothingText.setVisibility(View.INVISIBLE);
-                    pAdapter.notifyDataSetChanged();
-                    new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    dialog.dismiss();
+                    Playlist temp = allPlaylists.getPlaylists().get(position);
+                    boolean isRepeat = false;
+                    for (UnifiedTrack ut : temp.getSongList()) {
+                        if (track.getType() && ut.getType() && track.getLocalTrack().getTitle().equals(ut.getLocalTrack().getTitle())) {
+                            isRepeat = true;
+                            break;
+                        } else if (!track.getType() && !ut.getType() && track.getStreamTrack().getTitle().equals(ut.getStreamTrack().getTitle())) {
+                            isRepeat = true;
+                            break;
+                        }
+                    }
+                    if (!isRepeat) {
+                        temp.addSong(track);
+                        playlistsRecycler.setVisibility(View.VISIBLE);
+                        playlistNothingText.setVisibility(View.INVISIBLE);
+                        pAdapter.notifyDataSetChanged();
+                        Toast.makeText(ctx, "Added to Playlist : " + temp.getPlaylistName(), Toast.LENGTH_SHORT).show();
+                        new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                        dialog.dismiss();
+                    } else {
+                        Toast.makeText(ctx, "Song already present in Playlist", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         } else {

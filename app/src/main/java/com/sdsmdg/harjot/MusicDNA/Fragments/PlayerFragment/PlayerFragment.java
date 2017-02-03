@@ -162,9 +162,11 @@ public class PlayerFragment extends Fragment implements
         void onShuffleDisabled();
 
         void onSmallPlayerTouched();
+
+        void addCurrentSongtoPlaylist(UnifiedTrack ut);
     }
 
-    public interface onPlayPauseListener{
+    public interface onPlayPauseListener {
         void onPlayPause();
     }
 
@@ -532,7 +534,6 @@ public class PlayerFragment extends Fragment implements
             public void onClick(View v) {
                 if (!homeActivity.isPlayerTransitioning && smallPlayer != null) {
                     homeActivity.hidePlayer();
-//                    homeActivity.showTabs();
                     homeActivity.isPlayerVisible = false;
                 }
             }
@@ -880,6 +881,9 @@ public class PlayerFragment extends Fragment implements
                             }
                         } else if (item.getTitle().equals("Settings")) {
                             mCallback.onSettingsClicked();
+                        } else if (item.getTitle().equals("Add to playlist")) {
+                            UnifiedTrack ut = HomeActivity.queue.getQueue().get(HomeActivity.queueCurrentIndex);
+                            mCallback.addCurrentSongtoPlaylist(ut);
                         }
                         return true;
                     }

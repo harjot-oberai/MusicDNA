@@ -1600,7 +1600,8 @@ public class HomeActivity extends AppCompatActivity
             while (musicCursor.moveToNext());
         }
 
-        musicCursor.close();
+        if (musicCursor != null)
+            musicCursor.close();
 
         System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
         try {
@@ -2825,15 +2826,9 @@ public class HomeActivity extends AppCompatActivity
 
         if (isFullScreenEnabled) {
             Toast.makeText(this, "Long Press to Exit", Toast.LENGTH_SHORT).show();
-
-//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-//            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
-
             ActionBar actionBar = getSupportActionBar();
             actionBar.hide();
         } else {
-//            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
             ActionBar actionBar = getSupportActionBar();
             actionBar.show();
         }
@@ -3590,7 +3585,6 @@ public class HomeActivity extends AppCompatActivity
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 
     class CancelCall implements Runnable {

@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.Fragments.SettingsFragment;
+package com.sdsmdg.harjot.MusicDNA.fragments.SettingsFragment;
 
 
 import android.app.Activity;
@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -29,14 +28,12 @@ import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
-import com.sdsmdg.harjot.MusicDNA.Activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
 import com.sdsmdg.harjot.MusicDNA.R;
-import com.sdsmdg.harjot.MusicDNA.Activities.SplashActivity;
-import com.sdsmdg.harjot.MusicDNA.Utilities.CommonUtils;
+import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
+import com.sdsmdg.harjot.MusicDNA.utilities.CommonUtils;
 import com.squareup.leakcanary.RefWatcher;
-
-import java.util.Set;
 
 
 /**

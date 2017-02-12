@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.sdsmdg.harjot.MusicDNA.Activities.HomeActivity">
+    tools:context="com.sdsmdg.harjot.MusicDNA.activities.HomeActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -119,7 +119,7 @@
 
                 </LinearLayout>
 
-                <com.sdsmdg.harjot.MusicDNA.CustomViews.CustomLinearGradient
+                <com.sdsmdg.harjot.MusicDNA.customviews.CustomLinearGradient
                     android:id="@+id/custom_linear_gradient"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />

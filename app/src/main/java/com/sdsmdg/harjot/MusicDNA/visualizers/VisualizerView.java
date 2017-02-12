@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.VisualizerViews;
+package com.sdsmdg.harjot.MusicDNA.visualizers;
 
 /**
  * Created by Harjot on 01-May-16.
@@ -14,8 +14,8 @@ import android.graphics.PorterDuffXfermode;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.sdsmdg.harjot.MusicDNA.Activities.HomeActivity;
-import com.sdsmdg.harjot.MusicDNA.Fragments.PlayerFragment.PlayerFragment;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.fragments.PlayerFragment.PlayerFragment;
 
 public class VisualizerView extends View {
 

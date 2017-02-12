@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.Models;
+package com.sdsmdg.harjot.MusicDNA.models;
 
 import com.google.gson.annotations.SerializedName;
 

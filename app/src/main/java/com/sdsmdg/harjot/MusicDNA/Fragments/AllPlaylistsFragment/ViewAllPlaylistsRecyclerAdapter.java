@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.Fragments.AllPlaylistsFragment;
+package com.sdsmdg.harjot.MusicDNA.fragments.AllPlaylistsFragment;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,11 +8,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.Models.Playlist;
-import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
+import com.sdsmdg.harjot.MusicDNA.models.Playlist;
+import com.sdsmdg.harjot.MusicDNA.models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.R;
-import com.sdsmdg.harjot.MusicDNA.Activities.SplashActivity;
-import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
+import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
+import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
 
 import java.util.List;
 

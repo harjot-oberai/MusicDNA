@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorDark"
     android:clickable="true"
-    tools:context="com.sdsmdg.harjot.MusicDNA.Fragments.ViewAlbumFragment.ViewAlbumFragment">
+    tools:context="com.sdsmdg.harjot.MusicDNA.fragments.ViewAlbumFragment.ViewAlbumFragment">
 
     <RelativeLayout
         android:id="@+id/album_header"

@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.Fragments.NewPlaylistFragment;
+package com.sdsmdg.harjot.MusicDNA.fragments.NewPlaylistFragment;
 
 
 import android.content.Context;
@@ -22,12 +22,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.ClickItemTouchListener.ClickItemTouchListener;
-import com.sdsmdg.harjot.MusicDNA.Activities.HomeActivity;
-import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
+import com.sdsmdg.harjot.MusicDNA.clickitemtouchlistener.ClickItemTouchListener;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.R;
-import com.sdsmdg.harjot.MusicDNA.Activities.SplashActivity;
-import com.sdsmdg.harjot.MusicDNA.Utilities.CommonUtils;
+import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
+import com.sdsmdg.harjot.MusicDNA.utilities.CommonUtils;
 
 import java.util.ArrayList;
 import java.util.List;

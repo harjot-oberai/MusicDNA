@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.Fragments.LocalMusicFragments;
+package com.sdsmdg.harjot.MusicDNA.fragments.LocalMusicFragments;
 
 import android.content.Context;
 import android.os.Build;

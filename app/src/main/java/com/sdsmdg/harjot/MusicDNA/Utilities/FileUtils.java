@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.Utilities;
+package com.sdsmdg.harjot.MusicDNA.utilities;
 
 import android.content.Context;
 import android.content.Intent;

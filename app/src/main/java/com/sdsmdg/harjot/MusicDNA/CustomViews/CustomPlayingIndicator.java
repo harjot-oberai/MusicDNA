@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.CustomViews;
+package com.sdsmdg.harjot.MusicDNA.customviews;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -7,7 +7,7 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.sdsmdg.harjot.MusicDNA.Activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 
 /**
  * Created by Harjot on 28-Sep-16.

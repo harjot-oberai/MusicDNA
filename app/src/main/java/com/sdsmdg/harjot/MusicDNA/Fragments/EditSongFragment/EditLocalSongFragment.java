@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.Fragments.EditSongFragment;
+package com.sdsmdg.harjot.MusicDNA.fragments.EditSongFragment;
 
 
 import android.content.Context;
@@ -18,11 +18,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.sdsmdg.harjot.MusicDNA.Activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.R;
-import com.sdsmdg.harjot.MusicDNA.Activities.SplashActivity;
-import com.sdsmdg.harjot.MusicDNA.Utilities.CommonUtils;
-import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
+import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
+import com.sdsmdg.harjot.MusicDNA.utilities.CommonUtils;
+import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
 
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotReadException;

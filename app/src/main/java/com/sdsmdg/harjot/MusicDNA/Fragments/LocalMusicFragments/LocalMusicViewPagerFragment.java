@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.Fragments.LocalMusicFragments;
+package com.sdsmdg.harjot.MusicDNA.fragments.LocalMusicFragments;
 
 
 import android.content.Context;
@@ -19,11 +19,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.Activities.HomeActivity;
-import com.sdsmdg.harjot.MusicDNA.Activities.SplashActivity;
-import com.sdsmdg.harjot.MusicDNA.Fragments.LocalMusicFragments.AlbumFragment;
-import com.sdsmdg.harjot.MusicDNA.Fragments.LocalMusicFragments.ArtistFragment;
-import com.sdsmdg.harjot.MusicDNA.Fragments.LocalMusicFragments.LocalMusicFragment;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
 import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
 import com.sdsmdg.harjot.MusicDNA.R;
 import com.squareup.leakcanary.RefWatcher;
@@ -185,7 +182,7 @@ public class LocalMusicViewPagerFragment extends Fragment {
     }
 
     public Fragment getFragmentByPosition(int position) {
-        return adapter.getItem(position);
+        return (adapter != null) ? adapter.getItem(position) : null;
     }
 
 }

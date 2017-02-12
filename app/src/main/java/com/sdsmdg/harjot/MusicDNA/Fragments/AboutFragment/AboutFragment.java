@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.Fragments.AboutFragment;
+package com.sdsmdg.harjot.MusicDNA.fragments.AboutFragment;
 
 
 import android.content.Intent;
@@ -12,10 +12,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.Activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.R;
-import com.sdsmdg.harjot.MusicDNA.Activities.SplashActivity;
-import com.sdsmdg.harjot.MusicDNA.Utilities.CommonUtils;
+import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
+import com.sdsmdg.harjot.MusicDNA.utilities.CommonUtils;
 
 
 /**

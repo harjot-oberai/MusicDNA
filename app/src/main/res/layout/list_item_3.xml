@@ -64,7 +64,7 @@
             android:textSize="11dp" />
     </LinearLayout>
 
-    <com.sdsmdg.harjot.MusicDNA.CustomViews.CustomPlayingIndicator
+    <com.sdsmdg.harjot.MusicDNA.customviews.CustomPlayingIndicator
         android:id="@+id/currently_playing_indicator"
         android:layout_width="32dp"
         android:layout_height="32dp"

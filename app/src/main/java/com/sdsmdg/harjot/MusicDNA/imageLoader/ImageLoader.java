@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.imageLoader;
+package com.sdsmdg.harjot.MusicDNA.imageloader;
 
 /**
  * Created by Harjot on 06-Apr-16.

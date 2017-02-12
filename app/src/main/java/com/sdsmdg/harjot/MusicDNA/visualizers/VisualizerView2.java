@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.VisualizerViews;
+package com.sdsmdg.harjot.MusicDNA.visualizers;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -10,8 +10,8 @@ import android.graphics.PorterDuffXfermode;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.sdsmdg.harjot.MusicDNA.Activities.HomeActivity;
-import com.sdsmdg.harjot.MusicDNA.Activities.SplashActivity;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
 
 /**
  * Created by Harjot on 04-Jun-16.

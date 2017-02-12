@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.Fragments.LocalMusicFragments;
+package com.sdsmdg.harjot.MusicDNA.fragments.LocalMusicFragments;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.Models.Artist;
+import com.sdsmdg.harjot.MusicDNA.models.Artist;
 import com.sdsmdg.harjot.MusicDNA.R;
 
 import java.util.List;

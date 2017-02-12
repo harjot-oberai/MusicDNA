@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.Fragments.QueueFragment;
+package com.sdsmdg.harjot.MusicDNA.fragments.QueueFragment;
 
 
 import android.content.res.ColorStateList;
@@ -21,12 +21,12 @@ import android.widget.TextView;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
-import com.sdsmdg.harjot.MusicDNA.ClickItemTouchListener.ClickItemTouchListener;
-import com.sdsmdg.harjot.MusicDNA.Helpers.SimpleItemTouchHelperCallback;
-import com.sdsmdg.harjot.MusicDNA.Activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.clickitemtouchlistener.ClickItemTouchListener;
+import com.sdsmdg.harjot.MusicDNA.itemtouchhelpers.SimpleItemTouchHelperCallback;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
 import com.sdsmdg.harjot.MusicDNA.R;
-import com.sdsmdg.harjot.MusicDNA.Activities.SplashActivity;
+import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
 import com.squareup.leakcanary.RefWatcher;
 
 

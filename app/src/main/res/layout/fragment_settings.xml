@@ -6,7 +6,7 @@
     android:background="@color/colorDark"
     android:clickable="true"
     android:clipToPadding="false"
-    tools:context="com.sdsmdg.harjot.MusicDNA.Fragments.SettingsFragment.SettingsFragment">
+    tools:context="com.sdsmdg.harjot.MusicDNA.fragments.SettingsFragment.SettingsFragment">
 
     <RelativeLayout
         android:id="@+id/settings_action_container"

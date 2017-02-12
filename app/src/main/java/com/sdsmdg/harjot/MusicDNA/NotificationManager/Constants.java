@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.NotificationManager;
+package com.sdsmdg.harjot.MusicDNA.notificationmanager;
 
 /**
  * Created by Harjot on 03-Jun-16.

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="#000"
     android:clickable="true"
-    tools:context="com.sdsmdg.harjot.MusicDNA.Fragments.ViewSavedDNAsFragment.ViewSavedDNA">
+    tools:context="com.sdsmdg.harjot.MusicDNA.fragments.ViewSavedDNAsFragment.ViewSavedDNA">
 
     <RelativeLayout
         android:id="@+id/view_saved_dna_action_container"
@@ -42,7 +42,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="170dp" />
 
-    <com.sdsmdg.harjot.MusicDNA.VisualizerViews.VisualizerView2
+    <com.sdsmdg.harjot.MusicDNA.visualizers.VisualizerView2
         android:id="@+id/saved_dna_visualizer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

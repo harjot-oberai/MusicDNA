@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.HorizontalRecyclerViewAdapters;
+package com.sdsmdg.harjot.MusicDNA.adapters.horizontalrecycleradapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -9,10 +9,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.Models.Playlist;
-import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
+import com.sdsmdg.harjot.MusicDNA.models.Playlist;
+import com.sdsmdg.harjot.MusicDNA.models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.R;
-import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
+import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
 
 import java.util.List;
 

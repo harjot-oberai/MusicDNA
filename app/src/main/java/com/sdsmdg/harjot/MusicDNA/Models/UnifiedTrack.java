@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.Models;
+package com.sdsmdg.harjot.MusicDNA.models;
 
 /**
  * Created by Harjot on 14-May-16.

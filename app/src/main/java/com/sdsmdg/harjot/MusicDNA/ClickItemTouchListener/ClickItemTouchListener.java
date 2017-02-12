@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.ClickItemTouchListener;
+package com.sdsmdg.harjot.MusicDNA.clickitemtouchlistener;
 
 import android.content.Context;
 import android.os.Build;

@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.Fragments.ViewSavedDNAsFragment;
+package com.sdsmdg.harjot.MusicDNA.fragments.ViewSavedDNAsFragment;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -9,10 +9,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.Activities.HomeActivity;
-import com.sdsmdg.harjot.MusicDNA.Models.SavedDNA;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.models.SavedDNA;
 import com.sdsmdg.harjot.MusicDNA.R;
-import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
+import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

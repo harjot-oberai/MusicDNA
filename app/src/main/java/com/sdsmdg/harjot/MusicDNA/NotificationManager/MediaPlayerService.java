@@ -1,10 +1,9 @@
-package com.sdsmdg.harjot.MusicDNA.NotificationManager;
+package com.sdsmdg.harjot.MusicDNA.notificationmanager;
 
 /**
  * Created by Harjot on 03-Jun-16.
  */
 
-import android.annotation.TargetApi;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
@@ -13,14 +12,12 @@ import android.media.MediaMetadata;
 import android.media.Rating;
 import android.media.session.PlaybackState;
 import android.os.Binder;
-import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.ComponentName;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
@@ -29,9 +26,9 @@ import android.media.session.MediaSession;
 import android.media.session.MediaSessionManager;
 import android.os.IBinder;
 
-import com.sdsmdg.harjot.MusicDNA.Activities.HomeActivity;
-import com.sdsmdg.harjot.MusicDNA.Interfaces.ServiceCallbacks;
-import com.sdsmdg.harjot.MusicDNA.Fragments.PlayerFragment.PlayerFragment;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.interfaces.ServiceCallbacks;
+import com.sdsmdg.harjot.MusicDNA.fragments.PlayerFragment.PlayerFragment;
 import com.sdsmdg.harjot.MusicDNA.R;
 
 public class MediaPlayerService extends Service implements PlayerFragment.onPlayPauseListener {

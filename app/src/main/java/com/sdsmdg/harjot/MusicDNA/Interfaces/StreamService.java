@@ -1,7 +1,7 @@
-package com.sdsmdg.harjot.MusicDNA.Interfaces;
+package com.sdsmdg.harjot.MusicDNA.interfaces;
 
 import com.sdsmdg.harjot.MusicDNA.Config;
-import com.sdsmdg.harjot.MusicDNA.Models.Track;
+import com.sdsmdg.harjot.MusicDNA.models.Track;
 
 import java.util.List;
 

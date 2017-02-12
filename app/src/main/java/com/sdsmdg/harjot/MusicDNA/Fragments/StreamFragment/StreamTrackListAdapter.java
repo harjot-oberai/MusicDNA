@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.Fragments.StreamFragment;
+package com.sdsmdg.harjot.MusicDNA.fragments.StreamFragment;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.Models.Track;
+import com.sdsmdg.harjot.MusicDNA.models.Track;
 import com.sdsmdg.harjot.MusicDNA.R;
 import com.squareup.picasso.Picasso;
 

@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.Fragments.LocalMusicFragments;
+package com.sdsmdg.harjot.MusicDNA.fragments.LocalMusicFragments;
 
 
 import android.content.Context;
@@ -11,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.sdsmdg.harjot.MusicDNA.Activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
 import com.sdsmdg.harjot.MusicDNA.R;
 import com.squareup.leakcanary.RefWatcher;

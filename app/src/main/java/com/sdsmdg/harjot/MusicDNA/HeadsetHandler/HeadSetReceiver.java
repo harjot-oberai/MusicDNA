@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.HeadsetHandler;
+package com.sdsmdg.harjot.MusicDNA.headsethandler;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

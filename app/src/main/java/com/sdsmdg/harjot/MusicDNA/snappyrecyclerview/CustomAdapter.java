@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.CustomRecyclerView;
+package com.sdsmdg.harjot.MusicDNA.snappyrecyclerview;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -11,9 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.github.mmin18.widget.RealtimeBlurView;
-import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
+import com.sdsmdg.harjot.MusicDNA.models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.R;
-import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
+import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorDark"
     android:clickable="true"
-    tools:context="com.sdsmdg.harjot.MusicDNA.Fragments.EditSongFragment.EditLocalSongFragment">
+    tools:context="com.sdsmdg.harjot.MusicDNA.fragments.EditSongFragment.EditLocalSongFragment">
 
     <RelativeLayout
         android:id="@+id/edit_song_header"

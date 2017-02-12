@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.Fragments.EqualizerFragment;
+package com.sdsmdg.harjot.MusicDNA.fragments.EqualizerFragment;
 
 
 import android.content.Context;
@@ -31,12 +31,12 @@ import com.db.chart.view.ChartView;
 import com.db.chart.view.LineChartView;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
-import com.sdsmdg.harjot.MusicDNA.CustomViews.AnalogController;
-import com.sdsmdg.harjot.MusicDNA.Activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.customviews.AnalogController;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
-import com.sdsmdg.harjot.MusicDNA.Fragments.PlayerFragment.PlayerFragment;
+import com.sdsmdg.harjot.MusicDNA.fragments.PlayerFragment.PlayerFragment;
 import com.sdsmdg.harjot.MusicDNA.R;
-import com.sdsmdg.harjot.MusicDNA.Activities.SplashActivity;
+import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
 import com.squareup.leakcanary.RefWatcher;
 
 import java.util.ArrayList;

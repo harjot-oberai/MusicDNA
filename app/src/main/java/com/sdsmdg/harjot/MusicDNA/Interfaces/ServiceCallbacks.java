@@ -1,6 +1,6 @@
-package com.sdsmdg.harjot.MusicDNA.Interfaces;
+package com.sdsmdg.harjot.MusicDNA.interfaces;
 
-import com.sdsmdg.harjot.MusicDNA.Fragments.PlayerFragment.PlayerFragment;
+import com.sdsmdg.harjot.MusicDNA.fragments.PlayerFragment.PlayerFragment;
 
 /**
  * Created by Harjot on 14-Oct-16.

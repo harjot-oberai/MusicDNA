@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorDark"
     android:clickable="true"
-    tools:context=".Fragments.LocalMusicFragments.LocalMusicFragment">
+    tools:context=".fragments.LocalMusicFragments.LocalMusicFragment">
 
     <View
         android:id="@+id/songs_tab_alt_showcase"

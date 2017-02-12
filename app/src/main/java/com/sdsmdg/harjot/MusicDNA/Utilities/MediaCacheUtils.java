@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.Utilities;
+package com.sdsmdg.harjot.MusicDNA.utilities;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;

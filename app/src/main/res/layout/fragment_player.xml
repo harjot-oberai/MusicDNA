@@ -108,14 +108,14 @@
 
         </RelativeLayout>
 
-        <com.sdsmdg.harjot.MusicDNA.CustomViews.CustomProgressBar
+        <com.sdsmdg.harjot.MusicDNA.customviews.CustomProgressBar
             android:id="@+id/customProgress"
             android:layout_width="match_parent"
             android:layout_height="4dp"
             android:visibility="invisible" />
     </FrameLayout>
 
-    <com.sdsmdg.harjot.MusicDNA.CustomRecyclerView.SnappyRecyclerView
+    <com.sdsmdg.harjot.MusicDNA.snappyrecyclerview.SnappyRecyclerView
         android:id="@+id/visualizer_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -188,7 +188,7 @@
             android:src="@drawable/menu_overflow" />
     </RelativeLayout>
 
-    <com.sdsmdg.harjot.MusicDNA.VisualizerViews.VisualizerView
+    <com.sdsmdg.harjot.MusicDNA.visualizers.VisualizerView
         android:id="@+id/myvisualizerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

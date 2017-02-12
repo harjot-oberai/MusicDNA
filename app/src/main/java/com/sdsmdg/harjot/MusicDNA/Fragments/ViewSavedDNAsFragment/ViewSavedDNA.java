@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.Fragments.ViewSavedDNAsFragment;
+package com.sdsmdg.harjot.MusicDNA.fragments.ViewSavedDNAsFragment;
 
 
 import android.app.Dialog;
@@ -31,15 +31,15 @@ import android.widget.TextView;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
-import com.sdsmdg.harjot.MusicDNA.ClickItemTouchListener.ClickItemTouchListener;
-import com.sdsmdg.harjot.MusicDNA.Activities.HomeActivity;
-import com.sdsmdg.harjot.MusicDNA.Models.SavedDNA;
+import com.sdsmdg.harjot.MusicDNA.clickitemtouchlistener.ClickItemTouchListener;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.models.SavedDNA;
 import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
 import com.sdsmdg.harjot.MusicDNA.R;
-import com.sdsmdg.harjot.MusicDNA.Activities.SplashActivity;
-import com.sdsmdg.harjot.MusicDNA.Utilities.CommonUtils;
-import com.sdsmdg.harjot.MusicDNA.Utilities.FileUtils;
-import com.sdsmdg.harjot.MusicDNA.VisualizerViews.VisualizerView2;
+import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
+import com.sdsmdg.harjot.MusicDNA.utilities.CommonUtils;
+import com.sdsmdg.harjot.MusicDNA.utilities.FileUtils;
+import com.sdsmdg.harjot.MusicDNA.visualizers.VisualizerView2;
 import com.squareup.leakcanary.RefWatcher;
 
 import java.util.ArrayList;

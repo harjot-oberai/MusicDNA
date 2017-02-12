@@ -1,14 +1,12 @@
-package com.sdsmdg.harjot.MusicDNA.Utilities;
+package com.sdsmdg.harjot.MusicDNA.utilities;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-import com.sdsmdg.harjot.MusicDNA.Activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 
 /**
  * Created by Harjot on 18-Jan-17.

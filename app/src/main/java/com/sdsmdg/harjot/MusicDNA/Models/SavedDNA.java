@@ -1,7 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.Models;
-
-import android.graphics.Bitmap;
-import android.support.annotation.BoolRes;
+package com.sdsmdg.harjot.MusicDNA.models;
 
 /**
  * Created by Harjot on 03-Jun-16.

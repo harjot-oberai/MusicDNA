@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.Helpers;
+package com.sdsmdg.harjot.MusicDNA.itemtouchhelpers;
 
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;

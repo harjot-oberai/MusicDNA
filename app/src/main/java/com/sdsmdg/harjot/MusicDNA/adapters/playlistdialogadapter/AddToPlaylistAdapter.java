@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.AddToPlaylistDialogAdapter;
+package com.sdsmdg.harjot.MusicDNA.adapters.playlistdialogadapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.Models.Playlist;
+import com.sdsmdg.harjot.MusicDNA.models.Playlist;
 import com.sdsmdg.harjot.MusicDNA.R;
 
 import java.util.List;

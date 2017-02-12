@@ -5,7 +5,7 @@
     android:background="@color/colorDark"
     android:clickable="true"
     android:padding="5dp"
-    tools:context="com.sdsmdg.harjot.MusicDNA.Fragments.StreamFragment.StreamMusicFragment">
+    tools:context="com.sdsmdg.harjot.MusicDNA.fragments.StreamFragment.StreamMusicFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/trackList"

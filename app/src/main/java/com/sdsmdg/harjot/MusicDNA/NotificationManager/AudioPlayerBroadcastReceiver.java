@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.NotificationManager;
+package com.sdsmdg.harjot.MusicDNA.notificationmanager;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

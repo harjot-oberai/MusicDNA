@@ -1,6 +1,6 @@
-package com.sdsmdg.harjot.MusicDNA.Utilities.Comparators;
+package com.sdsmdg.harjot.MusicDNA.utilities.comparators;
 
-import com.sdsmdg.harjot.MusicDNA.Models.Album;
+import com.sdsmdg.harjot.MusicDNA.models.Album;
 
 import java.util.Comparator;
 

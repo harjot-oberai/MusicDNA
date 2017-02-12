@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="#000000"
     android:clickable="true"
-    tools:context="com.sdsmdg.harjot.MusicDNA.Fragments.QueueFragment.QueueFragment">
+    tools:context="com.sdsmdg.harjot.MusicDNA.fragments.QueueFragment.QueueFragment">
 
     <View
         android:id="@+id/queue_alt_showcase"

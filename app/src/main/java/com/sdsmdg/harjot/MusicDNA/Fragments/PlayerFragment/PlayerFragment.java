@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.Fragments.PlayerFragment;
+package com.sdsmdg.harjot.MusicDNA.fragments.PlayerFragment;
 
 
 import android.graphics.Canvas;
@@ -38,21 +38,21 @@ import android.widget.Toast;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
-import com.sdsmdg.harjot.MusicDNA.Activities.HomeActivity;
-import com.sdsmdg.harjot.MusicDNA.ClickItemTouchListener.ClickItemTouchListener;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.clickitemtouchlistener.ClickItemTouchListener;
 import com.sdsmdg.harjot.MusicDNA.Config;
-import com.sdsmdg.harjot.MusicDNA.CustomRecyclerView.CustomAdapter;
-import com.sdsmdg.harjot.MusicDNA.CustomRecyclerView.SnappyRecyclerView;
-import com.sdsmdg.harjot.MusicDNA.CustomViews.CustomProgressBar;
-import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
-import com.sdsmdg.harjot.MusicDNA.Models.SavedDNA;
-import com.sdsmdg.harjot.MusicDNA.Models.Track;
-import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
+import com.sdsmdg.harjot.MusicDNA.snappyrecyclerview.CustomAdapter;
+import com.sdsmdg.harjot.MusicDNA.snappyrecyclerview.SnappyRecyclerView;
+import com.sdsmdg.harjot.MusicDNA.customviews.CustomProgressBar;
+import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
+import com.sdsmdg.harjot.MusicDNA.models.SavedDNA;
+import com.sdsmdg.harjot.MusicDNA.models.Track;
+import com.sdsmdg.harjot.MusicDNA.models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
-import com.sdsmdg.harjot.MusicDNA.NotificationManager.AudioPlayerBroadcastReceiver;
+import com.sdsmdg.harjot.MusicDNA.notificationmanager.AudioPlayerBroadcastReceiver;
 import com.sdsmdg.harjot.MusicDNA.R;
-import com.sdsmdg.harjot.MusicDNA.VisualizerViews.VisualizerView;
-import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
+import com.sdsmdg.harjot.MusicDNA.visualizers.VisualizerView;
+import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
 import com.squareup.leakcanary.RefWatcher;
 import com.squareup.picasso.Picasso;
 import com.wang.avi.AVLoadingIndicatorView;

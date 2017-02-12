@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.Fragments.LocalMusicFragments;
+package com.sdsmdg.harjot.MusicDNA.fragments.LocalMusicFragments;
 
 
 //import android.app.Fragment;
@@ -22,14 +22,14 @@ import android.widget.RelativeLayout;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
-import com.sdsmdg.harjot.MusicDNA.ClickItemTouchListener.ClickItemTouchListener;
-import com.sdsmdg.harjot.MusicDNA.CustomBottomSheetDialogs.CustomLocalBottomSheetDialog;
-import com.sdsmdg.harjot.MusicDNA.Activities.HomeActivity;
-import com.sdsmdg.harjot.MusicDNA.Models.LocalTrack;
-import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
+import com.sdsmdg.harjot.MusicDNA.clickitemtouchlistener.ClickItemTouchListener;
+import com.sdsmdg.harjot.MusicDNA.custombottomsheets.CustomLocalBottomSheetDialog;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
+import com.sdsmdg.harjot.MusicDNA.models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
 import com.sdsmdg.harjot.MusicDNA.R;
-import com.sdsmdg.harjot.MusicDNA.Utilities.CommonUtils;
+import com.sdsmdg.harjot.MusicDNA.utilities.CommonUtils;
 import com.squareup.leakcanary.RefWatcher;
 
 import java.util.Random;

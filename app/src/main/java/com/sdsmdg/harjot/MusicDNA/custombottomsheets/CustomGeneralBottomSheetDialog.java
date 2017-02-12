@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.CustomBottomSheetDialogs;
+package com.sdsmdg.harjot.MusicDNA.custombottomsheets;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -11,10 +11,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.Activities.HomeActivity;
-import com.sdsmdg.harjot.MusicDNA.Models.UnifiedTrack;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.R;
-import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
+import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
 
 /**
  * Created by Harjot on 21-Oct-16.

@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.CustomRecyclerView;
+package com.sdsmdg.harjot.MusicDNA.snappyrecyclerview;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -8,7 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.sdsmdg.harjot.MusicDNA.Activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 
 /**
  * Created by Harjot on 22-Nov-16.

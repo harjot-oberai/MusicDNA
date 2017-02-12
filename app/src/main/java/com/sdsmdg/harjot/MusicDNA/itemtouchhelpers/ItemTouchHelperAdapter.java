@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.Helpers;
+package com.sdsmdg.harjot.MusicDNA.itemtouchhelpers;
 
 /**
  * Created by Harjot on 18-May-16.

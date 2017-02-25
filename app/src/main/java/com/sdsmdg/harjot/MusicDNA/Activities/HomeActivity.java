@@ -3627,8 +3627,13 @@ public class HomeActivity extends AppCompatActivity
 
     public void newPlaylistNameDialog() {
         final Dialog dialog = new Dialog(ctx);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.save_image_dialog);
-        dialog.setTitle("Playlist Name");
+
+        TextView titleText = (TextView) dialog.findViewById(R.id.dialog_title);
+        titleText.setText("Playlist Name");
+        if (SplashActivity.tf4 != null)
+            titleText.setTypeface(SplashActivity.tf4);
 
         Button btn = (Button) dialog.findViewById(R.id.save_image_btn);
         final EditText newName = (EditText) dialog.findViewById(R.id.save_image_filename_text);
@@ -3686,8 +3691,13 @@ public class HomeActivity extends AppCompatActivity
 
     public void renamePlaylistDialog(String oldName) {
         final Dialog dialog = new Dialog(ctx);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.save_image_dialog);
-        dialog.setTitle("Rename");
+
+        TextView titleText = (TextView) dialog.findViewById(R.id.dialog_title);
+        titleText.setText("Rename");
+        if (SplashActivity.tf4 != null)
+            titleText.setTypeface(SplashActivity.tf4);
 
         Button btn = (Button) dialog.findViewById(R.id.save_image_btn);
         final EditText newName = (EditText) dialog.findViewById(R.id.save_image_filename_text);

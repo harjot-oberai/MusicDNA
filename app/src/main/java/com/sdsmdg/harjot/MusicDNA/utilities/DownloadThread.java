@@ -48,7 +48,8 @@ public class DownloadThread extends Thread {
                     "LyricWiki",
                     "Genius",
                     "LyricsMania",
-                    "AZLyrics"
+                    "AZLyrics",
+                    "Bollywood"
             };
 
     private static ArrayList<String> providers = new ArrayList<>(Arrays.asList(mainProviders));

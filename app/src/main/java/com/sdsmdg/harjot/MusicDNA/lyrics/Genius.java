@@ -1,8 +1,8 @@
 package com.sdsmdg.harjot.MusicDNA.lyrics;
 
-import com.geecko.QuickLyric.Keys;
-import com.geecko.QuickLyric.annotations.Reflection;
-import com.geecko.QuickLyric.utils.Net;
+import com.sdsmdg.harjot.MusicDNA.Config;
+import com.sdsmdg.harjot.MusicDNA.annotations.Reflection;
+import com.sdsmdg.harjot.MusicDNA.utilities.Net;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -34,7 +34,7 @@ public class Genius {
         try {
             URL queryURL = new URL(String.format("http://api.genius.com/search?q=%s", URLEncoder.encode(query, "UTF-8")));
             Connection connection = Jsoup.connect(queryURL.toExternalForm())
-                    .header("Authorization", "Bearer " + Keys.GENIUS)
+                    .header("Authorization", "Bearer " + Config.GENIUS)
                     .timeout(0)
                     .ignoreContentType(true);
             Document document = connection.userAgent(Net.USER_AGENT).get();

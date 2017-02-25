@@ -21,8 +21,10 @@ import android.widget.Toast;
 import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.R;
 import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
+import com.sdsmdg.harjot.MusicDNA.lyrics.Lyrics;
 import com.sdsmdg.harjot.MusicDNA.utilities.CommonUtils;
 import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
+import com.sdsmdg.harjot.MusicDNA.utilities.DownloadThread;
 
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
@@ -45,7 +47,7 @@ import java.io.IOException;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EditLocalSongFragment extends Fragment {
+public class EditLocalSongFragment extends Fragment implements Lyrics.Callback {
 
     EditText titleText, artistText, albumText;
     Button saveButton;
@@ -71,7 +73,16 @@ public class EditLocalSongFragment extends Fragment {
 
     View bottomMarginLayout;
 
-    public interface EditFragmentCallbackListener{
+    @Override
+    public void onLyricsDownloaded(Lyrics lyrics) {
+        if (lyrics.getFlag() == Lyrics.POSITIVE_RESULT) {
+            Toast.makeText(ctx, lyrics.getText().substring(0, 100), Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(ctx, lyrics.getFlag() + "", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public interface EditFragmentCallbackListener {
         void onEditSongSave(boolean wasSaveSuccessful);
 
         void getNewBitmap();
@@ -126,7 +137,8 @@ public class EditLocalSongFragment extends Fragment {
         if (HomeActivity.isReloaded)
             bottomMarginLayout.getLayoutParams().height = 0;
         else
-            bottomMarginLayout.getLayoutParams().height = CommonUtils.dpTopx(65, getContext());;
+            bottomMarginLayout.getLayoutParams().height = CommonUtils.dpTopx(65, getContext());
+        ;
 
         titleText = (EditText) view.findViewById(R.id.edit_song_title);
         artistText = (EditText) view.findViewById(R.id.edit_song_artist);
@@ -259,6 +271,8 @@ public class EditLocalSongFragment extends Fragment {
             titleText.setText(HomeActivity.editSong.getTitle());
             artistText.setText(HomeActivity.editSong.getArtist());
             albumText.setText(HomeActivity.editSong.getAlbum());
+
+            new DownloadThread(this, false, HomeActivity.editSong.getArtist(), HomeActivity.editSong.getTitle()).start();
 
         }
 

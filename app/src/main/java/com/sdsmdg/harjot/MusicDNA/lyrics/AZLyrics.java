@@ -1,8 +1,8 @@
 package com.sdsmdg.harjot.MusicDNA.lyrics;
 
 
-import com.geecko.QuickLyric.annotations.Reflection;
-import com.geecko.QuickLyric.utils.Net;
+import com.sdsmdg.harjot.MusicDNA.annotations.Reflection;
+import com.sdsmdg.harjot.MusicDNA.utilities.Net;
 
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;

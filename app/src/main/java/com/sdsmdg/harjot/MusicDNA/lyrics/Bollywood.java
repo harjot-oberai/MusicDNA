@@ -1,7 +1,7 @@
 package com.sdsmdg.harjot.MusicDNA.lyrics;
 
-import com.geecko.QuickLyric.annotations.Reflection;
-import com.geecko.QuickLyric.utils.Net;
+import com.sdsmdg.harjot.MusicDNA.annotations.Reflection;
+import com.sdsmdg.harjot.MusicDNA.utilities.Net;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;

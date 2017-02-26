@@ -47,7 +47,7 @@ import java.io.IOException;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EditLocalSongFragment extends Fragment implements Lyrics.Callback {
+public class EditLocalSongFragment extends Fragment {
 
     EditText titleText, artistText, albumText;
     Button saveButton;
@@ -72,15 +72,6 @@ public class EditLocalSongFragment extends Fragment implements Lyrics.Callback {
     EditFragmentCallbackListener mCallback;
 
     View bottomMarginLayout;
-
-    @Override
-    public void onLyricsDownloaded(Lyrics lyrics) {
-        if (lyrics.getFlag() == Lyrics.POSITIVE_RESULT) {
-            Toast.makeText(ctx, lyrics.getText().substring(0, 100), Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(ctx, lyrics.getFlag() + "", Toast.LENGTH_SHORT).show();
-        }
-    }
 
     public interface EditFragmentCallbackListener {
         void onEditSongSave(boolean wasSaveSuccessful);
@@ -271,9 +262,6 @@ public class EditLocalSongFragment extends Fragment implements Lyrics.Callback {
             titleText.setText(HomeActivity.editSong.getTitle());
             artistText.setText(HomeActivity.editSong.getArtist());
             albumText.setText(HomeActivity.editSong.getAlbum());
-
-            new DownloadThread(this, false, HomeActivity.editSong.getArtist(), HomeActivity.editSong.getTitle()).start();
-
         }
 
         try {

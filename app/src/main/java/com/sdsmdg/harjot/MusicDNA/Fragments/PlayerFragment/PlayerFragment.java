@@ -21,6 +21,8 @@ import android.os.Handler;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Base64;
 import android.util.Log;
 import android.util.Pair;
@@ -41,6 +43,7 @@ import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.clickitemtouchlistener.ClickItemTouchListener;
 import com.sdsmdg.harjot.MusicDNA.Config;
+import com.sdsmdg.harjot.MusicDNA.lyrics.Lyrics;
 import com.sdsmdg.harjot.MusicDNA.snappyrecyclerview.CustomAdapter;
 import com.sdsmdg.harjot.MusicDNA.snappyrecyclerview.SnappyRecyclerView;
 import com.sdsmdg.harjot.MusicDNA.customviews.CustomProgressBar;
@@ -51,6 +54,7 @@ import com.sdsmdg.harjot.MusicDNA.models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
 import com.sdsmdg.harjot.MusicDNA.notificationmanager.AudioPlayerBroadcastReceiver;
 import com.sdsmdg.harjot.MusicDNA.R;
+import com.sdsmdg.harjot.MusicDNA.utilities.DownloadThread;
 import com.sdsmdg.harjot.MusicDNA.visualizers.VisualizerView;
 import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
 import com.squareup.leakcanary.RefWatcher;
@@ -68,7 +72,7 @@ import java.util.TimerTask;
  * A simple {@link Fragment} subclass.
  */
 public class PlayerFragment extends Fragment implements
-        AudioPlayerBroadcastReceiver.onCallbackListener {
+        AudioPlayerBroadcastReceiver.onCallbackListener, Lyrics.Callback {
 
     public SnappyRecyclerView snappyRecyclerView;
     CustomAdapter customAdapter;
@@ -140,6 +144,15 @@ public class PlayerFragment extends Fragment implements
     public PlayerFragmentCallbackListener mCallback;
     public onPlayPauseListener mCallback7;
 
+    @Override
+    public void onLyricsDownloaded(Lyrics lyrics) {
+        if (lyrics.getFlag() == Lyrics.POSITIVE_RESULT) {
+            lyricsContent.setText(Html.fromHtml(lyrics.getText()));
+        } else {
+            lyricsContent.setText("No Lyrics Found!");
+        }
+    }
+
     public interface PlayerFragmentCallbackListener {
         void onComplete();
 
@@ -178,6 +191,10 @@ public class PlayerFragment extends Fragment implements
     ImageView spImgAB;
     TextView spTitleAB;
     TextView spArtistAB;
+
+    ImageView lyricsIcon;
+    TextView lyricsContent;
+    boolean isLyricsVisisble = false;
 
     public boolean isStart = true;
 
@@ -528,6 +545,27 @@ public class PlayerFragment extends Fragment implements
         spToolbar = (RelativeLayout) view.findViewById(R.id.smallPlayer_AB);
 
         overflowMenuAB = (ImageView) view.findViewById(R.id.menuIcon);
+
+        lyricsIcon = (ImageView) view.findViewById(R.id.lyrics_icon);
+        lyricsContent = (TextView) view.findViewById(R.id.lyrics_content);
+        lyricsContent.setMovementMethod(new ScrollingMovementMethod());
+
+        lyricsIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!isLyricsVisisble) {
+                    mVisualizerView.setVisibility(View.GONE);
+                    lyricsContent.setVisibility(View.VISIBLE);
+                    new DownloadThread(PlayerFragment.this, false, selected_track_artist.getText().toString(), selected_track_title.getText().toString()).start();
+                } else {
+                    lyricsContent.setText("");
+                    lyricsContent.setVisibility(View.GONE);
+                    mVisualizerView.setVisibility(View.VISIBLE);
+                }
+                isLyricsVisisble = !isLyricsVisisble;
+            }
+        });
+
         spImgAB = (ImageView) view.findViewById(R.id.selected_track_image_sp_AB);
         spImgAB.setOnClickListener(new View.OnClickListener() {
             @Override

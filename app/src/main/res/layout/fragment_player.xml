@@ -150,7 +150,7 @@
             android:layout_marginRight="5dp"
             android:layout_marginTop="8dp"
             android:layout_toEndOf="@+id/selected_track_image_sp_AB"
-            android:layout_toStartOf="@+id/menuIcon"
+            android:layout_toStartOf="@+id/lyrics_icon"
             android:ellipsize="marquee"
             android:fadingEdge="horizontal"
             android:maxLines="1"
@@ -167,12 +167,25 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_toEndOf="@+id/selected_track_image_sp_AB"
-            android:layout_toStartOf="@+id/menuIcon"
+            android:layout_toStartOf="@+id/lyrics_icon"
             android:maxLines="1"
             android:paddingLeft="5dp"
             android:text="Unknown"
             android:textColor="#EEEEEE"
             android:textSize="13sp" />
+
+        <ImageView
+            android:id="@+id/lyrics_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="12dp"
+            android:layout_toStartOf="@+id/menuIcon"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:padding="8dp"
+            android:scrollbars="vertical"
+            android:src="@drawable/menu_overflow" />
 
 
         <ImageView
@@ -197,6 +210,19 @@
         android:layout_centerHorizontal="true"
         android:clickable="false"
         android:visibility="visible" />
+
+    <TextView
+        android:id="@+id/lyrics_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/mainControllerContainer"
+        android:layout_below="@+id/smallPlayer_AB"
+        android:layout_centerHorizontal="true"
+        android:background="#00000000"
+        android:clickable="true"
+        android:padding="10dp"
+        android:textColor="#FFFFFF"
+        android:visibility="gone" />
 
     <RelativeLayout
         android:id="@+id/mainControllerContainer"

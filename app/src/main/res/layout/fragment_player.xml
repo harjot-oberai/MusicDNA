@@ -211,18 +211,23 @@
         android:clickable="false"
         android:visibility="visible" />
 
-    <TextView
-        android:id="@+id/lyrics_content"
+    <RelativeLayout
+        android:id="@+id/lyrics_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/mainControllerContainer"
         android:layout_below="@+id/smallPlayer_AB"
-        android:layout_centerHorizontal="true"
         android:background="#00000000"
         android:clickable="true"
-        android:padding="10dp"
-        android:textColor="#FFFFFF"
-        android:visibility="gone" />
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/lyrics_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            android:textColor="#FFFFFF" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/mainControllerContainer"

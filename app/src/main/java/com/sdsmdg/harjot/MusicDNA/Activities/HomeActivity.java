@@ -2184,8 +2184,10 @@ public class HomeActivity extends AppCompatActivity
 
     public void hidePlayer() {
 
-        if (playerFragment != null && playerFragment.mVisualizerView != null)
+        if (playerFragment != null && playerFragment.mVisualizerView != null) {
             playerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
+            playerFragment.lyricsContainer.setVisibility(View.GONE);
+        }
 
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
@@ -2271,6 +2273,9 @@ public class HomeActivity extends AppCompatActivity
         isEqualizerVisible = false;
         isQueueVisible = false;
 
+        if (playerFragment.isLyricsVisisble) {
+            playerFragment.lyricsContainer.setVisibility(View.VISIBLE);
+        }
 
         playerContainer.setVisibility(View.VISIBLE);
         if (playerFragment != null && playerFragment.mVisualizerView != null)

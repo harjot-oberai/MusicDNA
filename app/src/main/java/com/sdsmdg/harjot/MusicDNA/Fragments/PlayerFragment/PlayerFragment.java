@@ -146,8 +146,9 @@ public class PlayerFragment extends Fragment implements
 
     @Override
     public void onLyricsDownloaded(Lyrics lyrics) {
-        if (lyrics.getFlag() == Lyrics.POSITIVE_RESULT) {
-            lyricsContent.setText(Html.fromHtml(lyrics.getText()));
+        currentLyrics = lyrics;
+        if (currentLyrics.getFlag() == Lyrics.POSITIVE_RESULT) {
+            lyricsContent.setText(Html.fromHtml(currentLyrics.getText()));
         } else {
             lyricsContent.setText("No Lyrics Found!");
         }
@@ -192,9 +193,11 @@ public class PlayerFragment extends Fragment implements
     TextView spTitleAB;
     TextView spArtistAB;
 
-    ImageView lyricsIcon;
-    TextView lyricsContent;
-    boolean isLyricsVisisble = false;
+    public RelativeLayout lyricsContainer;
+    public ImageView lyricsIcon;
+    public TextView lyricsContent;
+    public boolean isLyricsVisisble = false;
+    public Lyrics currentLyrics = null;
 
     public boolean isStart = true;
 
@@ -371,6 +374,13 @@ public class PlayerFragment extends Fragment implements
         mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
+                currentLyrics = null;
+                if (isLyricsVisisble) {
+                    isLyricsVisisble = false;
+                    lyricsContent.setText("");
+                    lyricsContainer.setVisibility(View.GONE);
+                    mVisualizerView.setVisibility(View.VISIBLE);
+                }
                 completed = false;
                 pauseClicked = false;
                 isPrepared = true;
@@ -546,6 +556,7 @@ public class PlayerFragment extends Fragment implements
 
         overflowMenuAB = (ImageView) view.findViewById(R.id.menuIcon);
 
+        lyricsContainer = (RelativeLayout) view.findViewById(R.id.lyrics_container);
         lyricsIcon = (ImageView) view.findViewById(R.id.lyrics_icon);
         lyricsContent = (TextView) view.findViewById(R.id.lyrics_content);
         lyricsContent.setMovementMethod(new ScrollingMovementMethod());
@@ -555,11 +566,14 @@ public class PlayerFragment extends Fragment implements
             public void onClick(View view) {
                 if (!isLyricsVisisble) {
                     mVisualizerView.setVisibility(View.GONE);
-                    lyricsContent.setVisibility(View.VISIBLE);
-                    new DownloadThread(PlayerFragment.this, false, selected_track_artist.getText().toString(), selected_track_title.getText().toString()).start();
+                    lyricsContainer.setVisibility(View.VISIBLE);
+                    if (currentLyrics == null)
+                        new DownloadThread(PlayerFragment.this, false, selected_track_artist.getText().toString(), selected_track_title.getText().toString()).start();
+                    else
+                        onLyricsDownloaded(currentLyrics);
                 } else {
                     lyricsContent.setText("");
-                    lyricsContent.setVisibility(View.GONE);
+                    lyricsContainer.setVisibility(View.GONE);
                     mVisualizerView.setVisibility(View.VISIBLE);
                 }
                 isLyricsVisisble = !isLyricsVisisble;

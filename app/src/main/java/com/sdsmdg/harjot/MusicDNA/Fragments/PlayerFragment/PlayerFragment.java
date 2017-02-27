@@ -146,11 +146,13 @@ public class PlayerFragment extends Fragment implements
 
     @Override
     public void onLyricsDownloaded(Lyrics lyrics) {
-        currentLyrics = lyrics;
-        if (currentLyrics.getFlag() == Lyrics.POSITIVE_RESULT) {
-            lyricsContent.setText(Html.fromHtml(currentLyrics.getText()));
-        } else {
-            lyricsContent.setText("No Lyrics Found!");
+        if (lyrics.getTrack().equals(selected_track_title.getText().toString()) && lyrics.getArtist().equals(selected_track_artist.getText().toString())) {
+            currentLyrics = lyrics;
+            if (currentLyrics.getFlag() == Lyrics.POSITIVE_RESULT) {
+                lyricsContent.setText(Html.fromHtml(currentLyrics.getText()));
+            } else {
+                lyricsContent.setText("No Lyrics Found!");
+            }
         }
     }
 
@@ -193,6 +195,7 @@ public class PlayerFragment extends Fragment implements
     TextView spTitleAB;
     TextView spArtistAB;
 
+    public DownloadThread downloadThread;
     public RelativeLayout lyricsContainer;
     public ImageView lyricsIcon;
     public TextView lyricsContent;
@@ -375,6 +378,9 @@ public class PlayerFragment extends Fragment implements
             @Override
             public void onPrepared(MediaPlayer mp) {
                 currentLyrics = null;
+                if (downloadThread != null) {
+                    downloadThread.interrupt();
+                }
                 if (isLyricsVisisble) {
                     isLyricsVisisble = false;
                     lyricsContent.setText("");
@@ -567,10 +573,12 @@ public class PlayerFragment extends Fragment implements
                 if (!isLyricsVisisble) {
                     mVisualizerView.setVisibility(View.GONE);
                     lyricsContainer.setVisibility(View.VISIBLE);
-                    if (currentLyrics == null)
-                        new DownloadThread(PlayerFragment.this, false, selected_track_artist.getText().toString(), selected_track_title.getText().toString()).start();
-                    else
+                    if (currentLyrics == null) {
+                        downloadThread = new DownloadThread(PlayerFragment.this, false, selected_track_artist.getText().toString(), selected_track_title.getText().toString());
+                        downloadThread.start();
+                    } else {
                         onLyricsDownloaded(currentLyrics);
+                    }
                 } else {
                     lyricsContent.setText("");
                     lyricsContainer.setVisibility(View.GONE);

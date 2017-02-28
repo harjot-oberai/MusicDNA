@@ -2185,7 +2185,7 @@ public class HomeActivity extends AppCompatActivity
     public void hidePlayer() {
 
         if (playerFragment != null && playerFragment.mVisualizerView != null) {
-            playerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
+            playerFragment.mVisualizerView.setVisibility(View.GONE);
             playerFragment.lyricsContainer.setVisibility(View.GONE);
         }
 
@@ -2273,10 +2273,6 @@ public class HomeActivity extends AppCompatActivity
         isEqualizerVisible = false;
         isQueueVisible = false;
 
-        if (playerFragment.isLyricsVisisble) {
-            playerFragment.lyricsContainer.setVisibility(View.VISIBLE);
-        }
-
         playerContainer.setVisibility(View.VISIBLE);
         if (playerFragment != null && playerFragment.mVisualizerView != null)
             playerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
@@ -2329,8 +2325,14 @@ public class HomeActivity extends AppCompatActivity
         handler2.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (playerFragment != null && playerFragment.mVisualizerView != null)
-                    playerFragment.mVisualizerView.setVisibility(View.VISIBLE);
+                if (playerFragment != null && playerFragment.mVisualizerView != null){
+                    if (playerFragment.isLyricsVisisble) {
+                        playerFragment.mVisualizerView.setVisibility(GONE);
+                        playerFragment.lyricsContainer.setVisibility(View.VISIBLE);
+                    } else {
+                        playerFragment.mVisualizerView.setVisibility(View.VISIBLE);
+                    }
+                }
             }
         }, 400);
 
@@ -2341,7 +2343,7 @@ public class HomeActivity extends AppCompatActivity
         isEqualizerVisible = true;
 
         if (playerFragment.mVisualizerView != null)
-            playerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
+            playerFragment.mVisualizerView.setVisibility(View.GONE);
 
         final Handler handler2 = new Handler();
         handler2.postDelayed(new Runnable() {
@@ -2386,19 +2388,11 @@ public class HomeActivity extends AppCompatActivity
                         if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
                             playerFragment.snappyRecyclerView.setTransparency();
                         }
+                        if (!playerFragment.isLyricsVisisble) {
+                            playerFragment.mVisualizerView.setVisibility(View.VISIBLE);
+                        }
                     }
                 });
-
-        final Handler handler2 = new Handler();
-        handler2.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (playerFragment.mVisualizerView != null)
-                    playerFragment.mVisualizerView.setVisibility(View.VISIBLE);
-            }
-        }, 400);
-
-
     }
 
     public void hidePlayer3() {
@@ -2443,6 +2437,9 @@ public class HomeActivity extends AppCompatActivity
                         if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
                             playerFragment.snappyRecyclerView.setTransparency();
                         }
+                        if (!playerFragment.isLyricsVisisble) {
+                            playerFragment.mVisualizerView.setVisibility(View.VISIBLE);
+                        }
                     }
                 });
 
@@ -2450,13 +2447,9 @@ public class HomeActivity extends AppCompatActivity
         handler2.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (playerFragment.mVisualizerView != null)
-                    playerFragment.mVisualizerView.setVisibility(View.VISIBLE);
                 hideFragment("queue");
             }
         }, 400);
-
-
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////

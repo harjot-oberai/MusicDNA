@@ -221,12 +221,38 @@
         android:clickable="true"
         android:visibility="gone">
 
+        <com.wang.avi.AVLoadingIndicatorView
+            android:id="@+id/lyrics_loading_indicator"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_above="@+id/lyrics_status_text"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            app:indicatorName="BallPulseSyncIndicator" />
+
         <TextView
-            android:id="@+id/lyrics_content"
+            android:id="@+id/lyrics_status_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:visibility="gone" />
+
+        <ScrollView
+            android:id="@+id/lyrics_content_scroll_wrapper"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="10dp"
-            android:textColor="#FFFFFF" />
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/lyrics_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textColor="#FFFFFF" />
+
+        </ScrollView>
+
     </RelativeLayout>
 
     <RelativeLayout

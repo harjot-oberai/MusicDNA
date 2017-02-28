@@ -148,10 +148,13 @@ public class PlayerFragment extends Fragment implements
     public void onLyricsDownloaded(Lyrics lyrics) {
         if (lyrics.getTrack().equals(selected_track_title.getText().toString()) && lyrics.getArtist().equals(selected_track_artist.getText().toString())) {
             currentLyrics = lyrics;
+            lyricsLoadingIndicator.setVisibility(View.GONE);
             if (currentLyrics.getFlag() == Lyrics.POSITIVE_RESULT) {
                 lyricsContent.setText(Html.fromHtml(currentLyrics.getText()));
+                lyricsStatus.setVisibility(View.GONE);
             } else {
-                lyricsContent.setText("No Lyrics Found!");
+                lyricsStatus.setText("No Lyrics Found!");
+                lyricsStatus.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -195,6 +198,8 @@ public class PlayerFragment extends Fragment implements
     TextView spTitleAB;
     TextView spArtistAB;
 
+    TextView lyricsStatus;
+    AVLoadingIndicatorView lyricsLoadingIndicator;
     public DownloadThread downloadThread;
     public RelativeLayout lyricsContainer;
     public ImageView lyricsIcon;
@@ -565,7 +570,8 @@ public class PlayerFragment extends Fragment implements
         lyricsContainer = (RelativeLayout) view.findViewById(R.id.lyrics_container);
         lyricsIcon = (ImageView) view.findViewById(R.id.lyrics_icon);
         lyricsContent = (TextView) view.findViewById(R.id.lyrics_content);
-        lyricsContent.setMovementMethod(new ScrollingMovementMethod());
+        lyricsLoadingIndicator = (AVLoadingIndicatorView) view.findViewById(R.id.lyrics_loading_indicator);
+        lyricsStatus = (TextView) view.findViewById(R.id.lyrics_status_text);
 
         lyricsIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -573,6 +579,9 @@ public class PlayerFragment extends Fragment implements
                 if (!isLyricsVisisble) {
                     mVisualizerView.setVisibility(View.GONE);
                     lyricsContainer.setVisibility(View.VISIBLE);
+                    lyricsLoadingIndicator.setVisibility(View.VISIBLE);
+                    lyricsStatus.setText("Searching Lyrics");
+                    lyricsStatus.setVisibility(View.VISIBLE);
                     if (currentLyrics == null) {
                         downloadThread = new DownloadThread(PlayerFragment.this, false, selected_track_artist.getText().toString(), selected_track_title.getText().toString());
                         downloadThread.start();

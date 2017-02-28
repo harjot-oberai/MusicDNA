@@ -185,8 +185,8 @@
             android:clickable="true"
             android:padding="8dp"
             android:scrollbars="vertical"
-            android:src="@drawable/menu_overflow" />
-
+            android:tint="#FFFFFF"
+            android:src="@drawable/lyrics_icon" />
 
         <ImageView
             android:id="@+id/menuIcon"
@@ -249,6 +249,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
+                android:textSize="14sp"
                 android:textColor="#FFFFFF" />
 
         </ScrollView>

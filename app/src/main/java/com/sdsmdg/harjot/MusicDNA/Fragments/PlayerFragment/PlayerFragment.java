@@ -1,6 +1,7 @@
 package com.sdsmdg.harjot.MusicDNA.fragments.PlayerFragment;
 
 
+import android.content.res.ColorStateList;
 import android.graphics.Canvas;
 import android.net.ConnectivityManager;
 import android.support.v4.app.Fragment;
@@ -577,6 +578,8 @@ public class PlayerFragment extends Fragment implements
             @Override
             public void onClick(View view) {
                 if (!isLyricsVisisble) {
+                    lyricsIcon.setBackgroundColor(Color.parseColor("#DEDEDE"));
+                    lyricsIcon.setImageTintList(ColorStateList.valueOf(Color.BLACK));
                     mVisualizerView.setVisibility(View.GONE);
                     lyricsContainer.setVisibility(View.VISIBLE);
                     lyricsLoadingIndicator.setVisibility(View.VISIBLE);
@@ -589,6 +592,8 @@ public class PlayerFragment extends Fragment implements
                         onLyricsDownloaded(currentLyrics);
                     }
                 } else {
+                    lyricsIcon.setBackgroundColor(Color.TRANSPARENT);
+                    lyricsIcon.setImageTintList(ColorStateList.valueOf(Color.WHITE));
                     lyricsContent.setText("");
                     lyricsContainer.setVisibility(View.GONE);
                     mVisualizerView.setVisibility(View.VISIBLE);

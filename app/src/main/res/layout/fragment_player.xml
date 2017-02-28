@@ -205,9 +205,9 @@
         android:id="@+id/myvisualizerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/mainControllerContainer"
         android:layout_below="@+id/smallPlayer_AB"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="171dp"
         android:clickable="false"
         android:visibility="visible" />
 
@@ -332,7 +332,7 @@
     <RelativeLayout
         android:id="@+id/seekBarContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:layout_above="@+id/toggleContainer"
         android:layout_marginBottom="10dp"
         android:padding="7dp">

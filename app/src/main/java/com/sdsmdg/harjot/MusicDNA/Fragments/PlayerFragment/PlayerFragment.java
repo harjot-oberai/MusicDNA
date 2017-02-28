@@ -821,9 +821,9 @@ public class PlayerFragment extends Fragment implements
                     mCallback.onFullScreen();
                 } else {
                     homeActivity.isFullScreenEnabled = true;
-                    bottomContainer.setVisibility(View.INVISIBLE);
-                    seekBarContainer.setVisibility(View.INVISIBLE);
-                    toggleContainer.setVisibility(View.INVISIBLE);
+                    bottomContainer.setVisibility(View.GONE);
+                    seekBarContainer.setVisibility(View.GONE);
+                    toggleContainer.setVisibility(View.GONE);
                     spToolbar.setVisibility(View.INVISIBLE);
                     mCallback.onFullScreen();
                 }
@@ -947,9 +947,9 @@ public class PlayerFragment extends Fragment implements
                                 mCallback.onFullScreen();
                             } else {
                                 homeActivity.isFullScreenEnabled = true;
-                                bottomContainer.setVisibility(View.INVISIBLE);
-                                seekBarContainer.setVisibility(View.INVISIBLE);
-                                toggleContainer.setVisibility(View.INVISIBLE);
+                                bottomContainer.setVisibility(View.GONE);
+                                seekBarContainer.setVisibility(View.GONE);
+                                toggleContainer.setVisibility(View.GONE);
                                 spToolbar.setVisibility(View.INVISIBLE);
                                 mCallback.onFullScreen();
                             }

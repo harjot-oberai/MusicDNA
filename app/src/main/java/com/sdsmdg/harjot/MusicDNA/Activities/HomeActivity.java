@@ -4881,6 +4881,7 @@ public class HomeActivity extends AppCompatActivity
     public void updateVisualizerRecycler() {
         if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
             playerFragment.snappyRecyclerView.getAdapter().notifyDataSetChanged();
+            playerFragment.snappyRecyclerView.scrollToPosition(queueCurrentIndex);
             playerFragment.snappyRecyclerView.setTransparency();
         }
     }

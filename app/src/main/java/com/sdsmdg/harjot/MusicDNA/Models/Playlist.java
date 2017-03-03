@@ -39,5 +39,46 @@ public class Playlist {
     public void addSong(UnifiedTrack track) {
         songList.add(track);
     }
+    
+    public void deleteSong(UnifiedTrack track){
+
+        int index;
+
+        if(track.getType()){
+
+            long idd = track.getLocalTrack().getId();
+
+            for(UnifiedTrack songs : songList){
+
+                if(songs.getLocalTrack().getId() == idd){
+                    
+                    index = songs.get();
+                    break;
+
+                }
+            }
+
+            songList.remove(index);
+
+        }else{
+            
+            int id = track.getStreamTrack().getID();
+
+            for(UnifiedTrack otherSongs : songList){
+
+                if(otherSongs.getStreamTrack().getID()){
+
+                    index = otherSongs.get();
+                    break;
+
+                }
+
+            }
+
+            songList.remove(index);
+
+        }
+
+    }
 
 }

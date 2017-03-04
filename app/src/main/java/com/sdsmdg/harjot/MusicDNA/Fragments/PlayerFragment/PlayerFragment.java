@@ -1,6 +1,7 @@
 package com.sdsmdg.harjot.MusicDNA.fragments.PlayerFragment;
 
 
+import android.content.res.ColorStateList;
 import android.graphics.Canvas;
 import android.net.ConnectivityManager;
 import android.support.v4.app.Fragment;
@@ -21,6 +22,8 @@ import android.os.Handler;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Base64;
 import android.util.Log;
 import android.util.Pair;
@@ -41,6 +44,7 @@ import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.clickitemtouchlistener.ClickItemTouchListener;
 import com.sdsmdg.harjot.MusicDNA.Config;
+import com.sdsmdg.harjot.MusicDNA.lyrics.Lyrics;
 import com.sdsmdg.harjot.MusicDNA.snappyrecyclerview.CustomAdapter;
 import com.sdsmdg.harjot.MusicDNA.snappyrecyclerview.SnappyRecyclerView;
 import com.sdsmdg.harjot.MusicDNA.customviews.CustomProgressBar;
@@ -51,6 +55,7 @@ import com.sdsmdg.harjot.MusicDNA.models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
 import com.sdsmdg.harjot.MusicDNA.notificationmanager.AudioPlayerBroadcastReceiver;
 import com.sdsmdg.harjot.MusicDNA.R;
+import com.sdsmdg.harjot.MusicDNA.utilities.DownloadThread;
 import com.sdsmdg.harjot.MusicDNA.visualizers.VisualizerView;
 import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
 import com.squareup.leakcanary.RefWatcher;
@@ -68,7 +73,7 @@ import java.util.TimerTask;
  * A simple {@link Fragment} subclass.
  */
 public class PlayerFragment extends Fragment implements
-        AudioPlayerBroadcastReceiver.onCallbackListener {
+        AudioPlayerBroadcastReceiver.onCallbackListener, Lyrics.Callback {
 
     public SnappyRecyclerView snappyRecyclerView;
     CustomAdapter customAdapter;
@@ -140,6 +145,21 @@ public class PlayerFragment extends Fragment implements
     public PlayerFragmentCallbackListener mCallback;
     public onPlayPauseListener mCallback7;
 
+    @Override
+    public void onLyricsDownloaded(Lyrics lyrics) {
+        if (lyrics.getTrack().equals(selected_track_title.getText().toString()) && lyrics.getArtist().equals(selected_track_artist.getText().toString())) {
+            currentLyrics = lyrics;
+            lyricsLoadingIndicator.setVisibility(View.GONE);
+            if (currentLyrics.getFlag() == Lyrics.POSITIVE_RESULT) {
+                lyricsContent.setText(Html.fromHtml(currentLyrics.getText()));
+                lyricsStatus.setVisibility(View.GONE);
+            } else {
+                lyricsStatus.setText("No Lyrics Found!");
+                lyricsStatus.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
     public interface PlayerFragmentCallbackListener {
         void onComplete();
 
@@ -178,6 +198,15 @@ public class PlayerFragment extends Fragment implements
     ImageView spImgAB;
     TextView spTitleAB;
     TextView spArtistAB;
+
+    TextView lyricsStatus;
+    AVLoadingIndicatorView lyricsLoadingIndicator;
+    public DownloadThread downloadThread;
+    public RelativeLayout lyricsContainer;
+    public ImageView lyricsIcon;
+    public TextView lyricsContent;
+    public boolean isLyricsVisisble = false;
+    public Lyrics currentLyrics = null;
 
     public boolean isStart = true;
 
@@ -354,6 +383,17 @@ public class PlayerFragment extends Fragment implements
         mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
+                currentLyrics = null;
+                if (downloadThread != null) {
+                    downloadThread.interrupt();
+                }
+                if (isLyricsVisisble) {
+                    isLyricsVisisble = false;
+                    lyricsContent.setText("");
+                    lyricsContainer.setVisibility(View.GONE);
+                    lyricsIcon.setAlpha(0.5f);
+                    mVisualizerView.setVisibility(View.VISIBLE);
+                }
                 completed = false;
                 pauseClicked = false;
                 isPrepared = true;
@@ -528,6 +568,39 @@ public class PlayerFragment extends Fragment implements
         spToolbar = (RelativeLayout) view.findViewById(R.id.smallPlayer_AB);
 
         overflowMenuAB = (ImageView) view.findViewById(R.id.menuIcon);
+
+        lyricsContainer = (RelativeLayout) view.findViewById(R.id.lyrics_container);
+        lyricsIcon = (ImageView) view.findViewById(R.id.lyrics_icon);
+        lyricsContent = (TextView) view.findViewById(R.id.lyrics_content);
+        lyricsLoadingIndicator = (AVLoadingIndicatorView) view.findViewById(R.id.lyrics_loading_indicator);
+        lyricsStatus = (TextView) view.findViewById(R.id.lyrics_status_text);
+
+        lyricsIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!isLyricsVisisble) {
+                    lyricsIcon.setAlpha(1.0f);
+                    mVisualizerView.setVisibility(View.GONE);
+                    lyricsContainer.setVisibility(View.VISIBLE);
+                    lyricsLoadingIndicator.setVisibility(View.VISIBLE);
+                    lyricsStatus.setText("Searching Lyrics");
+                    lyricsStatus.setVisibility(View.VISIBLE);
+                    if (currentLyrics == null) {
+                        downloadThread = new DownloadThread(PlayerFragment.this, false, selected_track_artist.getText().toString(), selected_track_title.getText().toString());
+                        downloadThread.start();
+                    } else {
+                        onLyricsDownloaded(currentLyrics);
+                    }
+                } else {
+                    lyricsIcon.setAlpha(0.5f);
+                    lyricsContent.setText("");
+                    lyricsContainer.setVisibility(View.GONE);
+                    mVisualizerView.setVisibility(View.VISIBLE);
+                }
+                isLyricsVisisble = !isLyricsVisisble;
+            }
+        });
+
         spImgAB = (ImageView) view.findViewById(R.id.selected_track_image_sp_AB);
         spImgAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -747,9 +820,9 @@ public class PlayerFragment extends Fragment implements
                     mCallback.onFullScreen();
                 } else {
                     homeActivity.isFullScreenEnabled = true;
-                    bottomContainer.setVisibility(View.INVISIBLE);
-                    seekBarContainer.setVisibility(View.INVISIBLE);
-                    toggleContainer.setVisibility(View.INVISIBLE);
+                    bottomContainer.setVisibility(View.GONE);
+                    seekBarContainer.setVisibility(View.GONE);
+                    toggleContainer.setVisibility(View.GONE);
                     spToolbar.setVisibility(View.INVISIBLE);
                     mCallback.onFullScreen();
                 }
@@ -873,9 +946,9 @@ public class PlayerFragment extends Fragment implements
                                 mCallback.onFullScreen();
                             } else {
                                 homeActivity.isFullScreenEnabled = true;
-                                bottomContainer.setVisibility(View.INVISIBLE);
-                                seekBarContainer.setVisibility(View.INVISIBLE);
-                                toggleContainer.setVisibility(View.INVISIBLE);
+                                bottomContainer.setVisibility(View.GONE);
+                                seekBarContainer.setVisibility(View.GONE);
+                                toggleContainer.setVisibility(View.GONE);
                                 spToolbar.setVisibility(View.INVISIBLE);
                                 mCallback.onFullScreen();
                             }
@@ -1054,6 +1127,13 @@ public class PlayerFragment extends Fragment implements
                                         showCase.setButtonText("Done");
                                         break;
                                     case 2:
+                                        showCase.setTarget(new ViewTarget(R.id.lyrics_icon, getActivity()));
+                                        showCase.setContentTitle("Lyrics");
+                                        showCase.setContentText("Get lyrics by tapping this icon");
+                                        showCase.setButtonPosition(homeActivity.lps);
+                                        showCase.setButtonText("Done");
+                                        break;
+                                    case 3:
                                         showCase.hide();
                                         break;
                                 }

@@ -150,7 +150,7 @@
             android:layout_marginRight="5dp"
             android:layout_marginTop="8dp"
             android:layout_toEndOf="@+id/selected_track_image_sp_AB"
-            android:layout_toStartOf="@+id/menuIcon"
+            android:layout_toStartOf="@+id/lyrics_icon"
             android:ellipsize="marquee"
             android:fadingEdge="horizontal"
             android:maxLines="1"
@@ -167,13 +167,27 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_toEndOf="@+id/selected_track_image_sp_AB"
-            android:layout_toStartOf="@+id/menuIcon"
+            android:layout_toStartOf="@+id/lyrics_icon"
             android:maxLines="1"
             android:paddingLeft="5dp"
             android:text="Unknown"
             android:textColor="#EEEEEE"
             android:textSize="13sp" />
 
+        <ImageView
+            android:id="@+id/lyrics_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="12dp"
+            android:layout_toStartOf="@+id/menuIcon"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:alpha="0.5"
+            android:padding="8dp"
+            android:scrollbars="vertical"
+            android:tint="#FFFFFF"
+            android:src="@drawable/lyrics_icon" />
 
         <ImageView
             android:id="@+id/menuIcon"
@@ -192,11 +206,56 @@
         android:id="@+id/myvisualizerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/mainControllerContainer"
         android:layout_below="@+id/smallPlayer_AB"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="171dp"
         android:clickable="false"
         android:visibility="visible" />
+
+    <RelativeLayout
+        android:id="@+id/lyrics_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/mainControllerContainer"
+        android:layout_below="@+id/smallPlayer_AB"
+        android:background="#00000000"
+        android:clickable="true"
+        android:visibility="gone">
+
+        <com.wang.avi.AVLoadingIndicatorView
+            android:id="@+id/lyrics_loading_indicator"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_above="@+id/lyrics_status_text"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            app:indicatorName="BallPulseSyncIndicator" />
+
+        <TextView
+            android:id="@+id/lyrics_status_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:visibility="gone" />
+
+        <ScrollView
+            android:id="@+id/lyrics_content_scroll_wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/lyrics_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textSize="14sp"
+                android:textColor="#FFFFFF" />
+
+        </ScrollView>
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/mainControllerContainer"
@@ -274,7 +333,7 @@
     <RelativeLayout
         android:id="@+id/seekBarContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:layout_above="@+id/toggleContainer"
         android:layout_marginBottom="10dp"
         android:padding="7dp">

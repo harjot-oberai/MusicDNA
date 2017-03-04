@@ -29,6 +29,8 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
         transitive = true;
     }
+    compile 'org.jsoup:jsoup:1.8.3'
+    compile 'com.squareup.okhttp:okhttp:2.+'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'com.github.mmin18:realtimeblurview:1.1.0'

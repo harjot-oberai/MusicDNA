@@ -21,8 +21,10 @@ import android.widget.Toast;
 import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.R;
 import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
+import com.sdsmdg.harjot.MusicDNA.lyrics.Lyrics;
 import com.sdsmdg.harjot.MusicDNA.utilities.CommonUtils;
 import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
+import com.sdsmdg.harjot.MusicDNA.utilities.DownloadThread;
 
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
@@ -71,7 +73,7 @@ public class EditLocalSongFragment extends Fragment {
 
     View bottomMarginLayout;
 
-    public interface EditFragmentCallbackListener{
+    public interface EditFragmentCallbackListener {
         void onEditSongSave(boolean wasSaveSuccessful);
 
         void getNewBitmap();
@@ -126,7 +128,8 @@ public class EditLocalSongFragment extends Fragment {
         if (HomeActivity.isReloaded)
             bottomMarginLayout.getLayoutParams().height = 0;
         else
-            bottomMarginLayout.getLayoutParams().height = CommonUtils.dpTopx(65, getContext());;
+            bottomMarginLayout.getLayoutParams().height = CommonUtils.dpTopx(65, getContext());
+        ;
 
         titleText = (EditText) view.findViewById(R.id.edit_song_title);
         artistText = (EditText) view.findViewById(R.id.edit_song_artist);
@@ -259,7 +262,6 @@ public class EditLocalSongFragment extends Fragment {
             titleText.setText(HomeActivity.editSong.getTitle());
             artistText.setText(HomeActivity.editSong.getArtist());
             albumText.setText(HomeActivity.editSong.getAlbum());
-
         }
 
         try {

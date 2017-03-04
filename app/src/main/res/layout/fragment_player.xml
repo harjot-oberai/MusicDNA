@@ -183,6 +183,7 @@
             android:layout_toStartOf="@+id/menuIcon"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
+            android:alpha="0.5"
             android:padding="8dp"
             android:scrollbars="vertical"
             android:tint="#FFFFFF"

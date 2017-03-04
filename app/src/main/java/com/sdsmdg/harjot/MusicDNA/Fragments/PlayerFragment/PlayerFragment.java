@@ -391,6 +391,7 @@ public class PlayerFragment extends Fragment implements
                     isLyricsVisisble = false;
                     lyricsContent.setText("");
                     lyricsContainer.setVisibility(View.GONE);
+                    lyricsIcon.setAlpha(0.5f);
                     mVisualizerView.setVisibility(View.VISIBLE);
                 }
                 completed = false;
@@ -578,8 +579,7 @@ public class PlayerFragment extends Fragment implements
             @Override
             public void onClick(View view) {
                 if (!isLyricsVisisble) {
-                    lyricsIcon.setBackgroundColor(Color.parseColor("#DEDEDE"));
-                    lyricsIcon.setImageTintList(ColorStateList.valueOf(Color.BLACK));
+                    lyricsIcon.setAlpha(1.0f);
                     mVisualizerView.setVisibility(View.GONE);
                     lyricsContainer.setVisibility(View.VISIBLE);
                     lyricsLoadingIndicator.setVisibility(View.VISIBLE);
@@ -592,8 +592,7 @@ public class PlayerFragment extends Fragment implements
                         onLyricsDownloaded(currentLyrics);
                     }
                 } else {
-                    lyricsIcon.setBackgroundColor(Color.TRANSPARENT);
-                    lyricsIcon.setImageTintList(ColorStateList.valueOf(Color.WHITE));
+                    lyricsIcon.setAlpha(0.5f);
                     lyricsContent.setText("");
                     lyricsContainer.setVisibility(View.GONE);
                     mVisualizerView.setVisibility(View.VISIBLE);
@@ -1128,6 +1127,13 @@ public class PlayerFragment extends Fragment implements
                                         showCase.setButtonText("Done");
                                         break;
                                     case 2:
+                                        showCase.setTarget(new ViewTarget(R.id.lyrics_icon, getActivity()));
+                                        showCase.setContentTitle("Lyrics");
+                                        showCase.setContentText("Get lyrics by tapping this icon");
+                                        showCase.setButtonPosition(homeActivity.lps);
+                                        showCase.setButtonText("Done");
+                                        break;
+                                    case 3:
                                         showCase.hide();
                                         break;
                                 }

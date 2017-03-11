@@ -23,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.support.v7.widget.SwitchCompat;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.OnColorSelectedListener;
@@ -32,6 +33,7 @@ import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
 import com.sdsmdg.harjot.MusicDNA.R;
 import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
+import com.sdsmdg.harjot.MusicDNA.models.Settings;
 import com.sdsmdg.harjot.MusicDNA.utilities.CommonUtils;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -41,7 +43,7 @@ import com.squareup.leakcanary.RefWatcher;
  */
 public class SettingsFragment extends Fragment {
 
-    RelativeLayout densitycard, themeCard, aboutCard, albumArtCard, wifiCard;
+    RelativeLayout densitycard, themeCard, aboutCard, albumArtCard, wifiCard, resetSettings;
     SwitchCompat albumArtToggle;
     SwitchCompat wifiToggle;
     ImageView themeColorImg;
@@ -110,6 +112,41 @@ public class SettingsFragment extends Fragment {
         else
             bottomMarginLayout.getLayoutParams().height = CommonUtils.dpTopx(65, getContext());
 
+        resetSettings = (RelativeLayout) view.findViewById(R.id.reset_settings_card);
+        resetSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final android.app.AlertDialog alertDialog = new android.app.AlertDialog.Builder(view.getContext()).create();
+                alertDialog.setTitle("Reset settings?");
+                alertDialog.setMessage("This operation will reset all settings but playlist and other content will remain unchanged.");
+                alertDialog.setButton(android.app.AlertDialog.BUTTON_POSITIVE, "Reset",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                            resetAllSettings();
+                            Toast.makeText(getContext(), "Settings have been reset", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                alertDialog.setButton(android.app.AlertDialog.BUTTON_NEGATIVE, "Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+                alertDialog.create();
+
+                alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface arg0) {
+                        alertDialog.getButton(android.app.AlertDialog.BUTTON_POSITIVE).setTextColor(HomeActivity.themeColor);
+                        alertDialog.getButton(android.app.AlertDialog.BUTTON_NEGATIVE).setTextColor(HomeActivity.themeColor);
+                    }
+                });
+
+                alertDialog.show();
+            }
+        });
+
+
         densitycard = (RelativeLayout) view.findViewById(R.id.density_card);
         densityText = (TextView) view.findViewById(R.id.density_value);
         densityText.setText(String.valueOf(100 - (int) (homeActivity.minAudioStrength * 100)));
@@ -130,8 +167,7 @@ public class SettingsFragment extends Fragment {
                 densitySeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        homeActivity.minAudioStrength = 1.0f - ((float) progress / (float) 100);
-                        homeActivity.settings.setMinAudioStrength(homeActivity.minAudioStrength);
+                        setHomeActivityDNADensity(progress);
                         densityTextDialog.setText(String.valueOf(progress));
                         densityText.setText(String.valueOf(progress));
                     }
@@ -174,19 +210,7 @@ public class SettingsFragment extends Fragment {
                         .setPositiveButton("ok", new ColorPickerClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int color, Integer[] allColors) {
-                                homeActivity.settings.setThemeColor(color);
-                                homeActivity.themeColor = color;
-                                homeActivity.collapsingToolbar.setContentScrimColor(color);
-                                homeActivity.customLinearGradient.setStartColor(color);
-                                homeActivity.customLinearGradient.invalidate();
-                                themeColorImg.setBackgroundColor(color);
-                                mCallback.onColorChanged();
-                                if (Build.VERSION.SDK_INT >= 21) {
-                                    Window window = ((Activity) (getContext())).getWindow();
-                                    window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-                                    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                                    window.setStatusBarColor(getDarkColor(color));
-                                }
+                                setHomeActivityColor(color);
                             }
                         })
                         .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
@@ -221,8 +245,7 @@ public class SettingsFragment extends Fragment {
         albumArtToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                homeActivity.settings.setAlbumArtBackgroundEnabled(isChecked);
-                mCallback.onAlbumArtBackgroundChangedVisibility(isChecked ? View.VISIBLE : View.GONE);
+                setHomeActivityAlbumBg(isChecked);
             }
         });
 
@@ -238,7 +261,7 @@ public class SettingsFragment extends Fragment {
         wifiToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                homeActivity.settings.setStreamOnlyOnWifiEnabled(isChecked);
+                setHomeActivityStreamingOnWifi(isChecked);
             }
         });
 
@@ -250,7 +273,6 @@ public class SettingsFragment extends Fragment {
                 mCallback.onAboutClicked();
             }
         });
-
     }
 
     @Override
@@ -277,5 +299,46 @@ public class SettingsFragment extends Fragment {
         darkColor = Color.rgb(r, g, b);
 
         return darkColor;
+    }
+
+    public void resetAllSettings(){
+        setHomeActivityColor(Settings.DEF_THEME_COLOR);
+        setHomeActivityDNADensity(Settings.DEF_DNA_DENSITY);
+        setHomeActivityAlbumBg(Settings.DEF_ALBUM_ART_BG);
+        setHomeActivityStreamingOnWifi(Settings.DEF_STREAM_ONLY_ON_WIFI);
+    }
+
+    public void setHomeActivityColor(int color){
+        homeActivity.settings.setThemeColor(color);
+        homeActivity.themeColor = color;
+        homeActivity.collapsingToolbar.setContentScrimColor(color);
+        homeActivity.customLinearGradient.setStartColor(color);
+        homeActivity.customLinearGradient.invalidate();
+        themeColorImg.setBackgroundColor(color);
+        mCallback.onColorChanged();
+        if (Build.VERSION.SDK_INT >= 21) {
+            Window window = ((lActivity) (getContext())).getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getDarkColor(color));
+        }
+    }
+
+    public void setHomeActivityDNADensity(float progress) {
+        homeActivity.minAudioStrength = (100 - progress)/(float)100;
+        homeActivity.settings.setMinAudioStrength(homeActivity.minAudioStrength);
+        densityText.setText(String.valueOf(progress));
+        densityText.setText(String.valueOf(100 - (int) (homeActivity.minAudioStrength * 100)));
+    }
+
+    public void setHomeActivityAlbumBg(boolean enabled) {
+        homeActivity.settings.setAlbumArtBackgroundEnabled(enabled);
+        mCallback.onAlbumArtBackgroundChangedVisibility(enabled ? View.VISIBLE : View.GONE);
+        albumArtToggle.setChecked(enabled);
+    }
+
+    public void setHomeActivityStreamingOnWifi(boolean enabled) {
+        homeActivity.settings.setStreamOnlyOnWifiEnabled(enabled);
+        wifiToggle.setChecked(enabled);
     }
 }

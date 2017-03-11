@@ -6,10 +6,15 @@ import android.graphics.Color;
  * Created by Harjot on 02-Aug-16.
  */
 public class Settings {
-    private int themeColor = Color.parseColor("#B24242");
+    public static final int DEF_THEME_COLOR = Color.parseColor("#B24242");
+    public static boolean DEF_ALBUM_ART_BG = true;
+    public static boolean DEF_STREAM_ONLY_ON_WIFI = false;
+    public static float DEF_DNA_DENSITY = 60f;
+
+    private int themeColor = DEF_THEME_COLOR;
     private float minAudioStrength;
-    private boolean albumArtBackgroundEnabled = true;
-    private boolean streamOnlyOnWifiEnabled = false;
+    private boolean albumArtBackgroundEnabled = DEF_ALBUM_ART_BG;
+    private boolean streamOnlyOnWifiEnabled = DEF_STREAM_ONLY_ON_WIFI;
 
     public Settings() {
         this.minAudioStrength = 0.40f;

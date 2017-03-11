@@ -227,6 +227,42 @@
                 android:layout_below="@+id/about_card"
                 android:background="#232323" />
 
+            <RelativeLayout
+                android:id="@+id/reset_settings_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/about_card"
+                android:background="@drawable/custom_ripple"
+                android:clickable="true"
+                android:padding="5dp">
+
+                <TextView
+                    android:id="@+id/setiings_reset"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="7dp"
+                    android:padding="5dp"
+                    android:text="Reset settings"
+                    android:textColor="#FFF"
+                    android:textSize="18dp" />
+                <ImageView
+                    android:id="@+id/settings_warning_sign"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:paddingRight="3dp"
+                    android:layout_margin="7dp"
+                    android:src="@drawable/ic_warning_sign"/>
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/reset_settings_card"
+                android:background="#232323" />
+
         </RelativeLayout>
 
     </ScrollView>

@@ -126,7 +126,7 @@
                 android:layout_marginBottom="12dp"
                 android:layout_marginRight="4dp"
                 android:layout_toLeftOf="@+id/about_rate_link"
-                android:padding="8dp"
+                android:padding="2dp"
                 />
             <ImageView
                 android:id="@+id/about_rate_link"
@@ -147,7 +147,7 @@
                 android:src="@drawable/ic_share_app"
                 android:layout_below="@+id/about_text"
                 android:layout_marginBottom="12dp"
-                android:padding="8dp"
+                android:padding="10dp"
                 />
 
             <TextView

@@ -317,7 +317,7 @@ public class SettingsFragment extends Fragment {
         themeColorImg.setBackgroundColor(color);
         mCallback.onColorChanged();
         if (Build.VERSION.SDK_INT >= 21) {
-            Window window = ((lActivity) (getContext())).getWindow();
+            Window window = ((Activity) (getContext())).getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(getDarkColor(color));

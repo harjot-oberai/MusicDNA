@@ -1,72 +1,172 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorDark"
     android:clipToPadding="false"
     tools:context="com.sdsmdg.harjot.MusicDNA.fragments.AboutFragment.AboutFragment">
-
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="#111111"
-        android:elevation="12dp">
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/bottom_margin_layout">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <RelativeLayout
+                android:id="@+id/about_top_bar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="#111111"
+                android:elevation="12dp">
 
-        <ImageView
-            android:id="@+id/about_back_btn"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/custom_ripple"
-            android:clickable="true"
-            android:padding="12dp"
-            android:src="@drawable/back2" />
+                <ImageView
+                    android:id="@+id/about_back_btn"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="false"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/custom_ripple"
+                    android:clickable="true"
+                    android:padding="12dp"
+                    android:src="@drawable/back2" />
 
-        <TextView
-            android:id="@+id/about_fragment_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="ABOUT"
-            android:textColor="#FFFFFF"
-            android:textSize="25sp" />
+                <TextView
+                    android:id="@+id/about_fragment_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="ABOUT"
+                    android:textColor="#FFFFFF"
+                    android:textSize="25sp" />
 
-    </RelativeLayout>
+            </RelativeLayout>
 
-    <ImageView
-        android:layout_width="140dp"
-        android:layout_height="70dp"
-        android:layout_above="@+id/version_text"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/logo" />
 
-    <Button
-        android:id="@+id/link_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/bottom_margin_layout"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
-        android:paddingBottom="1dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="1dp"
-        android:text="     Source Code     "
-        android:textColor="#FFF"
-        android:textSize="16dp" />
+            <ImageView
+                android:id="@+id/about_mdg_logo"
+                android:layout_below="@id/about_top_bar"
+                android:layout_marginTop="32dp"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/music_dna_icon" />
+            <TextView
+                android:id="@+id/about_music_dna_title"
+                android:layout_below="@id/about_mdg_logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="12dp"
+                android:text="Music DNA"
+                android:textSize="18sp"
+                android:textAlignment="center"
+                android:textColor="#fff"/>
 
-    <TextView
-        android:id="@+id/version_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginBottom="10dp"
-        android:text="\nMusic DNA © 2016"
-        android:textAlignment="center"
-        android:textColor="#CCC"
-        android:textSize="14dp" />
+            <TextView
+                android:id="@+id/about_version_text"
+                android:layout_below="@id/about_music_dna_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="8dp"
+                android:text="Version 1.1.0"
+                android:textSize="11sp"
+                android:textAlignment="center"
+                android:textColor="#fff"/>
+
+            <TextView
+                android:id="@+id/about_brought_by"
+                android:layout_below="@id/about_version_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="64dp"
+                android:text="developed by"
+                android:textSize="12sp"
+                android:textStyle="italic"
+                android:textAlignment="center"
+                android:textColor="#fff"/>
+
+            <ImageView
+                android:id="@+id/about_music_dna_logo"
+                android:layout_below="@id/about_brought_by"
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/logo"
+                />
+
+
+            <TextView
+                android:id="@+id/about_text"
+                android:layout_below="@id/about_music_dna_logo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="32dp"
+                android:layout_marginRight="32dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/mdg_description"
+                android:textAlignment="center"
+                android:textColor="#CCC"
+                android:textSize="12dp" />
+
+
+            <ImageView
+                android:id="@+id/about_github_link"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_github"
+                android:layout_below="@+id/about_text"
+                android:layout_marginBottom="12dp"
+                android:layout_marginRight="4dp"
+                android:layout_toLeftOf="@+id/about_rate_link"
+                android:padding="2dp"
+                />
+            <ImageView
+                android:id="@+id/about_rate_link"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_rate_play"
+                android:layout_below="@+id/about_text"
+                android:layout_marginBottom="12dp"
+                android:layout_centerHorizontal="true"
+                android:padding="8dp"
+                />
+            <ImageView
+                android:id="@+id/about_share_link"
+                android:layout_toRightOf="@id/about_rate_link"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="4dp"
+                android:src="@drawable/ic_share_app"
+                android:layout_below="@+id/about_text"
+                android:layout_marginBottom="12dp"
+                android:padding="10dp"
+                />
+
+            <TextView
+                android:id="@+id/about_license_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="0dp"
+                android:text="View open source licenses"
+                android:textAlignment="center"
+                android:textColor="@color/colorAccent"
+                android:autoLink="web"
+                android:clickable="true"
+                android:layout_below="@+id/about_share_link"
+                android:textSize="10sp"
+                />
+        </RelativeLayout>
+    </ScrollView>
+
 
     <View
         android:id="@+id/bottom_margin_layout"
@@ -75,5 +175,4 @@
         android:layout_alignParentBottom="true"
         android:background="@color/colorDark"
         android:clickable="true" />
-
 </RelativeLayout>

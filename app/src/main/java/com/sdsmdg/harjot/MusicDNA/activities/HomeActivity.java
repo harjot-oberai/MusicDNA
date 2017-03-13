@@ -1463,41 +1463,23 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void getSavedData() {
+        //TODO refactor using array and for loop
         try {
             Gson gson = new Gson();
-            Log.d("TIME", "start");
-            String json2 = mPrefs.getString("allPlaylists", "");
-            allPlaylists = gson.fromJson(json2, AllPlaylists.class);
-            Log.d("TIME", "allPlaylists");
-            String json3 = mPrefs.getString("queue", "");
-            queue = gson.fromJson(json3, Queue.class);
-            Log.d("TIME", "queue");
-            String json4 = mPrefs.getString("recentlyPlayed", "");
-            recentlyPlayed = gson.fromJson(json4, RecentlyPlayed.class);
-            Log.d("TIME", "recents");
-            String json5 = mPrefs.getString("favouriteTracks", "");
-            favouriteTracks = gson.fromJson(json5, Favourite.class);
-            Log.d("TIME", "fav");
-            String json6 = mPrefs.getString("queueCurrentIndex", "");
-            queueCurrentIndex = gson.fromJson(json6, Integer.class);
-            Log.d("TIME", "queueCurrentindex");
-            String json8 = mPrefs.getString("settings", "");
-            settings = gson.fromJson(json8, Settings.class);
-            Log.d("TIME", "settings");
-            String json9 = mPrefs.getString("equalizer", "");
-            equalizerModel = gson.fromJson(json9, EqualizerModel.class);
-            Log.d("TIME", "equalizer");
-            String json = mPrefs.getString("savedDNAs", "");
-            savedDNAs = gson.fromJson(json, AllSavedDNA.class);
-            Log.d("TIME", "savedDNAs");
+            allPlaylists = gson.fromJson(mPrefs.getString("allPlaylists", ""), AllPlaylists.class);
+            queue = gson.fromJson(mPrefs.getString("queue", ""), Queue.class);
+            recentlyPlayed = gson.fromJson(mPrefs.getString("recentlyPlayed", ""), RecentlyPlayed.class);
+            favouriteTracks = gson.fromJson(mPrefs.getString("favouriteTracks", ""), Favourite.class);
+            queueCurrentIndex = gson.fromJson(mPrefs.getString("queueCurrentIndex", ""), Integer.class);
+            settings = gson.fromJson(mPrefs.getString("settings", ""), Settings.class);
+            equalizerModel = gson.fromJson(mPrefs.getString("equalizer", ""), EqualizerModel.class);
+            savedDNAs = gson.fromJson(mPrefs.getString("savedDNAs", ""), AllSavedDNA.class);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         try {
-            String json7 = mPrefs.getString("versionCode", "");
-            prevVersionCode = gson.fromJson(json7, Integer.class);
-            Log.d("TIME", "VersionCode : " + prevVersionCode + " : " + versionCode);
+            prevVersionCode = gson.fromJson(mPrefs.getString("versionCode", ""), Integer.class);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1505,7 +1487,6 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void getLocalSongs() {
-
         localTrackList.clear();
         finalLocalSearchResultList.clear();
         albums.clear();
@@ -2790,14 +2771,11 @@ public class HomeActivity extends AppCompatActivity
         View view = findViewById(R.id.root_view);
         view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 
-
         if (isFullScreenEnabled) {
             Toast.makeText(this, "Long Press to Exit", Toast.LENGTH_SHORT).show();
-            ActionBar actionBar = getSupportActionBar();
-            actionBar.hide();
+            getSupportActionBar().hide();
         } else {
-            ActionBar actionBar = getSupportActionBar();
-            actionBar.show();
+            getSupportActionBar().show();
         }
     }
 
@@ -3007,10 +2985,8 @@ public class HomeActivity extends AppCompatActivity
                 queue.getQueue().add(++queueCurrentIndex, new UnifiedTrack(true, track, null));
             }
             localSelectedTrack = track;
-            streamSelected = false;
             localSelected = true;
-            queueCall = false;
-            isReloaded = false;
+            streamSelected = queueCall = isReloaded = false;
             onLocalTrackSelected(position);
         } else {
             Track track = ut.getStreamTrack();
@@ -3029,9 +3005,7 @@ public class HomeActivity extends AppCompatActivity
             }
             selectedTrack = track;
             streamSelected = true;
-            localSelected = false;
-            queueCall = false;
-            isReloaded = false;
+            localSelected = queueCall = isReloaded = false;
             onTrackSelected(position);
         }
     }
@@ -3080,18 +3054,14 @@ public class HomeActivity extends AppCompatActivity
                 if (ut.getType()) {
                     LocalTrack track = ut.getLocalTrack();
                     localSelectedTrack = track;
-                    streamSelected = false;
                     localSelected = true;
-                    queueCall = false;
-                    isReloaded = false;
+                    streamSelected = queueCall = isReloaded = false;
                     onLocalTrackSelected(position);
                 } else {
                     Track track = ut.getStreamTrack();
                     selectedTrack = track;
                     streamSelected = true;
-                    localSelected = false;
-                    queueCall = false;
-                    isReloaded = false;
+                    localSelected = queueCall = isReloaded = false;
                     onTrackSelected(position);
                 }
             }
@@ -3433,6 +3403,7 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onEditSongSave(boolean wasSaveSuccessful) {
+        //TODO refactor this
         hideFragment("Edit");
         if (!wasSaveSuccessful) {
             Toast.makeText(this, "Error occured while editing", Toast.LENGTH_SHORT).show();
@@ -3445,11 +3416,12 @@ public class HomeActivity extends AppCompatActivity
 
         if (isAlbumVisible) {
             hideFragment("viewAlbum");
-
         } else if (isArtistVisible) {
             hideFragment("viewArtist");
         }
+
         LocalMusicViewPagerFragment flmFrag = (LocalMusicViewPagerFragment) fragMan.findFragmentByTag("local");
+
         LocalMusicFragment lFrag = null;
         if (flmFrag != null) {
             lFrag = (LocalMusicFragment) flmFrag.getFragmentByPosition(0);
@@ -3458,20 +3430,20 @@ public class HomeActivity extends AppCompatActivity
             lFrag.updateAdapter();
         }
 
-        ArtistFragment artFrag = null;
-        if (flmFrag != null) {
-            artFrag = (ArtistFragment) flmFrag.getFragmentByPosition(2);
-        }
-        if (artFrag != null) {
-            artFrag.updateAdapter();
-        }
-
         AlbumFragment albFrag = null;
         if (flmFrag != null) {
             albFrag = (AlbumFragment) flmFrag.getFragmentByPosition(1);
         }
         if (albFrag != null) {
             albFrag.updateAdapter();
+        }
+
+        ArtistFragment artFrag = null;
+        if (flmFrag != null) {
+            artFrag = (ArtistFragment) flmFrag.getFragmentByPosition(2);
+        }
+        if (artFrag != null) {
+            artFrag.updateAdapter();
         }
     }
 
@@ -3575,18 +3547,14 @@ public class HomeActivity extends AppCompatActivity
             if (ut.getType()) {
                 LocalTrack track = ut.getLocalTrack();
                 localSelectedTrack = track;
-                streamSelected = false;
-                localSelected = true;
-                queueCall = true;
-                isReloaded = false;
+                localSelected = queueCall = true;
+                streamSelected = isReloaded = false;
                 onLocalTrackSelected(position);
             } else {
                 Track track = ut.getStreamTrack();
                 selectedTrack = track;
-                streamSelected = true;
-                localSelected = false;
-                queueCall = true;
-                isReloaded = false;
+                streamSelected = queueCall = true;
+                localSelected = isReloaded = false;
                 onTrackSelected(position);
             }
         }
@@ -3850,7 +3818,7 @@ public class HomeActivity extends AppCompatActivity
     }
 
     public void showFragment(String type) {
-
+        //TODO - Refactor using array and for...loop - [showFragment()]
         if (!type.equals("viewAlbum") && !type.equals("folderContent") && !type.equals("viewArtist") && !type.equals("playlist") && !type.equals("newPlaylist") && !type.equals("About") && !type.equals("Edit"))
             hideAllFrags();
 
@@ -4138,6 +4106,7 @@ public class HomeActivity extends AppCompatActivity
     }
 
     public void hideFragment(String type) {
+        //TODO - Refactor using array and for...loop - [hideFragment()]
         if (type.equals("local")) {
             isLocalVisible = false;
             setTitle("Music DNA");
@@ -4314,27 +4283,14 @@ public class HomeActivity extends AppCompatActivity
     }
 
     public void hideAllFrags() {
-        hideFragment("local");
-        hideFragment("queue");
-        hideFragment("stream");
-        hideFragment("playlist");
-        hideFragment("newPlaylist");
-        hideFragment("allPlaylists");
-        hideFragment("equalizer");
-        hideFragment("favourite");
-        hideFragment("folderContent");
-        hideFragment("allFolders");
-        hideFragment("allSavedDNAs");
-        hideFragment("viewAlbum");
-        hideFragment("viewArtist");
-        hideFragment("recent");
-        hideFragment("settings");
-        hideFragment("About");
+        String fragments[] = {"local","queue","stream","playlist","newPlaylist","allPlaylists","equalizer",
+                                "favourite","folderContent","allFolders","allSavedDNAs","viewAlbum",
+                                "viewArtist","recent","settings","About"};
+        for (String fragment : fragments)
+            hideFragment(fragment);
 
         navigationView.setCheckedItem(R.id.nav_home);
-
         setTitle("Music DNA");
-
     }
 
     public void showNotification() {
@@ -4467,7 +4423,7 @@ public class HomeActivity extends AppCompatActivity
                     String json = gson.toJson(savedDNAs);
                     prefsEditor.putString("savedDNAs", json);
                 } catch (Exception e) {
-
+                    e.printStackTrace();
                 }
                 isSaveDNAsRunning = false;
             }

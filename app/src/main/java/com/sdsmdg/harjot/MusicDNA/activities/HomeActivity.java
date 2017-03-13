@@ -2,6 +2,7 @@ package com.sdsmdg.harjot.MusicDNA.activities;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.support.v4.app.Fragment;
 import android.app.NotificationManager;
 import android.content.ComponentName;
 import android.content.ContentResolver;
@@ -1753,6 +1754,7 @@ public class HomeActivity extends AppCompatActivity
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else if (showCase != null && showCase.isShowing()) {
@@ -1809,54 +1811,24 @@ public class HomeActivity extends AppCompatActivity
             } else if (isArtistVisible) {
                 hideFragment("viewArtist");
             } else {
-                if (isLocalVisible) {
-                    hideFragment("local");
-                    setTitle("Music DNA");
-                } else if (isQueueVisible) {
-                    hideFragment("queue");
-                    setTitle("Music DNA");
-                } else if (isStreamVisible) {
-                    hideFragment("stream");
-                    setTitle("Music DNA");
-                } else if (isPlaylistVisible) {
-                    hideFragment("playlist");
-                    setTitle("Music DNA");
-                } else if (isNewPlaylistVisible) {
-                    hideFragment("newPlaylist");
-                    setTitle("Music DNA");
-                } else if (isEqualizerVisible) {
-                    finalSelectedTracks.clear();
-                    hideFragment("equalizer");
-                    setTitle("Music DNA");
-                } else if (isFavouriteVisible) {
-                    hideFragment("favourite");
-                    setTitle("Music DNA");
-                } else if (isAllPlaylistVisible) {
-                    hideFragment("allPlaylists");
-                    setTitle("Music DNA");
-                } else if (isFolderContentVisible) {
-                    hideFragment("folderContent");
-                    setTitle("Folders");
-                } else if (isAllFolderVisible) {
-                    hideFragment("allFolders");
-                    setTitle("Music DNA");
-                } else if (isAllSavedDnaVisisble) {
-                    hideFragment("allSavedDNAs");
-                    setTitle("Music DNA");
-                } else if (isSavedDNAVisible) {
-                    hideFragment("savedDNA");
-                    setTitle("Music DNA");
-                } else if (isRecentVisible) {
-                    hideFragment("recent");
-                    setTitle("Music DNA");
-                } else if (isAboutVisible) {
-                    hideFragment("About");
-                    setTitle("Settings");
-                } else if (isSettingsVisible) {
-                    hideFragment("settings");
-                    new SaveSettings().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    setTitle("Music DNA");
-                } else if (!isPlayerTransitioning) {
+                boolean checks[] = {isLocalVisible, isQueueVisible, isStreamVisible, isPlaylistVisible,
+                                        isNewPlaylistVisible, isEqualizerVisible, isFavouriteVisible,
+                                        isAllPlaylistVisible, isFolderContentVisible, isAllFolderVisible,
+                                        isAllSavedDnaVisisble, isRecentVisible, isAboutVisible};
+                String names[] = {"local", "queue", "stream", "playlist", "newPlaylist", "equalizer",
+                                    "favourite", "allPlaylists", "folderContent", "allFolders",
+                                    "allSavedDNAs", "recent", "about"};
+
+                setTitle("MusicDNA");
+                for (int i = 0; i < checks.length; i++){
+                    if (isEqualizerVisible)
+                        finalSelectedTracks.clear();
+                    else if (isSettingsVisible)
+                        new SaveSettings().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    if (checks[i]) hideFragment(names[i]);
+                }
+
+                if (!isPlayerTransitioning) {
                     startActivity(new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME));
                 }
             }
@@ -1898,23 +1870,20 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        int[] ids = {R.id.nav_home, R.id.nav_local, R.id.nav_playlists, R.id.nav_recent, R.id.nav_fav,
+                        R.id.nav_folder, R.id.nav_view, R.id.nav_settings};
+        String names[] = {"local", "allPlaylists", "recent", "favourite", "allFolders", "allSavedDNAs", "settings"};
+
         if (id == R.id.nav_home) {
             hideAllFrags();
             hideFragment("allPlaylists");
-        } else if (id == R.id.nav_local) {
-            showFragment("local");
-        } else if (id == R.id.nav_playlists) {
-            showFragment("allPlaylists");
-        } else if (id == R.id.nav_recent) {
-            showFragment("recent");
-        } else if (id == R.id.nav_fav) {
-            showFragment("favourite");
-        } else if (id == R.id.nav_folder) {
-            showFragment("allFolders");
-        } else if (id == R.id.nav_view) {
-            showFragment("allSavedDNAs");
-        } else if (id == R.id.nav_settings) {
-            showFragment("settings");
+        } else {
+            for (int i = 0; i < ids.length; i++) {
+                if (ids[i] == id) {
+                    showFragment(names[i]);
+                    break;
+                }
+            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

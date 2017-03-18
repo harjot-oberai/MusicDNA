@@ -156,13 +156,13 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="0dp"
-                android:text="View open source licenses"
+                android:text="View license"
                 android:textAlignment="center"
                 android:textColor="@color/colorAccent"
                 android:autoLink="web"
                 android:clickable="true"
                 android:layout_below="@+id/about_share_link"
-                android:textSize="10sp"
+                android:textSize="12sp"
                 />
         </RelativeLayout>
     </ScrollView>

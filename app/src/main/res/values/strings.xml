@@ -13,5 +13,6 @@
     <string name="mdg_description">An Active students group at IIT Roorkee directed towards developing useful applications</string>
     <string name="share_application_text">Check out MusicDNA an awesome music player from Play Store. Link: </string>
     <string name="music_dna_short_link">http://bit.ly/musicDnaApp</string>
-
+    <string name="license_text">MusicDNA and related material are distributed under \'Attribution-NonCommercial-ShareAlike 4.0 International license\'</string>
+    <string name="license_link">https://github.com/harjot-oberai/MusicDNA/blob/master/LICENSE.md</string>
 </resources>

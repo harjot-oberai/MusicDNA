@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,9 +26,6 @@ import android.widget.TextView;
 import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.R;
 import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
-
-import de.psdev.licensesdialog.licenses.MITLicense;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -62,7 +60,7 @@ public class AboutFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // To add underline effect in open source license textView
-        SpannableString content = new SpannableString("open source licenses");
+        SpannableString content = new SpannableString("view license");
         content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
 
         // Gets version and build number from package manager
@@ -156,22 +154,29 @@ public class AboutFragment extends Fragment {
     }
 
     public void displayOpenSourceLicenses(){
-        MITLicense appLicense = new MITLicense();
         final AlertDialog alertDialog = new AlertDialog.Builder(this.getContext()).create();
         alertDialog.setTitle("Music DNA");
-        alertDialog.setMessage("Copyright 2016-17 Harjot Singh\n\n" + appLicense.readFullTextFromResources(this.getContext()));
+        alertDialog.setMessage(getResources().getString(R.string.license_text));
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
                 });
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "view license", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse(getResources().getString(R.string.license_link))));
+            }
+        });
         alertDialog.create();
 
         alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface arg0) {
                 alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(HomeActivity.themeColor);
+                alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(HomeActivity.themeColor);
             }
         });
 

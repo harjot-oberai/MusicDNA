@@ -39,9 +39,7 @@ public class Genius {
                     .ignoreContentType(true);
             Document document = connection.userAgent(Net.USER_AGENT).get();
             response = new JsonParser().parse(document.text()).getAsJsonObject();
-        } catch (JsonSyntaxException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

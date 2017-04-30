@@ -41,7 +41,7 @@ public class Bollywood {
                     lyrics.setURL("https://api.quicklyric.be/bollywood/get?id=" + lyricsResult.get("id").getAsInt());
                     results.add(lyrics);
                 }
-        } catch (IOException | JsonParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return results;
@@ -73,7 +73,7 @@ public class Bollywood {
             String jsonText = Net.getUrlAsString(url);
             JsonObject lyricsJSON = new JsonParser().parse(jsonText).getAsJsonObject();
             lyrics.setText(lyricsJSON.get("body").getAsString().trim());
-        } catch (IOException | JsonParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return new Lyrics(Lyrics.ERROR);
         }

@@ -1548,9 +1548,11 @@ public class HomeActivity extends AppCompatActivity
                 if (duration > 10000) {
                     LocalTrack lt = new LocalTrack(thisId, thisTitle, thisArtist, thisAlbum, path, duration);
                     localTrackList.add(lt);
-                    recentlyAddedTrackList.add(lt);
                     finalLocalSearchResultList.add(lt);
-                    finalRecentlyAddedTrackSearchResultList.add(lt);
+                    if (recentlyAddedTrackList.size() <= 50) {
+                        recentlyAddedTrackList.add(lt);
+                        finalRecentlyAddedTrackSearchResultList.add(lt);
+                    }
 
                     int pos;
                     if (thisAlbum != null) {

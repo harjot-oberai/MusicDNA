@@ -1,0 +1,43 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorDark"
+    android:clickable="true"
+    tools:context="com.sdsmdg.harjot.MusicDNA.fragments.LocalMusicFragments.RecentlyAddedSongsFragment">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recentlyAddedLocalMusicList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottom_margin_layout"
+        android:layout_marginTop="3dp"
+        android:background="@color/colorDark" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/play_all_fab_local"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bottom_margin_layout"
+        android:layout_alignParentRight="true"
+        android:layout_margin="16dp"
+        android:clickable="true"
+        android:scaleX="0.0"
+        android:scaleY="0.0"
+        android:src="@drawable/ic_play_arrow_white_48dp"
+        app:backgroundTint="#111111"
+        app:borderWidth="0dp"
+        app:elevation="6dp"
+        app:pressedTranslationZ="9dp"
+        app:rippleColor="#888888" />
+
+    <View
+        android:id="@+id/bottom_margin_layout"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorDark"
+        android:clickable="true" />
+
+</RelativeLayout>

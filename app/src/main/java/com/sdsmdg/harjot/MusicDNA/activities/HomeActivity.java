@@ -85,6 +85,7 @@ import com.sdsmdg.harjot.MusicDNA.fragments.EqualizerFragment.EqualizerFragment;
 import com.sdsmdg.harjot.MusicDNA.fragments.FavouritesFragment.FavouritesFragment;
 import com.sdsmdg.harjot.MusicDNA.fragments.FolderContentFragment.FolderContentFragment;
 import com.sdsmdg.harjot.MusicDNA.fragments.AllFoldersFragment.FolderFragment;
+import com.sdsmdg.harjot.MusicDNA.fragments.LocalMusicFragments.RecentlyAddedSongsFragment;
 import com.sdsmdg.harjot.MusicDNA.fragments.NewPlaylistFragment.NewPlaylistFragment;
 import com.sdsmdg.harjot.MusicDNA.fragments.QueueFragment.QueueFragment;
 import com.sdsmdg.harjot.MusicDNA.fragments.RecentsFragment.RecentsFragment;
@@ -162,6 +163,7 @@ public class HomeActivity extends AppCompatActivity
         PlayerFragment.PlayerFragmentCallbackListener,
         PlayerFragment.onPlayPauseListener,
         LocalMusicFragment.OnLocalTrackSelectedListener,
+        RecentlyAddedSongsFragment.OnLocalTrackSelectedListener,
         StreamMusicFragment.OnTrackSelectedListener,
         QueueFragment.queueCallbackListener,
         ViewPlaylistFragment.playlistCallbackListener,
@@ -185,6 +187,8 @@ public class HomeActivity extends AppCompatActivity
     public static List<LocalTrack> localTrackList = new ArrayList<>();
     public static List<LocalTrack> finalLocalSearchResultList = new ArrayList<>();
     public static List<LocalTrack> finalSelectedTracks = new ArrayList<>();
+    public static List<LocalTrack> recentlyAddedTrackList = new ArrayList<>();
+    public static List<LocalTrack> finalRecentlyAddedTrackSearchResultList = new ArrayList<>();
     public static List<Track> streamingTrackList = new ArrayList<>();
     public static List<Album> albums = new ArrayList<>();
     public static List<Album> finalAlbums = new ArrayList<>();
@@ -1506,7 +1510,9 @@ public class HomeActivity extends AppCompatActivity
     private void getLocalSongs() {
 
         localTrackList.clear();
+        recentlyAddedTrackList.clear();
         finalLocalSearchResultList.clear();
+        finalRecentlyAddedTrackSearchResultList.clear();
         albums.clear();
         finalAlbums.clear();
         artists.clear();
@@ -1514,7 +1520,7 @@ public class HomeActivity extends AppCompatActivity
 
         ContentResolver musicResolver = this.getContentResolver();
         Uri musicUri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        Cursor musicCursor = musicResolver.query(musicUri, null, null, null, null);
+        Cursor musicCursor = musicResolver.query(musicUri, null, null, null, MediaStore.MediaColumns.DATE_ADDED + " DESC");
 
         if (musicCursor != null && musicCursor.moveToFirst()) {
             //get columns
@@ -1542,7 +1548,9 @@ public class HomeActivity extends AppCompatActivity
                 if (duration > 10000) {
                     LocalTrack lt = new LocalTrack(thisId, thisTitle, thisArtist, thisAlbum, path, duration);
                     localTrackList.add(lt);
+                    recentlyAddedTrackList.add(lt);
                     finalLocalSearchResultList.add(lt);
+                    finalRecentlyAddedTrackSearchResultList.add(lt);
 
                     int pos;
                     if (thisAlbum != null) {
@@ -2004,6 +2012,7 @@ public class HomeActivity extends AppCompatActivity
         updateStreamingList(query.trim());
         updateAlbumList(query.trim());
         updateArtistList(query.trim());
+        updateRecentlyAddedLocalList(query.trim());
         return true;
     }
 
@@ -2013,6 +2022,7 @@ public class HomeActivity extends AppCompatActivity
         updateStreamingList(newText.trim());
         updateAlbumList(newText.trim());
         updateArtistList(newText.trim());
+        updateRecentlyAddedLocalList(newText.trim());
         return true;
     }
 
@@ -2061,6 +2071,55 @@ public class HomeActivity extends AppCompatActivity
         if (query.equals("") && isLocalVisible) {
             if (lFrag != null)
                 lFrag.showShuffleFab();
+        }
+
+    }
+
+    private void updateRecentlyAddedLocalList(String query) {
+
+        LocalMusicViewPagerFragment flmFrag = (LocalMusicViewPagerFragment) fragMan.findFragmentByTag("local");
+        RecentlyAddedSongsFragment rasFrag = null;
+        if (flmFrag != null)
+            rasFrag = (RecentlyAddedSongsFragment) flmFrag.getFragmentByPosition(3);
+
+        if (rasFrag != null)
+            rasFrag.hidePlayAllFab();
+
+        /*Update the Local List*/
+
+        if (!isLocalVisible)
+            localRecyclerContainer.setVisibility(View.VISIBLE);
+
+        finalRecentlyAddedTrackSearchResultList.clear();
+        for (int i = 0; i < recentlyAddedTrackList.size(); i++) {
+            LocalTrack lt = recentlyAddedTrackList.get(i);
+            String tmp1 = lt.getTitle().toLowerCase();
+            String tmp2 = query.toLowerCase();
+            if (tmp1.contains(tmp2)) {
+                finalRecentlyAddedTrackSearchResultList.add(lt);
+            }
+        }
+
+        if (!isLocalVisible && localsongsRecyclerView != null) {
+            if (finalRecentlyAddedTrackSearchResultList.size() == 0) {
+                localsongsRecyclerView.setVisibility(GONE);
+                localNothingText.setVisibility(View.VISIBLE);
+            } else {
+                localsongsRecyclerView.setVisibility(View.VISIBLE);
+                localNothingText.setVisibility(View.INVISIBLE);
+            }
+            (localsongsRecyclerView.getAdapter()).notifyDataSetChanged();
+        }
+
+        if (rasFrag != null)
+            rasFrag.updateAdapter();
+
+        if (query.equals("")) {
+            localRecyclerContainer.setVisibility(GONE);
+        }
+        if (query.equals("") && isLocalVisible) {
+            if (rasFrag != null)
+                rasFrag.showPlayAllFab();
         }
 
     }

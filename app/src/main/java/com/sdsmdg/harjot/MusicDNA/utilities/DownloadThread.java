@@ -26,10 +26,11 @@ public class DownloadThread extends Thread {
 
     private static final String[] mainProviders =
             {
-                    "LyricWiki",
-                    "Genius",
-                    "LyricsMania",
+
                     "AZLyrics",
+                    "Genius",
+                    "LyricWiki",
+                    "LyricsMania",
                     "Bollywood"
             };
 

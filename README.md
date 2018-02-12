@@ -39,12 +39,18 @@ Video Demo : [http://sendvid.com/b2hhc1pi](http://sendvid.com/b2hhc1pi)<br>
 The video's length was cut short due to ADB screenrecord's limit of 3:00 min. <br>
 Credits for combining audio and video [Piyush Mehrotra](https://github.com/hm98)
 
-<img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/dna1.png" width = "300">
-<img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/home.png" width = "300">
-<img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/equalizer.png" width = "300">
-<img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/savedDNA.png" width = "300">
+<p align="center">
+<img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/dna1.png" width = "300"><img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/home.png" width = "300">
+</p>
+<p align="center">
+<img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/equalizer.png" width = "300"><img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/savedDNA.png" width = "300">
+</p>
+<p align="center">
 <img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/albums_artists.png" width = "600">
+</p>
+<p align="center">
 <img src = "https://github.com/harjot-oberai/MusicStreamer/blob/master/screenshots/fav_recents.png" width = "600">
+</p>
 
 ## License
 MusicDNA is under `CC BY-NC-SA` license.

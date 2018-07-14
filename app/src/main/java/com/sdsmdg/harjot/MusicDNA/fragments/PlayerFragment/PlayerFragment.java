@@ -240,7 +240,7 @@ public class PlayerFragment extends Fragment implements
                     mEqualizer.usePreset((short) (pos - 1));
                 } else {
                     for (short i = 0; i < 5; i++) {
-                        mEqualizer.setBandLevel(i, (short) HomeActivity.seekbarpos[i]);
+                        mEqualizer.setBandLevel(i, (short) HomeActivity.seekbarPos[i]);
                     }
                 }
                 if (HomeActivity.bassStrength != -1 && HomeActivity.reverbPreset != -1) {

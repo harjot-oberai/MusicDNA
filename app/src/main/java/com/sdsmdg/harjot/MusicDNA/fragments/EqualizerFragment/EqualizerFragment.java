@@ -313,14 +313,14 @@ public class EqualizerFragment extends Fragment {
             textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
             if (HomeActivity.isEqualizerReloaded) {
-                points[i] = HomeActivity.seekbarpos[i] - lowerEqualizerBandLevel;
+                points[i] = HomeActivity.seekbarPos[i] - lowerEqualizerBandLevel;
                 dataset.addPoint(frequencyHeaderTextView.getText().toString(), points[i]);
-                seekBar.setProgress(HomeActivity.seekbarpos[i] - lowerEqualizerBandLevel);
+                seekBar.setProgress(HomeActivity.seekbarPos[i] - lowerEqualizerBandLevel);
             } else {
                 points[i] = PlayerFragment.mEqualizer.getBandLevel(equalizerBandIndex) - lowerEqualizerBandLevel;
                 dataset.addPoint(frequencyHeaderTextView.getText().toString(), points[i]);
                 seekBar.setProgress(PlayerFragment.mEqualizer.getBandLevel(equalizerBandIndex) - lowerEqualizerBandLevel);
-                HomeActivity.seekbarpos[i] = PlayerFragment.mEqualizer.getBandLevel(equalizerBandIndex);
+                HomeActivity.seekbarPos[i] = PlayerFragment.mEqualizer.getBandLevel(equalizerBandIndex);
                 HomeActivity.isEqualizerReloaded = true;
             }
             seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -328,7 +328,7 @@ public class EqualizerFragment extends Fragment {
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     PlayerFragment.mEqualizer.setBandLevel(equalizerBandIndex, (short) (progress + lowerEqualizerBandLevel));
                     points[seekBar.getId()] = PlayerFragment.mEqualizer.getBandLevel(equalizerBandIndex) - lowerEqualizerBandLevel;
-                    HomeActivity.seekbarpos[seekBar.getId()] = (progress + lowerEqualizerBandLevel);
+                    HomeActivity.seekbarPos[seekBar.getId()] = (progress + lowerEqualizerBandLevel);
                     HomeActivity.equalizerModel.getSeekbarpos()[seekBar.getId()] = (progress + lowerEqualizerBandLevel);
                     dataset.updateValues(points);
                     chart.notifyDataUpdate();
@@ -451,7 +451,7 @@ public class EqualizerFragment extends Fragment {
                         for (short i = 0; i < numberOfFreqBands; i++) {
                             seekBarFinal[i].setProgress(PlayerFragment.mEqualizer.getBandLevel(i) - lowerEqualizerBandLevel);
                             points[i] = PlayerFragment.mEqualizer.getBandLevel(i) - lowerEqualizerBandLevel;
-                            HomeActivity.seekbarpos[i] = PlayerFragment.mEqualizer.getBandLevel(i);
+                            HomeActivity.seekbarPos[i] = PlayerFragment.mEqualizer.getBandLevel(i);
                             HomeActivity.equalizerModel.getSeekbarpos()[i] = PlayerFragment.mEqualizer.getBandLevel(i);
                         }
                         dataset.updateValues(points);

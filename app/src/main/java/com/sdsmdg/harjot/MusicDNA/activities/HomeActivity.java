@@ -652,26 +652,23 @@ public class HomeActivity extends AppCompatActivity
             }
         });
 
-        localBannerPlayAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                queue.getQueue().clear();
-                for (int i = 0; i < localTrackList.size(); i++) {
-                    UnifiedTrack ut = new UnifiedTrack(true, localTrackList.get(i), null);
-                    queue.getQueue().add(ut);
-                }
-                if (queue.getQueue().size() > 0) {
-                    Random r = new Random();
-                    int tmp = r.nextInt(queue.getQueue().size());
-                    queueCurrentIndex = tmp;
-                    LocalTrack track = localTrackList.get(tmp);
-                    localSelectedTrack = track;
-                    streamSelected = false;
-                    localSelected = true;
-                    queueCall = false;
-                    isReloaded = false;
-                    onLocalTrackSelected(-1);
-                }
+        localBannerPlayAll.setOnClickListener((View v) -> {
+            queue.getQueue().clear();
+            for (int i = 0; i < localTrackList.size(); i++) {
+                UnifiedTrack ut = new UnifiedTrack(true, localTrackList.get(i), null);
+                queue.getQueue().add(ut);
+            }
+            if (queue.getQueue().size() > 0) {
+                Random r = new Random();
+                int tmp = r.nextInt(queue.getQueue().size());
+                queueCurrentIndex = tmp;
+                LocalTrack track = localTrackList.get(tmp);
+                localSelectedTrack = track;
+                streamSelected = false;
+                localSelected = true;
+                queueCall = false;
+                isReloaded = false;
+                onLocalTrackSelected(-1);
             }
         });
 
@@ -681,25 +678,19 @@ public class HomeActivity extends AppCompatActivity
         spImgHome = findViewById(R.id.selected_track_image_sp_home);
         spTitleHome = findViewById(R.id.selected_track_title_sp_home);
 
-        playerControllerHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (queue != null && queue.getQueue().size() > 0) {
-                    onQueueItemClicked(queueCurrentIndex);
-                    bottomToolbar.setVisibility(View.INVISIBLE);
-                }
+        playerControllerHome.setOnClickListener((View v) -> {
+            if (queue != null && queue.getQueue().size() > 0) {
+                onQueueItemClicked(queueCurrentIndex);
+                bottomToolbar.setVisibility(View.INVISIBLE);
             }
         });
 
         playerControllerHome.setImageResource(R.drawable.ic_play_arrow_white_48dp);
 
-        spHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (queue != null && queue.getQueue().size() > 0) {
-                    onQueueItemClicked(queueCurrentIndex);
-                    bottomToolbar.setVisibility(View.INVISIBLE);
-                }
+        spHome.setOnClickListener((View v) -> {
+            if (queue != null && queue.getQueue().size() > 0) {
+                onQueueItemClicked(queueCurrentIndex);
+                bottomToolbar.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -723,19 +714,12 @@ public class HomeActivity extends AppCompatActivity
         playlistNothingText = findViewById(R.id.playlistNothingText);
 
         localViewAll = findViewById(R.id.localViewAll);
-        localViewAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFragment("local");
-            }
-        });
+        localViewAll.setOnClickListener((View v) ->
+            showFragment("local"));
+
         streamViewAll = findViewById(R.id.streamViewAll);
-        streamViewAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFragment("stream");
-            }
-        });
+        streamViewAll.setOnClickListener((View v) ->
+                showFragment("stream"));
 
         progress = new Dialog(ctx);
         progress.setCancelable(false);
@@ -753,7 +737,7 @@ public class HomeActivity extends AppCompatActivity
                 .setContentTitlePaint(tp)
                 .setTarget(new ViewTarget(R.id.recentsRecyclerLabel, this))
                 .setContentTitle("Recents and Playlists")
-                .setContentText("Here all you recent songs and playlists will be listed." +
+                .setContentText("All your recent songs and playlists will be listed here." +
                         "Long press the cards or playlists for more options \n" +
                         "\n" +
                         "(Press Next to continue / Press back to Hide)")
@@ -786,14 +770,9 @@ public class HomeActivity extends AppCompatActivity
                         break;
                 }
             }
-
         });
-
         new loadSavedData().execute();
-
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     /*
      * Methods for playing selected songs
@@ -899,7 +878,7 @@ public class HomeActivity extends AppCompatActivity
         for (int i = 0; i < recentlyPlayed.getRecentlyPlayed().size(); i++) {
             if (!recentlyPlayed.getRecentlyPlayed().get(i).getType() && recentlyPlayed.getRecentlyPlayed().get(i).getStreamTrack().getTitle().equals(track.getStreamTrack().getTitle())) {
                 recentlyPlayed.getRecentlyPlayed().remove(i);
-//                rAdapter.notifyItemRemoved(i);
+                //rAdapter.notifyItemRemoved(i);
                 break;
             }
         }
@@ -1025,7 +1004,7 @@ public class HomeActivity extends AppCompatActivity
         for (int i = 0; i < recentlyPlayed.getRecentlyPlayed().size(); i++) {
             if (recentlyPlayed.getRecentlyPlayed().get(i).getType() && recentlyPlayed.getRecentlyPlayed().get(i).getLocalTrack().getTitle().equals(track.getLocalTrack().getTitle())) {
                 recentlyPlayed.getRecentlyPlayed().remove(i);
-//                rAdapter.notifyItemRemoved(i);
+                //rAdapter.notifyItemRemoved(i);
                 break;
             }
         }
@@ -1048,8 +1027,6 @@ public class HomeActivity extends AppCompatActivity
         }
 
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     /*
      * Methods and Classes for loading local songs, albums, artists and folder
@@ -1101,7 +1078,7 @@ public class HomeActivity extends AppCompatActivity
             showPlayer3();
         } else if (isPlayerVisible && !isPlayerTransitioning && playerFragment.smallPlayer != null) {
             hidePlayer();
-//            showTabs();
+            //showTabs();
             isPlayerVisible = false;
         } else if (isLocalVisible && flmFrag != null && flmFrag.searchBox != null && flmFrag.isSearchboxVisible) {
             flmFrag.searchBox.setText("");
@@ -1462,8 +1439,6 @@ public class HomeActivity extends AppCompatActivity
         return mf;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
     /*
      * Standard Activity methods
      */
@@ -1661,9 +1636,6 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
     /*
      * Query change listeners for searchview and required methods for searching and updating recycler views.
      * onQueryTextSubmit(String query) -> updates lists based on query when entered is pressed on keyboard.
@@ -1837,8 +1809,6 @@ public class HomeActivity extends AppCompatActivity
             e.printStackTrace();
         }
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     /*
      * Methods to control the transitions of the player fragment
@@ -2117,8 +2087,6 @@ public class HomeActivity extends AppCompatActivity
         }, 400);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
     /*
      * Methods and classes for updating visualizer.
      * MyAsyncTask -> AsyncTask to update visualiser in background thread.
@@ -2250,8 +2218,6 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
     /*
      * PlayerFragment callbacks START
      * onComplete() -> called when a song ends or next button is clicked in player or notification.
@@ -2262,9 +2228,8 @@ public class HomeActivity extends AppCompatActivity
      * onSettingsClicked() -> called when settings menu item is selected.
      * onFullScreen() -> called when fullscreen menu item is selected or player is long pressed.
      * onAddedToFavFromPlayer() -> called when favourite icon is clicked.
-     * onShuffleEnabled() / onShuffleEnabled() -> shuffle enebled or disabled.
+     * onShuffleEnabled() / onShuffleEnabled() -> shuffle enabled or disabled.
      * onSmallPlayerTouched() -> called when the down icon at the top of the player ic clicked to hide the player.
-     *
      */
 
     @Override
@@ -2565,8 +2530,6 @@ public class HomeActivity extends AppCompatActivity
         showNotification();
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
     /*
      * ViewPlaylistFragment callbacks START
      * onPlaylistPlayAll() -> when play all fab is clciked in a playlist.
@@ -2661,8 +2624,6 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
     /*
      *  FavouriteFragment callbacks START
      *  onFavouriteItemClicked() -> when a song is selected from favourites.
@@ -2738,8 +2699,6 @@ public class HomeActivity extends AppCompatActivity
         Toast.makeText(ctx, "Added " + favouriteTracks.getFavourite().size() + " song(s) to queue", Toast.LENGTH_SHORT).show();
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
     /*
      *  QueueFragment callbacks START
      *  onQueueItemClicked() -> when a song is selected from queue.
@@ -2791,8 +2750,6 @@ public class HomeActivity extends AppCompatActivity
         new SaveQueue().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
     /*
      *  AllPlaylistsFragment callbacks START
      */
@@ -2819,8 +2776,6 @@ public class HomeActivity extends AppCompatActivity
         showFragment("newPlaylist");
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
     /*
      * FolderFragment callbacks START
      */
@@ -2831,8 +2786,6 @@ public class HomeActivity extends AppCompatActivity
         tempFolderContent = tempMusicFolder.getLocalTracks();
         showFragment("folderContent");
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     /*
      * FolderContentFragment callbacks START
@@ -2866,8 +2819,6 @@ public class HomeActivity extends AppCompatActivity
         Toast.makeText(ctx, "Added " + list.size() + " song(s) to queue", Toast.LENGTH_SHORT).show();
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
     /*
      * AlbumFragment callbacks START
      * onAlbumClick() -> a particular album is selected from all albums list.
@@ -2877,8 +2828,6 @@ public class HomeActivity extends AppCompatActivity
     public void onAlbumClick() {
         showFragment("viewAlbum");
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     /*
      * ViewAlbumFragment callbacks START
@@ -2911,8 +2860,6 @@ public class HomeActivity extends AppCompatActivity
         onLocalTrackSelected(-1);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
     /*
      * ArtistFragment callbacks START
      * onArtistClick() -> a particular artist is selected from all artists list.
@@ -2924,8 +2871,6 @@ public class HomeActivity extends AppCompatActivity
         searchView.setIconified(true);
         showFragment("viewArtist");
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     /*
      * ViewArtistFragment callbacks START
@@ -2957,8 +2902,6 @@ public class HomeActivity extends AppCompatActivity
     public void onArtistSongClick() {
         onLocalTrackSelected(-1);
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     /*
      * RecentsFragment callbacks START
@@ -2993,8 +2936,6 @@ public class HomeActivity extends AppCompatActivity
         Toast.makeText(ctx, "Added " + recentlyPlayed.getRecentlyPlayed().size() + " song(s) to queue", Toast.LENGTH_SHORT).show();
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
     /*
      * SettingsFragment callbacks START
      * onColorChanged() -> called when theme color is selected from the colorPicker
@@ -3020,8 +2961,6 @@ public class HomeActivity extends AppCompatActivity
         showFragment("About");
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
     /*
      * NewPlaylistFragment callbacks START
      * onCancel() -> callback to handle cancellation of creating new playlist.
@@ -3042,8 +2981,6 @@ public class HomeActivity extends AppCompatActivity
             newPlaylistNameDialog();
         }
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     /*
      * HeadsetReceiver callbacks START
@@ -3135,13 +3072,11 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
     /*
      * EditSongFragment callbacks START
      * onEditSongSave() -> called when save is clicked to store edited fields.
      * deleteMediaStoreCache() -> used to delete the media store cache so that it is rebuilt and new album art is cached.
-     * getNewBitmap() -> called to statr the image picker intent for album art.
+     * getNewBitmap() -> called to state the image picker intent for album art.
      */
 
     @Override
@@ -3199,8 +3134,6 @@ public class HomeActivity extends AppCompatActivity
         return playerFragment;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
     /*
      * EqualizerFragment callbacks START
      * onCheckChanged() -> when equalizer switch state is changed.
@@ -3229,8 +3162,6 @@ public class HomeActivity extends AppCompatActivity
             }
         }
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     /*
      * ServiceCallbacks callbacks START
@@ -3524,8 +3455,6 @@ public class HomeActivity extends AppCompatActivity
                     .commitAllowingStateLoss();
         }
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void hideFragment(String type) {
         if (type.equals("local")) {
@@ -3832,50 +3761,45 @@ public class HomeActivity extends AppCompatActivity
 
         btn.setBackgroundColor(themeColor);
 
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean isNameRepeat = false;
-                if (newName.getText().toString().trim().equals("")) {
-                    newName.setError("Enter Playlist Name!");
-                } else {
-                    for (int i = 0; i < allPlaylists.getPlaylists().size(); i++) {
-                        if (newName.getText().toString().equals(allPlaylists.getPlaylists().get(i).getPlaylistName())) {
-                            isNameRepeat = true;
-                            newName.setError("Playlist with same name exists!");
-                            break;
+        btn.setOnClickListener((View v) -> {
+            boolean isNameRepeat = false;
+            if (newName.getText().toString().trim().equals("")) {
+                newName.setError("Enter Playlist Name!");
+            } else {
+                for (int i = 0; i < allPlaylists.getPlaylists().size(); i++) {
+                    if (newName.getText().toString().equals(allPlaylists.getPlaylists().get(i).getPlaylistName())) {
+                        isNameRepeat = true;
+                        newName.setError("Playlist with same name exists!");
+                        break;
+                    }
+                }
+                if (!isNameRepeat) {
+                    UnifiedTrack ut;
+                    Playlist pl = new Playlist(newName.getText().toString());
+                    for (int i = 0; i < finalSelectedTracks.size(); i++) {
+                        ut = new UnifiedTrack(true, finalSelectedTracks.get(i), null);
+                        pl.getSongList().add(ut);
+                    }
+                    allPlaylists.addPlaylist(pl);
+                    finalSelectedTracks.clear();
+                    if (pAdapter != null) {
+                        pAdapter.notifyDataSetChanged();
+                        if (allPlaylists.getPlaylists().size() > 0) {
+                            playlistsRecycler.setVisibility(View.VISIBLE);
+                            playlistNothingText.setVisibility(View.INVISIBLE);
                         }
                     }
-                    if (!isNameRepeat) {
-                        UnifiedTrack ut;
-                        Playlist pl = new Playlist(newName.getText().toString());
-                        for (int i = 0; i < finalSelectedTracks.size(); i++) {
-                            ut = new UnifiedTrack(true, finalSelectedTracks.get(i), null);
-                            pl.getSongList().add(ut);
-                        }
-                        allPlaylists.addPlaylist(pl);
-                        finalSelectedTracks.clear();
-                        if (pAdapter != null) {
-                            pAdapter.notifyDataSetChanged();
-                            if (allPlaylists.getPlaylists().size() > 0) {
-                                playlistsRecycler.setVisibility(View.VISIBLE);
-                                playlistNothingText.setVisibility(View.INVISIBLE);
-                            }
-                        }
-                        AllPlaylistsFragment plFrag = (AllPlaylistsFragment) fragMan.findFragmentByTag("allPlaylists");
-                        if (plFrag != null) {
-                            plFrag.dataChanged();
-                        }
-                        new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                        dialog.dismiss();
-                        onBackPressed();
+                    AllPlaylistsFragment plFrag = (AllPlaylistsFragment) fragMan.findFragmentByTag("allPlaylists");
+                    if (plFrag != null) {
+                        plFrag.dataChanged();
                     }
+                    new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    dialog.dismiss();
+                    onBackPressed();
                 }
             }
         });
-
         dialog.show();
-
     }
 
     public void renamePlaylistDialog(String oldName) {
@@ -4551,7 +4475,6 @@ public class HomeActivity extends AppCompatActivity
 
                         @Override
                         public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
                         }
                     });
 
@@ -4601,7 +4524,6 @@ public class HomeActivity extends AppCompatActivity
 
                         @Override
                         public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
                         }
                     });
 
@@ -4645,7 +4567,6 @@ public class HomeActivity extends AppCompatActivity
 
                         @Override
                         public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
                         }
                     });
 

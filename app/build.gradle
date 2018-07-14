@@ -22,7 +22,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            minifyEnabled false
             applicationIdSuffix ".debug"
             versionNameSuffix "-debug"
         }

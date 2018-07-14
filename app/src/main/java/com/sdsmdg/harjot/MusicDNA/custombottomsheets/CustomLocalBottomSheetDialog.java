@@ -11,10 +11,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
-import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.R;
-import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
+import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
 
 /**
  * Created by Harjot on 21-Oct-16.
@@ -65,27 +65,27 @@ public class CustomLocalBottomSheetDialog extends BottomSheetDialogFragment impl
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        localSongImage = (ImageView) view.findViewById(R.id.local_song_bottom_sheet_image);
-        localSongTitle = (TextView) view.findViewById(R.id.local_song_bottom_sheet_title);
-        localSongArtist = (TextView) view.findViewById(R.id.local_song_bottom_sheet_artist);
+        localSongImage = view.findViewById(R.id.local_song_bottom_sheet_image);
+        localSongTitle = view.findViewById(R.id.local_song_bottom_sheet_title);
+        localSongArtist = view.findViewById(R.id.local_song_bottom_sheet_artist);
 
         imgLoader.DisplayImage(localTrack.getPath(), localSongImage);
         localSongTitle.setText(localTrack.getTitle());
         localSongArtist.setText(localTrack.getArtist());
 
-        playText = (LinearLayout) view.findViewById(R.id.local_song_bottom_sheet_play_wrapper);
+        playText = view.findViewById(R.id.local_song_bottom_sheet_play_wrapper);
         playText.setOnClickListener(this);
-        playNextText = (LinearLayout) view.findViewById(R.id.local_song_bottom_sheet_play_next_wrapper);
+        playNextText = view.findViewById(R.id.local_song_bottom_sheet_play_next_wrapper);
         playNextText.setOnClickListener(this);
-        addToQueueText = (LinearLayout) view.findViewById(R.id.local_song_bottom_sheet_add_to_queue_wrapper);
+        addToQueueText = view.findViewById(R.id.local_song_bottom_sheet_add_to_queue_wrapper);
         addToQueueText.setOnClickListener(this);
-        addToPlaylistText = (LinearLayout) view.findViewById(R.id.local_song_bottom_sheet_add_to_playlist_wrapper);
+        addToPlaylistText = view.findViewById(R.id.local_song_bottom_sheet_add_to_playlist_wrapper);
         addToPlaylistText.setOnClickListener(this);
-        addToFavouriteText = (LinearLayout) view.findViewById(R.id.local_song_bottom_sheet_add_to_fav_wrapper);
+        addToFavouriteText = view.findViewById(R.id.local_song_bottom_sheet_add_to_fav_wrapper);
         addToFavouriteText.setOnClickListener(this);
-        shareText = (LinearLayout) view.findViewById(R.id.local_song_bottom_sheet_share_wrapper);
+        shareText = view.findViewById(R.id.local_song_bottom_sheet_share_wrapper);
         shareText.setOnClickListener(this);
-        editText = (LinearLayout) view.findViewById(R.id.local_song_bottom_sheet_edit_wrapper);
+        editText = view.findViewById(R.id.local_song_bottom_sheet_edit_wrapper);
         editText.setOnClickListener(this);
 
     }

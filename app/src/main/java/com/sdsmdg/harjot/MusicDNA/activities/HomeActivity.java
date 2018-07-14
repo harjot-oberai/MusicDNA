@@ -47,6 +47,7 @@ import android.telephony.TelephonyManager;
 import android.text.TextPaint;
 import android.util.Log;
 import android.view.Display;
+import android.view.HapticFeedbackConstants;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -66,27 +67,37 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.view.HapticFeedbackConstants;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.gson.Gson;
 import com.lantouzi.wheelview.WheelView;
+import com.sdsmdg.harjot.MusicDNA.Config;
+import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
+import com.sdsmdg.harjot.MusicDNA.R;
+import com.sdsmdg.harjot.MusicDNA.adapters.horizontalrecycleradapters.LocalTracksHorizontalAdapter;
+import com.sdsmdg.harjot.MusicDNA.adapters.horizontalrecycleradapters.PlayListsHorizontalAdapter;
+import com.sdsmdg.harjot.MusicDNA.adapters.horizontalrecycleradapters.RecentsListHorizontalAdapter;
+import com.sdsmdg.harjot.MusicDNA.adapters.horizontalrecycleradapters.StreamTracksHorizontalAdapter;
 import com.sdsmdg.harjot.MusicDNA.adapters.playlistdialogadapter.AddToPlaylistAdapter;
 import com.sdsmdg.harjot.MusicDNA.clickitemtouchlistener.ClickItemTouchListener;
-import com.sdsmdg.harjot.MusicDNA.Config;
 import com.sdsmdg.harjot.MusicDNA.custombottomsheets.CustomGeneralBottomSheetDialog;
 import com.sdsmdg.harjot.MusicDNA.custombottomsheets.CustomLocalBottomSheetDialog;
 import com.sdsmdg.harjot.MusicDNA.customviews.CustomLinearGradient;
 import com.sdsmdg.harjot.MusicDNA.fragments.AboutFragment.AboutFragment;
+import com.sdsmdg.harjot.MusicDNA.fragments.AllFoldersFragment.FolderFragment;
 import com.sdsmdg.harjot.MusicDNA.fragments.AllPlaylistsFragment.AllPlaylistsFragment;
 import com.sdsmdg.harjot.MusicDNA.fragments.EditSongFragment.EditLocalSongFragment;
 import com.sdsmdg.harjot.MusicDNA.fragments.EqualizerFragment.EqualizerFragment;
 import com.sdsmdg.harjot.MusicDNA.fragments.FavouritesFragment.FavouritesFragment;
 import com.sdsmdg.harjot.MusicDNA.fragments.FolderContentFragment.FolderContentFragment;
-import com.sdsmdg.harjot.MusicDNA.fragments.AllFoldersFragment.FolderFragment;
+import com.sdsmdg.harjot.MusicDNA.fragments.LocalMusicFragments.AlbumFragment;
+import com.sdsmdg.harjot.MusicDNA.fragments.LocalMusicFragments.ArtistFragment;
+import com.sdsmdg.harjot.MusicDNA.fragments.LocalMusicFragments.LocalMusicFragment;
+import com.sdsmdg.harjot.MusicDNA.fragments.LocalMusicFragments.LocalMusicViewPagerFragment;
 import com.sdsmdg.harjot.MusicDNA.fragments.LocalMusicFragments.RecentlyAddedSongsFragment;
 import com.sdsmdg.harjot.MusicDNA.fragments.NewPlaylistFragment.NewPlaylistFragment;
+import com.sdsmdg.harjot.MusicDNA.fragments.PlayerFragment.PlayerFragment;
 import com.sdsmdg.harjot.MusicDNA.fragments.QueueFragment.QueueFragment;
 import com.sdsmdg.harjot.MusicDNA.fragments.RecentsFragment.RecentsFragment;
 import com.sdsmdg.harjot.MusicDNA.fragments.SettingsFragment.SettingsFragment;
@@ -96,17 +107,10 @@ import com.sdsmdg.harjot.MusicDNA.fragments.ViewArtistFragment.ViewArtistFragmen
 import com.sdsmdg.harjot.MusicDNA.fragments.ViewPlaylistFragment.PlaylistTrackAdapter;
 import com.sdsmdg.harjot.MusicDNA.fragments.ViewPlaylistFragment.ViewPlaylistFragment;
 import com.sdsmdg.harjot.MusicDNA.fragments.ViewSavedDNAsFragment.ViewSavedDNA;
-import com.sdsmdg.harjot.MusicDNA.fragments.LocalMusicFragments.LocalMusicViewPagerFragment;
 import com.sdsmdg.harjot.MusicDNA.headsethandler.HeadSetReceiver;
-import com.sdsmdg.harjot.MusicDNA.adapters.horizontalrecycleradapters.LocalTracksHorizontalAdapter;
-import com.sdsmdg.harjot.MusicDNA.adapters.horizontalrecycleradapters.PlayListsHorizontalAdapter;
-import com.sdsmdg.harjot.MusicDNA.adapters.horizontalrecycleradapters.RecentsListHorizontalAdapter;
-import com.sdsmdg.harjot.MusicDNA.adapters.horizontalrecycleradapters.StreamTracksHorizontalAdapter;
+import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
 import com.sdsmdg.harjot.MusicDNA.interfaces.ServiceCallbacks;
 import com.sdsmdg.harjot.MusicDNA.interfaces.StreamService;
-import com.sdsmdg.harjot.MusicDNA.fragments.LocalMusicFragments.AlbumFragment;
-import com.sdsmdg.harjot.MusicDNA.fragments.LocalMusicFragments.ArtistFragment;
-import com.sdsmdg.harjot.MusicDNA.fragments.LocalMusicFragments.LocalMusicFragment;
 import com.sdsmdg.harjot.MusicDNA.models.Album;
 import com.sdsmdg.harjot.MusicDNA.models.AllMusicFolders;
 import com.sdsmdg.harjot.MusicDNA.models.AllPlaylists;
@@ -123,19 +127,15 @@ import com.sdsmdg.harjot.MusicDNA.models.SavedDNA;
 import com.sdsmdg.harjot.MusicDNA.models.Settings;
 import com.sdsmdg.harjot.MusicDNA.models.Track;
 import com.sdsmdg.harjot.MusicDNA.models.UnifiedTrack;
-import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
 import com.sdsmdg.harjot.MusicDNA.notificationmanager.Constants;
 import com.sdsmdg.harjot.MusicDNA.notificationmanager.MediaPlayerService;
-import com.sdsmdg.harjot.MusicDNA.fragments.PlayerFragment.PlayerFragment;
-import com.sdsmdg.harjot.MusicDNA.R;
 import com.sdsmdg.harjot.MusicDNA.utilities.CommonUtils;
+import com.sdsmdg.harjot.MusicDNA.utilities.FileUtils;
+import com.sdsmdg.harjot.MusicDNA.utilities.MediaCacheUtils;
 import com.sdsmdg.harjot.MusicDNA.utilities.comparators.AlbumComparator;
 import com.sdsmdg.harjot.MusicDNA.utilities.comparators.ArtistComparator;
 import com.sdsmdg.harjot.MusicDNA.utilities.comparators.LocalMusicComparator;
-import com.sdsmdg.harjot.MusicDNA.utilities.FileUtils;
-import com.sdsmdg.harjot.MusicDNA.utilities.MediaCacheUtils;
 import com.sdsmdg.harjot.MusicDNA.visualizers.VisualizerView;
-import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
 import com.squareup.leakcanary.RefWatcher;
 
 import java.io.File;
@@ -150,12 +150,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import retrofit2.Call;
 import retrofit2.Callback;
-//import retrofit2.GsonConverterFactory;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.view.View.GONE;
+
+//import retrofit2.GsonConverterFactory;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -455,7 +456,7 @@ public class HomeActivity extends AppCompatActivity
         tp.setTextSize(65 * ratio);
         tp.setFakeBoldText(true);
 
-        recentsViewAll = (TextView) findViewById(R.id.recents_view_all);
+        recentsViewAll = findViewById(R.id.recents_view_all);
         recentsViewAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -463,7 +464,7 @@ public class HomeActivity extends AppCompatActivity
             }
         });
 
-        playlistsViewAll = (TextView) findViewById(R.id.playlists_view_all);
+        playlistsViewAll = findViewById(R.id.playlists_view_all);
         playlistsViewAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -471,7 +472,7 @@ public class HomeActivity extends AppCompatActivity
             }
         });
 
-        copyrightText = (TextView) findViewById(R.id.copyright_text);
+        copyrightText = findViewById(R.id.copyright_text);
         copyrightText.setText("Music DNA v" + versionName);
 
         if (SplashActivity.tf4 != null) {
@@ -522,40 +523,40 @@ public class HomeActivity extends AppCompatActivity
         lps.setMargins(margin, margin, margin, navBarHeightSizeinDp + ((Number) (getResources().getDisplayMetrics().density * 5)).intValue());
 
         fragMan = getSupportFragmentManager();
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        collapsingToolbar = findViewById(R.id.collapsing_toolbar);
         if (SplashActivity.tf4 != null) {
             collapsingToolbar.setCollapsedTitleTypeface(SplashActivity.tf4);
             collapsingToolbar.setExpandedTitleTypeface(SplashActivity.tf4);
         }
 
-        customLinearGradient = (CustomLinearGradient) findViewById(R.id.custom_linear_gradient);
+        customLinearGradient = findViewById(R.id.custom_linear_gradient);
         customLinearGradient.setAlpha(170);
         customLinearGradient.invalidate();
 
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         if (navigationView != null) {
             navigationView.setNavigationItemSelectedListener(this);
         }
         navigationView.setCheckedItem(R.id.nav_home);
 
         View header = navigationView.getHeaderView(0);
-        navImageView = (ImageView) header.findViewById(R.id.nav_image_view);
+        navImageView = header.findViewById(R.id.nav_image_view);
         if (navImageView != null) {
             navImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     PlayerFragment pFrag = getPlayerFragment();
                     if (pFrag != null) {
-                        if (pFrag.mMediaPlayer != null && pFrag.mMediaPlayer.isPlaying()) {
+                        if (PlayerFragment.mMediaPlayer != null && PlayerFragment.mMediaPlayer.isPlaying()) {
                             onBackPressed();
                             isPlayerVisible = true;
 //                            hideTabs();
@@ -578,7 +579,7 @@ public class HomeActivity extends AppCompatActivity
                 if (playerFragment != null) {
                     if (state == TelephonyManager.CALL_STATE_RINGING) {
                         //Incoming call: Pause music
-                        if (pFrag.mMediaPlayer != null && pFrag.mMediaPlayer.isPlaying()) {
+                        if (PlayerFragment.mMediaPlayer != null && PlayerFragment.mMediaPlayer.isPlaying()) {
                             wasMediaPlayerPlaying = true;
                             pFrag.togglePlayPause();
                         } else {
@@ -586,12 +587,12 @@ public class HomeActivity extends AppCompatActivity
                         }
                     } else if (state == TelephonyManager.CALL_STATE_IDLE) {
                         //Not in call: Play music
-                        if (pFrag.mMediaPlayer != null && !pFrag.mMediaPlayer.isPlaying() && wasMediaPlayerPlaying) {
+                        if (PlayerFragment.mMediaPlayer != null && !PlayerFragment.mMediaPlayer.isPlaying() && wasMediaPlayerPlaying) {
                             pFrag.togglePlayPause();
                         }
                     } else if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
                         //A call is dialing, active or on hold
-                        if (playerFragment.mMediaPlayer != null && pFrag.mMediaPlayer.isPlaying()) {
+                        if (PlayerFragment.mMediaPlayer != null && PlayerFragment.mMediaPlayer.isPlaying()) {
                             wasMediaPlayerPlaying = true;
                             pFrag.togglePlayPause();
                         } else {
@@ -613,13 +614,13 @@ public class HomeActivity extends AppCompatActivity
 
         main = this;
 
-        localBanner = (RelativeLayout) findViewById(R.id.localBanner);
-        favBanner = (ImageView) findViewById(R.id.favBanner);
-        recentBanner = (ImageView) findViewById(R.id.recentBanner);
-        folderBanner = (ImageView) findViewById(R.id.folderBanner);
-        savedDNABanner = (ImageView) findViewById(R.id.savedDNABanner);
+        localBanner = findViewById(R.id.localBanner);
+        favBanner = findViewById(R.id.favBanner);
+        recentBanner = findViewById(R.id.recentBanner);
+        folderBanner = findViewById(R.id.folderBanner);
+        savedDNABanner = findViewById(R.id.savedDNABanner);
 
-        localBannerPlayAll = (ImageView) findViewById(R.id.local_banner_play_all);
+        localBannerPlayAll = findViewById(R.id.local_banner_play_all);
 
         localBanner.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -675,11 +676,11 @@ public class HomeActivity extends AppCompatActivity
             }
         });
 
-        bottomToolbar = (FrameLayout) findViewById(R.id.bottomMargin);
-        spHome = (Toolbar) findViewById(R.id.smallPlayer_home);
-        playerControllerHome = (ImageView) findViewById(R.id.player_control_sp_home);
-        spImgHome = (CircleImageView) findViewById(R.id.selected_track_image_sp_home);
-        spTitleHome = (TextView) findViewById(R.id.selected_track_title_sp_home);
+        bottomToolbar = findViewById(R.id.bottomMargin);
+        spHome = findViewById(R.id.smallPlayer_home);
+        playerControllerHome = findViewById(R.id.player_control_sp_home);
+        spImgHome = findViewById(R.id.selected_track_image_sp_home);
+        spTitleHome = findViewById(R.id.selected_track_title_sp_home);
 
         playerControllerHome.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -703,10 +704,10 @@ public class HomeActivity extends AppCompatActivity
             }
         });
 
-        localRecyclerContainer = (RelativeLayout) findViewById(R.id.localRecyclerContainer);
-        recentsRecyclerContainer = (RelativeLayout) findViewById(R.id.recentsRecyclerContainer);
-        streamRecyclerContainer = (RelativeLayout) findViewById(R.id.streamRecyclerContainer);
-        playlistRecyclerContainer = (RelativeLayout) findViewById(R.id.playlistRecyclerContainer);
+        localRecyclerContainer = findViewById(R.id.localRecyclerContainer);
+        recentsRecyclerContainer = findViewById(R.id.recentsRecyclerContainer);
+        streamRecyclerContainer = findViewById(R.id.streamRecyclerContainer);
+        playlistRecyclerContainer = findViewById(R.id.playlistRecyclerContainer);
 
         if (SplashActivity.tf4 != null) {
             try {
@@ -717,19 +718,19 @@ public class HomeActivity extends AppCompatActivity
             }
         }
 
-        localNothingText = (TextView) findViewById(R.id.localNothingText);
-        streamNothingText = (TextView) findViewById(R.id.streamNothingText);
-        recentsNothingText = (TextView) findViewById(R.id.recentsNothingText);
-        playlistNothingText = (TextView) findViewById(R.id.playlistNothingText);
+        localNothingText = findViewById(R.id.localNothingText);
+        streamNothingText = findViewById(R.id.streamNothingText);
+        recentsNothingText = findViewById(R.id.recentsNothingText);
+        playlistNothingText = findViewById(R.id.playlistNothingText);
 
-        localViewAll = (TextView) findViewById(R.id.localViewAll);
+        localViewAll = findViewById(R.id.localViewAll);
         localViewAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showFragment("local");
             }
         });
-        streamViewAll = (TextView) findViewById(R.id.streamViewAll);
+        streamViewAll = findViewById(R.id.streamViewAll);
         streamViewAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -832,8 +833,8 @@ public class HomeActivity extends AppCompatActivity
                 if (flag == 0) {
                     isFavourite = false;
                 }
-                playerFragment.localIsPlaying = false;
-                playerFragment.track = selectedTrack;
+                PlayerFragment.localIsPlaying = false;
+                PlayerFragment.track = selectedTrack;
                 fm.beginTransaction()
                         .setCustomAnimations(R.anim.slide_up,
                                 R.anim.slide_down,
@@ -844,7 +845,7 @@ public class HomeActivity extends AppCompatActivity
                         .addToBackStack(null)
                         .commitAllowingStateLoss();
             } else {
-                if (playerFragment.track != null && !playerFragment.localIsPlaying && selectedTrack.getTitle() == playerFragment.track.getTitle()) {
+                if (PlayerFragment.track != null && !PlayerFragment.localIsPlaying && selectedTrack.getTitle() == PlayerFragment.track.getTitle()) {
 
                 } else {
                     int flag = 0;
@@ -859,8 +860,8 @@ public class HomeActivity extends AppCompatActivity
                     if (flag == 0) {
                         isFavourite = false;
                     }
-                    playerFragment.localIsPlaying = false;
-                    playerFragment.track = selectedTrack;
+                    PlayerFragment.localIsPlaying = false;
+                    PlayerFragment.track = selectedTrack;
                     frag.refresh();
                 }
             }
@@ -868,8 +869,8 @@ public class HomeActivity extends AppCompatActivity
                 showPlayer();
         } else {
             PlayerFragment frag = playerFragment;
-            playerFragment.localIsPlaying = false;
-            playerFragment.track = selectedTrack;
+            PlayerFragment.localIsPlaying = false;
+            PlayerFragment.track = selectedTrack;
             int flag = 0;
             for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
                 UnifiedTrack ut = favouriteTracks.getFavourite().get(i);
@@ -895,7 +896,7 @@ public class HomeActivity extends AppCompatActivity
             qFrag.updateQueueAdapter();
         }
 
-        UnifiedTrack track = new UnifiedTrack(false, null, playerFragment.track);
+        UnifiedTrack track = new UnifiedTrack(false, null, PlayerFragment.track);
         for (int i = 0; i < recentlyPlayed.getRecentlyPlayed().size(); i++) {
             if (!recentlyPlayed.getRecentlyPlayed().get(i).getType() && recentlyPlayed.getRecentlyPlayed().get(i).getStreamTrack().getTitle().equals(track.getStreamTrack().getTitle())) {
                 recentlyPlayed.getRecentlyPlayed().remove(i);
@@ -956,8 +957,8 @@ public class HomeActivity extends AppCompatActivity
                     isFavourite = false;
                 }
 
-                playerFragment.localIsPlaying = true;
-                playerFragment.localTrack = localSelectedTrack;
+                PlayerFragment.localIsPlaying = true;
+                PlayerFragment.localTrack = localSelectedTrack;
                 fm.beginTransaction()
                         .setCustomAnimations(R.anim.slide_up,
                                 R.anim.slide_down,
@@ -967,7 +968,7 @@ public class HomeActivity extends AppCompatActivity
                         .show(newFragment)
                         .commitAllowingStateLoss();
             } else {
-                if (playerFragment.localTrack != null && playerFragment.localIsPlaying && localSelectedTrack.getTitle() == playerFragment.localTrack.getTitle()) {
+                if (PlayerFragment.localTrack != null && PlayerFragment.localIsPlaying && localSelectedTrack.getTitle() == PlayerFragment.localTrack.getTitle()) {
 
                 } else {
                     int flag = 0;
@@ -982,8 +983,8 @@ public class HomeActivity extends AppCompatActivity
                     if (flag == 0) {
                         isFavourite = false;
                     }
-                    playerFragment.localIsPlaying = true;
-                    playerFragment.localTrack = localSelectedTrack;
+                    PlayerFragment.localIsPlaying = true;
+                    PlayerFragment.localTrack = localSelectedTrack;
                     frag.refresh();
                 }
             }
@@ -993,8 +994,8 @@ public class HomeActivity extends AppCompatActivity
 
         } else {
             PlayerFragment frag = playerFragment;
-            playerFragment.localIsPlaying = true;
-            playerFragment.localTrack = localSelectedTrack;
+            PlayerFragment.localIsPlaying = true;
+            PlayerFragment.localTrack = localSelectedTrack;
 
             int flag = 0;
             for (int i = 0; i < favouriteTracks.getFavourite().size(); i++) {
@@ -1021,7 +1022,7 @@ public class HomeActivity extends AppCompatActivity
         if (qFrag != null) {
             qFrag.updateQueueAdapter();
         }
-        UnifiedTrack track = new UnifiedTrack(true, playerFragment.localTrack, null);
+        UnifiedTrack track = new UnifiedTrack(true, PlayerFragment.localTrack, null);
         for (int i = 0; i < recentlyPlayed.getRecentlyPlayed().size(); i++) {
             if (recentlyPlayed.getRecentlyPlayed().get(i).getType() && recentlyPlayed.getRecentlyPlayed().get(i).getLocalTrack().getTitle().equals(track.getLocalTrack().getTitle())) {
                 recentlyPlayed.getRecentlyPlayed().remove(i);
@@ -1060,408 +1061,127 @@ public class HomeActivity extends AppCompatActivity
      * getFolder() -> gets MusicFolder based on folder name.
      */
 
-    public class loadSavedData extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-            getSavedData();
-            return "done";
+    @Override
+    public void onBackPressed() {
+        PlayerFragment plFrag = playerFragment;
+        LocalMusicViewPagerFragment flmFrag = (LocalMusicViewPagerFragment) fragMan.findFragmentByTag("local");
+        LocalMusicFragment lFrag = null;
+        if (flmFrag != null) {
+            lFrag = (LocalMusicFragment) flmFrag.getFragmentByPosition(0);
         }
-
-        @Override
-        protected void onPostExecute(String aVoid) {
-            super.onPostExecute(aVoid);
-            progress.dismiss();
-            main.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-
-                    if (settings == null) {
-                        settings = new Settings();
-                    }
-
-                    themeColor = settings.getThemeColor();
-                    minAudioStrength = settings.getMinAudioStrength();
+        QueueFragment qFrag = (QueueFragment) fragMan.findFragmentByTag("queue");
+        EqualizerFragment eqFrag = (EqualizerFragment) fragMan.findFragmentByTag("equalizer");
+        ViewSavedDNA vsdFrag = (ViewSavedDNA) fragMan.findFragmentByTag("allSavedDNAs");
 
 
-                    navigationView.setItemIconTintList(ColorStateList.valueOf(themeColor));
-                    collapsingToolbar.setContentScrimColor(themeColor);
-                    customLinearGradient.setStartColor(themeColor);
-                    customLinearGradient.invalidate();
-
-                    try {
-                        if (Build.VERSION.SDK_INT >= 21) {
-                            Window window = ((Activity) ctx).getWindow();
-                            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-                            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                            window.setStatusBarColor(CommonUtils.getDarkColor(themeColor));
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    if (prevVersionCode == -1 || prevVersionCode <= 30) {
-                        savedDNAs = null;
-                    }
-
-                    if (allPlaylists == null) {
-                        allPlaylists = new AllPlaylists();
-                    }
-
-                    if (tempPlaylist == null) {
-                        tempPlaylist = new Playlist(null, null);
-                    }
-
-                    if (queue == null) {
-                        queue = new Queue();
-                    }
-
-                    if (favouriteTracks == null) {
-                        favouriteTracks = new Favourite();
-                    }
-
-                    if (recentlyPlayed == null) {
-                        recentlyPlayed = new RecentlyPlayed();
-                    }
-                    if (allMusicFolders == null) {
-                        allMusicFolders = new AllMusicFolders();
-                    }
-                    if (savedDNAs == null) {
-                        savedDNAs = new AllSavedDNA();
-                    }
-
-                    if (equalizerModel == null) {
-                        equalizerModel = new EqualizerModel();
-                        isEqualizerEnabled = true;
-                        isEqualizerReloaded = false;
-                    } else {
-                        isEqualizerEnabled = equalizerModel.isEqualizerEnabled();
-                        isEqualizerReloaded = true;
-                        seekbarpos = equalizerModel.getSeekbarpos();
-                        presetPos = equalizerModel.getPresetPos();
-                        reverbPreset = equalizerModel.getReverbPreset();
-                        bassStrength = equalizerModel.getBassStrength();
-                    }
-
-                    new SaveVersionCode().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
-                    getLocalSongs();
-                    refreshHeaderImages();
-
-                    if (queue != null && queue.getQueue().size() != 0) {
-                        UnifiedTrack utHome = queue.getQueue().get(queueCurrentIndex);
-                        if (utHome.getType()) {
-                            imgLoader.DisplayImage(utHome.getLocalTrack().getPath(), spImgHome);
-                            spTitleHome.setText(utHome.getLocalTrack().getTitle());
-                        } else {
-                            imgLoader.DisplayImage(utHome.getStreamTrack().getArtworkURL(), spImgHome);
-                            spTitleHome.setText(utHome.getStreamTrack().getTitle());
-                        }
-                    } else {
-                        bottomToolbar.setVisibility(GONE);
-                    }
-
-                    for (int i = 0; i < Math.min(10, recentlyPlayed.getRecentlyPlayed().size()); i++) {
-                        continuePlayingList.add(recentlyPlayed.getRecentlyPlayed().get(i));
-                    }
-
-                    rAdapter = new RecentsListHorizontalAdapter(continuePlayingList, ctx);
-                    recentsRecycler = (RecyclerView) findViewById(R.id.recentsMusicList_home);
-                    recentsRecycler.setNestedScrollingEnabled(false);
-                    LinearLayoutManager mLayoutManager3 = new LinearLayoutManager(ctx, LinearLayoutManager.HORIZONTAL, false);
-                    recentsRecycler.setLayoutManager(mLayoutManager3);
-                    recentsRecycler.setItemAnimator(new DefaultItemAnimator());
-                    AlphaInAnimationAdapter alphaAdapter3 = new AlphaInAnimationAdapter(rAdapter);
-                    alphaAdapter3.setFirstOnly(false);
-                    recentsRecycler.setAdapter(alphaAdapter3);
-
-                    recentsRecycler.addOnItemTouchListener(new ClickItemTouchListener(recentsRecycler) {
-                        @Override
-                        public boolean onClick(RecyclerView parent, View view, final int position, long id) {
-                            UnifiedTrack ut = continuePlayingList.get(position);
-                            boolean isRepeat = false;
-                            int pos = 0;
-                            for (int i = 0; i < queue.getQueue().size(); i++) {
-                                UnifiedTrack ut1 = queue.getQueue().get(i);
-                                if (ut1.getType() && ut.getType() && ut1.getLocalTrack().getTitle().equals(ut.getLocalTrack().getTitle())) {
-                                    isRepeat = true;
-                                    pos = i;
-                                    break;
-                                }
-                                if (!ut1.getType() && !ut.getType() && ut1.getStreamTrack().getTitle().equals(ut.getStreamTrack().getTitle())) {
-                                    isRepeat = true;
-                                    pos = i;
-                                    break;
-                                }
-                            }
-                            if (!isRepeat) {
-                                if (ut.getType()) {
-                                    LocalTrack track = ut.getLocalTrack();
-                                    if (queue.getQueue().size() == 0) {
-                                        queueCurrentIndex = 0;
-                                        queue.getQueue().add(new UnifiedTrack(true, track, null));
-                                    } else if (queueCurrentIndex == queue.getQueue().size() - 1) {
-                                        queueCurrentIndex++;
-                                        queue.getQueue().add(new UnifiedTrack(true, track, null));
-                                    } else if (isReloaded) {
-                                        isReloaded = false;
-                                        queueCurrentIndex = queue.getQueue().size();
-                                        queue.getQueue().add(new UnifiedTrack(true, track, null));
-                                    } else {
-                                        queue.getQueue().add(++queueCurrentIndex, new UnifiedTrack(true, track, null));
-                                    }
-                                    localSelectedTrack = track;
-                                    streamSelected = false;
-                                    localSelected = true;
-                                    queueCall = false;
-                                    isReloaded = false;
-                                    onLocalTrackSelected(position);
-                                } else {
-                                    Track track = ut.getStreamTrack();
-                                    if (queue.getQueue().size() == 0) {
-                                        queueCurrentIndex = 0;
-                                        queue.getQueue().add(new UnifiedTrack(false, null, track));
-                                    } else if (queueCurrentIndex == queue.getQueue().size() - 1) {
-                                        queueCurrentIndex++;
-                                        queue.getQueue().add(new UnifiedTrack(false, null, track));
-                                    } else if (isReloaded) {
-                                        isReloaded = false;
-                                        queueCurrentIndex = queue.getQueue().size();
-                                        queue.getQueue().add(new UnifiedTrack(false, null, track));
-                                    } else {
-                                        queue.getQueue().add(++queueCurrentIndex, new UnifiedTrack(false, null, track));
-                                    }
-                                    selectedTrack = track;
-                                    streamSelected = true;
-                                    localSelected = false;
-                                    queueCall = false;
-                                    isReloaded = false;
-                                    onTrackSelected(position);
-                                }
-                            } else {
-                                onQueueItemClicked(pos);
-                            }
-
-                            return true;
-                        }
-
-                        @Override
-                        public boolean onLongClick(RecyclerView parent, View view, final int position, long id) {
-                            final UnifiedTrack ut = continuePlayingList.get(position);
-                            CustomGeneralBottomSheetDialog generalBottomSheetDialog = new CustomGeneralBottomSheetDialog();
-                            generalBottomSheetDialog.setPosition(position);
-                            generalBottomSheetDialog.setTrack(ut);
-                            generalBottomSheetDialog.setFragment("RecentHorizontalList");
-                            generalBottomSheetDialog.show(getSupportFragmentManager(), "general_bottom_sheet_dialog");
-                            return true;
-                        }
-
-                        @Override
-                        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-                        }
-                    });
-
-                    pAdapter = new PlayListsHorizontalAdapter(allPlaylists.getPlaylists(), ctx);
-                    playlistsRecycler = (RecyclerView) findViewById(R.id.playlist_home);
-                    playlistsRecycler.setNestedScrollingEnabled(false);
-                    LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(ctx, LinearLayoutManager.HORIZONTAL, false);
-                    playlistsRecycler.setLayoutManager(mLayoutManager2);
-                    playlistsRecycler.setItemAnimator(new DefaultItemAnimator());
-                    AlphaInAnimationAdapter alphaAdapter2 = new AlphaInAnimationAdapter(pAdapter);
-                    alphaAdapter2.setFirstOnly(false);
-                    playlistsRecycler.setAdapter(alphaAdapter2);
-
-                    playlistsRecycler.addOnItemTouchListener(new ClickItemTouchListener(playlistsRecycler) {
-                        @Override
-                        public boolean onClick(RecyclerView parent, View view, final int position, long id) {
-                            tempPlaylist = allPlaylists.getPlaylists().get(position);
-                            tempPlaylistNumber = position;
-                            showFragment("playlist");
-                            return true;
-                        }
-
-                        @Override
-                        public boolean onLongClick(RecyclerView parent, View view, final int position, long id) {
-                            PopupMenu popup = new PopupMenu(ctx, view);
-                            popup.getMenuInflater().inflate(R.menu.playlist_popup, popup.getMenu());
-
-                            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                                @Override
-                                public boolean onMenuItemClick(MenuItem item) {
-                                    if (item.getTitle().equals("Play")) {
-
-                                        tempPlaylist = allPlaylists.getPlaylists().get(position);
-                                        tempPlaylistNumber = position;
-
-                                        int size = tempPlaylist.getSongList().size();
-                                        queue.getQueue().clear();
-                                        for (int i = 0; i < size; i++) {
-                                            queue.addToQueue(tempPlaylist.getSongList().get(i));
-                                        }
-
-                                        queueCurrentIndex = 0;
-                                        onPlaylistPlayAll();
-                                    } else if (item.getTitle().equals("Add to Queue")) {
-                                        Playlist pl = allPlaylists.getPlaylists().get(position);
-                                        for (UnifiedTrack ut : pl.getSongList()) {
-                                            queue.addToQueue(ut);
-                                        }
-                                    } else if (item.getTitle().equals("Delete")) {
-                                        allPlaylists.getPlaylists().remove(position);
-                                        AllPlaylistsFragment plFrag = (AllPlaylistsFragment) fragMan.findFragmentByTag("allPlaylists");
-                                        if (plFrag != null) {
-                                            plFrag.itemRemoved(position);
-                                        }
-                                        pAdapter.notifyItemRemoved(position);
-                                        new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                                    } else if (item.getTitle().equals("Rename")) {
-                                        renamePlaylistNumber = position;
-                                        renamePlaylistDialog(allPlaylists.getPlaylists().get(position).getPlaylistName());
-                                    }
-                                    return true;
-                                }
-                            });
-                            popup.show();
-                            return true;
-                        }
-
-                        @Override
-                        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-                        }
-                    });
-
-                    adapter = new LocalTracksHorizontalAdapter(finalLocalSearchResultList, ctx);
-                    localsongsRecyclerView = (RecyclerView) findViewById(R.id.localMusicList_home);
-                    LinearLayoutManager mLayoutManager = new LinearLayoutManager(ctx, LinearLayoutManager.HORIZONTAL, false);
-                    localsongsRecyclerView.setLayoutManager(mLayoutManager);
-                    localsongsRecyclerView.setItemAnimator(new DefaultItemAnimator());
-                    AlphaInAnimationAdapter alphaAdapter = new AlphaInAnimationAdapter(adapter);
-                    alphaAdapter.setFirstOnly(false);
-                    localsongsRecyclerView.setAdapter(alphaAdapter);
-
-                    localsongsRecyclerView.addOnItemTouchListener(new ClickItemTouchListener(localsongsRecyclerView) {
-                        @Override
-                        public boolean onClick(RecyclerView parent, View view, int position, long id) {
-                            LocalTrack track = finalLocalSearchResultList.get(position);
-                            if (queue.getQueue().size() == 0) {
-                                queueCurrentIndex = 0;
-                                queue.getQueue().add(new UnifiedTrack(true, track, null));
-                            } else if (queueCurrentIndex == queue.getQueue().size() - 1) {
-                                queueCurrentIndex++;
-                                queue.getQueue().add(new UnifiedTrack(true, track, null));
-                            } else if (isReloaded) {
-                                isReloaded = false;
-                                queueCurrentIndex = queue.getQueue().size();
-                                queue.getQueue().add(new UnifiedTrack(true, track, null));
-                            } else {
-                                queue.getQueue().add(++queueCurrentIndex, new UnifiedTrack(true, track, null));
-                            }
-                            localSelectedTrack = track;
-                            streamSelected = false;
-                            localSelected = true;
-                            queueCall = false;
-                            isReloaded = false;
-                            onLocalTrackSelected(position);
-                            return true;
-                        }
-
-                        @Override
-                        public boolean onLongClick(RecyclerView parent, View view, final int position, long id) {
-                            CustomLocalBottomSheetDialog localBottomSheetDialog = new CustomLocalBottomSheetDialog();
-                            localBottomSheetDialog.setPosition(position);
-                            localBottomSheetDialog.setLocalTrack(finalLocalSearchResultList.get(position));
-                            localBottomSheetDialog.show(getSupportFragmentManager(), "local_song_bottom_sheet");
-                            return true;
-                        }
-
-                        @Override
-                        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-                        }
-                    });
-
-                    soundcloudRecyclerView = (RecyclerView) findViewById(R.id.trackList_home);
-
-                    soundcloudRecyclerView.addOnItemTouchListener(new ClickItemTouchListener(soundcloudRecyclerView) {
-                        @Override
-                        public boolean onClick(RecyclerView parent, View view, int position, long id) {
-                            Track track = streamingTrackList.get(position);
-                            if (queue.getQueue().size() == 0) {
-                                queueCurrentIndex = 0;
-                                queue.getQueue().add(new UnifiedTrack(false, null, track));
-                            } else if (queueCurrentIndex == queue.getQueue().size() - 1) {
-                                queueCurrentIndex++;
-                                queue.getQueue().add(new UnifiedTrack(false, null, track));
-                            } else if (isReloaded) {
-                                isReloaded = false;
-                                queueCurrentIndex = queue.getQueue().size();
-                                queue.getQueue().add(new UnifiedTrack(false, null, track));
-                            } else {
-                                queue.getQueue().add(++queueCurrentIndex, new UnifiedTrack(false, null, track));
-                            }
-                            selectedTrack = track;
-                            streamSelected = true;
-                            localSelected = false;
-                            queueCall = false;
-                            isReloaded = false;
-                            onTrackSelected(position);
-                            return true;
-                        }
-
-                        @Override
-                        public boolean onLongClick(RecyclerView parent, View view, final int position, long id) {
-                            CustomGeneralBottomSheetDialog generalBottomSheetDialog = new CustomGeneralBottomSheetDialog();
-                            generalBottomSheetDialog.setPosition(position);
-                            generalBottomSheetDialog.setTrack(new UnifiedTrack(false, null, streamingTrackList.get(position)));
-                            generalBottomSheetDialog.setFragment("Stream");
-                            generalBottomSheetDialog.show(getSupportFragmentManager(), "general_bottom_sheet_dialog");
-                            return true;
-                        }
-
-                        @Override
-                        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-                        }
-                    });
-
-                    playerContainer = findViewById(R.id.player_frag_container);
-
-                    if (finalLocalSearchResultList.size() == 0) {
-                        localsongsRecyclerView.setVisibility(GONE);
-                        localNothingText.setVisibility(View.VISIBLE);
-                    } else {
-                        localsongsRecyclerView.setVisibility(View.VISIBLE);
-                        localNothingText.setVisibility(View.INVISIBLE);
-                    }
-
-                    if (recentlyPlayed.getRecentlyPlayed().size() == 0) {
-                        recentsRecycler.setVisibility(GONE);
-                        recentsNothingText.setVisibility(View.VISIBLE);
-                    } else {
-                        recentsRecycler.setVisibility(View.VISIBLE);
-                        recentsNothingText.setVisibility(View.INVISIBLE);
-                    }
-
-                    if (streamingTrackList.size() == 0) {
-                        streamRecyclerContainer.setVisibility(GONE);
-                        streamNothingText.setVisibility(View.VISIBLE);
-                    } else {
-                        streamRecyclerContainer.setVisibility(View.VISIBLE);
-                        streamNothingText.setVisibility(View.INVISIBLE);
-                    }
-
-                    if (allPlaylists.getPlaylists().size() == 0) {
-                        playlistsRecycler.setVisibility(GONE);
-                        playlistNothingText.setVisibility(View.VISIBLE);
-                    } else {
-                        playlistsRecycler.setVisibility(View.VISIBLE);
-                        playlistNothingText.setVisibility(View.INVISIBLE);
-                    }
-
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else if (showCase != null && showCase.isShowing()) {
+            showCase.hide();
+        } else if (plFrag != null && plFrag.isShowcaseVisible()) {
+            plFrag.hideShowcase();
+        } else if (lFrag != null && lFrag.isShowcaseVisible()) {
+            lFrag.hideShowcase();
+        } else if (qFrag != null && qFrag.isShowcaseVisible()) {
+            qFrag.hideShowcase();
+        } else if (eqFrag != null && eqFrag.isShowcaseVisible()) {
+            eqFrag.hideShowcase();
+        } else if (vsdFrag != null && vsdFrag.isShowcaseVisible()) {
+            vsdFrag.hideShowcase();
+        } else if (isFullScreenEnabled) {
+            isFullScreenEnabled = false;
+            plFrag.bottomContainer.setVisibility(View.VISIBLE);
+            plFrag.seekBarContainer.setVisibility(View.VISIBLE);
+            plFrag.toggleContainer.setVisibility(View.VISIBLE);
+            plFrag.spToolbar.setVisibility(View.VISIBLE);
+            onFullScreen();
+        } else if (isEqualizerVisible) {
+            showPlayer2();
+        } else if (isQueueVisible) {
+            showPlayer3();
+        } else if (isPlayerVisible && !isPlayerTransitioning && playerFragment.smallPlayer != null) {
+            hidePlayer();
+//            showTabs();
+            isPlayerVisible = false;
+        } else if (isLocalVisible && flmFrag != null && flmFrag.searchBox != null && flmFrag.isSearchboxVisible) {
+            flmFrag.searchBox.setText("");
+            flmFrag.searchBox.setVisibility(View.INVISIBLE);
+            flmFrag.isSearchboxVisible = false;
+            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+            flmFrag.searchIcon.setImageResource(R.drawable.ic_search);
+            flmFrag.fragTitle.setVisibility(View.VISIBLE);
+        } else if (!searchView.isIconified()) {
+            searchView.setQuery("", true);
+            searchView.setIconified(true);
+            new Thread(new CancelCall()).start();
+            if (localRecyclerContainer.getVisibility() == View.VISIBLE || streamRecyclerContainer.getVisibility() == View.VISIBLE) {
+                localRecyclerContainer.setVisibility(GONE);
+                streamRecyclerContainer.setVisibility(GONE);
+            }
+        } else if (localRecyclerContainer.getVisibility() == View.VISIBLE || streamRecyclerContainer.getVisibility() == View.VISIBLE) {
+            localRecyclerContainer.setVisibility(GONE);
+            streamRecyclerContainer.setVisibility(GONE);
+        } else {
+            if (isEditVisible) {
+                hideFragment("Edit");
+            } else if (isAlbumVisible) {
+                hideFragment("viewAlbum");
+            } else if (isArtistVisible) {
+                hideFragment("viewArtist");
+            } else {
+                if (isLocalVisible) {
+                    hideFragment("local");
+                    setTitle("Music DNA");
+                } else if (isQueueVisible) {
+                    hideFragment("queue");
+                    setTitle("Music DNA");
+                } else if (isStreamVisible) {
+                    hideFragment("stream");
+                    setTitle("Music DNA");
+                } else if (isPlaylistVisible) {
+                    hideFragment("playlist");
+                    setTitle("Music DNA");
+                } else if (isNewPlaylistVisible) {
+                    hideFragment("newPlaylist");
+                    setTitle("Music DNA");
+                } else if (isEqualizerVisible) {
+                    finalSelectedTracks.clear();
+                    hideFragment("equalizer");
+                    setTitle("Music DNA");
+                } else if (isFavouriteVisible) {
+                    hideFragment("favourite");
+                    setTitle("Music DNA");
+                } else if (isAllPlaylistVisible) {
+                    hideFragment("allPlaylists");
+                    setTitle("Music DNA");
+                } else if (isFolderContentVisible) {
+                    hideFragment("folderContent");
+                    setTitle("Folders");
+                } else if (isAllFolderVisible) {
+                    hideFragment("allFolders");
+                    setTitle("Music DNA");
+                } else if (isAllSavedDnaVisisble) {
+                    hideFragment("allSavedDNAs");
+                    setTitle("Music DNA");
+                } else if (isSavedDNAVisible) {
+                    hideFragment("savedDNA");
+                    setTitle("Music DNA");
+                } else if (isRecentVisible) {
+                    hideFragment("recent");
+                    setTitle("Music DNA");
+                } else if (isAboutVisible) {
+                    hideFragment("About");
+                    setTitle("Settings");
+                } else if (isSettingsVisible) {
+                    hideFragment("settings");
+                    new SaveSettings().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    setTitle("Music DNA");
+                } else if (!isPlayerTransitioning) {
+                    startActivity(new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME));
                 }
-            });
+            }
         }
     }
 
@@ -1749,128 +1469,34 @@ public class HomeActivity extends AppCompatActivity
      * Standard Activity methods
      */
 
+    @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public void onBackPressed() {
-        PlayerFragment plFrag = playerFragment;
-        LocalMusicViewPagerFragment flmFrag = (LocalMusicViewPagerFragment) fragMan.findFragmentByTag("local");
-        LocalMusicFragment lFrag = null;
-        if (flmFrag != null) {
-            lFrag = (LocalMusicFragment) flmFrag.getFragmentByPosition(0);
-        }
-        QueueFragment qFrag = (QueueFragment) fragMan.findFragmentByTag("queue");
-        EqualizerFragment eqFrag = (EqualizerFragment) fragMan.findFragmentByTag("equalizer");
-        ViewSavedDNA vsdFrag = (ViewSavedDNA) fragMan.findFragmentByTag("allSavedDNAs");
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
 
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else if (showCase != null && showCase.isShowing()) {
-            showCase.hide();
-        } else if (plFrag != null && plFrag.isShowcaseVisible()) {
-            plFrag.hideShowcase();
-        } else if (lFrag != null && lFrag.isShowcaseVisible()) {
-            lFrag.hideShowcase();
-        } else if (qFrag != null && qFrag.isShowcaseVisible()) {
-            qFrag.hideShowcase();
-        } else if (eqFrag != null && eqFrag.isShowcaseVisible()) {
-            eqFrag.hideShowcase();
-        } else if (vsdFrag != null && vsdFrag.isShowcaseVisible()) {
-            vsdFrag.hideShowcase();
-        } else if (isFullScreenEnabled) {
-            isFullScreenEnabled = false;
-            plFrag.bottomContainer.setVisibility(View.VISIBLE);
-            plFrag.seekBarContainer.setVisibility(View.VISIBLE);
-            plFrag.toggleContainer.setVisibility(View.VISIBLE);
-            plFrag.spToolbar.setVisibility(View.VISIBLE);
-            onFullScreen();
-        } else if (isEqualizerVisible) {
-            showPlayer2();
-        } else if (isQueueVisible) {
-            showPlayer3();
-        } else if (isPlayerVisible && !isPlayerTransitioning && playerFragment.smallPlayer != null) {
-            hidePlayer();
-//            showTabs();
-            isPlayerVisible = false;
-        } else if (isLocalVisible && flmFrag != null && flmFrag.searchBox != null && flmFrag.isSearchboxVisible) {
-            flmFrag.searchBox.setText("");
-            flmFrag.searchBox.setVisibility(View.INVISIBLE);
-            flmFrag.isSearchboxVisible = false;
-            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-            flmFrag.searchIcon.setImageResource(R.drawable.ic_search);
-            flmFrag.fragTitle.setVisibility(View.VISIBLE);
-        } else if (!searchView.isIconified()) {
-            searchView.setQuery("", true);
-            searchView.setIconified(true);
-            new Thread(new CancelCall()).start();
-            if (localRecyclerContainer.getVisibility() == View.VISIBLE || streamRecyclerContainer.getVisibility() == View.VISIBLE) {
-                localRecyclerContainer.setVisibility(GONE);
-                streamRecyclerContainer.setVisibility(GONE);
-            }
-        } else if (localRecyclerContainer.getVisibility() == View.VISIBLE || streamRecyclerContainer.getVisibility() == View.VISIBLE) {
-            localRecyclerContainer.setVisibility(GONE);
-            streamRecyclerContainer.setVisibility(GONE);
-        } else {
-            if (isEditVisible) {
-                hideFragment("Edit");
-            } else if (isAlbumVisible) {
-                hideFragment("viewAlbum");
-            } else if (isArtistVisible) {
-                hideFragment("viewArtist");
-            } else {
-                if (isLocalVisible) {
-                    hideFragment("local");
-                    setTitle("Music DNA");
-                } else if (isQueueVisible) {
-                    hideFragment("queue");
-                    setTitle("Music DNA");
-                } else if (isStreamVisible) {
-                    hideFragment("stream");
-                    setTitle("Music DNA");
-                } else if (isPlaylistVisible) {
-                    hideFragment("playlist");
-                    setTitle("Music DNA");
-                } else if (isNewPlaylistVisible) {
-                    hideFragment("newPlaylist");
-                    setTitle("Music DNA");
-                } else if (isEqualizerVisible) {
-                    finalSelectedTracks.clear();
-                    hideFragment("equalizer");
-                    setTitle("Music DNA");
-                } else if (isFavouriteVisible) {
-                    hideFragment("favourite");
-                    setTitle("Music DNA");
-                } else if (isAllPlaylistVisible) {
-                    hideFragment("allPlaylists");
-                    setTitle("Music DNA");
-                } else if (isFolderContentVisible) {
-                    hideFragment("folderContent");
-                    setTitle("Folders");
-                } else if (isAllFolderVisible) {
-                    hideFragment("allFolders");
-                    setTitle("Music DNA");
-                } else if (isAllSavedDnaVisisble) {
-                    hideFragment("allSavedDNAs");
-                    setTitle("Music DNA");
-                } else if (isSavedDNAVisible) {
-                    hideFragment("savedDNA");
-                    setTitle("Music DNA");
-                } else if (isRecentVisible) {
-                    hideFragment("recent");
-                    setTitle("Music DNA");
-                } else if (isAboutVisible) {
-                    hideFragment("About");
-                    setTitle("Settings");
-                } else if (isSettingsVisible) {
-                    hideFragment("settings");
-                    new SaveSettings().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    setTitle("Music DNA");
-                } else if (!isPlayerTransitioning) {
-                    startActivity(new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME));
-                }
-            }
+        if (id == R.id.nav_home) {
+            hideAllFrags();
+            hideFragment("allPlaylists");
+        } else if (id == R.id.nav_local) {
+            showFragment("local");
+        } else if (id == R.id.nav_playlists) {
+            showFragment("allPlaylists");
+        } else if (id == R.id.nav_recent) {
+            showFragment("recent");
+        } else if (id == R.id.nav_fav) {
+            showFragment("favourite");
+        } else if (id == R.id.nav_folder) {
+            showFragment("allFolders");
+        } else if (id == R.id.nav_view) {
+            showFragment("allSavedDNAs");
+        } else if (id == R.id.nav_settings) {
+            showFragment("settings");
         }
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     @Override
@@ -1902,34 +1528,73 @@ public class HomeActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
+    private void updateStreamingList(String query) {
 
-        if (id == R.id.nav_home) {
-            hideAllFrags();
-            hideFragment("allPlaylists");
-        } else if (id == R.id.nav_local) {
-            showFragment("local");
-        } else if (id == R.id.nav_playlists) {
-            showFragment("allPlaylists");
-        } else if (id == R.id.nav_recent) {
-            showFragment("recent");
-        } else if (id == R.id.nav_fav) {
-            showFragment("favourite");
-        } else if (id == R.id.nav_folder) {
-            showFragment("allFolders");
-        } else if (id == R.id.nav_view) {
-            showFragment("allSavedDNAs");
-        } else if (id == R.id.nav_settings) {
-            showFragment("settings");
+        if (!isLocalVisible) {
+
+            mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            if (!settings.isStreamOnlyOnWifiEnabled() || mWifi.isConnected()) {
+                new Thread(new CancelCall()).start();
+
+
+                /*Update the Streaming List*/
+
+                if (!query.equals("")) {
+                    streamRecyclerContainer.setVisibility(View.VISIBLE);
+
+                    startLoadingIndicator();
+                    Retrofit client = new Retrofit.Builder()
+                            .baseUrl(Config.API_URL)
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+                    StreamService ss = client.create(StreamService.class);
+                    call = ss.getTracks(query, 75);
+                    call.enqueue(new Callback<List<Track>>() {
+
+                        @Override
+                        public void onResponse(Call<List<Track>> call, Response<List<Track>> response) {
+                            if (response.isSuccessful()) {
+                                streamingTrackList = response.body();
+                                sAdapter = new StreamTracksHorizontalAdapter(streamingTrackList, ctx);
+                                LinearLayoutManager mLayoutManager = new LinearLayoutManager(ctx, LinearLayoutManager.HORIZONTAL, false);
+                                soundcloudRecyclerView.setLayoutManager(mLayoutManager);
+                                soundcloudRecyclerView.setItemAnimator(new DefaultItemAnimator());
+                                soundcloudRecyclerView.setAdapter(sAdapter);
+
+                                if (streamingTrackList.size() == 0) {
+                                    streamRecyclerContainer.setVisibility(GONE);
+                                } else {
+                                    streamRecyclerContainer.setVisibility(View.VISIBLE);
+                                }
+
+                                stopLoadingIndicator();
+                                (soundcloudRecyclerView.getAdapter()).notifyDataSetChanged();
+
+                                StreamMusicFragment sFrag = (StreamMusicFragment) fragMan.findFragmentByTag("stream");
+                                if (sFrag != null) {
+                                    sFrag.dataChanged();
+                                }
+                            } else {
+                                stopLoadingIndicator();
+                            }
+                            Log.d("RETRO", response.body() + "");
+                        }
+
+                        @Override
+                        public void onFailure(Call<List<Track>> call, Throwable t) {
+                            Log.d("RETRO1", t.getMessage());
+                        }
+                    });
+
+                } else {
+                    stopLoadingIndicator();
+                    streamRecyclerContainer.setVisibility(GONE);
+                }
+            } else {
+                stopLoadingIndicator();
+                streamRecyclerContainer.setVisibility(GONE);
+            }
         }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 
     @Override
@@ -2165,88 +1830,10 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    private void updateStreamingList(String query) {
-
-        if (!isLocalVisible) {
-
-            mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-            if ((settings.isStreamOnlyOnWifiEnabled() && mWifi.isConnected()) || (!settings.isStreamOnlyOnWifiEnabled())) {
-                new Thread(new CancelCall()).start();
-
-
-                /*Update the Streaming List*/
-
-                if (!query.equals("")) {
-                    streamRecyclerContainer.setVisibility(View.VISIBLE);
-
-                    startLoadingIndicator();
-                    Retrofit client = new Retrofit.Builder()
-                            .baseUrl(Config.API_URL)
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
-                    StreamService ss = client.create(StreamService.class);
-                    call = ss.getTracks(query, 75);
-                    call.enqueue(new Callback<List<Track>>() {
-
-                        @Override
-                        public void onResponse(Call<List<Track>> call, Response<List<Track>> response) {
-                            if (response.isSuccessful()) {
-                                streamingTrackList = response.body();
-                                sAdapter = new StreamTracksHorizontalAdapter(streamingTrackList, ctx);
-                                LinearLayoutManager mLayoutManager = new LinearLayoutManager(ctx, LinearLayoutManager.HORIZONTAL, false);
-                                soundcloudRecyclerView.setLayoutManager(mLayoutManager);
-                                soundcloudRecyclerView.setItemAnimator(new DefaultItemAnimator());
-                                soundcloudRecyclerView.setAdapter(sAdapter);
-
-                                if (streamingTrackList.size() == 0) {
-                                    streamRecyclerContainer.setVisibility(GONE);
-                                } else {
-                                    streamRecyclerContainer.setVisibility(View.VISIBLE);
-                                }
-
-                                stopLoadingIndicator();
-                                (soundcloudRecyclerView.getAdapter()).notifyDataSetChanged();
-
-                                StreamMusicFragment sFrag = (StreamMusicFragment) fragMan.findFragmentByTag("stream");
-                                if (sFrag != null) {
-                                    sFrag.dataChanged();
-                                }
-                            } else {
-                                stopLoadingIndicator();
-                            }
-                            Log.d("RETRO", response.body() + "");
-                        }
-
-                        @Override
-                        public void onFailure(Call<List<Track>> call, Throwable t) {
-                            Log.d("RETRO1", t.getMessage());
-                        }
-                    });
-
-                } else {
-                    stopLoadingIndicator();
-                    streamRecyclerContainer.setVisibility(GONE);
-                }
-            } else {
-                stopLoadingIndicator();
-                streamRecyclerContainer.setVisibility(GONE);
-            }
-        }
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
-    /*
-     * Methods to control the transitions of the player fragment
-     * hidePlayer() / showPlayer()  -> the vertical animation to hide/show the visualizer
-     * hidePlayer2() / showPlayer2()  -> the horizontal animation to hide/show the equalizer
-     * hidePlayer3() / showPlayer3()  -> the horizontal animation to hide/show the queue
-     */
-
     public void hidePlayer() {
 
-        if (playerFragment != null && playerFragment.mVisualizerView != null) {
-            playerFragment.mVisualizerView.setVisibility(View.GONE);
+        if (playerFragment != null && PlayerFragment.mVisualizerView != null) {
+            PlayerFragment.mVisualizerView.setVisibility(View.GONE);
             playerFragment.lyricsContainer.setVisibility(View.GONE);
         }
 
@@ -2261,10 +1848,10 @@ public class HomeActivity extends AppCompatActivity
 
         isPlayerVisible = false;
 
-        if (playerFragment != null && playerFragment.cpb != null) {
-            playerFragment.cpb.setAlpha(0.0f);
-            playerFragment.cpb.setVisibility(View.VISIBLE);
-            playerFragment.cpb.animate()
+        if (playerFragment != null && PlayerFragment.cpb != null) {
+            PlayerFragment.cpb.setAlpha(0.0f);
+            PlayerFragment.cpb.setVisibility(View.VISIBLE);
+            PlayerFragment.cpb.animate()
                     .alpha(1.0f);
         }
         if (playerFragment != null && playerFragment.smallPlayer != null) {
@@ -2316,6 +1903,15 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*
+     * Methods to control the transitions of the player fragment
+     * hidePlayer() / showPlayer()  -> the vertical animation to hide/show the visualizer
+     * hidePlayer2() / showPlayer2()  -> the horizontal animation to hide/show the equalizer
+     * hidePlayer3() / showPlayer3()  -> the horizontal animation to hide/show the queue
+     */
+
     public void showPlayer() {
 
         if (Build.VERSION.SDK_INT >= 21) {
@@ -2335,8 +1931,8 @@ public class HomeActivity extends AppCompatActivity
         isQueueVisible = false;
 
         playerContainer.setVisibility(View.VISIBLE);
-        if (playerFragment != null && playerFragment.mVisualizerView != null)
-            playerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
+        if (playerFragment != null && PlayerFragment.mVisualizerView != null)
+            PlayerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
 
         if (playerFragment != null && playerFragment.player_controller != null) {
             playerFragment.player_controller.setAlpha(1.0f);
@@ -2345,8 +1941,8 @@ public class HomeActivity extends AppCompatActivity
                     .alpha(0.0f);
         }
 
-        if (playerFragment != null && playerFragment.cpb != null) {
-            playerFragment.cpb.animate()
+        if (playerFragment != null && PlayerFragment.cpb != null) {
+            PlayerFragment.cpb.animate()
                     .alpha(0.0f);
         }
         if (playerFragment != null && playerFragment.smallPlayer != null) {
@@ -2386,12 +1982,12 @@ public class HomeActivity extends AppCompatActivity
         handler2.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (playerFragment != null && playerFragment.mVisualizerView != null){
-                    if (playerFragment.isLyricsVisisble) {
-                        playerFragment.mVisualizerView.setVisibility(GONE);
+                if (playerFragment != null && PlayerFragment.mVisualizerView != null){
+                    if (playerFragment.isLyricsVisible) {
+                        PlayerFragment.mVisualizerView.setVisibility(GONE);
                         playerFragment.lyricsContainer.setVisibility(View.VISIBLE);
                     } else {
-                        playerFragment.mVisualizerView.setVisibility(View.VISIBLE);
+                        PlayerFragment.mVisualizerView.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -2403,8 +1999,8 @@ public class HomeActivity extends AppCompatActivity
 
         isEqualizerVisible = true;
 
-        if (playerFragment.mVisualizerView != null)
-            playerFragment.mVisualizerView.setVisibility(View.GONE);
+        if (PlayerFragment.mVisualizerView != null)
+            PlayerFragment.mVisualizerView.setVisibility(View.GONE);
 
         final Handler handler2 = new Handler();
         handler2.postDelayed(new Runnable() {
@@ -2434,8 +2030,8 @@ public class HomeActivity extends AppCompatActivity
         }, 350);
 
         playerContainer.setVisibility(View.VISIBLE);
-        if (playerFragment.mVisualizerView != null)
-            playerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
+        if (PlayerFragment.mVisualizerView != null)
+            PlayerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
 
         isPlayerTransitioning = true;
 
@@ -2449,8 +2045,8 @@ public class HomeActivity extends AppCompatActivity
                         if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
                             playerFragment.snappyRecyclerView.setTransparency();
                         }
-                        if (!playerFragment.isLyricsVisisble) {
-                            playerFragment.mVisualizerView.setVisibility(View.VISIBLE);
+                        if (!playerFragment.isLyricsVisible) {
+                            PlayerFragment.mVisualizerView.setVisibility(View.VISIBLE);
                         }
                     }
                 });
@@ -2460,8 +2056,8 @@ public class HomeActivity extends AppCompatActivity
 
         isQueueVisible = true;
 
-        if (playerFragment.mVisualizerView != null)
-            playerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
+        if (PlayerFragment.mVisualizerView != null)
+            PlayerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
 
         final Handler handler2 = new Handler();
         handler2.postDelayed(new Runnable() {
@@ -2483,8 +2079,8 @@ public class HomeActivity extends AppCompatActivity
         isEqualizerVisible = false;
         isQueueVisible = false;
 
-        if (playerFragment.mVisualizerView != null)
-            playerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
+        if (PlayerFragment.mVisualizerView != null)
+            PlayerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
 
         isPlayerTransitioning = true;
 
@@ -2498,8 +2094,8 @@ public class HomeActivity extends AppCompatActivity
                         if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
                             playerFragment.snappyRecyclerView.setTransparency();
                         }
-                        if (!playerFragment.isLyricsVisisble) {
-                            playerFragment.mVisualizerView.setVisibility(View.VISIBLE);
+                        if (!playerFragment.isLyricsVisible) {
+                            PlayerFragment.mVisualizerView.setVisibility(View.VISIBLE);
                         }
                     }
                 });
@@ -2513,76 +2109,29 @@ public class HomeActivity extends AppCompatActivity
         }, 400);
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
-    /*
-     * Methods and classes for updating visualizer.
-     * MyAsyncTask -> AsyncTask to update visualiser in background thread.
-     * updatePoints() -> Actual method to render the DNA.
-     */
-
-    public void updateVisualizer(byte[] bytes) {
-        mBytes = bytes;
-        try {
-            new MyAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public class MyAsyncTask extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            updatePoints();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            main.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    playerFragment.mVisualizerView.updateVisualizer(mBytes);
-                    if (playerFragment.mVisualizerView.bmp != null) {
-                        if (navImageView != null) {
-                            try {
-                                Bitmap croppedBmp = Bitmap.createBitmap(playerFragment.mVisualizerView.bmp, 0, (int) (75 * ratio), screen_width, screen_width);
-                                navImageView.setImageBitmap(croppedBmp);
-                            } catch (Exception | OutOfMemoryError e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                }
-            });
-        }
-    }
-
     public void updatePoints() {
 
         try {
-            playerFragment.mVisualizerView.outerRadius = (float) (Math.min(playerFragment.mVisualizerView.width, playerFragment.mVisualizerView.height) * 0.42);
-            playerFragment.mVisualizerView.normalizedPosition = ((float) (playerFragment.mMediaPlayer.getCurrentPosition()) / (float) (playerFragment.durationInMilliSec));
+            VisualizerView.outerRadius = (float) (Math.min(VisualizerView.width, VisualizerView.height) * 0.42);
+            VisualizerView.normalizedPosition = ((float) (PlayerFragment.mMediaPlayer.getCurrentPosition()) / (float) (PlayerFragment.durationInMilliSec));
             if (mBytes == null) {
                 return;
             }
-            playerFragment.mVisualizerView.angle = (float) (Math.PI - playerFragment.mVisualizerView.normalizedPosition * playerFragment.mVisualizerView.TAU);
-            playerFragment.mVisualizerView.color = 0;
-            playerFragment.mVisualizerView.lnDataDistance = 0;
-            playerFragment.mVisualizerView.distance = 0;
-            playerFragment.mVisualizerView.size = 0;
-            playerFragment.mVisualizerView.volume = 0;
-            playerFragment.mVisualizerView.power = 0;
+            VisualizerView.angle = (float) (Math.PI - VisualizerView.normalizedPosition * VisualizerView.TAU);
+            VisualizerView.color = 0;
+            VisualizerView.lnDataDistance = 0;
+            VisualizerView.distance = 0;
+            VisualizerView.size = 0;
+            VisualizerView.volume = 0;
+            VisualizerView.power = 0;
         } catch (Exception e) {
 
         }
 
         float x, y;
 
-        int midx = (int) (playerFragment.mVisualizerView.width / 2);
-        int midy = (int) (playerFragment.mVisualizerView.height / 2);
+        int midx = (int) (VisualizerView.width / 2);
+        int midy = (int) (VisualizerView.height / 2);
 
         // calculate min and max amplitude for current byte array
         float max = Integer.MIN_VALUE, min = Integer.MAX_VALUE;
@@ -2615,59 +2164,59 @@ public class HomeActivity extends AppCompatActivity
                 amp = 0;
             }
 
-            playerFragment.mVisualizerView.volume = (amp);
+            VisualizerView.volume = (amp);
 
             // converting polar to cartesian (distance calculated afterwards acts as radius for polar co-ords)
-            x = (float) Math.sin(playerFragment.mVisualizerView.angle);
-            y = (float) Math.cos(playerFragment.mVisualizerView.angle);
+            x = (float) Math.sin(VisualizerView.angle);
+            y = (float) Math.cos(VisualizerView.angle);
 
             // filtering low amplitude
-            if (playerFragment.mVisualizerView.volume < minAudioStrength) {
+            if (VisualizerView.volume < minAudioStrength) {
                 continue;
             }
 
             // color ( value of hue inn HSV ) calculated based on current progress of the song or audio clip
-            playerFragment.mVisualizerView.color = (float) (playerFragment.mVisualizerView.normalizedPosition - 0.12 + Math.random() * 0.24);
-            playerFragment.mVisualizerView.color = Math.round(playerFragment.mVisualizerView.color * 360);
-            seekBarColor = (float) (playerFragment.mVisualizerView.normalizedPosition);
+            VisualizerView.color = (float) (VisualizerView.normalizedPosition - 0.12 + Math.random() * 0.24);
+            VisualizerView.color = Math.round(VisualizerView.color * 360);
+            seekBarColor = VisualizerView.normalizedPosition;
             seekBarColor = Math.round(seekBarColor * 360);
 
             // calculating distance from center ( 'r' in polar coordinates)
-            playerFragment.mVisualizerView.lnDataDistance = (float) ((Math.log(a - 4) / playerFragment.mVisualizerView.LOG_MAX) - playerFragment.mVisualizerView.BASE);
-            playerFragment.mVisualizerView.distance = playerFragment.mVisualizerView.lnDataDistance * playerFragment.mVisualizerView.outerRadius;
+            VisualizerView.lnDataDistance = (float) ((Math.log(a - 4) / VisualizerView.LOG_MAX) - VisualizerView.BASE);
+            VisualizerView.distance = VisualizerView.lnDataDistance * VisualizerView.outerRadius;
 
 
             // size of the circle to be rendered at the calculated position
-            playerFragment.mVisualizerView.size = ratio * ((float) (4.5 * playerFragment.mVisualizerView.volume * playerFragment.mVisualizerView.MAX_DOT_SIZE + Math.random() * 2));
+            VisualizerView.size = ratio * ((float) (4.5 * VisualizerView.volume * VisualizerView.MAX_DOT_SIZE + Math.random() * 2));
 
             // alpha also based on volume ( amplitude )
-            playerFragment.mVisualizerView.alpha = (float) (playerFragment.mVisualizerView.volume * 0.09);
+            VisualizerView.alpha = (float) (VisualizerView.volume * 0.09);
 
             // final cartesian coordinates for drawing on canvas
-            x = x * playerFragment.mVisualizerView.distance;
-            y = y * playerFragment.mVisualizerView.distance;
+            x = x * VisualizerView.distance;
+            y = y * VisualizerView.distance;
 
 
             float[] hsv = new float[3];
-            hsv[0] = playerFragment.mVisualizerView.color;
+            hsv[0] = VisualizerView.color;
             hsv[1] = (float) 0.9;
             hsv[2] = (float) 0.9;
 
             // setting color of the Paint
-            playerFragment.mVisualizerView.mForePaint.setColor(Color.HSVToColor(hsv));
+            VisualizerView.mForePaint.setColor(Color.HSVToColor(hsv));
 
-            if (playerFragment.mVisualizerView.size >= 8.0 && playerFragment.mVisualizerView.size < 29.0) {
-                playerFragment.mVisualizerView.mForePaint.setAlpha(17);
-            } else if (playerFragment.mVisualizerView.size >= 29.0 && playerFragment.mVisualizerView.size <= 60.0) {
-                playerFragment.mVisualizerView.mForePaint.setAlpha(9);
-            } else if (playerFragment.mVisualizerView.size > 60.0) {
-                playerFragment.mVisualizerView.mForePaint.setAlpha(3);
+            if (VisualizerView.size >= 8.0 && VisualizerView.size < 29.0) {
+                VisualizerView.mForePaint.setAlpha(17);
+            } else if (VisualizerView.size >= 29.0 && VisualizerView.size <= 60.0) {
+                VisualizerView.mForePaint.setAlpha(9);
+            } else if (VisualizerView.size > 60.0) {
+                VisualizerView.mForePaint.setAlpha(3);
             } else {
-                playerFragment.mVisualizerView.mForePaint.setAlpha((int) (playerFragment.mVisualizerView.alpha * 1000));
+                VisualizerView.mForePaint.setAlpha((int) (VisualizerView.alpha * 1000));
             }
 
             // Draw to the *temp* canvas, this is done to deal with gaps in rendering, when canvas is out of focus
-            cacheCanvas.drawCircle(midx + x, midy + y, playerFragment.mVisualizerView.size, playerFragment.mVisualizerView.mForePaint);
+            cacheCanvas.drawCircle(midx + x, midy + y, VisualizerView.size, VisualizerView.mForePaint);
 
         }
     }
@@ -2675,19 +2224,19 @@ public class HomeActivity extends AppCompatActivity
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     /*
-     * PlayerFragment callbacks START
-     * onComplete() -> called when a song ends or next button is clicked in player or notification.
-     * onPreviousTrack() -> called when previous button is clicked in player or notification.
-     * onEqualizerClicked() -> called when equalizer icon is clicked.
-     * onQueueCLicked() -> called when queue icon is clicked.
-     * onPrepared() -> called when media player prepareAsync() is completed.
-     * onSettingsClicked() -> called when settings menu item is selected.
-     * onFullScreen() -> called when fullscreen menu item is selected or player is long pressed.
-     * onAddedtoFavfromPlayer() -> called when favourite icon is clicked.
-     * onShuffleEnabled() / onShuffleEnabled() -> shuffle enebled or disabled.
-     * onSmallPlayerTouched() -> called when the down icon at the top of the player ic clicked to hide the player.
-     *
+     * Methods and classes for updating visualizer.
+     * MyAsyncTask -> AsyncTask to update visualiser in background thread.
+     * updatePoints() -> Actual method to render the DNA.
      */
+
+    public void updateVisualizer(byte[] bytes) {
+        mBytes = bytes;
+        try {
+            new MyAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void onComplete() {
@@ -2729,7 +2278,7 @@ public class HomeActivity extends AppCompatActivity
             plFrag.progressBar.setSecondaryProgress(0);
 
             // Get Visualizer and Visualizer View to initial state
-            plFrag.mVisualizer.setEnabled(true);
+            PlayerFragment.mVisualizer.setEnabled(true);
             VisualizerView.w = screen_width;
             VisualizerView.h = screen_height;
             VisualizerView.conf = Bitmap.Config.ARGB_8888;
@@ -2737,16 +2286,16 @@ public class HomeActivity extends AppCompatActivity
             cacheCanvas = new Canvas(VisualizerView.bmp);
 
             // Play the song again by seeking media player to 0
-            plFrag.mMediaPlayer.seekTo(0);
+            PlayerFragment.mMediaPlayer.seekTo(0);
 
             // Setup the icons
             plFrag.mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
-            plFrag.isReplayIconVisible = false;
+            PlayerFragment.isReplayIconVisible = false;
             plFrag.player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
 
             // Resume the MediaPlayer
-            plFrag.isPrepared = true;
-            plFrag.mMediaPlayer.start();
+            PlayerFragment.isPrepared = true;
+            PlayerFragment.mMediaPlayer.start();
         } else {
 
             /*
@@ -2787,13 +2336,13 @@ public class HomeActivity extends AppCompatActivity
                     hasQueueEnded = false;
                     plFrag.progressBar.setProgress(0);
                     plFrag.progressBar.setSecondaryProgress(0);
-                    plFrag.mVisualizer.setEnabled(true);
-                    plFrag.mMediaPlayer.seekTo(0);
+                    PlayerFragment.mVisualizer.setEnabled(true);
+                    PlayerFragment.mMediaPlayer.seekTo(0);
                     plFrag.mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
-                    plFrag.isReplayIconVisible = false;
+                    PlayerFragment.isReplayIconVisible = false;
                     plFrag.player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
-                    plFrag.isPrepared = true;
-                    plFrag.mMediaPlayer.start();
+                    PlayerFragment.isPrepared = true;
+                    PlayerFragment.mMediaPlayer.start();
                 } else {
                     if ((nextControllerClicked || hasQueueEnded) && (queue.getQueue().size() > 1)) {
                         nextControllerClicked = false;
@@ -2808,14 +2357,14 @@ public class HomeActivity extends AppCompatActivity
                         hasQueueEnded = false;
                         plFrag.progressBar.setProgress(0);
                         plFrag.progressBar.setSecondaryProgress(0);
-                        if (plFrag.mVisualizer != null)
-                            plFrag.mVisualizer.setEnabled(true);
-                        plFrag.mMediaPlayer.seekTo(0);
+                        if (PlayerFragment.mVisualizer != null)
+                            PlayerFragment.mVisualizer.setEnabled(true);
+                        PlayerFragment.mMediaPlayer.seekTo(0);
                         plFrag.mainTrackController.setImageResource(R.drawable.ic_pause_white_48dp);
-                        plFrag.isReplayIconVisible = false;
+                        PlayerFragment.isReplayIconVisible = false;
                         plFrag.player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
-                        plFrag.isPrepared = true;
-                        plFrag.mMediaPlayer.start();
+                        PlayerFragment.isPrepared = true;
+                        PlayerFragment.mMediaPlayer.start();
                     } else {
                         // keep queue at last track or you are doomed
                     }
@@ -2823,6 +2372,58 @@ public class HomeActivity extends AppCompatActivity
             }
         }
 
+    }
+
+    @Override
+    public void onHeadsetRemoved() {
+        PlayerFragment pFrag = getPlayerFragment();
+        if (pFrag != null) {
+            if (PlayerFragment.mMediaPlayer != null && PlayerFragment.mMediaPlayer.isPlaying()) {
+                if (PlayerFragment.isReplayIconVisible) {
+
+                } else {
+                    if (!pFrag.pauseClicked) {
+                        pFrag.pauseClicked = true;
+                    }
+                    pFrag.togglePlayPause();
+                }
+            }
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*
+     * PlayerFragment callbacks START
+     * onComplete() -> called when a song ends or next button is clicked in player or notification.
+     * onPreviousTrack() -> called when previous button is clicked in player or notification.
+     * onEqualizerClicked() -> called when equalizer icon is clicked.
+     * onQueueCLicked() -> called when queue icon is clicked.
+     * onPrepared() -> called when media player prepareAsync() is completed.
+     * onSettingsClicked() -> called when settings menu item is selected.
+     * onFullScreen() -> called when fullscreen menu item is selected or player is long pressed.
+     * onAddedtoFavfromPlayer() -> called when favourite icon is clicked.
+     * onShuffleEnabled() / onShuffleEnabled() -> shuffle enebled or disabled.
+     * onSmallPlayerTouched() -> called when the down icon at the top of the player ic clicked to hide the player.
+     *
+     */
+
+    @Override
+    public void onHeadsetPlayPauseClicked() {
+        PlayerFragment pFrag = getPlayerFragment();
+        if (pFrag != null && !isReloaded) {
+            if (PlayerFragment.mMediaPlayer != null && PlayerFragment.mMediaPlayer.isPlaying()) {
+                if (PlayerFragment.isReplayIconVisible) {
+                    hasQueueEnded = true;
+                    onComplete();
+                } else {
+                    if (!pFrag.pauseClicked) {
+                        pFrag.pauseClicked = true;
+                    }
+                    pFrag.togglePlayPause();
+                }
+            }
+        }
     }
 
     @Override
@@ -3464,20 +3065,44 @@ public class HomeActivity extends AppCompatActivity
      */
 
     @Override
-    public void onHeadsetRemoved() {
-        PlayerFragment pFrag = getPlayerFragment();
-        if (pFrag != null) {
-            if (pFrag.mMediaPlayer != null && pFrag.mMediaPlayer.isPlaying()) {
-                if (pFrag.isReplayIconVisible) {
-
+    public void onCheckChanged(boolean isChecked) {
+        EqualizerFragment eqFrag = (EqualizerFragment) fragMan.findFragmentByTag("equalizer");
+        if (isChecked) {
+            try {
+                isEqualizerEnabled = true;
+                int pos = presetPos;
+                if (pos != 0) {
+                    PlayerFragment.mEqualizer.usePreset((short) (pos - 1));
                 } else {
-                    if (!pFrag.pauseClicked) {
-                        pFrag.pauseClicked = true;
+                    for (short i = 0; i < 5; i++) {
+                        PlayerFragment.mEqualizer.setBandLevel(i, (short) seekbarpos[i]);
                     }
-                    pFrag.togglePlayPause();
                 }
+                if (bassStrength != -1 && reverbPreset != -1) {
+                    PlayerFragment.bassBoost.setEnabled(true);
+                    PlayerFragment.bassBoost.setStrength(bassStrength);
+                    PlayerFragment.presetReverb.setEnabled(true);
+                    PlayerFragment.presetReverb.setPreset(reverbPreset);
+                }
+                PlayerFragment.mMediaPlayer.setAuxEffectSendLevel(1.0f);
+                if (eqFrag != null)
+                    eqFrag.setBlockerVisibility(View.GONE);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                isEqualizerEnabled = false;
+                PlayerFragment.mEqualizer.usePreset((short) 0);
+                PlayerFragment.bassBoost.setStrength((short) (((float) 1000 / 19) * (1)));
+                PlayerFragment.presetReverb.setPreset((short) 0);
+                if (eqFrag != null)
+                    eqFrag.setBlockerVisibility(View.VISIBLE);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
+        equalizerModel.isEqualizerEnabled = isChecked;
     }
 
     @Override
@@ -3496,22 +3121,68 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public void onHeadsetPlayPauseClicked() {
-        PlayerFragment pFrag = getPlayerFragment();
-        if (pFrag != null && !isReloaded) {
-            if (pFrag.mMediaPlayer != null && pFrag.mMediaPlayer.isPlaying()) {
-                if (pFrag.isReplayIconVisible) {
-                    hasQueueEnded = true;
-                    onComplete();
+    public void newPlaylistNameDialog() {
+        final Dialog dialog = new Dialog(ctx);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.save_image_dialog);
+
+        TextView titleText = dialog.findViewById(R.id.dialog_title);
+        titleText.setText("Playlist Name");
+        if (SplashActivity.tf4 != null)
+            titleText.setTypeface(SplashActivity.tf4);
+
+        Button btn = dialog.findViewById(R.id.save_image_btn);
+        final EditText newName = dialog.findViewById(R.id.save_image_filename_text);
+
+        CheckBox cb = dialog.findViewById(R.id.text_checkbox);
+        cb.setVisibility(GONE);
+
+        btn.setBackgroundColor(themeColor);
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean isNameRepeat = false;
+                if (newName.getText().toString().trim().equals("")) {
+                    newName.setError("Enter Playlist Name!");
                 } else {
-                    if (!pFrag.pauseClicked) {
-                        pFrag.pauseClicked = true;
+                    for (int i = 0; i < allPlaylists.getPlaylists().size(); i++) {
+                        if (newName.getText().toString().equals(allPlaylists.getPlaylists().get(i).getPlaylistName())) {
+                            isNameRepeat = true;
+                            newName.setError("Playlist with same name exists!");
+                            break;
+                        }
                     }
-                    pFrag.togglePlayPause();
+                    if (!isNameRepeat) {
+                        UnifiedTrack ut;
+                        Playlist pl = new Playlist(newName.getText().toString());
+                        for (int i = 0; i < finalSelectedTracks.size(); i++) {
+                            ut = new UnifiedTrack(true, finalSelectedTracks.get(i), null);
+                            pl.getSongList().add(ut);
+                        }
+                        allPlaylists.addPlaylist(pl);
+                        finalSelectedTracks.clear();
+                        if (pAdapter != null) {
+                            pAdapter.notifyDataSetChanged();
+                            if (allPlaylists.getPlaylists().size() > 0) {
+                                playlistsRecycler.setVisibility(View.VISIBLE);
+                                playlistNothingText.setVisibility(View.INVISIBLE);
+                            }
+                        }
+                        AllPlaylistsFragment plFrag = (AllPlaylistsFragment) fragMan.findFragmentByTag("allPlaylists");
+                        if (plFrag != null) {
+                            plFrag.dataChanged();
+                        }
+                        new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                        dialog.dismiss();
+                        onBackPressed();
+                    }
                 }
             }
-        }
+        });
+
+        dialog.show();
+
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3595,45 +3266,61 @@ public class HomeActivity extends AppCompatActivity
      * onCheckChanged() -> when equalizer switch state is changed.
      */
 
-    @Override
-    public void onCheckChanged(boolean isChecked) {
-        EqualizerFragment eqFrag = (EqualizerFragment) fragMan.findFragmentByTag("equalizer");
-        if (isChecked) {
-            try {
-                isEqualizerEnabled = true;
-                int pos = presetPos;
-                if (pos != 0) {
-                    playerFragment.mEqualizer.usePreset((short) (pos - 1));
+    public void renamePlaylistDialog(String oldName) {
+        final Dialog dialog = new Dialog(ctx);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.save_image_dialog);
+
+        TextView titleText = dialog.findViewById(R.id.dialog_title);
+        titleText.setText("Rename");
+        if (SplashActivity.tf4 != null)
+            titleText.setTypeface(SplashActivity.tf4);
+
+        Button btn = dialog.findViewById(R.id.save_image_btn);
+        final EditText newName = dialog.findViewById(R.id.save_image_filename_text);
+
+        CheckBox cb = dialog.findViewById(R.id.text_checkbox);
+        cb.setVisibility(GONE);
+
+        newName.setText(oldName);
+        btn.setBackgroundColor(themeColor);
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean isNameRepeat = false;
+                if (newName.getText().toString().trim().equals("")) {
+                    newName.setError("Enter Playlist Name!");
                 } else {
-                    for (short i = 0; i < 5; i++) {
-                        playerFragment.mEqualizer.setBandLevel(i, (short) seekbarpos[i]);
+                    for (int i = 0; i < allPlaylists.getPlaylists().size(); i++) {
+                        if (newName.getText().toString().equals(allPlaylists.getPlaylists().get(i).getPlaylistName())) {
+                            isNameRepeat = true;
+                            newName.setError("Playlist with same name exists!");
+                            break;
+                        }
+                    }
+                    if (!isNameRepeat) {
+                        allPlaylists.getPlaylists().get(renamePlaylistNumber).setPlaylistName(newName.getText().toString());
+                        if (pAdapter != null) {
+                            pAdapter.notifyItemChanged(renamePlaylistNumber);
+                        }
+                        AllPlaylistsFragment plFrag = (AllPlaylistsFragment) fragMan.findFragmentByTag("allPlaylists");
+                        if (plFrag != null) {
+                            plFrag.itemChanged(renamePlaylistNumber);
+                        }
+                        if (isPlaylistVisible) {
+                            ViewPlaylistFragment vplFragment = (ViewPlaylistFragment) fragMan.findFragmentByTag("playlist");
+                            vplFragment.updateViewPlaylistFragment();
+                        }
+                        new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                        dialog.dismiss();
                     }
                 }
-                if (bassStrength != -1 && reverbPreset != -1) {
-                    playerFragment.bassBoost.setEnabled(true);
-                    playerFragment.bassBoost.setStrength(bassStrength);
-                    playerFragment.presetReverb.setEnabled(true);
-                    playerFragment.presetReverb.setPreset(reverbPreset);
-                }
-                playerFragment.mMediaPlayer.setAuxEffectSendLevel(1.0f);
-                if (eqFrag != null)
-                    eqFrag.setBlockerVisibility(View.GONE);
-            } catch (Exception e) {
-                e.printStackTrace();
             }
-        } else {
-            try {
-                isEqualizerEnabled = false;
-                playerFragment.mEqualizer.usePreset((short) 0);
-                playerFragment.bassBoost.setStrength((short) (((float) 1000 / 19) * (1)));
-                playerFragment.presetReverb.setPreset((short) 0);
-                if (eqFrag != null)
-                    eqFrag.setBlockerVisibility(View.VISIBLE);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        equalizerModel.isEqualizerEnabled = isChecked;
+        });
+
+        dialog.show();
+
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3684,133 +3371,12 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    public void newPlaylistNameDialog() {
-        final Dialog dialog = new Dialog(ctx);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.save_image_dialog);
-
-        TextView titleText = (TextView) dialog.findViewById(R.id.dialog_title);
-        titleText.setText("Playlist Name");
-        if (SplashActivity.tf4 != null)
-            titleText.setTypeface(SplashActivity.tf4);
-
-        Button btn = (Button) dialog.findViewById(R.id.save_image_btn);
-        final EditText newName = (EditText) dialog.findViewById(R.id.save_image_filename_text);
-
-        CheckBox cb = (CheckBox) dialog.findViewById(R.id.text_checkbox);
-        cb.setVisibility(GONE);
-
-        btn.setBackgroundColor(themeColor);
-
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean isNameRepeat = false;
-                if (newName.getText().toString().trim().equals("")) {
-                    newName.setError("Enter Playlist Name!");
-                } else {
-                    for (int i = 0; i < allPlaylists.getPlaylists().size(); i++) {
-                        if (newName.getText().toString().equals(allPlaylists.getPlaylists().get(i).getPlaylistName())) {
-                            isNameRepeat = true;
-                            newName.setError("Playlist with same name exists!");
-                            break;
-                        }
-                    }
-                    if (!isNameRepeat) {
-                        UnifiedTrack ut;
-                        Playlist pl = new Playlist(newName.getText().toString());
-                        for (int i = 0; i < finalSelectedTracks.size(); i++) {
-                            ut = new UnifiedTrack(true, finalSelectedTracks.get(i), null);
-                            pl.getSongList().add(ut);
-                        }
-                        allPlaylists.addPlaylist(pl);
-                        finalSelectedTracks.clear();
-                        if (pAdapter != null) {
-                            pAdapter.notifyDataSetChanged();
-                            if (allPlaylists.getPlaylists().size() > 0) {
-                                playlistsRecycler.setVisibility(View.VISIBLE);
-                                playlistNothingText.setVisibility(View.INVISIBLE);
-                            }
-                        }
-                        AllPlaylistsFragment plFrag = (AllPlaylistsFragment) fragMan.findFragmentByTag("allPlaylists");
-                        if (plFrag != null) {
-                            plFrag.dataChanged();
-                        }
-                        new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                        dialog.dismiss();
-                        onBackPressed();
-                    }
-                }
-            }
-        });
-
-        dialog.show();
-
-    }
-
-    public void renamePlaylistDialog(String oldName) {
-        final Dialog dialog = new Dialog(ctx);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.save_image_dialog);
-
-        TextView titleText = (TextView) dialog.findViewById(R.id.dialog_title);
-        titleText.setText("Rename");
-        if (SplashActivity.tf4 != null)
-            titleText.setTypeface(SplashActivity.tf4);
-
-        Button btn = (Button) dialog.findViewById(R.id.save_image_btn);
-        final EditText newName = (EditText) dialog.findViewById(R.id.save_image_filename_text);
-
-        CheckBox cb = (CheckBox) dialog.findViewById(R.id.text_checkbox);
-        cb.setVisibility(GONE);
-
-        newName.setText(oldName);
-        btn.setBackgroundColor(themeColor);
-
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean isNameRepeat = false;
-                if (newName.getText().toString().trim().equals("")) {
-                    newName.setError("Enter Playlist Name!");
-                } else {
-                    for (int i = 0; i < allPlaylists.getPlaylists().size(); i++) {
-                        if (newName.getText().toString().equals(allPlaylists.getPlaylists().get(i).getPlaylistName())) {
-                            isNameRepeat = true;
-                            newName.setError("Playlist with same name exists!");
-                            break;
-                        }
-                    }
-                    if (!isNameRepeat) {
-                        allPlaylists.getPlaylists().get(renamePlaylistNumber).setPlaylistName(newName.getText().toString());
-                        if (pAdapter != null) {
-                            pAdapter.notifyItemChanged(renamePlaylistNumber);
-                        }
-                        AllPlaylistsFragment plFrag = (AllPlaylistsFragment) fragMan.findFragmentByTag("allPlaylists");
-                        if (plFrag != null) {
-                            plFrag.itemChanged(renamePlaylistNumber);
-                        }
-                        if (isPlaylistVisible) {
-                            ViewPlaylistFragment vplFragment = (ViewPlaylistFragment) fragMan.findFragmentByTag("playlist");
-                            vplFragment.updateViewPlaylistFragment();
-                        }
-                        new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                        dialog.dismiss();
-                    }
-                }
-            }
-        });
-
-        dialog.show();
-
-    }
-
     public void showAddToPlaylistDialog(final UnifiedTrack track) {
         final Dialog dialog = new Dialog(ctx);
         dialog.setContentView(R.layout.add_to_playlist_dialog);
         dialog.setTitle("Add to Playlist");
 
-        ListView lv = (ListView) dialog.findViewById(R.id.playlist_list);
+        ListView lv = dialog.findViewById(R.id.playlist_list);
         AddToPlaylistAdapter adapter;
         if (allPlaylists.getPlaylists() != null && allPlaylists.getPlaylists().size() != 0) {
             adapter = new AddToPlaylistAdapter(allPlaylists.getPlaylists(), ctx);
@@ -3847,8 +3413,8 @@ public class HomeActivity extends AppCompatActivity
         }
 
         // set the custom dialog components - text, image and button
-        final EditText text = (EditText) dialog.findViewById(R.id.new_playlist_name);
-        ImageView image = (ImageView) dialog.findViewById(R.id.confirm_button);
+        final EditText text = dialog.findViewById(R.id.new_playlist_name);
+        ImageView image = dialog.findViewById(R.id.confirm_button);
         // if button is clicked, close the custom dialog
         image.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -3887,12 +3453,12 @@ public class HomeActivity extends AppCompatActivity
         dialog.setContentView(R.layout.add_to_playlist_dialog);
         dialog.setTitle("Save Queue");
 
-        ListView lv = (ListView) dialog.findViewById(R.id.playlist_list);
+        ListView lv = dialog.findViewById(R.id.playlist_list);
         lv.setVisibility(GONE);
 
         // set the custom dialog components - text, image and button
-        final EditText text = (EditText) dialog.findViewById(R.id.new_playlist_name);
-        ImageView image = (ImageView) dialog.findViewById(R.id.confirm_button);
+        final EditText text = dialog.findViewById(R.id.new_playlist_name);
+        ImageView image = dialog.findViewById(R.id.confirm_button);
         // if button is clicked, close the custom dialog
         image.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -3925,6 +3491,130 @@ public class HomeActivity extends AppCompatActivity
             }
         });
         dialog.show();
+    }
+
+    public void showSleepDialog() {
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.sleep_timer_dialog);
+
+        final WheelView wheelPicker = dialog.findViewById(R.id.wheelPicker);
+        wheelPicker.setItems(minuteList);
+
+        TextView title = dialog.findViewById(R.id.sleep_dialog_title_text);
+        if (SplashActivity.tf4 != null)
+            title.setTypeface(SplashActivity.tf4);
+
+        Button setBtn = dialog.findViewById(R.id.set_button);
+        Button cancelBtn = dialog.findViewById(R.id.cancel_button);
+        final Button removerBtn = dialog.findViewById(R.id.remove_timer_button);
+
+        final LinearLayout buttonWrapper = dialog.findViewById(R.id.button_wrapper);
+
+        final TextView timerSetText = dialog.findViewById(R.id.timer_set_text);
+
+        setBtn.setBackgroundColor(themeColor);
+        removerBtn.setBackgroundColor(themeColor);
+        cancelBtn.setBackgroundColor(Color.WHITE);
+
+        if (isSleepTimerEnabled) {
+            wheelPicker.setVisibility(View.GONE);
+            buttonWrapper.setVisibility(View.GONE);
+            removerBtn.setVisibility(View.VISIBLE);
+            timerSetText.setVisibility(View.VISIBLE);
+
+            long currentTime = System.currentTimeMillis();
+            long difference = currentTime - timerSetTime;
+
+            int minutesLeft = (int) (timerTimeOutDuration - ((difference / 1000) / 60));
+            if (minutesLeft > 1) {
+                timerSetText.setText("Timer set for " + minutesLeft + " minutes from now.");
+            } else if (minutesLeft == 1) {
+                timerSetText.setText("Timer set for " + 1 + " minute from now.");
+            } else {
+                timerSetText.setText("Music will stop after completion of current song");
+            }
+
+        } else {
+            wheelPicker.setVisibility(View.VISIBLE);
+            buttonWrapper.setVisibility(View.VISIBLE);
+            removerBtn.setVisibility(View.GONE);
+            timerSetText.setVisibility(View.GONE);
+        }
+
+        removerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isSleepTimerEnabled = false;
+                isSleepTimerTimeout = false;
+                timerTimeOutDuration = 0;
+                timerSetTime = 0;
+                sleepHandler.removeCallbacksAndMessages(null);
+                Toast.makeText(ctx, "Timer removed", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+
+        setBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isSleepTimerEnabled = true;
+                int minutes = Integer.parseInt(wheelPicker.getItems().get(wheelPicker.getSelectedPosition()));
+                timerTimeOutDuration = minutes;
+                timerSetTime = System.currentTimeMillis();
+                sleepHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        isSleepTimerTimeout = true;
+                        if (PlayerFragment.mMediaPlayer == null || !PlayerFragment.mMediaPlayer.isPlaying()) {
+                            main.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(ctx, "Sleep timer timed out, closing app", Toast.LENGTH_SHORT).show();
+                                    if (playerFragment != null && playerFragment.timer != null)
+                                        playerFragment.timer.cancel();
+                                    notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                    try {
+                                        notificationManager.cancel(1);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    } finally {
+                                        finish();
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }, minutes * 60 * 1000);
+                Toast.makeText(ctx, "Timer set for " + minutes + " minutes", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isSleepTimerEnabled = false;
+                isSleepTimerTimeout = false;
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+
+    }
+
+    public void initializeHeaderImages() {
+        imgView[0] = findViewById(R.id.home_header_img_1);
+        imgView[1] = findViewById(R.id.home_header_img_2);
+        imgView[2] = findViewById(R.id.home_header_img_3);
+        imgView[3] = findViewById(R.id.home_header_img_4);
+        imgView[4] = findViewById(R.id.home_header_img_5);
+        imgView[5] = findViewById(R.id.home_header_img_6);
+        imgView[6] = findViewById(R.id.home_header_img_7);
+        imgView[7] = findViewById(R.id.home_header_img_8);
+        imgView[8] = findViewById(R.id.home_header_img_9);
+        imgView[9] = findViewById(R.id.home_header_img_10);
     }
 
     public void startLoadingIndicator() {
@@ -4826,115 +4516,409 @@ public class HomeActivity extends AppCompatActivity
 
     }
 
-    public void showSleepDialog() {
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.sleep_timer_dialog);
+    public class loadSavedData extends AsyncTask<String, Void, String> {
 
-        final WheelView wheelPicker = (WheelView) dialog.findViewById(R.id.wheelPicker);
-        wheelPicker.setItems(minuteList);
-
-        TextView title = (TextView) dialog.findViewById(R.id.sleep_dialog_title_text);
-        if (SplashActivity.tf4 != null)
-            title.setTypeface(SplashActivity.tf4);
-
-        Button setBtn = (Button) dialog.findViewById(R.id.set_button);
-        Button cancelBtn = (Button) dialog.findViewById(R.id.cancel_button);
-        final Button removerBtn = (Button) dialog.findViewById(R.id.remove_timer_button);
-
-        final LinearLayout buttonWrapper = (LinearLayout) dialog.findViewById(R.id.button_wrapper);
-
-        final TextView timerSetText = (TextView) dialog.findViewById(R.id.timer_set_text);
-
-        setBtn.setBackgroundColor(themeColor);
-        removerBtn.setBackgroundColor(themeColor);
-        cancelBtn.setBackgroundColor(Color.WHITE);
-
-        if (isSleepTimerEnabled) {
-            wheelPicker.setVisibility(View.GONE);
-            buttonWrapper.setVisibility(View.GONE);
-            removerBtn.setVisibility(View.VISIBLE);
-            timerSetText.setVisibility(View.VISIBLE);
-
-            long currentTime = System.currentTimeMillis();
-            long difference = currentTime - timerSetTime;
-
-            int minutesLeft = (int) (timerTimeOutDuration - ((difference / 1000) / 60));
-            if (minutesLeft > 1) {
-                timerSetText.setText("Timer set for " + minutesLeft + " minutes from now.");
-            } else if (minutesLeft == 1) {
-                timerSetText.setText("Timer set for " + 1 + " minute from now.");
-            } else {
-                timerSetText.setText("Music will stop after completion of current song");
-            }
-
-        } else {
-            wheelPicker.setVisibility(View.VISIBLE);
-            buttonWrapper.setVisibility(View.VISIBLE);
-            removerBtn.setVisibility(View.GONE);
-            timerSetText.setVisibility(View.GONE);
+        @Override
+        protected String doInBackground(String... params) {
+            getSavedData();
+            return "done";
         }
 
-        removerBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isSleepTimerEnabled = false;
-                isSleepTimerTimeout = false;
-                timerTimeOutDuration = 0;
-                timerSetTime = 0;
-                sleepHandler.removeCallbacksAndMessages(null);
-                Toast.makeText(ctx, "Timer removed", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }
-        });
+        @Override
+        protected void onPostExecute(String aVoid) {
+            super.onPostExecute(aVoid);
+            progress.dismiss();
+            main.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
 
-        setBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isSleepTimerEnabled = true;
-                int minutes = Integer.parseInt(wheelPicker.getItems().get(wheelPicker.getSelectedPosition()));
-                timerTimeOutDuration = minutes;
-                timerSetTime = System.currentTimeMillis();
-                sleepHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        isSleepTimerTimeout = true;
-                        if (playerFragment.mMediaPlayer == null || !playerFragment.mMediaPlayer.isPlaying()) {
-                            main.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(ctx, "Sleep timer timed out, closing app", Toast.LENGTH_SHORT).show();
-                                    if (playerFragment != null && playerFragment.timer != null)
-                                        playerFragment.timer.cancel();
-                                    notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                                    try {
-                                        notificationManager.cancel(1);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    } finally {
-                                        finish();
+                    if (settings == null) {
+                        settings = new Settings();
+                    }
+
+                    themeColor = settings.getThemeColor();
+                    minAudioStrength = settings.getMinAudioStrength();
+
+
+                    navigationView.setItemIconTintList(ColorStateList.valueOf(themeColor));
+                    collapsingToolbar.setContentScrimColor(themeColor);
+                    customLinearGradient.setStartColor(themeColor);
+                    customLinearGradient.invalidate();
+
+                    try {
+                        if (Build.VERSION.SDK_INT >= 21) {
+                            Window window = ((Activity) ctx).getWindow();
+                            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                            window.setStatusBarColor(CommonUtils.getDarkColor(themeColor));
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    if (prevVersionCode == -1 || prevVersionCode <= 30) {
+                        savedDNAs = null;
+                    }
+
+                    if (allPlaylists == null) {
+                        allPlaylists = new AllPlaylists();
+                    }
+
+                    if (tempPlaylist == null) {
+                        tempPlaylist = new Playlist(null, null);
+                    }
+
+                    if (queue == null) {
+                        queue = new Queue();
+                    }
+
+                    if (favouriteTracks == null) {
+                        favouriteTracks = new Favourite();
+                    }
+
+                    if (recentlyPlayed == null) {
+                        recentlyPlayed = new RecentlyPlayed();
+                    }
+                    if (allMusicFolders == null) {
+                        allMusicFolders = new AllMusicFolders();
+                    }
+                    if (savedDNAs == null) {
+                        savedDNAs = new AllSavedDNA();
+                    }
+
+                    if (equalizerModel == null) {
+                        equalizerModel = new EqualizerModel();
+                        isEqualizerEnabled = true;
+                        isEqualizerReloaded = false;
+                    } else {
+                        isEqualizerEnabled = equalizerModel.isEqualizerEnabled();
+                        isEqualizerReloaded = true;
+                        seekbarpos = equalizerModel.getSeekbarpos();
+                        presetPos = equalizerModel.getPresetPos();
+                        reverbPreset = equalizerModel.getReverbPreset();
+                        bassStrength = equalizerModel.getBassStrength();
+                    }
+
+                    new SaveVersionCode().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+                    getLocalSongs();
+                    refreshHeaderImages();
+
+                    if (queue != null && queue.getQueue().size() != 0) {
+                        UnifiedTrack utHome = queue.getQueue().get(queueCurrentIndex);
+                        if (utHome.getType()) {
+                            imgLoader.DisplayImage(utHome.getLocalTrack().getPath(), spImgHome);
+                            spTitleHome.setText(utHome.getLocalTrack().getTitle());
+                        } else {
+                            imgLoader.DisplayImage(utHome.getStreamTrack().getArtworkURL(), spImgHome);
+                            spTitleHome.setText(utHome.getStreamTrack().getTitle());
+                        }
+                    } else {
+                        bottomToolbar.setVisibility(GONE);
+                    }
+
+                    for (int i = 0; i < Math.min(10, recentlyPlayed.getRecentlyPlayed().size()); i++) {
+                        continuePlayingList.add(recentlyPlayed.getRecentlyPlayed().get(i));
+                    }
+
+                    rAdapter = new RecentsListHorizontalAdapter(continuePlayingList, ctx);
+                    recentsRecycler = findViewById(R.id.recentsMusicList_home);
+                    recentsRecycler.setNestedScrollingEnabled(false);
+                    LinearLayoutManager mLayoutManager3 = new LinearLayoutManager(ctx, LinearLayoutManager.HORIZONTAL, false);
+                    recentsRecycler.setLayoutManager(mLayoutManager3);
+                    recentsRecycler.setItemAnimator(new DefaultItemAnimator());
+                    AlphaInAnimationAdapter alphaAdapter3 = new AlphaInAnimationAdapter(rAdapter);
+                    alphaAdapter3.setFirstOnly(false);
+                    recentsRecycler.setAdapter(alphaAdapter3);
+
+                    recentsRecycler.addOnItemTouchListener(new ClickItemTouchListener(recentsRecycler) {
+                        @Override
+                        public boolean onClick(RecyclerView parent, View view, final int position, long id) {
+                            UnifiedTrack ut = continuePlayingList.get(position);
+                            boolean isRepeat = false;
+                            int pos = 0;
+                            for (int i = 0; i < queue.getQueue().size(); i++) {
+                                UnifiedTrack ut1 = queue.getQueue().get(i);
+                                if (ut1.getType() && ut.getType() && ut1.getLocalTrack().getTitle().equals(ut.getLocalTrack().getTitle())) {
+                                    isRepeat = true;
+                                    pos = i;
+                                    break;
+                                }
+                                if (!ut1.getType() && !ut.getType() && ut1.getStreamTrack().getTitle().equals(ut.getStreamTrack().getTitle())) {
+                                    isRepeat = true;
+                                    pos = i;
+                                    break;
+                                }
+                            }
+                            if (!isRepeat) {
+                                if (ut.getType()) {
+                                    LocalTrack track = ut.getLocalTrack();
+                                    if (queue.getQueue().size() == 0) {
+                                        queueCurrentIndex = 0;
+                                        queue.getQueue().add(new UnifiedTrack(true, track, null));
+                                    } else if (queueCurrentIndex == queue.getQueue().size() - 1) {
+                                        queueCurrentIndex++;
+                                        queue.getQueue().add(new UnifiedTrack(true, track, null));
+                                    } else if (isReloaded) {
+                                        isReloaded = false;
+                                        queueCurrentIndex = queue.getQueue().size();
+                                        queue.getQueue().add(new UnifiedTrack(true, track, null));
+                                    } else {
+                                        queue.getQueue().add(++queueCurrentIndex, new UnifiedTrack(true, track, null));
                                     }
+                                    localSelectedTrack = track;
+                                    streamSelected = false;
+                                    localSelected = true;
+                                    queueCall = false;
+                                    isReloaded = false;
+                                    onLocalTrackSelected(position);
+                                } else {
+                                    Track track = ut.getStreamTrack();
+                                    if (queue.getQueue().size() == 0) {
+                                        queueCurrentIndex = 0;
+                                        queue.getQueue().add(new UnifiedTrack(false, null, track));
+                                    } else if (queueCurrentIndex == queue.getQueue().size() - 1) {
+                                        queueCurrentIndex++;
+                                        queue.getQueue().add(new UnifiedTrack(false, null, track));
+                                    } else if (isReloaded) {
+                                        isReloaded = false;
+                                        queueCurrentIndex = queue.getQueue().size();
+                                        queue.getQueue().add(new UnifiedTrack(false, null, track));
+                                    } else {
+                                        queue.getQueue().add(++queueCurrentIndex, new UnifiedTrack(false, null, track));
+                                    }
+                                    selectedTrack = track;
+                                    streamSelected = true;
+                                    localSelected = false;
+                                    queueCall = false;
+                                    isReloaded = false;
+                                    onTrackSelected(position);
+                                }
+                            } else {
+                                onQueueItemClicked(pos);
+                            }
+
+                            return true;
+                        }
+
+                        @Override
+                        public boolean onLongClick(RecyclerView parent, View view, final int position, long id) {
+                            final UnifiedTrack ut = continuePlayingList.get(position);
+                            CustomGeneralBottomSheetDialog generalBottomSheetDialog = new CustomGeneralBottomSheetDialog();
+                            generalBottomSheetDialog.setPosition(position);
+                            generalBottomSheetDialog.setTrack(ut);
+                            generalBottomSheetDialog.setFragment("RecentHorizontalList");
+                            generalBottomSheetDialog.show(getSupportFragmentManager(), "general_bottom_sheet_dialog");
+                            return true;
+                        }
+
+                        @Override
+                        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+                        }
+                    });
+
+                    pAdapter = new PlayListsHorizontalAdapter(allPlaylists.getPlaylists(), ctx);
+                    playlistsRecycler = findViewById(R.id.playlist_home);
+                    playlistsRecycler.setNestedScrollingEnabled(false);
+                    LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(ctx, LinearLayoutManager.HORIZONTAL, false);
+                    playlistsRecycler.setLayoutManager(mLayoutManager2);
+                    playlistsRecycler.setItemAnimator(new DefaultItemAnimator());
+                    AlphaInAnimationAdapter alphaAdapter2 = new AlphaInAnimationAdapter(pAdapter);
+                    alphaAdapter2.setFirstOnly(false);
+                    playlistsRecycler.setAdapter(alphaAdapter2);
+
+                    playlistsRecycler.addOnItemTouchListener(new ClickItemTouchListener(playlistsRecycler) {
+                        @Override
+                        public boolean onClick(RecyclerView parent, View view, final int position, long id) {
+                            tempPlaylist = allPlaylists.getPlaylists().get(position);
+                            tempPlaylistNumber = position;
+                            showFragment("playlist");
+                            return true;
+                        }
+
+                        @Override
+                        public boolean onLongClick(RecyclerView parent, View view, final int position, long id) {
+                            PopupMenu popup = new PopupMenu(ctx, view);
+                            popup.getMenuInflater().inflate(R.menu.playlist_popup, popup.getMenu());
+
+                            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                                @Override
+                                public boolean onMenuItemClick(MenuItem item) {
+                                    if (item.getTitle().equals("Play")) {
+
+                                        tempPlaylist = allPlaylists.getPlaylists().get(position);
+                                        tempPlaylistNumber = position;
+
+                                        int size = tempPlaylist.getSongList().size();
+                                        queue.getQueue().clear();
+                                        for (int i = 0; i < size; i++) {
+                                            queue.addToQueue(tempPlaylist.getSongList().get(i));
+                                        }
+
+                                        queueCurrentIndex = 0;
+                                        onPlaylistPlayAll();
+                                    } else if (item.getTitle().equals("Add to Queue")) {
+                                        Playlist pl = allPlaylists.getPlaylists().get(position);
+                                        for (UnifiedTrack ut : pl.getSongList()) {
+                                            queue.addToQueue(ut);
+                                        }
+                                    } else if (item.getTitle().equals("Delete")) {
+                                        allPlaylists.getPlaylists().remove(position);
+                                        AllPlaylistsFragment plFrag = (AllPlaylistsFragment) fragMan.findFragmentByTag("allPlaylists");
+                                        if (plFrag != null) {
+                                            plFrag.itemRemoved(position);
+                                        }
+                                        pAdapter.notifyItemRemoved(position);
+                                        new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                                    } else if (item.getTitle().equals("Rename")) {
+                                        renamePlaylistNumber = position;
+                                        renamePlaylistDialog(allPlaylists.getPlaylists().get(position).getPlaylistName());
+                                    }
+                                    return true;
                                 }
                             });
+                            popup.show();
+                            return true;
                         }
+
+                        @Override
+                        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+                        }
+                    });
+
+                    adapter = new LocalTracksHorizontalAdapter(finalLocalSearchResultList, ctx);
+                    localsongsRecyclerView = findViewById(R.id.localMusicList_home);
+                    LinearLayoutManager mLayoutManager = new LinearLayoutManager(ctx, LinearLayoutManager.HORIZONTAL, false);
+                    localsongsRecyclerView.setLayoutManager(mLayoutManager);
+                    localsongsRecyclerView.setItemAnimator(new DefaultItemAnimator());
+                    AlphaInAnimationAdapter alphaAdapter = new AlphaInAnimationAdapter(adapter);
+                    alphaAdapter.setFirstOnly(false);
+                    localsongsRecyclerView.setAdapter(alphaAdapter);
+
+                    localsongsRecyclerView.addOnItemTouchListener(new ClickItemTouchListener(localsongsRecyclerView) {
+                        @Override
+                        public boolean onClick(RecyclerView parent, View view, int position, long id) {
+                            LocalTrack track = finalLocalSearchResultList.get(position);
+                            if (queue.getQueue().size() == 0) {
+                                queueCurrentIndex = 0;
+                                queue.getQueue().add(new UnifiedTrack(true, track, null));
+                            } else if (queueCurrentIndex == queue.getQueue().size() - 1) {
+                                queueCurrentIndex++;
+                                queue.getQueue().add(new UnifiedTrack(true, track, null));
+                            } else if (isReloaded) {
+                                isReloaded = false;
+                                queueCurrentIndex = queue.getQueue().size();
+                                queue.getQueue().add(new UnifiedTrack(true, track, null));
+                            } else {
+                                queue.getQueue().add(++queueCurrentIndex, new UnifiedTrack(true, track, null));
+                            }
+                            localSelectedTrack = track;
+                            streamSelected = false;
+                            localSelected = true;
+                            queueCall = false;
+                            isReloaded = false;
+                            onLocalTrackSelected(position);
+                            return true;
+                        }
+
+                        @Override
+                        public boolean onLongClick(RecyclerView parent, View view, final int position, long id) {
+                            CustomLocalBottomSheetDialog localBottomSheetDialog = new CustomLocalBottomSheetDialog();
+                            localBottomSheetDialog.setPosition(position);
+                            localBottomSheetDialog.setLocalTrack(finalLocalSearchResultList.get(position));
+                            localBottomSheetDialog.show(getSupportFragmentManager(), "local_song_bottom_sheet");
+                            return true;
+                        }
+
+                        @Override
+                        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+                        }
+                    });
+
+                    soundcloudRecyclerView = findViewById(R.id.trackList_home);
+
+                    soundcloudRecyclerView.addOnItemTouchListener(new ClickItemTouchListener(soundcloudRecyclerView) {
+                        @Override
+                        public boolean onClick(RecyclerView parent, View view, int position, long id) {
+                            Track track = streamingTrackList.get(position);
+                            if (queue.getQueue().size() == 0) {
+                                queueCurrentIndex = 0;
+                                queue.getQueue().add(new UnifiedTrack(false, null, track));
+                            } else if (queueCurrentIndex == queue.getQueue().size() - 1) {
+                                queueCurrentIndex++;
+                                queue.getQueue().add(new UnifiedTrack(false, null, track));
+                            } else if (isReloaded) {
+                                isReloaded = false;
+                                queueCurrentIndex = queue.getQueue().size();
+                                queue.getQueue().add(new UnifiedTrack(false, null, track));
+                            } else {
+                                queue.getQueue().add(++queueCurrentIndex, new UnifiedTrack(false, null, track));
+                            }
+                            selectedTrack = track;
+                            streamSelected = true;
+                            localSelected = false;
+                            queueCall = false;
+                            isReloaded = false;
+                            onTrackSelected(position);
+                            return true;
+                        }
+
+                        @Override
+                        public boolean onLongClick(RecyclerView parent, View view, final int position, long id) {
+                            CustomGeneralBottomSheetDialog generalBottomSheetDialog = new CustomGeneralBottomSheetDialog();
+                            generalBottomSheetDialog.setPosition(position);
+                            generalBottomSheetDialog.setTrack(new UnifiedTrack(false, null, streamingTrackList.get(position)));
+                            generalBottomSheetDialog.setFragment("Stream");
+                            generalBottomSheetDialog.show(getSupportFragmentManager(), "general_bottom_sheet_dialog");
+                            return true;
+                        }
+
+                        @Override
+                        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+                        }
+                    });
+
+                    playerContainer = findViewById(R.id.player_frag_container);
+
+                    if (finalLocalSearchResultList.size() == 0) {
+                        localsongsRecyclerView.setVisibility(GONE);
+                        localNothingText.setVisibility(View.VISIBLE);
+                    } else {
+                        localsongsRecyclerView.setVisibility(View.VISIBLE);
+                        localNothingText.setVisibility(View.INVISIBLE);
                     }
-                }, minutes * 60 * 1000);
-                Toast.makeText(ctx, "Timer set for " + minutes + " minutes", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }
-        });
 
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isSleepTimerEnabled = false;
-                isSleepTimerTimeout = false;
-                dialog.dismiss();
-            }
-        });
+                    if (recentlyPlayed.getRecentlyPlayed().size() == 0) {
+                        recentsRecycler.setVisibility(GONE);
+                        recentsNothingText.setVisibility(View.VISIBLE);
+                    } else {
+                        recentsRecycler.setVisibility(View.VISIBLE);
+                        recentsNothingText.setVisibility(View.INVISIBLE);
+                    }
 
-        dialog.show();
+                    if (streamingTrackList.size() == 0) {
+                        streamRecyclerContainer.setVisibility(GONE);
+                        streamNothingText.setVisibility(View.VISIBLE);
+                    } else {
+                        streamRecyclerContainer.setVisibility(View.VISIBLE);
+                        streamNothingText.setVisibility(View.INVISIBLE);
+                    }
 
+                    if (allPlaylists.getPlaylists().size() == 0) {
+                        playlistsRecycler.setVisibility(GONE);
+                        playlistNothingText.setVisibility(View.VISIBLE);
+                    } else {
+                        playlistsRecycler.setVisibility(View.VISIBLE);
+                        playlistNothingText.setVisibility(View.INVISIBLE);
+                    }
+
+                }
+            });
+        }
     }
 
     public void updateVisualizerRecycler() {
@@ -4952,17 +4936,34 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
-    public void initializeHeaderImages() {
-        imgView[0] = (ImageView) findViewById(R.id.home_header_img_1);
-        imgView[1] = (ImageView) findViewById(R.id.home_header_img_2);
-        imgView[2] = (ImageView) findViewById(R.id.home_header_img_3);
-        imgView[3] = (ImageView) findViewById(R.id.home_header_img_4);
-        imgView[4] = (ImageView) findViewById(R.id.home_header_img_5);
-        imgView[5] = (ImageView) findViewById(R.id.home_header_img_6);
-        imgView[6] = (ImageView) findViewById(R.id.home_header_img_7);
-        imgView[7] = (ImageView) findViewById(R.id.home_header_img_8);
-        imgView[8] = (ImageView) findViewById(R.id.home_header_img_9);
-        imgView[9] = (ImageView) findViewById(R.id.home_header_img_10);
+    public class MyAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            updatePoints();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            main.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    PlayerFragment.mVisualizerView.updateVisualizer(mBytes);
+                    if (VisualizerView.bmp != null) {
+                        if (navImageView != null) {
+                            try {
+                                Bitmap croppedBmp = Bitmap.createBitmap(VisualizerView.bmp, 0, (int) (75 * ratio), screen_width, screen_width);
+                                navImageView.setImageBitmap(croppedBmp);
+                            } catch (Exception | OutOfMemoryError e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
+            });
+        }
     }
 
     public void refreshHeaderImages() {

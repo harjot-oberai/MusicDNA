@@ -1,4 +1,4 @@
-package com.sdsmdg.harjot.MusicDNA.imageloader;
+package com.sdsmdg.harjot.MusicDNA.imageLoader;
 
 /**
  * Created by Harjot on 06-Apr-16.
@@ -30,7 +30,6 @@ import java.util.Random;
 import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 
 public class ImageLoader {
 
@@ -100,7 +99,7 @@ public class ImageLoader {
             } catch (Throwable ex) {
                 ex.printStackTrace();
                 if (ex instanceof OutOfMemoryError)
-                    memoryCache.clear();
+                    clearMemory();
                 return null;
             }
         } else {
@@ -121,7 +120,7 @@ public class ImageLoader {
                     OutputStream os = new FileOutputStream(f);
                     os.write(data);
                     os.close();
-//                    bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                    //bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
                     bitmap = decodeFile(f);
                     return bitmap;
                 } else {
@@ -130,7 +129,7 @@ public class ImageLoader {
             } catch (Throwable ex) {
                 ex.printStackTrace();
                 if (ex instanceof OutOfMemoryError)
-                    memoryCache.clear();
+                    clearMemory();
                 return null;
             }
 
@@ -222,14 +221,10 @@ public class ImageLoader {
 
     boolean imageViewReused(PhotoToLoad photoToLoad) {
         String tag = imageViews.get(photoToLoad.imageView);
-        if (tag == null || !tag.equals(photoToLoad.url))
-            return true;
-        return false;
+        return tag == null || !tag.equals(photoToLoad.url);
     }
+    //@Override
+    public void clearMemory() {
 
-    public void clearCache() {
-        memoryCache.clear();
-        fileCache.clear();
     }
-
 }

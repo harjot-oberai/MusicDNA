@@ -1,12 +1,11 @@
 package com.sdsmdg.harjot.MusicDNA.fragments.ViewPlaylistFragment;
 
-
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,20 +17,19 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.clickitemtouchlistener.ClickItemTouchListener;
-import com.sdsmdg.harjot.MusicDNA.itemtouchhelpers.SimpleItemTouchHelperCallback;
+import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
+import com.sdsmdg.harjot.MusicDNA.R;
 import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
+import com.sdsmdg.harjot.MusicDNA.clickitemtouchlistener.ClickItemTouchListener;
+import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
+import com.sdsmdg.harjot.MusicDNA.itemtouchhelpers.SimpleItemTouchHelperCallback;
 import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.models.Track;
 import com.sdsmdg.harjot.MusicDNA.models.UnifiedTrack;
-import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
-import com.sdsmdg.harjot.MusicDNA.R;
-import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
 import com.sdsmdg.harjot.MusicDNA.utilities.CommonUtils;
-import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
 import com.squareup.leakcanary.RefWatcher;
 import com.squareup.picasso.Picasso;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -80,7 +78,7 @@ public class ViewPlaylistFragment extends Fragment implements
             imgLoader.DisplayImage(lt.getPath(), backdrop);
         } else {
             Track t = ut.getStreamTrack();
-            Picasso.with(getContext())
+            Picasso.get()
                     .load(t.getArtworkURL())
                     .resize(100, 100)
                     .error(R.drawable.ic_default)
@@ -133,14 +131,14 @@ public class ViewPlaylistFragment extends Fragment implements
         else
             bottomMarginLayout.getLayoutParams().height = CommonUtils.dpTopx(65, getContext());
 
-        fragmentTitle = (TextView) view.findViewById(R.id.playlist_fragment_title);
+        fragmentTitle = view.findViewById(R.id.playlist_fragment_title);
         if (SplashActivity.tf4 != null)
             fragmentTitle.setTypeface(SplashActivity.tf4);
 
-        title = (TextView) view.findViewById(R.id.playlist_title);
+        title = view.findViewById(R.id.playlist_title);
         title.setText(HomeActivity.tempPlaylist.getPlaylistName());
 
-        songsText = (TextView) view.findViewById(R.id.playlist_tracks_text);
+        songsText = view.findViewById(R.id.playlist_tracks_text);
         String s = "";
         if (HomeActivity.tempPlaylist.getSongList().size() > 1)
             s = "Songs";
@@ -148,7 +146,7 @@ public class ViewPlaylistFragment extends Fragment implements
             s = "Song";
         songsText.setText(HomeActivity.tempPlaylist.getSongList().size() + " " + s);
 
-        backBtn = (ImageView) view.findViewById(R.id.view_playlist_back_btn);
+        backBtn = view.findViewById(R.id.view_playlist_back_btn);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -156,7 +154,7 @@ public class ViewPlaylistFragment extends Fragment implements
             }
         });
 
-        renameIcon = (ImageView) view.findViewById(R.id.rename_playlist_icon);
+        renameIcon = view.findViewById(R.id.rename_playlist_icon);
         renameIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -164,7 +162,7 @@ public class ViewPlaylistFragment extends Fragment implements
             }
         });
 
-        addToQueueIcon = (ImageView) view.findViewById(R.id.add_playlist_to_queue_icon);
+        addToQueueIcon = view.findViewById(R.id.add_playlist_to_queue_icon);
         addToQueueIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -172,14 +170,14 @@ public class ViewPlaylistFragment extends Fragment implements
             }
         });
 
-        backdrop = (ImageView) view.findViewById(R.id.playlist_backdrop);
+        backdrop = view.findViewById(R.id.playlist_backdrop);
         UnifiedTrack ut = HomeActivity.tempPlaylist.getSongList().get(0);
         if (ut.getType()) {
             LocalTrack lt = ut.getLocalTrack();
             imgLoader.DisplayImage(lt.getPath(), backdrop);
         } else {
             Track t = ut.getStreamTrack();
-            Picasso.with(getContext())
+            Picasso.get()
                     .load(t.getArtworkURL())
                     .resize(100, 100)
                     .error(R.drawable.ic_default)
@@ -187,7 +185,7 @@ public class ViewPlaylistFragment extends Fragment implements
                     .into(backdrop);
         }
 
-        playlistRecyler = (RecyclerView) view.findViewById(R.id.view_playlist_recycler);
+        playlistRecyler = view.findViewById(R.id.view_playlist_recycler);
         plAdapter = new PlaylistTrackAdapter(HomeActivity.tempPlaylist.getSongList(), this, getContext());
         mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         playlistRecyler.setLayoutManager(mLayoutManager2);
@@ -212,9 +210,9 @@ public class ViewPlaylistFragment extends Fragment implements
             }
         });
 
-        playAll = (FloatingActionButton) view.findViewById(R.id.play_all_fab);
+        playAll = view.findViewById(R.id.play_all_fab);
         if (HomeActivity.tempPlaylist.getSongList().size() == 0) {
-            playAll.setVisibility(View.GONE);
+            playAll.hide();
         }
         playAll.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));
         playAll.setOnClickListener(new View.OnClickListener() {
@@ -261,5 +259,4 @@ public class ViewPlaylistFragment extends Fragment implements
         RefWatcher refWatcher = MusicDNAApplication.getRefWatcher(getContext());
         refWatcher.watch(this);
     }
-
 }

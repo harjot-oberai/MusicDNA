@@ -11,9 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.R;
-import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
+import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
+import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
 
 import java.util.List;
 
@@ -33,9 +33,9 @@ public class LocalTrackRecyclerAdapter extends RecyclerView.Adapter<LocalTrackRe
 
         public MyViewHolder(View view) {
             super(view);
-            art = (ImageView) view.findViewById(R.id.img_2);
-            title = (TextView) view.findViewById(R.id.title_2);
-            artist = (TextView) view.findViewById(R.id.url_2);
+            art = view.findViewById(R.id.img_2);
+            title = view.findViewById(R.id.title_2);
+            artist = view.findViewById(R.id.url_2);
         }
     }
 

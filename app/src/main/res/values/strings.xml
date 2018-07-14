@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">Music DNA</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="title_activity_home">Music DNA</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -10,7 +9,7 @@
     <string name="action_settings">Settings</string>
 
     <!-- About Fragment strings -->
-    <string name="mdg_description">An Active students group at IIT Roorkee directed towards developing useful applications</string>
+    <string name="mdg_description">An Active students group at IIT Roorkee directed towards developing useful applications.</string>
     <string name="share_application_text">Check out MusicDNA an awesome music player from Play Store. Link: </string>
     <string name="music_dna_short_link">http://bit.ly/musicDnaApp</string>
     <string name="license_text">MusicDNA and related material are distributed under \'Attribution-NonCommercial-ShareAlike 4.0 International license\'</string>

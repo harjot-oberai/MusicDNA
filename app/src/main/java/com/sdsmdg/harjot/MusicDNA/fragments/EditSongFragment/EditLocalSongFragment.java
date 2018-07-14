@@ -1,6 +1,5 @@
 package com.sdsmdg.harjot.MusicDNA.fragments.EditSongFragment;
 
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,13 +17,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.R;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
-import com.sdsmdg.harjot.MusicDNA.lyrics.Lyrics;
+import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
 import com.sdsmdg.harjot.MusicDNA.utilities.CommonUtils;
-import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
-import com.sdsmdg.harjot.MusicDNA.utilities.DownloadThread;
 
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
@@ -42,7 +39,6 @@ import org.jaudiotagger.tag.id3.ID3v24Tag;
 
 import java.io.File;
 import java.io.IOException;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -109,7 +105,7 @@ public class EditLocalSongFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        backBtn = (ImageView) view.findViewById(R.id.edit_song_back_btn);
+        backBtn = view.findViewById(R.id.edit_song_back_btn);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,11 +113,11 @@ public class EditLocalSongFragment extends Fragment {
             }
         });
 
-        fragTitle = (TextView) view.findViewById(R.id.edit_song_fragment_title);
+        fragTitle = view.findViewById(R.id.edit_song_fragment_title);
         if (SplashActivity.tf4 != null)
             fragTitle.setTypeface(SplashActivity.tf4);
 
-        backdrop = (ImageView) view.findViewById(R.id.edit_song_backdrop);
+        backdrop = view.findViewById(R.id.edit_song_backdrop);
         imgLoader.DisplayImage(HomeActivity.editSong.getPath(), backdrop);
 
         bottomMarginLayout = view.findViewById(R.id.bottom_margin_layout);
@@ -129,14 +125,13 @@ public class EditLocalSongFragment extends Fragment {
             bottomMarginLayout.getLayoutParams().height = 0;
         else
             bottomMarginLayout.getLayoutParams().height = CommonUtils.dpTopx(65, getContext());
-        ;
 
-        titleText = (EditText) view.findViewById(R.id.edit_song_title);
-        artistText = (EditText) view.findViewById(R.id.edit_song_artist);
-        albumText = (EditText) view.findViewById(R.id.edit_song_album);
+        titleText = view.findViewById(R.id.edit_song_title);
+        artistText = view.findViewById(R.id.edit_song_artist);
+        albumText = view.findViewById(R.id.edit_song_album);
 
 
-        saveButton = (Button) view.findViewById(R.id.edit_song_save_button);
+        saveButton = view.findViewById(R.id.edit_song_save_button);
         saveButton.setBackgroundColor(HomeActivity.themeColor);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override

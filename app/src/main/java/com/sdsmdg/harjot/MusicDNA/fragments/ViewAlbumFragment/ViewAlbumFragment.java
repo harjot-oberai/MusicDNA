@@ -1,6 +1,5 @@
 package com.sdsmdg.harjot.MusicDNA.fragments.ViewAlbumFragment;
 
-
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
@@ -20,19 +19,18 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
+import com.sdsmdg.harjot.MusicDNA.R;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
 import com.sdsmdg.harjot.MusicDNA.clickitemtouchlistener.ClickItemTouchListener;
 import com.sdsmdg.harjot.MusicDNA.custombottomsheets.CustomLocalBottomSheetDialog;
 import com.sdsmdg.harjot.MusicDNA.fragments.LocalMusicFragments.LocalTrackRecyclerAdapter;
-import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
 import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.models.UnifiedTrack;
-import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
-import com.sdsmdg.harjot.MusicDNA.R;
-import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
 import com.sdsmdg.harjot.MusicDNA.utilities.CommonUtils;
-import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
 import com.squareup.leakcanary.RefWatcher;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -96,7 +94,7 @@ public class ViewAlbumFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        backBtn = (ImageView) view.findViewById(R.id.view_album_back_btn);
+        backBtn = view.findViewById(R.id.view_album_back_btn);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,19 +102,19 @@ public class ViewAlbumFragment extends Fragment {
             }
         });
 
-        backDrop = (ImageView) view.findViewById(R.id.album_backdrop);
+        backDrop = view.findViewById(R.id.album_backdrop);
         imgLoader.DisplayImage(HomeActivity.tempAlbum.getAlbumSongs().get(0).getPath(), backDrop);
 
-        fragTitle = (TextView) view.findViewById(R.id.album_fragment_title);
+        fragTitle = view.findViewById(R.id.album_fragment_title);
         if (SplashActivity.tf4 != null)
             fragTitle.setTypeface(SplashActivity.tf4);
 
-        albumTitle = (TextView) view.findViewById(R.id.album_title);
+        albumTitle = view.findViewById(R.id.album_title);
         albumTitle.setText(HomeActivity.tempAlbum.getName());
 
-        albumTracksText = (TextView) view.findViewById(R.id.album_tracks_text);
+        albumTracksText = view.findViewById(R.id.album_tracks_text);
 
-        addToQueueIcon = (ImageView) view.findViewById(R.id.add_album_to_queue_icon);
+        addToQueueIcon = view.findViewById(R.id.add_album_to_queue_icon);
         addToQueueIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,10 +139,10 @@ public class ViewAlbumFragment extends Fragment {
 
         albumTracksText.setText(details1);
 
-        fab = (FloatingActionButton) view.findViewById(R.id.play_all_from_album);
+        fab = view.findViewById(R.id.play_all_from_album);
         fab.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));
 
-        rv = (RecyclerView) view.findViewById(R.id.album_songs_recycler);
+        rv = view.findViewById(R.id.album_songs_recycler);
         aslAdapter = new LocalTrackRecyclerAdapter(HomeActivity.tempAlbum.getAlbumSongs(), getContext());
         LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rv.setLayoutManager(mLayoutManager2);
@@ -193,7 +191,7 @@ public class ViewAlbumFragment extends Fragment {
             public boolean onLongClick(RecyclerView parent, View view, final int position, long id) {
                 CustomLocalBottomSheetDialog localBottomSheetDialog = new CustomLocalBottomSheetDialog();
                 localBottomSheetDialog.setPosition(position);
-                localBottomSheetDialog.setLocalTrack(activity.tempAlbum.getAlbumSongs().get(position));
+                localBottomSheetDialog.setLocalTrack(HomeActivity.tempAlbum.getAlbumSongs().get(position));
                 localBottomSheetDialog.setFragment("Album");
                 localBottomSheetDialog.show(activity.getSupportFragmentManager(), "local_song_bottom_sheet");
                 return true;

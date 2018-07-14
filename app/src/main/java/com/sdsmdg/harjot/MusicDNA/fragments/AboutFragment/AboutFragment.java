@@ -2,13 +2,11 @@ package com.sdsmdg.harjot.MusicDNA.fragments.AboutFragment;
 
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,13 +16,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.R;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
 
 /**
@@ -34,7 +30,7 @@ public class AboutFragment extends Fragment {
 
     ImageView githubLinkBtn, reviewLinkBtn, shareLink, backBtn;
 
-    TextView fragTitle, openSourceLicense, versiontTextView;
+    TextView fragTitle, openSourceLicense, versionTextView;
 
     View bottomMarginLayout;
 
@@ -46,7 +42,6 @@ public class AboutFragment extends Fragment {
     public AboutFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -72,22 +67,22 @@ public class AboutFragment extends Fragment {
             e.printStackTrace();
         }
 
-        versiontTextView = (TextView) view.findViewById(R.id.about_version_text);
+        versionTextView = view.findViewById(R.id.about_version_text);
 
-        openSourceLicense = (TextView) view.findViewById(R.id.about_license_text);
+        openSourceLicense = view.findViewById(R.id.about_license_text);
         openSourceLicense.setText(content);
         openSourceLicense.setTextColor(HomeActivity.themeColor);
 
-        githubLinkBtn = (ImageView) view.findViewById(R.id.about_github_link);
-        reviewLinkBtn = (ImageView) view.findViewById(R.id.about_rate_link);
-        shareLink = (ImageView) view.findViewById(R.id.about_share_link);
+        githubLinkBtn = view.findViewById(R.id.about_github_link);
+        reviewLinkBtn = view.findViewById(R.id.about_rate_link);
+        shareLink = view.findViewById(R.id.about_share_link);
 
-        backBtn = (ImageView) view.findViewById(R.id.about_back_btn);
-        fragTitle = (TextView) view.findViewById(R.id.about_fragment_title);
+        backBtn = view.findViewById(R.id.about_back_btn);
+        fragTitle = view.findViewById(R.id.about_fragment_title);
 
         bottomMarginLayout = view.findViewById(R.id.bottom_margin_layout);
 
-        versiontTextView.setText("Version " + versionName);
+        versionTextView.setText("Version " + versionName);
 
         if (SplashActivity.tf4 != null) {
             backBtn.setOnClickListener(new View.OnClickListener() {

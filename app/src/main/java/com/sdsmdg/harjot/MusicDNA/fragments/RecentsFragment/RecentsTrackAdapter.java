@@ -11,14 +11,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.sdsmdg.harjot.MusicDNA.R;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
 import com.sdsmdg.harjot.MusicDNA.itemtouchhelpers.ItemTouchHelperAdapter;
 import com.sdsmdg.harjot.MusicDNA.itemtouchhelpers.ItemTouchHelperViewHolder;
-import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.models.Track;
 import com.sdsmdg.harjot.MusicDNA.models.UnifiedTrack;
-import com.sdsmdg.harjot.MusicDNA.R;
-import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -82,6 +82,35 @@ public class RecentsTrackAdapter extends RecyclerView.Adapter<RecentsTrackAdapte
         new HomeActivity.SaveRecents().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
+    @Override
+    public void onBindViewHolder(final RecentsTrackAdapter.MyViewHolder holder, int position) {
+        UnifiedTrack ut = songList.get(position);
+        if (ut.getType()) {
+            LocalTrack lt = ut.getLocalTrack();
+            imgLoader.DisplayImage(lt.getPath(), holder.art);
+            holder.title.setText(lt.getTitle());
+            holder.artist.setText(lt.getArtist());
+        } else {
+            Track t = ut.getStreamTrack();
+            Picasso.get()
+                    .load(t.getArtworkURL())
+                    .resize(100, 100)
+                    .error(R.drawable.ic_default)
+                    .placeholder(R.drawable.ic_default)
+                    .into(holder.art);
+            holder.title.setText(t.getTitle());
+            holder.artist.setText("");
+        }
+    }
+
+    @Override
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.list_item_2, parent, false);
+
+        return new MyViewHolder(itemView);
+    }
+
     public class MyViewHolder extends RecyclerView.ViewHolder
             implements ItemTouchHelperViewHolder {
 
@@ -90,9 +119,9 @@ public class RecentsTrackAdapter extends RecyclerView.Adapter<RecentsTrackAdapte
 
         public MyViewHolder(View view) {
             super(view);
-            art = (ImageView) view.findViewById(R.id.img_2);
-            title = (TextView) view.findViewById(R.id.title_2);
-            artist = (TextView) view.findViewById(R.id.url_2);
+            art = view.findViewById(R.id.img_2);
+            title = view.findViewById(R.id.title_2);
+            artist = view.findViewById(R.id.url_2);
         }
 
         @Override
@@ -109,35 +138,6 @@ public class RecentsTrackAdapter extends RecyclerView.Adapter<RecentsTrackAdapte
             if (Build.VERSION.SDK_INT >= 21) {
                 itemView.setTranslationZ(0);
             }
-        }
-    }
-
-    @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_item_2, parent, false);
-
-        return new MyViewHolder(itemView);
-    }
-
-    @Override
-    public void onBindViewHolder(final RecentsTrackAdapter.MyViewHolder holder, int position) {
-        UnifiedTrack ut = songList.get(position);
-        if (ut.getType()) {
-            LocalTrack lt = ut.getLocalTrack();
-            imgLoader.DisplayImage(lt.getPath(), holder.art);
-            holder.title.setText(lt.getTitle());
-            holder.artist.setText(lt.getArtist());
-        } else {
-            Track t = ut.getStreamTrack();
-            Picasso.with(ctx)
-                    .load(t.getArtworkURL())
-                    .resize(100, 100)
-                    .error(R.drawable.ic_default)
-                    .placeholder(R.drawable.ic_default)
-                    .into(holder.art);
-            holder.title.setText(t.getTitle());
-            holder.artist.setText("");
         }
     }
 

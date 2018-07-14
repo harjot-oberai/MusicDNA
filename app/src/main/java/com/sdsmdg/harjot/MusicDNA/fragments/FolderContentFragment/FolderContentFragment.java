@@ -1,12 +1,11 @@
 package com.sdsmdg.harjot.MusicDNA.fragments.FolderContentFragment;
 
-
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,19 +16,18 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
+import com.sdsmdg.harjot.MusicDNA.R;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
 import com.sdsmdg.harjot.MusicDNA.clickitemtouchlistener.ClickItemTouchListener;
 import com.sdsmdg.harjot.MusicDNA.custombottomsheets.CustomGeneralBottomSheetDialog;
 import com.sdsmdg.harjot.MusicDNA.fragments.LocalMusicFragments.LocalTrackRecyclerAdapter;
-import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
 import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.models.UnifiedTrack;
-import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
-import com.sdsmdg.harjot.MusicDNA.R;
-import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
 import com.sdsmdg.harjot.MusicDNA.utilities.CommonUtils;
-import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
 import com.squareup.leakcanary.RefWatcher;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -92,14 +90,14 @@ public class FolderContentFragment extends Fragment {
         else
             bottomMarginLayout.getLayoutParams().height = CommonUtils.dpTopx(65, getContext());
 
-        fragmentTitle = (TextView) view.findViewById(R.id.folder_fragment_title);
+        fragmentTitle = view.findViewById(R.id.folder_fragment_title);
         if (SplashActivity.tf4 != null)
             fragmentTitle.setTypeface(SplashActivity.tf4);
 
-        title = (TextView) view.findViewById(R.id.folder_title);
+        title = view.findViewById(R.id.folder_title);
         title.setText(HomeActivity.tempMusicFolder.getFolderName());
 
-        songsText = (TextView) view.findViewById(R.id.folder_tracks_text);
+        songsText = view.findViewById(R.id.folder_tracks_text);
         String s = "";
         if (HomeActivity.tempMusicFolder.getLocalTracks().size() > 1)
             s = "Songs";
@@ -107,7 +105,7 @@ public class FolderContentFragment extends Fragment {
             s = "Song";
         songsText.setText(HomeActivity.tempMusicFolder.getLocalTracks().size() + " " + s);
 
-        backBtn = (ImageView) view.findViewById(R.id.folder_content_back_btn);
+        backBtn = view.findViewById(R.id.folder_content_back_btn);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,7 +113,7 @@ public class FolderContentFragment extends Fragment {
             }
         });
 
-        addToQueueIcon = (ImageView) view.findViewById(R.id.add_folder_to_queue_icon);
+        addToQueueIcon = view.findViewById(R.id.add_folder_to_queue_icon);
         addToQueueIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,11 +121,11 @@ public class FolderContentFragment extends Fragment {
             }
         });
 
-        backdrop = (ImageView) view.findViewById(R.id.folder_backdrop);
+        backdrop = view.findViewById(R.id.folder_backdrop);
         LocalTrack lt = HomeActivity.tempFolderContent.get(0);
         imgLoader.DisplayImage(lt.getPath(), backdrop);
 
-        folderContentRecycler = (RecyclerView) view.findViewById(R.id.folder_content_recycler);
+        folderContentRecycler = view.findViewById(R.id.folder_content_recycler);
         fContentAdapter = new LocalTrackRecyclerAdapter(HomeActivity.tempFolderContent, getContext());
         mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         folderContentRecycler.setLayoutManager(mLayoutManager2);
@@ -177,7 +175,7 @@ public class FolderContentFragment extends Fragment {
             }
         });
 
-        playAllFAB = (FloatingActionButton) view.findViewById(R.id.folder_play_all_fab);
+        playAllFAB = view.findViewById(R.id.folder_play_all_fab);
         playAllFAB.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));
         playAllFAB.setOnClickListener(new View.OnClickListener() {
             @Override

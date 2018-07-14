@@ -1,6 +1,5 @@
 package com.sdsmdg.harjot.MusicDNA.fragments.SettingsFragment;
 
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -12,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +21,6 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
-import android.support.v7.widget.SwitchCompat;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,21 +28,20 @@ import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
-import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
 import com.sdsmdg.harjot.MusicDNA.R;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
 import com.sdsmdg.harjot.MusicDNA.models.Settings;
 import com.sdsmdg.harjot.MusicDNA.utilities.CommonUtils;
 import com.squareup.leakcanary.RefWatcher;
-
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class SettingsFragment extends Fragment {
 
-    RelativeLayout densitycard, themeCard, aboutCard, albumArtCard, wifiCard, resetSettings;
+    RelativeLayout densityCard, themeCard, aboutCard, albumArtCard, wifiCard, resetSettings;
     SwitchCompat albumArtToggle;
     SwitchCompat wifiToggle;
     ImageView themeColorImg;
@@ -94,7 +92,7 @@ public class SettingsFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        backBtn = (ImageView) view.findViewById(R.id.settings_back_btn);
+        backBtn = view.findViewById(R.id.settings_back_btn);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,7 +100,7 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-        fragTitle = (TextView) view.findViewById(R.id.settings_fragment_title);
+        fragTitle = view.findViewById(R.id.settings_fragment_title);
         if (SplashActivity.tf4 != null)
             fragTitle.setTypeface(SplashActivity.tf4);
 
@@ -112,7 +110,7 @@ public class SettingsFragment extends Fragment {
         else
             bottomMarginLayout.getLayoutParams().height = CommonUtils.dpTopx(65, getContext());
 
-        resetSettings = (RelativeLayout) view.findViewById(R.id.reset_settings_card);
+        resetSettings = view.findViewById(R.id.reset_settings_card);
         resetSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -141,26 +139,24 @@ public class SettingsFragment extends Fragment {
                         alertDialog.getButton(android.app.AlertDialog.BUTTON_NEGATIVE).setTextColor(HomeActivity.themeColor);
                     }
                 });
-
                 alertDialog.show();
             }
         });
 
+        densityCard = view.findViewById(R.id.density_card);
+        densityText = view.findViewById(R.id.density_value);
+        densityText.setText(String.valueOf(100 - (int) (HomeActivity.minAudioStrength * 100)));
 
-        densitycard = (RelativeLayout) view.findViewById(R.id.density_card);
-        densityText = (TextView) view.findViewById(R.id.density_value);
-        densityText.setText(String.valueOf(100 - (int) (homeActivity.minAudioStrength * 100)));
-
-        densitycard.setOnClickListener(new View.OnClickListener() {
+        densityCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Dialog dialog = new Dialog(getContext());
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
                 dialog.setContentView(R.layout.density_dialog);
-                densitySeekbar = (SeekBar) dialog.findViewById(R.id.density_dialog_seekbar);
-                densitySeekbar.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(homeActivity.themeColor, PorterDuff.Mode.SRC_IN));
-                densityTextDialog = (TextView) dialog.findViewById(R.id.density_dialog_value);
+                densitySeekbar = dialog.findViewById(R.id.density_dialog_seekbar);
+                densitySeekbar.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(HomeActivity.themeColor, PorterDuff.Mode.SRC_IN));
+                densityTextDialog = dialog.findViewById(R.id.density_dialog_value);
                 densitySeekbar.setMax(100);
                 densitySeekbar.setProgress(Integer.parseInt(densityText.getText().toString()));
                 densityTextDialog.setText(String.valueOf(densitySeekbar.getProgress()));
@@ -174,23 +170,19 @@ public class SettingsFragment extends Fragment {
 
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
-
                     }
 
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
-
                     }
                 });
-
                 dialog.show();
-
             }
         });
 
-        themeCard = (RelativeLayout) view.findViewById(R.id.theme_card);
-        themeColorImg = (ImageView) view.findViewById(R.id.theme_color_img);
-        themeColorImg.setBackgroundColor(homeActivity.themeColor);
+        themeCard = view.findViewById(R.id.theme_card);
+        themeColorImg = view.findViewById(R.id.theme_color_img);
+        themeColorImg.setBackgroundColor(HomeActivity.themeColor);
         themeCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -233,9 +225,9 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-        albumArtCard = (RelativeLayout) view.findViewById(R.id.album_art_card);
-        albumArtToggle = (SwitchCompat) view.findViewById(R.id.album_art_toggle);
-        albumArtToggle.setChecked(homeActivity.settings.isAlbumArtBackgroundEnabled());
+        albumArtCard = view.findViewById(R.id.album_art_card);
+        albumArtToggle = view.findViewById(R.id.album_art_toggle);
+        albumArtToggle.setChecked(HomeActivity.settings.isAlbumArtBackgroundEnabled());
         albumArtCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -249,9 +241,9 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-        wifiCard = (RelativeLayout) view.findViewById(R.id.wifi_card);
-        wifiToggle = (SwitchCompat) view.findViewById(R.id.wifi_stream_toggle);
-        wifiToggle.setChecked(homeActivity.settings.isStreamOnlyOnWifiEnabled());
+        wifiCard = view.findViewById(R.id.wifi_card);
+        wifiToggle = view.findViewById(R.id.wifi_stream_toggle);
+        wifiToggle.setChecked(HomeActivity.settings.isStreamOnlyOnWifiEnabled());
         wifiCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -265,8 +257,7 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-
-        aboutCard = (RelativeLayout) view.findViewById(R.id.about_card);
+        aboutCard = view.findViewById(R.id.about_card);
         aboutCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -309,8 +300,8 @@ public class SettingsFragment extends Fragment {
     }
 
     public void setHomeActivityColor(int color){
-        homeActivity.settings.setThemeColor(color);
-        homeActivity.themeColor = color;
+        HomeActivity.settings.setThemeColor(color);
+        HomeActivity.themeColor = color;
         homeActivity.collapsingToolbar.setContentScrimColor(color);
         homeActivity.customLinearGradient.setStartColor(color);
         homeActivity.customLinearGradient.invalidate();
@@ -325,20 +316,20 @@ public class SettingsFragment extends Fragment {
     }
 
     public void setHomeActivityDNADensity(float progress) {
-        homeActivity.minAudioStrength = (100 - progress)/(float)100;
-        homeActivity.settings.setMinAudioStrength(homeActivity.minAudioStrength);
+        HomeActivity.minAudioStrength = (100 - progress)/(float)100;
+        HomeActivity.settings.setMinAudioStrength(HomeActivity.minAudioStrength);
         densityText.setText(String.valueOf(progress));
-        densityText.setText(String.valueOf(100 - (int) (homeActivity.minAudioStrength * 100)));
+        densityText.setText(String.valueOf(100 - (int) (HomeActivity.minAudioStrength * 100)));
     }
 
     public void setHomeActivityAlbumBg(boolean enabled) {
-        homeActivity.settings.setAlbumArtBackgroundEnabled(enabled);
+        HomeActivity.settings.setAlbumArtBackgroundEnabled(enabled);
         mCallback.onAlbumArtBackgroundChangedVisibility(enabled ? View.VISIBLE : View.GONE);
         albumArtToggle.setChecked(enabled);
     }
 
     public void setHomeActivityStreamingOnWifi(boolean enabled) {
-        homeActivity.settings.setStreamOnlyOnWifiEnabled(enabled);
+        HomeActivity.settings.setStreamOnlyOnWifiEnabled(enabled);
         wifiToggle.setChecked(enabled);
     }
 }

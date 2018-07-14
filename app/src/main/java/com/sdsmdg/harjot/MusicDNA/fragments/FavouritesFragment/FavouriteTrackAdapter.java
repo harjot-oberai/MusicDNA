@@ -12,14 +12,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.sdsmdg.harjot.MusicDNA.R;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
 import com.sdsmdg.harjot.MusicDNA.itemtouchhelpers.ItemTouchHelperAdapter;
 import com.sdsmdg.harjot.MusicDNA.itemtouchhelpers.ItemTouchHelperViewHolder;
-import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.models.Track;
 import com.sdsmdg.harjot.MusicDNA.models.UnifiedTrack;
-import com.sdsmdg.harjot.MusicDNA.R;
-import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -58,42 +58,6 @@ public class FavouriteTrackAdapter extends RecyclerView.Adapter<FavouriteTrackAd
         imgLoader = new ImageLoader(ctx);
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder
-            implements ItemTouchHelperViewHolder {
-
-        ImageView art;
-        TextView title, artist;
-        View indicator;
-        ImageView holderImg;
-
-        public MyViewHolder(View view) {
-            super(view);
-            art = (ImageView) view.findViewById(R.id.img);
-            title = (TextView) view.findViewById(R.id.title);
-            artist = (TextView) view.findViewById(R.id.url);
-            indicator = view.findViewById(R.id.currently_playing_indicator);
-            holderImg = (ImageView) view.findViewById(R.id.holderImage);
-        }
-
-        @Override
-        public void onItemSelected() {
-            itemView.setBackgroundColor(Color.DKGRAY);
-        }
-
-        @Override
-        public void onItemClear() {
-            itemView.setBackgroundColor(Color.parseColor("#111111"));
-        }
-    }
-
-    @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_item, parent, false);
-
-        return new MyViewHolder(itemView);
-    }
-
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         UnifiedTrack ut = favouriteList.get(position);
@@ -104,7 +68,7 @@ public class FavouriteTrackAdapter extends RecyclerView.Adapter<FavouriteTrackAd
             holder.artist.setText(lt.getArtist());
         } else {
             Track t = ut.getStreamTrack();
-            Picasso.with(ctx)
+            Picasso.get()
                     .load(t.getArtworkURL())
                     .resize(100, 100)
                     .error(R.drawable.ic_default)
@@ -123,6 +87,42 @@ public class FavouriteTrackAdapter extends RecyclerView.Adapter<FavouriteTrackAd
                 return false;
             }
         });
+    }
+
+    @Override
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.list_item, parent, false);
+
+        return new MyViewHolder(itemView);
+    }
+
+    public class MyViewHolder extends RecyclerView.ViewHolder
+            implements ItemTouchHelperViewHolder {
+
+        ImageView art;
+        TextView title, artist;
+        View indicator;
+        ImageView holderImg;
+
+        public MyViewHolder(View view) {
+            super(view);
+            art =  view.findViewById(R.id.img);
+            title = view.findViewById(R.id.title);
+            artist = view.findViewById(R.id.url);
+            indicator = view.findViewById(R.id.currently_playing_indicator);
+            holderImg = view.findViewById(R.id.holderImage);
+        }
+
+        @Override
+        public void onItemSelected() {
+            itemView.setBackgroundColor(Color.DKGRAY);
+        }
+
+        @Override
+        public void onItemClear() {
+            itemView.setBackgroundColor(Color.parseColor("#111111"));
+        }
     }
 
     @Override

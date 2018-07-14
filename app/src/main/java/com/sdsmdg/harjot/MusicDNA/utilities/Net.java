@@ -1,12 +1,12 @@
 package com.sdsmdg.harjot.MusicDNA.utilities;
 
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-
 import java.io.IOException;
 import java.net.URL;
-import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+//import java.util.concurrent.TimeUnit;
 
 public class Net {
 
@@ -20,7 +20,7 @@ public class Net {
     public static String getUrlAsString(URL paramURL) throws IOException {
         Request request = new Request.Builder().header("User-Agent", USER_AGENT).url(paramURL).build();
         OkHttpClient client = new OkHttpClient();
-        client.setConnectTimeout(10, TimeUnit.SECONDS);
+        //client.connectTimeout(10, TimeUnit.SECONDS);
         Response response = client.newCall(request).execute();
 
         return response.body().string();

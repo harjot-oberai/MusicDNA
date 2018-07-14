@@ -1,15 +1,8 @@
 package com.sdsmdg.harjot.MusicDNA.lyrics;
 
 import com.sdsmdg.harjot.MusicDNA.annotations.Reflection;
-
 import com.sdsmdg.harjot.MusicDNA.utilities.Levenshtein;
 import com.sdsmdg.harjot.MusicDNA.utilities.Net;
-
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.Response;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -23,10 +16,15 @@ import java.io.InputStreamReader;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 import static com.sdsmdg.harjot.MusicDNA.lyrics.Lyrics.NEGATIVE_RESULT;
 import static com.sdsmdg.harjot.MusicDNA.lyrics.Lyrics.NO_RESULT;
@@ -95,8 +93,8 @@ public class ViewLyrics {
 
     private static ArrayList<Lyrics> search(String searchQuery) throws IOException, ParserConfigurationException, SAXException, NoSuchAlgorithmException {
         OkHttpClient client = new OkHttpClient();
-        client.setConnectTimeout(10, TimeUnit.SECONDS);
-        client.setReadTimeout(30, TimeUnit.SECONDS);
+        //client.connectTimeout(10, TimeUnit.SECONDS);
+        //client.readTimeout(30, TimeUnit.SECONDS);
 
         RequestBody body = RequestBody.create(MediaType.parse("application/text"), assembleQuery(searchQuery.getBytes("UTF-8")));
 

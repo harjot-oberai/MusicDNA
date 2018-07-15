@@ -53,14 +53,12 @@ public class FolderRecyclerAdapter extends RecyclerView.Adapter<FolderRecyclerAd
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.playlist_custom_row, parent, false);
-
+            .inflate(R.layout.playlist_custom_row, parent, false);
         return new MyViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-
         MusicFolder mf = musicFolders.get(position);
         List<LocalTrack> list = mf.getLocalTracks();
 //        holder.playListName.setText(mf.getFolderName() + " (" + mf.getLocalTracks().size() + ")");
@@ -83,10 +81,6 @@ public class FolderRecyclerAdapter extends RecyclerView.Adapter<FolderRecyclerAd
             }
         }
     }
-
     @Override
-    public int getItemCount() {
-        return musicFolders.size();
-    }
-
+    public int getItemCount() { return musicFolders.size(); }
 }

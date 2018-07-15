@@ -456,20 +456,10 @@ public class HomeActivity extends AppCompatActivity
         tp.setFakeBoldText(true);
 
         recentsViewAll = findViewById(R.id.recents_view_all);
-        recentsViewAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFragment("recent");
-            }
-        });
+        recentsViewAll.setOnClickListener((View v) -> showFragment("recent"));
 
         playlistsViewAll = findViewById(R.id.playlists_view_all);
-        playlistsViewAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFragment("allPlaylists");
-            }
-        });
+        playlistsViewAll.setOnClickListener((View v) -> showFragment("allPlaylists"));
 
         copyrightText = findViewById(R.id.copyright_text);
         copyrightText.setText("Music DNA v" + versionName);
@@ -550,17 +540,14 @@ public class HomeActivity extends AppCompatActivity
         View header = navigationView.getHeaderView(0);
         navImageView = header.findViewById(R.id.nav_image_view);
         if (navImageView != null) {
-            navImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    PlayerFragment pFrag = getPlayerFragment();
-                    if (pFrag != null) {
-                        if (PlayerFragment.mMediaPlayer != null && PlayerFragment.mMediaPlayer.isPlaying()) {
-                            onBackPressed();
-                            isPlayerVisible = true;
-//                            hideTabs();
-                            showPlayer();
-                        }
+            navImageView.setOnClickListener((View v) -> {
+                PlayerFragment pFrag = getPlayerFragment();
+                if (pFrag != null) {
+                    if (PlayerFragment.mMediaPlayer != null && PlayerFragment.mMediaPlayer.isPlaying()) {
+                        onBackPressed();
+                        isPlayerVisible = true;
+                        //hideTabs();
+                        showPlayer();
                     }
                 }
             });
@@ -621,36 +608,15 @@ public class HomeActivity extends AppCompatActivity
 
         localBannerPlayAll = findViewById(R.id.local_banner_play_all);
 
-        localBanner.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFragment("local");
-            }
-        });
-        favBanner.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFragment("favourite");
-            }
-        });
-        recentBanner.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFragment("recent");
-            }
-        });
-        folderBanner.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFragment("allFolders");
-            }
-        });
-        savedDNABanner.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFragment("allSavedDNAs");
-            }
-        });
+        localBanner.setOnClickListener((View v) -> showFragment("local"));
+
+        favBanner.setOnClickListener((View v) -> showFragment("favourite"));
+
+        recentBanner.setOnClickListener((View v) -> showFragment("recent"));
+
+        folderBanner.setOnClickListener((View v) -> showFragment("allFolders"));
+
+        savedDNABanner.setOnClickListener((View v) -> showFragment("allSavedDNAs"));
 
         localBannerPlayAll.setOnClickListener((View v) -> {
             queue.getQueue().clear();
@@ -714,12 +680,10 @@ public class HomeActivity extends AppCompatActivity
         playlistNothingText = findViewById(R.id.playlistNothingText);
 
         localViewAll = findViewById(R.id.localViewAll);
-        localViewAll.setOnClickListener((View v) ->
-            showFragment("local"));
+        localViewAll.setOnClickListener((View v) -> showFragment("local"));
 
         streamViewAll = findViewById(R.id.streamViewAll);
-        streamViewAll.setOnClickListener((View v) ->
-                showFragment("stream"));
+        streamViewAll.setOnClickListener((View v) -> showFragment("stream"));
 
         progress = new Dialog(ctx);
         progress.setCancelable(false);
@@ -729,19 +693,19 @@ public class HomeActivity extends AppCompatActivity
         progress.show();
 
         showCase = new ShowcaseView.Builder(this)
-                .blockAllTouches()
-                .singleShot(0)
-                .setStyle(R.style.CustomShowcaseTheme)
-                .useDecorViewAsParent()
-                .replaceEndButton(mEndButton)
-                .setContentTitlePaint(tp)
-                .setTarget(new ViewTarget(R.id.recentsRecyclerLabel, this))
-                .setContentTitle("Recents and Playlists")
-                .setContentText("All your recent songs and playlists will be listed here." +
-                        "Long press the cards or playlists for more options \n" +
-                        "\n" +
-                        "(Press Next to continue / Press back to Hide)")
-                .build();
+            .blockAllTouches()
+            .singleShot(0)
+            .setStyle(R.style.CustomShowcaseTheme)
+            .useDecorViewAsParent()
+            .replaceEndButton(mEndButton)
+            .setContentTitlePaint(tp)
+            .setTarget(new ViewTarget(R.id.recentsRecyclerLabel, this))
+            .setContentTitle("Recents and Playlists")
+            .setContentText("All your recent songs and playlists will be listed here." +
+                    "Long press the cards or playlists for more options \n" +
+                    "\n" +
+                    "(Press Next to continue / Press back to Hide)")
+            .build();
         showCase.setButtonText("Next");
         showCase.setButtonPosition(lps);
         showCase.overrideButtonClick(new View.OnClickListener() {
@@ -914,7 +878,7 @@ public class HomeActivity extends AppCompatActivity
             searchView.setIconified(true);
             new Thread(new CancelCall()).start();
 
-//            hideTabs();
+            //hideTabs();
             isPlayerVisible = true;
 
             PlayerFragment frag = playerFragment;
@@ -1301,7 +1265,6 @@ public class HomeActivity extends AppCompatActivity
                         getFolder(dirName).getLocalTracks().add(lt);
                     }
                 }
-
             }
             while (musicCursor.moveToNext());
         }
@@ -1510,7 +1473,6 @@ public class HomeActivity extends AppCompatActivity
             if (!settings.isStreamOnlyOnWifiEnabled() || mWifi.isConnected()) {
                 new Thread(new CancelCall()).start();
 
-
                 /*Update the Streaming List*/
 
                 if (!query.equals("")) {
@@ -1594,7 +1556,6 @@ public class HomeActivity extends AppCompatActivity
                 }
             }
         }
-
     }
 
     @Override
@@ -1611,7 +1572,6 @@ public class HomeActivity extends AppCompatActivity
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
@@ -1759,7 +1719,6 @@ public class HomeActivity extends AppCompatActivity
             if (rasFrag != null)
                 rasFrag.showPlayAllFab();
         }
-
     }
 
     private void updateAlbumList(String query) {
@@ -1839,36 +1798,30 @@ public class HomeActivity extends AppCompatActivity
             PlayerFragment.cpb.setAlpha(0.0f);
             PlayerFragment.cpb.setVisibility(View.VISIBLE);
             PlayerFragment.cpb.animate()
-                    .alpha(1.0f);
+                .alpha(1.0f);
         }
         if (playerFragment != null && playerFragment.smallPlayer != null) {
             playerFragment.smallPlayer.setAlpha(0.0f);
             playerFragment.smallPlayer.setVisibility(View.VISIBLE);
             playerFragment.smallPlayer.animate()
-                    .alpha(1.0f);
+                .alpha(1.0f);
         }
 
         if (playerFragment != null && playerFragment.spToolbar != null) {
             playerFragment.spToolbar.animate()
-                    .alpha(0.0f)
-                    .withEndAction(new Runnable() {
-                        @Override
-                        public void run() {
-                            playerFragment.spToolbar.setVisibility(GONE);
-                        }
-                    });
-        }
+                .alpha(0.0f)
+                .withEndAction(() -> playerFragment.spToolbar.setVisibility(GONE)); }
 
         playerContainer.setVisibility(View.VISIBLE);
         if (playerFragment != null) {
             playerContainer.animate()
-                    .translationY(playerContainer.getHeight() - playerFragment.smallPlayer.getHeight())
-                    .setDuration(300);
+                .translationY(playerContainer.getHeight() - playerFragment.smallPlayer.getHeight())
+                .setDuration(300);
         } else {
             playerContainer.animate()
-                    .translationY(playerContainer.getHeight() - playerFragment.smallPlayer.getHeight())
-                    .setDuration(300)
-                    .setStartDelay(500);
+                .translationY(playerContainer.getHeight() - playerFragment.smallPlayer.getHeight())
+                .setDuration(300)
+                .setStartDelay(500);
         }
 
         if (playerFragment != null) {
@@ -1877,16 +1830,11 @@ public class HomeActivity extends AppCompatActivity
             playerFragment.player_controller.setImageDrawable(playerFragment.mainTrackController.getDrawable());
 
             playerFragment.player_controller.animate()
-                    .alpha(1.0f);
+                .alpha(1.0f);
 
             playerFragment.snappyRecyclerView.animate()
-                    .alpha(0.0f)
-                    .withEndAction(new Runnable() {
-                        @Override
-                        public void run() {
-                            playerFragment.snappyRecyclerView.setVisibility(GONE);
-                        }
-                    });
+                .alpha(0.0f)
+                .withEndAction(() -> playerFragment.snappyRecyclerView.setVisibility(GONE));
         }
     }
 
@@ -1936,41 +1884,33 @@ public class HomeActivity extends AppCompatActivity
         isPlayerTransitioning = true;
 
         playerContainer.animate()
-                .setDuration(300)
-                .translationY(0)
-                .withEndAction(new Runnable() {
-                    @Override
-                    public void run() {
-                        isPlayerTransitioning = false;
-                        if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
-                            playerFragment.snappyRecyclerView.setTransparency();
-                        }
-                    }
-                });
-
+            .setDuration(300)
+            .translationY(0)
+            .withEndAction(() -> {
+                isPlayerTransitioning = false;
+                if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
+                    playerFragment.snappyRecyclerView.setTransparency();
+                }
+            });
 
         if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
             playerFragment.snappyRecyclerView.setVisibility(View.VISIBLE);
             playerFragment.snappyRecyclerView.animate()
-                    .alpha(1.0f)
-                    .setDuration(300);
+                .alpha(1.0f)
+                .setDuration(300);
         }
 
         final Handler handler2 = new Handler();
-        handler2.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (playerFragment != null && PlayerFragment.mVisualizerView != null){
-                    if (playerFragment.isLyricsVisible) {
-                        PlayerFragment.mVisualizerView.setVisibility(GONE);
-                        playerFragment.lyricsContainer.setVisibility(View.VISIBLE);
-                    } else {
-                        PlayerFragment.mVisualizerView.setVisibility(View.VISIBLE);
-                    }
+        handler2.postDelayed(() -> {
+            if (playerFragment != null && PlayerFragment.mVisualizerView != null){
+                if (playerFragment.isLyricsVisible) {
+                    PlayerFragment.mVisualizerView.setVisibility(GONE);
+                    playerFragment.lyricsContainer.setVisibility(View.VISIBLE);
+                } else {
+                    PlayerFragment.mVisualizerView.setVisibility(View.VISIBLE);
                 }
             }
         }, 400);
-
     }
 
     public void hidePlayer2() {
@@ -1981,17 +1921,12 @@ public class HomeActivity extends AppCompatActivity
             PlayerFragment.mVisualizerView.setVisibility(View.GONE);
 
         final Handler handler2 = new Handler();
-        handler2.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                playerContainer.animate()
-                        .setInterpolator(new AccelerateDecelerateInterpolator())
-                        .translationX(playerContainer.getWidth());
-            }
-        }, 50);
+        handler2.postDelayed(() ->
+            playerContainer.animate()
+                .setInterpolator(new AccelerateDecelerateInterpolator())
+                .translationX(playerContainer.getWidth()),50);
 
         playerContainer.setVisibility(View.VISIBLE);
-
     }
 
     public void showPlayer2() {
@@ -2000,12 +1935,7 @@ public class HomeActivity extends AppCompatActivity
         isEqualizerVisible = false;
         isQueueVisible = false;
         final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                hideFragment("equalizer");
-            }
-        }, 350);
+        handler.postDelayed(() -> hideFragment("equalizer"),350);
 
         playerContainer.setVisibility(View.VISIBLE);
         if (PlayerFragment.mVisualizerView != null)
@@ -2014,20 +1944,17 @@ public class HomeActivity extends AppCompatActivity
         isPlayerTransitioning = true;
 
         playerContainer.animate()
-                .setDuration(300)
-                .translationX(0)
-                .withEndAction(new Runnable() {
-                    @Override
-                    public void run() {
-                        isPlayerTransitioning = false;
-                        if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
-                            playerFragment.snappyRecyclerView.setTransparency();
-                        }
-                        if (!playerFragment.isLyricsVisible) {
-                            PlayerFragment.mVisualizerView.setVisibility(View.VISIBLE);
-                        }
-                    }
-                });
+            .setDuration(300)
+            .translationX(0)
+            .withEndAction(() -> {
+                isPlayerTransitioning = false;
+                if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
+                    playerFragment.snappyRecyclerView.setTransparency();
+                }
+                if (!playerFragment.isLyricsVisible) {
+                    PlayerFragment.mVisualizerView.setVisibility(View.VISIBLE);
+                }
+            });
     }
 
     public void hidePlayer3() {
@@ -2038,17 +1965,12 @@ public class HomeActivity extends AppCompatActivity
             PlayerFragment.mVisualizerView.setVisibility(View.INVISIBLE);
 
         final Handler handler2 = new Handler();
-        handler2.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                playerContainer.animate()
-                        .setInterpolator(new AccelerateDecelerateInterpolator())
-                        .translationX(-1 * playerContainer.getWidth());
-            }
-        }, 50);
+        handler2.postDelayed(() ->
+            playerContainer.animate()
+                .setInterpolator(new AccelerateDecelerateInterpolator())
+                .translationX(-1 * playerContainer.getWidth()),50);
 
         playerContainer.setVisibility(View.VISIBLE);
-
     }
 
     public void showPlayer3() {
@@ -2063,28 +1985,18 @@ public class HomeActivity extends AppCompatActivity
         isPlayerTransitioning = true;
 
         playerContainer.animate()
-                .setDuration(300)
-                .translationX(0)
-                .withEndAction(new Runnable() {
-                    @Override
-                    public void run() {
-                        isPlayerTransitioning = false;
-                        if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
-                            playerFragment.snappyRecyclerView.setTransparency();
-                        }
-                        if (!playerFragment.isLyricsVisible) {
-                            PlayerFragment.mVisualizerView.setVisibility(View.VISIBLE);
-                        }
-                    }
-                });
+            .setDuration(300)
+            .translationX(0)
+            .withEndAction(() -> {
+                isPlayerTransitioning = false;
+                if (playerFragment != null && playerFragment.snappyRecyclerView != null) {
+                    playerFragment.snappyRecyclerView.setTransparency(); }
+                if (!playerFragment.isLyricsVisible) {
+                    PlayerFragment.mVisualizerView.setVisibility(View.VISIBLE); }
+            });
 
         final Handler handler2 = new Handler();
-        handler2.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                hideFragment("queue");
-            }
-        }, 400);
+        handler2.postDelayed(() -> hideFragment("queue"), 400);
     }
 
     /*
@@ -2365,7 +2277,6 @@ public class HomeActivity extends AppCompatActivity
                 }
             }
         }
-
     }
 
     @Override
@@ -2424,7 +2335,6 @@ public class HomeActivity extends AppCompatActivity
         //Adds Haptic Feedback(Vibration) on entering and exiting full screen mode of video player
         View view = findViewById(R.id.root_view);
         view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-
 
         if (isFullScreenEnabled) {
             Toast.makeText(this, "Long Press to Exit", Toast.LENGTH_SHORT).show();
@@ -2713,28 +2623,25 @@ public class HomeActivity extends AppCompatActivity
             showPlayer3();
 
         final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                queueCurrentIndex = position;
-                UnifiedTrack ut = queue.getQueue().get(position);
-                if (ut.getType()) {
-                    LocalTrack track = ut.getLocalTrack();
-                    localSelectedTrack = track;
-                    streamSelected = false;
-                    localSelected = true;
-                    queueCall = false;
-                    isReloaded = false;
-                    onLocalTrackSelected(position);
-                } else {
-                    Track track = ut.getStreamTrack();
-                    selectedTrack = track;
-                    streamSelected = true;
-                    localSelected = false;
-                    queueCall = false;
-                    isReloaded = false;
-                    onTrackSelected(position);
-                }
+        handler.postDelayed(() -> {
+            queueCurrentIndex = position;
+            UnifiedTrack ut = queue.getQueue().get(position);
+            if (ut.getType()) {
+                LocalTrack track = ut.getLocalTrack();
+                localSelectedTrack = track;
+                streamSelected = false;
+                localSelected = true;
+                queueCall = false;
+                isReloaded = false;
+                onLocalTrackSelected(position);
+            } else {
+                Track track = ut.getStreamTrack();
+                selectedTrack = track;
+                streamSelected = true;
+                localSelected = false;
+                queueCall = false;
+                isReloaded = false;
+                onTrackSelected(position);
             }
         }, 500);
     }
@@ -3681,66 +3588,49 @@ public class HomeActivity extends AppCompatActivity
             timerSetText.setVisibility(View.GONE);
         }
 
-        removerBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isSleepTimerEnabled = false;
-                isSleepTimerTimeout = false;
-                timerTimeOutDuration = 0;
-                timerSetTime = 0;
-                sleepHandler.removeCallbacksAndMessages(null);
-                Toast.makeText(ctx, "Timer removed", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }
+        removerBtn.setOnClickListener((View v) -> {
+            isSleepTimerEnabled = false;
+            isSleepTimerTimeout = false;
+            timerTimeOutDuration = 0;
+            timerSetTime = 0;
+            sleepHandler.removeCallbacksAndMessages(null);
+            Toast.makeText(ctx, "Timer removed", Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
         });
 
-        setBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isSleepTimerEnabled = true;
-                int minutes = Integer.parseInt(wheelPicker.getItems().get(wheelPicker.getSelectedPosition()));
-                timerTimeOutDuration = minutes;
-                timerSetTime = System.currentTimeMillis();
-                sleepHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        isSleepTimerTimeout = true;
-                        if (PlayerFragment.mMediaPlayer == null || !PlayerFragment.mMediaPlayer.isPlaying()) {
-                            main.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(ctx, "Sleep timer timed out, closing app", Toast.LENGTH_SHORT).show();
-                                    if (playerFragment != null && playerFragment.timer != null)
-                                        playerFragment.timer.cancel();
-                                    notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                                    try {
-                                        notificationManager.cancel(1);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    } finally {
-                                        finish();
-                                    }
-                                }
-                            });
+        setBtn.setOnClickListener((View v) -> {
+            isSleepTimerEnabled = true;
+            int minutes = Integer.parseInt(wheelPicker.getItems().get(wheelPicker.getSelectedPosition()));
+            timerTimeOutDuration = minutes;
+            timerSetTime = System.currentTimeMillis();
+            sleepHandler.postDelayed(() -> {
+                isSleepTimerTimeout = true;
+                if (PlayerFragment.mMediaPlayer == null || !PlayerFragment.mMediaPlayer.isPlaying()) {
+                    main.runOnUiThread(() -> {
+                        Toast.makeText(ctx, "Sleep timer timed out, closing app", Toast.LENGTH_SHORT).show();
+                        if (playerFragment != null && playerFragment.timer != null)
+                            playerFragment.timer.cancel();
+                        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                        try {
+                            notificationManager.cancel(1);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        } finally {
+                            finish();
                         }
-                    }
-                }, minutes * 60 * 1000);
-                Toast.makeText(ctx, "Timer set for " + minutes + " minutes", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }
+                    });
+                }
+            }, minutes * 60 * 1000);
+            Toast.makeText(ctx, "Timer set for " + minutes + " minutes", Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
         });
 
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isSleepTimerEnabled = false;
-                isSleepTimerTimeout = false;
-                dialog.dismiss();
-            }
+        cancelBtn.setOnClickListener((View v) -> {
+            isSleepTimerEnabled = false;
+            isSleepTimerTimeout = false;
+            dialog.dismiss();
         });
-
         dialog.show();
-
     }
 
     public void newPlaylistNameDialog() {
@@ -3821,42 +3711,37 @@ public class HomeActivity extends AppCompatActivity
         newName.setText(oldName);
         btn.setBackgroundColor(themeColor);
 
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean isNameRepeat = false;
-                if (newName.getText().toString().trim().equals("")) {
-                    newName.setError("Enter Playlist Name!");
-                } else {
-                    for (int i = 0; i < allPlaylists.getPlaylists().size(); i++) {
-                        if (newName.getText().toString().equals(allPlaylists.getPlaylists().get(i).getPlaylistName())) {
-                            isNameRepeat = true;
-                            newName.setError("Playlist with same name exists!");
-                            break;
-                        }
+        btn.setOnClickListener((View v) -> {
+            boolean isNameRepeat = false;
+            if (newName.getText().toString().trim().equals("")) {
+                newName.setError("Enter Playlist Name!");
+            } else {
+                for (int i = 0; i < allPlaylists.getPlaylists().size(); i++) {
+                    if (newName.getText().toString().equals(allPlaylists.getPlaylists().get(i).getPlaylistName())) {
+                        isNameRepeat = true;
+                        newName.setError("Playlist with same name exists!");
+                        break;
                     }
-                    if (!isNameRepeat) {
-                        allPlaylists.getPlaylists().get(renamePlaylistNumber).setPlaylistName(newName.getText().toString());
-                        if (pAdapter != null) {
-                            pAdapter.notifyItemChanged(renamePlaylistNumber);
-                        }
-                        AllPlaylistsFragment plFrag = (AllPlaylistsFragment) fragMan.findFragmentByTag("allPlaylists");
-                        if (plFrag != null) {
-                            plFrag.itemChanged(renamePlaylistNumber);
-                        }
-                        if (isPlaylistVisible) {
-                            ViewPlaylistFragment vplFragment = (ViewPlaylistFragment) fragMan.findFragmentByTag("playlist");
-                            vplFragment.updateViewPlaylistFragment();
-                        }
-                        new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                        dialog.dismiss();
+                }
+                if (!isNameRepeat) {
+                    allPlaylists.getPlaylists().get(renamePlaylistNumber).setPlaylistName(newName.getText().toString());
+                    if (pAdapter != null) {
+                        pAdapter.notifyItemChanged(renamePlaylistNumber);
                     }
+                    AllPlaylistsFragment plFrag = (AllPlaylistsFragment) fragMan.findFragmentByTag("allPlaylists");
+                    if (plFrag != null) {
+                        plFrag.itemChanged(renamePlaylistNumber);
+                    }
+                    if (isPlaylistVisible) {
+                        ViewPlaylistFragment vplFragment = (ViewPlaylistFragment) fragMan.findFragmentByTag("playlist");
+                        vplFragment.updateViewPlaylistFragment();
+                    }
+                    new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    dialog.dismiss();
                 }
             }
         });
-
         dialog.show();
-
     }
 
     public void showAddToPlaylistDialog(final UnifiedTrack track) {
@@ -3869,31 +3754,28 @@ public class HomeActivity extends AppCompatActivity
         if (allPlaylists.getPlaylists() != null && allPlaylists.getPlaylists().size() != 0) {
             adapter = new AddToPlaylistAdapter(allPlaylists.getPlaylists(), ctx);
             lv.setAdapter(adapter);
-            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Playlist temp = allPlaylists.getPlaylists().get(position);
-                    boolean isRepeat = false;
-                    for (UnifiedTrack ut : temp.getSongList()) {
-                        if (track.getType() && ut.getType() && track.getLocalTrack().getTitle().equals(ut.getLocalTrack().getTitle())) {
-                            isRepeat = true;
-                            break;
-                        } else if (!track.getType() && !ut.getType() && track.getStreamTrack().getTitle().equals(ut.getStreamTrack().getTitle())) {
-                            isRepeat = true;
-                            break;
-                        }
+            lv.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
+                Playlist temp = allPlaylists.getPlaylists().get(position);
+                boolean isRepeat = false;
+                for (UnifiedTrack ut : temp.getSongList()) {
+                    if (track.getType() && ut.getType() && track.getLocalTrack().getTitle().equals(ut.getLocalTrack().getTitle())) {
+                        isRepeat = true;
+                        break;
+                    } else if (!track.getType() && !ut.getType() && track.getStreamTrack().getTitle().equals(ut.getStreamTrack().getTitle())) {
+                        isRepeat = true;
+                        break;
                     }
-                    if (!isRepeat) {
-                        temp.addSong(track);
-                        playlistsRecycler.setVisibility(View.VISIBLE);
-                        playlistNothingText.setVisibility(View.INVISIBLE);
-                        pAdapter.notifyDataSetChanged();
-                        Toast.makeText(ctx, "Added to Playlist : " + temp.getPlaylistName(), Toast.LENGTH_SHORT).show();
-                        new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                        dialog.dismiss();
-                    } else {
-                        Toast.makeText(ctx, "Song already present in Playlist", Toast.LENGTH_SHORT).show();
-                    }
+                }
+                if (!isRepeat) {
+                    temp.addSong(track);
+                    playlistsRecycler.setVisibility(View.VISIBLE);
+                    playlistNothingText.setVisibility(View.INVISIBLE);
+                    pAdapter.notifyDataSetChanged();
+                    Toast.makeText(ctx, "Added to Playlist : " + temp.getPlaylistName(), Toast.LENGTH_SHORT).show();
+                    new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    dialog.dismiss();
+                } else {
+                    Toast.makeText(ctx, "Song already present in Playlist", Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
@@ -3904,35 +3786,31 @@ public class HomeActivity extends AppCompatActivity
         final EditText text = dialog.findViewById(R.id.new_playlist_name);
         ImageView image = dialog.findViewById(R.id.confirm_button);
         // if button is clicked, close the custom dialog
-        image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean isNameRepeat = false;
-                if (text.getText().toString().trim().equals("")) {
-                    text.setError("Enter Playlist Name!");
-                } else {
-                    for (int i = 0; i < allPlaylists.getPlaylists().size(); i++) {
-                        if (text.getText().toString().equals(allPlaylists.getPlaylists().get(i).getPlaylistName())) {
-                            isNameRepeat = true;
-                            text.setError("Playlist with same name exists!");
-                            break;
-                        }
+        image.setOnClickListener((View v) -> {
+            boolean isNameRepeat = false;
+            if (text.getText().toString().trim().equals("")) {
+                text.setError("Enter Playlist Name!");
+            } else {
+                for (int i = 0; i < allPlaylists.getPlaylists().size(); i++) {
+                    if (text.getText().toString().equals(allPlaylists.getPlaylists().get(i).getPlaylistName())) {
+                        isNameRepeat = true;
+                        text.setError("Playlist with same name exists!");
+                        break;
                     }
-                    if (!isNameRepeat) {
-                        List<UnifiedTrack> l = new ArrayList<UnifiedTrack>();
-                        l.add(track);
-                        Playlist pl = new Playlist(l, text.getText().toString().trim());
-                        allPlaylists.addPlaylist(pl);
-                        playlistsRecycler.setVisibility(View.VISIBLE);
-                        playlistNothingText.setVisibility(View.INVISIBLE);
-                        pAdapter.notifyDataSetChanged();
-                        dialog.dismiss();
-                        new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                    }
+                }
+                if (!isNameRepeat) {
+                    List<UnifiedTrack> l = new ArrayList<UnifiedTrack>();
+                    l.add(track);
+                    Playlist pl = new Playlist(l, text.getText().toString().trim());
+                    allPlaylists.addPlaylist(pl);
+                    playlistsRecycler.setVisibility(View.VISIBLE);
+                    playlistNothingText.setVisibility(View.INVISIBLE);
+                    pAdapter.notifyDataSetChanged();
+                    dialog.dismiss();
+                    new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 }
             }
         });
-
         dialog.show();
     }
 
@@ -3948,33 +3826,30 @@ public class HomeActivity extends AppCompatActivity
         final EditText text = dialog.findViewById(R.id.new_playlist_name);
         ImageView image = dialog.findViewById(R.id.confirm_button);
         // if button is clicked, close the custom dialog
-        image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean isNameRepeat = false;
-                if (text.getText().toString().trim().equals("")) {
-                    text.setError("Enter Playlist Name!");
-                } else {
-                    for (int i = 0; i < allPlaylists.getPlaylists().size(); i++) {
-                        if (text.getText().toString().equals(allPlaylists.getPlaylists().get(i).getPlaylistName())) {
-                            isNameRepeat = true;
-                            text.setError("Playlist with same name exists!");
-                            break;
-                        }
+        image.setOnClickListener((View v) -> {
+            boolean isNameRepeat = false;
+            if (text.getText().toString().trim().equals("")) {
+                text.setError("Enter Playlist Name!");
+            } else {
+                for (int i = 0; i < allPlaylists.getPlaylists().size(); i++) {
+                    if (text.getText().toString().equals(allPlaylists.getPlaylists().get(i).getPlaylistName())) {
+                        isNameRepeat = true;
+                        text.setError("Playlist with same name exists!");
+                        break;
                     }
-                    if (!isNameRepeat) {
-                        Playlist pl = new Playlist(text.getText().toString());
-                        for (int i = 0; i < queue.getQueue().size(); i++) {
-                            pl.getSongList().add(queue.getQueue().get(i));
-                        }
-                        allPlaylists.addPlaylist(pl);
-                        playlistsRecycler.setVisibility(View.VISIBLE);
-                        playlistNothingText.setVisibility(View.INVISIBLE);
-                        pAdapter.notifyDataSetChanged();
-                        new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                        Toast.makeText(HomeActivity.this, "Queue saved!", Toast.LENGTH_SHORT).show();
-                        dialog.dismiss();
+                }
+                if (!isNameRepeat) {
+                    Playlist pl = new Playlist(text.getText().toString());
+                    for (int i = 0; i < queue.getQueue().size(); i++) {
+                        pl.getSongList().add(queue.getQueue().get(i));
                     }
+                    allPlaylists.addPlaylist(pl);
+                    playlistsRecycler.setVisibility(View.VISIBLE);
+                    playlistNothingText.setVisibility(View.INVISIBLE);
+                    pAdapter.notifyDataSetChanged();
+                    new SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    Toast.makeText(HomeActivity.this, "Queue saved!", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
                 }
             }
         });
@@ -4018,7 +3893,6 @@ public class HomeActivity extends AppCompatActivity
                     String json2 = gson.toJson(allPlaylists);
                     prefsEditor.putString("allPlaylists", json2);
                 } catch (Exception e) {
-
                 }
                 isSavePlaylistsRunning = false;
             }
@@ -4047,7 +3921,6 @@ public class HomeActivity extends AppCompatActivity
         navigationView.setCheckedItem(R.id.nav_home);
 
         setTitle("Music DNA");
-
     }
 
     public void showNotification() {
@@ -4079,10 +3952,8 @@ public class HomeActivity extends AppCompatActivity
                 }
             }
         }
-
         if (!isRepeat)
             favouriteTracks.getFavourite().add(ut);
-
     }
 
     public class SaveData extends AsyncTask<Void, Void, Void> {
@@ -4094,7 +3965,6 @@ public class HomeActivity extends AppCompatActivity
                 String json6 = gson.toJson(queueCurrentIndex);
                 prefsEditor.putString("queueCurrentIndex", json6);
             } catch (Exception e) {
-
             }
             return null;
         }
@@ -4126,7 +3996,6 @@ public class HomeActivity extends AppCompatActivity
                     String json4 = gson.toJson(recentlyPlayed);
                     prefsEditor.putString("recentlyPlayed", json4);
                 } catch (Exception e) {
-
                 }
                 isSaveRecentsRunning = false;
             }
@@ -4144,7 +4013,6 @@ public class HomeActivity extends AppCompatActivity
                     String json5 = gson.toJson(favouriteTracks);
                     prefsEditor.putString("favouriteTracks", json5);
                 } catch (Exception e) {
-
                 }
                 isSaveFavouritesRunning = false;
             }
@@ -4162,7 +4030,6 @@ public class HomeActivity extends AppCompatActivity
                     String json8 = gson.toJson(settings);
                     prefsEditor.putString("settings", json8);
                 } catch (Exception e) {
-
                 }
                 isSaveSettingsRunning = false;
             }
@@ -4180,7 +4047,6 @@ public class HomeActivity extends AppCompatActivity
                     String json = gson.toJson(savedDNAs);
                     prefsEditor.putString("savedDNAs", json);
                 } catch (Exception e) {
-
                 }
                 isSaveDNAsRunning = false;
             }
@@ -4200,7 +4066,6 @@ public class HomeActivity extends AppCompatActivity
                     String json6 = gson.toJson(queueCurrentIndex);
                     prefsEditor.putString("queueCurrentIndex", json6);
                 } catch (Exception e) {
-
                 }
                 isSaveQueueRunning = false;
             }
@@ -4220,10 +4085,7 @@ public class HomeActivity extends AppCompatActivity
         protected void onPostExecute(String aVoid) {
             super.onPostExecute(aVoid);
             progress.dismiss();
-            main.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-
+            main.runOnUiThread(() -> {
                     if (settings == null) {
                         settings = new Settings();
                     }
@@ -4324,7 +4186,7 @@ public class HomeActivity extends AppCompatActivity
 
                     recentsRecycler.addOnItemTouchListener(new ClickItemTouchListener(recentsRecycler) {
                         @Override
-                    public boolean onClick(RecyclerView parent, View view, final int position, long id) {
+                        public boolean onClick(RecyclerView parent, View view, final int position, long id) {
                             UnifiedTrack ut = continuePlayingList.get(position);
                             boolean isRepeat = false;
                             int pos = 0;
@@ -4433,9 +4295,7 @@ public class HomeActivity extends AppCompatActivity
                             PopupMenu popup = new PopupMenu(ctx, view);
                             popup.getMenuInflater().inflate(R.menu.playlist_popup, popup.getMenu());
 
-                            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                                @Override
-                                public boolean onMenuItemClick(MenuItem item) {
+                            popup.setOnMenuItemClickListener((MenuItem item) -> {
                                     if (item.getTitle().equals("Play")) {
 
                                         tempPlaylist = allPlaylists.getPlaylists().get(position);
@@ -4467,7 +4327,6 @@ public class HomeActivity extends AppCompatActivity
                                         renamePlaylistDialog(allPlaylists.getPlaylists().get(position).getPlaylistName());
                                     }
                                     return true;
-                                }
                             });
                             popup.show();
                             return true;
@@ -4603,8 +4462,6 @@ public class HomeActivity extends AppCompatActivity
                         playlistsRecycler.setVisibility(View.VISIBLE);
                         playlistNothingText.setVisibility(View.INVISIBLE);
                     }
-
-                }
             });
         }
     }
@@ -4619,7 +4476,6 @@ public class HomeActivity extends AppCompatActivity
                     String json2 = gson.toJson(equalizerModel);
                     prefsEditor.putString("equalizer", json2);
                 } catch (Exception e) {
-
                 }
                 isSaveEqualizerRunning = false;
             }
@@ -4841,18 +4697,15 @@ public class HomeActivity extends AppCompatActivity
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            main.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    PlayerFragment.mVisualizerView.updateVisualizer(mBytes);
-                    if (VisualizerView.bmp != null) {
-                        if (navImageView != null) {
-                            try {
-                                Bitmap croppedBmp = Bitmap.createBitmap(VisualizerView.bmp, 0, (int) (75 * ratio), screen_width, screen_width);
-                                navImageView.setImageBitmap(croppedBmp);
-                            } catch (Exception | OutOfMemoryError e) {
-                                e.printStackTrace();
-                            }
+            main.runOnUiThread(() -> {
+                PlayerFragment.mVisualizerView.updateVisualizer(mBytes);
+                if (VisualizerView.bmp != null) {
+                    if (navImageView != null) {
+                        try {
+                            Bitmap croppedBmp = Bitmap.createBitmap(VisualizerView.bmp, 0, (int) (75 * ratio), screen_width, screen_width);
+                            navImageView.setImageBitmap(croppedBmp);
+                        } catch (Exception | OutOfMemoryError e) {
+                            e.printStackTrace();
                         }
                     }
                 }

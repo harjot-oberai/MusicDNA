@@ -23,13 +23,11 @@ public class CustomLinearGradient extends View {
 
     public CustomLinearGradient(Context context) {
         super(context);
-        init();
-    }
+        init(); }
 
     public CustomLinearGradient(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
-    }
+        init(); }
 
     public CustomLinearGradient(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -44,17 +42,11 @@ public class CustomLinearGradient extends View {
         endColor = Color.parseColor("#FF111111");
     }
 
-    public void setAlpha(int alpha) {
-        this.alpha = alpha;
-    }
+    public void setAlpha(int alpha) { this.alpha = alpha; }
 
-    public void setStartColor(int color) {
-        startColor = color;
-    }
+    public void setStartColor(int color) { startColor = color; }
 
-    void setEndColor(int color) {
-        endColor = color;
-    }
+    void setEndColor(int color) { endColor = color; }
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -62,7 +54,7 @@ public class CustomLinearGradient extends View {
         startColor = Color.argb(alpha, Color.red(HomeActivity.themeColor), Color.green(HomeActivity.themeColor), Color.blue(HomeActivity.themeColor));
         midColor = Color.parseColor("#88111111");
         endColor = Color.parseColor("#FF111111");
-//        paint.setShader(new LinearGradient(0, 0, 0, getHeight(), new int[]{startColor, midColor, endColor}, new float[]{0.0f, 0.35f, 1.0f}, Shader.TileMode.MIRROR));
+        //paint.setShader(new LinearGradient(0, 0, 0, getHeight(), new int[]{startColor, midColor, endColor}, new float[]{0.0f, 0.35f, 1.0f}, Shader.TileMode.MIRROR));
         paint.setShader(new LinearGradient(0, 0, 0, getHeight(), startColor, endColor, Shader.TileMode.CLAMP));
         canvas.drawPaint(paint);
     }

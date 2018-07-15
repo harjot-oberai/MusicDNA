@@ -15,6 +15,6 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
--dontwarn okhttp3.internal.**
--dontwarn retrofit2.**
+-keep class * extends okhttp3.internal.**
+-keep class * extends retrofit2.** { *; }
 -keeppackagenames org.jsoup.nodes

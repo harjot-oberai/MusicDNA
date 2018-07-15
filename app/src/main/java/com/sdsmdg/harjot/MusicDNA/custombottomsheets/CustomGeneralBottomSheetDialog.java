@@ -42,17 +42,11 @@ public class CustomGeneralBottomSheetDialog extends BottomSheetDialogFragment im
         imgLoader = new ImageLoader(activity);
     }
 
-    public void setPosition(int pos) {
-        position = pos;
-    }
+    public void setPosition(int pos) { position = pos; }
 
-    public void setTrack(UnifiedTrack generalTrack) {
-        this.generalTrack = generalTrack;
-    }
+    public void setTrack(UnifiedTrack generalTrack) { this.generalTrack = generalTrack; }
 
-    public void setFragment(String fragment) {
-        this.fragment = fragment;
-    }
+    public void setFragment(String fragment) { this.fragment = fragment; }
 
     @Nullable
     @Override
@@ -89,7 +83,6 @@ public class CustomGeneralBottomSheetDialog extends BottomSheetDialogFragment im
         addToPlaylistText.setOnClickListener(this);
         addToFavouriteText = view.findViewById(R.id.general_song_bottom_sheet_add_to_fav_wrapper);
         addToFavouriteText.setOnClickListener(this);
-
     }
 
     @Override

@@ -100,12 +100,7 @@ public class EqualizerFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         backBtn = view.findViewById(R.id.equalizer_back_btn);
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });
+        backBtn.setOnClickListener((View v) -> getActivity().onBackPressed());
 
         fragTitle = view.findViewById(R.id.equalizer_fragment_title);
         if (SplashActivity.tf4 != null)
@@ -113,20 +108,11 @@ public class EqualizerFragment extends Fragment {
 
         equalizerSwitch = view.findViewById(R.id.equalizer_switch);
         equalizerSwitch.setChecked(HomeActivity.isEqualizerEnabled);
-        equalizerSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mCallback.onCheckChanged(isChecked);
-            }
-        });
+        equalizerSwitch.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked) ->
+            mCallback.onCheckChanged(isChecked));
 
         spinnerDropDownIcon = view.findViewById(R.id.spinner_dropdown_icon);
-        spinnerDropDownIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                presetSpinner.performClick();
-            }
-        });
+        spinnerDropDownIcon.setOnClickListener((View v) -> presetSpinner.performClick());
 
         presetSpinner = view.findViewById(R.id.equalizer_preset_spinner);
 
@@ -200,31 +186,25 @@ public class EqualizerFragment extends Fragment {
             }
         }
 
-        bassController.setOnProgressChangedListener(new AnalogController.onProgressChangedListener() {
-            @Override
-            public void onProgressChanged(int progress) {
-                HomeActivity.bassStrength = (short) (((float) 1000 / 19) * (progress));
-                try {
-                    PlayerFragment.bassBoost.setStrength(HomeActivity.bassStrength);
-                    HomeActivity.equalizerModel.setBassStrength(HomeActivity.bassStrength);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        bassController.setOnProgressChangedListener((int progress) -> {
+            HomeActivity.bassStrength = (short) (((float) 1000 / 19) * (progress));
+            try {
+                PlayerFragment.bassBoost.setStrength(HomeActivity.bassStrength);
+                HomeActivity.equalizerModel.setBassStrength(HomeActivity.bassStrength);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
 
-        reverbController.setOnProgressChangedListener(new AnalogController.onProgressChangedListener() {
-            @Override
-            public void onProgressChanged(int progress) {
-                HomeActivity.reverbPreset = (short) ((progress * 6) / 19);
-                HomeActivity.equalizerModel.setReverbPreset(HomeActivity.reverbPreset);
-                try {
-                    PlayerFragment.presetReverb.setPreset(HomeActivity.reverbPreset);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                y = progress;
+        reverbController.setOnProgressChangedListener((int progress) -> {
+            HomeActivity.reverbPreset = (short) ((progress * 6) / 19);
+            HomeActivity.equalizerModel.setReverbPreset(HomeActivity.reverbPreset);
+            try {
+                PlayerFragment.presetReverb.setPreset(HomeActivity.reverbPreset);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+            y = progress;
         });
 
         mLinearLayout = view.findViewById(R.id.equalizerContainer);
@@ -245,8 +225,8 @@ public class EqualizerFragment extends Fragment {
             final short equalizerBandIndex = i;
             final TextView frequencyHeaderTextView = new TextView(getContext());
             frequencyHeaderTextView.setLayoutParams(new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
             ));
             frequencyHeaderTextView.setGravity(Gravity.CENTER_HORIZONTAL);
             frequencyHeaderTextView.setTextColor(Color.parseColor("#FFFFFF"));
@@ -257,23 +237,23 @@ public class EqualizerFragment extends Fragment {
 
             TextView lowerEqualizerBandLevelTextView = new TextView(getContext());
             lowerEqualizerBandLevelTextView.setLayoutParams(new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
             ));
             lowerEqualizerBandLevelTextView.setTextColor(Color.parseColor("#FFFFFF"));
             lowerEqualizerBandLevelTextView.setText((lowerEqualizerBandLevel / 100) + "dB");
 
             TextView upperEqualizerBandLevelTextView = new TextView(getContext());
             lowerEqualizerBandLevelTextView.setLayoutParams(new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
             ));
             upperEqualizerBandLevelTextView.setTextColor(Color.parseColor("#FFFFFF"));
             upperEqualizerBandLevelTextView.setText((upperEqualizerBandLevel / 100) + "dB");
 
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
             );
             layoutParams.weight = 1;
 
@@ -343,10 +323,8 @@ public class EqualizerFragment extends Fragment {
 
                 @Override
                 public void onStopTrackingTouch(SeekBar seekBar) {
-
                 }
             });
-
         }
 
         equalizeSound();
@@ -375,16 +353,16 @@ public class EqualizerFragment extends Fragment {
         mEndButton.setTextColor(Color.WHITE);
 
         showCase = new ShowcaseView.Builder(getActivity())
-                .blockAllTouches()
-                .singleShot(4)
-                .setStyle(R.style.CustomShowcaseTheme)
-                .useDecorViewAsParent()
-                .replaceEndButton(mEndButton)
-                .setContentTitlePaint(HomeActivity.tp)
-                .setTarget(new ViewTarget(R.id.showcase_view_equalizer, getActivity()))
-                .setContentTitle("Presets")
-                .setContentText("Use one of the available presets")
-                .build();
+            .blockAllTouches()
+            .singleShot(4)
+            .setStyle(R.style.CustomShowcaseTheme)
+            .useDecorViewAsParent()
+            .replaceEndButton(mEndButton)
+            .setContentTitlePaint(HomeActivity.tp)
+            .setTarget(new ViewTarget(R.id.showcase_view_equalizer, getActivity()))
+            .setContentTitle("Presets")
+            .setContentText("Use one of the available presets")
+            .build();
         showCase.setButtonText("Next");
         showCase.setButtonPosition(HomeActivity.lps);
         showCase.overrideButtonClick(new View.OnClickListener() {
@@ -413,16 +391,14 @@ public class EqualizerFragment extends Fragment {
                         break;
                 }
             }
-
         });
-
     }
 
     public void equalizeSound() {
         ArrayList<String> equalizerPresetNames = new ArrayList<>();
         ArrayAdapter<String> equalizerPresetSpinnerAdapter = new ArrayAdapter<>(getContext(),
-                R.layout.spinner_item,
-                equalizerPresetNames);
+            R.layout.spinner_item,
+            equalizerPresetNames);
         equalizerPresetSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         equalizerPresetNames.add("Custom");
 
@@ -465,7 +441,6 @@ public class EqualizerFragment extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
     }
@@ -484,16 +459,9 @@ public class EqualizerFragment extends Fragment {
         refWatcher.watch(this);
     }
 
-    public boolean isShowcaseVisible() {
-        return (showCase != null && showCase.isShowing());
-    }
+    public boolean isShowcaseVisible() { return (showCase != null && showCase.isShowing()); }
 
-    public void hideShowcase() {
-        showCase.hide();
-    }
+    public void hideShowcase() { showCase.hide(); }
 
-    public void setBlockerVisibility(int visibility) {
-        equalizerBlocker.setVisibility(visibility);
-    }
-
+    public void setBlockerVisibility(int visibility) { equalizerBlocker.setVisibility(visibility); }
 }

@@ -38,8 +38,7 @@ import com.squareup.picasso.Picasso;
 public class FavouritesFragment extends Fragment implements
         FavouriteTrackAdapter.OnDragStartListener,
         FavouriteTrackAdapter.onEmptyListener,
-        FavouriteTrackAdapter.onMoveRemoveistener {
-
+        FavouriteTrackAdapter.onMoveRemoveListener {
 
     RecyclerView favouriteRecycler;
     FavouriteTrackAdapter fAdapter;
@@ -91,12 +90,7 @@ public class FavouritesFragment extends Fragment implements
         super.onViewCreated(view, savedInstanceState);
 
         backBtn = view.findViewById(R.id.fav_back_btn);
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });
+        backBtn.setOnClickListener((View v) -> getActivity().onBackPressed());
 
         fragIcon = view.findViewById(R.id.fav_frag_icon);
         fragIcon.setImageTintList(ColorStateList.valueOf(HomeActivity.themeColor));
@@ -106,12 +100,7 @@ public class FavouritesFragment extends Fragment implements
             fragTitle.setTypeface(SplashActivity.tf4);
 
         addToQueueIcon = view.findViewById(R.id.add_fav_to_queue_icon);
-        addToQueueIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCallback.addFavToQueue();
-            }
-        });
+        addToQueueIcon.setOnClickListener((View v) -> mCallback.addFavToQueue());
 
         backdrop = view.findViewById(R.id.fav_backdrop);
         if (HomeActivity.favouriteTracks.getFavourite().size() > 0) {
@@ -172,7 +161,6 @@ public class FavouritesFragment extends Fragment implements
 
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
             }
         });
 
@@ -182,17 +170,14 @@ public class FavouritesFragment extends Fragment implements
             playAll.show();
         }
         playAll.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));
-        playAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (HomeActivity.favouriteTracks.getFavourite().size() > 0) {
-                    HomeActivity.queue.getQueue().clear();
-                    for (int i = 0; i < HomeActivity.favouriteTracks.getFavourite().size(); i++) {
-                        HomeActivity.queue.getQueue().add(HomeActivity.favouriteTracks.getFavourite().get(i));
-                    }
-                    HomeActivity.queueCurrentIndex = 0;
-                    mCallback.onFavouritePlayAll();
+        playAll.setOnClickListener((View v) -> {
+            if (HomeActivity.favouriteTracks.getFavourite().size() > 0) {
+                HomeActivity.queue.getQueue().clear();
+                for (int i = 0; i < HomeActivity.favouriteTracks.getFavourite().size(); i++) {
+                    HomeActivity.queue.getQueue().add(HomeActivity.favouriteTracks.getFavourite().get(i));
                 }
+                HomeActivity.queueCurrentIndex = 0;
+                mCallback.onFavouritePlayAll();
             }
         });
 
@@ -218,9 +203,7 @@ public class FavouritesFragment extends Fragment implements
 
     public interface favouriteFragmentCallback {
         void onFavouriteItemClicked(int position);
-
         void onFavouritePlayAll();
-
         void addFavToQueue();
     }
 
@@ -256,12 +239,9 @@ public class FavouritesFragment extends Fragment implements
     public void onResume() {
         super.onResume();
         mLayoutManager2.scrollToPositionWithOffset(0, 0);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                playAll.animate().scaleX(1.0f).scaleY(1.0f).setDuration(300).setInterpolator(new OvershootInterpolator());
-            }
-        }, 500);
+        new Handler().postDelayed(() ->
+            playAll.animate().scaleX(1.0f).scaleY(1.0f).setDuration(300).setInterpolator(new OvershootInterpolator())
+        ,500);
     }
 
     @Override

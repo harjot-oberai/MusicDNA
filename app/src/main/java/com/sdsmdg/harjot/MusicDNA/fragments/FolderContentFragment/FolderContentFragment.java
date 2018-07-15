@@ -55,9 +55,7 @@ public class FolderContentFragment extends Fragment {
 
     public interface folderCallbackListener {
         void onFolderContentPlayAll();
-
         void onFolderContentItemClick(int position);
-
         void folderAddToQueue();
     }
 
@@ -75,9 +73,9 @@ public class FolderContentFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_folder_content, container, false);
+        Bundle savedInstanceState) {
+    // Inflate the layout for this fragment
+    return inflater.inflate(R.layout.fragment_folder_content, container, false);
     }
 
     @Override
@@ -106,20 +104,10 @@ public class FolderContentFragment extends Fragment {
         songsText.setText(HomeActivity.tempMusicFolder.getLocalTracks().size() + " " + s);
 
         backBtn = view.findViewById(R.id.folder_content_back_btn);
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });
+        backBtn.setOnClickListener((View v) -> getActivity().onBackPressed());
 
         addToQueueIcon = view.findViewById(R.id.add_folder_to_queue_icon);
-        addToQueueIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCallback.folderAddToQueue();
-            }
-        });
+        addToQueueIcon.setOnClickListener((View v) -> mCallback.folderAddToQueue());
 
         backdrop = view.findViewById(R.id.folder_backdrop);
         LocalTrack lt = HomeActivity.tempFolderContent.get(0);
@@ -171,31 +159,21 @@ public class FolderContentFragment extends Fragment {
 
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
             }
         });
 
         playAllFAB = view.findViewById(R.id.folder_play_all_fab);
         playAllFAB.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));
-        playAllFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCallback.onFolderContentPlayAll();
-            }
-        });
-
+        playAllFAB.setOnClickListener((View v) -> mCallback.onFolderContentPlayAll());
     }
 
     @Override
     public void onResume() {
         super.onResume();
         mLayoutManager2.scrollToPositionWithOffset(0, 0);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                playAllFAB.animate().scaleX(1.0f).scaleY(1.0f).setDuration(300).setInterpolator(new OvershootInterpolator());
-            }
-        }, 500);
+        new Handler().postDelayed(() ->
+            playAllFAB.animate().scaleX(1.0f).scaleY(1.0f).setDuration(300).setInterpolator(new OvershootInterpolator())
+        ,500);
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.sdsmdg.harjot.MusicDNA.fragments.AllFoldersFragment;
 
-
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -24,7 +23,6 @@ import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.models.MusicFolder;
 import com.sdsmdg.harjot.MusicDNA.utilities.CommonUtils;
 import com.squareup.leakcanary.RefWatcher;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -64,7 +62,7 @@ public class FolderFragment extends Fragment {
             mCallback = (onFolderClickedListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
-                    + " must implement OnHeadlineSelectedListener");
+                + " must implement OnHeadlineSelectedListener");
         }
     }
 
@@ -80,12 +78,7 @@ public class FolderFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         backBtn = view.findViewById(R.id.all_folder_back_btn);
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });
+        backBtn.setOnClickListener((View v) -> getActivity().onBackPressed());
 
         fragmentTitle = view.findViewById(R.id.all_folder_fragment_title);
         if (SplashActivity.tf4 != null)
@@ -123,10 +116,8 @@ public class FolderFragment extends Fragment {
 
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
             }
         });
-
     }
 
     @Override
@@ -202,5 +193,4 @@ public class FolderFragment extends Fragment {
             }
         }
     }
-
 }

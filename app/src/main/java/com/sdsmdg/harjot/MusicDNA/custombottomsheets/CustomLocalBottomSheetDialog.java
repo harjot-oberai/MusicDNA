@@ -42,17 +42,11 @@ public class CustomLocalBottomSheetDialog extends BottomSheetDialogFragment impl
         imgLoader = new ImageLoader(activity);
     }
 
-    public void setPosition(int pos) {
-        position = pos;
-    }
+    public void setPosition(int pos) { position = pos; }
 
-    public void setLocalTrack(LocalTrack localTrack) {
-        this.localTrack = localTrack;
-    }
+    public void setLocalTrack(LocalTrack localTrack) { this.localTrack = localTrack; }
 
-    public void setFragment(String frag) {
-        fragment = frag;
-    }
+    public void setFragment(String frag) { fragment = frag; }
 
     @Nullable
     @Override
@@ -87,7 +81,6 @@ public class CustomLocalBottomSheetDialog extends BottomSheetDialogFragment impl
         shareText.setOnClickListener(this);
         editText = view.findViewById(R.id.local_song_bottom_sheet_edit_wrapper);
         editText.setOnClickListener(this);
-
     }
 
     @Override

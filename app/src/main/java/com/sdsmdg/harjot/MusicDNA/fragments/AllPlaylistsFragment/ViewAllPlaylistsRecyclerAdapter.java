@@ -54,8 +54,7 @@ public class ViewAllPlaylistsRecyclerAdapter extends RecyclerView.Adapter<ViewAl
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.playlist_custom_row, parent, false);
-
+            .inflate(R.layout.playlist_custom_row, parent, false);
         return new MyViewHolder(itemView);
     }
 
@@ -97,8 +96,5 @@ public class ViewAllPlaylistsRecyclerAdapter extends RecyclerView.Adapter<ViewAl
     }
 
     @Override
-    public int getItemCount() {
-        return playlists.size();
-    }
-
+    public int getItemCount() { return playlists.size(); }
 }

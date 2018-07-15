@@ -66,5 +66,4 @@ public class LocalTracksHorizontalAdapter extends RecyclerView.Adapter<LocalTrac
     public int getItemCount() {
         return localList.size();
     }
-
 }

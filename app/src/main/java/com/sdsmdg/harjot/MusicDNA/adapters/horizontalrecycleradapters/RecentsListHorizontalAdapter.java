@@ -64,9 +64,7 @@ public class RecentsListHorizontalAdapter extends RecyclerView.Adapter<RecentsLi
     }
 
     @Override
-    public int getItemCount() {
-        return recentlyPlayed.size();
-    }
+    public int getItemCount() { return recentlyPlayed.size(); }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 

@@ -31,50 +31,20 @@ public class AnalogController extends View {
 
     String label;
 
-    public interface onProgressChangedListener {
-        void onProgressChanged(int progress);
-    }
-
-    public void setOnProgressChangedListener(onProgressChangedListener listener) {
-        mListener = listener;
-    }
-
     public AnalogController(Context context) {
         super(context);
-        init();
-    }
+        init(); }
 
     public AnalogController(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
-    }
+        init(); }
 
     public AnalogController(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
-    }
+        init(); }
 
-    void init() {
-        textPaint = new Paint();
-        textPaint.setColor(Color.WHITE);
-        textPaint.setStyle(Paint.Style.FILL);
-        textPaint.setTextSize(33 * HomeActivity.ratio);
-        textPaint.setFakeBoldText(true);
-        textPaint.setTextAlign(Paint.Align.CENTER);
-        circlePaint = new Paint();
-        circlePaint.setColor(Color.parseColor("#222222"));
-        circlePaint.setStyle(Paint.Style.FILL);
-        circlePaint2 = new Paint();
-        circlePaint2.setColor(HomeActivity.themeColor);
-//        circlePaint2.setColor(Color.parseColor("#FFA036"));
-        circlePaint2.setStyle(Paint.Style.FILL);
-        linePaint = new Paint();
-        linePaint.setColor(HomeActivity.themeColor);
-//        linePaint.setColor(Color.parseColor("#FFA036"));
-        linePaint.setStrokeWidth(7 * HomeActivity.ratio);
-        angle = "0.0";
-        label = "Label";
-    }
+    public void setOnProgressChangedListener(onProgressChangedListener listener) {
+        mListener = listener; }
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -101,7 +71,7 @@ public class AnalogController extends View {
             canvas.drawCircle(x, y, ((float) radius / 15), circlePaint2);
         }
 
-        float tmp2 = (float) deg / 24;
+        float tmp2 = deg / 24;
         float x1 = midx + (float) (radius * ((float) 2 / 5) * Math.sin(2 * Math.PI * (1.0 - tmp2)));
         float y1 = midy + (float) (radius * ((float) 2 / 5) * Math.cos(2 * Math.PI * (1.0 - tmp2)));
         float x2 = midx + (float) (radius * ((float) 3 / 5) * Math.sin(2 * Math.PI * (1.0 - tmp2)));
@@ -113,8 +83,31 @@ public class AnalogController extends View {
         canvas.drawCircle(midx, midy, radius * ((float) 11 / 15), circlePaint);
         canvas.drawText(label, midx, midy + (float) (radius * 1.1), textPaint);
         canvas.drawLine(x1, y1, x2, y2, linePaint);
-
     }
+
+    void init() {
+        textPaint = new Paint();
+        textPaint.setColor(Color.WHITE);
+        textPaint.setStyle(Paint.Style.FILL);
+        textPaint.setTextSize(33 * HomeActivity.ratio);
+        textPaint.setFakeBoldText(true);
+        textPaint.setTextAlign(Paint.Align.CENTER);
+        circlePaint = new Paint();
+        circlePaint.setColor(Color.parseColor("#222222"));
+        circlePaint.setStyle(Paint.Style.FILL);
+        circlePaint2 = new Paint();
+        circlePaint2.setColor(HomeActivity.themeColor);
+//        circlePaint2.setColor(Color.parseColor("#FFA036"));
+        circlePaint2.setStyle(Paint.Style.FILL);
+        linePaint = new Paint();
+        linePaint.setColor(HomeActivity.themeColor);
+//        linePaint.setColor(Color.parseColor("#FFA036"));
+        linePaint.setStrokeWidth(7 * HomeActivity.ratio);
+        angle = "0.0";
+        label = "Label";
+    }
+
+    public int getProgress() { return (int) (deg - 2); }
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
@@ -175,35 +168,20 @@ public class AnalogController extends View {
         return super.onTouchEvent(e);
     }
 
-    public int getProgress() {
-        return (int) (deg - 2);
-    }
+    public void setProgress(int x) { deg = x + 2; }
 
-    public void setProgress(int x) {
-        deg = x + 2;
-    }
+    public String getLabel() { return label; }
 
-    public String getLabel() {
-        return label;
-    }
+    public void setLabel(String txt) { label = txt; }
 
-    public void setLabel(String txt) {
-        label = txt;
-    }
+    public int getLineColor() { return lineColor; }
 
-    public int getLineColor() {
-        return lineColor;
-    }
+    public void setLineColor(int lineColor) { this.lineColor = lineColor; }
 
-    public void setLineColor(int lineColor) {
-        this.lineColor = lineColor;
-    }
+    public int getProgressColor() { return progressColor; }
 
-    public int getProgressColor() {
-        return progressColor;
-    }
+    public void setProgressColor(int progressColor) { this.progressColor = progressColor; }
 
-    public void setProgressColor(int progressColor) {
-        this.progressColor = progressColor;
-    }
+    public interface onProgressChangedListener {
+        void onProgressChanged(int progress); }
 }

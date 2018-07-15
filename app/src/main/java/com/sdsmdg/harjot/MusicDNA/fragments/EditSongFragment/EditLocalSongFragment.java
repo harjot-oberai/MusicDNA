@@ -71,9 +71,7 @@ public class EditLocalSongFragment extends Fragment {
 
     public interface EditFragmentCallbackListener {
         void onEditSongSave(boolean wasSaveSuccessful);
-
         void getNewBitmap();
-
         void deleteMediaStoreCache();
     }
 
@@ -90,13 +88,12 @@ public class EditLocalSongFragment extends Fragment {
             mCallback = (EditFragmentCallbackListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
-                    + " must implement OnHeadlineSelectedListener");
+                + " must implement OnHeadlineSelectedListener");
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_edit_local_song, container, false);
     }
@@ -106,12 +103,7 @@ public class EditLocalSongFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         backBtn = view.findViewById(R.id.edit_song_back_btn);
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });
+        backBtn.setOnClickListener((View v) -> getActivity().onBackPressed());
 
         fragTitle = view.findViewById(R.id.edit_song_fragment_title);
         if (SplashActivity.tf4 != null)
@@ -130,110 +122,93 @@ public class EditLocalSongFragment extends Fragment {
         artistText = view.findViewById(R.id.edit_song_artist);
         albumText = view.findViewById(R.id.edit_song_album);
 
-
         saveButton = view.findViewById(R.id.edit_song_save_button);
         saveButton.setBackgroundColor(HomeActivity.themeColor);
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (!titleText.getText().toString().trim().equals("")) {
+        saveButton.setOnClickListener((View v) -> {
+            if (!titleText.getText().toString().trim().equals("")) {
+                HomeActivity.editSong.setTitle(titleText.getText().toString().trim());
+                isTitleNotNull = true;
+            } else {
+                titleText.setError("Enter a valid Title");
+                isTitleNotNull = false;
+            }
+            if (!artistText.getText().toString().trim().equals("")) {
+                HomeActivity.editSong.setTitle(artistText.getText().toString().trim());
+                isArtistNotNull = true;
+            } else {
+                artistText.setError("Enter a valid Artist name");
+                isArtistNotNull = false;
+            }
+            if (!albumText.getText().toString().trim().equals("")) {
+                HomeActivity.editSong.setTitle(albumText.getText().toString().trim());
+                isAlbumNotNull = true;
+            } else {
+                albumText.setError("Enter a valid Album name");
+                isAlbumNotNull = false;
+            }
+            if (isTitleNotNull && isArtistNotNull && isAlbumNotNull) {
+                boolean error = false;
+                try {
+                    if (tag != null) {
+                        tag.setField(FieldKey.TITLE, titleText.getText().toString().trim());
+                        tag.setField(FieldKey.ARTIST, artistText.getText().toString().trim());
+                        tag.setField(FieldKey.ALBUM, albumText.getText().toString().trim());
+                    }
+                } catch (FieldDataInvalidException e) {
+                    error = true;
+                    e.printStackTrace();
+                }
+                try {
+                    if (id3v1Tag != null) {
+                        id3v1Tag.setField(FieldKey.TITLE, titleText.getText().toString().trim());
+                        id3v1Tag.setField(FieldKey.ARTIST, artistText.getText().toString().trim());
+                        id3v1Tag.setField(FieldKey.ALBUM, albumText.getText().toString().trim());
+                    }
+                } catch (FieldDataInvalidException e) {
+                    error = true;
+                    e.printStackTrace();
+                }
+                try {
+                    if (id3v2Tag != null) {
+                        id3v2Tag.setField(FieldKey.TITLE, titleText.getText().toString().trim());
+                        id3v2Tag.setField(FieldKey.ARTIST, artistText.getText().toString().trim());
+                        id3v2Tag.setField(FieldKey.ALBUM, albumText.getText().toString().trim());
+                    }
+                } catch (FieldDataInvalidException e) {
+                    error = true;
+                    e.printStackTrace();
+                }
+                try {
+                    if (id3v24Tag != null) {
+                        id3v24Tag.setField(FieldKey.TITLE, titleText.getText().toString().trim());
+                        id3v24Tag.setField(FieldKey.ARTIST, artistText.getText().toString().trim());
+                        id3v24Tag.setField(FieldKey.ALBUM, albumText.getText().toString().trim());
+                    }
+                } catch (FieldDataInvalidException e) {
+                    error = true;
+                    e.printStackTrace();
+                }
+                try {
+                    mp3File.commit();
+                } catch (CannotWriteException e) {
+                    error = true;
+                    e.printStackTrace();
+                }
+                if (!error) {
+                    Toast.makeText(ctx, "Saved", Toast.LENGTH_SHORT).show();
                     HomeActivity.editSong.setTitle(titleText.getText().toString().trim());
-                    isTitleNotNull = true;
-                } else {
-                    titleText.setError("Enter a valid Title");
-                    isTitleNotNull = false;
+                    HomeActivity.editSong.setArtist(artistText.getText().toString().trim());
+                    HomeActivity.editSong.setAlbum(albumText.getText().toString().trim());
                 }
-                if (!artistText.getText().toString().trim().equals("")) {
-                    HomeActivity.editSong.setTitle(artistText.getText().toString().trim());
-                    isArtistNotNull = true;
-                } else {
-                    artistText.setError("Enter a valid Artist name");
-                    isArtistNotNull = false;
-                }
-                if (!albumText.getText().toString().trim().equals("")) {
-                    HomeActivity.editSong.setTitle(albumText.getText().toString().trim());
-                    isAlbumNotNull = true;
-                } else {
-                    albumText.setError("Enter a valid Album name");
-                    isAlbumNotNull = false;
-                }
-                if (isTitleNotNull && isArtistNotNull && isAlbumNotNull) {
-
-                    boolean error = false;
-
-                    try {
-                        if (tag != null) {
-                            tag.setField(FieldKey.TITLE, titleText.getText().toString().trim());
-                            tag.setField(FieldKey.ARTIST, artistText.getText().toString().trim());
-                            tag.setField(FieldKey.ALBUM, albumText.getText().toString().trim());
-                        }
-                    } catch (FieldDataInvalidException e) {
-                        error = true;
-                        e.printStackTrace();
-                    }
-
-                    try {
-                        if (id3v1Tag != null) {
-                            id3v1Tag.setField(FieldKey.TITLE, titleText.getText().toString().trim());
-                            id3v1Tag.setField(FieldKey.ARTIST, artistText.getText().toString().trim());
-                            id3v1Tag.setField(FieldKey.ALBUM, albumText.getText().toString().trim());
-                        }
-                    } catch (FieldDataInvalidException e) {
-                        error = true;
-                        e.printStackTrace();
-                    }
-
-                    try {
-                        if (id3v2Tag != null) {
-                            id3v2Tag.setField(FieldKey.TITLE, titleText.getText().toString().trim());
-                            id3v2Tag.setField(FieldKey.ARTIST, artistText.getText().toString().trim());
-                            id3v2Tag.setField(FieldKey.ALBUM, albumText.getText().toString().trim());
-                        }
-                    } catch (FieldDataInvalidException e) {
-                        error = true;
-                        e.printStackTrace();
-                    }
-
-                    try {
-                        if (id3v24Tag != null) {
-                            id3v24Tag.setField(FieldKey.TITLE, titleText.getText().toString().trim());
-                            id3v24Tag.setField(FieldKey.ARTIST, artistText.getText().toString().trim());
-                            id3v24Tag.setField(FieldKey.ALBUM, albumText.getText().toString().trim());
-                        }
-                    } catch (FieldDataInvalidException e) {
-                        error = true;
-                        e.printStackTrace();
-                    }
-
-                    try {
-                        mp3File.commit();
-                    } catch (CannotWriteException e) {
-                        error = true;
-                        e.printStackTrace();
-                    }
-
-                    if (!error) {
-                        Toast.makeText(ctx, "Saved", Toast.LENGTH_SHORT).show();
-                        HomeActivity.editSong.setTitle(titleText.getText().toString().trim());
-                        HomeActivity.editSong.setArtist(artistText.getText().toString().trim());
-                        HomeActivity.editSong.setAlbum(albumText.getText().toString().trim());
-                    }
-
-                    mCallback.onEditSongSave(!error);
-
-                }
+                mCallback.onEditSongSave(!error);
             }
         });
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
         mp3File = null;
-
         try {
             File f = new File(HomeActivity.editSong.getPath());
             mp3File = (MP3File) AudioFileIO.read(f);
@@ -243,7 +218,6 @@ public class EditLocalSongFragment extends Fragment {
             mp3File = null;
             e.printStackTrace();
         }
-
         if (mp3File == null) {
             Toast.makeText(ctx, "Error in loading the file", Toast.LENGTH_SHORT).show();
             mCallback.onEditSongSave(false);
@@ -252,13 +226,11 @@ public class EditLocalSongFragment extends Fragment {
             Toast.makeText(ctx, "No Tags Found", Toast.LENGTH_SHORT).show();
             mCallback.onEditSongSave(false);
         }
-
         if (mp3File != null && mp3File.hasID3v2Tag()) {
             titleText.setText(HomeActivity.editSong.getTitle());
             artistText.setText(HomeActivity.editSong.getArtist());
             albumText.setText(HomeActivity.editSong.getAlbum());
         }
-
         try {
             tag = mp3File.getTag();
             id3v1Tag = mp3File.getID3v1Tag();
@@ -269,7 +241,6 @@ public class EditLocalSongFragment extends Fragment {
             Toast.makeText(ctx, "Error in finding tags", Toast.LENGTH_SHORT).show();
             mCallback.onEditSongSave(false);
         }
-
     }
 
     public Bitmap getBitmap(String url) {
@@ -311,9 +282,6 @@ public class EditLocalSongFragment extends Fragment {
 //                e.printStackTrace();
 //            }
 //        }
-//
 //        mCallback2.deleteMediaStoreCache();
-
     }
-
 }

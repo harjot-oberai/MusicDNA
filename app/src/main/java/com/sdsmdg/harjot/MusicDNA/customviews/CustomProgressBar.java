@@ -39,9 +39,7 @@ public class CustomProgressBar extends View {
         forePaint.setColor(Color.rgb(0, 128, 255));
     }
 
-    public void update() {
-        invalidate();
-    }
+    public void update() { invalidate(); }
 
     @Override
     protected void onDraw(Canvas canvas) {

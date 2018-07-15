@@ -69,6 +69,8 @@
             android:name=".notificationmanager.MediaPlayerService"
             android:stopWithTask="false" />
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="020e360fee5fdd83e6fe111174abd62efddb08fa" />
     </application>
-
 </manifest>

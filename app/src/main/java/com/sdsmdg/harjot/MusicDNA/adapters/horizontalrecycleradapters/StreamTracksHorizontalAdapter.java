@@ -78,7 +78,5 @@ public class StreamTracksHorizontalAdapter extends RecyclerView.Adapter<StreamTr
     }
 
     @Override
-    public int getItemCount() {
-        return streamList.size();
-    }
+    public int getItemCount() { return streamList.size(); }
 }

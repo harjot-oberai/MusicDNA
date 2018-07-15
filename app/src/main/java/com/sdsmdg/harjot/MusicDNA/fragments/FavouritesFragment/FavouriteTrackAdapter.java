@@ -37,26 +37,7 @@ public class FavouriteTrackAdapter extends RecyclerView.Adapter<FavouriteTrackAd
         void onDragStarted(RecyclerView.ViewHolder viewHolder);
     }
 
-    public interface onEmptyListener {
-        void onEmpty();
-    }
-
-    public interface onMoveRemoveistener {
-        void updateFavFragment();
-    }
-
-    private final OnDragStartListener mDragStartListener;
-    private onEmptyListener mCallback;
-    private onMoveRemoveistener mCallback2;
-
-    public FavouriteTrackAdapter(List<UnifiedTrack> favouriteList, FavouritesFragment favContext, Context ctx) {
-        this.mDragStartListener = favContext;
-        this.mCallback = favContext;
-        this.mCallback2 = favContext;
-        this.favouriteList = favouriteList;
-        this.ctx = ctx;
-        imgLoader = new ImageLoader(ctx);
-    }
+    private onMoveRemoveListener mCallback2;
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
@@ -78,16 +59,30 @@ public class FavouriteTrackAdapter extends RecyclerView.Adapter<FavouriteTrackAd
             holder.artist.setText("");
         }
 
-        holder.holderImg.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
-                    mDragStartListener.onDragStarted(holder);
-                }
-                return false;
+        holder.holderImg.setOnTouchListener((View v, MotionEvent event) -> {
+            if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
+                mDragStartListener.onDragStarted(holder);
             }
+            return false;
         });
     }
+
+    private final OnDragStartListener mDragStartListener;
+    private onEmptyListener mCallback;
+
+    @Override
+    public int getItemCount() { return favouriteList.size(); }
+
+    public FavouriteTrackAdapter(List<UnifiedTrack> favouriteList, FavouritesFragment favContext, Context ctx) {
+        this.mDragStartListener = favContext;
+        this.mCallback = favContext;
+        this.mCallback2 = favContext;
+        this.favouriteList = favouriteList;
+        this.ctx = ctx;
+        imgLoader = new ImageLoader(ctx);
+    }
+
+    public interface onEmptyListener { void onEmpty(); }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -96,6 +91,8 @@ public class FavouriteTrackAdapter extends RecyclerView.Adapter<FavouriteTrackAd
 
         return new MyViewHolder(itemView);
     }
+
+    public interface onMoveRemoveListener { void updateFavFragment(); }
 
     public class MyViewHolder extends RecyclerView.ViewHolder
             implements ItemTouchHelperViewHolder {
@@ -115,19 +112,10 @@ public class FavouriteTrackAdapter extends RecyclerView.Adapter<FavouriteTrackAd
         }
 
         @Override
-        public void onItemSelected() {
-            itemView.setBackgroundColor(Color.DKGRAY);
-        }
+        public void onItemSelected() { itemView.setBackgroundColor(Color.DKGRAY); }
 
         @Override
-        public void onItemClear() {
-            itemView.setBackgroundColor(Color.parseColor("#111111"));
-        }
-    }
-
-    @Override
-    public int getItemCount() {
-        return favouriteList.size();
+        public void onItemClear() { itemView.setBackgroundColor(Color.parseColor("#111111")); }
     }
 
     @Override
@@ -154,5 +142,4 @@ public class FavouriteTrackAdapter extends RecyclerView.Adapter<FavouriteTrackAd
 
         new HomeActivity.SaveFavourites().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
-
 }

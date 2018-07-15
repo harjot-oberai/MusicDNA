@@ -25,7 +25,7 @@ public abstract class ClickItemTouchListener implements OnItemTouchListener {
     }
 
     private boolean isAttachedToWindow(RecyclerView hostView) {
-        if (Build.VERSION.SDK_INT >= 19) {
+        if (Build.VERSION.SDK_INT >= 21) {
             return hostView.isAttachedToWindow();
         } else {
             return (hostView.getHandler() != null);
@@ -72,7 +72,6 @@ public abstract class ClickItemTouchListener implements OnItemTouchListener {
             if (action == MotionEvent.ACTION_UP) {
                 mGestureListener.dispatchSingleTapUpIfNeeded(event);
             }
-
             return handled;
         }
     }
@@ -81,9 +80,7 @@ public abstract class ClickItemTouchListener implements OnItemTouchListener {
         private final RecyclerView mHostView;
         private View mTargetChild;
 
-        public ItemClickGestureListener(RecyclerView hostView) {
-            mHostView = hostView;
-        }
+        public ItemClickGestureListener(RecyclerView hostView) { mHostView = hostView; }
 
         public void dispatchSingleTapUpIfNeeded(MotionEvent event) {
             // When the long press hook is called but the long press listener
@@ -124,7 +121,6 @@ public abstract class ClickItemTouchListener implements OnItemTouchListener {
 
                 mTargetChild = null;
             }
-
             return handled;
         }
 

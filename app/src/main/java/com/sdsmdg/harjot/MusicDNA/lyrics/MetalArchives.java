@@ -1,11 +1,11 @@
 package com.sdsmdg.harjot.MusicDNA.lyrics;
 
-import com.sdsmdg.harjot.MusicDNA.annotations.Reflection;
-import com.sdsmdg.harjot.MusicDNA.utilities.Net;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
+import com.sdsmdg.harjot.MusicDNA.annotations.Reflection;
+import com.sdsmdg.harjot.MusicDNA.utilities.Net;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -16,9 +16,7 @@ import static com.sdsmdg.harjot.MusicDNA.lyrics.Lyrics.POSITIVE_RESULT;
 
 @Reflection
 public class MetalArchives {
-
     public static final String domain = "metal-archives.com";
-
     @Reflection
     public static Lyrics fromMetaData(String artist, String title) {
         String baseURL = "http://www.metal-archives.com/search/ajax-advanced/searching/songs/?bandName=%s&songTitle=%s&releaseType[]=1&exactSongMatch=1&exactBandMatch=1";
@@ -49,7 +47,6 @@ public class MetalArchives {
         lyrics.setText(text);
         lyrics.setSource(domain);
         lyrics.setURL(url);
-
         return lyrics;
     }
 
@@ -58,5 +55,4 @@ public class MetalArchives {
         // TODO: support metal-archives URL
         return new Lyrics(NO_RESULT);
     }
-
 }

@@ -48,7 +48,7 @@ public class LocalTrackRecyclerAdapter extends RecyclerView.Adapter<LocalTrackRe
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_item_2, parent, false);
+            .inflate(R.layout.list_item_2, parent, false);
 
         return new MyViewHolder(itemView);
     }
@@ -62,9 +62,7 @@ public class LocalTrackRecyclerAdapter extends RecyclerView.Adapter<LocalTrackRe
     }
 
     @Override
-    public int getItemCount() {
-        return localTracks.size();
-    }
+    public int getItemCount() { return localTracks.size(); }
 
     public static Bitmap getAlbumArt(String path) {
         android.media.MediaMetadataRetriever mmr = new MediaMetadataRetriever();

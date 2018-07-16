@@ -36,24 +36,16 @@ import com.squareup.leakcanary.RefWatcher;
  * A simple {@link Fragment} subclass.
  */
 public class ViewAlbumFragment extends Fragment {
-
     LocalTrackRecyclerAdapter aslAdapter;
-
     RecyclerView rv;
-
     ImageLoader imgLoader;
     ImageView backDrop, backBtn, addToQueueIcon;
     FloatingActionButton fab;
     Context ctx;
-
     TextView fragTitle, albumTitle, albumTracksText;
-
     TextView albumDetails;
-
     HomeActivity activity;
-
     View bottomMarginLayout;
-
     albumCallbackListener mCallback;
 
     public ViewAlbumFragment() {
@@ -62,9 +54,7 @@ public class ViewAlbumFragment extends Fragment {
 
     public interface albumCallbackListener {
         void onAlbumSongClick();
-
         void onAlbumPlayAll();
-
         void addAlbumToQueue();
     }
 
@@ -78,14 +68,12 @@ public class ViewAlbumFragment extends Fragment {
             mCallback = (albumCallbackListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
-                    + " must implement OnHeadlineSelectedListener");
+                + " must implement OnHeadlineSelectedListener");
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_view_album, container, false);
     }
@@ -95,13 +83,7 @@ public class ViewAlbumFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         backBtn = view.findViewById(R.id.view_album_back_btn);
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });
-
+        backBtn.setOnClickListener((View v) -> getActivity().onBackPressed());
         backDrop = view.findViewById(R.id.album_backdrop);
         imgLoader.DisplayImage(HomeActivity.tempAlbum.getAlbumSongs().get(0).getPath(), backDrop);
 
@@ -111,23 +93,16 @@ public class ViewAlbumFragment extends Fragment {
 
         albumTitle = view.findViewById(R.id.album_title);
         albumTitle.setText(HomeActivity.tempAlbum.getName());
-
         albumTracksText = view.findViewById(R.id.album_tracks_text);
 
         addToQueueIcon = view.findViewById(R.id.add_album_to_queue_icon);
-        addToQueueIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCallback.addAlbumToQueue();
-            }
-        });
+        addToQueueIcon.setOnClickListener((View v) -> mCallback.addAlbumToQueue());
 
         bottomMarginLayout = view.findViewById(R.id.bottom_margin_layout);
         if (HomeActivity.isReloaded)
             bottomMarginLayout.getLayoutParams().height = 0;
         else
             bottomMarginLayout.getLayoutParams().height = CommonUtils.dpTopx(65, getContext());
-
 
         int tmp = HomeActivity.tempAlbum.getAlbumSongs().size();
         String details1;
@@ -149,16 +124,13 @@ public class ViewAlbumFragment extends Fragment {
         rv.setItemAnimator(new DefaultItemAnimator());
         rv.setAdapter(aslAdapter);
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                HomeActivity.queue.getQueue().clear();
-                for (int i = 0; i < HomeActivity.tempAlbum.getAlbumSongs().size(); i++) {
-                    UnifiedTrack ut = new UnifiedTrack(true, HomeActivity.tempAlbum.getAlbumSongs().get(i), null);
-                    HomeActivity.queue.getQueue().add(ut);
-                }
-                mCallback.onAlbumPlayAll();
+        fab.setOnClickListener((View v) -> {
+            HomeActivity.queue.getQueue().clear();
+            for (int i = 0; i < HomeActivity.tempAlbum.getAlbumSongs().size(); i++) {
+                UnifiedTrack ut = new UnifiedTrack(true, HomeActivity.tempAlbum.getAlbumSongs().get(i), null);
+                HomeActivity.queue.getQueue().add(ut);
             }
+            mCallback.onAlbumPlayAll();
         });
 
         rv.addOnItemTouchListener(new ClickItemTouchListener(rv) {
@@ -199,10 +171,8 @@ public class ViewAlbumFragment extends Fragment {
 
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
             }
         });
-
     }
 
     public Bitmap getBitmap(String url) {
@@ -211,7 +181,6 @@ public class ViewAlbumFragment extends Fragment {
         Bitmap bitmap = null;
 
         byte[] data = mmr.getEmbeddedPicture();
-
         if (data != null) {
             bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
             return bitmap;
@@ -223,12 +192,8 @@ public class ViewAlbumFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                fab.animate().scaleX(1.0f).scaleY(1.0f).setDuration(300).setInterpolator(new OvershootInterpolator());
-            }
-        }, 500);
+        new Handler().postDelayed(() -> fab.animate().scaleX(1.0f).scaleY(1.0f).setDuration(300).setInterpolator(new OvershootInterpolator())
+        ,500);
     }
 
     @Override

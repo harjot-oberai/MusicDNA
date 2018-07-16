@@ -95,7 +95,6 @@ public class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdap
                 return false;
             }
         });
-
     }
 
     public QueueRecyclerAdapter(List<UnifiedTrack> queue, Context ctx, OnDragStartListener listener) {
@@ -112,6 +111,9 @@ public class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdap
 
         return new MyViewHolder(itemView);
     }
+
+    @Override
+    public int getItemCount() { return queue.size(); }
 
     public class MyViewHolder extends RecyclerView.ViewHolder
             implements ItemTouchHelperViewHolder {
@@ -131,19 +133,10 @@ public class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdap
         }
 
         @Override
-        public void onItemSelected() {
-            itemView.setBackgroundColor(Color.parseColor("#333333"));
-        }
+        public void onItemSelected() { itemView.setBackgroundColor(Color.parseColor("#333333")); }
 
         @Override
-        public void onItemClear() {
-            itemView.setBackgroundColor(Color.BLACK);
-        }
-    }
-
-    @Override
-    public int getItemCount() {
-        return queue.size();
+        public void onItemClear() { itemView.setBackgroundColor(Color.BLACK); }
     }
 
     @Override

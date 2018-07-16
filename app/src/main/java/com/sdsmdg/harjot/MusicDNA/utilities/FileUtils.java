@@ -19,10 +19,8 @@ import java.io.OutputStream;
  */
 
 public class FileUtils {
-
     public static void shareLocalSong(String path, Context ctx) {
         Uri contentUri = Uri.parse("file:///" + path);
-
         if (contentUri != null) {
             Intent shareIntent = new Intent();
             shareIntent.setAction(Intent.ACTION_SEND);
@@ -63,7 +61,6 @@ public class FileUtils {
             FileOutputStream stream = new FileOutputStream(cachePath + "/" + fileName + ".png"); // overwrites this image every time
             bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
             stream.close();
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -82,15 +79,12 @@ public class FileUtils {
             shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
             ctx.startActivity(Intent.createChooser(shareIntent, "Choose an app"));
         }
-
     }
 
     public static void deleteRecursive(File fileOrDirectory) {
         if (fileOrDirectory.isDirectory())
             for (File child : fileOrDirectory.listFiles())
                 deleteRecursive(child);
-
         fileOrDirectory.delete();
     }
-
 }

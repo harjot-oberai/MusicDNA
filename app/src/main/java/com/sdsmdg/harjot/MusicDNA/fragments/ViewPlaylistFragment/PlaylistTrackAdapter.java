@@ -36,18 +36,43 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
     ImageLoader imgLoader;
     HomeActivity homeActivity;
 
-    public interface OnDragStartListener {
-        void onDragStarted(RecyclerView.ViewHolder viewHolder);
+    @Override
+    public void onBindViewHolder(final PlaylistTrackAdapter.MyViewHolder holder, int position) {
+        UnifiedTrack ut = songList.get(position);
+        if (ut.getType()) {
+            LocalTrack lt = ut.getLocalTrack();
+            imgLoader.DisplayImage(lt.getPath(), holder.art);
+            holder.title.setText(lt.getTitle());
+            holder.artist.setText(lt.getArtist());
+        } else {
+            Track t = ut.getStreamTrack();
+            Picasso.get()
+                .load(t.getArtworkURL())
+                .resize(100, 100)
+                .error(R.drawable.ic_default)
+                .placeholder(R.drawable.ic_default)
+                .into(holder.art);
+            holder.title.setText(t.getTitle());
+            holder.artist.setText("");
+        }
+
+        holder.holderImg.setOnTouchListener((View v, MotionEvent event) -> {
+            if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
+                mDragStartListener.onDragStarted(holder);
+            }
+            return false;
+        });
     }
 
-    public interface OnMoveRemoveListener {
-        void updateViewPlaylistFragment();
+    @Override
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+            .inflate(R.layout.list_item, parent, false);
+        return new MyViewHolder(itemView);
     }
 
-    public interface onPlaylistEmptyListener {
-        void onPlaylistEmpty();
-    }
-
+    @Override
+    public int getItemCount() { return songList.size(); }
     private final OnDragStartListener mDragStartListener;
     public onPlaylistEmptyListener mCallback;
     public OnMoveRemoveListener mCallback2;
@@ -56,7 +81,6 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
         this.songList = songList;
         mDragStartListener = fragContext;
         mCallback2 = fragContext;
-
         mCallback = (onPlaylistEmptyListener) ctx;
         this.ctx = ctx;
         homeActivity = (HomeActivity) ctx;
@@ -70,10 +94,8 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
         notifyItemMoved(fromPosition, toPosition);
         if (homeActivity.pAdapter != null)
             homeActivity.pAdapter.notifyDataSetChanged();
-
         homeActivity.updateAllPlaylistFragment();
         mCallback2.updateViewPlaylistFragment();
-
         new HomeActivity.SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
@@ -89,54 +111,17 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
             homeActivity.pAdapter.notifyDataSetChanged();
             mCallback2.updateViewPlaylistFragment();
         }
-
         homeActivity.updateAllPlaylistFragment();
-
         new HomeActivity.SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    @Override
-    public void onBindViewHolder(final PlaylistTrackAdapter.MyViewHolder holder, int position) {
-        UnifiedTrack ut = songList.get(position);
-        if (ut.getType()) {
-            LocalTrack lt = ut.getLocalTrack();
-            imgLoader.DisplayImage(lt.getPath(), holder.art);
-            holder.title.setText(lt.getTitle());
-            holder.artist.setText(lt.getArtist());
-        } else {
-            Track t = ut.getStreamTrack();
-            Picasso.get()
-                    .load(t.getArtworkURL())
-                    .resize(100, 100)
-                    .error(R.drawable.ic_default)
-                    .placeholder(R.drawable.ic_default)
-                    .into(holder.art);
-            holder.title.setText(t.getTitle());
-            holder.artist.setText("");
-        }
+    public interface OnDragStartListener { void onDragStarted(RecyclerView.ViewHolder viewHolder); }
 
-        holder.holderImg.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
-                    mDragStartListener.onDragStarted(holder);
-                }
-                return false;
-            }
-        });
-    }
+    public interface OnMoveRemoveListener { void updateViewPlaylistFragment(); }
 
-    @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_item, parent, false);
+    public interface onPlaylistEmptyListener { void onPlaylistEmpty(); }
 
-        return new MyViewHolder(itemView);
-    }
-
-    public class MyViewHolder extends RecyclerView.ViewHolder
-            implements ItemTouchHelperViewHolder {
-
+    public class MyViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
         ImageView art;
         TextView title, artist;
         View indicator;
@@ -150,7 +135,6 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
             indicator = view.findViewById(R.id.currently_playing_indicator);
             holderImg = view.findViewById(R.id.holderImage);
         }
-
         @Override
         public void onItemSelected() {
             itemView.setBackgroundColor(Color.parseColor("#444444"));
@@ -158,7 +142,6 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
                 itemView.setTranslationZ(12);
             }
         }
-
         @Override
         public void onItemClear() {
             itemView.setBackgroundColor(Color.parseColor("#111111"));
@@ -167,10 +150,4 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
             }
         }
     }
-
-    @Override
-    public int getItemCount() {
-        return songList.size();
-    }
-
 }

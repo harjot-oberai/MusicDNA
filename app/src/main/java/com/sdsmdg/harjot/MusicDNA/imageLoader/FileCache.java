@@ -1,6 +1,6 @@
 package com.sdsmdg.harjot.MusicDNA.imageLoader;
 
-/**
+/*
  * Created by Harjot on 06-Apr-16.
  */
 
@@ -9,9 +9,7 @@ import android.content.Context;
 import java.io.File;
 
 public class FileCache {
-
     private File cacheDir;
-
     public FileCache(Context context){
         //Find the dir to save cached images
         if (android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED))
@@ -29,7 +27,6 @@ public class FileCache {
         //String filename = URLEncoder.encode(url);
         File f = new File(cacheDir, filename);
         return f;
-
     }
 
     public void clear(){
@@ -39,5 +36,4 @@ public class FileCache {
         for(File f:files)
             f.delete();
     }
-
 }

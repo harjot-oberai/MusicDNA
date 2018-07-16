@@ -29,11 +29,11 @@ public class StreamTrackListAdapter extends RecyclerView.Adapter<StreamTrackList
         holder.title.setText(track.getTitle());
         try {
             Picasso.get()
-                    .load(track.getArtworkURL())
-                    .resize(100, 100)
-                    .error(R.drawable.ic_default)
-                    .placeholder(R.drawable.ic_default)
-                    .into(holder.art);
+                .load(track.getArtworkURL())
+                .resize(100, 100)
+                .error(R.drawable.ic_default)
+                .placeholder(R.drawable.ic_default)
+                .into(holder.art);
             Log.d("URL", track.getArtworkURL());
         } catch (Exception e) {
             Log.e("AdapterError", e.getMessage());
@@ -43,16 +43,13 @@ public class StreamTrackListAdapter extends RecyclerView.Adapter<StreamTrackList
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_item_2, parent, false);
-
+            .inflate(R.layout.list_item_2, parent, false);
         return new MyViewHolder(itemView);
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-
         ImageView art;
         TextView title, artist;
-
         public MyViewHolder(View view) {
             super(view);
             art = view.findViewById(R.id.img_2);
@@ -62,10 +59,7 @@ public class StreamTrackListAdapter extends RecyclerView.Adapter<StreamTrackList
     }
 
     @Override
-    public int getItemCount() {
-        return tracks.size();
-    }
-
+    public int getItemCount() { return tracks.size(); }
 
     public StreamTrackListAdapter(Context ctx, List<Track> tracks) {
         super();

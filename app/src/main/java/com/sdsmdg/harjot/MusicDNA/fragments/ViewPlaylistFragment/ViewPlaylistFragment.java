@@ -35,36 +35,26 @@ import com.squareup.picasso.Picasso;
  * A simple {@link Fragment} subclass.
  */
 public class ViewPlaylistFragment extends Fragment implements
-        PlaylistTrackAdapter.OnDragStartListener,
-        PlaylistTrackAdapter.OnMoveRemoveListener {
+    PlaylistTrackAdapter.OnDragStartListener,
+    PlaylistTrackAdapter.OnMoveRemoveListener {
 
-    RecyclerView playlistRecyler;
+    RecyclerView playlistRecycler;
     PlaylistTrackAdapter plAdapter;
     FloatingActionButton playAll;
-
     ImageView backdrop, backBtn, renameIcon, addToQueueIcon;
     TextView title, songsText, fragmentTitle;
-
     ImageLoader imgLoader;
-
     ItemTouchHelper mItemTouchHelper;
-
     LinearLayoutManager mLayoutManager2;
-
     View bottomMarginLayout;
-
     playlistCallbackListener mCallback;
 
     @Override
-    public void onDragStarted(RecyclerView.ViewHolder viewHolder) {
-        mItemTouchHelper.startDrag(viewHolder);
-    }
+    public void onDragStarted(RecyclerView.ViewHolder viewHolder) { mItemTouchHelper.startDrag(viewHolder); }
 
     @Override
     public void updateViewPlaylistFragment() {
-
         title.setText(HomeActivity.tempPlaylist.getPlaylistName());
-
         String s = "";
         if (HomeActivity.tempPlaylist.getSongList().size() > 1)
             s = "Songs";
@@ -79,22 +69,17 @@ public class ViewPlaylistFragment extends Fragment implements
         } else {
             Track t = ut.getStreamTrack();
             Picasso.get()
-                    .load(t.getArtworkURL())
-                    .resize(100, 100)
-                    .error(R.drawable.ic_default)
-                    .placeholder(R.drawable.ic_default)
-                    .into(backdrop);
+                .load(t.getArtworkURL())
+                .resize(100, 100)
+                .error(R.drawable.ic_default)
+                .placeholder(R.drawable.ic_default)
+                .into(backdrop);
         }
-
     }
-
     public interface playlistCallbackListener {
         void onPlaylistPlayAll();
-
         void onPlaylistItemClicked(int position);
-
         void playlistRename();
-
         void playlistAddToQueue();
     }
 
@@ -110,35 +95,34 @@ public class ViewPlaylistFragment extends Fragment implements
             mCallback = (playlistCallbackListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
-                    + " must implement OnHeadlineSelectedListener");
+                + " must implement OnHeadlineSelectedListener");
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_view_playlist, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onViewCreated(View v, Bundle savedInstanceState) {
+        super.onViewCreated(v, savedInstanceState);
 
-        bottomMarginLayout = view.findViewById(R.id.bottom_margin_layout);
+        bottomMarginLayout = v.findViewById(R.id.bottom_margin_layout);
         if (HomeActivity.isReloaded)
             bottomMarginLayout.getLayoutParams().height = 0;
         else
             bottomMarginLayout.getLayoutParams().height = CommonUtils.dpTopx(65, getContext());
 
-        fragmentTitle = view.findViewById(R.id.playlist_fragment_title);
+        fragmentTitle = v.findViewById(R.id.playlist_fragment_title);
         if (SplashActivity.tf4 != null)
             fragmentTitle.setTypeface(SplashActivity.tf4);
 
-        title = view.findViewById(R.id.playlist_title);
+        title = v.findViewById(R.id.playlist_title);
         title.setText(HomeActivity.tempPlaylist.getPlaylistName());
 
-        songsText = view.findViewById(R.id.playlist_tracks_text);
+        songsText = v.findViewById(R.id.playlist_tracks_text);
         String s = "";
         if (HomeActivity.tempPlaylist.getSongList().size() > 1)
             s = "Songs";
@@ -146,31 +130,16 @@ public class ViewPlaylistFragment extends Fragment implements
             s = "Song";
         songsText.setText(HomeActivity.tempPlaylist.getSongList().size() + " " + s);
 
-        backBtn = view.findViewById(R.id.view_playlist_back_btn);
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });
+        backBtn = v.findViewById(R.id.view_playlist_back_btn);
+        backBtn.setOnClickListener((View view) -> getActivity().onBackPressed());
 
-        renameIcon = view.findViewById(R.id.rename_playlist_icon);
-        renameIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCallback.playlistRename();
-            }
-        });
+        renameIcon = v.findViewById(R.id.rename_playlist_icon);
+        renameIcon.setOnClickListener((View view) -> mCallback.playlistRename());
 
-        addToQueueIcon = view.findViewById(R.id.add_playlist_to_queue_icon);
-        addToQueueIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCallback.playlistAddToQueue();
-            }
-        });
+        addToQueueIcon = v.findViewById(R.id.add_playlist_to_queue_icon);
+        addToQueueIcon.setOnClickListener((View view) -> mCallback.playlistAddToQueue());
 
-        backdrop = view.findViewById(R.id.playlist_backdrop);
+        backdrop = v.findViewById(R.id.playlist_backdrop);
         UnifiedTrack ut = HomeActivity.tempPlaylist.getSongList().get(0);
         if (ut.getType()) {
             LocalTrack lt = ut.getLocalTrack();
@@ -178,72 +147,59 @@ public class ViewPlaylistFragment extends Fragment implements
         } else {
             Track t = ut.getStreamTrack();
             Picasso.get()
-                    .load(t.getArtworkURL())
-                    .resize(100, 100)
-                    .error(R.drawable.ic_default)
-                    .placeholder(R.drawable.ic_default)
-                    .into(backdrop);
+                .load(t.getArtworkURL())
+                .resize(100, 100)
+                .error(R.drawable.ic_default)
+                .placeholder(R.drawable.ic_default)
+                .into(backdrop);
         }
 
-        playlistRecyler = view.findViewById(R.id.view_playlist_recycler);
+        playlistRecycler = v.findViewById(R.id.view_playlist_recycler);
         plAdapter = new PlaylistTrackAdapter(HomeActivity.tempPlaylist.getSongList(), this, getContext());
         mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        playlistRecyler.setLayoutManager(mLayoutManager2);
-        playlistRecyler.setItemAnimator(new DefaultItemAnimator());
-        playlistRecyler.setAdapter(plAdapter);
-
-        playlistRecyler.addOnItemTouchListener(new ClickItemTouchListener(playlistRecyler) {
+        playlistRecycler.setLayoutManager(mLayoutManager2);
+        playlistRecycler.setItemAnimator(new DefaultItemAnimator());
+        playlistRecycler.setAdapter(plAdapter);
+        playlistRecycler.addOnItemTouchListener(new ClickItemTouchListener(playlistRecycler) {
             @Override
             public boolean onClick(RecyclerView parent, View view, int position, long id) {
                 mCallback.onPlaylistItemClicked(position);
                 return true;
             }
-
             @Override
             public boolean onLongClick(RecyclerView parent, View view, int position, long id) {
                 return true;
             }
-
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
             }
         });
 
-        playAll = view.findViewById(R.id.play_all_fab);
+        playAll = v.findViewById(R.id.play_all_fab);
         if (HomeActivity.tempPlaylist.getSongList().size() == 0) {
             playAll.hide();
         }
         playAll.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));
-        playAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int size = HomeActivity.tempPlaylist.getSongList().size();
-                HomeActivity.queue.getQueue().clear();
-                for (int i = 0; i < size; i++) {
-                    HomeActivity.queue.addToQueue(HomeActivity.tempPlaylist.getSongList().get(i));
-                }
-                HomeActivity.queueCurrentIndex = 0;
-                mCallback.onPlaylistPlayAll();
+        playAll.setOnClickListener((View view) -> {
+            int size = HomeActivity.tempPlaylist.getSongList().size();
+            HomeActivity.queue.getQueue().clear();
+            for (int i = 0; i < size; i++) {
+                HomeActivity.queue.addToQueue(HomeActivity.tempPlaylist.getSongList().get(i));
             }
+            HomeActivity.queueCurrentIndex = 0;
+            mCallback.onPlaylistPlayAll();
         });
-
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(plAdapter);
         mItemTouchHelper = new ItemTouchHelper(callback);
-        mItemTouchHelper.attachToRecyclerView(playlistRecyler);
-
+        mItemTouchHelper.attachToRecyclerView(playlistRecycler);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         mLayoutManager2.scrollToPositionWithOffset(0, 0);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                playAll.animate().scaleX(1.0f).scaleY(1.0f).setDuration(300).setInterpolator(new OvershootInterpolator());
-            }
-        }, 500);
+        new Handler().postDelayed(() -> playAll.animate().scaleX(1.0f).scaleY(1.0f).setDuration(300).setInterpolator(new OvershootInterpolator())
+        ,500);
     }
 
     @Override

@@ -19,31 +19,11 @@ public class SavedDNA {
         this.artist = artist;
         this.base64encodedBitmap = base64encodedBitmap;
     }
-    public Boolean getType() {
-        return type;
-    }
-
-    public String getLocalPath() {
-        return localPath;
-    }
-
-    public String getTrackArtworkURL() {
-        return trackArtworkURL;
-    }
-
-    public String getArtist() {
-        return artist;
-    }
-
-    public String getBase64encodedBitmap() {
-        return base64encodedBitmap;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    public Boolean getType() { return type; }
+    public String getLocalPath() { return localPath; }
+    public String getTrackArtworkURL() { return trackArtworkURL; }
+    public String getArtist() { return artist; }
+    public String getBase64encodedBitmap() { return base64encodedBitmap; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 }

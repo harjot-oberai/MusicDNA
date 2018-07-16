@@ -11,9 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
 import com.sdsmdg.harjot.MusicDNA.R;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 import com.squareup.leakcanary.RefWatcher;
 
 /**
@@ -34,28 +34,6 @@ public class AlbumFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public interface onAlbumClickListener {
-        public void onAlbumClick();
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            mCallback = (onAlbumClickListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
-                    + " must implement OnHeadlineSelectedListener");
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_album, container, false);
-    }
-
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -66,7 +44,7 @@ public class AlbumFragment extends Fragment {
         else
             bottomMarginLayout.setVisibility(View.VISIBLE);
 
-        rv = (RecyclerView) view.findViewById(R.id.albums_recycler);
+        rv = view.findViewById(R.id.albums_recycler);
         abAdapter = new AlbumRecyclerAdapter(HomeActivity.finalAlbums, getContext());
         glManager = new GridLayoutManager(getContext(), 2);
         rv.setLayoutManager(glManager);
@@ -88,10 +66,30 @@ public class AlbumFragment extends Fragment {
 
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
             }
         });
+    }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mCallback = (onAlbumClickListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnHeadlineSelectedListener");
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_album, container, false);
+    }
+
+    public interface onAlbumClickListener {
+        void onAlbumClick();
     }
 
     @Override

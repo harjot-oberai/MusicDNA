@@ -48,21 +48,14 @@ public class RecentsFragment extends Fragment implements
     RecyclerView recentRecycler;
     public RecentsTrackAdapter rtAdpater;
     LinearLayoutManager mLayoutManager2;
-
     LinearLayout noContent;
-
     ItemTouchHelper mItemTouchHelper;
-
     recentsCallbackListener mCallback;
-
     FloatingActionButton shuffleFab;
-
     View bottomMarginLayout;
-
     ImageView backdrop;
     TextView fragTitle;
     ImageView backBtn, addToQueueIcon, fragIcon;
-
     ImageLoader imgLoader;
 
     public RecentsFragment() {
@@ -79,11 +72,11 @@ public class RecentsFragment extends Fragment implements
             } else {
                 Track t = ut.getStreamTrack();
                 Picasso.get()
-                        .load(t.getArtworkURL())
-                        .resize(100, 100)
-                        .error(R.drawable.ic_default)
-                        .placeholder(R.drawable.ic_default)
-                        .into(backdrop);
+                    .load(t.getArtworkURL())
+                    .resize(100, 100)
+                    .error(R.drawable.ic_default)
+                    .placeholder(R.drawable.ic_default)
+                    .into(backdrop);
             }
         } else {
             backdrop.setBackground(new ColorDrawable(Color.parseColor("#111111")));
@@ -92,9 +85,7 @@ public class RecentsFragment extends Fragment implements
 
     public interface recentsCallbackListener {
         void onRecentItemClicked(boolean isLocal);
-
         void onRecentFromQueue(int pos);
-
         void addRecentsToQueue();
     }
 
@@ -106,13 +97,13 @@ public class RecentsFragment extends Fragment implements
             mCallback = (recentsCallbackListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
-                    + " must implement OnHeadlineSelectedListener");
+                + " must implement OnHeadlineSelectedListener");
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_recents, container, false);
     }
@@ -122,12 +113,7 @@ public class RecentsFragment extends Fragment implements
         super.onViewCreated(view, savedInstanceState);
 
         backBtn = view.findViewById(R.id.recents_back_btn);
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });
+        backBtn.setOnClickListener((View v) -> getActivity().onBackPressed());
 
         fragIcon = view.findViewById(R.id.recents_frag_icon);
         fragIcon.setImageTintList(ColorStateList.valueOf(HomeActivity.themeColor));
@@ -137,12 +123,7 @@ public class RecentsFragment extends Fragment implements
             fragTitle.setTypeface(SplashActivity.tf4);
 
         addToQueueIcon = view.findViewById(R.id.add_recents_to_queue_icon);
-        addToQueueIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCallback.addRecentsToQueue();
-            }
-        });
+        addToQueueIcon.setOnClickListener((View v) -> mCallback.addRecentsToQueue());
 
         backdrop = view.findViewById(R.id.recents_backdrop);
         if (HomeActivity.recentlyPlayed.getRecentlyPlayed().size() > 0) {
@@ -153,11 +134,11 @@ public class RecentsFragment extends Fragment implements
             } else {
                 Track t = ut.getStreamTrack();
                 Picasso.get()
-                        .load(t.getArtworkURL())
-                        .resize(100, 100)
-                        .error(R.drawable.ic_default)
-                        .placeholder(R.drawable.ic_default)
-                        .into(backdrop);
+                    .load(t.getArtworkURL())
+                    .resize(100, 100)
+                    .error(R.drawable.ic_default)
+                    .placeholder(R.drawable.ic_default)
+                    .into(backdrop);
             }
         }
 
@@ -168,14 +149,12 @@ public class RecentsFragment extends Fragment implements
             bottomMarginLayout.getLayoutParams().height = CommonUtils.dpTopx(65, getContext());
 
         noContent = view.findViewById(R.id.no_recents_content);
-
         recentRecycler = view.findViewById(R.id.view_recent_recycler);
         rtAdpater = new RecentsTrackAdapter(HomeActivity.recentlyPlayed.getRecentlyPlayed(), this, getContext());
         mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recentRecycler.setLayoutManager(mLayoutManager2);
         recentRecycler.setItemAnimator(new DefaultItemAnimator());
         recentRecycler.setAdapter(rtAdpater);
-
         recentRecycler.addOnItemTouchListener(new ClickItemTouchListener(recentRecycler) {
             @Override
             public boolean onClick(RecyclerView parent, View view, int position, long id) {
@@ -242,7 +221,6 @@ public class RecentsFragment extends Fragment implements
                 } else {
                     mCallback.onRecentFromQueue(pos);
                 }
-
                 return true;
             }
 
@@ -261,7 +239,6 @@ public class RecentsFragment extends Fragment implements
 
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
             }
         });
 
@@ -276,41 +253,32 @@ public class RecentsFragment extends Fragment implements
         }
 
         shuffleFab.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));
-        shuffleFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (HomeActivity.recentlyPlayed.getRecentlyPlayed().size() > 0) {
-                    HomeActivity.queue.getQueue().clear();
-                    for (int i = 0; i < HomeActivity.recentlyPlayed.getRecentlyPlayed().size(); i++) {
-                        HomeActivity.queue.getQueue().add(HomeActivity.recentlyPlayed.getRecentlyPlayed().get(i));
-                    }
-                    Random r = new Random();
-                    mCallback.onRecentFromQueue(r.nextInt(HomeActivity.queue.getQueue().size()));
+        shuffleFab.setOnClickListener((View v) -> {
+            if (HomeActivity.recentlyPlayed.getRecentlyPlayed().size() > 0) {
+                HomeActivity.queue.getQueue().clear();
+                for (int i = 0; i < HomeActivity.recentlyPlayed.getRecentlyPlayed().size(); i++) {
+                    HomeActivity.queue.getQueue().add(HomeActivity.recentlyPlayed.getRecentlyPlayed().get(i));
                 }
+                Random r = new Random();
+                mCallback.onRecentFromQueue(r.nextInt(HomeActivity.queue.getQueue().size()));
             }
         });
-
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(rtAdpater);
         mItemTouchHelper = new ItemTouchHelper(callback);
         mItemTouchHelper.attachToRecyclerView(recentRecycler);
-
     }
 
     @Override
     public void onDragStarted(RecyclerView.ViewHolder viewHolder) {
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
         mLayoutManager2.scrollToPositionWithOffset(0, 0);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                shuffleFab.animate().scaleX(1.0f).scaleY(1.0f).setDuration(300).setInterpolator(new OvershootInterpolator());
-            }
-        }, 500);
+        new Handler().postDelayed(() ->
+            shuffleFab.animate().scaleX(1.0f).scaleY(1.0f).setDuration(300).setInterpolator(new OvershootInterpolator())
+                ,500);
     }
 
     @Override

@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.models.Artist;
 import com.sdsmdg.harjot.MusicDNA.R;
+import com.sdsmdg.harjot.MusicDNA.models.Artist;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ public class ArtistRecyclerAdapter extends RecyclerView.Adapter<ArtistRecyclerAd
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_item_4, parent, false);
+            .inflate(R.layout.list_item_4, parent, false);
 
         return new MyViewHolder(itemView);
     }
@@ -41,19 +41,14 @@ public class ArtistRecyclerAdapter extends RecyclerView.Adapter<ArtistRecyclerAd
     }
 
     @Override
-    public int getItemCount() {
-        return artistList.size();
-    }
+    public int getItemCount() { return artistList.size(); }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-
         TextView title, numSongs;
-
         public MyViewHolder(View view) {
             super(view);
-            title = (TextView) view.findViewById(R.id.artist_name);
-            numSongs = (TextView) view.findViewById(R.id.num_songs);
+            title = view.findViewById(R.id.artist_name);
+            numSongs = view.findViewById(R.id.num_songs);
         }
     }
-
 }

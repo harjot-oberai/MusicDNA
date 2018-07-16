@@ -1,6 +1,6 @@
 package com.sdsmdg.harjot.MusicDNA.imageLoader;
 
-/**
+/*
  * Created by Harjot on 06-Apr-16.
  */
 import java.io.InputStream;

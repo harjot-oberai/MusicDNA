@@ -32,7 +32,6 @@ import static com.sdsmdg.harjot.MusicDNA.lyrics.Lyrics.POSITIVE_RESULT;
 import static com.sdsmdg.harjot.MusicDNA.lyrics.Lyrics.SEARCH_ITEM;
 
 public class ViewLyrics {
-
     /*
      * Needed data
      */
@@ -50,9 +49,7 @@ public class ViewLyrics {
     //MOBILE: MiniLyricsForAndroid
 
     private static final String searchQueryBase = "<?xml version='1.0' encoding='utf-8' ?><searchV1 artist=\"%s\" title=\"%s\" OnlyMatched=\"1\" %s/>";
-
     private static final String searchQueryPage = " RequestPage='%d'";
-
     private static final byte[] magickey = "Mlv1clt4.0".getBytes();
 
 	/*
@@ -67,8 +64,7 @@ public class ViewLyrics {
 
     public static Lyrics fromMetaData(String artist, String title) throws IOException, NoSuchAlgorithmException, SAXException, ParserConfigurationException {
         ArrayList<Lyrics> results =
-                search(
-                        String.format(searchQueryBase, artist, title, clientTag +
+                search(String.format(searchQueryBase, artist, title, clientTag +
                                 String.format(searchQueryPage, 0)) // Create XMLQuery String
                 );
         if (results.size() == 0)
@@ -87,7 +83,6 @@ public class ViewLyrics {
         result.setLRC(url.endsWith("lrc"));
         result.setText(Net.getUrlAsString(url).replaceAll("(\\[(?=.[a-z]).+\\]|<.+?>|www.*[\\s])", "").replaceAll("[\n\r]", " ").replaceAll("\\[", "\n\\["));
         result.setSource(clientUserAgent);
-
         return result;
     }
 
@@ -95,9 +90,7 @@ public class ViewLyrics {
         OkHttpClient client = new OkHttpClient();
         //client.connectTimeout(10, TimeUnit.SECONDS);
         //client.readTimeout(30, TimeUnit.SECONDS);
-
         RequestBody body = RequestBody.create(MediaType.parse("application/text"), assembleQuery(searchQuery.getBytes("UTF-8")));
-
         Request request = new Request.Builder()
                 .header("User-Agent", clientUserAgent)
                 .post(body)
@@ -105,9 +98,7 @@ public class ViewLyrics {
                 .build();
 
         Response response = client.newCall(request).execute();
-
-        BufferedReader rd = new BufferedReader
-                (new InputStreamReader(response.body().byteStream(), "ISO_8859_1"));
+        BufferedReader rd = new BufferedReader(new InputStreamReader(response.body().byteStream(), "ISO_8859_1"));
 
         // Get full result
         StringBuilder builder = new StringBuilder();
@@ -121,7 +112,6 @@ public class ViewLyrics {
         // Decrypt, parse, store, and return the result list
         return parseResultXML(decryptResultXML(full));
     }
-
 	/*
      * Add MD5 and Encrypts Search Query
 	 */
@@ -160,7 +150,7 @@ public class ViewLyrics {
         result.write(0x00);
         result.write(0x00);
 
-        // Write Generated MD5 of POG problaby to be used in a search cache
+        // Write Generated MD5 of POG probably to be used in a search cache
         result.write(pog_md5);
 
         // Write encrypted value
@@ -188,7 +178,6 @@ public class ViewLyrics {
         // Return value
         return neomagic.toString();
     }
-
 	/*
 	 * Create the ArrayList<LyricInfo>
 	 */
@@ -225,14 +214,9 @@ public class ViewLyrics {
             //item.setLyricsFileName(readStrFromAttr(itemElem, "filename", ""));
             //itemInfo.setFType(readIntFromAttr(itemElem, "file_type", 0));
             //itemInfo.setMatchVal(readFloatFromAttr(itemElem, "match_value", 0.0F));
-            //itemInfo.setTimeLenght(readIntFromAttr(itemElem, "timelength", 0));
-
-
+            //itemInfo.setTimeLength(readIntFromAttr(itemElem, "timelength", 0));
             availableLyrics.add(item);
         }
-
         return availableLyrics;
     }
-
-
 }

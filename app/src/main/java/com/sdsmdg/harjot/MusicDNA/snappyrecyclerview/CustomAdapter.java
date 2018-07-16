@@ -23,12 +23,10 @@ import java.util.List;
  */
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
-
     Context ctx;
     SnappyRecyclerView recyclerView;
     List<UnifiedTrack> queue;
     ImageLoader imgLoader;
-
     public CustomAdapter(Context ctx, SnappyRecyclerView recyclerView, List<UnifiedTrack> queue) {
         this.ctx = ctx;
         this.recyclerView = recyclerView;
@@ -62,14 +60,10 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     }
 
     @Override
-    public int getItemCount() {
-        return queue.size();
-    }
-
+    public int getItemCount() { return queue.size(); }
     public class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView albumArt;
         public RealtimeBlurView blurredAlbumArt;
-
         public ViewHolder(View itemView) {
             super(itemView);
             albumArt = itemView.findViewById(R.id.album_art_container_v);
@@ -82,9 +76,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             android.media.MediaMetadataRetriever mmr = new MediaMetadataRetriever();
             mmr.setDataSource(url);
             Bitmap bitmap = null;
-
             byte[] data = mmr.getEmbeddedPicture();
-
             if (data != null) {
                 bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
                 return bitmap;
@@ -96,5 +88,4 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         }
         return null;
     }
-
 }

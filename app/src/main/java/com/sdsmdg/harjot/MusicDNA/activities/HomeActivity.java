@@ -702,9 +702,9 @@ public class HomeActivity extends AppCompatActivity
             .setTarget(new ViewTarget(R.id.recentsRecyclerLabel, this))
             .setContentTitle("Recents and Playlists")
             .setContentText("All your recent songs and playlists will be listed here." +
-                    "Long press the cards or playlists for more options \n" +
-                    "\n" +
-                    "(Press Next to continue / Press back to Hide)")
+                "Long press the cards or playlists for more options \n" +
+                "\n" +
+                "(Press Next to continue / Press back to Hide)")
             .build();
         showCase.setButtonText("Next");
         showCase.setButtonPosition(lps);

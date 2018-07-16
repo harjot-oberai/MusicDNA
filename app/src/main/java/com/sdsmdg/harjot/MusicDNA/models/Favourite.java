@@ -8,16 +8,7 @@ import java.util.List;
  */
 public class Favourite {
     private List<UnifiedTrack> favourite;
-
-    public Favourite() {
-        favourite = new ArrayList<>();
-    }
-
-    public List<UnifiedTrack> getFavourite() {
-        return favourite;
-    }
-
-    public void setFavourite(List<UnifiedTrack> favourite) {
-        this.favourite = favourite;
-    }
+    public Favourite() { favourite = new ArrayList<>(); }
+    public List<UnifiedTrack> getFavourite() { return favourite; }
+    public void setFavourite(List<UnifiedTrack> favourite) { this.favourite = favourite; }
 }

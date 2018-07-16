@@ -23,10 +23,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class DownloadThread extends Thread {
-
     private static final String[] mainProviders =
             {
-
                     "AZLyrics",
                     "Genius",
                     "LyricWiki",
@@ -35,10 +33,8 @@ public class DownloadThread extends Thread {
             };
 
     private static ArrayList<String> providers = new ArrayList<>(Arrays.asList(mainProviders));
-
     public DownloadThread(final Lyrics.Callback callback, boolean positionAvailable, final String... params) {
-        super(DownloadThread.getRunnable(callback, positionAvailable, params));
-    }
+        super(DownloadThread.getRunnable(callback, positionAvailable, params)); }
 
     public static void setProviders(Iterable<String> providers) {
         DownloadThread.providers = new ArrayList<>(Arrays.asList(mainProviders));
@@ -52,7 +48,6 @@ public class DownloadThread extends Thread {
 
     public static Runnable getRunnable(final Lyrics.Callback callback, final boolean positionAvailable, final String... params) {
         return new Runnable() {
-
             @SuppressWarnings("unchecked")
             public Lyrics download(String url, String artist, String title) {
                 Lyrics lyrics = null;
@@ -99,7 +94,6 @@ public class DownloadThread extends Thread {
                 }
                 return new Lyrics(Lyrics.NO_RESULT);
             }
-
             @SuppressWarnings("unchecked")
             public Lyrics download(String artist, String title) {
                 Lyrics lyrics = new Lyrics(Lyrics.NO_RESULT);
@@ -150,11 +144,8 @@ public class DownloadThread extends Thread {
                 }
                 return lyrics;
             }
-
-
             public void run() {
                 Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
-
                 Lyrics lyrics;
                 String artist = null;
                 String title = null;
@@ -191,7 +182,6 @@ public class DownloadThread extends Thread {
                 }
                 threadMsg(lyrics);
             }
-
             private void threadMsg(Lyrics lyrics) {
                 if (lyrics != null) {
                     Message msgObj = handler.obtainMessage();
@@ -201,7 +191,6 @@ public class DownloadThread extends Thread {
                     handler.sendMessage(msgObj);
                 }
             }
-
             // Define the Handler that receives messages from the thread and update the progress
             private final Handler handler = new Handler(Looper.getMainLooper()) {
                 @Override

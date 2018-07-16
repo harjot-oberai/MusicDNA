@@ -1,6 +1,5 @@
 package com.sdsmdg.harjot.MusicDNA.fragments.PlayerFragment;
 
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -66,12 +65,10 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PlayerFragment extends Fragment implements
-        AudioPlayerBroadcastReceiver.onCallbackListener, Lyrics.Callback {
+public class PlayerFragment extends Fragment implements AudioPlayerBroadcastReceiver.onCallbackListener, Lyrics.Callback {
 
     public SnappyRecyclerView snappyRecyclerView;
     CustomAdapter customAdapter;
@@ -84,7 +81,6 @@ public class PlayerFragment extends Fragment implements
     public static PresetReverb presetReverb;
 
     public static boolean isReplayIconVisible = false;
-
     public static boolean isPrepared = false;
 
     AVLoadingIndicatorView bufferingIndicator;
@@ -97,14 +93,12 @@ public class PlayerFragment extends Fragment implements
 
     public ImageView repeatController;
     public ImageView shuffleController;
-
     public ImageView equalizerIcon;
     public ImageView mainTrackController;
     public ImageView nextTrackController;
     public ImageView previousTrackController;
     public ImageView favouriteIcon;
     public ImageView queueIcon;
-
     public ImageView saveDNAToggle;
 
     boolean isFav = false;
@@ -112,16 +106,13 @@ public class PlayerFragment extends Fragment implements
     public RelativeLayout bottomContainer;
     public RelativeLayout seekBarContainer;
     public RelativeLayout toggleContainer;
-
     public ImageView selected_track_image;
     public TextView selected_track_title;
     public TextView selected_track_artist;
     public ImageView player_controller;
-
     public RelativeLayout smallPlayer;
 
     ImageView favControllerSp, nextControllerSp;
-
     ImageLoader imgLoader;
 
     public SeekBar progressBar;
@@ -130,16 +121,13 @@ public class PlayerFragment extends Fragment implements
     static boolean completed = false;
     public boolean pauseClicked = false;
     boolean isTracking = false;
-
     public static boolean localIsPlaying = false;
 
     public Timer timer;
 
     public static Track track;
     public static LocalTrack localTrack;
-
     static boolean isRefreshed = false;
-
     public PlayerFragmentCallbackListener mCallback;
     public onPlayPauseListener mCallback7;
 
@@ -159,14 +147,12 @@ public class PlayerFragment extends Fragment implements
     }
 
     public boolean isLyricsVisible = false;
-
     public interface onPlayPauseListener {
         void onPlayPause();
     }
 
     HomeActivity homeActivity;
     public static Context ctx;
-
     public RelativeLayout spToolbar;
     ImageView overflowMenuAB;
     ImageView spImgAB;
@@ -180,8 +166,18 @@ public class PlayerFragment extends Fragment implements
     public ImageView lyricsIcon;
     public TextView lyricsContent;
 
-    public void setupVisualizerFxAndUI() {
+    public PlayerFragment() {
+    // Required empty public constructor
+    }
+    public Lyrics currentLyrics = null;
+    public boolean isStart = true;
 
+    ShowcaseView showCase;
+
+    long startTrack;
+    long endTrack;
+
+    public void setupVisualizerFxAndUI() {
         try {
             mVisualizer = new Visualizer(mMediaPlayer.getAudioSessionId());
             mEqualizer = new Equalizer(0, mMediaPlayer.getAudioSessionId());
@@ -195,7 +191,6 @@ public class PlayerFragment extends Fragment implements
                 bassBoostSetting.strength = (1000 / 19);
                 bassBoost.setProperties(bassBoostSetting);
                 mMediaPlayer.setAuxEffectSendLevel(1.0f);
-
                 presetReverb = new PresetReverb(0, mMediaPlayer.getAudioSessionId());
                 presetReverb.setPreset(PresetReverb.PRESET_NONE);
                 presetReverb.setEnabled(false);
@@ -255,35 +250,20 @@ public class PlayerFragment extends Fragment implements
             }
         }
 
-
         try {
             mVisualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[1]);
             mVisualizer.setDataCaptureListener(
                     new Visualizer.OnDataCaptureListener() {
-                        public void onWaveFormDataCapture(Visualizer visualizer,
-                                                          byte[] bytes, int samplingRate) {
+                        public void onWaveFormDataCapture(Visualizer visualizer, byte[] bytes, int samplingRate) {
                         }
 
-                        public void onFftDataCapture(Visualizer visualizer,
-                                                     byte[] bytes, int samplingRate) {
+                        public void onFftDataCapture(Visualizer visualizer, byte[] bytes, int samplingRate) {
                             homeActivity.updateVisualizer(bytes);
                         }
                     }, Visualizer.getMaxCaptureRate() / 2, false, true);
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-    public Lyrics currentLyrics = null;
-
-    public boolean isStart = true;
-
-    ShowcaseView showCase;
-
-    long startTrack;
-    long endTrack;
-
-    public PlayerFragment() {
-        // Required empty public constructor
     }
 
     public void togglePlayPause() {
@@ -348,108 +328,87 @@ public class PlayerFragment extends Fragment implements
             mCallback = (PlayerFragmentCallbackListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
-                    + " must implement OnHeadlineSelectedListener");
+                + " must implement OnHeadlineSelectedListener");
         }
 
         mMediaPlayer = new MediaPlayer();
         mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                currentLyrics = null;
-                if (downloadThread != null) {
-                    downloadThread.interrupt();
-                }
-                if (isLyricsVisible) {
-                    isLyricsVisible = false;
-                    lyricsContent.setText("");
-                    lyricsContainer.setVisibility(View.GONE);
-                    lyricsIcon.setAlpha(0.5f);
-                    mVisualizerView.setVisibility(View.VISIBLE);
-                }
-                completed = false;
-                pauseClicked = false;
-                isPrepared = true;
-                mCallback.onPrepared();
-                if (HomeActivity.isPlayerVisible) {
-                    player_controller.setVisibility(View.VISIBLE);
-                    player_controller.setImageResource(R.drawable.ic_queue_music_white_48dp);
-                } else {
-                    player_controller.setVisibility(View.VISIBLE);
-                    player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
-                }
-                togglePlayPause();
-                togglePlayPause();
-                togglePlayPause();
-                bufferingIndicator.setVisibility(View.GONE);
-                mainTrackController.setVisibility(View.VISIBLE);
-                equalizerIcon.setVisibility(View.VISIBLE);
+        mMediaPlayer.setOnPreparedListener((MediaPlayer mp) -> {
+            currentLyrics = null;
+            if (downloadThread != null) {
+                downloadThread.interrupt();
+            }
+            if (isLyricsVisible) {
+                isLyricsVisible = false;
+                lyricsContent.setText("");
+                lyricsContainer.setVisibility(View.GONE);
+                lyricsIcon.setAlpha(0.5f);
+                mVisualizerView.setVisibility(View.VISIBLE);
+            }
+            completed = false;
+            pauseClicked = false;
+            isPrepared = true;
+            mCallback.onPrepared();
+            if (HomeActivity.isPlayerVisible) {
+                player_controller.setVisibility(View.VISIBLE);
+                player_controller.setImageResource(R.drawable.ic_queue_music_white_48dp);
+            } else {
+                player_controller.setVisibility(View.VISIBLE);
+                player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
+            }
+            togglePlayPause();
+            togglePlayPause();
+            togglePlayPause();
+            bufferingIndicator.setVisibility(View.GONE);
+            mainTrackController.setVisibility(View.VISIBLE);
+            equalizerIcon.setVisibility(View.VISIBLE);
+            snappyRecyclerView.setCurrentPosition(HomeActivity.queueCurrentIndex);
+            snappyRecyclerView.setTransparency();
+            new HomeActivity.SaveQueue().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            new HomeActivity.SaveRecents().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        });
 
-                snappyRecyclerView.setCurrentPosition(HomeActivity.queueCurrentIndex);
-                snappyRecyclerView.setTransparency();
+        mMediaPlayer.setOnCompletionListener((MediaPlayer mp) -> {
+            completed = true;
+            if (HomeActivity.isPlayerVisible) {
+                mainTrackController.setImageResource(R.drawable.ic_replay_white_48dp);
+                player_controller.setImageResource(R.drawable.ic_replay_white_48dp);
+                isReplayIconVisible = true;
+            } else {
+                player_controller.setImageResource(R.drawable.ic_replay_white_48dp);
+                mainTrackController.setImageResource(R.drawable.ic_replay_white_48dp);
+                isReplayIconVisible = true;
+            }
+            new SaveDNA().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        });
 
-                new HomeActivity.SaveQueue().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                new HomeActivity.SaveRecents().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
+        mMediaPlayer.setOnBufferingUpdateListener((MediaPlayer mp, int percent) -> {
+            double ratio = percent / 100.0;
+            double bufferingLevel = (int) (mp.getDuration() * ratio);
+            if (progressBar != null) {
+                progressBar.setSecondaryProgress((int) bufferingLevel);
             }
         });
 
-        mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                completed = true;
-                if (HomeActivity.isPlayerVisible) {
-                    mainTrackController.setImageResource(R.drawable.ic_replay_white_48dp);
-                    player_controller.setImageResource(R.drawable.ic_replay_white_48dp);
-                    isReplayIconVisible = true;
-                } else {
-                    player_controller.setImageResource(R.drawable.ic_replay_white_48dp);
-                    mainTrackController.setImageResource(R.drawable.ic_replay_white_48dp);
-                    isReplayIconVisible = true;
-                }
-                new SaveDNA().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-            }
+        mMediaPlayer.setOnErrorListener((MediaPlayer mp, int what, int extra) -> {
+            return true;
         });
 
-        mMediaPlayer.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
-            @Override
-            public void onBufferingUpdate(MediaPlayer mp, int percent) {
-                double ratio = percent / 100.0;
-                double bufferingLevel = (int) (mp.getDuration() * ratio);
-                if (progressBar != null) {
-                    progressBar.setSecondaryProgress((int) bufferingLevel);
-                }
+        mMediaPlayer.setOnInfoListener((MediaPlayer mp, int what, int extra) -> {
+            switch (what) {
+                case MediaPlayer.MEDIA_INFO_BUFFERING_START:
+                    bufferingIndicator.setVisibility(View.VISIBLE);
+                    mainTrackController.setVisibility(View.GONE);
+                    isPrepared = false;
+                    break;
+                case MediaPlayer.MEDIA_INFO_BUFFERING_END:
+                    bufferingIndicator.setVisibility(View.GONE);
+                    mainTrackController.setVisibility(View.VISIBLE);
+                    isPrepared = true;
+                    break;
             }
+            return true;
         });
-
-        mMediaPlayer.setOnErrorListener(
-                new MediaPlayer.OnErrorListener() {
-                    @Override
-                    public boolean onError(MediaPlayer mp, int what, int extra) {
-                        return true;
-                    }
-                }
-        );
-
-        mMediaPlayer.setOnInfoListener(new MediaPlayer.OnInfoListener() {
-            @Override
-            public boolean onInfo(MediaPlayer mp, int what, int extra) {
-                switch (what) {
-                    case MediaPlayer.MEDIA_INFO_BUFFERING_START:
-                        bufferingIndicator.setVisibility(View.VISIBLE);
-                        mainTrackController.setVisibility(View.GONE);
-                        isPrepared = false;
-                        break;
-                    case MediaPlayer.MEDIA_INFO_BUFFERING_END:
-                        bufferingIndicator.setVisibility(View.GONE);
-                        mainTrackController.setVisibility(View.VISIBLE);
-                        isPrepared = true;
-                        break;
-                }
-                return true;
-            }
-        });
-
     }
 
     @Override
@@ -473,22 +432,17 @@ public class PlayerFragment extends Fragment implements
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    public void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState); }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_player, container, false);
         return view;
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-    }
+    public void onPause() { super.onPause(); }
 
     @Override
     public void onResume() {
@@ -504,69 +458,53 @@ public class PlayerFragment extends Fragment implements
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         imgLoader = new ImageLoader(getContext());
-
         smallPlayer = view.findViewById(R.id.smallPlayer);
-
         snappyRecyclerView = view.findViewById(R.id.visualizer_recycler);
-
         bufferingIndicator = view.findViewById(R.id.bufferingIndicator);
         currTime = view.findViewById(R.id.currTime);
         totalTime = view.findViewById(R.id.totalTime);
-
         repeatController = view.findViewById(R.id.repeat_controller);
         shuffleController = view.findViewById(R.id.shuffle_controller);
-
         spToolbar = view.findViewById(R.id.smallPlayer_AB);
-
         overflowMenuAB = view.findViewById(R.id.menuIcon);
-
         lyricsContainer = view.findViewById(R.id.lyrics_container);
         lyricsIcon = view.findViewById(R.id.lyrics_icon);
         lyricsContent = view.findViewById(R.id.lyrics_content);
         lyricsLoadingIndicator = view.findViewById(R.id.lyrics_loading_indicator);
         lyricsStatus = view.findViewById(R.id.lyrics_status_text);
-
-        lyricsIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!isLyricsVisible) {
-                    lyricsIcon.setAlpha(1.0f);
-                    mVisualizerView.setVisibility(View.GONE);
-                    lyricsContainer.setVisibility(View.VISIBLE);
-                    lyricsLoadingIndicator.setVisibility(View.VISIBLE);
-                    lyricsStatus.setText("Searching Lyrics");
-                    lyricsStatus.setVisibility(View.VISIBLE);
-                    if (currentLyrics == null) {
-                        downloadThread = new DownloadThread(PlayerFragment.this, false, selected_track_artist.getText().toString(), selected_track_title.getText().toString());
-                        downloadThread.start();
-                    } else {
-                        onLyricsDownloaded(currentLyrics);
-                    }
+        lyricsIcon.setOnClickListener((View v) -> {
+            if (!isLyricsVisible) {
+                lyricsIcon.setAlpha(1.0f);
+                mVisualizerView.setVisibility(View.GONE);
+                lyricsContainer.setVisibility(View.VISIBLE);
+                lyricsLoadingIndicator.setVisibility(View.VISIBLE);
+                lyricsStatus.setText("Searching Lyrics");
+                lyricsStatus.setVisibility(View.VISIBLE);
+                if (currentLyrics == null) {
+                    downloadThread = new DownloadThread(PlayerFragment.this, false, selected_track_artist.getText().toString(), selected_track_title.getText().toString());
+                    downloadThread.start();
                 } else {
-                    lyricsIcon.setAlpha(0.5f);
-                    lyricsContent.setText("");
-                    lyricsContainer.setVisibility(View.GONE);
-                    mVisualizerView.setVisibility(View.VISIBLE);
+                    onLyricsDownloaded(currentLyrics);
                 }
-                isLyricsVisible = !isLyricsVisible;
+            } else {
+                lyricsIcon.setAlpha(0.5f);
+                lyricsContent.setText("");
+                lyricsContainer.setVisibility(View.GONE);
+                mVisualizerView.setVisibility(View.VISIBLE);
             }
+            isLyricsVisible = !isLyricsVisible;
         });
 
         spImgAB = view.findViewById(R.id.selected_track_image_sp_AB);
-        spImgAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!homeActivity.isPlayerTransitioning && smallPlayer != null) {
-                    homeActivity.hidePlayer();
-                    HomeActivity.isPlayerVisible = false;
-                }
+        spImgAB.setOnClickListener((View v) -> {
+            if (!homeActivity.isPlayerTransitioning && smallPlayer != null) {
+                homeActivity.hidePlayer();
+                HomeActivity.isPlayerVisible = false;
             }
         });
         spTitleAB = view.findViewById(R.id.selected_track_title_sp_AB);
         spTitleAB.setSelected(true);
-
         spArtistAB = view.findViewById(R.id.selected_track_artist_sp_AB);
 
         if (HomeActivity.shuffleEnabled) {
@@ -583,74 +521,54 @@ public class PlayerFragment extends Fragment implements
             repeatController.setImageResource(R.drawable.ic_repeat_alpha);
         }
 
-        repeatController.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (HomeActivity.repeatOnceEnabled) {
-                    HomeActivity.repeatOnceEnabled = false;
-                    repeatController.setImageResource(R.drawable.ic_repeat_alpha);
-                } else if (HomeActivity.repeatEnabled) {
-                    HomeActivity.repeatEnabled = false;
-                    HomeActivity.repeatOnceEnabled = true;
-                    repeatController.setImageResource(R.drawable.ic_repeat_once);
-                } else {
-                    HomeActivity.repeatEnabled = true;
-                    repeatController.setImageResource(R.drawable.ic_repeat_filled);
-                }
+        repeatController.setOnClickListener((View v) -> {
+            if (HomeActivity.repeatOnceEnabled) {
+                HomeActivity.repeatOnceEnabled = false;
+                repeatController.setImageResource(R.drawable.ic_repeat_alpha);
+            } else if (HomeActivity.repeatEnabled) {
+                HomeActivity.repeatEnabled = false;
+                HomeActivity.repeatOnceEnabled = true;
+                repeatController.setImageResource(R.drawable.ic_repeat_once);
+            } else {
+                HomeActivity.repeatEnabled = true;
+                repeatController.setImageResource(R.drawable.ic_repeat_filled);
             }
         });
 
-        shuffleController.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (HomeActivity.shuffleEnabled) {
-                    HomeActivity.shuffleEnabled = false;
-                    shuffleController.setImageResource(R.drawable.ic_shuffle_alpha);
-                    mCallback.onShuffleDisabled();
-                } else {
-                    HomeActivity.shuffleEnabled = true;
-                    shuffleController.setImageResource(R.drawable.ic_shuffle_filled);
-                    mCallback.onShuffleEnabled();
-                }
-                snappyRecyclerView.scrollToPosition(HomeActivity.queueCurrentIndex);
-                snappyRecyclerView.setCurrentPosition(HomeActivity.queueCurrentIndex);
-                customAdapter.notifyDataSetChanged();
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        snappyRecyclerView.setTransparency();
-                    }
-                }, 400);
+        shuffleController.setOnClickListener((View v) -> {
+            if (HomeActivity.shuffleEnabled) {
+                HomeActivity.shuffleEnabled = false;
+                shuffleController.setImageResource(R.drawable.ic_shuffle_alpha);
+                mCallback.onShuffleDisabled();
+            } else {
+                HomeActivity.shuffleEnabled = true;
+                shuffleController.setImageResource(R.drawable.ic_shuffle_filled);
+                mCallback.onShuffleEnabled();
             }
+            snappyRecyclerView.scrollToPosition(HomeActivity.queueCurrentIndex);
+            snappyRecyclerView.setCurrentPosition(HomeActivity.queueCurrentIndex);
+            customAdapter.notifyDataSetChanged();
+            Handler handler = new Handler();
+            handler.postDelayed(() -> snappyRecyclerView.setTransparency()
+            ,400);
         });
 
         equalizerIcon = view.findViewById(R.id.equalizer_icon);
-        equalizerIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCallback.onEqualizerClicked();
-            }
-        });
+        equalizerIcon.setOnClickListener((View v) -> mCallback.onEqualizerClicked());
         equalizerIcon.setVisibility(View.INVISIBLE);
-
         saveDNAToggle = view.findViewById(R.id.toggleSaveDNA);
         if (HomeActivity.isSaveDNAEnabled) {
             saveDNAToggle.setImageResource(R.drawable.ic_save_filled);
         } else {
             saveDNAToggle.setImageResource(R.drawable.ic_save_alpha);
         }
-
-        saveDNAToggle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (HomeActivity.isSaveDNAEnabled) {
-                    HomeActivity.isSaveDNAEnabled = false;
-                    saveDNAToggle.setImageResource(R.drawable.ic_save_alpha);
-                } else {
-                    HomeActivity.isSaveDNAEnabled = true;
-                    saveDNAToggle.setImageResource(R.drawable.ic_save_filled);
-                }
+        saveDNAToggle.setOnClickListener((View v) -> {
+            if (HomeActivity.isSaveDNAEnabled) {
+                HomeActivity.isSaveDNAEnabled = false;
+                saveDNAToggle.setImageResource(R.drawable.ic_save_alpha);
+            } else {
+                HomeActivity.isSaveDNAEnabled = true;
+                saveDNAToggle.setImageResource(R.drawable.ic_save_filled);
             }
         });
 
@@ -673,49 +591,38 @@ public class PlayerFragment extends Fragment implements
             isFav = false;
         }
 
-        favouriteIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isFav) {
-                    favouriteIcon.setImageResource(R.drawable.ic_heart_alpha);
-                    favControllerSp.setImageResource(R.drawable.ic_heart_alpha);
-                    isFav = false;
-                    removeFromFavourite();
-                } else {
-                    favouriteIcon.setImageResource(R.drawable.ic_heart_filled_1);
-                    favControllerSp.setImageResource(R.drawable.ic_heart_filled_1);
-                    isFav = true;
-                    addToFavourite();
-                }
-                new HomeActivity.SaveFavourites().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        favouriteIcon.setOnClickListener((View v) -> {
+            if (isFav) {
+                favouriteIcon.setImageResource(R.drawable.ic_heart_alpha);
+                favControllerSp.setImageResource(R.drawable.ic_heart_alpha);
+                isFav = false;
+                removeFromFavourite();
+            } else {
+                favouriteIcon.setImageResource(R.drawable.ic_heart_filled_1);
+                favControllerSp.setImageResource(R.drawable.ic_heart_filled_1);
+                isFav = true;
+                addToFavourite();
             }
+            new HomeActivity.SaveFavourites().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         });
 
-        favControllerSp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isFav) {
-                    favouriteIcon.setImageResource(R.drawable.ic_heart_alpha);
-                    favControllerSp.setImageResource(R.drawable.ic_heart_alpha);
-                    isFav = false;
-                    removeFromFavourite();
-                } else {
-                    favouriteIcon.setImageResource(R.drawable.ic_heart_filled_1);
-                    favControllerSp.setImageResource(R.drawable.ic_heart_filled_1);
-                    isFav = true;
-                    addToFavourite();
-                }
-                new HomeActivity.SaveFavourites().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        favControllerSp.setOnClickListener((View v) -> {
+            if (isFav) {
+                favouriteIcon.setImageResource(R.drawable.ic_heart_alpha);
+                favControllerSp.setImageResource(R.drawable.ic_heart_alpha);
+                isFav = false;
+                removeFromFavourite();
+            } else {
+                favouriteIcon.setImageResource(R.drawable.ic_heart_filled_1);
+                favControllerSp.setImageResource(R.drawable.ic_heart_filled_1);
+                isFav = true;
+                addToFavourite();
             }
+            new HomeActivity.SaveFavourites().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         });
 
         queueIcon = view.findViewById(R.id.queue_icon);
-        queueIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCallback.onQueueClicked();
-            }
-        });
+        queueIcon.setOnClickListener((View v) -> mCallback.onQueueClicked());
 
         selected_track_image = view.findViewById(R.id.selected_track_image_sp);
         selected_track_title = view.findViewById(R.id.selected_track_title_sp);
@@ -723,14 +630,10 @@ public class PlayerFragment extends Fragment implements
         player_controller = view.findViewById(R.id.player_control_sp);
 
         nextControllerSp = view.findViewById(R.id.next_controller_sp);
-
-        nextControllerSp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mMediaPlayer.pause();
-                HomeActivity.nextControllerClicked = true;
-                mCallback.onComplete();
-            }
+        nextControllerSp.setOnClickListener((View v) -> {
+            mMediaPlayer.pause();
+            HomeActivity.nextControllerClicked = true;
+            mCallback.onComplete();
         });
 
         bottomContainer = view.findViewById(R.id.mainControllerContainer);
@@ -738,7 +641,6 @@ public class PlayerFragment extends Fragment implements
         toggleContainer = view.findViewById(R.id.toggleContainer);
 
         mVisualizerView = view.findViewById(R.id.myvisualizerview);
-
         VisualizerView.w = HomeActivity.screen_width;
         VisualizerView.h = HomeActivity.screen_height;
         VisualizerView.conf = Bitmap.Config.ARGB_8888;
@@ -755,7 +657,6 @@ public class PlayerFragment extends Fragment implements
         snappyRecyclerView.setItemAnimator(new DefaultItemAnimator());
         snappyRecyclerView.setAdapter(customAdapter);
         snappyRecyclerView.setActivity(homeActivity);
-
         snappyRecyclerView.addOnItemTouchListener(new ClickItemTouchListener(snappyRecyclerView) {
             @Override
             public boolean onClick(RecyclerView parent, View view, int position, long id) {
@@ -784,24 +685,13 @@ public class PlayerFragment extends Fragment implements
 
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
             }
         });
-
 
         cpb = view.findViewById(R.id.customProgress);
-
-        smallPlayer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCallback.onSmallPlayerTouched();
-            }
-        });
-
-
+        smallPlayer.setOnClickListener((View v) -> mCallback.onSmallPlayerTouched());
         track = HomeActivity.selectedTrack;
         localTrack = HomeActivity.localSelectedTrack;
-
         if (HomeActivity.streamSelected) {
             try {
                 durationInMilliSec = track.getDuration();
@@ -825,12 +715,10 @@ public class PlayerFragment extends Fragment implements
             try {
                 durationInMilliSec = (int) localTrack.getDuration();
             } catch (Exception e) {
-
             }
             try {
                 imgLoader.DisplayImage(localTrack.getPath(), selected_track_image);
             } catch (Exception e) {
-
             }
             try {
                 spTitleAB.setText(localTrack.getTitle());
@@ -838,14 +726,11 @@ public class PlayerFragment extends Fragment implements
                 selected_track_artist.setText(localTrack.getArtist());
                 spArtistAB.setText(localTrack.getArtist());
             } catch (Exception e) {
-
             }
-
         }
 
         temp = getTime(durationInMilliSec);
         totalTime.setText(temp.first + ":" + temp.second);
-
         homeActivity.mWifi = homeActivity.connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
         try {
@@ -880,141 +765,104 @@ public class PlayerFragment extends Fragment implements
             e.printStackTrace();
         }
 
-        overflowMenuAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopupMenu popMenu = new PopupMenu(getContext(), overflowMenuAB);
-                popMenu.getMenuInflater().inflate(R.menu.player_overflow_menu, popMenu.getMenu());
-
-                popMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        if (item.getTitle().equals("Full Screen")) {
-                            if (HomeActivity.isFullScreenEnabled) {
-                                HomeActivity.isFullScreenEnabled = false;
-                                bottomContainer.setVisibility(View.VISIBLE);
-                                seekBarContainer.setVisibility(View.VISIBLE);
-                                toggleContainer.setVisibility(View.VISIBLE);
-                                spToolbar.setVisibility(View.VISIBLE);
-                                mCallback.onFullScreen();
-                            } else {
-                                HomeActivity.isFullScreenEnabled = true;
-                                bottomContainer.setVisibility(View.GONE);
-                                seekBarContainer.setVisibility(View.GONE);
-                                toggleContainer.setVisibility(View.GONE);
-                                spToolbar.setVisibility(View.INVISIBLE);
-                                mCallback.onFullScreen();
-                            }
-                        } else if (item.getTitle().equals("Settings")) {
-                            mCallback.onSettingsClicked();
-                        } else if (item.getTitle().equals("Add to playlist")) {
-                            UnifiedTrack ut = HomeActivity.queue.getQueue().get(HomeActivity.queueCurrentIndex);
-                            mCallback.addCurrentSongToPlaylist(ut);
-                        }
-                        return true;
+        overflowMenuAB.setOnClickListener((View v) -> {
+            PopupMenu popMenu = new PopupMenu(getContext(), overflowMenuAB);
+            popMenu.getMenuInflater().inflate(R.menu.player_overflow_menu, popMenu.getMenu());
+            popMenu.setOnMenuItemClickListener((MenuItem item) -> {
+                if (item.getTitle().equals("Full Screen")) {
+                    if (HomeActivity.isFullScreenEnabled) {
+                        HomeActivity.isFullScreenEnabled = false;
+                        bottomContainer.setVisibility(View.VISIBLE);
+                        seekBarContainer.setVisibility(View.VISIBLE);
+                        toggleContainer.setVisibility(View.VISIBLE);
+                        spToolbar.setVisibility(View.VISIBLE);
+                        mCallback.onFullScreen();
+                    } else {
+                        HomeActivity.isFullScreenEnabled = true;
+                        bottomContainer.setVisibility(View.GONE);
+                        seekBarContainer.setVisibility(View.GONE);
+                        toggleContainer.setVisibility(View.GONE);
+                        spToolbar.setVisibility(View.INVISIBLE);
+                        mCallback.onFullScreen();
                     }
-                });
-
-                popMenu.show();
-            }
-        });
-
-
-        player_controller.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isReplayIconVisible) {
-                    HomeActivity.hasQueueEnded = true;
-                    mCallback.onComplete();
-                } else {
-                    if (!pauseClicked) {
-                        pauseClicked = true;
-                    }
-                    togglePlayPause();
+                } else if (item.getTitle().equals("Settings")) {
+                    mCallback.onSettingsClicked();
+                } else if (item.getTitle().equals("Add to playlist")) {
+                    UnifiedTrack ut = HomeActivity.queue.getQueue().get(HomeActivity.queueCurrentIndex);
+                    mCallback.addCurrentSongToPlaylist(ut);
                 }
-            }
+                return true;
+            });
+            popMenu.show();
         });
 
-        mainTrackController.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isReplayIconVisible) {
-                    HomeActivity.hasQueueEnded = true;
-                    mCallback.onComplete();
-                } else {
-                    if (!pauseClicked) {
-                        pauseClicked = true;
-                    }
-                    togglePlayPause();
-                }
-            }
-        });
-
-        nextTrackController.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mMediaPlayer.pause();
-                HomeActivity.nextControllerClicked = true;
+        player_controller.setOnClickListener((View v) -> {
+            if (isReplayIconVisible) {
+                HomeActivity.hasQueueEnded = true;
                 mCallback.onComplete();
+            } else {
+                if (!pauseClicked) {
+                    pauseClicked = true;
+                }
+                togglePlayPause();
             }
         });
 
-        previousTrackController.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (HomeActivity.queueCurrentIndex != 0) {
-                    mMediaPlayer.pause();
-                    mCallback.onPreviousTrack();
+        mainTrackController.setOnClickListener((View v) -> {
+            if (isReplayIconVisible) {
+                HomeActivity.hasQueueEnded = true;
+                mCallback.onComplete();
+            } else {
+                if (!pauseClicked) {
+                    pauseClicked = true;
                 }
+                togglePlayPause();
+            }
+        });
+
+        nextTrackController.setOnClickListener((View v) -> {
+            mMediaPlayer.pause();
+            HomeActivity.nextControllerClicked = true;
+            mCallback.onComplete();
+        });
+
+        previousTrackController.setOnClickListener((View v) -> {
+            if (HomeActivity.queueCurrentIndex != 0) {
+                mMediaPlayer.pause();
+                mCallback.onPreviousTrack();
             }
         });
 
         progressBar = view.findViewById(R.id.progressBar);
         progressBar.setMax(durationInMilliSec);
-
         timer = new Timer();
-        timer.scheduleAtFixedRate(
-                new TimerTask() {
-                    public void run() {
-                        if (isPrepared && !isTracking && getActivity() != null) {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    float[] hsv = new float[3];
-                                    hsv[0] = HomeActivity.seekBarColor;
-                                    hsv[1] = (float) 0.8;
-                                    hsv[2] = (float) 0.5;
-                                    progressBar.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(Color.HSVToColor(hsv), PorterDuff.Mode.SRC_IN));
-                                    cpb.update();
-                                }
-                            });
-                            try {
-                                temp = getTime(mMediaPlayer.getCurrentPosition());
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        currTime.setText(temp.first + ":" + temp.second);
-                                    }
-                                });
-                                progressBar.setProgress(mMediaPlayer.getCurrentPosition());
-                            } catch (Exception e) {
-                                Log.e("MEDIA", e.getMessage() + ":");
-                            }
-                        }
+        timer.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                if (isPrepared && !isTracking && getActivity() != null) {
+                    getActivity().runOnUiThread(() -> {
+                        float[] hsv = new float[3];
+                        hsv[0] = HomeActivity.seekBarColor;
+                        hsv[1] = (float) 0.8;
+                        hsv[2] = (float) 0.5;
+                        progressBar.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(Color.HSVToColor(hsv), PorterDuff.Mode.SRC_IN));
+                        cpb.update();
+                    });
+                    try {
+                        temp = getTime(mMediaPlayer.getCurrentPosition());
+                        getActivity().runOnUiThread(() -> currTime.setText(temp.first + ":" + temp.second));
+                        progressBar.setProgress(mMediaPlayer.getCurrentPosition());
+                    } catch (Exception e) {
+                        Log.e("MEDIA", e.getMessage() + ":");
                     }
-                }, 0, 50);
+                }
+            }
+        }, 0, 50);
 
         progressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 temp = getTime(progress);
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        currTime.setText(temp.first + ":" + temp.second);
-                    }
-                });
+                getActivity().runOnUiThread(() -> currTime.setText(temp.first + ":" + temp.second));
             }
 
             @Override
@@ -1029,7 +877,6 @@ public class PlayerFragment extends Fragment implements
                     mMediaPlayer.start();
                 isTracking = false;
             }
-
         });
 
         final Button mEndButton = new Button(getContext());
@@ -1037,104 +884,80 @@ public class PlayerFragment extends Fragment implements
         mEndButton.setTextColor(Color.WHITE);
 
         Handler handler = new Handler();
-        handler.postDelayed(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        showCase = new ShowcaseView.Builder(getActivity())
-                                .blockAllTouches()
-                                .singleShot(2)
-                                .setStyle(R.style.CustomShowcaseTheme)
-                                .useDecorViewAsParent()
-                                .replaceEndButton(mEndButton)
-                                .setContentTitlePaint(HomeActivity.tp)
-                                .setTarget(new ViewTarget(mVisualizerView.getId(), getActivity()))
-                                .setContentTitle("The DNA")
-                                .setContentText("The DNA of the currently playing song.")
-                                .build();
-                        showCase.setButtonText("Next");
-                        showCase.setButtonPosition(HomeActivity.lps);
-                        showCase.overrideButtonClick(new View.OnClickListener() {
-                            int count1 = -1;
-
-                            @Override
-                            public void onClick(View v) {
-                                count1++;
-                                switch (count1) {
-                                    case 0:
-                                        showCase.setTarget(new ViewTarget(mVisualizerView.getId(), getActivity()));
-                                        showCase.setContentTitle("The DNA");
-                                        showCase.setContentText("Swipe Left or Right to change Song." +
-                                                "Long Press for fullscreen");
-                                        showCase.setButtonPosition(HomeActivity.lps);
-                                        showCase.setButtonText("Next");
-                                        break;
-                                    case 1:
-                                        showCase.setTarget(new ViewTarget(R.id.toggleContainer, getActivity()));
-                                        showCase.setContentTitle("The Controls");
-                                        showCase.setContentText("Equalizer \n" +
-                                                "Save DNA toggle\n" +
-                                                "Add to Favourites \n" +
-                                                "Queue");
-                                        showCase.setButtonPosition(HomeActivity.lps);
-                                        showCase.setButtonText("Done");
-                                        break;
-                                    case 2:
-                                        showCase.setTarget(new ViewTarget(R.id.lyrics_icon, getActivity()));
-                                        showCase.setContentTitle("Lyrics");
-                                        showCase.setContentText("Get lyrics by tapping this icon");
-                                        showCase.setButtonPosition(HomeActivity.lps);
-                                        showCase.setButtonText("Done");
-                                        break;
-                                    case 3:
-                                        showCase.hide();
-                                        break;
-                                }
-                            }
-
-                        });
+        handler.postDelayed(() -> {
+            showCase = new ShowcaseView.Builder(getActivity())
+                .blockAllTouches()
+                .singleShot(2)
+                .setStyle(R.style.CustomShowcaseTheme)
+                .useDecorViewAsParent()
+                .replaceEndButton(mEndButton)
+                .setContentTitlePaint(HomeActivity.tp)
+                .setTarget(new ViewTarget(mVisualizerView.getId(), getActivity()))
+                .setContentTitle("The DNA")
+                .setContentText("The DNA of the currently playing song.")
+                .build();
+            showCase.setButtonText("Next");
+            showCase.setButtonPosition(HomeActivity.lps);
+            showCase.overrideButtonClick(new View.OnClickListener() {
+                int count1 = -1;
+                @Override
+                public void onClick(View v) {
+                    count1++;
+                    switch (count1) {
+                        case 0:
+                            showCase.setTarget(new ViewTarget(mVisualizerView.getId(), getActivity()));
+                            showCase.setContentTitle("The DNA");
+                            showCase.setContentText("Swipe Left or Right to change Song." + "Long Press for fullscreen");
+                            showCase.setButtonPosition(HomeActivity.lps);
+                            showCase.setButtonText("Next");
+                            break;
+                        case 1:
+                            showCase.setTarget(new ViewTarget(R.id.toggleContainer, getActivity()));
+                            showCase.setContentTitle("The Controls");
+                            showCase.setContentText("Equalizer \n" + "Save DNA toggle\n" + "Add to Favourites \n" + "Queue");
+                            showCase.setButtonPosition(HomeActivity.lps);
+                            showCase.setButtonText("Done");
+                            break;
+                        case 2:
+                            showCase.setTarget(new ViewTarget(R.id.lyrics_icon, getActivity()));
+                            showCase.setContentTitle("Lyrics");
+                            showCase.setContentText("Get lyrics by tapping this icon");
+                            showCase.setButtonPosition(HomeActivity.lps);
+                            showCase.setButtonText("Done");
+                            break;
+                        case 3:
+                            showCase.hide();
+                            break;
                     }
-                }, 500);
-
+                }
+            });
+        }, 500);
     }
 
     @Override
-    public void togglePLayPauseCallback() {
-        togglePlayPause();
-    }
+    public void togglePLayPauseCallback() { togglePlayPause(); }
 
     @Override
-    public boolean getPauseClicked() {
-        return pauseClicked;
-    }
+    public boolean getPauseClicked() { return pauseClicked; }
 
     @Override
-    public void setPauseClicked(boolean bool) {
-        pauseClicked = bool;
-    }
+    public void setPauseClicked(boolean bool) { pauseClicked = bool; }
 
     @Override
-    public MediaPlayer getMediaPlayer() {
-        return mMediaPlayer;
-    }
+    public MediaPlayer getMediaPlayer() { return mMediaPlayer; }
 
     public void addToFavourite() {
-
         UnifiedTrack ut;
-
         if (HomeActivity.localSelected)
             ut = new UnifiedTrack(true, localTrack, null);
         else
             ut = new UnifiedTrack(false, null, track);
-
         HomeActivity.favouriteTracks.getFavourite().add(ut);
         mCallback.onAddedToFavFromPlayer();
     }
 
     public void removeFromFavourite() {
-
         UnifiedTrack ut;
-
         if (HomeActivity.localSelected)
             ut = new UnifiedTrack(true, localTrack, null);
         else
@@ -1158,25 +981,20 @@ public class PlayerFragment extends Fragment implements
     }
 
     public void refresh() {
-
         isRefreshed = true;
-
         pauseClicked = false;
         completed = false;
         isTracking = false;
-
         if (snappyRecyclerView.getCurrentPosition() != HomeActivity.queueCurrentIndex) {
             snappyRecyclerView.scrollToPosition(HomeActivity.queueCurrentIndex);
             snappyRecyclerView.setCurrentPosition(HomeActivity.queueCurrentIndex);
             customAdapter.notifyDataSetChanged();
         }
-
         VisualizerView.w = HomeActivity.screen_width;
         VisualizerView.h = HomeActivity.screen_height;
         VisualizerView.conf = Bitmap.Config.ARGB_8888;
         VisualizerView.bmp = Bitmap.createBitmap(VisualizerView.w, VisualizerView.h, VisualizerView.conf);
         HomeActivity.cacheCanvas = new Canvas(VisualizerView.bmp);
-
         if (HomeActivity.isPlayerVisible) {
             player_controller.setVisibility(View.VISIBLE);
             player_controller.setImageResource(R.drawable.ic_queue_music_white_48dp);
@@ -1184,7 +1002,6 @@ public class PlayerFragment extends Fragment implements
             player_controller.setVisibility(View.VISIBLE);
             player_controller.setImageResource(R.drawable.ic_pause_white_48dp);
         }
-
         isFav = false;
 
         if (HomeActivity.isFavourite) {
@@ -1240,12 +1057,10 @@ public class PlayerFragment extends Fragment implements
             try {
                 durationInMilliSec = (int) localTrack.getDuration();
             } catch (Exception e) {
-
             }
             try {
                 imgLoader.DisplayImage(localTrack.getPath(), selected_track_image);
             } catch (Exception e) {
-
             }
             try {
                 spTitleAB.setText(localTrack.getTitle());
@@ -1253,15 +1068,12 @@ public class PlayerFragment extends Fragment implements
                 selected_track_artist.setText(localTrack.getArtist());
                 spArtistAB.setText(localTrack.getArtist());
             } catch (Exception e) {
-
             }
         }
 
         temp = getTime(durationInMilliSec);
         totalTime.setText(temp.first + ":" + temp.second);
-
         homeActivity.mWifi = homeActivity.connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
         try {
             if (HomeActivity.streamSelected) {
                 if (!HomeActivity.settings.isStreamOnlyOnWifiEnabled() || homeActivity.mWifi.isConnected()) {
@@ -1299,51 +1111,35 @@ public class PlayerFragment extends Fragment implements
         }
 
         progressBar.setMax(durationInMilliSec);
-
         timer.cancel();
         timer = new Timer();
-        timer.scheduleAtFixedRate(
-                new TimerTask() {
-                    public void run() {
-                        if (isPrepared && !isTracking && getActivity() != null) {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    float[] hsv = new float[3];
-                                    hsv[0] = HomeActivity.seekBarColor;
-                                    hsv[1] = (float) 0.8;
-                                    hsv[2] = (float) 0.5;
-                                    progressBar.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(Color.HSVToColor(hsv), PorterDuff.Mode.SRC_IN));
-                                    cpb.update();
-                                }
-                            });
-                            try {
-                                temp = getTime(mMediaPlayer.getCurrentPosition());
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        currTime.setText(temp.first + ":" + temp.second);
-                                    }
-                                });
-                                progressBar.setProgress(mMediaPlayer.getCurrentPosition());
-                            } catch (Exception e) {
-                                Log.e("MEDIA", e.getMessage() + ":");
-                            }
-                        }
+        timer.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                if (isPrepared && !isTracking && getActivity() != null) {
+                    getActivity().runOnUiThread(() -> {
+                        float[] hsv = new float[3];
+                        hsv[0] = HomeActivity.seekBarColor;
+                        hsv[1] = (float) 0.8;
+                        hsv[2] = (float) 0.5;
+                        progressBar.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(Color.HSVToColor(hsv), PorterDuff.Mode.SRC_IN));
+                        cpb.update();
+                    });
+                    try {
+                        temp = getTime(mMediaPlayer.getCurrentPosition());
+                        getActivity().runOnUiThread(() -> currTime.setText(temp.first + ":" + temp.second));
+                        progressBar.setProgress(mMediaPlayer.getCurrentPosition());
+                    } catch (Exception e) {
+                        Log.e("MEDIA", e.getMessage() + ":");
                     }
-                }, 0, 50);
+                }
+            }
+        }, 0, 50);
 
         progressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 temp = getTime(progress);
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        currTime.setText(temp.first + ":" + temp.second);
-                    }
-                });
+                getActivity().runOnUiThread(() -> currTime.setText(temp.first + ":" + temp.second));
             }
 
             @Override
@@ -1360,7 +1156,6 @@ public class PlayerFragment extends Fragment implements
                     mMediaPlayer.start();
                 isTracking = false;
             }
-
         });
     }
 
@@ -1391,33 +1186,22 @@ public class PlayerFragment extends Fragment implements
 
     public interface PlayerFragmentCallbackListener {
         void onComplete();
-
         void onPreviousTrack();
-
         void onEqualizerClicked();
-
         void onQueueClicked();
-
         void onPrepared();
-
         void onFullScreen();
-
         void onSettingsClicked();
-
         void onAddedToFavFromPlayer();
-
         void onShuffleEnabled();
-
         void onShuffleDisabled();
-
         void onSmallPlayerTouched();
-
         void addCurrentSongToPlaylist(UnifiedTrack ut);
     }
 
-    public Pair<String, String> getTime(int millsec) {
+    public Pair<String, String> getTime(int millisec) {
         int min, sec;
-        sec = millsec / 1000;
+        sec = millisec / 1000;
         min = sec / 60;
         sec = sec % 60;
         String minS, secS;
@@ -1430,16 +1214,19 @@ public class PlayerFragment extends Fragment implements
         return pair;
     }
 
-    public class SaveDNA extends AsyncTask<Void, Void, Void> {
+    public boolean isShowcaseVisible() { return (showCase != null && showCase.isShowing()); }
 
+    public void hideShowcase() { showCase.hide(); }
+
+    public void toggleAlbumArtBackground() { snappyRecyclerView.setTransparency(); }
+
+    public class SaveDNA extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... params) {
             if (HomeActivity.isSaveDNAEnabled) {
                 Bitmap bmp = VisualizerView.bmp;
-
                 // Generate base64 encoded bitmap
                 String base64encoded = getBase64encodedBitmap(bmp);
-
                 // Create SavedDNA object with relevant values.
                 SavedDNA savedDNA;
                 if (localIsPlaying) {
@@ -1447,7 +1234,6 @@ public class PlayerFragment extends Fragment implements
                 } else {
                     savedDNA = new SavedDNA(track.getTitle(), false, null, track.getArtworkURL(), "", base64encoded);
                 }
-
                 // Check if a DNA exists for the current song, and remove it.
                 for (int i = 0; i < HomeActivity.savedDNAs.getSavedDNAs().size(); i++) {
                     if (HomeActivity.savedDNAs.getSavedDNAs().get(i).getName().equals(savedDNA.getName())) {
@@ -1455,23 +1241,15 @@ public class PlayerFragment extends Fragment implements
                         break;
                     }
                 }
-
                 // Add the DNA to the first position.
                 HomeActivity.savedDNAs.getSavedDNAs().add(0, savedDNA);
-
                 // If number of DNAs get more than 10, then remove the 11th DNA to keep size as 10.
                 // Caution : 0-indexed arrays.
                 if (HomeActivity.savedDNAs.getSavedDNAs().size() > 10) {
                     HomeActivity.savedDNAs.getSavedDNAs().remove(10);
                 }
-
                 // Display Toast.
-                homeActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(ctx, "DNA Saved!", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                homeActivity.runOnUiThread(() -> Toast.makeText(ctx, "DNA Saved!", Toast.LENGTH_SHORT).show());
             }
             return null;
         }
@@ -1479,29 +1257,14 @@ public class PlayerFragment extends Fragment implements
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-
             // Set flags to initial values.
             completed = false;
             isPrepared = false;
-
             // Pause the MediaPlayer and call onComplete().
             mMediaPlayer.pause();
             mCallback.onComplete();
         }
     }
-
-    public boolean isShowcaseVisible() {
-        return (showCase != null && showCase.isShowing());
-    }
-
-    public void hideShowcase() {
-        showCase.hide();
-    }
-
-    public void toggleAlbumArtBackground() {
-        snappyRecyclerView.setTransparency();
-    }
-
     public String getBase64encodedBitmap(Bitmap image) {
         ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOS);

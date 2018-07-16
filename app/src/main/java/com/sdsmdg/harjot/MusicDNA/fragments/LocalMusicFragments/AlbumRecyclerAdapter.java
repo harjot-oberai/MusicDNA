@@ -34,7 +34,7 @@ public class AlbumRecyclerAdapter extends RecyclerView.Adapter<AlbumRecyclerAdap
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_card_layout3, parent, false);
+            .inflate(R.layout.item_card_layout3, parent, false);
 
         return new MyViewHolder(itemView);
     }
@@ -53,9 +53,7 @@ public class AlbumRecyclerAdapter extends RecyclerView.Adapter<AlbumRecyclerAdap
     }
 
     @Override
-    public int getItemCount() {
-        return albumList.size();
-    }
+    public int getItemCount() { return albumList.size(); }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -71,5 +69,4 @@ public class AlbumRecyclerAdapter extends RecyclerView.Adapter<AlbumRecyclerAdap
             bottomHolder = view.findViewById(R.id.bottomHolder);
         }
     }
-
 }

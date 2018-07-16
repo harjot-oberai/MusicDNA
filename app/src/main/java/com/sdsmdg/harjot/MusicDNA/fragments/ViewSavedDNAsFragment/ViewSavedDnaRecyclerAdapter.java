@@ -31,7 +31,6 @@ public class ViewSavedDnaRecyclerAdapter extends RecyclerView.Adapter<ViewSavedD
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_card_layout, parent, false);
-
         return new MyViewHolder(itemView);
     }
 
@@ -61,17 +60,11 @@ public class ViewSavedDnaRecyclerAdapter extends RecyclerView.Adapter<ViewSavedD
         }
 
     }
-
     @Override
-    public int getItemCount() {
-        return savedDNAs.size();
-    }
-
+    public int getItemCount() { return savedDNAs.size(); }
     public class MyViewHolder extends RecyclerView.ViewHolder {
-
         ImageView art;
         TextView title, artist;
-
         public MyViewHolder(View view) {
             super(view);
             art = view.findViewById(R.id.backImage);
@@ -86,6 +79,4 @@ public class ViewSavedDnaRecyclerAdapter extends RecyclerView.Adapter<ViewSavedD
         this.vsdFrag = vsdFrag;
         imgLoader = new ImageLoader(ctx);
     }
-
-
 }

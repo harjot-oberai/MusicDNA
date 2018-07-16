@@ -28,15 +28,14 @@ public class Lyrics implements Serializable, Parcelable {
     public static final int POSITIVE_RESULT = 1;
     public static final int ERROR = -3;
     public static final int SEARCH_ITEM = 2;
+    public static final Creator<Lyrics> CREATOR = new Creator<Lyrics>() {
+        @Override
+        public Lyrics createFromParcel(Parcel in) { return new Lyrics(in); }
 
-    public interface Callback {
-        void onLyricsDownloaded(Lyrics lyrics);
-    }
-
-    public Lyrics(int flag) {
-        this.mFlag = flag;
-    }
-
+        @Override
+        public Lyrics[] newArray(int size) { return new Lyrics[size]; }
+    };
+    public Lyrics(int flag) { this.mFlag = flag; }
     protected Lyrics(Parcel in) {
         mTitle = in.readString();
         mArtist = in.readString();
@@ -50,26 +49,11 @@ public class Lyrics implements Serializable, Parcelable {
         mFlag = in.readInt();
     }
 
-    public static final Creator<Lyrics> CREATOR = new Creator<Lyrics>() {
-        @Override
-        public Lyrics createFromParcel(Parcel in) {
-            return new Lyrics(in);
-        }
+    public String getTrack() { return mTitle; }
 
-        @Override
-        public Lyrics[] newArray(int size) {
-            return new Lyrics[size];
-        }
-    };
+    public void setTitle(String title) { this.mTitle = title; }
 
-    public String getTrack() {
-        return mTitle;
-    }
-
-    public void setTitle(String title) {
-        this.mTitle = title;
-    }
-
+    public void setOriginalTitle(String originalTitle) { this.mOriginalTitle = originalTitle; }
     public String getOriginalTrack() {
         if (mOriginalTitle != null)
             return mOriginalTitle;
@@ -77,17 +61,11 @@ public class Lyrics implements Serializable, Parcelable {
             return mTitle;
     }
 
-    public void setOriginalTitle(String originalTitle) {
-        this.mOriginalTitle = originalTitle;
-    }
+    public String getArtist() { return mArtist; }
 
-    public String getArtist() {
-        return mArtist;
-    }
+    public void setArtist(String artist) { this.mArtist = artist; }
 
-    public void setArtist(String artist) {
-        this.mArtist = artist;
-    }
+    public String getURL() { return mSourceUrl; }
 
     public String getOriginalArtist() {
         if (mOriginalArtist != null)
@@ -100,50 +78,28 @@ public class Lyrics implements Serializable, Parcelable {
         this.mOriginalArtist = originalArtist;
     }
 
-    public String getURL() {
-        return mSourceUrl;
-    }
+    public void setURL(String uRL) { this.mSourceUrl = uRL; }
 
-    public void setURL(String uRL) {
-        this.mSourceUrl = uRL;
-    }
+    public String getCoverURL() { return mCoverURL; }
 
-    public String getCoverURL() {
-        return mCoverURL;
-    }
+    public void setCoverURL(String coverURL) { this.mCoverURL = coverURL; }
 
-    public void setCoverURL(String coverURL) {
-        this.mCoverURL = coverURL;
-    }
+    public String getText() { return mLyrics; }
 
-    public String getText() {
-        return mLyrics;
-    }
+    public void setText(String lyrics) { this.mLyrics = lyrics; }
 
-    public void setText(String lyrics) {
-        this.mLyrics = lyrics;
-    }
+    public String getSource() { return mSource; }
 
-    public String getSource() {
-        return mSource;
-    }
+    public void setSource(String mSource) { this.mSource = mSource; }
 
-    public int getFlag() {
-        return mFlag;
-    }
+    public int getFlag() { return mFlag; }
 
-    public void setSource(String mSource) {
-        this.mSource = mSource;
-    }
+    public boolean isLRC() { return this.mLRC; }
 
-    public void setLRC(boolean LRC) {
-        this.mLRC = LRC;
-    }
+    public void setLRC(boolean LRC) { this.mLRC = LRC; }
 
-    public boolean isLRC() {
-        return this.mLRC;
-    }
-
+    @Override
+    public int describeContents() { return 0; }
     public byte[] toBytes() throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         try {
@@ -188,12 +144,7 @@ public class Lyrics implements Serializable, Parcelable {
         return this.getURL() != null ? this.getURL().hashCode() :
                 (""+this.getOriginalArtist()+this.getOriginalTrack()+this.getSource()).hashCode();
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
+    public interface Callback { void onLyricsDownloaded(Lyrics lyrics); }
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mTitle);

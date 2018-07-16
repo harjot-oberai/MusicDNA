@@ -17,32 +17,21 @@ import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
  * Created by Harjot on 04-Jun-16.
  */
 public class VisualizerView2 extends View {
-
     public Bitmap bmp;
     public Paint mForePaint = new Paint();
     public Paint mTextPaint = new Paint();
     boolean textEnabled = false;
     String text;
-
     public VisualizerView2(Context context) {
         super(context);
-        init();
-    }
-
+        init(); }
     public VisualizerView2(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
-    }
-
+        init(); }
     public VisualizerView2(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
-    }
-
-    public void setBmp(Bitmap bmp) {
-        this.bmp = bmp;
-    }
-
+        init(); }
+    public void setBmp(Bitmap bmp) { this.bmp = bmp; }
     private void init() {
         mForePaint.setStrokeWidth(1f);
         mForePaint.setAntiAlias(true);
@@ -66,19 +55,13 @@ public class VisualizerView2 extends View {
         }
     }
 
-    public void update() {
-        invalidate();
-    }
+    public void update() { invalidate(); }
 
-    public void drawText(String str, boolean addTexttoImage) {
-        textEnabled = addTexttoImage;
+    public void drawText(String str, boolean addTextToImage) {
+        textEnabled = addTextToImage;
         text = str;
-        invalidate();
-    }
-
+        invalidate(); }
     public void dropText() {
         textEnabled = false;
-        invalidate();
-    }
-
+        invalidate(); }
 }

@@ -18,14 +18,14 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true
-            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            minifyEnabled false
+            //minifyEnabled true
+            //shrinkResources true
+            //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-        debug {
-            applicationIdSuffix ".debug"
-            versionNameSuffix "-debug"
-        }
+        //debug {
+        //applicationIdSuffix ".debug"
+        //versionNameSuffix "-debug"
     }
 
     compileOptions {
@@ -37,8 +37,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.4@aar') {
-        transitive = true
-    }
+        transitive = true }
 
     implementation 'org.jsoup:jsoup:1.11.3'
     implementation 'com.github.bumptech.glide:glide:4.7.1'

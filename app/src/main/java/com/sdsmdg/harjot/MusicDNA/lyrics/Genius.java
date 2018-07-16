@@ -1,12 +1,11 @@
 package com.sdsmdg.harjot.MusicDNA.lyrics;
 
-import com.sdsmdg.harjot.MusicDNA.Config;
-import com.sdsmdg.harjot.MusicDNA.annotations.Reflection;
-import com.sdsmdg.harjot.MusicDNA.utilities.Net;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonSyntaxException;
+import com.sdsmdg.harjot.MusicDNA.Config;
+import com.sdsmdg.harjot.MusicDNA.annotations.Reflection;
+import com.sdsmdg.harjot.MusicDNA.utilities.Net;
 
 import org.jsoup.Connection;
 import org.jsoup.HttpStatusException;
@@ -117,5 +116,4 @@ public class Genius {
         result.setSource("Genius");
         return result;
     }
-
 }

@@ -34,8 +34,7 @@ public class NewPlaylistRecyclerAdapter extends RecyclerView.Adapter<NewPlaylist
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_item_5, parent, false);
-
+            .inflate(R.layout.list_item_5, parent, false);
         return new MyViewHolder(itemView);
     }
 
@@ -51,7 +50,6 @@ public class NewPlaylistRecyclerAdapter extends RecyclerView.Adapter<NewPlaylist
         } else {
             holder.cb.setChecked(false);
         }
-
         imgLoader.DisplayImage(track.getPath(), holder.art);
     }
 
@@ -59,9 +57,7 @@ public class NewPlaylistRecyclerAdapter extends RecyclerView.Adapter<NewPlaylist
     public int getItemCount() {
         return localTracks.size();
     }
-
     public class MyViewHolder extends RecyclerView.ViewHolder {
-
         ImageView art;
         TextView title, artist;
         CheckBox cb;

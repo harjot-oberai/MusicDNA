@@ -33,23 +33,15 @@ import com.squareup.leakcanary.RefWatcher;
  * A simple {@link Fragment} subclass.
  */
 public class ViewArtistFragment extends Fragment {
-
     RecyclerView rv;
     LocalTrackRecyclerAdapter lAdapter;
-
     artistCallbackListener mCallback;
-
     FloatingActionButton playAllfab;
     Context ctx;
-
     HomeActivity activity;
-
     TextView title;
-
     View bottomMarginLayout;
-
     ImageLoader imgLoader;
-
     ImageView backBtn, backdrop, addToQueueIcon;
     TextView fragTitle, artistTitle, artistTrackText;
 
@@ -59,9 +51,7 @@ public class ViewArtistFragment extends Fragment {
 
     public interface artistCallbackListener {
         void onArtistSongClick();
-
         void onArtistPlayAll();
-
         void addArtistToQueue();
     }
 
@@ -75,13 +65,12 @@ public class ViewArtistFragment extends Fragment {
             mCallback = (artistCallbackListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
-                    + " must implement OnHeadlineSelectedListener");
+                + " must implement OnHeadlineSelectedListener");
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_view_artist, container, false);
     }
@@ -91,12 +80,7 @@ public class ViewArtistFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         backBtn = view.findViewById(R.id.view_artist_back_btn);
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });
+        backBtn.setOnClickListener((View v) -> getActivity().onBackPressed());
 
         backdrop = view.findViewById(R.id.artist_backdrop);
         imgLoader.DisplayImage(HomeActivity.tempArtist.getArtistSongs().get(0).getPath(), backdrop);
@@ -107,7 +91,6 @@ public class ViewArtistFragment extends Fragment {
 
         artistTitle = view.findViewById(R.id.artist_title);
         artistTitle.setText(HomeActivity.tempArtist.getName());
-
         artistTrackText = view.findViewById(R.id.artist_tracks_text);
         int tmp = HomeActivity.tempArtist.getArtistSongs().size();
         String details1;
@@ -117,14 +100,8 @@ public class ViewArtistFragment extends Fragment {
             details1 = tmp + " Songs ";
         }
         artistTrackText.setText(details1);
-
         addToQueueIcon = view.findViewById(R.id.add_artist_to_queue_icon);
-        addToQueueIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCallback.addArtistToQueue();
-            }
-        });
+        addToQueueIcon.setOnClickListener((View v) -> mCallback.addArtistToQueue());
 
         bottomMarginLayout = view.findViewById(R.id.bottom_margin_layout);
         if (HomeActivity.isReloaded)
@@ -138,7 +115,6 @@ public class ViewArtistFragment extends Fragment {
         rv.setLayoutManager(llManager);
         rv.setItemAnimator(new DefaultItemAnimator());
         rv.setAdapter(lAdapter);
-
         rv.addOnItemTouchListener(new ClickItemTouchListener(rv) {
             @Override
             public boolean onClick(RecyclerView parent, View view, int position, long id) {
@@ -174,37 +150,28 @@ public class ViewArtistFragment extends Fragment {
                 localBottomSheetDialog.show(activity.getSupportFragmentManager(), "local_song_bottom_sheet");
                 return true;
             }
-
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
             }
         });
 
         playAllfab = view.findViewById(R.id.play_all_fab_artist);
         playAllfab.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));
-        playAllfab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                HomeActivity.queue.getQueue().clear();
-                for (int i = 0; i < HomeActivity.tempArtist.getArtistSongs().size(); i++) {
-                    UnifiedTrack ut = new UnifiedTrack(true, HomeActivity.tempArtist.getArtistSongs().get(i), null);
-                    HomeActivity.queue.getQueue().add(ut);
-                }
-                mCallback.onArtistPlayAll();
+        playAllfab.setOnClickListener((View v) -> {
+            HomeActivity.queue.getQueue().clear();
+            for (int i = 0; i < HomeActivity.tempArtist.getArtistSongs().size(); i++) {
+                UnifiedTrack ut = new UnifiedTrack(true, HomeActivity.tempArtist.getArtistSongs().get(i), null);
+                HomeActivity.queue.getQueue().add(ut);
             }
+            mCallback.onArtistPlayAll();
         });
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                playAllfab.animate().scaleX(1.0f).scaleY(1.0f).setDuration(300).setInterpolator(new OvershootInterpolator());
-            }
-        }, 500);
+        new Handler().postDelayed(() -> playAllfab.animate().scaleX(1.0f).scaleY(1.0f).setDuration(300).setInterpolator(new OvershootInterpolator())
+        ,500);
     }
 
     public void updateData() {

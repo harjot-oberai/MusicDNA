@@ -3,7 +3,6 @@ package com.sdsmdg.harjot.MusicDNA.utilities;
 import java.util.Locale;
 
 public class Levenshtein {
-
     public static int distance(String a, String b) {
         a = a.toLowerCase(Locale.US);
         b = b.toLowerCase(Locale.US);
@@ -23,5 +22,4 @@ public class Levenshtein {
         }
         return costs[b.length()];
     }
-
 }

@@ -35,13 +35,29 @@ public class RecentsTrackAdapter extends RecyclerView.Adapter<RecentsTrackAdapte
 
     HomeActivity homeActivity;
 
-    public interface OnDragStartListener {
-        void onDragStarted(RecyclerView.ViewHolder viewHolder);
+    @Override
+    public void onBindViewHolder(final RecentsTrackAdapter.MyViewHolder holder, int position) {
+        UnifiedTrack ut = songList.get(position);
+        if (ut.getType()) {
+            LocalTrack lt = ut.getLocalTrack();
+            imgLoader.DisplayImage(lt.getPath(), holder.art);
+            holder.title.setText(lt.getTitle());
+            holder.artist.setText(lt.getArtist());
+        } else {
+            Track t = ut.getStreamTrack();
+            Picasso.get()
+                .load(t.getArtworkURL())
+                .resize(100, 100)
+                .error(R.drawable.ic_default)
+                .placeholder(R.drawable.ic_default)
+                .into(holder.art);
+            holder.title.setText(t.getTitle());
+            holder.artist.setText("");
+        }
     }
 
-    public interface onRemoveListener {
-        void updateRecentsFragment();
-    }
+    @Override
+    public int getItemCount() { return songList.size(); }
 
     private final OnDragStartListener mDragStartListener;
     onRemoveListener mCallback;
@@ -60,7 +76,6 @@ public class RecentsTrackAdapter extends RecyclerView.Adapter<RecentsTrackAdapte
         UnifiedTrack prev = songList.remove(fromPosition);
         songList.add(toPosition, prev);
         notifyItemMoved(fromPosition, toPosition);
-
         new HomeActivity.SaveRecents().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
@@ -76,38 +91,16 @@ public class RecentsTrackAdapter extends RecyclerView.Adapter<RecentsTrackAdapte
             homeActivity.rAdapter.notifyDataSetChanged();
             homeActivity.refreshHeaderImages();
         }
-
         mCallback.updateRecentsFragment();
-
         new HomeActivity.SaveRecents().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    @Override
-    public void onBindViewHolder(final RecentsTrackAdapter.MyViewHolder holder, int position) {
-        UnifiedTrack ut = songList.get(position);
-        if (ut.getType()) {
-            LocalTrack lt = ut.getLocalTrack();
-            imgLoader.DisplayImage(lt.getPath(), holder.art);
-            holder.title.setText(lt.getTitle());
-            holder.artist.setText(lt.getArtist());
-        } else {
-            Track t = ut.getStreamTrack();
-            Picasso.get()
-                    .load(t.getArtworkURL())
-                    .resize(100, 100)
-                    .error(R.drawable.ic_default)
-                    .placeholder(R.drawable.ic_default)
-                    .into(holder.art);
-            holder.title.setText(t.getTitle());
-            holder.artist.setText("");
-        }
-    }
+    public interface OnDragStartListener { void onDragStarted(RecyclerView.ViewHolder viewHolder); }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_item_2, parent, false);
-
         return new MyViewHolder(itemView);
     }
 
@@ -141,8 +134,5 @@ public class RecentsTrackAdapter extends RecyclerView.Adapter<RecentsTrackAdapte
         }
     }
 
-    @Override
-    public int getItemCount() {
-        return songList.size();
-    }
+    public interface onRemoveListener { void updateRecentsFragment(); }
 }

@@ -33,6 +33,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
+
 ext {
     supportLibVersion = '28.0.0-beta01'
     leakCanary = '1.6.1'

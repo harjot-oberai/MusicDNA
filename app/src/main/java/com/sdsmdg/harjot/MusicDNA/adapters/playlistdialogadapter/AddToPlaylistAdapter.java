@@ -7,8 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.models.Playlist;
 import com.sdsmdg.harjot.MusicDNA.R;
+import com.sdsmdg.harjot.MusicDNA.models.Playlist;
 
 import java.util.List;
 
@@ -26,19 +26,13 @@ public class AddToPlaylistAdapter extends BaseAdapter {
     }
 
     @Override
-    public int getCount() {
-        return allPlaylists.size();
-    }
+    public int getCount() { return allPlaylists.size(); }
 
     @Override
-    public Object getItem(int position) {
-        return null;
-    }
+    public Object getItem(int position) { return null; }
 
     @Override
-    public long getItemId(int position) {
-        return 0;
-    }
+    public long getItemId(int position) { return 0; }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -47,7 +41,7 @@ public class AddToPlaylistAdapter extends BaseAdapter {
 
         Playlist pl = allPlaylists.get(position);
 
-        TextView playlistName = (TextView) v.findViewById(R.id.playlist_name_holder);
+        TextView playlistName = v.findViewById(R.id.playlist_name_holder);
         playlistName.setText(pl.getPlaylistName());
 
         return v;

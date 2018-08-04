@@ -10,9 +10,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.models.Track;
 import com.sdsmdg.harjot.MusicDNA.R;
-import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
+import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
+import com.sdsmdg.harjot.MusicDNA.models.Track;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -26,18 +26,27 @@ public class StreamTracksHorizontalAdapter extends RecyclerView.Adapter<StreamTr
     Context ctx;
     ImageLoader imgLoader;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        ImageView art;
-        TextView title, artist;
-        RelativeLayout bottomHolder;
+    @Override
+    public void onBindViewHolder(StreamTracksHorizontalAdapter.MyViewHolder holder, int position) {
 
-        public MyViewHolder(View view) {
-            super(view);
-            art = (ImageView) view.findViewById(R.id.backImage);
-            title = (TextView) view.findViewById(R.id.card_title);
-            artist = (TextView) view.findViewById(R.id.card_artist);
-            bottomHolder = (RelativeLayout) view.findViewById(R.id.bottomHolder);
+        Track track = streamList.get(position);
+        try {
+            if (track.getArtworkURL() != null) {
+                Log.d("ARTWORK_URL", track.getArtworkURL());
+                Picasso.get()
+                        .load(track.getArtworkURL())
+                        .error(R.drawable.ic_default)
+                        .placeholder(R.drawable.ic_default)
+                        .into(holder.art);
+            } else {
+                holder.art.setImageResource(R.drawable.ic_default);
+            }
+
+        } catch (Exception e) {
+            Log.e("AdapterError", e.getMessage());
         }
+        holder.title.setText(track.getTitle());
+        holder.artist.setText("");
     }
 
     public StreamTracksHorizontalAdapter(List<Track> streamList, Context ctx) {
@@ -54,31 +63,20 @@ public class StreamTracksHorizontalAdapter extends RecyclerView.Adapter<StreamTr
         return new MyViewHolder(itemView);
     }
 
-    @Override
-    public void onBindViewHolder(StreamTracksHorizontalAdapter.MyViewHolder holder, int position) {
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        ImageView art;
+        TextView title, artist;
+        RelativeLayout bottomHolder;
 
-        Track track = streamList.get(position);
-        try {
-            if (track.getArtworkURL() != null) {
-                Log.d("ARTWORK_URL", track.getArtworkURL());
-                Picasso.with(ctx)
-                        .load(track.getArtworkURL())
-                        .error(R.drawable.ic_default)
-                        .placeholder(R.drawable.ic_default)
-                        .into(holder.art);
-            } else {
-                holder.art.setImageResource(R.drawable.ic_default);
-            }
-
-        } catch (Exception e) {
-            Log.e("AdapterError", e.getMessage());
+        public MyViewHolder(View view) {
+            super(view);
+            art = view.findViewById(R.id.backImage);
+            title = view.findViewById(R.id.card_title);
+            artist = view.findViewById(R.id.card_artist);
+            bottomHolder = view.findViewById(R.id.bottomHolder);
         }
-        holder.title.setText(track.getTitle());
-        holder.artist.setText("");
     }
 
     @Override
-    public int getItemCount() {
-        return streamList.size();
-    }
+    public int getItemCount() { return streamList.size(); }
 }

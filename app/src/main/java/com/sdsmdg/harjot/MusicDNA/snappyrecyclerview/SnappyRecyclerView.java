@@ -15,34 +15,23 @@ import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
  */
 
 public class SnappyRecyclerView extends RecyclerView {
-
     private int currentPosition;
     HomeActivity homeActivity;
     Context ctx;
-
     // Use it with a horizontal LinearLayoutManager
     // Based on http://stackoverflow.com/a/29171652/4034572
-
     public SnappyRecyclerView(Context context) {
         super(context);
-        ctx = context;
-    }
-
+        ctx = context; }
     public SnappyRecyclerView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        ctx = context;
-    }
-
+        ctx = context; }
     public SnappyRecyclerView(Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        ctx = context;
-    }
-
+        ctx = context; }
     @Override
     public boolean fling(int velocityX, int velocityY) {
-
         LinearLayoutManager linearLayoutManager = (LinearLayoutManager) getLayoutManager();
-
         int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
 
         // views on the screen
@@ -62,7 +51,6 @@ public class SnappyRecyclerView extends RecyclerView {
         if (Math.abs(velocityX) < 1000) {
             // The fling is slow -> stay at the current page if we are less than half through,
             // or go to the next page if more than half through
-
             if (leftEdge > screenWidth / 2) {
                 // go to next page
                 smoothScrollBy(-scrollDistanceRight, 0);
@@ -79,10 +67,8 @@ public class SnappyRecyclerView extends RecyclerView {
             }
 //            handleActions();
             return true;
-
         } else {
             // The fling is fast -> go to next page
-
             if (velocityX > 0) {
                 smoothScrollBy(scrollDistanceLeft, 0);
             } else {
@@ -90,21 +76,16 @@ public class SnappyRecyclerView extends RecyclerView {
             }
 //            handleActions();
             return true;
-
         }
-
     }
 
     @Override
     public void onScrollStateChanged(int state) {
         super.onScrollStateChanged(state);
-
         // If you tap on the phone while the RecyclerView is scrolling it will stop in the middle.
         // This code fixes this. This code is not strictly necessary but it improves the behaviour.
-
         if (state == SCROLL_STATE_IDLE) {
             LinearLayoutManager linearLayoutManager = (LinearLayoutManager) getLayoutManager();
-
             int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
 
             // views on the screen
@@ -126,20 +107,12 @@ public class SnappyRecyclerView extends RecyclerView {
             } else if (rightEdge < screenWidth / 2) {
                 smoothScrollBy(scrollDistanceLeft, 0);
             }
-
             handleActions();
-
         }
     }
 
-    public int getCurrentPosition() {
-        return currentPosition;
-    }
-
-    public void setCurrentPosition(int currentPosition) {
-        this.currentPosition = currentPosition;
-    }
-
+    public int getCurrentPosition() { return currentPosition; }
+    public void setCurrentPosition(int currentPosition) { this.currentPosition = currentPosition; }
     public void handleActions() {
         LinearLayoutManager linearLayoutManager = (LinearLayoutManager) getLayoutManager();
         int firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
@@ -158,8 +131,8 @@ public class SnappyRecyclerView extends RecyclerView {
 
     public void setTransparency() {
         final CustomAdapter.ViewHolder viewHolder = (CustomAdapter.ViewHolder) findViewHolderForAdapterPosition(currentPosition);
-        if (homeActivity.settings != null) {
-            if (homeActivity.settings.isAlbumArtBackgroundEnabled()) {
+        if (HomeActivity.settings != null) {
+            if (HomeActivity.settings.isAlbumArtBackgroundEnabled()) {
                 if (viewHolder != null && viewHolder.albumArt != null)
                     viewHolder.albumArt.animate()
                             .alpha(0.20f);
@@ -170,9 +143,5 @@ public class SnappyRecyclerView extends RecyclerView {
             }
         }
     }
-
-    public void setActivity(HomeActivity homeActivity) {
-        this.homeActivity = homeActivity;
-    }
-
+    public void setActivity(HomeActivity homeActivity) { this.homeActivity = homeActivity; }
 }

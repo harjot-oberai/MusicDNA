@@ -14,9 +14,7 @@ import java.util.regex.Pattern;
 
 @Reflection
 public class PLyrics {
-
     public static final String domain = "www.plyrics.com/";
-
     @Reflection
     public static Lyrics fromMetaData(String artist, String song) {
         String htmlArtist = artist.replaceAll("[\\s'\"-]", "")
@@ -33,7 +31,6 @@ public class PLyrics {
                 htmlSong.toLowerCase(Locale.getDefault()));
         return fromURL(urlString, artist, song);
     }
-
     public static Lyrics fromURL(String url, String artist, String song) {
         String html;
         try {
@@ -79,5 +76,4 @@ public class PLyrics {
         } else
             return new Lyrics(Lyrics.NEGATIVE_RESULT);
     }
-
 }

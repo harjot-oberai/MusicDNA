@@ -15,3 +15,10 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+#-keep public class okhttp3.internal.** { public *; }
+#-keep public class okhttp3.internal.huc.DelegatingHttpsURLConnection
+#-keep public class okhttp3.internal.huc.OkHttpsURLConnection
+#-keep public class okhttp3.internal.platform.ConscryptPlatform
+#-keepclassmembers class retrofit2.** { *; }
+#-keeppackagenames org.jsoup.nodes

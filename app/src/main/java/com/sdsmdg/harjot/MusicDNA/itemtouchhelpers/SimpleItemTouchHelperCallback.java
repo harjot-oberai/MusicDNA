@@ -9,23 +9,14 @@ import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
  * Created by Harjot on 18-May-16.
  */
 public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
-
     private final ItemTouchHelperAdapter mAdapter;
-
     public SimpleItemTouchHelperCallback(ItemTouchHelperAdapter adapter) {
         mAdapter = adapter;
     }
-
     @Override
-    public boolean isLongPressDragEnabled() {
-        return true;
-    }
-
+    public boolean isLongPressDragEnabled() { return true; }
     @Override
-    public boolean isItemViewSwipeEnabled() {
-        return true;
-    }
-
+    public boolean isItemViewSwipeEnabled() { return true; }
     @Override
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
@@ -55,14 +46,12 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
             ItemTouchHelperViewHolder itemViewHolder = (ItemTouchHelperViewHolder) viewHolder;
             itemViewHolder.onItemSelected();
         }
-
         super.onSelectedChanged(viewHolder, actionState);
     }
 
     @Override
     public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         super.clearView(recyclerView, viewHolder);
-
         ItemTouchHelperViewHolder itemViewHolder = (ItemTouchHelperViewHolder) viewHolder;
         itemViewHolder.onItemClear();
     }

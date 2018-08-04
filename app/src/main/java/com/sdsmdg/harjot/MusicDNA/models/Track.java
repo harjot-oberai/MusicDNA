@@ -21,24 +21,9 @@ public class Track {
     @SerializedName("artwork_url")
     private String mArtworkURL;
 
-    public String getTitle() {
-        return mTitle;
-    }
-
-    public int getID() {
-        return mID;
-    }
-
-    public int getDuration() {
-        return mDuration;
-    }
-
-    public String getStreamURL() {
-        return mStreamURL;
-    }
-
-    public String getArtworkURL() {
-        return mArtworkURL;
-    }
-
+    public String getTitle() { return mTitle; }
+    public int getID() { return mID; }
+    public int getDuration() { return mDuration; }
+    public String getStreamURL() { return mStreamURL; }
+    public String getArtworkURL() { return mArtworkURL; }
 }

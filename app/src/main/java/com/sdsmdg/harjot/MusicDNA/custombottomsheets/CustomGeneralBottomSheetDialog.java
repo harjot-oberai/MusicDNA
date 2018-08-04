@@ -11,10 +11,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
-import com.sdsmdg.harjot.MusicDNA.models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.R;
-import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
+import com.sdsmdg.harjot.MusicDNA.models.UnifiedTrack;
 
 /**
  * Created by Harjot on 21-Oct-16.
@@ -42,17 +42,11 @@ public class CustomGeneralBottomSheetDialog extends BottomSheetDialogFragment im
         imgLoader = new ImageLoader(activity);
     }
 
-    public void setPosition(int pos) {
-        position = pos;
-    }
+    public void setPosition(int pos) { position = pos; }
 
-    public void setTrack(UnifiedTrack generalTrack) {
-        this.generalTrack = generalTrack;
-    }
+    public void setTrack(UnifiedTrack generalTrack) { this.generalTrack = generalTrack; }
 
-    public void setFragment(String fragment) {
-        this.fragment = fragment;
-    }
+    public void setFragment(String fragment) { this.fragment = fragment; }
 
     @Nullable
     @Override
@@ -65,9 +59,9 @@ public class CustomGeneralBottomSheetDialog extends BottomSheetDialogFragment im
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        generalSongImage = (ImageView) view.findViewById(R.id.general_song_bottom_sheet_image);
-        generalSongTitle = (TextView) view.findViewById(R.id.general_song_bottom_sheet_title);
-        generalSongArtist = (TextView) view.findViewById(R.id.general_song_bottom_sheet_artist);
+        generalSongImage = view.findViewById(R.id.general_song_bottom_sheet_image);
+        generalSongTitle = view.findViewById(R.id.general_song_bottom_sheet_title);
+        generalSongArtist = view.findViewById(R.id.general_song_bottom_sheet_artist);
 
         if (generalTrack.getType()) {
             imgLoader.DisplayImage(generalTrack.getLocalTrack().getPath(), generalSongImage);
@@ -79,17 +73,16 @@ public class CustomGeneralBottomSheetDialog extends BottomSheetDialogFragment im
             generalSongArtist.setText("");
         }
 
-        playText = (LinearLayout) view.findViewById(R.id.general_song_bottom_sheet_play_wrapper);
+        playText = view.findViewById(R.id.general_song_bottom_sheet_play_wrapper);
         playText.setOnClickListener(this);
-        playNextText = (LinearLayout) view.findViewById(R.id.general_song_bottom_sheet_play_next_wrapper);
+        playNextText = view.findViewById(R.id.general_song_bottom_sheet_play_next_wrapper);
         playNextText.setOnClickListener(this);
-        addToQueueText = (LinearLayout) view.findViewById(R.id.general_song_bottom_sheet_add_to_queue_wrapper);
+        addToQueueText = view.findViewById(R.id.general_song_bottom_sheet_add_to_queue_wrapper);
         addToQueueText.setOnClickListener(this);
-        addToPlaylistText = (LinearLayout) view.findViewById(R.id.general_song_bottom_sheet_add_to_playlist_wrapper);
+        addToPlaylistText = view.findViewById(R.id.general_song_bottom_sheet_add_to_playlist_wrapper);
         addToPlaylistText.setOnClickListener(this);
-        addToFavouriteText = (LinearLayout) view.findViewById(R.id.general_song_bottom_sheet_add_to_fav_wrapper);
+        addToFavouriteText = view.findViewById(R.id.general_song_bottom_sheet_add_to_fav_wrapper);
         addToFavouriteText.setOnClickListener(this);
-
     }
 
     @Override

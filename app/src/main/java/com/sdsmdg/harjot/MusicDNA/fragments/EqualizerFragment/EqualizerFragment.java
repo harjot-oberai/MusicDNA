@@ -1,6 +1,5 @@
 package com.sdsmdg.harjot.MusicDNA.fragments.EqualizerFragment;
 
-
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -27,20 +26,18 @@ import android.widget.Toast;
 
 import com.db.chart.model.LineSet;
 import com.db.chart.renderer.AxisRenderer;
-import com.db.chart.view.ChartView;
 import com.db.chart.view.LineChartView;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
-import com.sdsmdg.harjot.MusicDNA.customviews.AnalogController;
-import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
-import com.sdsmdg.harjot.MusicDNA.fragments.PlayerFragment.PlayerFragment;
 import com.sdsmdg.harjot.MusicDNA.R;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
+import com.sdsmdg.harjot.MusicDNA.customviews.AnalogController;
+import com.sdsmdg.harjot.MusicDNA.fragments.PlayerFragment.PlayerFragment;
 import com.squareup.leakcanary.RefWatcher;
 
 import java.util.ArrayList;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -102,38 +99,24 @@ public class EqualizerFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        backBtn = (ImageView) view.findViewById(R.id.equalizer_back_btn);
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });
+        backBtn = view.findViewById(R.id.equalizer_back_btn);
+        backBtn.setOnClickListener((View v) -> getActivity().onBackPressed());
 
-        fragTitle = (TextView) view.findViewById(R.id.equalizer_fragment_title);
+        fragTitle = view.findViewById(R.id.equalizer_fragment_title);
         if (SplashActivity.tf4 != null)
             fragTitle.setTypeface(SplashActivity.tf4);
 
-        equalizerSwitch = (SwitchCompat) view.findViewById(R.id.equalizer_switch);
+        equalizerSwitch = view.findViewById(R.id.equalizer_switch);
         equalizerSwitch.setChecked(HomeActivity.isEqualizerEnabled);
-        equalizerSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                mCallback.onCheckChanged(isChecked);
-            }
-        });
+        equalizerSwitch.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked) ->
+            mCallback.onCheckChanged(isChecked));
 
-        spinnerDropDownIcon = (ImageView) view.findViewById(R.id.spinner_dropdown_icon);
-        spinnerDropDownIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                presetSpinner.performClick();
-            }
-        });
+        spinnerDropDownIcon = view.findViewById(R.id.spinner_dropdown_icon);
+        spinnerDropDownIcon.setOnClickListener((View v) -> presetSpinner.performClick());
 
-        presetSpinner = (Spinner) view.findViewById(R.id.equalizer_preset_spinner);
+        presetSpinner = view.findViewById(R.id.equalizer_preset_spinner);
 
-        equalizerBlocker = (FrameLayout) view.findViewById(R.id.equalizerBlocker);
+        equalizerBlocker = view.findViewById(R.id.equalizerBlocker);
 
         if (HomeActivity.isEqualizerEnabled) {
             equalizerBlocker.setVisibility(View.GONE);
@@ -141,12 +124,12 @@ public class EqualizerFragment extends Fragment {
             equalizerBlocker.setVisibility(View.VISIBLE);
         }
 
-        chart = (LineChartView) view.findViewById(R.id.lineChart);
+        chart = view.findViewById(R.id.lineChart);
         paint = new Paint();
         dataset = new LineSet();
 
-        bassController = (AnalogController) view.findViewById(R.id.controllerBass);
-        reverbController = (AnalogController) view.findViewById(R.id.controller3D);
+        bassController = view.findViewById(R.id.controllerBass);
+        reverbController = view.findViewById(R.id.controller3D);
 
         bassController.setLabel("BASS");
         reverbController.setLabel("3D");
@@ -203,34 +186,28 @@ public class EqualizerFragment extends Fragment {
             }
         }
 
-        bassController.setOnProgressChangedListener(new AnalogController.onProgressChangedListener() {
-            @Override
-            public void onProgressChanged(int progress) {
-                HomeActivity.bassStrength = (short) (((float) 1000 / 19) * (progress));
-                try {
-                    PlayerFragment.bassBoost.setStrength(HomeActivity.bassStrength);
-                    HomeActivity.equalizerModel.setBassStrength(HomeActivity.bassStrength);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        bassController.setOnProgressChangedListener((int progress) -> {
+            HomeActivity.bassStrength = (short) (((float) 1000 / 19) * (progress));
+            try {
+                PlayerFragment.bassBoost.setStrength(HomeActivity.bassStrength);
+                HomeActivity.equalizerModel.setBassStrength(HomeActivity.bassStrength);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
 
-        reverbController.setOnProgressChangedListener(new AnalogController.onProgressChangedListener() {
-            @Override
-            public void onProgressChanged(int progress) {
-                HomeActivity.reverbPreset = (short) ((progress * 6) / 19);
-                HomeActivity.equalizerModel.setReverbPreset(HomeActivity.reverbPreset);
-                try {
-                    PlayerFragment.presetReverb.setPreset(HomeActivity.reverbPreset);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                y = progress;
+        reverbController.setOnProgressChangedListener((int progress) -> {
+            HomeActivity.reverbPreset = (short) ((progress * 6) / 19);
+            HomeActivity.equalizerModel.setReverbPreset(HomeActivity.reverbPreset);
+            try {
+                PlayerFragment.presetReverb.setPreset(HomeActivity.reverbPreset);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+            y = progress;
         });
 
-        mLinearLayout = (LinearLayout) view.findViewById(R.id.equalizerContainer);
+        mLinearLayout = view.findViewById(R.id.equalizerContainer);
 
         TextView equalizerHeading = new TextView(getContext());
         equalizerHeading.setText("Equalizer");
@@ -248,8 +225,8 @@ public class EqualizerFragment extends Fragment {
             final short equalizerBandIndex = i;
             final TextView frequencyHeaderTextView = new TextView(getContext());
             frequencyHeaderTextView.setLayoutParams(new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
             ));
             frequencyHeaderTextView.setGravity(Gravity.CENTER_HORIZONTAL);
             frequencyHeaderTextView.setTextColor(Color.parseColor("#FFFFFF"));
@@ -260,23 +237,23 @@ public class EqualizerFragment extends Fragment {
 
             TextView lowerEqualizerBandLevelTextView = new TextView(getContext());
             lowerEqualizerBandLevelTextView.setLayoutParams(new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
             ));
             lowerEqualizerBandLevelTextView.setTextColor(Color.parseColor("#FFFFFF"));
             lowerEqualizerBandLevelTextView.setText((lowerEqualizerBandLevel / 100) + "dB");
 
             TextView upperEqualizerBandLevelTextView = new TextView(getContext());
             lowerEqualizerBandLevelTextView.setLayoutParams(new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
             ));
             upperEqualizerBandLevelTextView.setTextColor(Color.parseColor("#FFFFFF"));
             upperEqualizerBandLevelTextView.setText((upperEqualizerBandLevel / 100) + "dB");
 
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
             );
             layoutParams.weight = 1;
 
@@ -284,24 +261,24 @@ public class EqualizerFragment extends Fragment {
             TextView textView = new TextView(getContext());
             switch (i) {
                 case 0:
-                    seekBar = (SeekBar) view.findViewById(R.id.seekBar1);
-                    textView = (TextView) view.findViewById(R.id.textView1);
+                    seekBar = view.findViewById(R.id.seekBar1);
+                    textView = view.findViewById(R.id.textView1);
                     break;
                 case 1:
-                    seekBar = (SeekBar) view.findViewById(R.id.seekBar2);
-                    textView = (TextView) view.findViewById(R.id.textView2);
+                    seekBar = view.findViewById(R.id.seekBar2);
+                    textView = view.findViewById(R.id.textView2);
                     break;
                 case 2:
-                    seekBar = (SeekBar) view.findViewById(R.id.seekBar3);
-                    textView = (TextView) view.findViewById(R.id.textView3);
+                    seekBar = view.findViewById(R.id.seekBar3);
+                    textView = view.findViewById(R.id.textView3);
                     break;
                 case 3:
-                    seekBar = (SeekBar) view.findViewById(R.id.seekBar4);
-                    textView = (TextView) view.findViewById(R.id.textView4);
+                    seekBar = view.findViewById(R.id.seekBar4);
+                    textView = view.findViewById(R.id.textView4);
                     break;
                 case 4:
-                    seekBar = (SeekBar) view.findViewById(R.id.seekBar5);
-                    textView = (TextView) view.findViewById(R.id.textView5);
+                    seekBar = view.findViewById(R.id.seekBar5);
+                    textView = view.findViewById(R.id.textView5);
                     break;
             }
             seekBarFinal[i] = seekBar;
@@ -316,14 +293,14 @@ public class EqualizerFragment extends Fragment {
             textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
             if (HomeActivity.isEqualizerReloaded) {
-                points[i] = HomeActivity.seekbarpos[i] - lowerEqualizerBandLevel;
+                points[i] = HomeActivity.seekbarPos[i] - lowerEqualizerBandLevel;
                 dataset.addPoint(frequencyHeaderTextView.getText().toString(), points[i]);
-                seekBar.setProgress(HomeActivity.seekbarpos[i] - lowerEqualizerBandLevel);
+                seekBar.setProgress(HomeActivity.seekbarPos[i] - lowerEqualizerBandLevel);
             } else {
                 points[i] = PlayerFragment.mEqualizer.getBandLevel(equalizerBandIndex) - lowerEqualizerBandLevel;
                 dataset.addPoint(frequencyHeaderTextView.getText().toString(), points[i]);
                 seekBar.setProgress(PlayerFragment.mEqualizer.getBandLevel(equalizerBandIndex) - lowerEqualizerBandLevel);
-                HomeActivity.seekbarpos[i] = PlayerFragment.mEqualizer.getBandLevel(equalizerBandIndex);
+                HomeActivity.seekbarPos[i] = PlayerFragment.mEqualizer.getBandLevel(equalizerBandIndex);
                 HomeActivity.isEqualizerReloaded = true;
             }
             seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -331,7 +308,7 @@ public class EqualizerFragment extends Fragment {
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     PlayerFragment.mEqualizer.setBandLevel(equalizerBandIndex, (short) (progress + lowerEqualizerBandLevel));
                     points[seekBar.getId()] = PlayerFragment.mEqualizer.getBandLevel(equalizerBandIndex) - lowerEqualizerBandLevel;
-                    HomeActivity.seekbarpos[seekBar.getId()] = (progress + lowerEqualizerBandLevel);
+                    HomeActivity.seekbarPos[seekBar.getId()] = (progress + lowerEqualizerBandLevel);
                     HomeActivity.equalizerModel.getSeekbarpos()[seekBar.getId()] = (progress + lowerEqualizerBandLevel);
                     dataset.updateValues(points);
                     chart.notifyDataUpdate();
@@ -346,10 +323,8 @@ public class EqualizerFragment extends Fragment {
 
                 @Override
                 public void onStopTrackingTouch(SeekBar seekBar) {
-
                 }
             });
-
         }
 
         equalizeSound();
@@ -366,7 +341,7 @@ public class EqualizerFragment extends Fragment {
 
         chart.setYLabels(AxisRenderer.LabelPosition.NONE);
         chart.setXLabels(AxisRenderer.LabelPosition.NONE);
-        chart.setGrid(ChartView.GridType.NONE, 7, 10, paint);
+        chart.setGrid(7, 10, paint);
 
         chart.setAxisBorderValues(-300, 3300);
 
@@ -378,16 +353,16 @@ public class EqualizerFragment extends Fragment {
         mEndButton.setTextColor(Color.WHITE);
 
         showCase = new ShowcaseView.Builder(getActivity())
-                .blockAllTouches()
-                .singleShot(4)
-                .setStyle(R.style.CustomShowcaseTheme)
-                .useDecorViewAsParent()
-                .replaceEndButton(mEndButton)
-                .setContentTitlePaint(HomeActivity.tp)
-                .setTarget(new ViewTarget(R.id.showcase_view_equalizer, getActivity()))
-                .setContentTitle("Presets")
-                .setContentText("Use one of the available presets")
-                .build();
+            .blockAllTouches()
+            .singleShot(4)
+            .setStyle(R.style.CustomShowcaseTheme)
+            .useDecorViewAsParent()
+            .replaceEndButton(mEndButton)
+            .setContentTitlePaint(HomeActivity.tp)
+            .setTarget(new ViewTarget(R.id.showcase_view_equalizer, getActivity()))
+            .setContentTitle("Presets")
+            .setContentText("Use one of the available presets")
+            .build();
         showCase.setButtonText("Next");
         showCase.setButtonPosition(HomeActivity.lps);
         showCase.overrideButtonClick(new View.OnClickListener() {
@@ -416,16 +391,14 @@ public class EqualizerFragment extends Fragment {
                         break;
                 }
             }
-
         });
-
     }
 
     public void equalizeSound() {
         ArrayList<String> equalizerPresetNames = new ArrayList<>();
         ArrayAdapter<String> equalizerPresetSpinnerAdapter = new ArrayAdapter<>(getContext(),
-                R.layout.spinner_item,
-                equalizerPresetNames);
+            R.layout.spinner_item,
+            equalizerPresetNames);
         equalizerPresetSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         equalizerPresetNames.add("Custom");
 
@@ -454,7 +427,7 @@ public class EqualizerFragment extends Fragment {
                         for (short i = 0; i < numberOfFreqBands; i++) {
                             seekBarFinal[i].setProgress(PlayerFragment.mEqualizer.getBandLevel(i) - lowerEqualizerBandLevel);
                             points[i] = PlayerFragment.mEqualizer.getBandLevel(i) - lowerEqualizerBandLevel;
-                            HomeActivity.seekbarpos[i] = PlayerFragment.mEqualizer.getBandLevel(i);
+                            HomeActivity.seekbarPos[i] = PlayerFragment.mEqualizer.getBandLevel(i);
                             HomeActivity.equalizerModel.getSeekbarpos()[i] = PlayerFragment.mEqualizer.getBandLevel(i);
                         }
                         dataset.updateValues(points);
@@ -468,7 +441,6 @@ public class EqualizerFragment extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
     }
@@ -487,16 +459,9 @@ public class EqualizerFragment extends Fragment {
         refWatcher.watch(this);
     }
 
-    public boolean isShowcaseVisible() {
-        return (showCase != null && showCase.isShowing());
-    }
+    public boolean isShowcaseVisible() { return (showCase != null && showCase.isShowing()); }
 
-    public void hideShowcase() {
-        showCase.hide();
-    }
+    public void hideShowcase() { showCase.hide(); }
 
-    public void setBlockerVisibility(int visibility) {
-        equalizerBlocker.setVisibility(visibility);
-    }
-
+    public void setBlockerVisibility(int visibility) { equalizerBlocker.setVisibility(visibility); }
 }

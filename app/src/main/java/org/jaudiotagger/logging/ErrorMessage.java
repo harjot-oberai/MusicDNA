@@ -5,13 +5,12 @@ import java.text.MessageFormat;
 /**
  * Defines Error Messages
  */
-public enum ErrorMessage
-{
+public enum ErrorMessage {
     GENERAL_READ("File {0} being read"),
     MP4_FILE_NOT_CONTAINER("This file does not appear to be an Mp4  file"),
     MP4_FILE_NOT_AUDIO("This file does not appear to be an Mp4 Audio file, could be corrupted or video "),
     MP4_FILE_IS_VIDEO("This file appears to be an Mp4 Video file, video files are not supported "),
-    MP4_UNABLE_TO_PRIME_FILE_FOR_WRITE_SAFETLY("Unable to safetly check consistency in Mp4 file so cancelling save"),
+    MP4_UNABLE_TO_PRIME_FILE_FOR_WRITE_SAFETLY("Unable to safely check consistency in Mp4 file so cancelling save"),
     MP4_FILE_CONTAINS_MULTIPLE_DATA_ATOMS("File contains multiple data atoms"),
     MP4_CHANGES_TO_FILE_FAILED("Unable to make changes to Mp4 file"),
     MP4_CHANGES_TO_FILE_FAILED_NO_DATA("Unable to make changes to Mp4 file, no data was written"),
@@ -84,7 +83,7 @@ public enum ErrorMessage
     WMA_LENGTH_OF_STRING_IS_TOO_LARGE("Trying to create field but UTF-16LE representation is {0} and exceeds maximum allowed of 65535."),
     WMA_ONLY_STRING_IN_CD ("Only Strings are allowed in content description objects"),
     ID3_EXTENDED_HEADER_SIZE_INVALID("{0} Invalid Extended Header Size of {0} assuming no extended header after all"),
-    ID3_EXTENDED_HEADER_SIZE_TOO_SMALL("{0} Invalid Extended Header Size of {0} is too smal to be valid"),
+    ID3_EXTENDED_HEADER_SIZE_TOO_SMALL("{0} Invalid Extended Header Size of {0} is too small to be valid"),
     ID3_INVALID_OR_UNKNOWN_FLAG_SET("{0} Invalid or unknown bit flag 0x{1} set in ID3 tag header"),
     ID3_TAG_UNSYNCHRONIZED("{0} the ID3 Tag is unsynchronized"),
     ID3_TAG_EXPERIMENTAL("{0} the ID3 Tag is experimental"),
@@ -119,22 +118,8 @@ public enum ErrorMessage
     FLAC_NO_BLOCKTYPE("Flac file has invalid block type {0}"),
     ;
 
-
     String msg;
-
-    ErrorMessage(String msg)
-    {
-        this.msg = msg;
-    }
-
-    public String getMsg()
-    {
-        return msg;
-    }
-
-    public String getMsg(Object... args)
-    {
-        return MessageFormat.format(getMsg(), args);
-    }
-
+    ErrorMessage(String msg) { this.msg = msg; }
+    public String getMsg() { return msg; }
+    public String getMsg(Object... args) { return MessageFormat.format(getMsg(), args); }
 }

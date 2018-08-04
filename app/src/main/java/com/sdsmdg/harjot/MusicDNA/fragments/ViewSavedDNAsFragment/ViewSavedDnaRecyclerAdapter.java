@@ -9,10 +9,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
-import com.sdsmdg.harjot.MusicDNA.models.SavedDNA;
 import com.sdsmdg.harjot.MusicDNA.R;
-import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
+import com.sdsmdg.harjot.MusicDNA.models.SavedDNA;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -31,7 +31,6 @@ public class ViewSavedDnaRecyclerAdapter extends RecyclerView.Adapter<ViewSavedD
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_card_layout, parent, false);
-
         return new MyViewHolder(itemView);
     }
 
@@ -44,7 +43,7 @@ public class ViewSavedDnaRecyclerAdapter extends RecyclerView.Adapter<ViewSavedD
             holder.title.setText(dna.getName());
             holder.artist.setText(dna.getArtist());
         } else {
-            Picasso.with(ctx)
+            Picasso.get()
                     .load(dna.getTrackArtworkURL())
                     .resize(100, 100)
                     .error(R.drawable.ic_default)
@@ -61,22 +60,16 @@ public class ViewSavedDnaRecyclerAdapter extends RecyclerView.Adapter<ViewSavedD
         }
 
     }
-
     @Override
-    public int getItemCount() {
-        return savedDNAs.size();
-    }
-
+    public int getItemCount() { return savedDNAs.size(); }
     public class MyViewHolder extends RecyclerView.ViewHolder {
-
         ImageView art;
         TextView title, artist;
-
         public MyViewHolder(View view) {
             super(view);
-            art = (ImageView) view.findViewById(R.id.backImage);
-            title = (TextView) view.findViewById(R.id.card_title);
-            artist = (TextView) view.findViewById(R.id.card_artist);
+            art = view.findViewById(R.id.backImage);
+            title = view.findViewById(R.id.card_title);
+            artist = view.findViewById(R.id.card_artist);
         }
     }
 
@@ -86,6 +79,4 @@ public class ViewSavedDnaRecyclerAdapter extends RecyclerView.Adapter<ViewSavedD
         this.vsdFrag = vsdFrag;
         imgLoader = new ImageLoader(ctx);
     }
-
-
 }

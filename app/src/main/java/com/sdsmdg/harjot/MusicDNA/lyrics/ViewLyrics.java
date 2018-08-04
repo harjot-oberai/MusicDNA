@@ -1,15 +1,8 @@
 package com.sdsmdg.harjot.MusicDNA.lyrics;
 
 import com.sdsmdg.harjot.MusicDNA.annotations.Reflection;
-
 import com.sdsmdg.harjot.MusicDNA.utilities.Levenshtein;
 import com.sdsmdg.harjot.MusicDNA.utilities.Net;
-
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.Response;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -23,10 +16,15 @@ import java.io.InputStreamReader;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 import static com.sdsmdg.harjot.MusicDNA.lyrics.Lyrics.NEGATIVE_RESULT;
 import static com.sdsmdg.harjot.MusicDNA.lyrics.Lyrics.NO_RESULT;
@@ -34,7 +32,6 @@ import static com.sdsmdg.harjot.MusicDNA.lyrics.Lyrics.POSITIVE_RESULT;
 import static com.sdsmdg.harjot.MusicDNA.lyrics.Lyrics.SEARCH_ITEM;
 
 public class ViewLyrics {
-
     /*
      * Needed data
      */
@@ -52,9 +49,7 @@ public class ViewLyrics {
     //MOBILE: MiniLyricsForAndroid
 
     private static final String searchQueryBase = "<?xml version='1.0' encoding='utf-8' ?><searchV1 artist=\"%s\" title=\"%s\" OnlyMatched=\"1\" %s/>";
-
     private static final String searchQueryPage = " RequestPage='%d'";
-
     private static final byte[] magickey = "Mlv1clt4.0".getBytes();
 
 	/*
@@ -69,8 +64,7 @@ public class ViewLyrics {
 
     public static Lyrics fromMetaData(String artist, String title) throws IOException, NoSuchAlgorithmException, SAXException, ParserConfigurationException {
         ArrayList<Lyrics> results =
-                search(
-                        String.format(searchQueryBase, artist, title, clientTag +
+                search(String.format(searchQueryBase, artist, title, clientTag +
                                 String.format(searchQueryPage, 0)) // Create XMLQuery String
                 );
         if (results.size() == 0)
@@ -89,17 +83,14 @@ public class ViewLyrics {
         result.setLRC(url.endsWith("lrc"));
         result.setText(Net.getUrlAsString(url).replaceAll("(\\[(?=.[a-z]).+\\]|<.+?>|www.*[\\s])", "").replaceAll("[\n\r]", " ").replaceAll("\\[", "\n\\["));
         result.setSource(clientUserAgent);
-
         return result;
     }
 
     private static ArrayList<Lyrics> search(String searchQuery) throws IOException, ParserConfigurationException, SAXException, NoSuchAlgorithmException {
         OkHttpClient client = new OkHttpClient();
-        client.setConnectTimeout(10, TimeUnit.SECONDS);
-        client.setReadTimeout(30, TimeUnit.SECONDS);
-
+        //client.connectTimeout(10, TimeUnit.SECONDS);
+        //client.readTimeout(30, TimeUnit.SECONDS);
         RequestBody body = RequestBody.create(MediaType.parse("application/text"), assembleQuery(searchQuery.getBytes("UTF-8")));
-
         Request request = new Request.Builder()
                 .header("User-Agent", clientUserAgent)
                 .post(body)
@@ -107,9 +98,7 @@ public class ViewLyrics {
                 .build();
 
         Response response = client.newCall(request).execute();
-
-        BufferedReader rd = new BufferedReader
-                (new InputStreamReader(response.body().byteStream(), "ISO_8859_1"));
+        BufferedReader rd = new BufferedReader(new InputStreamReader(response.body().byteStream(), "ISO_8859_1"));
 
         // Get full result
         StringBuilder builder = new StringBuilder();
@@ -123,7 +112,6 @@ public class ViewLyrics {
         // Decrypt, parse, store, and return the result list
         return parseResultXML(decryptResultXML(full));
     }
-
 	/*
      * Add MD5 and Encrypts Search Query
 	 */
@@ -162,7 +150,7 @@ public class ViewLyrics {
         result.write(0x00);
         result.write(0x00);
 
-        // Write Generated MD5 of POG problaby to be used in a search cache
+        // Write Generated MD5 of POG probably to be used in a search cache
         result.write(pog_md5);
 
         // Write encrypted value
@@ -190,7 +178,6 @@ public class ViewLyrics {
         // Return value
         return neomagic.toString();
     }
-
 	/*
 	 * Create the ArrayList<LyricInfo>
 	 */
@@ -227,14 +214,9 @@ public class ViewLyrics {
             //item.setLyricsFileName(readStrFromAttr(itemElem, "filename", ""));
             //itemInfo.setFType(readIntFromAttr(itemElem, "file_type", 0));
             //itemInfo.setMatchVal(readFloatFromAttr(itemElem, "match_value", 0.0F));
-            //itemInfo.setTimeLenght(readIntFromAttr(itemElem, "timelength", 0));
-
-
+            //itemInfo.setTimeLength(readIntFromAttr(itemElem, "timelength", 0));
             availableLyrics.add(item);
         }
-
         return availableLyrics;
     }
-
-
 }

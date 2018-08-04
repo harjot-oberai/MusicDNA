@@ -1,9 +1,8 @@
 package com.sdsmdg.harjot.MusicDNA.fragments.StreamFragment;
 
-
-import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,16 +10,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.sdsmdg.harjot.MusicDNA.clickitemtouchlistener.ClickItemTouchListener;
-import com.sdsmdg.harjot.MusicDNA.custombottomsheets.CustomGeneralBottomSheetDialog;
-import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
-import com.sdsmdg.harjot.MusicDNA.models.Track;
-import com.sdsmdg.harjot.MusicDNA.models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
 import com.sdsmdg.harjot.MusicDNA.R;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.clickitemtouchlistener.ClickItemTouchListener;
+import com.sdsmdg.harjot.MusicDNA.custombottomsheets.CustomGeneralBottomSheetDialog;
+import com.sdsmdg.harjot.MusicDNA.models.Track;
+import com.sdsmdg.harjot.MusicDNA.models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.utilities.CommonUtils;
 import com.squareup.leakcanary.RefWatcher;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,17 +28,11 @@ public class StreamMusicFragment extends Fragment {
     public static StreamTrackListAdapter adapter;
     OnTrackSelectedListener mCallback;
     Context ctx;
-
     RecyclerView lv;
-
     View bottomMarginLayout;
 
     public StreamMusicFragment() {
         // Required empty public constructor
-    }
-
-    public interface OnTrackSelectedListener {
-        void onTrackSelected(int position);
     }
 
     @Override
@@ -50,14 +42,13 @@ public class StreamMusicFragment extends Fragment {
             mCallback = (OnTrackSelectedListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
-                    + " must implement OnHeadlineSelectedListener");
+                + " must implement OnHeadlineSelectedListener");
         }
         ctx = context;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_stream_music, container, false);
     }
@@ -72,14 +63,13 @@ public class StreamMusicFragment extends Fragment {
         else
             bottomMarginLayout.getLayoutParams().height = CommonUtils.dpTopx(65, getContext());
 
-        lv = (RecyclerView) view.findViewById(R.id.trackList);
+        lv = view.findViewById(R.id.trackList);
 
         adapter = new StreamTrackListAdapter(getContext(), HomeActivity.streamingTrackList);
         LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         lv.setLayoutManager(mLayoutManager2);
         lv.setItemAnimator(new DefaultItemAnimator());
         lv.setAdapter(adapter);
-
         lv.addOnItemTouchListener(new ClickItemTouchListener(lv) {
             @Override
             public boolean onClick(RecyclerView parent, View view, int position, long id) {
@@ -118,11 +108,11 @@ public class StreamMusicFragment extends Fragment {
 
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
             }
         });
-
     }
+
+    public interface OnTrackSelectedListener { void onTrackSelected(int position); }
 
     @Override
     public void onDestroyView() {
@@ -142,5 +132,4 @@ public class StreamMusicFragment extends Fragment {
         if (adapter != null)
             adapter.notifyDataSetChanged();
     }
-
 }

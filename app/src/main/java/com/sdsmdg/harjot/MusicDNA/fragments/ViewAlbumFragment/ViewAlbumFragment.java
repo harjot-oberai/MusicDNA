@@ -1,6 +1,5 @@
 package com.sdsmdg.harjot.MusicDNA.fragments.ViewAlbumFragment;
 
-
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
@@ -20,42 +19,33 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
+import com.sdsmdg.harjot.MusicDNA.R;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
 import com.sdsmdg.harjot.MusicDNA.clickitemtouchlistener.ClickItemTouchListener;
 import com.sdsmdg.harjot.MusicDNA.custombottomsheets.CustomLocalBottomSheetDialog;
 import com.sdsmdg.harjot.MusicDNA.fragments.LocalMusicFragments.LocalTrackRecyclerAdapter;
-import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
 import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.models.UnifiedTrack;
-import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
-import com.sdsmdg.harjot.MusicDNA.R;
-import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
 import com.sdsmdg.harjot.MusicDNA.utilities.CommonUtils;
-import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
 import com.squareup.leakcanary.RefWatcher;
-
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ViewAlbumFragment extends Fragment {
-
     LocalTrackRecyclerAdapter aslAdapter;
-
     RecyclerView rv;
-
     ImageLoader imgLoader;
     ImageView backDrop, backBtn, addToQueueIcon;
     FloatingActionButton fab;
     Context ctx;
-
     TextView fragTitle, albumTitle, albumTracksText;
-
     TextView albumDetails;
-
     HomeActivity activity;
-
     View bottomMarginLayout;
-
     albumCallbackListener mCallback;
 
     public ViewAlbumFragment() {
@@ -64,9 +54,7 @@ public class ViewAlbumFragment extends Fragment {
 
     public interface albumCallbackListener {
         void onAlbumSongClick();
-
         void onAlbumPlayAll();
-
         void addAlbumToQueue();
     }
 
@@ -80,14 +68,12 @@ public class ViewAlbumFragment extends Fragment {
             mCallback = (albumCallbackListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
-                    + " must implement OnHeadlineSelectedListener");
+                + " must implement OnHeadlineSelectedListener");
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_view_album, container, false);
     }
@@ -96,40 +82,27 @@ public class ViewAlbumFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        backBtn = (ImageView) view.findViewById(R.id.view_album_back_btn);
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });
-
-        backDrop = (ImageView) view.findViewById(R.id.album_backdrop);
+        backBtn = view.findViewById(R.id.view_album_back_btn);
+        backBtn.setOnClickListener((View v) -> getActivity().onBackPressed());
+        backDrop = view.findViewById(R.id.album_backdrop);
         imgLoader.DisplayImage(HomeActivity.tempAlbum.getAlbumSongs().get(0).getPath(), backDrop);
 
-        fragTitle = (TextView) view.findViewById(R.id.album_fragment_title);
+        fragTitle = view.findViewById(R.id.album_fragment_title);
         if (SplashActivity.tf4 != null)
             fragTitle.setTypeface(SplashActivity.tf4);
 
-        albumTitle = (TextView) view.findViewById(R.id.album_title);
+        albumTitle = view.findViewById(R.id.album_title);
         albumTitle.setText(HomeActivity.tempAlbum.getName());
+        albumTracksText = view.findViewById(R.id.album_tracks_text);
 
-        albumTracksText = (TextView) view.findViewById(R.id.album_tracks_text);
-
-        addToQueueIcon = (ImageView) view.findViewById(R.id.add_album_to_queue_icon);
-        addToQueueIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCallback.addAlbumToQueue();
-            }
-        });
+        addToQueueIcon = view.findViewById(R.id.add_album_to_queue_icon);
+        addToQueueIcon.setOnClickListener((View v) -> mCallback.addAlbumToQueue());
 
         bottomMarginLayout = view.findViewById(R.id.bottom_margin_layout);
         if (HomeActivity.isReloaded)
             bottomMarginLayout.getLayoutParams().height = 0;
         else
             bottomMarginLayout.getLayoutParams().height = CommonUtils.dpTopx(65, getContext());
-
 
         int tmp = HomeActivity.tempAlbum.getAlbumSongs().size();
         String details1;
@@ -141,26 +114,23 @@ public class ViewAlbumFragment extends Fragment {
 
         albumTracksText.setText(details1);
 
-        fab = (FloatingActionButton) view.findViewById(R.id.play_all_from_album);
+        fab = view.findViewById(R.id.play_all_from_album);
         fab.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));
 
-        rv = (RecyclerView) view.findViewById(R.id.album_songs_recycler);
+        rv = view.findViewById(R.id.album_songs_recycler);
         aslAdapter = new LocalTrackRecyclerAdapter(HomeActivity.tempAlbum.getAlbumSongs(), getContext());
         LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rv.setLayoutManager(mLayoutManager2);
         rv.setItemAnimator(new DefaultItemAnimator());
         rv.setAdapter(aslAdapter);
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                HomeActivity.queue.getQueue().clear();
-                for (int i = 0; i < HomeActivity.tempAlbum.getAlbumSongs().size(); i++) {
-                    UnifiedTrack ut = new UnifiedTrack(true, HomeActivity.tempAlbum.getAlbumSongs().get(i), null);
-                    HomeActivity.queue.getQueue().add(ut);
-                }
-                mCallback.onAlbumPlayAll();
+        fab.setOnClickListener((View v) -> {
+            HomeActivity.queue.getQueue().clear();
+            for (int i = 0; i < HomeActivity.tempAlbum.getAlbumSongs().size(); i++) {
+                UnifiedTrack ut = new UnifiedTrack(true, HomeActivity.tempAlbum.getAlbumSongs().get(i), null);
+                HomeActivity.queue.getQueue().add(ut);
             }
+            mCallback.onAlbumPlayAll();
         });
 
         rv.addOnItemTouchListener(new ClickItemTouchListener(rv) {
@@ -193,7 +163,7 @@ public class ViewAlbumFragment extends Fragment {
             public boolean onLongClick(RecyclerView parent, View view, final int position, long id) {
                 CustomLocalBottomSheetDialog localBottomSheetDialog = new CustomLocalBottomSheetDialog();
                 localBottomSheetDialog.setPosition(position);
-                localBottomSheetDialog.setLocalTrack(activity.tempAlbum.getAlbumSongs().get(position));
+                localBottomSheetDialog.setLocalTrack(HomeActivity.tempAlbum.getAlbumSongs().get(position));
                 localBottomSheetDialog.setFragment("Album");
                 localBottomSheetDialog.show(activity.getSupportFragmentManager(), "local_song_bottom_sheet");
                 return true;
@@ -201,10 +171,8 @@ public class ViewAlbumFragment extends Fragment {
 
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
             }
         });
-
     }
 
     public Bitmap getBitmap(String url) {
@@ -213,7 +181,6 @@ public class ViewAlbumFragment extends Fragment {
         Bitmap bitmap = null;
 
         byte[] data = mmr.getEmbeddedPicture();
-
         if (data != null) {
             bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
             return bitmap;
@@ -225,12 +192,8 @@ public class ViewAlbumFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                fab.animate().scaleX(1.0f).scaleY(1.0f).setDuration(300).setInterpolator(new OvershootInterpolator());
-            }
-        }, 500);
+        new Handler().postDelayed(() -> fab.animate().scaleX(1.0f).scaleY(1.0f).setDuration(300).setInterpolator(new OvershootInterpolator())
+        ,500);
     }
 
     @Override

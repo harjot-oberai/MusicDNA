@@ -1,6 +1,5 @@
 package com.sdsmdg.harjot.MusicDNA.fragments.AllFoldersFragment;
 
-
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -14,17 +13,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.clickitemtouchlistener.ClickItemTouchListener;
-import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
-import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
-import com.sdsmdg.harjot.MusicDNA.models.MusicFolder;
 import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
 import com.sdsmdg.harjot.MusicDNA.R;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
+import com.sdsmdg.harjot.MusicDNA.clickitemtouchlistener.ClickItemTouchListener;
+import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
+import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
+import com.sdsmdg.harjot.MusicDNA.models.MusicFolder;
 import com.sdsmdg.harjot.MusicDNA.utilities.CommonUtils;
-import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
 import com.squareup.leakcanary.RefWatcher;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -64,7 +62,7 @@ public class FolderFragment extends Fragment {
             mCallback = (onFolderClickedListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
-                    + " must implement OnHeadlineSelectedListener");
+                + " must implement OnHeadlineSelectedListener");
         }
     }
 
@@ -79,19 +77,14 @@ public class FolderFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        backBtn = (ImageView) view.findViewById(R.id.all_folder_back_btn);
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });
+        backBtn = view.findViewById(R.id.all_folder_back_btn);
+        backBtn.setOnClickListener((View v) -> getActivity().onBackPressed());
 
-        fragmentTitle = (TextView) view.findViewById(R.id.all_folder_fragment_title);
+        fragmentTitle = view.findViewById(R.id.all_folder_fragment_title);
         if (SplashActivity.tf4 != null)
             fragmentTitle.setTypeface(SplashActivity.tf4);
 
-        fragIcon = (ImageView) view.findViewById(R.id.all_folder_frag_icon);
+        fragIcon = view.findViewById(R.id.all_folder_frag_icon);
         fragIcon.setImageTintList(ColorStateList.valueOf(HomeActivity.themeColor));
 
         initializeHeaderImages(view);
@@ -102,7 +95,7 @@ public class FolderFragment extends Fragment {
         else
             bottomMarginLayout.getLayoutParams().height = CommonUtils.dpTopx(65, getContext());
 
-        allFoldersRecycler = (RecyclerView) view.findViewById(R.id.all_folders_recycler);
+        allFoldersRecycler = view.findViewById(R.id.all_folders_recycler);
         mfAdapter = new FolderRecyclerAdapter(HomeActivity.allMusicFolders.getMusicFolders(), getContext());
         mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         allFoldersRecycler.setLayoutManager(mLayoutManager2);
@@ -123,10 +116,8 @@ public class FolderFragment extends Fragment {
 
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
             }
         });
-
     }
 
     @Override
@@ -151,16 +142,16 @@ public class FolderFragment extends Fragment {
 
     public void initializeHeaderImages(View v) {
 
-        imgView[0] = (ImageView) v.findViewById(R.id.all_folder_img_1);
-        imgView[1] = (ImageView) v.findViewById(R.id.all_folder_img_2);
-        imgView[2] = (ImageView) v.findViewById(R.id.all_folder_img_3);
-        imgView[3] = (ImageView) v.findViewById(R.id.all_folder_img_4);
-        imgView[4] = (ImageView) v.findViewById(R.id.all_folder_img_5);
-        imgView[5] = (ImageView) v.findViewById(R.id.all_folder_img_6);
-        imgView[6] = (ImageView) v.findViewById(R.id.all_folder_img_7);
-        imgView[7] = (ImageView) v.findViewById(R.id.all_folder_img_8);
-        imgView[8] = (ImageView) v.findViewById(R.id.all_folder_img_9);
-        imgView[9] = (ImageView) v.findViewById(R.id.all_folder_img_10);
+        imgView[0] = v.findViewById(R.id.all_folder_img_1);
+        imgView[1] = v.findViewById(R.id.all_folder_img_2);
+        imgView[2] = v.findViewById(R.id.all_folder_img_3);
+        imgView[3] = v.findViewById(R.id.all_folder_img_4);
+        imgView[4] = v.findViewById(R.id.all_folder_img_5);
+        imgView[5] = v.findViewById(R.id.all_folder_img_6);
+        imgView[6] = v.findViewById(R.id.all_folder_img_7);
+        imgView[7] = v.findViewById(R.id.all_folder_img_8);
+        imgView[8] = v.findViewById(R.id.all_folder_img_9);
+        imgView[9] = v.findViewById(R.id.all_folder_img_10);
 
         int numFolders = HomeActivity.allMusicFolders.getMusicFolders().size();
         MusicFolder mf1, mf2;
@@ -202,5 +193,4 @@ public class FolderFragment extends Fragment {
             }
         }
     }
-
 }

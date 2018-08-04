@@ -1,9 +1,9 @@
 package com.sdsmdg.harjot.MusicDNA.lyrics;
 
-import com.sdsmdg.harjot.MusicDNA.annotations.Reflection;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
+import com.sdsmdg.harjot.MusicDNA.annotations.Reflection;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -20,16 +20,14 @@ import java.net.URLEncoder;
 import java.text.Normalizer;
 import java.util.ArrayList;
 
-import static com.sdsmdg.harjot.MusicDNA.utilities.Net.getUrlAsString;
-
 import static com.sdsmdg.harjot.MusicDNA.lyrics.Lyrics.ERROR;
 import static com.sdsmdg.harjot.MusicDNA.lyrics.Lyrics.NEGATIVE_RESULT;
 import static com.sdsmdg.harjot.MusicDNA.lyrics.Lyrics.NO_RESULT;
 import static com.sdsmdg.harjot.MusicDNA.lyrics.Lyrics.POSITIVE_RESULT;
 import static com.sdsmdg.harjot.MusicDNA.lyrics.Lyrics.SEARCH_ITEM;
+import static com.sdsmdg.harjot.MusicDNA.utilities.Net.getUrlAsString;
 
 public class LyricWiki {
-
     @Reflection
     public static final String domain = "lyrics.wikia.com";
     private static final String baseUrl =
@@ -38,7 +36,6 @@ public class LyricWiki {
             "http://lyrics.wikia.com/wikia.php?controller=LyricsApi&method=getSong&artist=%1s&song=%2s";
     private static final String baseSearchUrl =
             "http://lyrics.wikia.com/Special:Search?search=%s&fulltext=Search";
-
     @Reflection
     public static ArrayList<Lyrics> search(String query) {
         ArrayList<Lyrics> results = new ArrayList<>();
@@ -160,5 +157,4 @@ public class LyricWiki {
             return lyrics;
         }
     }
-
 }

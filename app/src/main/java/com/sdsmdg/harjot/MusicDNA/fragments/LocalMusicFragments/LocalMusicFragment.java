@@ -3,13 +3,13 @@ package com.sdsmdg.harjot.MusicDNA.fragments.LocalMusicFragments;
 
 //import android.app.Fragment;
 
+import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.content.Context;
-import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,13 +22,13 @@ import android.widget.RelativeLayout;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
-import com.sdsmdg.harjot.MusicDNA.clickitemtouchlistener.ClickItemTouchListener;
-import com.sdsmdg.harjot.MusicDNA.custombottomsheets.CustomLocalBottomSheetDialog;
-import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
-import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
-import com.sdsmdg.harjot.MusicDNA.models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
 import com.sdsmdg.harjot.MusicDNA.R;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.clickitemtouchlistener.ClickItemTouchListener;
+import com.sdsmdg.harjot.MusicDNA.custombottomsheets.CustomLocalBottomSheetDialog;
+import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
+import com.sdsmdg.harjot.MusicDNA.models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.utilities.CommonUtils;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -59,10 +59,6 @@ public class LocalMusicFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public interface OnLocalTrackSelectedListener {
-        void onLocalTrackSelected(int position);
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -70,15 +66,14 @@ public class LocalMusicFragment extends Fragment {
             mCallback = (OnLocalTrackSelectedListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
-                    + " must implement OnHeadlineSelectedListener");
+                + " must implement OnHeadlineSelectedListener");
         }
         ctx = context;
         activity = (HomeActivity) context;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_local_music, container, false);
     }
@@ -93,47 +88,42 @@ public class LocalMusicFragment extends Fragment {
         else
             bottomMarginLayout.getLayoutParams().height = CommonUtils.dpTopx(65, getContext());
 
-        shuffleFab = (FloatingActionButton) view.findViewById(R.id.play_all_fab_local);
+        shuffleFab = view.findViewById(R.id.play_all_fab_local);
 
         if (HomeActivity.localTrackList.size() == 0) {
-            shuffleFab.setVisibility(View.INVISIBLE);
+            shuffleFab.hide();
         }
 
         shuffleFab.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));
-        shuffleFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                HomeActivity.queue.getQueue().clear();
-                for (int i = 0; i < HomeActivity.localTrackList.size(); i++) {
-                    UnifiedTrack ut = new UnifiedTrack(true, HomeActivity.localTrackList.get(i), null);
-                    HomeActivity.queue.getQueue().add(ut);
-                }
-                if (HomeActivity.queue.getQueue().size() > 0) {
-                    Random r = new Random();
-                    int tmp = r.nextInt(HomeActivity.queue.getQueue().size());
-                    HomeActivity.queueCurrentIndex = tmp;
-                    LocalTrack track = HomeActivity.localTrackList.get(tmp);
-                    HomeActivity.localSelectedTrack = track;
-                    HomeActivity.streamSelected = false;
-                    HomeActivity.localSelected = true;
-                    HomeActivity.queueCall = false;
-                    HomeActivity.isReloaded = false;
-                    mCallback.onLocalTrackSelected(-1);
-                }
+        shuffleFab.setOnClickListener((View v) -> {
+            HomeActivity.queue.getQueue().clear();
+            for (int i = 0; i < HomeActivity.localTrackList.size(); i++) {
+                UnifiedTrack ut = new UnifiedTrack(true, HomeActivity.localTrackList.get(i), null);
+                HomeActivity.queue.getQueue().add(ut);
+            }
+            if (HomeActivity.queue.getQueue().size() > 0) {
+                Random r = new Random();
+                int tmp = r.nextInt(HomeActivity.queue.getQueue().size());
+                HomeActivity.queueCurrentIndex = tmp;
+                LocalTrack track = HomeActivity.localTrackList.get(tmp);
+                HomeActivity.localSelectedTrack = track;
+                HomeActivity.streamSelected = false;
+                HomeActivity.localSelected = true;
+                HomeActivity.queueCall = false;
+                HomeActivity.isReloaded = false;
+                mCallback.onLocalTrackSelected(-1);
             }
         });
 
-        lv = (RecyclerView) view.findViewById(R.id.localMusicList);
+        lv = view.findViewById(R.id.localMusicList);
         adapter = new LocalTrackRecyclerAdapter(HomeActivity.finalLocalSearchResultList, getContext());
         mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         lv.setLayoutManager(mLayoutManager2);
         lv.setItemAnimator(new DefaultItemAnimator());
         lv.setAdapter(adapter);
-
         lv.addOnItemTouchListener(new ClickItemTouchListener(lv) {
             @Override
             public boolean onClick(RecyclerView parent, View view, int position, long id) {
-
                 if (position >= 0) {
                     HomeActivity.queue.getQueue().clear();
                     for (int i = 0; i < HomeActivity.localTrackList.size(); i++) {
@@ -149,7 +139,6 @@ public class LocalMusicFragment extends Fragment {
                     HomeActivity.isReloaded = false;
                     mCallback.onLocalTrackSelected(-1);
                 }
-
                 return true;
             }
 
@@ -158,7 +147,7 @@ public class LocalMusicFragment extends Fragment {
                 if (position >= 0) {
                     CustomLocalBottomSheetDialog localBottomSheetDialog = new CustomLocalBottomSheetDialog();
                     localBottomSheetDialog.setPosition(position);
-                    localBottomSheetDialog.setLocalTrack(activity.finalLocalSearchResultList.get(position));
+                    localBottomSheetDialog.setLocalTrack(HomeActivity.finalLocalSearchResultList.get(position));
                     localBottomSheetDialog.show(activity.getSupportFragmentManager(), "local_song_bottom_sheet");
                 }
                 return true;
@@ -166,25 +155,23 @@ public class LocalMusicFragment extends Fragment {
 
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
             }
         });
 
         Button mEndButton = new Button(getContext());
         mEndButton.setBackgroundColor(HomeActivity.themeColor);
         mEndButton.setTextColor(Color.WHITE);
-
         showCase = new ShowcaseView.Builder(getActivity())
-                .blockAllTouches()
-                .singleShot(1)
-                .setStyle(R.style.CustomShowcaseTheme)
-                .useDecorViewAsParent()
-                .replaceEndButton(mEndButton)
-                .setContentTitlePaint(HomeActivity.tp)
-                .setTarget(new ViewTarget(R.id.songs_tab_alt_showcase, getActivity()))
-                .setContentTitle("All Songs")
-                .setContentText("All local Songs listed here.Click to Play.Long click for more options")
-                .build();
+            .blockAllTouches()
+            .singleShot(1)
+            .setStyle(R.style.CustomShowcaseTheme)
+            .useDecorViewAsParent()
+            .replaceEndButton(mEndButton)
+            .setContentTitlePaint(HomeActivity.tp)
+            .setTarget(new ViewTarget(R.id.songs_tab_alt_showcase, getActivity()))
+            .setContentTitle("All Songs")
+            .setContentText("All local Songs listed here.Click to Play.Long click for more options")
+            .build();
         showCase.setButtonText("Next");
         showCase.setButtonPosition(HomeActivity.lps);
         showCase.overrideButtonClick(new View.OnClickListener() {
@@ -211,21 +198,21 @@ public class LocalMusicFragment extends Fragment {
                         break;
                 }
             }
-
         });
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
         mLayoutManager2.scrollToPositionWithOffset(0, 0);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                shuffleFab.animate().scaleX(1.0f).scaleY(1.0f).setDuration(300).setInterpolator(new OvershootInterpolator());
-            }
-        }, 500);
+        new Handler().postDelayed(() ->
+            shuffleFab.animate().scaleX(1.0f).scaleY(1.0f).setDuration(300).setInterpolator(new OvershootInterpolator())
+        ,500);
+    }
+
+    public void hideShuffleFab() {
+        if (shuffleFab != null)
+            shuffleFab.hide();
     }
 
     public int getPosition(LocalTrack lt) {
@@ -251,15 +238,12 @@ public class LocalMusicFragment extends Fragment {
         refWatcher.watch(this);
     }
 
-    public void hideShuffleFab() {
-        if (shuffleFab != null)
-            shuffleFab.setVisibility(View.INVISIBLE);
-    }
-
     public void showShuffleFab() {
         if (shuffleFab != null)
-            shuffleFab.setVisibility(View.VISIBLE);
+            shuffleFab.show();
     }
+
+    public interface OnLocalTrackSelectedListener { void onLocalTrackSelected(int position); }
 
     public void updateAdapter() {
         if (adapter != null)
@@ -273,5 +257,4 @@ public class LocalMusicFragment extends Fragment {
     public void hideShowcase() {
         showCase.hide();
     }
-
 }

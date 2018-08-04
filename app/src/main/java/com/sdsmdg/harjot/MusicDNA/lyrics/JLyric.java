@@ -17,7 +17,6 @@ public class JLyric {
 
     public static final String domain = "j-lyric.net";
     private static final String baseUrl = "http://search.j-lyric.net/index.php?ct=0&ca=0&kl=&cl=0&ka=%1s&kt=%1s";
-
     public static ArrayList<Lyrics> search(String query) {
         ArrayList<Lyrics> results = new ArrayList<>();
         Elements artistBlocks = null;
@@ -32,7 +31,6 @@ public class JLyric {
 
         if (artistBlocks == null || artistBlocks.first() == null)
             return results;
-
 
         for(Element result: artistBlocks) {
             Lyrics l = new Lyrics(Lyrics.SEARCH_ITEM);
@@ -52,7 +50,6 @@ public class JLyric {
     public static Lyrics fromMetaData(String artist, String song) {
         if ((artist == null) || (song == null))
             return new Lyrics(Lyrics.ERROR);
-
         String encodedArtist;
         String encodedSong;
         String url;
@@ -79,14 +76,12 @@ public class JLyric {
             e.printStackTrace();
             return new Lyrics(Lyrics.ERROR);
         }
-
         return fromURL(url, artist, song);
     }
 
     public static Lyrics fromURL(String url, String artist, String song) {
         Lyrics lyrics;
         String text = null;
-
         try {
             Document lyricsPage = Jsoup.connect(url).userAgent(Net.USER_AGENT).get();
             if (!lyricsPage.location().contains(domain))
@@ -100,7 +95,6 @@ public class JLyric {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         if (text == null)
             lyrics = new Lyrics(Lyrics.ERROR);
         else
@@ -111,7 +105,5 @@ public class JLyric {
         lyrics.setSource("J-Lyric");
         lyrics.setURL(url);
         return lyrics;
-
     }
-
 }

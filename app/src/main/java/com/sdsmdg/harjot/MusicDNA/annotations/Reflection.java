@@ -1,5 +1,4 @@
 package com.sdsmdg.harjot.MusicDNA.annotations;
-
 /**
  * This file is part of QuickLyric
  * Created by geecko on 15/03/15.

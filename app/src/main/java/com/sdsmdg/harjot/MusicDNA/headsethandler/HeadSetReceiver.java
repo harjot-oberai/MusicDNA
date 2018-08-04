@@ -10,25 +10,17 @@ import android.view.KeyEvent;
  * Created by Harjot on 06-Oct-16.
  */
 public class HeadSetReceiver extends BroadcastReceiver {
-
     onHeadsetEventListener mCallback;
-
     public interface onHeadsetEventListener {
         void onHeadsetRemoved();
-
         void onHeadsetNextClicked();
-
         void onHeadsetPreviousClicked();
-
         void onHeadsetPlayPauseClicked();
     }
 
-
     @Override
     public void onReceive(Context context, Intent intent) {
-
         mCallback = (onHeadsetEventListener) context;
-
         if (intent.getAction().equals(Intent.ACTION_HEADSET_PLUG)) {
             int state = intent.getIntExtra("state", -1);
             switch (state) {
@@ -40,7 +32,7 @@ public class HeadSetReceiver extends BroadcastReceiver {
             }
         }
         if (intent.getAction().equals(Intent.ACTION_MEDIA_BUTTON)) {
-            KeyEvent event = (KeyEvent) intent
+            KeyEvent event = intent
                     .getParcelableExtra(Intent.EXTRA_KEY_EVENT);
             int keycode = event.getKeyCode();
             int action = event.getAction();
@@ -57,8 +49,6 @@ public class HeadSetReceiver extends BroadcastReceiver {
             if (keycode == KeyEvent.KEYCODE_MEDIA_PREVIOUS)
                 if (action == KeyEvent.ACTION_DOWN)
                     mCallback.onHeadsetPreviousClicked();
-
         }
     }
 }
-

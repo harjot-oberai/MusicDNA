@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.sdsmdg.harjot.MusicDNA">
+    package="com.sdsmdg.harjot.MusicDNA" android:installLocation="auto">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -73,5 +73,4 @@
             android:name="io.fabric.ApiKey"
             android:value="020e360fee5fdd83e6fe111174abd62efddb08fa" />
     </application>
-
 </manifest>

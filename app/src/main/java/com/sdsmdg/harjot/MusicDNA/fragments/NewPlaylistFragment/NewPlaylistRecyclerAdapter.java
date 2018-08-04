@@ -9,10 +9,10 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
-import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.R;
-import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
+import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
 
 import java.util.List;
 
@@ -34,8 +34,7 @@ public class NewPlaylistRecyclerAdapter extends RecyclerView.Adapter<NewPlaylist
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_item_5, parent, false);
-
+            .inflate(R.layout.list_item_5, parent, false);
         return new MyViewHolder(itemView);
     }
 
@@ -51,7 +50,6 @@ public class NewPlaylistRecyclerAdapter extends RecyclerView.Adapter<NewPlaylist
         } else {
             holder.cb.setChecked(false);
         }
-
         imgLoader.DisplayImage(track.getPath(), holder.art);
     }
 
@@ -59,19 +57,17 @@ public class NewPlaylistRecyclerAdapter extends RecyclerView.Adapter<NewPlaylist
     public int getItemCount() {
         return localTracks.size();
     }
-
     public class MyViewHolder extends RecyclerView.ViewHolder {
-
         ImageView art;
         TextView title, artist;
         CheckBox cb;
 
         public MyViewHolder(View view) {
             super(view);
-            art = (ImageView) view.findViewById(R.id.img_2);
-            title = (TextView) view.findViewById(R.id.title_2);
-            artist = (TextView) view.findViewById(R.id.url_2);
-            cb = (CheckBox) view.findViewById(R.id.is_selected_checkbox);
+            art = view.findViewById(R.id.img_2);
+            title = view.findViewById(R.id.title_2);
+            artist = view.findViewById(R.id.url_2);
+            cb = view.findViewById(R.id.is_selected_checkbox);
         }
     }
 }

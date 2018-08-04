@@ -20,8 +20,8 @@ package org.jaudiotagger.audio;
 
 import org.jaudiotagger.audio.generic.Utils;
 
-import java.io.FileFilter;
 import java.io.File;
+import java.io.FileFilter;
 
 /**
  * <p>This is a simple FileFilter that will only allow the file supported by this library.
@@ -32,22 +32,14 @@ import java.io.File;
  * @version $Id$
  * @since v0.01
  */
-public class AudioFileFilter implements FileFilter
-{
+public class AudioFileFilter implements FileFilter {
     /**
      * allows Directories
      */
     private final boolean allowDirectories;
 
-    public AudioFileFilter( boolean allowDirectories)
-    {
-        this.allowDirectories=allowDirectories;
-    }
-
-    public AudioFileFilter()
-    {
-        this(true);
-    }
+    public AudioFileFilter( boolean allowDirectories) { this.allowDirectories=allowDirectories; }
+    public AudioFileFilter() { this(true); }
 
     /**
      * <p>Check whether the given file meet the required conditions (supported by the library OR directory).
@@ -56,29 +48,20 @@ public class AudioFileFilter implements FileFilter
      * @param    f    The file to test
      * @return a boolean indicating if the file is accepted or not
      */
-    public boolean accept(File f)
-    {
-        if (f.isHidden() || !f.canRead())
-        {
+    public boolean accept(File f) {
+        if (f.isHidden() || !f.canRead()) {
             return false;
         }
-
-        if (f.isDirectory())
-        {
+        if (f.isDirectory()) {
             return allowDirectories;
         }
-
         String ext = Utils.getExtension(f);
-
-        try
-        {
-            if (SupportedFileFormat.valueOf(ext.toUpperCase()) != null)
-            {
+        try {
+            if (SupportedFileFormat.valueOf(ext.toUpperCase()) != null) {
                 return true;
             }
         }
-        catch(IllegalArgumentException iae)
-        {
+        catch(IllegalArgumentException iae) {
             //Not known enum value
             return false;    
         }

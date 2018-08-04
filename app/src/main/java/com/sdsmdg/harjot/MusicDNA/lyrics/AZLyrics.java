@@ -1,6 +1,5 @@
 package com.sdsmdg.harjot.MusicDNA.lyrics;
 
-
 import com.sdsmdg.harjot.MusicDNA.annotations.Reflection;
 import com.sdsmdg.harjot.MusicDNA.utilities.Net;
 
@@ -42,7 +41,7 @@ public class AZLyrics {
             if (document.location().contains("azlyrics"))
                 html = document.html();
             else
-                throw new IOException("Redirected to wrong domain " + document.location());
+                throw new IOException("Redirected to wrong domain" + document.location());
         } catch (HttpStatusException e) {
             return new Lyrics(Lyrics.NO_RESULT);
         } catch (IOException e) {
@@ -81,5 +80,4 @@ public class AZLyrics {
         } else
             return new Lyrics(Lyrics.NEGATIVE_RESULT);
     }
-
 }

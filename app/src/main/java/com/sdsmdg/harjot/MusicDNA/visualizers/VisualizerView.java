@@ -31,22 +31,15 @@ public class VisualizerView extends View {
     public static int h;
     public static Bitmap.Config conf;
     public static Bitmap bmp;
-
     public VisualizerView(Context context) {
         super(context);
-        init();
-    }
-
+        init(); }
     public VisualizerView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
-    }
-
+        init(); }
     public VisualizerView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
-    }
-
+        init(); }
     private void init() {
         mForePaint.setStrokeWidth(1f);
         mForePaint.setAntiAlias(true);
@@ -66,7 +59,6 @@ public class VisualizerView extends View {
         super.onDraw(canvas);
         width = canvas.getWidth();
         height = canvas.getHeight();
-
         // Redraw previous points
         if (HomeActivity.isPlayerVisible) {
             if (PlayerFragment.mVisualizerView != null && (PlayerFragment.mVisualizerView.getVisibility() == View.VISIBLE)) {

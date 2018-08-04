@@ -4,50 +4,45 @@ package com.sdsmdg.harjot.MusicDNA.notificationmanager;
  * Created by Harjot on 03-Jun-16.
  */
 
-import android.app.NotificationManager;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
-import android.media.MediaMetadata;
-import android.media.Rating;
-import android.media.session.PlaybackState;
-import android.os.Binder;
-import android.os.Handler;
-import android.util.Log;
-
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.media.MediaMetadata;
 import android.media.MediaPlayer;
+import android.media.Rating;
 import android.media.session.MediaController;
 import android.media.session.MediaSession;
 import android.media.session.MediaSessionManager;
+import android.media.session.PlaybackState;
+import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
+import android.util.Log;
 
-import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
-import com.sdsmdg.harjot.MusicDNA.interfaces.ServiceCallbacks;
-import com.sdsmdg.harjot.MusicDNA.fragments.PlayerFragment.PlayerFragment;
 import com.sdsmdg.harjot.MusicDNA.R;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.fragments.PlayerFragment.PlayerFragment;
+import com.sdsmdg.harjot.MusicDNA.interfaces.ServiceCallbacks;
 
 public class MediaPlayerService extends Service implements PlayerFragment.onPlayPauseListener {
-
 
     private MediaSessionManager m_objMediaSessionManager;
     private MediaSession m_objMediaSession;
     private MediaController m_objMediaController;
     private MediaPlayer m_objMediaPlayer;
     private NotificationManager notificationManager;
-
     private ServiceCallbacks serviceCallbacks;
 
     Intent startIntent;
-
     PlayerFragment pFragment;
 
-    private boolean isSwipable = false;
-
+    private boolean isSwipeable = false;
     public class LocalBinder extends Binder {
         public MediaPlayerService getService() {
             // Return this instance of MyService so clients can call public methods
@@ -93,9 +88,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
     private void handleIntent(Intent intent) {
         if (intent == null || intent.getAction() == null)
             return;
-
         String action = intent.getAction();
-
         if (m_objMediaController != null && action.equalsIgnoreCase(Constants.ACTION_PLAY)) {
             m_objMediaController.getTransportControls().play();
         } else if (m_objMediaController != null && action.equalsIgnoreCase(Constants.ACTION_PAUSE)) {
@@ -114,28 +107,21 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
     }
 
     private void buildNotification(Notification.Action action) {
-
         Notification.MediaStyle style = new Notification.MediaStyle();
         style.setShowActionsInCompactView(1);
         style.setMediaSession(m_objMediaSession.getSessionToken());
-
         Intent intent = new Intent(getApplicationContext(), MediaPlayerService.class);
         intent.setAction(Constants.ACTION_STOP);
         PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), 1, intent, 0);
-
         String artist;
-
-        if (pFragment != null && pFragment.localIsPlaying) {
-            artist = pFragment.localTrack.getArtist();
+        if (pFragment != null && PlayerFragment.localIsPlaying) {
+            artist = PlayerFragment.localTrack.getArtist();
         } else {
             artist = "";
         }
-
         Intent notificationIntent = new Intent(this, HomeActivity.class);
         PendingIntent pendingNotificationIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-
         Bitmap bmp = null;
-
         try {
             bmp = ((BitmapDrawable) pFragment.selected_track_image.getDrawable()).getBitmap();
         } catch (Exception e) {
@@ -145,7 +131,6 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
         if (bmp == null) {
             bmp = BitmapFactory.decodeResource(getResources(), R.drawable.ic_default);
         }
-
         Notification notification = new Notification.Builder(this)
                 .setStyle(style)
                 .setSmallIcon(R.drawable.ic_notification)
@@ -158,15 +143,11 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
                 .setContentText(artist)
                 .setLargeIcon(bmp)
                 .build();
-
         notification.contentIntent = pendingNotificationIntent;
         notification.priority = Notification.PRIORITY_MAX;
-
-        if (isSwipable || (pFragment.mMediaPlayer != null && pFragment.mMediaPlayer.isPlaying())) {
+        if (isSwipeable || (PlayerFragment.mMediaPlayer != null && PlayerFragment.mMediaPlayer.isPlaying())) {
             notification.flags |= Notification.FLAG_ONGOING_EVENT;
         }
-
-
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         try {
@@ -174,11 +155,8 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         updateMediaSession();
-
     }
-
     private Notification.Action generateAction(int icon, String title, String intentAction) {
         Intent intent = new Intent(getApplicationContext(), MediaPlayerService.class);
         intent.setAction(intentAction);
@@ -191,14 +169,14 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
             m_objMediaSession.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS | MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);
 
             MediaMetadata.Builder metadataBuilder = new MediaMetadata.Builder();
-            if (pFragment.localIsPlaying) {
-                if (pFragment.localTrack != null) {
-                    metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, pFragment.localTrack.getTitle());
-                    metadataBuilder.putString(MediaMetadata.METADATA_KEY_ARTIST, pFragment.localTrack.getArtist());
+            if (PlayerFragment.localIsPlaying) {
+                if (PlayerFragment.localTrack != null) {
+                    metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, PlayerFragment.localTrack.getTitle());
+                    metadataBuilder.putString(MediaMetadata.METADATA_KEY_ARTIST, PlayerFragment.localTrack.getArtist());
                 }
             } else {
-                if (pFragment.track != null) {
-                    metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, pFragment.track.getTitle());
+                if (PlayerFragment.track != null) {
+                    metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, PlayerFragment.track.getTitle());
                     metadataBuilder.putString(MediaMetadata.METADATA_KEY_ARTIST, "");
                 }
             }
@@ -214,8 +192,8 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
             PlaybackState.Builder stateBuilder = new PlaybackState.Builder();
             stateBuilder.setActions(PlaybackState.ACTION_PLAY | PlaybackState.ACTION_PLAY_PAUSE | PlaybackState.ACTION_PAUSE | PlaybackState.ACTION_SKIP_TO_NEXT | PlaybackState.ACTION_SKIP_TO_PREVIOUS);
             try {
-                if (pFragment.mMediaPlayer != null) {
-                    stateBuilder.setState(!pFragment.mMediaPlayer.isPlaying() ? PlaybackState.STATE_PAUSED : PlaybackState.STATE_PLAYING, PlaybackState.PLAYBACK_POSITION_UNKNOWN, 1.0f);
+                if (PlayerFragment.mMediaPlayer != null) {
+                    stateBuilder.setState(!PlayerFragment.mMediaPlayer.isPlaying() ? PlaybackState.STATE_PAUSED : PlaybackState.STATE_PLAYING, PlaybackState.PLAYBACK_POSITION_UNKNOWN, 1.0f);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -230,21 +208,21 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
         if (pFragment != null) {
             pFragment.mCallback7 = this;
 
-            m_objMediaPlayer = pFragment.mMediaPlayer;
+            m_objMediaPlayer = PlayerFragment.mMediaPlayer;
             m_objMediaSessionManager = (MediaSessionManager) getSystemService(Context.MEDIA_SESSION_SERVICE);
             m_objMediaSession = new MediaSession(getApplicationContext(), "sample session");
 
             m_objMediaSession.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS | MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS);
 
             MediaMetadata.Builder metadataBuilder = new MediaMetadata.Builder();
-            if (pFragment.localIsPlaying) {
-                if (pFragment.localTrack != null) {
-                    metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, pFragment.localTrack.getTitle());
-                    metadataBuilder.putString(MediaMetadata.METADATA_KEY_ARTIST, pFragment.localTrack.getArtist());
+            if (PlayerFragment.localIsPlaying) {
+                if (PlayerFragment.localTrack != null) {
+                    metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, PlayerFragment.localTrack.getTitle());
+                    metadataBuilder.putString(MediaMetadata.METADATA_KEY_ARTIST, PlayerFragment.localTrack.getArtist());
                 }
             } else {
-                if (pFragment.track != null) {
-                    metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, pFragment.track.getTitle());
+                if (PlayerFragment.track != null) {
+                    metadataBuilder.putString(MediaMetadata.METADATA_KEY_TITLE, PlayerFragment.track.getTitle());
                     metadataBuilder.putString(MediaMetadata.METADATA_KEY_ARTIST, "");
                 }
             }
@@ -259,8 +237,8 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
             PlaybackState.Builder stateBuilder = new PlaybackState.Builder();
             stateBuilder.setActions(PlaybackState.ACTION_PLAY | PlaybackState.ACTION_PLAY_PAUSE | PlaybackState.ACTION_PAUSE | PlaybackState.ACTION_SKIP_TO_NEXT | PlaybackState.ACTION_SKIP_TO_PREVIOUS);
             try {
-                if (pFragment.mMediaPlayer != null) {
-                    stateBuilder.setState(!pFragment.mMediaPlayer.isPlaying() ? PlaybackState.STATE_PAUSED : PlaybackState.STATE_PLAYING, PlaybackState.PLAYBACK_POSITION_UNKNOWN, 1.0f);
+                if (PlayerFragment.mMediaPlayer != null) {
+                    stateBuilder.setState(!PlayerFragment.mMediaPlayer.isPlaying() ? PlaybackState.STATE_PAUSED : PlaybackState.STATE_PLAYING, PlaybackState.PLAYBACK_POSITION_UNKNOWN, 1.0f);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -270,7 +248,6 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
             m_objMediaSession.setActive(true);
             m_objMediaController = m_objMediaSession.getController();
             m_objMediaSession.setCallback(new MediaSession.Callback() {
-
                 @Override
                 public void onPlay() {
                     super.onPlay();
@@ -285,7 +262,6 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
                             buildNotification(generateAction(R.drawable.ic_pause_notif, "Pause", Constants.ACTION_PAUSE));
                         }
                     } catch (Exception e) {
-
                     }
                 }
 
@@ -299,7 +275,6 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
                             buildNotification(generateAction(R.drawable.ic_play_notif, "Play", Constants.ACTION_PLAY));
                         }
                     } catch (Exception e) {
-
                     }
                 }
 
@@ -310,17 +285,11 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
                         if (pFragment != null) {
                             pFragment.onCallbackCalled(2);
                             final Handler handler = new Handler();
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    buildNotification(generateAction(R.drawable.ic_pause_notif, "Pause", Constants.ACTION_PAUSE));
-                                }
-                            }, 100);
+                            handler.postDelayed(() -> buildNotification(generateAction(R.drawable.ic_pause_notif, "Pause", Constants.ACTION_PAUSE))
+                                    ,100);
                         }
                     } catch (Exception e) {
-
                     }
-
                 }
 
                 @Override
@@ -330,17 +299,11 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
                         if (pFragment != null) {
                             pFragment.onCallbackCalled(3);
                             final Handler handler = new Handler();
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    buildNotification(generateAction(R.drawable.ic_pause_notif, "Pause", Constants.ACTION_PAUSE));
-                                }
-                            }, 100);
+                            handler.postDelayed(() -> buildNotification(generateAction(R.drawable.ic_pause_notif, "Pause", Constants.ACTION_PAUSE))
+                                    ,100);
                         }
                     } catch (Exception e) {
-
                     }
-
                 }
 
                 @Override
@@ -350,12 +313,8 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
                     if (pFragment != null)
                         pFragment.mCallback.onComplete();
                     final Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            buildNotification(generateAction(R.drawable.ic_pause_notif, "Pause", Constants.ACTION_PAUSE));
-                        }
-                    }, 100);
+                    handler.postDelayed(() -> buildNotification(generateAction(R.drawable.ic_pause_notif, "Pause", Constants.ACTION_PAUSE))
+                            ,100);
                 }
 
                 @Override
@@ -365,12 +324,8 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
                     if (pFragment != null)
                         pFragment.mCallback.onPreviousTrack();
                     final Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            buildNotification(generateAction(R.drawable.ic_pause_notif, "Pause", Constants.ACTION_PAUSE));
-                        }
-                    }, 100);
+                    handler.postDelayed(() -> buildNotification(generateAction(R.drawable.ic_pause_notif, "Pause", Constants.ACTION_PAUSE))
+                            ,100);
                 }
 
                 @Override
@@ -386,14 +341,9 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
                 }
 
                 @Override
-                public void onSeekTo(long pos) {
-                    super.onSeekTo(pos);
-                }
-
+                public void onSeekTo(long pos) { super.onSeekTo(pos); }
                 @Override
-                public void onSetRating(Rating rating) {
-                    super.onSetRating(rating);
-                }
+                public void onSetRating(Rating rating) { super.onSetRating(rating); }
             });
         }
     }
@@ -406,7 +356,7 @@ public class MediaPlayerService extends Service implements PlayerFragment.onPlay
 
     @Override
     public void onPlayPause() {
-        if (pFragment.mMediaPlayer != null && pFragment.mMediaPlayer.isPlaying()) {
+        if (PlayerFragment.mMediaPlayer != null && PlayerFragment.mMediaPlayer.isPlaying()) {
             buildNotification(generateAction(R.drawable.ic_pause_notif, "Pause", Constants.ACTION_PAUSE));
         } else {
             buildNotification(generateAction(R.drawable.ic_play_notif, "Play", Constants.ACTION_PLAY));

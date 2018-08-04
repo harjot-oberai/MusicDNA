@@ -30,18 +30,15 @@ public class CustomPlayingIndicator extends View implements Runnable {
 
     public CustomPlayingIndicator(Context context) {
         super(context);
-        init();
-    }
+        init(); }
 
     public CustomPlayingIndicator(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
-    }
+        init(); }
 
     public CustomPlayingIndicator(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
-    }
+        init(); }
 
     public void init() {
         drawColor = Color.BLACK;
@@ -76,9 +73,7 @@ public class CustomPlayingIndicator extends View implements Runnable {
                 }
             }
         }
-
     }
-
 
     @Override
     public void run() {
@@ -105,5 +100,4 @@ public class CustomPlayingIndicator extends View implements Runnable {
         drawPaint.setColor(color);
         invalidate();
     }
-
 }

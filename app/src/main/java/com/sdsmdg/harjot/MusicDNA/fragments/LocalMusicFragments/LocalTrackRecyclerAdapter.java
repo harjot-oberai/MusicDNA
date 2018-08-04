@@ -11,9 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.R;
-import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
+import com.sdsmdg.harjot.MusicDNA.imageLoader.ImageLoader;
+import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
 
 import java.util.List;
 
@@ -33,9 +33,9 @@ public class LocalTrackRecyclerAdapter extends RecyclerView.Adapter<LocalTrackRe
 
         public MyViewHolder(View view) {
             super(view);
-            art = (ImageView) view.findViewById(R.id.img_2);
-            title = (TextView) view.findViewById(R.id.title_2);
-            artist = (TextView) view.findViewById(R.id.url_2);
+            art = view.findViewById(R.id.img_2);
+            title = view.findViewById(R.id.title_2);
+            artist = view.findViewById(R.id.url_2);
         }
     }
 
@@ -48,7 +48,7 @@ public class LocalTrackRecyclerAdapter extends RecyclerView.Adapter<LocalTrackRe
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_item_2, parent, false);
+            .inflate(R.layout.list_item_2, parent, false);
 
         return new MyViewHolder(itemView);
     }
@@ -62,9 +62,7 @@ public class LocalTrackRecyclerAdapter extends RecyclerView.Adapter<LocalTrackRe
     }
 
     @Override
-    public int getItemCount() {
-        return localTracks.size();
-    }
+    public int getItemCount() { return localTracks.size(); }
 
     public static Bitmap getAlbumArt(String path) {
         android.media.MediaMetadataRetriever mmr = new MediaMetadataRetriever();

@@ -1,6 +1,6 @@
-package com.sdsmdg.harjot.MusicDNA.imageloader;
+package com.sdsmdg.harjot.MusicDNA.imageLoader;
 
-/**
+/*
  * Created by Harjot on 06-Apr-16.
  */
 
@@ -17,10 +17,9 @@ public class MemoryCache {
 
     private static final String TAG = "MemoryCache";
     private Map<String, Bitmap> cache=Collections.synchronizedMap(
-            new LinkedHashMap<String, Bitmap>(10,1.5f,true));//Last argument true for LRU ordering
+        new LinkedHashMap<String, Bitmap>(10,1.5f,true));//Last argument true for LRU ordering
     private long size=0;//current allocated size
     private long limit=1000000;//max memory in bytes
-
     public MemoryCache(){
         //use 25% of available heap size
         setLimit(Runtime.getRuntime().maxMemory()/4);

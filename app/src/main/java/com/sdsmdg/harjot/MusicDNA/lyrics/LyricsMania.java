@@ -19,11 +19,9 @@ import static com.sdsmdg.harjot.MusicDNA.lyrics.Lyrics.POSITIVE_RESULT;
 
 @Reflection
 public class LyricsMania {
-
     @Reflection
     public static final String domain = "www.lyricsmania.com";
     private static final String baseURL = "http://www.lyricsmania.com/%s_lyrics_%s.html";
-
     @Reflection
     public static Lyrics fromMetaData(String artist, String song) {
         String htmlArtist = Normalizer.normalize(artist.replaceAll("[\\s-]", "_"), Normalizer.Form.NFD)
@@ -40,7 +38,6 @@ public class LyricsMania {
                 htmlArtist.toLowerCase(Locale.getDefault()));
         return fromURL(urlString, artist, song);
     }
-
     @Reflection
     public static Lyrics fromURL(String url, String artist, String title) {
         String text;

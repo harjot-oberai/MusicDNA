@@ -1,6 +1,6 @@
-package com.sdsmdg.harjot.MusicDNA.imageloader;
+package com.sdsmdg.harjot.MusicDNA.imageLoader;
 
-/**
+/*
  * Created by Harjot on 06-Apr-16.
  */
 
@@ -31,9 +31,7 @@ import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-
 public class ImageLoader {
-
     MemoryCache memoryCache = new MemoryCache();
     FileCache fileCache;
     private Map<ImageView, String> imageViews = Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
@@ -100,28 +98,24 @@ public class ImageLoader {
             } catch (Throwable ex) {
                 ex.printStackTrace();
                 if (ex instanceof OutOfMemoryError)
-                    memoryCache.clear();
+                    clearMemory();
                 return null;
             }
         } else {
-
             File f = fileCache.getFile(url);
             Bitmap b = decodeFile(f);
             if (b != null)
                 return b;
-
             try {
                 android.media.MediaMetadataRetriever mmr = new MediaMetadataRetriever();
                 mmr.setDataSource(url);
                 Bitmap bitmap = null;
-
                 byte[] data = mmr.getEmbeddedPicture();
-
                 if (data != null) {
                     OutputStream os = new FileOutputStream(f);
                     os.write(data);
                     os.close();
-//                    bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                    //bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
                     bitmap = decodeFile(f);
                     return bitmap;
                 } else {
@@ -130,10 +124,9 @@ public class ImageLoader {
             } catch (Throwable ex) {
                 ex.printStackTrace();
                 if (ex instanceof OutOfMemoryError)
-                    memoryCache.clear();
+                    clearMemory();
                 return null;
             }
-
         }
     }
 
@@ -170,7 +163,6 @@ public class ImageLoader {
     private class PhotoToLoad {
         public String url;
         public ImageView imageView;
-
         public PhotoToLoad(String u, ImageView i) {
             url = u;
             imageView = i;
@@ -179,11 +171,7 @@ public class ImageLoader {
 
     class PhotosLoader implements Runnable {
         PhotoToLoad photoToLoad;
-
-        PhotosLoader(PhotoToLoad photoToLoad) {
-            this.photoToLoad = photoToLoad;
-        }
-
+        PhotosLoader(PhotoToLoad photoToLoad) { this.photoToLoad = photoToLoad; }
         @Override
         public void run() {
             if (imageViewReused(photoToLoad))
@@ -195,25 +183,22 @@ public class ImageLoader {
                 return;
             }
             Activity a = (Activity) ctx;
-            a.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (imageViewReused(photoToLoad)) {
-                        return;
-                    }
-                    if (bmp != null) {
-                        photoToLoad.imageView.setImageBitmap(bmp);
-                    } else {
-                        if (type.equals("none"))
-                            photoToLoad.imageView.setImageResource(stub_id);
-                        else {
-                            int r = random.nextInt(210) + 45;
-                            int g = random.nextInt(210) + 45;
-                            int b = random.nextInt(210) + 45;
-                            photoToLoad.imageView.setImageResource(R.drawable.ic_record_3);
-                            photoToLoad.imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-                            photoToLoad.imageView.setImageTintList(ColorStateList.valueOf(Color.rgb(r, g, b)));
-                        }
+            a.runOnUiThread(() -> {
+                if (imageViewReused(photoToLoad)) {
+                    return;
+                }
+                if (bmp != null) {
+                    photoToLoad.imageView.setImageBitmap(bmp);
+                } else {
+                    if (type.equals("none"))
+                        photoToLoad.imageView.setImageResource(stub_id);
+                    else {
+                        int r = random.nextInt(210) + 45;
+                        int g = random.nextInt(210) + 45;
+                        int b = random.nextInt(210) + 45;
+                        photoToLoad.imageView.setImageResource(R.drawable.ic_record_3);
+                        photoToLoad.imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                        photoToLoad.imageView.setImageTintList(ColorStateList.valueOf(Color.rgb(r, g, b)));
                     }
                 }
             });
@@ -222,14 +207,9 @@ public class ImageLoader {
 
     boolean imageViewReused(PhotoToLoad photoToLoad) {
         String tag = imageViews.get(photoToLoad.imageView);
-        if (tag == null || !tag.equals(photoToLoad.url))
-            return true;
-        return false;
+        return tag == null || !tag.equals(photoToLoad.url);
     }
-
-    public void clearCache() {
-        memoryCache.clear();
-        fileCache.clear();
+    //@Override
+    public void clearMemory() {
     }
-
 }

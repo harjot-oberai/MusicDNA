@@ -32,9 +32,7 @@ abstract class ClickItemTouchListener implements OnItemTouchListener {
         }
     }
 
-    private boolean hasAdapter(RecyclerView hostView) {
-        return (hostView.getAdapter() != null);
-    }
+    private boolean hasAdapter(RecyclerView hostView) { return (hostView.getAdapter() != null); }
 
     @Override
     public boolean onInterceptTouchEvent(RecyclerView recyclerView, MotionEvent event) {
@@ -53,7 +51,6 @@ abstract class ClickItemTouchListener implements OnItemTouchListener {
     }
 
     abstract boolean onClick(RecyclerView parent, View view, int position, long id);
-
     abstract boolean onLongClick(RecyclerView parent, View view, int position, long id);
 
     private class ItemClickGestureDetector extends GestureDetector {
@@ -72,7 +69,6 @@ abstract class ClickItemTouchListener implements OnItemTouchListener {
             if (action == MotionEvent.ACTION_UP) {
                 mGestureListener.dispatchSingleTapUpIfNeeded(event);
             }
-
             return handled;
         }
     }
@@ -81,9 +77,7 @@ abstract class ClickItemTouchListener implements OnItemTouchListener {
         private final RecyclerView mHostView;
         private View mTargetChild;
 
-        public ItemClickGestureListener(RecyclerView hostView) {
-            mHostView = hostView;
-        }
+        public ItemClickGestureListener(RecyclerView hostView) { mHostView = hostView; }
 
         public void dispatchSingleTapUpIfNeeded(MotionEvent event) {
             // When the long press hook is called but the long press listener
@@ -124,7 +118,6 @@ abstract class ClickItemTouchListener implements OnItemTouchListener {
 
                 mTargetChild = null;
             }
-
             return handled;
         }
 
@@ -136,7 +129,6 @@ abstract class ClickItemTouchListener implements OnItemTouchListener {
 
                 return true;
             }
-
             return false;
         }
 

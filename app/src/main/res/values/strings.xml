@@ -1,18 +1,191 @@
 <resources>
     <string name="app_name">Music DNA</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="title_activity_home">Music DNA</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="settings">Settings</string>
 
     <!-- About Fragment strings -->
-    <string name="mdg_description">An Active students group at IIT Roorkee directed towards developing useful applications</string>
-    <string name="share_application_text">Check out MusicDNA an awesome music player from Play Store. Link: </string>
-    <string name="music_dna_short_link">http://bit.ly/musicDnaApp</string>
-    <string name="license_text">MusicDNA and related material are distributed under \'Attribution-NonCommercial-ShareAlike 4.0 International license\'</string>
+    <string name="mdg_description">An active students group at IIT Roorkee directed towards developing useful applications</string>
+    <string name="share_application_text">Check out MusicDNA! Link: </string>
+    <string name="music_dna_short_link">https://bit.ly/musicDnaApp</string>
+    <string name="license_text">MusicDNA and related material are distributed under the \'Attribution-NonCommercial-ShareAlike 4.0 International License\'</string>
     <string name="license_link">https://github.com/harjot-oberai/MusicDNA/blob/master/LICENSE.md</string>
+
+    <!-- New strings -->
+    <string name="new_playlist">New Playlist</string>
+    <string name="all_playlists">All Playlists</string>
+    <string name="no_playlists">No Playlists</string>
+    <string name="playlists">Playlists</string>
+    <string name="playlist">Playlist</string>
+    <string name="recents_playlists">Recents &amp; Playlists</string>
+
+    <string name="ellipses">…</string>
+    <string name="recent">Recent</string>
+    <string name="search">Search</string>
+    <string name="clear">Clear</string>
+    <string name="edit">Edit</string>
+    <string name="artist">Artist</string>
+    <string name="album">Album</string>
+    <string name="save">Save</string>
+    <string name="saved">Saved</string>
+    <string name="folder">Folder</string>
+    <string name="songs">Songs</string>
+    <string name="queue">Queue</string>
+    <string name="unknown">Unknown</string>
+    <string name="play">Play</string>
+    <string name="play_next">Play Next</string>
+    <string name="favourites">Favourites</string>
+    <string name="folders">Folders</string>
+    <string name="home">Home</string>
+    <string name="view">View</string>
+    <string name="share">Share</string>
+    <string name="text">Text</string>
+    <string name="delete">Delete</string>
+    <string name="rename">Rename</string>
+    <string name="remove">Remove</string>
+    <string name="cancel">Cancel</string>
+    <string name="set">Set</string>
+    <string name="next">Next</string>
+    <string name="done">Done</string>
+    <string name="equalizer">Equalizer</string>
+    <string name="favourite">Favourite</string>
+    <string name="about">About</string>
+    <string name="custom">Custom</string>
+    <string name="shuffle">Shuffle</string>
+    <string name="albums">Albums</string>
+    <string name="artists">Artists</string>
+    <string name="previous">Previous</string>
+    <string name="pause">Pause</string>
+    <string name="reset">Reset</string>
+    <string name="ok">OK</string>
+    <string name="stream">Stream</string>
+    <string name="song">Song</string>
+    <string name="recents">Recents</string>
+    <string name="lyrics">Lyrics</string>
+
+    <string name="add_to_queue">Add to queue</string>
+    <string name="add_to_favourites">Add to favourites</string>
+    <string name="add_text_to_image">Add Text to Image also</string>
+    <string name="add_to_playlist">Add to playlist</string>
+
+    <string name="playlist_name">Playlist Name</string>
+    <string name="songs_playlists_listed">Here all your recent songs and playlists will be listed.</string>
+    <string name="long_press_cards_playlists">Long press the cards or playlists for more options. \n</string>
+
+    <string name="playlist_already_exists">Another playlist with that name already exists</string>
+    <string name="added_to_playlist">Added to playlist: </string>
+    <string name="song_already_in_playlist">Song already present in playlist</string>
+    <string name="save_queue_as_playlist">Save the queue as a playlist</string>
+
+    <string name="saved_dna">Saved DNA</string>
+    <string name="no_saved_dnas">No saved DNAs</string>
+    <string name="to_save_dnas">To save DNAs, select the save option in the bottom of the player. DNAs will automatically be saved at the end of the song.</string>
+    <string name="the_dna">The DNA</string>
+    <string name="dna_of_playing_song">The DNA of the currently playing song.</string>
+    <string name="dna_saved">DNA saved!</string>
+    <string name="view_saved_dnas">View all your saved DNAs here</string>
+    <string name="saved_dnas">Saved DNAs</string>
+    <string name="share_dna">Share DNA</string>
+    <string name="share_dna_as_image">Share the DNA as an image with your friends</string>
+    <string name="save_dna">Save DNA</string>
+    <string name="save_dna_as_image_internal">Save the DNA as an image to your internal storage</string>
+    <string name="save_as_image">Save as Image</string>
+    <string name="share_as_image">Share as Image</string>
+
+    <string name="nothing_to_show">Nothing to show…</string>
+    <string name="view_all">View All</string>
+    <string name="local">Local</string>
+    <string name="soundcloud">SoundCloud</string>
+    <string name="title">Title</string>
+    <string name="getting_saved_data">Getting saved data…</string>
+    <string name="dna_density">DNA Density</string>
+    <string name="higher_is_not_always_better">(Higher isn\'t always better)</string>
+    <string name="_100">100</string>
+    <string name="version">Version 2.0.0</string>
+    <string name="developed_by">Developed by</string>
+    <string name="view_license">View License</string>
+    <string name="number_selected">0 selected</string>
+    <string name="no_favourites">No Favourites</string>
+    <string name="all_folders">All Folders</string>
+    <string name="current_time_or_something">0:00</string>
+    <string name="no_recent_songs">No recent songs</string>
+    <string name="theme_color">Theme color</string>
+    <string name="art_behind_the_dna">Art behind the DNA</string>
+    <string name="stream_over_wifi_only">Stream over WiFi only</string>
+    <string name="reset_settings">Reset settings</string>
+    <string name="local_music">Local Music</string>
+    <string name="recently_played">Recently Played</string>
+    <string name="sleep_timer">Sleep Timer</string>
+    <string name="full_screen">Full Screen</string>
+
+    <string name="version_">Version </string>
+    <string name="sourcecode">https://github.com/harjot-oberai/MusicDNA</string>
+    <string name="musicdna">MusicDNA</string>
+    <string name="_songs"> Songs</string>
+    <string name="_song"> Song</string>
+
+    <string name="enter_valid_title">Enter a valid title</string>
+    <string name="enter_valid_artist_name">Enter a valid artist name</string>
+    <string name="enter_valid_album_name">Enter a valid album name</string>
+    <string name="enter_filename">Enter Filename</string>
+    <string name="enter_text">Enter Text</string>
+    <string name="enter_playlist_name">Enter playlist name</string>
+
+    <string name="error_loading_file">Error loading file</string>
+    <string name="error_finding_tags">Error finding tags</string>
+    <string name="error_updating_equalizer">Error updating equalizer</string>
+    <string name="error_occurred_editing">Error occurred while editing</string>
+    <string name="error_playing">Error playing </string>
+
+    <string name="no_tags_found">No tags found</string>
+    <string name="bass">BASS</string>
+    <string name="_3d">3D</string>
+    <string name="hertz">Hz</string>
+    <string name="decibel">dB</string>
+    <string name="presets">Presets</string>
+    <string name="use_available_presets">Use one of the available presets</string>
+    <string name="equalizer_controls">Equalizer Controls</string>
+    <string name="control_bass_reverb">Use these controls to control Bass &amp; Reverb</string>
+    <string name="bass_reverb">Bass &amp; Reverb</string>
+    <string name="control_individual_frequencies">Use the seekbars to control individual frequencies</string>
+
+    <string name="png">.png</string>
+    <string name="nothing"> </string>
+    <string name="lowercase_folder">folder</string>
+    <string name="music_dna_v">Music DNA v</string>
+    <string name="slash_n">\n</string>
+    <string name="press_next_back">(Press Next to continue / Press back to hide)</string>
+    <string name="local_songs">Local Songs</string>
+    <string name="all_songs_locally">See all songs available locally, classified on basis of Artist and Album.</string>
+    <string name="search_for_songs">Search for songs from local library and SoundCloud</string>
+    <string name="sleep_timer_timed_out">Sleep timer timed out, closing app…</string>
+    <string name="long_press_exit">Long press to exit</string>
+
+    <string name="clearing_cache">Clearing cache…</string>
+    <string name="save_queue">Save queue</string>
+    <string name="queue_saved">Queue saved</string>
+    <string name="timer_completion">Music will stop after completion of current song</string>
+    <string name="timer_set_for">Timer set for </string>
+    <string name="minute_from_now"> minute from now</string>
+    <string name="minutes_from_now"> minutes from now</string>
+    <string name="timer_removed">Timer removed</string>
+    <string name="all_songs_listed_here">All local songs are listed here. Press to play. Long press for more options.</string>
+    <string name="all_songs">All songs</string>
+    <string name="play_songs_shuffled_randomly">Play all songs shuffled randomly</string>
+    <string name="_selected"> selected</string>
+    <string name="no_lyrics_found">No lyrics found</string>
+    <string name="searching_lyrics">Searching lyrics…</string>
+    <string name="skipping_to_next_track">. Skipping to next track…</string>
+    <string name="swipe_change_press_fullscreen">Swipe left or right to change song. Long press for fullscreen.</string>
+    <string name="the_controls">The Controls</string>
+    <string name="get_lyrics_tap_icon">Get lyrics by tapping this icon</string>
+    <string name="queue_listed">All songs that are currently in queue are listed here. Use handle to reorder the queue and swipe the song to remove from queue.</string>
+    <string name="reset_settings_question">Reset settings?</string>
+    <string name="reset_settings_operation">This operation will reset all settings but playlists and other content will remain unchanged.</string>
+    <string name="settings_reset">Settings have been reset</string>
+    <string name="choose_color">Choose color</string>
 </resources>

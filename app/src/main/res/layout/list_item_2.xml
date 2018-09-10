@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/custom_ripple"
@@ -14,7 +13,7 @@
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_marginBottom="10dp"
-        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="10dp"
         android:background="#222"
         android:scaleType="centerCrop" />
@@ -24,10 +23,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:layout_marginLeft="14dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="14dp"
         android:layout_marginTop="10dp"
-        android:layout_toRightOf="@+id/img_2"
+        android:layout_toEndOf="@+id/img_2"
         android:orientation="vertical">
 
         <TextView
@@ -36,9 +35,9 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="Title"
+            android:text="@string/title"
             android:textColor="#FFF"
-            android:textSize="14dp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/url_2"
@@ -47,7 +46,7 @@
             android:layout_marginTop="3dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="Artist"
+            android:text="@string/artist"
             android:textColor="#EEE"
             android:textSize="11dp" />
     </LinearLayout>

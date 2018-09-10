@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -5,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="#000"
     android:clickable="true"
+    android:focusable="true"
     tools:context="com.sdsmdg.harjot.MusicDNA.fragments.EqualizerFragment.EqualizerFragment">
 
     <RelativeLayout
@@ -17,11 +19,12 @@
             android:id="@+id/equalizer_back_btn"
             android:layout_width="50dp"
             android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:background="@drawable/custom_ripple_2"
             android:clickable="true"
             android:padding="12dp"
+            android:focusable="true"
             android:src="@drawable/back2" />
 
         <TextView
@@ -29,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="equalizer"
+            android:text="@string/equalizer"
             android:textColor="#FFFFFF"
             android:textSize="25sp" />
 
@@ -37,9 +40,9 @@
             android:id="@+id/equalizer_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
             app:theme="@style/CustomSwitch" />
 
     </RelativeLayout>
@@ -54,8 +57,6 @@
             android:id="@+id/lineChart"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_above="@+id/equalizerContainer"
-            android:layout_alignParentTop="true"
             android:layout_weight="3"
             android:background="@drawable/graph_back_2"
             android:paddingBottom="5dp"
@@ -74,24 +75,24 @@
                 android:id="@+id/showcase_view_equalizer"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="20dp" />
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="20dp" />
 
             <Spinner
                 android:id="@+id/equalizer_preset_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
-                android:layout_toLeftOf="@+id/spinner_dropdown_icon"
+                android:layout_marginStart="5dp"
+                android:layout_toStartOf="@+id/spinner_dropdown_icon"
                 android:background="#111" />
 
             <ImageView
                 android:id="@+id/spinner_dropdown_icon"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
                 android:src="@drawable/dropdown_icon"
                 android:tint="#FFFFFF" />
         </RelativeLayout>
@@ -285,6 +286,7 @@
         android:alpha="0.7"
         android:background="#000000"
         android:clickable="true"
+        android:focusable="true"
         android:visibility="invisible" />
 
 </RelativeLayout>

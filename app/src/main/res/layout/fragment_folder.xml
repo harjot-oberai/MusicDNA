@@ -1,9 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorDark"
     android:clickable="true"
+    android:focusable="true"
     tools:context="com.sdsmdg.harjot.MusicDNA.fragments.AllPlaylistsFragment.AllPlaylistsFragment">
 
     <RelativeLayout
@@ -117,11 +119,12 @@
                 android:id="@+id/all_folder_back_btn"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:padding="12dp"
+                android:focusable="true"
                 android:src="@drawable/back2" />
 
             <TextView
@@ -129,7 +132,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="ALL FOLDERS"
+                android:text="@string/all_folders"
                 android:textColor="#FFFFFF"
                 android:textSize="25sp" />
 
@@ -160,6 +163,7 @@
         android:layout_height="65dp"
         android:layout_alignParentBottom="true"
         android:background="@color/colorDark"
-        android:clickable="true" />
+        android:clickable="true"
+        android:focusable="true" />
 
 </RelativeLayout>

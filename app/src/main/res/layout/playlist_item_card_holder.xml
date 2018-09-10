@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="115dp"
     android:layout_height="154dp"
@@ -26,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignBottom="@+id/center_view"
-            android:layout_alignRight="@+id/center_view"
+            android:layout_alignEnd="@+id/center_view"
             android:layout_weight="1"
             android:background="#151515"
             android:scaleType="centerCrop" />
@@ -36,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignBottom="@+id/center_view"
-            android:layout_alignLeft="@+id/center_view"
+            android:layout_alignStart="@+id/center_view"
             android:layout_weight="1"
             android:background="#151515"
             android:scaleType="centerCrop" />
@@ -45,7 +44,7 @@
             android:id="@+id/image3"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignRight="@+id/center_view"
+            android:layout_alignEnd="@+id/center_view"
             android:layout_alignTop="@+id/center_view"
             android:layout_weight="1"
             android:background="#151515"
@@ -55,7 +54,7 @@
             android:id="@+id/image4"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignLeft="@+id/center_view"
+            android:layout_alignStart="@+id/center_view"
             android:layout_alignTop="@+id/center_view"
             android:layout_weight="1"
             android:background="#151515"
@@ -79,9 +78,9 @@
             android:layout_marginTop="5dp"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text="Title"
+            android:text="@string/title"
             android:textColor="#FFF"
-            android:textSize="13dp" />
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/playlist_num_songs"
@@ -91,7 +90,7 @@
             android:layout_marginTop="-5dp"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text="Artist"
+            android:text="@string/artist"
             android:textColor="#EEE"
             android:textSize="8dp" />
 

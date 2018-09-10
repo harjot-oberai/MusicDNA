@@ -22,12 +22,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/avloadingIndicatorView2"
         android:layout_marginTop="20dp"
-        android:text="Getting Saved Data"
+        android:text="@string/getting_saved_data"
         android:layout_marginRight="30dp"
         android:layout_marginLeft="30dp"
         android:typeface="sans"
         android:textStyle="bold"
         android:textColor="#EEEEEE"
         android:layout_marginBottom="10dp"
-        android:textSize="17dp" />
+        android:textSize="17sp" />
 </RelativeLayout>

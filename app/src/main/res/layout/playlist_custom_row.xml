@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="120dp"
     android:layout_margin="5dp"
@@ -15,9 +14,9 @@
         android:id="@+id/image1"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
         android:background="#151515"
         android:elevation="10dp"
         android:scaleType="centerCrop" />
@@ -26,9 +25,9 @@
         android:id="@+id/image2"
         android:layout_width="90dp"
         android:layout_height="90dp"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="25dp"
+        android:layout_marginStart="25dp"
         android:background="#151515"
         android:elevation="6dp"
         android:scaleType="centerCrop" />
@@ -37,9 +36,9 @@
         android:id="@+id/image3"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="45dp"
+        android:layout_marginStart="45dp"
         android:background="#151515"
         android:elevation="2dp"
         android:scaleType="centerCrop" />
@@ -48,8 +47,8 @@
         android:layout_width="match_parent"
         android:layout_height="110dp"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="5dp"
-        android:layout_toRightOf="@+id/image3"
+        android:layout_marginStart="5dp"
+        android:layout_toEndOf="@+id/image3"
         android:orientation="vertical"
         android:padding="5dp">
 
@@ -61,7 +60,7 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:textColor="#CCC"
-            android:textSize="10sp" />
+            android:textSize="10dp" />
 
         <TextView
             android:id="@+id/name2"
@@ -70,7 +69,7 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:textColor="#CCC"
-            android:textSize="10sp" />
+            android:textSize="10dp" />
 
         <TextView
             android:id="@+id/name3"
@@ -79,16 +78,16 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:textColor="#CCC"
-            android:textSize="10sp" />
+            android:textSize="10dp" />
 
         <TextView
             android:id="@+id/name5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:text="..."
+            android:text="@string/ellipses"
             android:textColor="#CCC"
-            android:textSize="10sp"
+            android:textSize="10dp"
             android:visibility="invisible" />
 
     </LinearLayout>
@@ -97,7 +96,7 @@
         android:layout_width="210dp"
         android:layout_height="30dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true">
+        android:layout_alignParentEnd="true">
 
         <View
             android:layout_width="match_parent"
@@ -109,10 +108,10 @@
             android:id="@+id/playlist_name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginRight="5dp"
+            android:layout_marginEnd="5dp"
             android:gravity="end|center_vertical"
             android:singleLine="true"
-            android:text="Playlist Name"
+            android:text="@string/playlist_name"
             android:textColor="#FFF"
             android:textSize="15sp" />
 

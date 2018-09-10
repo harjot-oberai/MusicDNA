@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="115dp"
     android:layout_height="154dp"
@@ -32,7 +31,7 @@
             android:layout_marginTop="5dp"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text="Title"
+            android:text="@string/title"
             android:textColor="#FFF"
             android:textSize="13dp" />
 
@@ -44,7 +43,7 @@
             android:layout_marginTop="-5dp"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text="Artist"
+            android:text="@string/artist"
             android:textColor="#EEE"
             android:textSize="9dp" />
 

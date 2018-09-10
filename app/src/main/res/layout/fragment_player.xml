@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root_view"
@@ -6,6 +7,7 @@
     android:background="#000"
     android:clickable="true"
     android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar"
+    android:focusable="true"
     android:visibility="visible">
 
     <FrameLayout
@@ -27,7 +29,7 @@
                 android:layout_height="48dp"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
                 android:visibility="visible"
                 app:civ_border_color="#FF000000"
                 app:civ_border_width="0dp" />
@@ -36,13 +38,13 @@
                 android:id="@+id/selected_track_title_sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="7dp"
+                android:layout_marginStart="7dp"
                 android:layout_marginTop="12dp"
-                android:layout_toLeftOf="@+id/sp_controls_container"
-                android:layout_toRightOf="@+id/selected_track_image_sp"
+                android:layout_toEndOf="@+id/selected_track_image_sp"
+                android:layout_toStartOf="@+id/sp_controls_container"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="Title"
+                android:text="@string/title"
                 android:textColor="#FFFFFF"
                 android:textSize="15sp" />
 
@@ -51,11 +53,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/selected_track_title_sp"
-                android:layout_marginLeft="7dp"
-                android:layout_toLeftOf="@+id/sp_controls_container"
-                android:layout_toRightOf="@+id/selected_track_image_sp"
+                android:layout_marginStart="7dp"
+                android:layout_toEndOf="@+id/selected_track_image_sp"
+                android:layout_toStartOf="@+id/sp_controls_container"
                 android:maxLines="1"
-                android:text="Unknown"
+                android:text="@string/unknown"
                 android:textColor="#CCCCCC"
                 android:textSize="12sp" />
 
@@ -63,7 +65,7 @@
                 android:id="@+id/sp_controls_container"
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:orientation="horizontal"
                 android:padding="0dp">
@@ -79,6 +81,7 @@
                     android:clickable="true"
                     android:padding="3dp"
                     android:src="@drawable/ic_heart_out_1"
+                    android:focusable="true"
                     android:visibility="visible" />
 
                 <ImageView
@@ -91,6 +94,7 @@
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
                     android:src="@drawable/ic_play_arrow_white_48dp"
+                    android:focusable="true"
                     android:visibility="visible" />
 
                 <ImageView
@@ -103,6 +107,7 @@
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
                     android:src="@drawable/ic_skip_next_white_48dp"
+                    android:focusable="true"
                     android:visibility="visible" />
             </LinearLayout>
 
@@ -121,6 +126,7 @@
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         android:clickable="true"
+        android:focusable="true"
         android:visibility="visible" />
 
     <RelativeLayout
@@ -136,7 +142,7 @@
             android:layout_height="37dp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
             android:padding="5dp"
             android:src="@drawable/dropdown_icon"
             android:tint="#FFFFFF"
@@ -153,10 +159,10 @@
             android:layout_toStartOf="@+id/lyrics_icon"
             android:ellipsize="marquee"
             android:fadingEdge="horizontal"
-            android:maxLines="1"
-            android:paddingLeft="5dp"
-            android:text="Title"
+            android:paddingStart="5dp"
+            android:singleLine="true"
             android:textColor="#FFFFFF"
+            android:text="@string/title"
             android:textSize="17sp" />
 
         <TextView
@@ -169,8 +175,8 @@
             android:layout_toEndOf="@+id/selected_track_image_sp_AB"
             android:layout_toStartOf="@+id/lyrics_icon"
             android:maxLines="1"
-            android:paddingLeft="5dp"
-            android:text="Unknown"
+            android:paddingStart="5dp"
+            android:text="@string/unknown"
             android:textColor="#EEEEEE"
             android:textSize="13sp" />
 
@@ -179,7 +185,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_centerVertical="true"
-            android:layout_marginRight="12dp"
+            android:layout_marginEnd="12dp"
             android:layout_toStartOf="@+id/menuIcon"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
@@ -187,18 +193,20 @@
             android:padding="8dp"
             android:scrollbars="vertical"
             android:tint="#FFFFFF"
+            android:focusable="true"
             android:src="@drawable/lyrics_icon" />
 
         <ImageView
             android:id="@+id/menuIcon"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="12dp"
+            android:layout_marginEnd="12dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
             android:padding="8dp"
+            android:focusable="true"
             android:src="@drawable/menu_overflow" />
     </RelativeLayout>
 
@@ -220,6 +228,7 @@
         android:layout_below="@+id/smallPlayer_AB"
         android:background="#00000000"
         android:clickable="true"
+        android:focusable="true"
         android:visibility="gone">
 
         <com.wang.avi.AVLoadingIndicatorView
@@ -268,23 +277,25 @@
             android:id="@+id/repeat_controller"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
             android:padding="3dp"
+            android:focusable="true"
             android:src="@drawable/ic_repeat_filled" />
 
         <ImageView
             android:id="@+id/previous"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="85dp"
+            android:layout_marginStart="85dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
+            android:focusable="true"
             android:src="@drawable/ic_skip_previous_white_48dp" />
 
         <ImageView
@@ -293,7 +304,8 @@
             android:layout_height="60dp"
             android:layout_centerInParent="true"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true" />
+            android:clickable="true"
+            android:focusable="true" />
 
         <com.wang.avi.AVLoadingIndicatorView
             android:id="@+id/bufferingIndicator"
@@ -303,29 +315,32 @@
             android:clickable="true"
             android:padding="10dp"
             app:indicatorColor="#FFFFFF"
+            android:focusable="true"
             app:indicatorName="BallSpinFadeLoaderIndicator" />
 
         <ImageView
             android:id="@+id/next"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="85dp"
+            android:layout_marginEnd="85dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
+            android:focusable="true"
             android:src="@drawable/ic_skip_next_white_48dp" />
 
         <ImageView
             android:id="@+id/shuffle_controller"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
             android:padding="3dp"
+            android:focusable="true"
             android:src="@drawable/ic_shuffle_filled" />
 
     </RelativeLayout>
@@ -342,10 +357,10 @@
             android:id="@+id/currTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:text="0:00"
+            android:layout_marginStart="10dp"
+            android:text="@string/current_time_or_something"
             android:textColor="#FFF" />
 
         <SeekBar
@@ -364,10 +379,10 @@
             android:id="@+id/totalTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:text="0:00"
+            android:layout_marginEnd="10dp"
+            android:text="@string/current_time_or_something"
             android:textColor="#FFF" />
 
     </RelativeLayout>
@@ -397,6 +412,7 @@
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
+                android:focusable="true"
                 android:src="@drawable/ic_equalizer_white_48dp" />
 
             <ImageView
@@ -406,6 +422,7 @@
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
+                android:focusable="true"
                 android:src="@drawable/ic_save_outline" />
 
             <ImageView
@@ -416,6 +433,7 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:padding="1dp"
+                android:focusable="true"
                 android:src="@drawable/ic_heart_out_1" />
 
             <ImageView
@@ -425,6 +443,7 @@
                 android:layout_weight="1"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
+                android:focusable="true"
                 android:src="@drawable/ic_queue_music_white_48dp" />
 
             <View
@@ -432,7 +451,6 @@
                 android:layout_height="32dp"
                 android:layout_weight="0.5" />
         </LinearLayout>
-
 
     </RelativeLayout>
 

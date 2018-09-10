@@ -150,6 +150,7 @@
             android:layout_height="match_parent"
             android:background="@color/colorDark"
             android:clickable="true"
+            android:focusable="true"
             android:padding="0dp">
 
             <RelativeLayout
@@ -164,11 +165,11 @@
                     android:id="@+id/recentsRecyclerLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginStart="15dp"
                     android:layout_marginTop="10dp"
-                    android:text="Recent"
+                    android:text="@string/recent"
                     android:textColor="#FFF"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -179,9 +180,9 @@
                     android:layout_centerInParent="true"
                     android:layout_marginBottom="25dp"
                     android:layout_marginTop="25dp"
-                    android:text="Nothing to Show !"
+                    android:text="@string/nothing_to_show"
                     android:textColor="#888"
-                    android:textSize="13dp"
+                    android:textSize="13sp"
                     android:visibility="invisible" />
 
                 <TextView
@@ -189,9 +190,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignBaseline="@+id/recentsRecyclerLabel"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="15dp"
-                    android:text="VIEW ALL"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="15dp"
+                    android:text="@string/view_all"
                     android:textColor="#FFF"
                     android:textSize="13sp" />
 
@@ -201,6 +202,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/recentsRecyclerLabel"
                     android:padding="5dp" />
+
             </RelativeLayout>
 
             <View
@@ -225,12 +227,12 @@
                     android:id="@+id/playListRecyclerLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="15dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="15dp"
                     android:layout_marginTop="10dp"
-                    android:text="Playlists"
+                    android:text="@string/playlists"
                     android:textColor="#FFF"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -241,9 +243,9 @@
                     android:layout_centerInParent="true"
                     android:layout_marginBottom="25dp"
                     android:layout_marginTop="25dp"
-                    android:text="Nothing to Show !"
+                    android:text="@string/nothing_to_show"
                     android:textColor="#888"
-                    android:textSize="13dp"
+                    android:textSize="13sp"
                     android:visibility="invisible" />
 
 
@@ -252,9 +254,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignBaseline="@+id/playListRecyclerLabel"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="15dp"
-                    android:text="VIEW ALL"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="15dp"
+                    android:text="@string/view_all"
                     android:textColor="#FFF"
                     android:textSize="13sp" />
 
@@ -297,9 +299,9 @@
                         android:id="@+id/local_banner_play_all"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="20dp"
+                        android:layout_marginEnd="20dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:src="@drawable/ic_play_arrow_white_48dp" />
 
@@ -307,9 +309,9 @@
                         android:id="@+id/local_banner_alt_showcase"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="-10dp" />
+                        android:layout_marginStart="-10dp" />
                 </RelativeLayout>
 
                 <LinearLayout
@@ -369,7 +371,7 @@
                 android:layout_height="40dp"
                 android:layout_below="@+id/bannerContainer"
                 android:gravity="center"
-                android:text="Music DNA"
+                android:text="@string/app_name"
                 android:textAlignment="gravity"
                 android:textColor="#888" />
 
@@ -403,7 +405,7 @@
                 android:id="@+id/localRecyclerLabelContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
@@ -411,9 +413,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="10"
-                    android:text="Local"
+                    android:text="@string/local"
                     android:textColor="#FFF"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -422,9 +424,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="2"
-                    android:text="View All"
+                    android:text="@string/view_all"
                     android:textColor="#FFF"
-                    android:textSize="12dp"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -437,9 +439,9 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="25dp"
                 android:layout_marginTop="25dp"
-                android:text="Nothing to Show !"
+                android:text="@string/nothing_to_show"
                 android:textColor="#DDD"
-                android:textSize="13dp"
+                android:textSize="13sp"
                 android:visibility="invisible" />
 
             <android.support.v7.widget.RecyclerView
@@ -454,7 +456,6 @@
             android:id="@+id/streamRecyclerContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/localRecyclerContainer"
             android:layout_marginLeft="-6dp"
             android:layout_marginRight="-6dp"
             android:background="#222"
@@ -473,7 +474,7 @@
                 android:id="@+id/streamRecyclerLabelContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
@@ -481,9 +482,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="10"
-                    android:text="SoundCloud"
+                    android:text="@string/soundcloud"
                     android:textColor="#FFF"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -492,9 +493,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="2"
-                    android:text="View All"
+                    android:text="@string/view_all"
                     android:textColor="#FFF"
-                    android:textSize="12dp"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -506,18 +507,19 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="25dp"
                 android:layout_marginTop="25dp"
-                android:text="Nothing to Show !"
+                android:text="@string/nothing_to_show"
                 android:textColor="#DDD"
-                android:textSize="13dp"
+                android:textSize="13sp"
                 android:visibility="invisible" />
-
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/trackList_home"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/streamRecyclerLabelContainer"
-                android:padding="5dp"></android.support.v7.widget.RecyclerView>
+                android:padding="5dp">
+
+            </android.support.v7.widget.RecyclerView>
         </RelativeLayout>
     </LinearLayout>
 
@@ -557,7 +559,6 @@
             android:id="@+id/smallPlayer_home"
             android:layout_width="match_parent"
             android:layout_height="65dp"
-            android:layout_alignParentTop="true"
             android:layout_marginBottom="0dp"
             android:visibility="visible">
 
@@ -567,7 +568,7 @@
                 android:layout_height="48dp"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/myvisualizerview"
-                android:layout_marginLeft="0dp"
+                android:layout_marginStart="0dp"
                 android:layout_marginTop="10dp"
                 android:visibility="visible"
                 app:civ_border_color="#FF000000"
@@ -579,14 +580,14 @@
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/player_control"
                 android:layout_alignParentStart="true"
-                android:layout_marginLeft="35dp"
+                android:layout_marginStart="35dp"
                 android:layout_marginTop="2dp"
                 android:ellipsize="end"
                 android:singleLine="false"
-                android:text="Title"
+                android:text="@string/title"
                 android:textAlignment="center"
                 android:textColor="#FFFFFF"
-                android:textSize="13dp" />
+                android:textSize="13sp" />
 
             <ImageView
                 android:id="@+id/player_control_sp_home"
@@ -594,14 +595,16 @@
                 android:layout_height="24dp"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:layout_gravity="right|center_vertical"
+                android:layout_gravity="end"
                 android:layout_marginBottom="5dp"
-                android:layout_marginRight="17dp"
+                android:layout_marginEnd="17dp"
                 android:layout_marginTop="2dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
+                android:focusable="true"
                 android:visibility="visible" />
         </android.support.v7.widget.Toolbar>
+
     </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>

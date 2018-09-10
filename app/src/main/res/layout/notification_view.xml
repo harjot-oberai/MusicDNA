@@ -8,20 +8,20 @@
         android:id="@+id/image_in_notification"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:scaleType="fitXY" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_toRightOf="@id/image_in_notification">
+        android:layout_toEndOf="@id/image_in_notification">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:orientation="vertical"
             android:padding="5dp">
 
@@ -31,9 +31,9 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="marquee"
                 android:singleLine="true"
-                android:text="Title"
+                android:text="@string/title"
                 android:textColor="#FFFFFF"
-                android:textSize="14dp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/artist_in_notification"
@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:text="Artist"
+                android:text="@string/artist"
                 android:textColor="#AAAAAA"
                 android:textSize="11dp" />
         </LinearLayout>
@@ -51,7 +51,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_margin="10dp"
             android:src="@drawable/ic_skip_previous_white_48dp" />
 
@@ -70,7 +70,7 @@
             android:layout_height="48dp"
             android:layout_alignParentBottom="true"
             android:layout_margin="10dp"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:src="@drawable/ic_skip_next_white_48dp" />
     </RelativeLayout>
 

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -5,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="#000000"
     android:clickable="true"
+    android:focusable="true"
     tools:context="com.sdsmdg.harjot.MusicDNA.fragments.QueueFragment.QueueFragment">
 
     <View
@@ -23,11 +25,12 @@
             android:id="@+id/queue_back_btn"
             android:layout_width="50dp"
             android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:background="@drawable/custom_ripple_2"
             android:clickable="true"
             android:padding="12dp"
+            android:focusable="true"
             android:src="@drawable/back2" />
 
         <TextView
@@ -35,7 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="QUEUE"
+            android:text="@string/queue"
             android:textColor="#FFFFFF"
             android:textSize="25sp" />
 
@@ -43,12 +46,12 @@
             android:id="@+id/queue_clear_text"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:background="@drawable/custom_ripple_2"
             android:gravity="center_vertical"
             android:padding="10dp"
-            android:text="CLEAR"
+            android:text="@string/clear"
             android:textAlignment="gravity"
             android:textColor="#FFFFFF"
             android:textSize="16sp" />
@@ -67,7 +70,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_margin="16dp"
         android:clickable="true"
         android:src="@drawable/ic_save_filled_2"
@@ -75,6 +78,7 @@
         app:borderWidth="0dp"
         app:elevation="6dp"
         app:pressedTranslationZ="9dp"
+        android:focusable="true"
         app:rippleColor="#888888" />
 
 </RelativeLayout>

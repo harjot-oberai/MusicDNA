@@ -1,11 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorDark"
     android:clickable="true"
     android:clipToPadding="false"
+    android:focusable="true"
     tools:context="com.sdsmdg.harjot.MusicDNA.fragments.SettingsFragment.SettingsFragment">
 
     <RelativeLayout
@@ -19,11 +20,12 @@
             android:id="@+id/settings_back_btn"
             android:layout_width="50dp"
             android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:background="@drawable/custom_ripple"
             android:clickable="true"
             android:padding="12dp"
+            android:focusable="true"
             android:src="@drawable/back2" />
 
         <TextView
@@ -31,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="SETTINGS"
+            android:text="@string/settings"
             android:textColor="#FFFFFF"
             android:textSize="25sp" />
 
@@ -54,30 +56,31 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/custom_ripple"
                 android:clickable="true"
+                android:focusable="true"
                 android:padding="5dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:layout_margin="7dp"
-                    android:layout_toLeftOf="@+id/density_value"
+                    android:layout_toStartOf="@+id/density_value"
                     android:padding="5dp"
-                    android:text="DNA Density"
+                    android:text="@string/dna_density"
                     android:textColor="#FFF"
-                    android:textSize="18dp" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/density_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:text="100"
+                    android:layout_marginEnd="10dp"
+                    android:text="@string/_100"
                     android:textColor="#FFF"
-                    android:textSize="18dp" />
+                    android:textSize="18sp" />
 
             </RelativeLayout>
 
@@ -94,24 +97,25 @@
                 android:layout_below="@+id/density_card"
                 android:background="@drawable/custom_ripple"
                 android:clickable="true"
+                android:focusable="true"
                 android:padding="5dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
                     android:layout_margin="7dp"
                     android:padding="5dp"
-                    android:text="Theme Color"
+                    android:text="@string/theme_color"
                     android:textColor="#FFF"
-                    android:textSize="18dp" />
+                    android:textSize="18sp" />
 
                 <ImageView
                     android:id="@+id/theme_color_img"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_margin="10dp"
                     android:background="#000000" />
             </RelativeLayout>
@@ -129,28 +133,30 @@
                 android:layout_below="@+id/theme_card"
                 android:background="@drawable/custom_ripple"
                 android:clickable="true"
+                android:focusable="true"
                 android:padding="5dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
                     android:layout_margin="7dp"
                     android:padding="5dp"
-                    android:text="Art behind the DNA"
+                    android:text="@string/art_behind_the_dna"
                     android:textColor="#FFF"
-                    android:textSize="18dp" />
+                    android:textSize="18sp" />
 
                 <android.support.v7.widget.SwitchCompat
                     android:id="@+id/album_art_toggle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="1dp"
+                    android:layout_marginEnd="1dp"
                     android:checked="false"
                     android:clickable="true"
+                    android:focusable="true"
                     android:theme="@style/CustomSwitch" />
 
             </RelativeLayout>
@@ -168,28 +174,30 @@
                 android:layout_below="@+id/album_art_card"
                 android:background="@drawable/custom_ripple"
                 android:clickable="true"
+                android:focusable="true"
                 android:padding="5dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
                     android:layout_margin="7dp"
                     android:padding="5dp"
-                    android:text="Stream over Wifi only"
+                    android:text="@string/stream_over_wifi_only"
                     android:textColor="#FFF"
-                    android:textSize="18dp" />
+                    android:textSize="18sp" />
 
                 <android.support.v7.widget.SwitchCompat
                     android:id="@+id/wifi_stream_toggle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="1dp"
+                    android:layout_marginEnd="1dp"
                     android:checked="false"
                     android:clickable="true"
+                    android:focusable="true"
                     android:theme="@style/CustomSwitch" />
 
             </RelativeLayout>
@@ -207,18 +215,19 @@
                 android:layout_below="@+id/wifi_card"
                 android:background="@drawable/custom_ripple"
                 android:clickable="true"
+                android:focusable="true"
                 android:padding="5dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
                     android:layout_margin="7dp"
                     android:padding="5dp"
-                    android:text="About"
+                    android:text="@string/about"
                     android:textColor="#FFF"
-                    android:textSize="18dp" />
+                    android:textSize="18sp" />
             </RelativeLayout>
 
             <View
@@ -234,6 +243,7 @@
                 android:layout_below="@+id/about_card"
                 android:background="@drawable/custom_ripple"
                 android:clickable="true"
+                android:focusable="true"
                 android:padding="5dp">
 
                 <TextView
@@ -244,15 +254,16 @@
                     android:layout_centerVertical="true"
                     android:layout_margin="7dp"
                     android:padding="5dp"
-                    android:text="Reset settings"
+                    android:text="@string/reset_settings"
                     android:textColor="#FFF"
-                    android:textSize="18dp" />
+                    android:textSize="18sp" />
+
                 <ImageView
                     android:id="@+id/settings_warning_sign"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:paddingRight="3dp"
+                    android:paddingEnd="3dp"
                     android:layout_margin="7dp"
                     android:src="@drawable/ic_warning_sign"/>
             </RelativeLayout>
@@ -273,6 +284,7 @@
         android:layout_height="65dp"
         android:layout_alignParentBottom="true"
         android:background="@color/colorDark"
-        android:clickable="true" />
+        android:clickable="true"
+        android:focusable="true" />
 
 </RelativeLayout>

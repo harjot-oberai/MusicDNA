@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="154dp"
@@ -34,10 +33,10 @@
             android:layout_marginTop="5dp"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text="Title"
+            android:text="@string/title"
             android:textAlignment="center"
             android:textColor="#FFF"
-            android:textSize="13dp" />
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/card_artist"
@@ -47,7 +46,7 @@
             android:layout_marginTop="-5dp"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text="Artist"
+            android:text="@string/artist"
             android:textAlignment="center"
             android:textColor="#EEE"
             android:textSize="9dp" />

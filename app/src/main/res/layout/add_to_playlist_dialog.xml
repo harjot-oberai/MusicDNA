@@ -7,7 +7,9 @@
     <ListView
         android:id="@+id/playlist_list"
         android:layout_width="match_parent"
-        android:layout_height="150dp"></ListView>
+        android:layout_height="150dp">
+
+    </ListView>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,14 +23,14 @@
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_weight="6"
-            android:hint="New Playlist..." />
+            android:hint="@string/new_playlist"
+            android:inputType="" />
 
         <ImageView
             android:id="@+id/confirm_button"
             android:layout_width="0dp"
             android:layout_height="50dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
             android:layout_weight="1"
             android:src="@drawable/ic_playlist_add_black_48dp" />
     </LinearLayout>

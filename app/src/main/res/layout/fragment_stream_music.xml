@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -5,6 +6,7 @@
     android:background="@color/colorDark"
     android:clickable="true"
     android:padding="5dp"
+    android:focusable="true"
     tools:context="com.sdsmdg.harjot.MusicDNA.fragments.StreamFragment.StreamMusicFragment">
 
     <android.support.v7.widget.RecyclerView
@@ -20,6 +22,7 @@
         android:layout_height="65dp"
         android:layout_alignParentBottom="true"
         android:background="@color/colorDark"
-        android:clickable="true" />
+        android:clickable="true"
+        android:focusable="true" />
 
 </RelativeLayout>

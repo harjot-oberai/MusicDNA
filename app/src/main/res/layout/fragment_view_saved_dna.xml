@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000"
+    android:clickable="true"
+    android:focusable="true"
+    tools:context="com.sdsmdg.harjot.MusicDNA.fragments.ViewSavedDNAsFragment.ViewSavedDNA">
+
+    <RelativeLayout
+        android:id="@+id/view_saved_dna_action_container"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#000000">
+
+        <ImageView
+            android:id="@+id/view_saved_dna_back_btn"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/custom_ripple_2"
+            android:clickable="true"
+            android:padding="12dp"
+            android:focusable="true"
+            android:src="@drawable/back2" />
+
+        <TextView
+            android:id="@+id/view_saved_dna_fragment_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/saved_dna"
+            android:textColor="#FFFFFF"
+            android:textSize="25sp" />
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/visualizer_alt_showcase"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="170dp" />
+
+    <com.sdsmdg.harjot.MusicDNA.visualizers.VisualizerView2
+        android:id="@+id/saved_dna_visualizer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/saved_dna_recycler"
+        android:layout_below="@+id/view_saved_dna_action_container"
+        android:background="#000000" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/saved_dna_recycler"
+        android:layout_marginBottom="2dp"
+        android:padding="2dp">
+
+        <ImageView
+            android:id="@+id/save_to_storage_icon"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_alignParentStart="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_save_to_storage" />
+
+        <ImageView
+            android:id="@+id/share_icon"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="10dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_share" />
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/saved_dna_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="135dp"
+        android:layout_above="@+id/bottom_margin_layout"
+        android:background="@color/colorDark"
+        android:padding="1dp" />
+
+    <LinearLayout
+        android:id="@+id/no_saved_dnas"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/view_saved_dna_action_container"
+        android:background="@color/colorDark"
+        android:orientation="vertical"
+        android:visibility="invisible">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:src="@drawable/ic_error_white_48dp" />
+
+        <TextView
+            android:id="@+id/no_saved_content_text"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:layout_weight="2"
+            android:gravity="top|center_horizontal"
+            android:text="@string/no_saved_dnas"
+            android:textColor="#DDDDDD"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="4"
+            android:gravity="top|center_horizontal"
+            android:padding="7dp"
+            android:text="@string/to_save_dnas"
+            android:textAlignment="gravity"
+            android:textColor="#DDDDDD" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/bottom_margin_layout"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorDark"
+        android:clickable="true"
+        android:focusable="true" />
+
+</RelativeLayout>

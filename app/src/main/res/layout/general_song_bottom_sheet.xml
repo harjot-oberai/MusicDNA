@@ -10,18 +10,18 @@
         android:id="@+id/general_song_bottom_sheet_image"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
         android:scaleType="centerCrop" />
 
     <TextView
         android:id="@+id/general_song_bottom_sheet_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="13dp"
+        android:layout_marginStart="13dp"
         android:layout_marginTop="5dp"
-        android:layout_toRightOf="@id/general_song_bottom_sheet_image"
+        android:layout_toEndOf="@id/general_song_bottom_sheet_image"
         android:maxLines="1"
-        android:text="Title"
+        android:text="@string/title"
         android:textColor="#000"
         android:textSize="18sp" />
 
@@ -30,10 +30,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/general_song_bottom_sheet_title"
-        android:layout_marginLeft="13dp"
+        android:layout_marginStart="13dp"
         android:layout_marginTop="2dp"
-        android:layout_toRightOf="@id/general_song_bottom_sheet_image"
-        android:text="Artist"
+        android:layout_toEndOf="@id/general_song_bottom_sheet_image"
+        android:text="@string/artist"
         android:textColor="#444"
         android:textSize="13sp" />
 
@@ -45,12 +45,13 @@
         android:layout_marginTop="5dp"
         android:background="?attr/selectableItemBackground"
         android:clickable="true"
+        android:focusable="true"
         android:orientation="horizontal">
 
         <ImageView
             android:layout_width="40dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:padding="10dp"
             android:src="@drawable/bs_play_2"
             android:tint="#494949" />
@@ -58,11 +59,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:gravity="center_vertical"
             android:paddingBottom="8dp"
             android:paddingTop="8dp"
-            android:text="Play"
+            android:text="@string/play"
             android:textAlignment="gravity"
             android:textColor="#111111"
             android:textSize="18sp" />
@@ -82,7 +83,7 @@
         <ImageView
             android:layout_width="40dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:padding="10dp"
             android:src="@drawable/bs_play_2"
             android:tint="#494949" />
@@ -90,10 +91,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:paddingBottom="8dp"
             android:paddingTop="8dp"
-            android:text="Play Next"
+            android:text="@string/play_next"
             android:textColor="#111111"
             android:textSize="18sp" />
 
@@ -107,24 +108,25 @@
         android:layout_marginTop="5dp"
         android:background="?attr/selectableItemBackground"
         android:clickable="true"
+        android:focusable="true"
         android:orientation="horizontal">
 
         <ImageView
             android:layout_width="40dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:paddingLeft="9dp"
-            android:paddingRight="11dp"
+            android:layout_marginStart="10dp"
+            android:paddingEnd="11dp"
+            android:paddingStart="9dp"
             android:src="@drawable/ic_add_to_queue"
             android:tint="#494949" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:paddingBottom="8dp"
             android:paddingTop="8dp"
-            android:text="Add to Queue"
+            android:text="@string/add_to_queue"
             android:textColor="#111111"
             android:textSize="18sp" />
 
@@ -138,24 +140,25 @@
         android:layout_marginTop="5dp"
         android:background="?attr/selectableItemBackground"
         android:clickable="true"
+        android:focusable="true"
         android:orientation="horizontal">
 
         <ImageView
             android:layout_width="40dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:paddingLeft="9dp"
-            android:paddingRight="6dp"
+            android:layout_marginStart="10dp"
+            android:paddingEnd="6dp"
+            android:paddingStart="9dp"
             android:src="@drawable/ic_playlist_add_black_48dp"
             android:tint="#494949" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:paddingBottom="8dp"
             android:paddingTop="8dp"
-            android:text="Add to Playlist"
+            android:text="@string/add_to_playlist"
             android:textColor="#111111"
             android:textSize="18sp" />
 
@@ -169,6 +172,7 @@
         android:layout_marginTop="5dp"
         android:background="?attr/selectableItemBackground"
         android:clickable="true"
+        android:focusable="true"
         android:orientation="horizontal">
 
         <ImageView
@@ -182,10 +186,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:paddingBottom="8dp"
             android:paddingTop="8dp"
-            android:text="Add to Favourites"
+            android:text="@string/add_to_favourites"
             android:textColor="#111111"
             android:textSize="18sp" />
 

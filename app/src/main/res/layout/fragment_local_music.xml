@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -5,13 +6,14 @@
     android:layout_height="match_parent"
     android:background="@color/colorDark"
     android:clickable="true"
+    android:focusable="true"
     tools:context=".fragments.LocalMusicFragments.LocalMusicFragment">
 
     <View
         android:id="@+id/songs_tab_alt_showcase"
         android:layout_width="100dp"
         android:layout_height="?attr/actionBarSize"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginTop="-35dp" />
 
@@ -28,7 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/bottom_margin_layout"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_margin="16dp"
         android:clickable="true"
         android:scaleX="0.0"
@@ -38,6 +40,7 @@
         app:borderWidth="0dp"
         app:elevation="6dp"
         app:pressedTranslationZ="9dp"
+        android:focusable="true"
         app:rippleColor="#888888" />
 
     <View
@@ -46,6 +49,7 @@
         android:layout_height="65dp"
         android:layout_alignParentBottom="true"
         android:background="@color/colorDark"
-        android:clickable="true" />
+        android:clickable="true"
+        android:focusable="true" />
 
 </RelativeLayout>

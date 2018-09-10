@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/custom_ripple"
@@ -16,7 +15,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
         android:scaleType="fitXY"
         android:src="@drawable/handle" />
 
@@ -24,10 +23,10 @@
         android:id="@+id/img"
         android:layout_width="56dp"
         android:layout_height="56dp"
-        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:layout_toRightOf="@+id/holderImage"
+        android:layout_toEndOf="@+id/holderImage"
         android:background="#222"
         android:scaleType="centerCrop" />
 
@@ -37,9 +36,9 @@
         android:layout_centerVertical="true"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
-        android:layout_marginLeft="14dp"
-        android:layout_marginRight="10dp"
-        android:layout_toRightOf="@+id/img"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="14dp"
+        android:layout_toEndOf="@+id/img"
         android:orientation="vertical">
 
         <TextView
@@ -48,9 +47,9 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="Title"
+            android:text="@string/title"
             android:textColor="#FFF"
-            android:textSize="14dp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/url"
@@ -60,7 +59,7 @@
             android:layout_marginTop="1dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="Artist"
+            android:text="@string/artist"
             android:textColor="#EEE"
             android:textSize="11dp" />
     </LinearLayout>

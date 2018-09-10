@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:gravity="center"
-        android:text="Text"
+        android:text="@string/text"
         android:textColor="#000000"
         android:textSize="22sp" />
 
@@ -24,18 +24,18 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="13dp"
         android:text=""
-        android:textSize="15dp" />
+        android:textSize="15sp" />
 
     <CheckBox
         android:id="@+id/text_checkbox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/save_image_filename_text"
-        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:buttonTint="@color/colorPrimary"
         android:checked="false"
-        android:text="Add Text to Image also" />
+        android:text="@string/add_text_to_image" />
 
     <Button
         android:id="@+id/save_image_btn"
@@ -45,8 +45,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
         android:background="@color/colorPrimary"
-        android:text="Save"
+        android:text="@string/save"
         android:textColor="#FFFFFF"
-        android:textSize="15dp" />
+        android:textSize="15sp" />
 
 </RelativeLayout>

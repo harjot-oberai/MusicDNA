@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="Add to playlist" />
-    <item android:title="Full Screen" />
-    <item android:title="Settings" />
+    <item android:title="@string/add_to_playlist" />
+    <item android:title="@string/full_screen" />
+    <item android:title="@string/settings" />
     <!--<item-->
     <!--android:id="@+id/play"-->
     <!--android:icon="@android:drawable/ic_menu_search"-->
-    <!--android:title="Play" />-->
+    <!--android:title="@string/play" />-->
 </menu>

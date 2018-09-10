@@ -6,35 +6,35 @@
             android:id="@+id/nav_home"
             android:checked="true"
             android:icon="@drawable/ic_home"
-            android:title="Home" />
+            android:title="@string/home" />
         <item
             android:id="@+id/nav_local"
             android:icon="@drawable/local"
-            android:title="Local Music" />
+            android:title="@string/local_music" />
         <item
             android:id="@+id/nav_playlists"
             android:icon="@drawable/ic_playlist"
-            android:title="Playlists" />
+            android:title="@string/playlists" />
         <item
             android:id="@+id/nav_recent"
             android:icon="@drawable/ic_recent"
-            android:title="Recently Played" />
+            android:title="@string/recently_played" />
         <item
             android:id="@+id/nav_fav"
             android:icon="@drawable/ic_heart_filled"
-            android:title="Favourites" />
+            android:title="@string/favourites" />
         <item
             android:id="@+id/nav_folder"
             android:icon="@drawable/folder"
-            android:title="Folders" />
+            android:title="@string/folders" />
         <item
             android:id="@+id/nav_view"
             android:icon="@drawable/ic_save_filled"
-            android:title="Saved DNA" />
+            android:title="@string/saved_dna" />
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/settings"
-            android:title="Settings" />
+            android:title="@string/settings" />
     </group>
 
 </menu>

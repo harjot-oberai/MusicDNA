@@ -12,6 +12,6 @@ public class ArtistComparator implements Comparator<Artist> {
 
     @Override
     public int compare(Artist lhs, Artist rhs) {
-        return lhs.getName().toString().compareTo(rhs.getName().toString());
+        return lhs.getName().compareTo(rhs.getName());
     }
 }

@@ -1,12 +1,11 @@
 package com.sdsmdg.harjot.MusicDNA.lyrics;
 
-import com.sdsmdg.harjot.MusicDNA.Config;
-import com.sdsmdg.harjot.MusicDNA.annotations.Reflection;
-import com.sdsmdg.harjot.MusicDNA.utilities.Net;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonSyntaxException;
+import com.sdsmdg.harjot.MusicDNA.Config;
+import com.sdsmdg.harjot.MusicDNA.annotations.Reflection;
+import com.sdsmdg.harjot.MusicDNA.utilities.Net;
 
 import org.jsoup.Connection;
 import org.jsoup.HttpStatusException;
@@ -29,10 +28,11 @@ public class Genius {
 
     public static ArrayList<Lyrics> search(String query) {
         ArrayList<Lyrics> results = new ArrayList<>();
-        query = Normalizer.normalize(query, Normalizer.Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+        query = Normalizer.normalize(query, Normalizer.Form.NFD)
+                .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
         JsonObject response = null;
         try {
-            URL queryURL = new URL(String.format("http://api.genius.com/search?q=%s", URLEncoder.encode(query, "UTF-8")));
+            URL queryURL = new URL(String.format("https://api.genius.com/search?q=%s", URLEncoder.encode(query, "UTF-8")));
             Connection connection = Jsoup.connect(queryURL.toExternalForm())
                     .header("Authorization", "Bearer " + Config.GENIUS)
                     .timeout(0)
@@ -52,7 +52,7 @@ public class Genius {
             JsonObject song = hits.get(processed).getAsJsonObject().getAsJsonObject("result");
             String artist = song.getAsJsonObject("primary_artist").get("name").getAsString();
             String title = song.get("title").getAsString();
-            String url = "http://genius.com/songs/" + song.get("id").getAsString();
+            String url = "https://genius.com/songs/" + song.get("id").getAsString();
             Lyrics l = new Lyrics(Lyrics.SEARCH_ITEM);
             l.setArtist(artist);
             l.setTitle(title);
@@ -74,7 +74,7 @@ public class Genius {
                 .trim().replaceAll("[\\s+]", "-");
         urlTitle = urlTitle.replaceAll("[^a-zA-Z0-9\\s+]", "").replaceAll("&", "and")
                 .trim().replaceAll("[\\s+]", "-");
-        String url = String.format("http://genius.com/%s-%s-lyrics", urlArtist, urlTitle);
+        String url = String.format("https://genius.com/%s-%s-lyrics", urlArtist, urlTitle);
         return fromURL(url, originalArtist, originalTitle);
     }
 
@@ -101,7 +101,7 @@ public class Genius {
         Lyrics result = new Lyrics(Lyrics.POSITIVE_RESULT);
         if ("[Instrumental]".equals(text))
             result = new Lyrics(Lyrics.NEGATIVE_RESULT);
-        Pattern pattern = Pattern.compile("\\[.+\\]");
+        Pattern pattern = Pattern.compile("\\[.+]");
         StringBuilder builder = new StringBuilder();
         for (String line : text.split("<br> ")) {
             String strippedLine = line.replaceAll("\\s", "");
@@ -117,5 +117,4 @@ public class Genius {
         result.setSource("Genius");
         return result;
     }
-
 }

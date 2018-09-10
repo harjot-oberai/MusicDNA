@@ -12,7 +12,7 @@ public class Playlist {
 
     public Playlist(String name) {
         playlistName = name;
-        songList = new ArrayList<UnifiedTrack>();
+        songList = new ArrayList<>();
     }
 
     public Playlist(List<UnifiedTrack> songList, String playlistName) {
@@ -39,5 +39,4 @@ public class Playlist {
     public void addSong(UnifiedTrack track) {
         songList.add(track);
     }
-
 }

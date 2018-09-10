@@ -12,12 +12,11 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 public class Lyrics implements Serializable, Parcelable {
-
     private String mTitle;
     private String mArtist;
     private String mOriginalTitle;
     private String mOriginalArtist;
-    private String mSourceUrl;
+    private String mSourceURL;
     private String mCoverURL;
     private String mLyrics;
     private String mSource;
@@ -42,7 +41,7 @@ public class Lyrics implements Serializable, Parcelable {
         mArtist = in.readString();
         mOriginalTitle = in.readString();
         mOriginalArtist = in.readString();
-        mSourceUrl = in.readString();
+        mSourceURL = in.readString();
         mCoverURL = in.readString();
         mLyrics = in.readString();
         mSource = in.readString();
@@ -101,11 +100,11 @@ public class Lyrics implements Serializable, Parcelable {
     }
 
     public String getURL() {
-        return mSourceUrl;
+        return mSourceURL;
     }
 
-    public void setURL(String uRL) {
-        this.mSourceUrl = uRL;
+    public void setURL(String URL) {
+        this.mSourceURL = URL;
     }
 
     public String getCoverURL() {
@@ -200,7 +199,7 @@ public class Lyrics implements Serializable, Parcelable {
         dest.writeString(mArtist);
         dest.writeString(mOriginalTitle);
         dest.writeString(mOriginalArtist);
-        dest.writeString(mSourceUrl);
+        dest.writeString(mSourceURL);
         dest.writeString(mCoverURL);
         dest.writeString(mLyrics);
         dest.writeString(mSource);

@@ -1,6 +1,5 @@
 package com.sdsmdg.harjot.MusicDNA.fragments.ViewAlbumFragment;
 
-
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
@@ -20,42 +19,33 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
+import com.sdsmdg.harjot.MusicDNA.R;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
 import com.sdsmdg.harjot.MusicDNA.clickitemtouchlistener.ClickItemTouchListener;
 import com.sdsmdg.harjot.MusicDNA.custombottomsheets.CustomLocalBottomSheetDialog;
 import com.sdsmdg.harjot.MusicDNA.fragments.LocalMusicFragments.LocalTrackRecyclerAdapter;
-import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
 import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.models.UnifiedTrack;
-import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
-import com.sdsmdg.harjot.MusicDNA.R;
-import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
 import com.sdsmdg.harjot.MusicDNA.utilities.CommonUtils;
-import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
 import com.squareup.leakcanary.RefWatcher;
-
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ViewAlbumFragment extends Fragment {
-
     LocalTrackRecyclerAdapter aslAdapter;
-
     RecyclerView rv;
-
     ImageLoader imgLoader;
     ImageView backDrop, backBtn, addToQueueIcon;
     FloatingActionButton fab;
     Context ctx;
-
     TextView fragTitle, albumTitle, albumTracksText;
-
     TextView albumDetails;
-
     HomeActivity activity;
-
     View bottomMarginLayout;
-
     albumCallbackListener mCallback;
 
     public ViewAlbumFragment() {
@@ -64,9 +54,7 @@ public class ViewAlbumFragment extends Fragment {
 
     public interface albumCallbackListener {
         void onAlbumSongClick();
-
         void onAlbumPlayAll();
-
         void addAlbumToQueue();
     }
 
@@ -96,33 +84,23 @@ public class ViewAlbumFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        backBtn = (ImageView) view.findViewById(R.id.view_album_back_btn);
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });
+        backBtn = view.findViewById(R.id.view_album_back_btn);
+        backBtn.setOnClickListener(v -> getActivity().onBackPressed());
 
-        backDrop = (ImageView) view.findViewById(R.id.album_backdrop);
+        backDrop = view.findViewById(R.id.album_backdrop);
         imgLoader.DisplayImage(HomeActivity.tempAlbum.getAlbumSongs().get(0).getPath(), backDrop);
 
-        fragTitle = (TextView) view.findViewById(R.id.album_fragment_title);
+        fragTitle = view.findViewById(R.id.album_fragment_title);
         if (SplashActivity.tf4 != null)
             fragTitle.setTypeface(SplashActivity.tf4);
 
-        albumTitle = (TextView) view.findViewById(R.id.album_title);
+        albumTitle = view.findViewById(R.id.album_title);
         albumTitle.setText(HomeActivity.tempAlbum.getName());
 
-        albumTracksText = (TextView) view.findViewById(R.id.album_tracks_text);
+        albumTracksText = view.findViewById(R.id.album_tracks_text);
 
-        addToQueueIcon = (ImageView) view.findViewById(R.id.add_album_to_queue_icon);
-        addToQueueIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCallback.addAlbumToQueue();
-            }
-        });
+        addToQueueIcon = view.findViewById(R.id.add_album_to_queue_icon);
+        addToQueueIcon.setOnClickListener(v -> mCallback.addAlbumToQueue());
 
         bottomMarginLayout = view.findViewById(R.id.bottom_margin_layout);
         if (HomeActivity.isReloaded)
@@ -134,33 +112,30 @@ public class ViewAlbumFragment extends Fragment {
         int tmp = HomeActivity.tempAlbum.getAlbumSongs().size();
         String details1;
         if (tmp == 1) {
-            details1 = "1 Song ";
+            details1 = "1 Song";
         } else {
-            details1 = tmp + " Songs ";
+            details1 = tmp + getString(R.string._songs);
         }
 
         albumTracksText.setText(details1);
 
-        fab = (FloatingActionButton) view.findViewById(R.id.play_all_from_album);
+        fab = view.findViewById(R.id.play_all_from_album);
         fab.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));
 
-        rv = (RecyclerView) view.findViewById(R.id.album_songs_recycler);
+        rv = view.findViewById(R.id.album_songs_recycler);
         aslAdapter = new LocalTrackRecyclerAdapter(HomeActivity.tempAlbum.getAlbumSongs(), getContext());
         LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rv.setLayoutManager(mLayoutManager2);
         rv.setItemAnimator(new DefaultItemAnimator());
         rv.setAdapter(aslAdapter);
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                HomeActivity.queue.getQueue().clear();
-                for (int i = 0; i < HomeActivity.tempAlbum.getAlbumSongs().size(); i++) {
-                    UnifiedTrack ut = new UnifiedTrack(true, HomeActivity.tempAlbum.getAlbumSongs().get(i), null);
-                    HomeActivity.queue.getQueue().add(ut);
-                }
-                mCallback.onAlbumPlayAll();
+        fab.setOnClickListener(v -> {
+            HomeActivity.queue.getQueue().clear();
+            for (int i = 0; i < HomeActivity.tempAlbum.getAlbumSongs().size(); i++) {
+                UnifiedTrack ut = new UnifiedTrack(true, HomeActivity.tempAlbum.getAlbumSongs().get(i), null);
+                HomeActivity.queue.getQueue().add(ut);
             }
+            mCallback.onAlbumPlayAll();
         });
 
         rv.addOnItemTouchListener(new ClickItemTouchListener(rv) {
@@ -193,24 +168,22 @@ public class ViewAlbumFragment extends Fragment {
             public boolean onLongClick(RecyclerView parent, View view, final int position, long id) {
                 CustomLocalBottomSheetDialog localBottomSheetDialog = new CustomLocalBottomSheetDialog();
                 localBottomSheetDialog.setPosition(position);
-                localBottomSheetDialog.setLocalTrack(activity.tempAlbum.getAlbumSongs().get(position));
-                localBottomSheetDialog.setFragment("Album");
+                localBottomSheetDialog.setLocalTrack(HomeActivity.tempAlbum.getAlbumSongs().get(position));
+                localBottomSheetDialog.setFragment(getString(R.string.album));
                 localBottomSheetDialog.show(activity.getSupportFragmentManager(), "local_song_bottom_sheet");
                 return true;
             }
 
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
             }
         });
-
     }
 
     public Bitmap getBitmap(String url) {
         android.media.MediaMetadataRetriever mmr = new MediaMetadataRetriever();
         mmr.setDataSource(url);
-        Bitmap bitmap = null;
+        Bitmap bitmap;
 
         byte[] data = mmr.getEmbeddedPicture();
 
@@ -225,12 +198,12 @@ public class ViewAlbumFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                fab.animate().scaleX(1.0f).scaleY(1.0f).setDuration(300).setInterpolator(new OvershootInterpolator());
-            }
-        }, 500);
+        new Handler().postDelayed(() -> fab
+                .animate()
+                .scaleX(1.0f)
+                .scaleY(1.0f)
+                .setDuration(300)
+                .setInterpolator(new OvershootInterpolator()), 500);
     }
 
     @Override

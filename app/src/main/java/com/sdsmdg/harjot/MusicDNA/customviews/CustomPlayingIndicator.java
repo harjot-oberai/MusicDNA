@@ -76,9 +76,7 @@ public class CustomPlayingIndicator extends View implements Runnable {
                 }
             }
         }
-
     }
-
 
     @Override
     public void run() {

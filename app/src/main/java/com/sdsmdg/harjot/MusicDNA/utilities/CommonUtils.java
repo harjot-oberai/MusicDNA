@@ -43,7 +43,7 @@ public class CommonUtils {
     }
 
     public static int getDarkColor(int color) {
-        int darkColor = 0;
+        int darkColor;
 
         int r = Math.max(Color.red(color) - 25, 0);
         int g = Math.max(Color.green(color) - 25, 0);
@@ -61,5 +61,4 @@ public class CommonUtils {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
-
 }

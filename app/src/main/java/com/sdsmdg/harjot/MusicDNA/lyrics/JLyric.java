@@ -16,14 +16,14 @@ import java.util.ArrayList;
 public class JLyric {
 
     public static final String domain = "j-lyric.net";
-    private static final String baseUrl = "http://search.j-lyric.net/index.php?ct=0&ca=0&kl=&cl=0&ka=%1s&kt=%1s";
+    private static final String baseUrl = "https://search.j-lyric.net/index.php?ct=0&ca=0&kl=&cl=0&ka=%1s&kt=%1s";
 
     public static ArrayList<Lyrics> search(String query) {
         ArrayList<Lyrics> results = new ArrayList<>();
         Elements artistBlocks = null;
 
         try {
-            Document searchPage = Jsoup.connect(String.format("http://search.j-lyric.net/index.php?ct=0&ka=&ca=0&kl=&cl=0&kt=%s", URLEncoder.encode(query, "UTF-8")))
+            Document searchPage = Jsoup.connect(String.format("https://search.j-lyric.net/index.php?ct=0&ka=&ca=0&kl=&cl=0&kt=%s", URLEncoder.encode(query, "UTF-8")))
                     .userAgent(Net.USER_AGENT).get();
             artistBlocks = searchPage.body().select("div#lyricList .body");
         } catch (IOException e) {
@@ -62,7 +62,7 @@ public class JLyric {
             encodedSong = URLEncoder.encode(song, "UTF-8");
             Document searchPage = Jsoup.connect(String.format(baseUrl, encodedArtist, encodedSong))
                     .userAgent(Net.USER_AGENT).get();
-            if (!searchPage.location().startsWith("http://search.j-lyric.net/"))
+            if (!searchPage.location().startsWith("https://search.j-lyric.net/"))
                 throw new IOException("Redirected to wrong domain " + searchPage.location());
             Elements artistBlocks = searchPage.body().select("div#lyricList");
 
@@ -111,7 +111,5 @@ public class JLyric {
         lyrics.setSource("J-Lyric");
         lyrics.setURL(url);
         return lyrics;
-
     }
-
 }

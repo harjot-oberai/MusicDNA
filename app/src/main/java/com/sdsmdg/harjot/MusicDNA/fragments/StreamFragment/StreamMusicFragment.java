@@ -1,9 +1,8 @@
 package com.sdsmdg.harjot.MusicDNA.fragments.StreamFragment;
 
-
-import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,16 +10,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.sdsmdg.harjot.MusicDNA.clickitemtouchlistener.ClickItemTouchListener;
-import com.sdsmdg.harjot.MusicDNA.custombottomsheets.CustomGeneralBottomSheetDialog;
-import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
-import com.sdsmdg.harjot.MusicDNA.models.Track;
-import com.sdsmdg.harjot.MusicDNA.models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
 import com.sdsmdg.harjot.MusicDNA.R;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.clickitemtouchlistener.ClickItemTouchListener;
+import com.sdsmdg.harjot.MusicDNA.custombottomsheets.CustomGeneralBottomSheetDialog;
+import com.sdsmdg.harjot.MusicDNA.models.Track;
+import com.sdsmdg.harjot.MusicDNA.models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.utilities.CommonUtils;
 import com.squareup.leakcanary.RefWatcher;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,7 +70,7 @@ public class StreamMusicFragment extends Fragment {
         else
             bottomMarginLayout.getLayoutParams().height = CommonUtils.dpTopx(65, getContext());
 
-        lv = (RecyclerView) view.findViewById(R.id.trackList);
+        lv = view.findViewById(R.id.trackList);
 
         adapter = new StreamTrackListAdapter(getContext(), HomeActivity.streamingTrackList);
         LinearLayoutManager mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -95,7 +93,8 @@ public class StreamMusicFragment extends Fragment {
                     HomeActivity.queueCurrentIndex = HomeActivity.queue.getQueue().size();
                     HomeActivity.queue.getQueue().add(new UnifiedTrack(false, null, track));
                 } else {
-                    HomeActivity.queue.getQueue().add(++HomeActivity.queueCurrentIndex, new UnifiedTrack(false, null, track));
+                    HomeActivity.queue.getQueue().add(++HomeActivity.queueCurrentIndex, new UnifiedTrack(
+                            false, null, track));
                 }
                 HomeActivity.selectedTrack = track;
                 HomeActivity.streamSelected = true;
@@ -110,18 +109,17 @@ public class StreamMusicFragment extends Fragment {
             public boolean onLongClick(RecyclerView parent, View view, final int position, long id) {
                 CustomGeneralBottomSheetDialog generalBottomSheetDialog = new CustomGeneralBottomSheetDialog();
                 generalBottomSheetDialog.setPosition(position);
-                generalBottomSheetDialog.setTrack(new UnifiedTrack(false, null, HomeActivity.streamingTrackList.get(position)));
-                generalBottomSheetDialog.setFragment("Stream");
+                generalBottomSheetDialog.setTrack(new UnifiedTrack(
+                        false, null, HomeActivity.streamingTrackList.get(position)));
+                generalBottomSheetDialog.setFragment(getString(R.string.stream));
                 generalBottomSheetDialog.show(getActivity().getSupportFragmentManager(), "general_bottom_sheet_dialog");
                 return true;
             }
 
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
             }
         });
-
     }
 
     @Override
@@ -142,5 +140,4 @@ public class StreamMusicFragment extends Fragment {
         if (adapter != null)
             adapter.notifyDataSetChanged();
     }
-
 }

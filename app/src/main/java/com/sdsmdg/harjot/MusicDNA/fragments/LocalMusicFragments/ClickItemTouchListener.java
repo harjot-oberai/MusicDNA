@@ -1,7 +1,6 @@
 package com.sdsmdg.harjot.MusicDNA.fragments.LocalMusicFragments;
 
 import android.content.Context;
-import android.os.Build;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnItemTouchListener;
@@ -9,7 +8,6 @@ import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
-
 /**
  * Created by Harjot on 18-May-16.
  */
@@ -25,11 +23,7 @@ abstract class ClickItemTouchListener implements OnItemTouchListener {
     }
 
     private boolean isAttachedToWindow(RecyclerView hostView) {
-        if (Build.VERSION.SDK_INT >= 19) {
-            return hostView.isAttachedToWindow();
-        } else {
-            return (hostView.getHandler() != null);
-        }
+        return hostView.isAttachedToWindow();
     }
 
     private boolean hasAdapter(RecyclerView hostView) {

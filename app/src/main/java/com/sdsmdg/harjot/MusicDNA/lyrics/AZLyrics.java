@@ -1,6 +1,5 @@
 package com.sdsmdg.harjot.MusicDNA.lyrics;
 
-
 import com.sdsmdg.harjot.MusicDNA.annotations.Reflection;
 import com.sdsmdg.harjot.MusicDNA.utilities.Net;
 
@@ -29,7 +28,7 @@ public class AZLyrics {
             htmlArtist = htmlArtist.substring(3);
 
         String urlString = String.format(
-                "http://www.azlyrics.com/lyrics/%s/%s.html",
+                "https://www.azlyrics.com/lyrics/%s/%s.html",
                 htmlArtist.toLowerCase(Locale.getDefault()),
                 htmlSong.toLowerCase(Locale.getDefault()));
         return fromURL(urlString, artist, song);
@@ -72,7 +71,7 @@ public class AZLyrics {
             l.setArtist(artist);
             String text = matcher.group(1);
             text = text.substring(0, text.indexOf("</div>"));
-            text = text.replaceAll("\\[[^\\[]*\\]", "");
+            text = text.replaceAll("\\[[^\\[]*]", "");
             l.setText(text);
             l.setTitle(song);
             l.setURL(url);
@@ -81,5 +80,4 @@ public class AZLyrics {
         } else
             return new Lyrics(Lyrics.NEGATIVE_RESULT);
     }
-
 }

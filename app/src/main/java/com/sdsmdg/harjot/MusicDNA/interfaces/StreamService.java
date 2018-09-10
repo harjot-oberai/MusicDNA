@@ -6,8 +6,8 @@ import com.sdsmdg.harjot.MusicDNA.models.Track;
 import java.util.List;
 
 import retrofit2.Call;
-import retrofit2.http.Query;
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 /**
  * Created by Harjot on 30-Apr-16.

@@ -1,9 +1,5 @@
 package com.sdsmdg.harjot.MusicDNA.visualizers;
 
-/**
- * Created by Harjot on 01-May-16.
- */
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

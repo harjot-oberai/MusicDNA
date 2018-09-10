@@ -11,9 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.github.mmin18.widget.RealtimeBlurView;
-import com.sdsmdg.harjot.MusicDNA.models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.R;
 import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
+import com.sdsmdg.harjot.MusicDNA.models.UnifiedTrack;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -57,7 +57,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                 holder.albumArt.setImageResource(R.drawable.ic_default);
             }
         } else {
-            Picasso.with(ctx).load(ut.getStreamTrack().getArtworkURL()).into(holder.albumArt);
+            Picasso.get()
+                    .load(ut.getStreamTrack().getArtworkURL())
+                    .into(holder.albumArt);
         }
     }
 
@@ -66,22 +68,11 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         return queue.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public ImageView albumArt;
-        public RealtimeBlurView blurredAlbumArt;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            albumArt = (ImageView) itemView.findViewById(R.id.album_art_container_v);
-            blurredAlbumArt = (RealtimeBlurView) itemView.findViewById(R.id.blurred_album_art);
-        }
-    }
-
     public Bitmap getBitmap(String url) {
         try {
             android.media.MediaMetadataRetriever mmr = new MediaMetadataRetriever();
             mmr.setDataSource(url);
-            Bitmap bitmap = null;
+            Bitmap bitmap;
 
             byte[] data = mmr.getEmbeddedPicture();
 
@@ -97,4 +88,14 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         return null;
     }
 
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        public ImageView albumArt;
+        public RealtimeBlurView blurredAlbumArt;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            albumArt = itemView.findViewById(R.id.album_art_container_v);
+            blurredAlbumArt = itemView.findViewById(R.id.blurred_album_art);
+        }
+    }
 }

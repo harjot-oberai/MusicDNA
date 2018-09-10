@@ -9,9 +9,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.R;
 import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
+import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
 
 import java.util.List;
 
@@ -30,12 +30,12 @@ public class LocalTracksHorizontalAdapter extends RecyclerView.Adapter<LocalTrac
         TextView title, artist;
         RelativeLayout bottomHolder;
 
-        public MyViewHolder(View view) {
-            super(view);
-            art = (ImageView) view.findViewById(R.id.backImage);
-            title = (TextView) view.findViewById(R.id.card_title);
-            artist = (TextView) view.findViewById(R.id.card_artist);
-            bottomHolder = (RelativeLayout) view.findViewById(R.id.bottomHolder);
+        public MyViewHolder(View v) {
+            super(v);
+            art = v.findViewById(R.id.backImage);
+            title = v.findViewById(R.id.card_title);
+            artist = v.findViewById(R.id.card_artist);
+            bottomHolder = v.findViewById(R.id.bottomHolder);
         }
     }
 
@@ -66,5 +66,4 @@ public class LocalTracksHorizontalAdapter extends RecyclerView.Adapter<LocalTrac
     public int getItemCount() {
         return localList.size();
     }
-
 }

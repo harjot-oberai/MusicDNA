@@ -1,12 +1,11 @@
 package com.sdsmdg.harjot.MusicDNA.fragments.QueueFragment;
 
-
+import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.support.v4.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,41 +20,32 @@ import android.widget.TextView;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
-import com.sdsmdg.harjot.MusicDNA.clickitemtouchlistener.ClickItemTouchListener;
-import com.sdsmdg.harjot.MusicDNA.itemtouchhelpers.SimpleItemTouchHelperCallback;
-import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
 import com.sdsmdg.harjot.MusicDNA.R;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
+import com.sdsmdg.harjot.MusicDNA.clickitemtouchlistener.ClickItemTouchListener;
+import com.sdsmdg.harjot.MusicDNA.itemtouchhelpers.SimpleItemTouchHelperCallback;
 import com.squareup.leakcanary.RefWatcher;
-
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDragStartListener {
-
     ImageView backBtn;
     TextView fragTitle;
     TextView clearText;
-
     RecyclerView queueRecycler;
     QueueRecyclerAdapter qAdapter;
     LinearLayoutManager mLayoutManager2;
-
     ItemTouchHelper mItemTouchHelper;
-
     FloatingActionButton saveQueue;
-
     queueCallbackListener mCallback;
-
     ShowcaseView showCase;
 
     public interface queueCallbackListener {
         void onQueueItemClicked(int position);
-
         void onQueueSave();
-
         void onQueueClear();
     }
 
@@ -85,27 +75,17 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        backBtn = (ImageView) view.findViewById(R.id.queue_back_btn);
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });
+        backBtn = view.findViewById(R.id.queue_back_btn);
+        backBtn.setOnClickListener(v -> getActivity().onBackPressed());
 
-        fragTitle = (TextView) view.findViewById(R.id.queue_fragment_title);
+        fragTitle = view.findViewById(R.id.queue_fragment_title);
         if (SplashActivity.tf4 != null)
             fragTitle.setTypeface(SplashActivity.tf4);
 
-        clearText = (TextView) view.findViewById(R.id.queue_clear_text);
-        clearText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCallback.onQueueClear();
-            }
-        });
+        clearText = view.findViewById(R.id.queue_clear_text);
+        clearText.setOnClickListener(v -> mCallback.onQueueClear());
 
-        queueRecycler = (RecyclerView) view.findViewById(R.id.queueRecycler);
+        queueRecycler = view.findViewById(R.id.queueRecycler);
 
         qAdapter = new QueueRecyclerAdapter(HomeActivity.queue.getQueue(), getContext(), this);
         mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -127,18 +107,12 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
 
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
             }
         });
 
-        saveQueue = (FloatingActionButton) view.findViewById(R.id.save_queue);
+        saveQueue = view.findViewById(R.id.save_queue);
         saveQueue.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));
-        saveQueue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCallback.onQueueSave();
-            }
-        });
+        saveQueue.setOnClickListener(v -> mCallback.onQueueSave());
 
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(qAdapter);
         mItemTouchHelper = new ItemTouchHelper(callback);
@@ -156,11 +130,10 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
                 .replaceEndButton(mEndButton)
                 .setContentTitlePaint(HomeActivity.tp)
                 .setTarget(new ViewTarget(R.id.queue_alt_showcase, getActivity()))
-                .setContentTitle("Queue")
-                .setContentText("Here all songs that are currently in queue are listed." +
-                        " Use handle to reorder the Queue and swipe the song to remove from queue")
+                .setContentTitle(R.string.queue)
+                .setContentText(getString(R.string.queue_listed))
                 .build();
-        showCase.setButtonText("Next");
+        showCase.setButtonText(getString(R.string.next));
         showCase.setButtonPosition(HomeActivity.lps);
         showCase.overrideButtonClick(new View.OnClickListener() {
             int count1 = 0;
@@ -174,21 +147,19 @@ public class QueueFragment extends Fragment implements QueueRecyclerAdapter.OnDr
                         lps.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                         lps.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
                         int margin = ((Number) (getResources().getDisplayMetrics().density * 12)).intValue();
-                        lps.setMargins(margin, margin, margin, 5 + HomeActivity.navBarHeightSizeinDp);
+                        lps.setMargins(margin, margin, margin, 5 + HomeActivity.navBarHeightSizeInDp);
                         showCase.setButtonPosition(lps);
                         showCase.setTarget(new ViewTarget(saveQueue.getId(), getActivity()));
-                        showCase.setContentTitle("Save Queue");
-                        showCase.setContentText("Save the queue as a playlist");
-                        showCase.setButtonText("Done");
+                        showCase.setContentTitle(getString(R.string.save_queue));
+                        showCase.setContentText(getString(R.string.save_queue_as_playlist));
+                        showCase.setButtonText(getString(R.string.done));
                         break;
                     case 2:
                         showCase.hide();
                         break;
                 }
             }
-
         });
-
     }
 
     @Override

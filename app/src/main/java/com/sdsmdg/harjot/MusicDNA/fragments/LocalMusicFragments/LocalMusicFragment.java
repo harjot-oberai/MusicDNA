@@ -1,15 +1,12 @@
 package com.sdsmdg.harjot.MusicDNA.fragments.LocalMusicFragments;
 
-
-//import android.app.Fragment;
-
+import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.content.Context;
-import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,18 +19,17 @@ import android.widget.RelativeLayout;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
-import com.sdsmdg.harjot.MusicDNA.clickitemtouchlistener.ClickItemTouchListener;
-import com.sdsmdg.harjot.MusicDNA.custombottomsheets.CustomLocalBottomSheetDialog;
-import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
-import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
-import com.sdsmdg.harjot.MusicDNA.models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
 import com.sdsmdg.harjot.MusicDNA.R;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.clickitemtouchlistener.ClickItemTouchListener;
+import com.sdsmdg.harjot.MusicDNA.custombottomsheets.CustomLocalBottomSheetDialog;
+import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
+import com.sdsmdg.harjot.MusicDNA.models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.utilities.CommonUtils;
 import com.squareup.leakcanary.RefWatcher;
 
 import java.util.Random;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -93,37 +89,33 @@ public class LocalMusicFragment extends Fragment {
         else
             bottomMarginLayout.getLayoutParams().height = CommonUtils.dpTopx(65, getContext());
 
-        shuffleFab = (FloatingActionButton) view.findViewById(R.id.play_all_fab_local);
+        shuffleFab = view.findViewById(R.id.play_all_fab_local);
 
         if (HomeActivity.localTrackList.size() == 0) {
-            shuffleFab.setVisibility(View.INVISIBLE);
+            shuffleFab.hide();
         }
 
         shuffleFab.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));
-        shuffleFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                HomeActivity.queue.getQueue().clear();
-                for (int i = 0; i < HomeActivity.localTrackList.size(); i++) {
-                    UnifiedTrack ut = new UnifiedTrack(true, HomeActivity.localTrackList.get(i), null);
-                    HomeActivity.queue.getQueue().add(ut);
-                }
-                if (HomeActivity.queue.getQueue().size() > 0) {
-                    Random r = new Random();
-                    int tmp = r.nextInt(HomeActivity.queue.getQueue().size());
-                    HomeActivity.queueCurrentIndex = tmp;
-                    LocalTrack track = HomeActivity.localTrackList.get(tmp);
-                    HomeActivity.localSelectedTrack = track;
-                    HomeActivity.streamSelected = false;
-                    HomeActivity.localSelected = true;
-                    HomeActivity.queueCall = false;
-                    HomeActivity.isReloaded = false;
-                    mCallback.onLocalTrackSelected(-1);
-                }
+        shuffleFab.setOnClickListener(v -> {
+            HomeActivity.queue.getQueue().clear();
+            for (int i = 0; i < HomeActivity.localTrackList.size(); i++) {
+                UnifiedTrack ut = new UnifiedTrack(true, HomeActivity.localTrackList.get(i), null);
+                HomeActivity.queue.getQueue().add(ut);
+            }
+            if (HomeActivity.queue.getQueue().size() > 0) {
+                Random r = new Random();
+                int tmp = r.nextInt(HomeActivity.queue.getQueue().size());
+                HomeActivity.queueCurrentIndex = tmp;
+                HomeActivity.localSelectedTrack = HomeActivity.localTrackList.get(tmp);
+                HomeActivity.streamSelected = false;
+                HomeActivity.localSelected = true;
+                HomeActivity.queueCall = false;
+                HomeActivity.isReloaded = false;
+                mCallback.onLocalTrackSelected(-1);
             }
         });
 
-        lv = (RecyclerView) view.findViewById(R.id.localMusicList);
+        lv = view.findViewById(R.id.localMusicList);
         adapter = new LocalTrackRecyclerAdapter(HomeActivity.finalLocalSearchResultList, getContext());
         mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         lv.setLayoutManager(mLayoutManager2);
@@ -141,15 +133,13 @@ public class LocalMusicFragment extends Fragment {
                         HomeActivity.queue.getQueue().add(ut);
                     }
                     HomeActivity.queueCurrentIndex = getPosition(HomeActivity.finalLocalSearchResultList.get(position));
-                    LocalTrack track = HomeActivity.finalLocalSearchResultList.get(position);
-                    HomeActivity.localSelectedTrack = track;
+                    HomeActivity.localSelectedTrack = HomeActivity.finalLocalSearchResultList.get(position);
                     HomeActivity.streamSelected = false;
                     HomeActivity.localSelected = true;
                     HomeActivity.queueCall = false;
                     HomeActivity.isReloaded = false;
                     mCallback.onLocalTrackSelected(-1);
                 }
-
                 return true;
             }
 
@@ -158,7 +148,7 @@ public class LocalMusicFragment extends Fragment {
                 if (position >= 0) {
                     CustomLocalBottomSheetDialog localBottomSheetDialog = new CustomLocalBottomSheetDialog();
                     localBottomSheetDialog.setPosition(position);
-                    localBottomSheetDialog.setLocalTrack(activity.finalLocalSearchResultList.get(position));
+                    localBottomSheetDialog.setLocalTrack(HomeActivity.finalLocalSearchResultList.get(position));
                     localBottomSheetDialog.show(activity.getSupportFragmentManager(), "local_song_bottom_sheet");
                 }
                 return true;
@@ -166,7 +156,6 @@ public class LocalMusicFragment extends Fragment {
 
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
             }
         });
 
@@ -182,10 +171,10 @@ public class LocalMusicFragment extends Fragment {
                 .replaceEndButton(mEndButton)
                 .setContentTitlePaint(HomeActivity.tp)
                 .setTarget(new ViewTarget(R.id.songs_tab_alt_showcase, getActivity()))
-                .setContentTitle("All Songs")
-                .setContentText("All local Songs listed here.Click to Play.Long click for more options")
+                .setContentTitle(getString(R.string.all_songs))
+                .setContentText(R.string.all_songs_listed_here)
                 .build();
-        showCase.setButtonText("Next");
+        showCase.setButtonText(getString(R.string.next));
         showCase.setButtonPosition(HomeActivity.lps);
         showCase.overrideButtonClick(new View.OnClickListener() {
             int count1 = 0;
@@ -199,11 +188,11 @@ public class LocalMusicFragment extends Fragment {
                         lps.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
                         lps.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
                         int margin = ((Number) (getResources().getDisplayMetrics().density * 12)).intValue();
-                        lps.setMargins(margin, margin, margin, 5 + HomeActivity.navBarHeightSizeinDp);
+                        lps.setMargins(margin, margin, margin, 5 + HomeActivity.navBarHeightSizeInDp);
                         showCase.setTarget(new ViewTarget(shuffleFab.getId(), getActivity()));
-                        showCase.setContentTitle("Shuffle");
-                        showCase.setContentText("Play all songs, shuffled randomly");
-                        showCase.setButtonText("Done");
+                        showCase.setContentTitle(getString(R.string.shuffle));
+                        showCase.setContentText(getString(R.string.play_songs_shuffled_randomly));
+                        showCase.setButtonText(getString(R.string.done));
                         showCase.setButtonPosition(lps);
                         break;
                     case 2:
@@ -211,21 +200,19 @@ public class LocalMusicFragment extends Fragment {
                         break;
                 }
             }
-
         });
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
         mLayoutManager2.scrollToPositionWithOffset(0, 0);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                shuffleFab.animate().scaleX(1.0f).scaleY(1.0f).setDuration(300).setInterpolator(new OvershootInterpolator());
-            }
-        }, 500);
+        new Handler().postDelayed(() -> shuffleFab
+                .animate()
+                .scaleX(1.0f)
+                .scaleY(1.0f)
+                .setDuration(300)
+                .setInterpolator(new OvershootInterpolator()), 500);
     }
 
     public int getPosition(LocalTrack lt) {
@@ -253,12 +240,12 @@ public class LocalMusicFragment extends Fragment {
 
     public void hideShuffleFab() {
         if (shuffleFab != null)
-            shuffleFab.setVisibility(View.INVISIBLE);
+            shuffleFab.hide();
     }
 
     public void showShuffleFab() {
         if (shuffleFab != null)
-            shuffleFab.setVisibility(View.VISIBLE);
+            shuffleFab.show();
     }
 
     public void updateAdapter() {
@@ -273,5 +260,4 @@ public class LocalMusicFragment extends Fragment {
     public void hideShowcase() {
         showCase.hide();
     }
-
 }

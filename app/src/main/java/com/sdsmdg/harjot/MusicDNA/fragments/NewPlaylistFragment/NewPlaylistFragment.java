@@ -1,6 +1,5 @@
 package com.sdsmdg.harjot.MusicDNA.fragments.NewPlaylistFragment;
 
-
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -22,47 +21,36 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.clickitemtouchlistener.ClickItemTouchListener;
-import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
-import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.R;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
+import com.sdsmdg.harjot.MusicDNA.clickitemtouchlistener.ClickItemTouchListener;
+import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.utilities.CommonUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * A simple {@link Fragment} subclass.
  */
 public class NewPlaylistFragment extends Fragment {
-
     RecyclerView rv;
     NewPlaylistRecyclerAdapter atpAdapter;
-
     ImageView backBtn, backDrop;
-
     EditText searchBox;
-
     TextView numberSelectedSongs, fragTitle, clearText;
     FloatingActionButton savePlaylist;
-
     List<LocalTrack> finalList;
-
     ImageView clearSearchBtn;
-
     LinearLayoutManager mLayoutManager2;
-
     int numberSelected = 0;
-
     View bottomMarginLayout;
 
     public NewPlaylistFragmentCallbackListener mCallback;
 
     public interface NewPlaylistFragmentCallbackListener {
         void onCancel();
-
         void onDone();
     }
 
@@ -87,9 +75,7 @@ public class NewPlaylistFragment extends Fragment {
                     + " must implement OnHeadlineSelectedListener");
         }
         finalList = new ArrayList<>();
-        for (int i = 0; i < HomeActivity.localTrackList.size(); i++) {
-            finalList.add(HomeActivity.localTrackList.get(i));
-        }
+        finalList.addAll(HomeActivity.localTrackList);
 
         atpAdapter = new NewPlaylistRecyclerAdapter(finalList, getContext());
 
@@ -99,26 +85,16 @@ public class NewPlaylistFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        backBtn = (ImageView) view.findViewById(R.id.add_to_playlist_back_btn);
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });
+        backBtn = view.findViewById(R.id.add_to_playlist_back_btn);
+        backBtn.setOnClickListener(v -> getActivity().onBackPressed());
 
-        fragTitle = (TextView) view.findViewById(R.id.add_to_playlist_fragment_title);
+        fragTitle = view.findViewById(R.id.add_to_playlist_fragment_title);
         if (SplashActivity.tf4 != null)
             fragTitle.setTypeface(SplashActivity.tf4);
 
-        savePlaylist = (FloatingActionButton) view.findViewById(R.id.save_playlist_fab);
+        savePlaylist = view.findViewById(R.id.save_playlist_fab);
         savePlaylist.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));
-        savePlaylist.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCallback.onDone();
-            }
-        });
+        savePlaylist.setOnClickListener(v -> mCallback.onDone());
 
         bottomMarginLayout = view.findViewById(R.id.bottom_margin_layout);
         if (HomeActivity.isReloaded)
@@ -129,21 +105,16 @@ public class NewPlaylistFragment extends Fragment {
         numberSelected = 0;
         HomeActivity.finalSelectedTracks.clear();
         atpAdapter.notifyDataSetChanged();
-        clearSearchBtn = (ImageView) view.findViewById(R.id.clear_search_btn);
-        clearSearchBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hideKeyboard();
-                searchBox.setText("");
-                finalList.clear();
-                for (int i = 0; i < HomeActivity.localTrackList.size(); i++) {
-                    finalList.add(HomeActivity.localTrackList.get(i));
-                }
-                atpAdapter.notifyDataSetChanged();
-            }
+        clearSearchBtn = view.findViewById(R.id.clear_search_btn);
+        clearSearchBtn.setOnClickListener(v -> {
+            hideKeyboard();
+            searchBox.setText("");
+            finalList.clear();
+            finalList.addAll(HomeActivity.localTrackList);
+            atpAdapter.notifyDataSetChanged();
         });
 
-        searchBox = (EditText) view.findViewById(R.id.add_to_playlist_search);
+        searchBox = view.findViewById(R.id.add_to_playlist_search);
 
         searchBox.addTextChangedListener(new TextWatcher() {
             @Override
@@ -155,9 +126,7 @@ public class NewPlaylistFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.toString().equals("")) {
                     finalList.clear();
-                    for (int i = 0; i < HomeActivity.localTrackList.size(); i++) {
-                        finalList.add(HomeActivity.localTrackList.get(i));
-                    }
+                    finalList.addAll(HomeActivity.localTrackList);
                 } else {
                     finalList.clear();
                     for (int i = 0; i < HomeActivity.localTrackList.size(); i++) {
@@ -176,20 +145,17 @@ public class NewPlaylistFragment extends Fragment {
             }
         });
 
-        numberSelectedSongs = (TextView) view.findViewById(R.id.number_selected_songs);
+        numberSelectedSongs = view.findViewById(R.id.number_selected_songs);
 
-        clearText = (TextView) view.findViewById(R.id.clear_selected_songs_text);
-        clearText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCallback.onCancel();
-                atpAdapter.notifyDataSetChanged();
-                numberSelected = 0;
-                numberSelectedSongs.setText(String.valueOf(numberSelected) + " selected");
-            }
+        clearText = view.findViewById(R.id.clear_selected_songs_text);
+        clearText.setOnClickListener(v -> {
+            mCallback.onCancel();
+            atpAdapter.notifyDataSetChanged();
+            numberSelected = 0;
+            numberSelectedSongs.setText(String.valueOf(numberSelected) + R.string._selected);
         });
 
-        rv = (RecyclerView) view.findViewById(R.id.add_to_playlist_recycler);
+        rv = view.findViewById(R.id.add_to_playlist_recycler);
         mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rv.setLayoutManager(mLayoutManager2);
         rv.setItemAnimator(new DefaultItemAnimator());
@@ -208,9 +174,9 @@ public class NewPlaylistFragment extends Fragment {
                     numberSelected++;
                 }
 
-                numberSelectedSongs.setText(String.valueOf(numberSelected) + " selected");
+                numberSelectedSongs.setText(String.valueOf(numberSelected) + R.string._selected);
 
-                CheckBox cb = (CheckBox) view.findViewById(R.id.is_selected_checkbox);
+                CheckBox cb = view.findViewById(R.id.is_selected_checkbox);
                 cb.setChecked(!cb.isChecked());
 
                 atpAdapter.notifyItemChanged(position);
@@ -224,7 +190,6 @@ public class NewPlaylistFragment extends Fragment {
 
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
             }
         });
 
@@ -234,12 +199,12 @@ public class NewPlaylistFragment extends Fragment {
     public void onResume() {
         super.onResume();
         mLayoutManager2.scrollToPositionWithOffset(0, 0);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                savePlaylist.animate().scaleX(1.0f).scaleY(1.0f).setDuration(300).setInterpolator(new OvershootInterpolator());
-            }
-        }, 500);
+        new Handler().postDelayed(() -> savePlaylist
+                .animate()
+                .scaleX(1.0f)
+                .scaleY(1.0f)
+                .setDuration(300)
+                .setInterpolator(new OvershootInterpolator()), 500);
     }
 
     public void hideKeyboard() {
@@ -249,5 +214,4 @@ public class NewPlaylistFragment extends Fragment {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
-
 }

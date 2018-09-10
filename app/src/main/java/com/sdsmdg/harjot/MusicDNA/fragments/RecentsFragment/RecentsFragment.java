@@ -1,6 +1,5 @@
 package com.sdsmdg.harjot.MusicDNA.fragments.RecentsFragment;
 
-
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -21,33 +20,31 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
+import com.sdsmdg.harjot.MusicDNA.R;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
 import com.sdsmdg.harjot.MusicDNA.clickitemtouchlistener.ClickItemTouchListener;
 import com.sdsmdg.harjot.MusicDNA.custombottomsheets.CustomGeneralBottomSheetDialog;
+import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
 import com.sdsmdg.harjot.MusicDNA.itemtouchhelpers.SimpleItemTouchHelperCallback;
-import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.models.Track;
 import com.sdsmdg.harjot.MusicDNA.models.UnifiedTrack;
-import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
-import com.sdsmdg.harjot.MusicDNA.R;
-import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
 import com.sdsmdg.harjot.MusicDNA.utilities.CommonUtils;
-import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
 import com.squareup.leakcanary.RefWatcher;
 import com.squareup.picasso.Picasso;
 
 import java.util.Random;
 
-
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RecentsFragment extends Fragment implements
-        RecentsTrackAdapter.OnDragStartListener,
+public class RecentsFragment extends Fragment implements RecentsTrackAdapter.OnDragStartListener,
         RecentsTrackAdapter.onRemoveListener {
 
     RecyclerView recentRecycler;
-    public RecentsTrackAdapter rtAdpater;
+    public RecentsTrackAdapter rtAdapter;
     LinearLayoutManager mLayoutManager2;
 
     LinearLayout noContent;
@@ -79,7 +76,7 @@ public class RecentsFragment extends Fragment implements
                 imgLoader.DisplayImage(lt.getPath(), backdrop);
             } else {
                 Track t = ut.getStreamTrack();
-                Picasso.with(getContext())
+                Picasso.get()
                         .load(t.getArtworkURL())
                         .resize(100, 100)
                         .error(R.drawable.ic_default)
@@ -93,9 +90,7 @@ public class RecentsFragment extends Fragment implements
 
     public interface recentsCallbackListener {
         void onRecentItemClicked(boolean isLocal);
-
         void onRecentFromQueue(int pos);
-
         void addRecentsToQueue();
     }
 
@@ -122,30 +117,20 @@ public class RecentsFragment extends Fragment implements
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        backBtn = (ImageView) view.findViewById(R.id.recents_back_btn);
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });
+        backBtn = view.findViewById(R.id.recents_back_btn);
+        backBtn.setOnClickListener(v -> getActivity().onBackPressed());
 
-        fragIcon = (ImageView) view.findViewById(R.id.recents_frag_icon);
+        fragIcon = view.findViewById(R.id.recents_frag_icon);
         fragIcon.setImageTintList(ColorStateList.valueOf(HomeActivity.themeColor));
 
-        fragTitle = (TextView) view.findViewById(R.id.recents_fragment_title);
+        fragTitle = view.findViewById(R.id.recents_fragment_title);
         if (SplashActivity.tf4 != null)
             fragTitle.setTypeface(SplashActivity.tf4);
 
-        addToQueueIcon = (ImageView) view.findViewById(R.id.add_recents_to_queue_icon);
-        addToQueueIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCallback.addRecentsToQueue();
-            }
-        });
+        addToQueueIcon = view.findViewById(R.id.add_recents_to_queue_icon);
+        addToQueueIcon.setOnClickListener(v -> mCallback.addRecentsToQueue());
 
-        backdrop = (ImageView) view.findViewById(R.id.recents_backdrop);
+        backdrop = view.findViewById(R.id.recents_backdrop);
         if (HomeActivity.recentlyPlayed.getRecentlyPlayed().size() > 0) {
             UnifiedTrack ut = HomeActivity.recentlyPlayed.getRecentlyPlayed().get(0);
             if (ut.getType()) {
@@ -153,7 +138,7 @@ public class RecentsFragment extends Fragment implements
                 imgLoader.DisplayImage(lt.getPath(), backdrop);
             } else {
                 Track t = ut.getStreamTrack();
-                Picasso.with(getContext())
+                Picasso.get()
                         .load(t.getArtworkURL())
                         .resize(100, 100)
                         .error(R.drawable.ic_default)
@@ -168,14 +153,14 @@ public class RecentsFragment extends Fragment implements
         else
             bottomMarginLayout.getLayoutParams().height = CommonUtils.dpTopx(65, getContext());
 
-        noContent = (LinearLayout) view.findViewById(R.id.no_recents_content);
+        noContent = view.findViewById(R.id.no_recents_content);
 
-        recentRecycler = (RecyclerView) view.findViewById(R.id.view_recent_recycler);
-        rtAdpater = new RecentsTrackAdapter(HomeActivity.recentlyPlayed.getRecentlyPlayed(), this, getContext());
+        recentRecycler = view.findViewById(R.id.view_recent_recycler);
+        rtAdapter = new RecentsTrackAdapter(HomeActivity.recentlyPlayed.getRecentlyPlayed(), this, getContext());
         mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recentRecycler.setLayoutManager(mLayoutManager2);
         recentRecycler.setItemAnimator(new DefaultItemAnimator());
-        recentRecycler.setAdapter(rtAdpater);
+        recentRecycler.setAdapter(rtAdapter);
 
         recentRecycler.addOnItemTouchListener(new ClickItemTouchListener(recentRecycler) {
             @Override
@@ -254,7 +239,7 @@ public class RecentsFragment extends Fragment implements
                     CustomGeneralBottomSheetDialog generalBottomSheetDialog = new CustomGeneralBottomSheetDialog();
                     generalBottomSheetDialog.setPosition(position);
                     generalBottomSheetDialog.setTrack(ut);
-                    generalBottomSheetDialog.setFragment("Recents");
+                    generalBottomSheetDialog.setFragment(getString(R.string.recents));
                     generalBottomSheetDialog.show(getActivity().getSupportFragmentManager(), "general_bottom_sheet_dialog");
                 }
                 return true;
@@ -266,52 +251,47 @@ public class RecentsFragment extends Fragment implements
             }
         });
 
-        shuffleFab = (FloatingActionButton) view.findViewById(R.id.play_all_fab_recent);
+        shuffleFab = view.findViewById(R.id.play_all_fab_recent);
 
         if (HomeActivity.recentlyPlayed != null && HomeActivity.recentlyPlayed.getRecentlyPlayed().size() > 0) {
             noContent.setVisibility(View.INVISIBLE);
-            shuffleFab.setVisibility(View.VISIBLE);
+            shuffleFab.show();
         } else {
             noContent.setVisibility(View.VISIBLE);
-            shuffleFab.setVisibility(View.INVISIBLE);
+            shuffleFab.hide();
         }
 
         shuffleFab.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));
-        shuffleFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (HomeActivity.recentlyPlayed.getRecentlyPlayed().size() > 0) {
-                    HomeActivity.queue.getQueue().clear();
-                    for (int i = 0; i < HomeActivity.recentlyPlayed.getRecentlyPlayed().size(); i++) {
-                        HomeActivity.queue.getQueue().add(HomeActivity.recentlyPlayed.getRecentlyPlayed().get(i));
-                    }
-                    Random r = new Random();
-                    mCallback.onRecentFromQueue(r.nextInt(HomeActivity.queue.getQueue().size()));
+        shuffleFab.setOnClickListener(v -> {
+            if (HomeActivity.recentlyPlayed.getRecentlyPlayed().size() > 0) {
+                HomeActivity.queue.getQueue().clear();
+                for (int i = 0; i < HomeActivity.recentlyPlayed.getRecentlyPlayed().size(); i++) {
+                    HomeActivity.queue.getQueue().add(HomeActivity.recentlyPlayed.getRecentlyPlayed().get(i));
                 }
+                Random r = new Random();
+                mCallback.onRecentFromQueue(r.nextInt(HomeActivity.queue.getQueue().size()));
             }
         });
 
-        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(rtAdpater);
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(rtAdapter);
         mItemTouchHelper = new ItemTouchHelper(callback);
         mItemTouchHelper.attachToRecyclerView(recentRecycler);
-
     }
 
     @Override
     public void onDragStarted(RecyclerView.ViewHolder viewHolder) {
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
         mLayoutManager2.scrollToPositionWithOffset(0, 0);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                shuffleFab.animate().scaleX(1.0f).scaleY(1.0f).setDuration(300).setInterpolator(new OvershootInterpolator());
-            }
-        }, 500);
+        new Handler().postDelayed(() -> shuffleFab
+                .animate()
+                .scaleX(1.0f)
+                .scaleY(1.0f)
+                .setDuration(300)
+                .setInterpolator(new OvershootInterpolator()), 500);
     }
 
     @Override

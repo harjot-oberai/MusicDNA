@@ -11,7 +11,12 @@ public class SavedDNA {
     private String artist;
     private String base64encodedBitmap;
 
-    public SavedDNA(String name, boolean type, String localPath, String trackArtworkURL, String artist, String base64encodedBitmap) {
+    public SavedDNA(String name,
+                    boolean type,
+                    String localPath,
+                    String trackArtworkURL,
+                    String artist,
+                    String base64encodedBitmap) {
         this.name = name;
         this.type = type;
         this.localPath = localPath;

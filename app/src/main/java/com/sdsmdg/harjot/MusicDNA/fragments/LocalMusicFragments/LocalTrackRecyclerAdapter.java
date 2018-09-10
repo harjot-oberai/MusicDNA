@@ -11,9 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.R;
 import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
+import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
 
 import java.util.List;
 
@@ -26,16 +26,17 @@ public class LocalTrackRecyclerAdapter extends RecyclerView.Adapter<LocalTrackRe
     private Context ctx;
     ImageLoader imgLoader;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public static Bitmap getAlbumArt(String path) {
+        android.media.MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+        mmr.setDataSource(path);
+        Bitmap bitmap;
 
-        ImageView art;
-        TextView title, artist;
-
-        public MyViewHolder(View view) {
-            super(view);
-            art = (ImageView) view.findViewById(R.id.img_2);
-            title = (TextView) view.findViewById(R.id.title_2);
-            artist = (TextView) view.findViewById(R.id.url_2);
+        byte[] data = mmr.getEmbeddedPicture();
+        if (data != null) {
+            bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+            return bitmap;
+        } else {
+            return null;
         }
     }
 
@@ -66,17 +67,16 @@ public class LocalTrackRecyclerAdapter extends RecyclerView.Adapter<LocalTrackRe
         return localTracks.size();
     }
 
-    public static Bitmap getAlbumArt(String path) {
-        android.media.MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-        mmr.setDataSource(path);
-        Bitmap bitmap = null;
+    public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        byte[] data = mmr.getEmbeddedPicture();
-        if (data != null) {
-            bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-            return bitmap;
-        } else {
-            return null;
+        ImageView art;
+        TextView title, artist;
+
+        public MyViewHolder(View view) {
+            super(view);
+            art = view.findViewById(R.id.img_2);
+            title = view.findViewById(R.id.title_2);
+            artist = view.findViewById(R.id.url_2);
         }
     }
 }

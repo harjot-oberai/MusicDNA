@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.models.Track;
 import com.sdsmdg.harjot.MusicDNA.R;
+import com.sdsmdg.harjot.MusicDNA.models.Track;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -21,19 +21,12 @@ import java.util.List;
 public class StreamTrackListAdapter extends RecyclerView.Adapter<StreamTrackListAdapter.MyViewHolder> {
 
     private List<Track> tracks;
-    private Context context;
+    private Context ctx;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-
-        ImageView art;
-        TextView title, artist;
-
-        public MyViewHolder(View view) {
-            super(view);
-            art = (ImageView) view.findViewById(R.id.img_2);
-            title = (TextView) view.findViewById(R.id.title_2);
-            artist = (TextView) view.findViewById(R.id.url_2);
-        }
+    public StreamTrackListAdapter(Context ctx, List<Track> tracks) {
+        super();
+        this.ctx = ctx;
+        this.tracks = tracks;
     }
 
     @Override
@@ -49,7 +42,7 @@ public class StreamTrackListAdapter extends RecyclerView.Adapter<StreamTrackList
         Track track = tracks.get(position);
         holder.title.setText(track.getTitle());
         try {
-            Picasso.with(context)
+            Picasso.get()
                     .load(track.getArtworkURL())
                     .resize(100, 100)
                     .error(R.drawable.ic_default)
@@ -66,10 +59,16 @@ public class StreamTrackListAdapter extends RecyclerView.Adapter<StreamTrackList
         return tracks.size();
     }
 
+    public class MyViewHolder extends RecyclerView.ViewHolder {
 
-    public StreamTrackListAdapter(Context ctx, List<Track> tracks) {
-        super();
-        context = ctx;
-        this.tracks = tracks;
+        ImageView art;
+        TextView title, artist;
+
+        public MyViewHolder(View view) {
+            super(view);
+            art = view.findViewById(R.id.img_2);
+            title = view.findViewById(R.id.title_2);
+            artist = view.findViewById(R.id.url_2);
+        }
     }
 }

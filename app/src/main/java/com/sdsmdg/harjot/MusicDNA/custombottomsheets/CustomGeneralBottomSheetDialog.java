@@ -11,10 +11,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
-import com.sdsmdg.harjot.MusicDNA.models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.R;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
+import com.sdsmdg.harjot.MusicDNA.models.UnifiedTrack;
 
 /**
  * Created by Harjot on 21-Oct-16.
@@ -57,17 +57,16 @@ public class CustomGeneralBottomSheetDialog extends BottomSheetDialogFragment im
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.general_song_bottom_sheet, container, false);
-        return v;
+        return inflater.inflate(R.layout.general_song_bottom_sheet, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        generalSongImage = (ImageView) view.findViewById(R.id.general_song_bottom_sheet_image);
-        generalSongTitle = (TextView) view.findViewById(R.id.general_song_bottom_sheet_title);
-        generalSongArtist = (TextView) view.findViewById(R.id.general_song_bottom_sheet_artist);
+        generalSongImage = view.findViewById(R.id.general_song_bottom_sheet_image);
+        generalSongTitle = view.findViewById(R.id.general_song_bottom_sheet_title);
+        generalSongArtist = view.findViewById(R.id.general_song_bottom_sheet_artist);
 
         if (generalTrack.getType()) {
             imgLoader.DisplayImage(generalTrack.getLocalTrack().getPath(), generalSongImage);
@@ -79,15 +78,15 @@ public class CustomGeneralBottomSheetDialog extends BottomSheetDialogFragment im
             generalSongArtist.setText("");
         }
 
-        playText = (LinearLayout) view.findViewById(R.id.general_song_bottom_sheet_play_wrapper);
+        playText = view.findViewById(R.id.general_song_bottom_sheet_play_wrapper);
         playText.setOnClickListener(this);
-        playNextText = (LinearLayout) view.findViewById(R.id.general_song_bottom_sheet_play_next_wrapper);
+        playNextText = view.findViewById(R.id.general_song_bottom_sheet_play_next_wrapper);
         playNextText.setOnClickListener(this);
-        addToQueueText = (LinearLayout) view.findViewById(R.id.general_song_bottom_sheet_add_to_queue_wrapper);
+        addToQueueText = view.findViewById(R.id.general_song_bottom_sheet_add_to_queue_wrapper);
         addToQueueText.setOnClickListener(this);
-        addToPlaylistText = (LinearLayout) view.findViewById(R.id.general_song_bottom_sheet_add_to_playlist_wrapper);
+        addToPlaylistText = view.findViewById(R.id.general_song_bottom_sheet_add_to_playlist_wrapper);
         addToPlaylistText.setOnClickListener(this);
-        addToFavouriteText = (LinearLayout) view.findViewById(R.id.general_song_bottom_sheet_add_to_fav_wrapper);
+        addToFavouriteText = view.findViewById(R.id.general_song_bottom_sheet_add_to_fav_wrapper);
         addToFavouriteText.setOnClickListener(this);
 
     }
@@ -96,19 +95,19 @@ public class CustomGeneralBottomSheetDialog extends BottomSheetDialogFragment im
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.general_song_bottom_sheet_play_wrapper:
-                activity.bottomSheetListener(position, "Play", fragment, generalTrack.getType());
+                activity.bottomSheetListener(position, getString(R.string.play), fragment, generalTrack.getType());
                 break;
             case R.id.general_song_bottom_sheet_play_next_wrapper:
-                activity.bottomSheetListener(position, "Play Next", fragment, generalTrack.getType());
+                activity.bottomSheetListener(position, getString(R.string.play_next), fragment, generalTrack.getType());
                 break;
             case R.id.general_song_bottom_sheet_add_to_queue_wrapper:
-                activity.bottomSheetListener(position, "Add to Queue", fragment, generalTrack.getType());
+                activity.bottomSheetListener(position, getString(R.string.add_to_queue), fragment, generalTrack.getType());
                 break;
             case R.id.general_song_bottom_sheet_add_to_playlist_wrapper:
-                activity.bottomSheetListener(position, "Add to Playlist", fragment, generalTrack.getType());
+                activity.bottomSheetListener(position, getString(R.string.add_to_playlist), fragment, generalTrack.getType());
                 break;
             case R.id.general_song_bottom_sheet_add_to_fav_wrapper:
-                activity.bottomSheetListener(position, "Add to Favourites", fragment, generalTrack.getType());
+                activity.bottomSheetListener(position, getString(R.string.add_to_favourites), fragment, generalTrack.getType());
                 break;
         }
         dismiss();

@@ -8,10 +8,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
-import com.sdsmdg.harjot.MusicDNA.models.MusicFolder;
 import com.sdsmdg.harjot.MusicDNA.R;
 import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
+import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
+import com.sdsmdg.harjot.MusicDNA.models.MusicFolder;
 
 import java.util.List;
 
@@ -39,14 +39,14 @@ public class FolderRecyclerAdapter extends RecyclerView.Adapter<FolderRecyclerAd
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            img[0] = (ImageView) itemView.findViewById(R.id.image1);
-            img[1] = (ImageView) itemView.findViewById(R.id.image2);
-            img[2] = (ImageView) itemView.findViewById(R.id.image3);
-            playListName = (TextView) itemView.findViewById(R.id.playlist_name);
-            name[0] = (TextView) itemView.findViewById(R.id.name1);
-            name[1] = (TextView) itemView.findViewById(R.id.name2);
-            name[2] = (TextView) itemView.findViewById(R.id.name3);
-            continuedSymbol = (TextView) itemView.findViewById(R.id.name5);
+            img[0] = itemView.findViewById(R.id.image1);
+            img[1] = itemView.findViewById(R.id.image2);
+            img[2] = itemView.findViewById(R.id.image3);
+            playListName = itemView.findViewById(R.id.playlist_name);
+            name[0] = itemView.findViewById(R.id.name1);
+            name[1] = itemView.findViewById(R.id.name2);
+            name[2] = itemView.findViewById(R.id.name3);
+            continuedSymbol = itemView.findViewById(R.id.name5);
         }
     }
 
@@ -88,5 +88,4 @@ public class FolderRecyclerAdapter extends RecyclerView.Adapter<FolderRecyclerAd
     public int getItemCount() {
         return musicFolders.size();
     }
-
 }

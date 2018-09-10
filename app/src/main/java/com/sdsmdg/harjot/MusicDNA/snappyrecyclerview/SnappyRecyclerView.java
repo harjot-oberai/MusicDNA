@@ -90,9 +90,7 @@ public class SnappyRecyclerView extends RecyclerView {
             }
 //            handleActions();
             return true;
-
         }
-
     }
 
     @Override
@@ -126,9 +124,7 @@ public class SnappyRecyclerView extends RecyclerView {
             } else if (rightEdge < screenWidth / 2) {
                 smoothScrollBy(scrollDistanceLeft, 0);
             }
-
             handleActions();
-
         }
     }
 
@@ -142,9 +138,8 @@ public class SnappyRecyclerView extends RecyclerView {
 
     public void handleActions() {
         LinearLayoutManager linearLayoutManager = (LinearLayoutManager) getLayoutManager();
-        int firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
 
-        currentPosition = firstVisibleItemPosition;
+        currentPosition = linearLayoutManager.findFirstVisibleItemPosition();
         if (currentPosition > HomeActivity.queueCurrentIndex) {
             getAdapter().notifyDataSetChanged();
             homeActivity.onQueueItemClicked2(currentPosition);
@@ -158,8 +153,8 @@ public class SnappyRecyclerView extends RecyclerView {
 
     public void setTransparency() {
         final CustomAdapter.ViewHolder viewHolder = (CustomAdapter.ViewHolder) findViewHolderForAdapterPosition(currentPosition);
-        if (homeActivity.settings != null) {
-            if (homeActivity.settings.isAlbumArtBackgroundEnabled()) {
+        if (HomeActivity.settings != null) {
+            if (HomeActivity.settings.isAlbumArtBackgroundEnabled()) {
                 if (viewHolder != null && viewHolder.albumArt != null)
                     viewHolder.albumArt.animate()
                             .alpha(0.20f);
@@ -170,9 +165,7 @@ public class SnappyRecyclerView extends RecyclerView {
             }
         }
     }
-
     public void setActivity(HomeActivity homeActivity) {
         this.homeActivity = homeActivity;
     }
-
 }

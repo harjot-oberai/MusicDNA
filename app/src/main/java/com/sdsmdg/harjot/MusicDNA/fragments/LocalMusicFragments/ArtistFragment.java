@@ -1,6 +1,5 @@
 package com.sdsmdg.harjot.MusicDNA.fragments.LocalMusicFragments;
 
-
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,9 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
 import com.sdsmdg.harjot.MusicDNA.R;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 import com.squareup.leakcanary.RefWatcher;
 
 /**
@@ -33,28 +32,6 @@ public class ArtistFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public interface onArtistClickListener {
-        public void onArtistClick();
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            mCallback = (onArtistClickListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
-                    + " must implement OnHeadlineSelectedListener");
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_artist, container, false);
-    }
-
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -65,7 +42,7 @@ public class ArtistFragment extends Fragment {
         else
             bottomMarginLayout.setVisibility(View.VISIBLE);
 
-        rv = (RecyclerView) view.findViewById(R.id.artists_recycler);
+        rv = view.findViewById(R.id.artists_recycler);
         arAdapter = new ArtistRecyclerAdapter(HomeActivity.finalArtists);
         llManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rv.setLayoutManager(llManager);
@@ -87,10 +64,31 @@ public class ArtistFragment extends Fragment {
 
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
             }
         });
 
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mCallback = (onArtistClickListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnHeadlineSelectedListener");
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_artist, container, false);
+    }
+
+    public interface onArtistClickListener {
+        void onArtistClick();
     }
 
     @Override

@@ -23,5 +23,4 @@ public class Levenshtein {
         }
         return costs[b.length()];
     }
-
 }

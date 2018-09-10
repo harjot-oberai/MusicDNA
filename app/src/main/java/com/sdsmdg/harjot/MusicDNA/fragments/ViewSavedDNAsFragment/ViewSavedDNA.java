@@ -1,6 +1,5 @@
 package com.sdsmdg.harjot.MusicDNA.fragments.ViewSavedDNAsFragment;
 
-
 import android.app.Dialog;
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -9,21 +8,19 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,19 +28,18 @@ import android.widget.TextView;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
-import com.sdsmdg.harjot.MusicDNA.clickitemtouchlistener.ClickItemTouchListener;
-import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
-import com.sdsmdg.harjot.MusicDNA.models.SavedDNA;
 import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
 import com.sdsmdg.harjot.MusicDNA.R;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
+import com.sdsmdg.harjot.MusicDNA.clickitemtouchlistener.ClickItemTouchListener;
+import com.sdsmdg.harjot.MusicDNA.models.SavedDNA;
 import com.sdsmdg.harjot.MusicDNA.utilities.CommonUtils;
 import com.sdsmdg.harjot.MusicDNA.utilities.FileUtils;
 import com.sdsmdg.harjot.MusicDNA.visualizers.VisualizerView2;
 import com.squareup.leakcanary.RefWatcher;
 
 import java.util.ArrayList;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -53,13 +49,9 @@ public class ViewSavedDNA extends Fragment {
     RecyclerView viewDnaRecycler;
     ViewSavedDnaRecyclerAdapter vdAdapter;
     LinearLayoutManager mLayoutManager2;
-
     VisualizerView2 mVisualizerView2;
-
     ImageView shareIcon, saveToStorageIcon;
-
     LinearLayout noSavedContent;
-
     ShowcaseView showCase;
 
     boolean addTextToImage = false;
@@ -84,7 +76,7 @@ public class ViewSavedDNA extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_view_saved_dn, container, false);
+		return inflater.inflate(R.layout.fragment_view_saved_dna, container, false);
     }
 
 
@@ -92,15 +84,10 @@ public class ViewSavedDNA extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        backBtn = (ImageView) view.findViewById(R.id.view_saved_dna_back_btn);
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });
+		backBtn = view.findViewById(R.id.view_saved_dna_back_btn);
+		backBtn.setOnClickListener(v -> getActivity().onBackPressed());
 
-        fragmentTitle = (TextView) view.findViewById(R.id.view_saved_dna_fragment_title);
+		fragmentTitle = view.findViewById(R.id.view_saved_dna_fragment_title);
         if (SplashActivity.tf4 != null)
             fragmentTitle.setTypeface(SplashActivity.tf4);
 
@@ -110,10 +97,10 @@ public class ViewSavedDNA extends Fragment {
         else
             bottomMarginLayout.getLayoutParams().height = CommonUtils.dpTopx(65, getContext());
 
-        mVisualizerView2 = (VisualizerView2) view.findViewById(R.id.saved_dna_visualizer);
-        viewDnaRecycler = (RecyclerView) view.findViewById(R.id.saved_dna_recycler);
+		mVisualizerView2 = view.findViewById(R.id.saved_dna_visualizer);
+		viewDnaRecycler = view.findViewById(R.id.saved_dna_recycler);
 
-        noSavedContent = (LinearLayout) view.findViewById(R.id.no_saved_dnas);
+		noSavedContent = view.findViewById(R.id.no_saved_dnas);
 
         if (SplashActivity.tf4 != null)
             ((TextView) view.findViewById(R.id.no_saved_content_text)).setTypeface(SplashActivity.tf4);
@@ -131,7 +118,7 @@ public class ViewSavedDNA extends Fragment {
         if (HomeActivity.savedDNAs != null)
             vdAdapter = new ViewSavedDnaRecyclerAdapter(HomeActivity.savedDNAs.getSavedDNAs(), getContext(), this);
         else
-            vdAdapter = new ViewSavedDnaRecyclerAdapter(new ArrayList<SavedDNA>(), getContext(), this);
+			vdAdapter = new ViewSavedDnaRecyclerAdapter(new ArrayList<>(), getContext(), this);
 
         mLayoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         viewDnaRecycler.setLayoutManager(mLayoutManager2);
@@ -139,19 +126,16 @@ public class ViewSavedDNA extends Fragment {
         viewDnaRecycler.setAdapter(vdAdapter);
 
         final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (HomeActivity.savedDNAs.getSavedDNAs().size() > 0) {
-                    SavedDNA dna = HomeActivity.savedDNAs.getSavedDNAs().get(selectedDNA);
-                    selectedDNA = 0;
-                    HomeActivity.tempSavedDNA = dna;
-                    Bitmap bmp = bitmapFromBase64String(dna.getBase64encodedBitmap());
-                    mVisualizerView2.setBmp(bmp);
-                    mVisualizerView2.update();
-                }
-            }
-        }, 350);
+		handler.postDelayed(() -> {
+			if (HomeActivity.savedDNAs.getSavedDNAs().size() > 0) {
+				SavedDNA dna = HomeActivity.savedDNAs.getSavedDNAs().get(selectedDNA);
+				selectedDNA = 0;
+				HomeActivity.tempSavedDNA = dna;
+				Bitmap bmp = bitmapFromBase64String(dna.getBase64encodedBitmap());
+				mVisualizerView2.setBmp(bmp);
+				mVisualizerView2.update();
+			}
+		}, 350);
 
         viewDnaRecycler.addOnItemTouchListener(new ClickItemTouchListener(viewDnaRecycler) {
             @Override
@@ -173,78 +157,68 @@ public class ViewSavedDNA extends Fragment {
                 PopupMenu popup = new PopupMenu(getContext(), view);
                 popup.getMenuInflater().inflate(R.menu.save_dna_popup, popup.getMenu());
 
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        if (item.getTitle().equals("View")) {
-                            vdAdapter.notifyItemChanged(selectedDNA);
-                            selectedDNA = position;
-                            vdAdapter.notifyItemChanged(selectedDNA);
-                            SavedDNA dna = HomeActivity.savedDNAs.getSavedDNAs().get(position);
-                            selectedDNA = position;
-                            HomeActivity.tempSavedDNA = dna;
-                            Bitmap bmp = bitmapFromBase64String(dna.getBase64encodedBitmap());
-                            mVisualizerView2.setBmp(bmp);
-                            mVisualizerView2.update();
-                        } else if (item.getTitle().equals("Delete")) {
-                            HomeActivity.savedDNAs.getSavedDNAs().remove(position);
-                            vdAdapter.notifyItemRemoved(position);
+				popup.setOnMenuItemClickListener(item -> {
+					if (item.getTitle().equals("View")) {
+						vdAdapter.notifyItemChanged(selectedDNA);
+						selectedDNA = position;
+						vdAdapter.notifyItemChanged(selectedDNA);
+						SavedDNA dna = HomeActivity.savedDNAs.getSavedDNAs().get(position);
+						selectedDNA = position;
+						HomeActivity.tempSavedDNA = dna;
+						Bitmap bmp = bitmapFromBase64String(dna.getBase64encodedBitmap());
+						mVisualizerView2.setBmp(bmp);
+						mVisualizerView2.update();
+					} else if (item.getTitle().equals("Delete")) {
+						HomeActivity.savedDNAs.getSavedDNAs().remove(position);
+						vdAdapter.notifyItemRemoved(position);
 
-                            if (position == selectedDNA) {
-                                if (position > 0) {
-                                    selectedDNA = position - 1;
-                                } else if (position == 0) {
-                                    if (HomeActivity.savedDNAs.getSavedDNAs().size() == 0) {
-                                        noSavedContent.setVisibility(View.VISIBLE);
-                                        new HomeActivity.SaveTheDNAs().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                                        return true;
-                                    } else {
-                                        selectedDNA = 0;
-                                    }
-                                }
+						if (position == selectedDNA) {
+							if (position > 0) {
+								selectedDNA = position - 1;
+							} else if (position == 0) {
+								if (HomeActivity.savedDNAs.getSavedDNAs().size() == 0) {
+									noSavedContent.setVisibility(View.VISIBLE);
+									new HomeActivity.SaveTheDNAs().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+									return true;
+								} else {
+									selectedDNA = 0;
+								}
+							}
 
-                                SavedDNA dna = HomeActivity.savedDNAs.getSavedDNAs().get(selectedDNA);
-                                HomeActivity.tempSavedDNA = dna;
-                                Bitmap bmp = bitmapFromBase64String(dna.getBase64encodedBitmap());
-                                mVisualizerView2.setBmp(bmp);
-                                mVisualizerView2.update();
-                            }
+							SavedDNA dna = HomeActivity.savedDNAs.getSavedDNAs().get(selectedDNA);
+							HomeActivity.tempSavedDNA = dna;
+							Bitmap bmp = bitmapFromBase64String(dna.getBase64encodedBitmap());
+							mVisualizerView2.setBmp(bmp);
+							mVisualizerView2.update();
+						}
 
-                            new HomeActivity.SaveTheDNAs().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                        }
-                        return true;
-                    }
-                });
+						new HomeActivity.SaveTheDNAs().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+					}
+					return true;
+				});
                 popup.show();
                 return true;
             }
 
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
             }
         });
 
-        shareIcon = (ImageView) view.findViewById(R.id.share_icon);
-        saveToStorageIcon = (ImageView) view.findViewById(R.id.save_to_storage_icon);
+		shareIcon = view.findViewById(R.id.share_icon);
+		saveToStorageIcon = view.findViewById(R.id.save_to_storage_icon);
 
-        shareIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (HomeActivity.tempSavedDNA != null) {
-                    showDialog(1);
-                }
-            }
-        });
+		shareIcon.setOnClickListener(v -> {
+			if (HomeActivity.tempSavedDNA != null) {
+				showDialog(1);
+			}
+		});
 
-        saveToStorageIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (HomeActivity.tempSavedDNA != null) {
-                    showDialog(0);
-                }
-            }
-        });
+		saveToStorageIcon.setOnClickListener(v -> {
+			if (HomeActivity.tempSavedDNA != null) {
+				showDialog(0);
+			}
+		});
 
         Button mEndButton = new Button(getContext());
         mEndButton.setBackgroundColor(HomeActivity.themeColor);
@@ -259,10 +233,10 @@ public class ViewSavedDNA extends Fragment {
                     .replaceEndButton(mEndButton)
                     .setContentTitlePaint(HomeActivity.tp)
                     .setTarget(new ViewTarget(R.id.visualizer_alt_showcase, getActivity()))
-                    .setContentTitle("Saved DNAs")
-                    .setContentText("View all your saved DNAs here")
+					.setContentTitle(getString(R.string.saved_dnas))
+					.setContentText(getString(R.string.view_saved_dnas))
                     .build();
-            showCase.setButtonText("Next");
+			showCase.setButtonText(getString(R.string.next));
             showCase.setButtonPosition(HomeActivity.lps);
             showCase.overrideButtonClick(new View.OnClickListener() {
                 int count1 = 0;
@@ -273,17 +247,17 @@ public class ViewSavedDNA extends Fragment {
                     switch (count1) {
                         case 1:
                             showCase.setTarget(new ViewTarget(shareIcon.getId(), getActivity()));
-                            showCase.setContentTitle("Share DNA");
-                            showCase.setContentText("Share the DNA as an image with your friends");
+							showCase.setContentTitle(getString(R.string.share_dna));
+							showCase.setContentText(getString(R.string.share_dna_as_image));
                             showCase.setButtonPosition(HomeActivity.lps);
-                            showCase.setButtonText("Next");
+							showCase.setButtonText(getString(R.string.next));
                             break;
                         case 2:
                             showCase.setTarget(new ViewTarget(saveToStorageIcon.getId(), getActivity()));
-                            showCase.setContentTitle("Save DNA");
-                            showCase.setContentText("Save the DNA as an image to your internal storage");
+							showCase.setContentTitle(getString(R.string.save_dna));
+							showCase.setContentText(getString(R.string.save_dna_as_image_internal));
                             showCase.setButtonPosition(HomeActivity.lps);
-                            showCase.setButtonText("Done");
+							showCase.setButtonText(getString(R.string.done));
                             break;
                         case 3:
                             showCase.hide();
@@ -307,45 +281,37 @@ public class ViewSavedDNA extends Fragment {
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.save_image_dialog);
 
-            TextView titleText = (TextView) dialog.findViewById(R.id.dialog_title);
-            titleText.setText("Save as Image");
+			TextView titleText = dialog.findViewById(R.id.dialog_title);
+			titleText.setText(R.string.save_as_image);
             if (SplashActivity.tf4 != null)
                 titleText.setTypeface(SplashActivity.tf4);
 
             // set the custom dialog components - text, image and button
-            final EditText text = (EditText) dialog.findViewById(R.id.save_image_filename_text);
+			final EditText text = dialog.findViewById(R.id.save_image_filename_text);
             text.setText(HomeActivity.tempSavedDNA.getName());
             text.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));
 
-            Button btn = (Button) dialog.findViewById(R.id.save_image_btn);
+			Button btn = dialog.findViewById(R.id.save_image_btn);
             btn.setBackgroundColor(HomeActivity.themeColor);
 
-            CheckBox cb = (CheckBox) dialog.findViewById(R.id.text_checkbox);
+			CheckBox cb = dialog.findViewById(R.id.text_checkbox);
             cb.setChecked(addTextToImage);
             cb.setButtonTintList(ColorStateList.valueOf(HomeActivity.themeColor));
-            cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    addTextToImage = isChecked;
-                }
-            });
+			cb.setOnCheckedChangeListener((buttonView, isChecked) -> addTextToImage = isChecked);
 
             // if button is clicked, close the custom dialog
-            btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (text.getText().toString().trim().equals("")) {
-                        text.setError("Enter Filename");
-                    } else {
-                        mVisualizerView2.drawText(text.getText().toString(), addTextToImage);
-                        mVisualizerView2.setDrawingCacheEnabled(true);
-                        FileUtils.saveBitmapAsImage(mVisualizerView2.getDrawingCache(), text.getText().toString());
-                        mVisualizerView2.dropText();
-                        mVisualizerView2.setDrawingCacheEnabled(false);
-                        dialog.dismiss();
-                    }
-                }
-            });
+			btn.setOnClickListener(v -> {
+				if (text.getText().toString().trim().equals("")) {
+					text.setError(getString(R.string.enter_filename));
+				} else {
+					mVisualizerView2.drawText(text.getText().toString(), addTextToImage);
+					mVisualizerView2.setDrawingCacheEnabled(true);
+					FileUtils.saveBitmapAsImage(mVisualizerView2.getDrawingCache(), text.getText().toString());
+					mVisualizerView2.dropText();
+					mVisualizerView2.setDrawingCacheEnabled(false);
+					dialog.dismiss();
+				}
+			});
 
             dialog.show();
         } else if (type == 1) {
@@ -353,46 +319,38 @@ public class ViewSavedDNA extends Fragment {
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.save_image_dialog);
 
-            TextView titleText = (TextView) dialog.findViewById(R.id.dialog_title);
-            titleText.setText("Share as Image");
+			TextView titleText = dialog.findViewById(R.id.dialog_title);
+			titleText.setText(R.string.share_as_image);
             if (SplashActivity.tf4 != null)
                 titleText.setTypeface(SplashActivity.tf4);
 
             // set the custom dialog components - text, image and button
-            final EditText text = (EditText) dialog.findViewById(R.id.save_image_filename_text);
+			final EditText text = dialog.findViewById(R.id.save_image_filename_text);
             text.setText(HomeActivity.tempSavedDNA.getName());
             text.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));
 
-            Button btn = (Button) dialog.findViewById(R.id.save_image_btn);
+			Button btn = dialog.findViewById(R.id.save_image_btn);
             btn.setBackgroundColor(HomeActivity.themeColor);
-            btn.setText("SHARE");
+			btn.setText(R.string.share);
 
-            CheckBox cb = (CheckBox) dialog.findViewById(R.id.text_checkbox);
+			CheckBox cb = dialog.findViewById(R.id.text_checkbox);
             cb.setChecked(addTextToImage);
             cb.setButtonTintList(ColorStateList.valueOf(HomeActivity.themeColor));
-            cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    addTextToImage = isChecked;
-                }
-            });
+			cb.setOnCheckedChangeListener((buttonView, isChecked) -> addTextToImage = isChecked);
 
             // if button is clicked, close the custom dialog
-            btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (text.getText().toString().trim().equals("")) {
-                        text.setError("Enter Text");
-                    } else {
-                        mVisualizerView2.drawText(text.getText().toString(), addTextToImage);
-                        mVisualizerView2.setDrawingCacheEnabled(true);
-                        FileUtils.shareBitmapAsImage(mVisualizerView2.getDrawingCache(), text.getText().toString(), getContext());
-                        mVisualizerView2.dropText();
-                        mVisualizerView2.setDrawingCacheEnabled(false);
-                        dialog.dismiss();
-                    }
-                }
-            });
+			btn.setOnClickListener(v -> {
+				if (text.getText().toString().trim().equals("")) {
+					text.setError(getString(R.string.enter_text));
+				} else {
+					mVisualizerView2.drawText(text.getText().toString(), addTextToImage);
+					mVisualizerView2.setDrawingCacheEnabled(true);
+					FileUtils.shareBitmapAsImage(mVisualizerView2.getDrawingCache(), text.getText().toString(), getContext());
+					mVisualizerView2.dropText();
+					mVisualizerView2.setDrawingCacheEnabled(false);
+					dialog.dismiss();
+				}
+			});
             dialog.show();
         }
     }
@@ -423,7 +381,7 @@ public class ViewSavedDNA extends Fragment {
         mVisualizerView2.setVisibility(visibility);
     }
 
-    public int getSelectedDNAnumber() {
+	public int getSelectedDNANumber() {
         return selectedDNA;
     }
 
@@ -431,5 +389,4 @@ public class ViewSavedDNA extends Fragment {
         byte[] decodedBytes = Base64.decode(input, 0);
         return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
     }
-
 }

@@ -1,9 +1,9 @@
 package com.sdsmdg.harjot.MusicDNA.lyrics;
 
-import com.sdsmdg.harjot.MusicDNA.annotations.Reflection;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
+import com.sdsmdg.harjot.MusicDNA.annotations.Reflection;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -20,34 +20,34 @@ import java.net.URLEncoder;
 import java.text.Normalizer;
 import java.util.ArrayList;
 
-import static com.sdsmdg.harjot.MusicDNA.utilities.Net.getUrlAsString;
-
 import static com.sdsmdg.harjot.MusicDNA.lyrics.Lyrics.ERROR;
 import static com.sdsmdg.harjot.MusicDNA.lyrics.Lyrics.NEGATIVE_RESULT;
 import static com.sdsmdg.harjot.MusicDNA.lyrics.Lyrics.NO_RESULT;
 import static com.sdsmdg.harjot.MusicDNA.lyrics.Lyrics.POSITIVE_RESULT;
 import static com.sdsmdg.harjot.MusicDNA.lyrics.Lyrics.SEARCH_ITEM;
+import static com.sdsmdg.harjot.MusicDNA.utilities.Net.getUrlAsString;
 
 public class LyricWiki {
 
     @Reflection
     public static final String domain = "lyrics.wikia.com";
     private static final String baseUrl =
-            "http://lyrics.wikia.com/api.php?action=lyrics&fmt=json&func=getSong&artist=%1s&song=%1s";
+            "https://lyrics.wikia.com/api.php?action=lyrics&fmt=json&func=getSong&artist=%1s&song=%1s";
     private static final String baseAPIUrl =
-            "http://lyrics.wikia.com/wikia.php?controller=LyricsApi&method=getSong&artist=%1s&song=%2s";
+            "https://lyrics.wikia.com/wikia.php?controller=LyricsApi&method=getSong&artist=%1s&song=%2s";
     private static final String baseSearchUrl =
-            "http://lyrics.wikia.com/Special:Search?search=%s&fulltext=Search";
+            "https://lyrics.wikia.com/Special:Search?search=%s&fulltext=Search";
 
     @Reflection
     public static ArrayList<Lyrics> search(String query) {
         ArrayList<Lyrics> results = new ArrayList<>();
         query = query + " song";
-        query = Normalizer.normalize(query, Normalizer.Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+        query = Normalizer.normalize(query, Normalizer.Form.NFD)
+                .replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
         try {
             URL queryURL = new URL(String.format(baseSearchUrl, URLEncoder.encode(query, "UTF-8")));
-            Document searchpage = Jsoup.connect(queryURL.toExternalForm()).timeout(0).get();
-            Elements searchResults = searchpage.getElementsByClass("Results");
+            Document searchPage = Jsoup.connect(queryURL.toExternalForm()).timeout(0).get();
+            Elements searchResults = searchPage.getElementsByClass("Results");
             if (searchResults.size() >= 1) {
                 searchResults = searchResults.get(0).getElementsByClass("result");
                 for (Element searchResult : searchResults) {
@@ -79,7 +79,8 @@ public class LyricWiki {
             String encodedArtist = URLEncoder.encode(artist, "UTF-8");
             String encodedSong = URLEncoder.encode(title, "UTF-8");
             JsonObject json = new JsonParser().parse(getUrlAsString(new URL(
-                    String.format(baseUrl, encodedArtist, encodedSong))).replace("song = ", "")).getAsJsonObject();
+                    String.format(baseUrl, encodedArtist, encodedSong)))
+                    .replace("song = ", "")).getAsJsonObject();
             url = URLDecoder.decode(json.get("url").getAsString(), "UTF-8");
             artist = json.get("artist").getAsString();
             title = json.get("song").getAsString();
@@ -113,14 +114,14 @@ public class LyricWiki {
         try {
             //url = URLDecoder.decode(url, "utf-8");
             Document lyricsPage = Jsoup.connect(url).get();
-            Element lyricbox = lyricsPage.select("div.lyricBox").get(0);
-            lyricbox.getElementsByClass("references").remove();
-            String lyricsHtml = lyricbox.html();
+            Element lyricBox = lyricsPage.select("div.lyricBox").get(0);
+            lyricBox.getElementsByClass("references").remove();
+            String lyricsHtml = lyricBox.html();
             final Document.OutputSettings outputSettings = new Document.OutputSettings().prettyPrint(false);
             text = Jsoup.clean(lyricsHtml, "", new Whitelist().addTags("br"), outputSettings);
             if (text.contains("&#"))
                 text = Parser.unescapeEntities(text, true);
-            text = text.replaceAll("\\[\\d\\]", "").trim();
+            text = text.replaceAll("\\[\\d]", "").trim();
 
             String title = lyricsPage.getElementsByTag("title").get(0).text();
             int colon = title.indexOf(':');
@@ -160,5 +161,4 @@ public class LyricWiki {
             return lyrics;
         }
     }
-
 }

@@ -4,18 +4,21 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
-
 /**
  * Created by Harjot on 29-Jun-16.
  */
 public class AudioPlayerBroadcastReceiver extends BroadcastReceiver {
 
     public interface onCallbackListener {
-        public void onCallbackCalled(int i);
-        public void togglePLayPauseCallback();
-        public boolean getPauseClicked();
-        public void setPauseClicked(boolean bool);
-        public MediaPlayer getMediaPlayer();
+        void onCallbackCalled(int i);
+
+        void togglePLayPauseCallback();
+
+        boolean getPauseClicked();
+
+        void setPauseClicked(boolean bool);
+
+        MediaPlayer getMediaPlayer();
     }
 
     onCallbackListener callback;
@@ -34,7 +37,6 @@ public class AudioPlayerBroadcastReceiver extends BroadcastReceiver {
                 callback.togglePLayPauseCallback();
                 callback.onCallbackCalled(6);
             } catch (Exception e) {
-
             }
 
         } else if (action.equalsIgnoreCase("com.sdsmdg.harjot.MusicDNA.ACTION_NEXT")) {
@@ -42,13 +44,11 @@ public class AudioPlayerBroadcastReceiver extends BroadcastReceiver {
             try {
                 callback.onCallbackCalled(2);
             } catch (Exception e) {
-
             }
         } else if (action.equalsIgnoreCase("com.sdsmdg.harjot.MusicDNA.ACTION_PREV")) {
             try {
                 callback.onCallbackCalled(3);
             } catch (Exception e) {
-
             }
         }
     }

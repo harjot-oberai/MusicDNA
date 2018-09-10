@@ -4,7 +4,7 @@ package com.sdsmdg.harjot.MusicDNA.models;
  * Created by Harjot on 14-May-16.
  */
 public class UnifiedTrack {
-    boolean type;                       // true->localTrack         false->streamTrack
+    boolean type;       // true->localTrack     false->streamTrack
     LocalTrack localTrack;
     Track streamTrack;
 

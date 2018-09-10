@@ -1,6 +1,6 @@
 package com.sdsmdg.harjot.MusicDNA.imageloader;
 
-/**
+/*
  * Created by Harjot on 06-Apr-16.
  */
 
@@ -85,7 +85,7 @@ public class ImageLoader {
 
             //from web
             try {
-                Bitmap bitmap = null;
+                Bitmap bitmap;
                 URL imageUrl = new URL(url);
                 HttpURLConnection conn = (HttpURLConnection) imageUrl.openConnection();
                 conn.setConnectTimeout(30000);
@@ -113,7 +113,7 @@ public class ImageLoader {
             try {
                 android.media.MediaMetadataRetriever mmr = new MediaMetadataRetriever();
                 mmr.setDataSource(url);
-                Bitmap bitmap = null;
+                Bitmap bitmap;
 
                 byte[] data = mmr.getEmbeddedPicture();
 
@@ -177,6 +177,11 @@ public class ImageLoader {
         }
     }
 
+    boolean imageViewReused(PhotoToLoad photoToLoad) {
+        String tag = imageViews.get(photoToLoad.imageView);
+        return tag == null || !tag.equals(photoToLoad.url);
+    }
+
     class PhotosLoader implements Runnable {
         PhotoToLoad photoToLoad;
 
@@ -195,41 +200,30 @@ public class ImageLoader {
                 return;
             }
             Activity a = (Activity) ctx;
-            a.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (imageViewReused(photoToLoad)) {
-                        return;
-                    }
-                    if (bmp != null) {
-                        photoToLoad.imageView.setImageBitmap(bmp);
-                    } else {
-                        if (type.equals("none"))
-                            photoToLoad.imageView.setImageResource(stub_id);
-                        else {
-                            int r = random.nextInt(210) + 45;
-                            int g = random.nextInt(210) + 45;
-                            int b = random.nextInt(210) + 45;
-                            photoToLoad.imageView.setImageResource(R.drawable.ic_record_3);
-                            photoToLoad.imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-                            photoToLoad.imageView.setImageTintList(ColorStateList.valueOf(Color.rgb(r, g, b)));
-                        }
+            a.runOnUiThread(() -> {
+                if (imageViewReused(photoToLoad)) {
+                    return;
+                }
+                if (bmp != null) {
+                    photoToLoad.imageView.setImageBitmap(bmp);
+                } else {
+                    if (type.equals("none"))
+                        photoToLoad.imageView.setImageResource(stub_id);
+                    else {
+                        int r = random.nextInt(210) + 45;
+                        int g = random.nextInt(210) + 45;
+                        int b = random.nextInt(210) + 45;
+                        photoToLoad.imageView.setImageResource(R.drawable.ic_record_3);
+                        photoToLoad.imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                        photoToLoad.imageView.setImageTintList(ColorStateList.valueOf(Color.rgb(r, g, b)));
                     }
                 }
             });
         }
     }
 
-    boolean imageViewReused(PhotoToLoad photoToLoad) {
-        String tag = imageViews.get(photoToLoad.imageView);
-        if (tag == null || !tag.equals(photoToLoad.url))
-            return true;
-        return false;
-    }
-
     public void clearCache() {
         memoryCache.clear();
         fileCache.clear();
     }
-
 }

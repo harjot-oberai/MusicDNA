@@ -24,5 +24,4 @@ public class AllPlaylists {
     public void addPlaylist(Playlist pl){
         allPlaylists.add(pl);
     }
-
 }

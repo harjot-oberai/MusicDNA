@@ -13,7 +13,7 @@ public class Settings {
 
     private int themeColor = DEF_THEME_COLOR;
     private float minAudioStrength;
-    private boolean albumArtBackgroundEnabled = DEF_ALBUM_ART_BG;
+    private boolean albumArtBackgroundEnabled;
     private boolean streamOnlyOnWifiEnabled = DEF_STREAM_ONLY_ON_WIFI;
 
     public Settings() {

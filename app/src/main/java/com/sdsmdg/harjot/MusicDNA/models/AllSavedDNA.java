@@ -21,4 +21,3 @@ public class AllSavedDNA {
         this.savedDNAs = savedDNAs;
     }
 }
-

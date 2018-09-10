@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.models.Artist;
 import com.sdsmdg.harjot.MusicDNA.R;
+import com.sdsmdg.harjot.MusicDNA.models.Artist;
 
 import java.util.List;
 
@@ -35,9 +35,9 @@ public class ArtistRecyclerAdapter extends RecyclerView.Adapter<ArtistRecyclerAd
         Artist ab = artistList.get(position);
         holder.title.setText(ab.getName());
         if (ab.getArtistSongs().size() > 1)
-            holder.numSongs.setText(ab.getArtistSongs().size() + " Songs");
+            holder.numSongs.setText(ab.getArtistSongs().size() + R.string._songs);
         else
-            holder.numSongs.setText(ab.getArtistSongs().size() + " Song");
+            holder.numSongs.setText(ab.getArtistSongs().size() + R.string._song);
     }
 
     @Override
@@ -51,9 +51,8 @@ public class ArtistRecyclerAdapter extends RecyclerView.Adapter<ArtistRecyclerAd
 
         public MyViewHolder(View view) {
             super(view);
-            title = (TextView) view.findViewById(R.id.artist_name);
-            numSongs = (TextView) view.findViewById(R.id.num_songs);
+            title = view.findViewById(R.id.artist_name);
+            numSongs = view.findViewById(R.id.num_songs);
         }
     }
-
 }

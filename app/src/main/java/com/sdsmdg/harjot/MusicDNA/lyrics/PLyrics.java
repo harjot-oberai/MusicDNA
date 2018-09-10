@@ -28,7 +28,7 @@ public class PLyrics {
             htmlArtist = htmlArtist.substring(3);
 
         String urlString = String.format(
-                "http://www.plyrics.com/lyrics/%s/%s.html",
+                "https://www.plyrics.com/lyrics/%s/%s.html",
                 htmlArtist.toLowerCase(Locale.getDefault()),
                 htmlSong.toLowerCase(Locale.getDefault()));
         return fromURL(urlString, artist, song);
@@ -70,7 +70,7 @@ public class PLyrics {
             Lyrics l = new Lyrics(Lyrics.POSITIVE_RESULT);
             l.setArtist(artist);
             String text = matcher.group(1);
-            text = text.replaceAll("\\[[^\\[]*\\]", "");
+            text = text.replaceAll("\\[[^\\[]*]", "");
             l.setText(text);
             l.setTitle(song);
             l.setURL(url);
@@ -79,5 +79,4 @@ public class PLyrics {
         } else
             return new Lyrics(Lyrics.NEGATIVE_RESULT);
     }
-
 }

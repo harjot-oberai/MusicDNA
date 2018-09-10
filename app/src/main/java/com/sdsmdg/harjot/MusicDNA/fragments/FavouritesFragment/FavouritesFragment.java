@@ -1,12 +1,11 @@
 package com.sdsmdg.harjot.MusicDNA.fragments.FavouritesFragment;
 
-
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,20 +18,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.clickitemtouchlistener.ClickItemTouchListener;
-import com.sdsmdg.harjot.MusicDNA.itemtouchhelpers.SimpleItemTouchHelperCallback;
+import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
+import com.sdsmdg.harjot.MusicDNA.R;
 import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
+import com.sdsmdg.harjot.MusicDNA.clickitemtouchlistener.ClickItemTouchListener;
+import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
+import com.sdsmdg.harjot.MusicDNA.itemtouchhelpers.SimpleItemTouchHelperCallback;
 import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.models.Track;
 import com.sdsmdg.harjot.MusicDNA.models.UnifiedTrack;
-import com.sdsmdg.harjot.MusicDNA.MusicDNAApplication;
-import com.sdsmdg.harjot.MusicDNA.R;
-import com.sdsmdg.harjot.MusicDNA.activities.SplashActivity;
 import com.sdsmdg.harjot.MusicDNA.utilities.CommonUtils;
-import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
 import com.squareup.leakcanary.RefWatcher;
 import com.squareup.picasso.Picasso;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,8 +38,7 @@ import com.squareup.picasso.Picasso;
 public class FavouritesFragment extends Fragment implements
         FavouriteTrackAdapter.OnDragStartListener,
         FavouriteTrackAdapter.onEmptyListener,
-        FavouriteTrackAdapter.onMoveRemoveistener {
-
+        FavouriteTrackAdapter.onMoveRemoveListener {
 
     RecyclerView favouriteRecycler;
     FavouriteTrackAdapter fAdapter;
@@ -63,10 +60,14 @@ public class FavouritesFragment extends Fragment implements
 
     ImageLoader imgLoader;
 
+    public FavouritesFragment() {
+        // Required empty public constructor
+    }
+
     @Override
     public void onEmpty() {
         noFavouriteContent.setVisibility(View.VISIBLE);
-        playAll.setVisibility(View.GONE);
+        playAll.hide();
     }
 
     @Override
@@ -78,7 +79,7 @@ public class FavouritesFragment extends Fragment implements
                 imgLoader.DisplayImage(lt.getPath(), backdrop);
             } else {
                 Track t = ut.getStreamTrack();
-                Picasso.with(getContext())
+                Picasso.get()
                         .load(t.getArtworkURL())
                         .resize(100, 100)
                         .error(R.drawable.ic_default)
@@ -88,66 +89,24 @@ public class FavouritesFragment extends Fragment implements
         }
     }
 
-    public interface onFavouriteItemClickedListener {
-        public void onFavouriteItemClicked(int position);
-    }
-
-    public interface onFavouritePlayAllListener {
-        public void onFavouritePlayAll();
-    }
-
-    public interface favouriteFragmentCallback {
-        void onFavouriteItemClicked(int position);
-
-        void onFavouritePlayAll();
-
-        void addFavToQueue();
-    }
-
-    public FavouritesFragment() {
-        // Required empty public constructor
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            mCallback = (favouriteFragmentCallback) context;
-            imgLoader = new ImageLoader(context);
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
-                    + " must implement OnHeadlineSelectedListener");
-        }
-    }
-
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        backBtn = (ImageView) view.findViewById(R.id.fav_back_btn);
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });
+        backBtn = view.findViewById(R.id.fav_back_btn);
+        backBtn.setOnClickListener(v -> getActivity().onBackPressed());
 
-        fragIcon = (ImageView) view.findViewById(R.id.fav_frag_icon);
+        fragIcon = view.findViewById(R.id.fav_frag_icon);
         fragIcon.setImageTintList(ColorStateList.valueOf(HomeActivity.themeColor));
 
-        fragTitle = (TextView) view.findViewById(R.id.fav_fragment_title);
+        fragTitle = view.findViewById(R.id.fav_fragment_title);
         if (SplashActivity.tf4 != null)
             fragTitle.setTypeface(SplashActivity.tf4);
 
-        addToQueueIcon = (ImageView) view.findViewById(R.id.add_fav_to_queue_icon);
-        addToQueueIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCallback.addFavToQueue();
-            }
-        });
+        addToQueueIcon = view.findViewById(R.id.add_fav_to_queue_icon);
+        addToQueueIcon.setOnClickListener(v -> mCallback.addFavToQueue());
 
-        backdrop = (ImageView) view.findViewById(R.id.fav_backdrop);
+        backdrop = view.findViewById(R.id.fav_backdrop);
         if (HomeActivity.favouriteTracks.getFavourite().size() > 0) {
             UnifiedTrack ut = HomeActivity.favouriteTracks.getFavourite().get(0);
             if (ut.getType()) {
@@ -155,7 +114,7 @@ public class FavouritesFragment extends Fragment implements
                 imgLoader.DisplayImage(lt.getPath(), backdrop);
             } else {
                 Track t = ut.getStreamTrack();
-                Picasso.with(getContext())
+                Picasso.get()
                         .load(t.getArtworkURL())
                         .resize(100, 100)
                         .error(R.drawable.ic_default)
@@ -170,19 +129,19 @@ public class FavouritesFragment extends Fragment implements
         else
             bottomMarginLayout.getLayoutParams().height = CommonUtils.dpTopx(65, getContext());
 
-        favouriteRecycler = (RecyclerView) view.findViewById(R.id.favouriteRecycler);
-        noFavouriteContent = (LinearLayout) view.findViewById(R.id.noFavouriteContent);
-        playAll = (FloatingActionButton) view.findViewById(R.id.fav_play_all_fab);
+        favouriteRecycler = view.findViewById(R.id.favouriteRecycler);
+        noFavouriteContent = view.findViewById(R.id.noFavouriteContent);
+        playAll = view.findViewById(R.id.fav_play_all_fab);
         if (SplashActivity.tf4 != null)
             ((TextView) view.findViewById(R.id.favNoContentText)).setTypeface(SplashActivity.tf4);
 
         if (HomeActivity.favouriteTracks.getFavourite().size() == 0) {
             favouriteRecycler.setVisibility(View.INVISIBLE);
-            playAll.setVisibility(View.INVISIBLE);
+            playAll.hide();
             noFavouriteContent.setVisibility(View.VISIBLE);
         } else {
             favouriteRecycler.setVisibility(View.VISIBLE);
-            playAll.setVisibility(View.VISIBLE);
+            playAll.show();
             noFavouriteContent.setVisibility(View.INVISIBLE);
         }
 
@@ -206,27 +165,23 @@ public class FavouritesFragment extends Fragment implements
 
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
             }
         });
 
         if (HomeActivity.favouriteTracks.getFavourite().size() == 0) {
-            playAll.setVisibility(View.INVISIBLE);
+            playAll.hide();
         } else {
-            playAll.setVisibility(View.VISIBLE);
+            playAll.show();
         }
         playAll.setBackgroundTintList(ColorStateList.valueOf(HomeActivity.themeColor));
-        playAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (HomeActivity.favouriteTracks.getFavourite().size() > 0) {
-                    HomeActivity.queue.getQueue().clear();
-                    for (int i = 0; i < HomeActivity.favouriteTracks.getFavourite().size(); i++) {
-                        HomeActivity.queue.getQueue().add(HomeActivity.favouriteTracks.getFavourite().get(i));
-                    }
-                    HomeActivity.queueCurrentIndex = 0;
-                    mCallback.onFavouritePlayAll();
+        playAll.setOnClickListener(v -> {
+            if (HomeActivity.favouriteTracks.getFavourite().size() > 0) {
+                HomeActivity.queue.getQueue().clear();
+                for (int i = 0; i < HomeActivity.favouriteTracks.getFavourite().size(); i++) {
+                    HomeActivity.queue.getQueue().add(HomeActivity.favouriteTracks.getFavourite().get(i));
                 }
+                HomeActivity.queueCurrentIndex = 0;
+                mCallback.onFavouritePlayAll();
             }
         });
 
@@ -236,23 +191,61 @@ public class FavouritesFragment extends Fragment implements
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_favourites, container, false);
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mCallback = (favouriteFragmentCallback) context;
+            imgLoader = new ImageLoader(context);
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnHeadlineSelectedListener");
+        }
+    }
 
     @Override
     public void onResume() {
         super.onResume();
         mLayoutManager2.scrollToPositionWithOffset(0, 0);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                playAll.animate().scaleX(1.0f).scaleY(1.0f).setDuration(300).setInterpolator(new OvershootInterpolator());
-            }
-        }, 500);
+        new Handler().postDelayed(() -> playAll
+                .animate()
+                .scaleX(1.0f)
+                .scaleY(1.0f)
+                .setDuration(300)
+                .setInterpolator(new OvershootInterpolator()), 500);
+    }
+
+    public void updateData() {
+        if (HomeActivity.favouriteTracks.getFavourite().size() == 0) {
+            favouriteRecycler.setVisibility(View.INVISIBLE);
+            playAll.hide();
+            noFavouriteContent.setVisibility(View.VISIBLE);
+        } else {
+            favouriteRecycler.setVisibility(View.VISIBLE);
+            playAll.show();
+            noFavouriteContent.setVisibility(View.INVISIBLE);
+        }
+        if (fAdapter != null) {
+            fAdapter.notifyDataSetChanged();
+        }
+    }
+
+    public interface favouriteFragmentCallback {
+        void onFavouriteItemClicked(int position);
+
+        void onFavouritePlayAll();
+
+        void addFavToQueue();
+    }
+
+
+    public interface onFavouriteItemClickedListener {
+        void onFavouriteItemClicked(int position);
     }
 
     @Override
@@ -274,19 +267,7 @@ public class FavouritesFragment extends Fragment implements
         refWatcher.watch(this);
     }
 
-    public void updateData() {
-        if (HomeActivity.favouriteTracks.getFavourite().size() == 0) {
-            favouriteRecycler.setVisibility(View.INVISIBLE);
-            playAll.setVisibility(View.INVISIBLE);
-            noFavouriteContent.setVisibility(View.VISIBLE);
-        } else {
-            favouriteRecycler.setVisibility(View.VISIBLE);
-            playAll.setVisibility(View.VISIBLE);
-            noFavouriteContent.setVisibility(View.INVISIBLE);
-        }
-        if (fAdapter != null) {
-            fAdapter.notifyDataSetChanged();
-        }
+    public interface onFavouritePlayAllListener {
+        void onFavouritePlayAll();
     }
-
 }

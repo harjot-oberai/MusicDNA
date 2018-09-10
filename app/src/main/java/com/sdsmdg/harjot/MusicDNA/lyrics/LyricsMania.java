@@ -22,7 +22,7 @@ public class LyricsMania {
 
     @Reflection
     public static final String domain = "www.lyricsmania.com";
-    private static final String baseURL = "http://www.lyricsmania.com/%s_lyrics_%s.html";
+    private static final String baseURL = "https://www.lyricsmania.com/%s_lyrics_%s.html";
 
     @Reflection
     public static Lyrics fromMetaData(String artist, String song) {
@@ -51,8 +51,11 @@ public class LyricsMania {
             text = Jsoup.clean(lyricsBody.html(), "", Whitelist.basic().addTags("div"));
             text = text.substring(text.indexOf("</strong>")+10, text.lastIndexOf("</div>"));
 
-            String[] keywords =
-                    document.getElementsByTag("meta").attr("name", "keywords").get(0).attr("content").split(",");
+            String[] keywords = document.getElementsByTag("meta")
+                    .attr("name", "keywords")
+                    .get(0)
+                    .attr("content")
+                    .split(",");
 
             if (artist == null)
                 artist = document.getElementsByClass("lyrics-nav-menu").get(0)

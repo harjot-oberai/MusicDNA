@@ -6,9 +6,9 @@ package com.sdsmdg.harjot.MusicDNA.models;
 
 public class EqualizerModel {
     public boolean isEqualizerEnabled;
-    int[] seekbarpos = new int[5];
+    int[] seekbarPos = new int[5];
     int presetPos;
-    short reverbPreset = -1, bassStrength = -1;
+    short reverbPreset, bassStrength;
 
     public EqualizerModel() {
         isEqualizerEnabled = true;
@@ -24,12 +24,12 @@ public class EqualizerModel {
         isEqualizerEnabled = equalizerEnabled;
     }
 
-    public int[] getSeekbarpos() {
-        return seekbarpos;
+    public int[] getSeekbarPos() {
+        return seekbarPos;
     }
 
-    public void setSeekbarpos(int[] seekbarpos) {
-        this.seekbarpos = seekbarpos;
+    public void setSeekbarPos(int[] seekbarPos) {
+        this.seekbarPos = seekbarPos;
     }
 
     public int getPresetPos() {

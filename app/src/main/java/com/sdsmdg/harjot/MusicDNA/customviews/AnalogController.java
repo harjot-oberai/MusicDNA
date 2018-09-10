@@ -83,7 +83,7 @@ public class AnalogController extends View {
         midy = canvas.getHeight() / 2;
 
         int ang = 0;
-        float x = 0, y = 0;
+        float x, y;
         int radius = (int) (Math.min(midx, midy) * ((float) 14.5 / 16));
         float deg2 = Math.max(3, deg);
         float deg3 = Math.min(deg, 21);
@@ -101,7 +101,7 @@ public class AnalogController extends View {
             canvas.drawCircle(x, y, ((float) radius / 15), circlePaint2);
         }
 
-        float tmp2 = (float) deg / 24;
+        float tmp2 = deg / 24;
         float x1 = midx + (float) (radius * ((float) 2 / 5) * Math.sin(2 * Math.PI * (1.0 - tmp2)));
         float y1 = midy + (float) (radius * ((float) 2 / 5) * Math.cos(2 * Math.PI * (1.0 - tmp2)));
         float x2 = midx + (float) (radius * ((float) 3 / 5) * Math.sin(2 * Math.PI * (1.0 - tmp2)));
@@ -169,10 +169,7 @@ public class AnalogController extends View {
             invalidate();
             return true;
         }
-        if (e.getAction() == MotionEvent.ACTION_UP) {
-            return true;
-        }
-        return super.onTouchEvent(e);
+        return e.getAction() == MotionEvent.ACTION_UP || super.onTouchEvent(e);
     }
 
     public int getProgress() {

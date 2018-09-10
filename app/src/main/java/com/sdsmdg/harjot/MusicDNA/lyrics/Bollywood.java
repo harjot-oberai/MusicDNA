@@ -1,13 +1,11 @@
 package com.sdsmdg.harjot.MusicDNA.lyrics;
 
-import com.sdsmdg.harjot.MusicDNA.annotations.Reflection;
-import com.sdsmdg.harjot.MusicDNA.utilities.Net;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
+import com.sdsmdg.harjot.MusicDNA.annotations.Reflection;
+import com.sdsmdg.harjot.MusicDNA.utilities.Net;
 
-import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 

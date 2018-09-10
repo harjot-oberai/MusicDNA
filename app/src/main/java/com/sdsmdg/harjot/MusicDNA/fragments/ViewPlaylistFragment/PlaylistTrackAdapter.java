@@ -13,14 +13,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.sdsmdg.harjot.MusicDNA.R;
+import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
+import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
 import com.sdsmdg.harjot.MusicDNA.itemtouchhelpers.ItemTouchHelperAdapter;
 import com.sdsmdg.harjot.MusicDNA.itemtouchhelpers.ItemTouchHelperViewHolder;
-import com.sdsmdg.harjot.MusicDNA.activities.HomeActivity;
 import com.sdsmdg.harjot.MusicDNA.models.LocalTrack;
 import com.sdsmdg.harjot.MusicDNA.models.Track;
 import com.sdsmdg.harjot.MusicDNA.models.UnifiedTrack;
-import com.sdsmdg.harjot.MusicDNA.R;
-import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -83,7 +83,7 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
         notifyItemRemoved(position);
         if (songList.size() == 0) {
             ((HomeActivity) ctx).onBackPressed();
-            homeActivity.allPlaylists.getPlaylists().remove(homeActivity.tempPlaylistNumber);
+            HomeActivity.allPlaylists.getPlaylists().remove(HomeActivity.tempPlaylistNumber);
             mCallback.onPlaylistEmpty();
         } else if (homeActivity.pAdapter != null) {
             homeActivity.pAdapter.notifyDataSetChanged();
@@ -93,6 +93,41 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
         homeActivity.updateAllPlaylistFragment();
 
         new HomeActivity.SavePlaylists().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    @Override
+    public void onBindViewHolder(final PlaylistTrackAdapter.MyViewHolder holder, int position) {
+        UnifiedTrack ut = songList.get(position);
+        if (ut.getType()) {
+            LocalTrack lt = ut.getLocalTrack();
+            imgLoader.DisplayImage(lt.getPath(), holder.art);
+            holder.title.setText(lt.getTitle());
+            holder.artist.setText(lt.getArtist());
+        } else {
+            Track t = ut.getStreamTrack();
+            Picasso.get()
+                    .load(t.getArtworkURL())
+                    .resize(100, 100)
+                    .error(R.drawable.ic_default)
+                    .placeholder(R.drawable.ic_default)
+                    .into(holder.art);
+            holder.title.setText(t.getTitle());
+            holder.artist.setText("");
+        }
+
+        holder.holderImg.setOnTouchListener((v, event) -> {
+            if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
+                mDragStartListener.onDragStarted(holder);
+            }
+            return false;
+        });
+    }
+
+    @Override
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.list_item, parent, false);
+        return new MyViewHolder(itemView);
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder
@@ -105,11 +140,11 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
 
         public MyViewHolder(View view) {
             super(view);
-            art = (ImageView) view.findViewById(R.id.img);
-            title = (TextView) view.findViewById(R.id.title);
-            artist = (TextView) view.findViewById(R.id.url);
+            art = view.findViewById(R.id.img);
+            title = view.findViewById(R.id.title);
+            artist = view.findViewById(R.id.url);
             indicator = view.findViewById(R.id.currently_playing_indicator);
-            holderImg = (ImageView) view.findViewById(R.id.holderImage);
+            holderImg = view.findViewById(R.id.holderImage);
         }
 
         @Override
@@ -130,47 +165,7 @@ public class PlaylistTrackAdapter extends RecyclerView.Adapter<PlaylistTrackAdap
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_item, parent, false);
-
-        return new MyViewHolder(itemView);
-    }
-
-    @Override
-    public void onBindViewHolder(final PlaylistTrackAdapter.MyViewHolder holder, int position) {
-        UnifiedTrack ut = songList.get(position);
-        if (ut.getType()) {
-            LocalTrack lt = ut.getLocalTrack();
-            imgLoader.DisplayImage(lt.getPath(), holder.art);
-            holder.title.setText(lt.getTitle());
-            holder.artist.setText(lt.getArtist());
-        } else {
-            Track t = ut.getStreamTrack();
-            Picasso.with(ctx)
-                    .load(t.getArtworkURL())
-                    .resize(100, 100)
-                    .error(R.drawable.ic_default)
-                    .placeholder(R.drawable.ic_default)
-                    .into(holder.art);
-            holder.title.setText(t.getTitle());
-            holder.artist.setText("");
-        }
-
-        holder.holderImg.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
-                    mDragStartListener.onDragStarted(holder);
-                }
-                return false;
-            }
-        });
-    }
-
-    @Override
     public int getItemCount() {
         return songList.size();
     }
-
 }

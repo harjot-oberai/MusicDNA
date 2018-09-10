@@ -9,10 +9,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.sdsmdg.harjot.MusicDNA.models.Playlist;
-import com.sdsmdg.harjot.MusicDNA.models.UnifiedTrack;
 import com.sdsmdg.harjot.MusicDNA.R;
 import com.sdsmdg.harjot.MusicDNA.imageloader.ImageLoader;
+import com.sdsmdg.harjot.MusicDNA.models.Playlist;
+import com.sdsmdg.harjot.MusicDNA.models.UnifiedTrack;
 
 import java.util.List;
 
@@ -25,36 +25,10 @@ public class PlayListsHorizontalAdapter extends RecyclerView.Adapter<PlayListsHo
     List<Playlist> playlists;
     ImageLoader imgLoader;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-
-        ImageView img[] = new ImageView[4];
-        TextView playlistName, playlistSize;
-        RelativeLayout bottomHolder;
-
-        public MyViewHolder(View view) {
-            super(view);
-            img[0] = (ImageView) itemView.findViewById(R.id.image1);
-            img[1] = (ImageView) itemView.findViewById(R.id.image2);
-            img[2] = (ImageView) itemView.findViewById(R.id.image3);
-            img[3] = (ImageView) itemView.findViewById(R.id.image4);
-            playlistName = (TextView) view.findViewById(R.id.playlist_card_title);
-            playlistSize = (TextView) view.findViewById(R.id.playlist_num_songs);
-            bottomHolder = (RelativeLayout) view.findViewById(R.id.playlist_bottomHolder);
-        }
-    }
-
     public PlayListsHorizontalAdapter(List<Playlist> playlists, Context ctx) {
         this.playlists = playlists;
         this.ctx = ctx;
         imgLoader = new ImageLoader(ctx);
-    }
-
-    @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.playlist_item_card_holder, parent, false);
-
-        return new MyViewHolder(itemView);
     }
 
     @Override
@@ -88,10 +62,35 @@ public class PlayListsHorizontalAdapter extends RecyclerView.Adapter<PlayListsHo
 
         holder.playlistName.setText(pl.getPlaylistName());
         if (pl.getSongList().size() > 1)
-            holder.playlistSize.setText(String.valueOf(pl.getSongList().size()) + " Songs");
+			holder.playlistSize.setText(String.valueOf(pl.getSongList().size()) + R.string._songs);
         else
-            holder.playlistSize.setText(String.valueOf(pl.getSongList().size()) + " Song");
+			holder.playlistSize.setText(String.valueOf(pl.getSongList().size()) + R.string._song);
+	}
 
+	@Override
+	public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+		View itemView = LayoutInflater.from(parent.getContext())
+				.inflate(R.layout.playlist_item_card_holder, parent, false);
+
+		return new MyViewHolder(itemView);
+	}
+
+	public class MyViewHolder extends RecyclerView.ViewHolder {
+
+		ImageView img[] = new ImageView[4];
+		TextView playlistName, playlistSize;
+		RelativeLayout bottomHolder;
+
+		public MyViewHolder(View view) {
+			super(view);
+			img[0] = itemView.findViewById(R.id.image1);
+			img[1] = itemView.findViewById(R.id.image2);
+			img[2] = itemView.findViewById(R.id.image3);
+			img[3] = itemView.findViewById(R.id.image4);
+			playlistName = view.findViewById(R.id.playlist_card_title);
+			playlistSize = view.findViewById(R.id.playlist_num_songs);
+			bottomHolder = view.findViewById(R.id.playlist_bottomHolder);
+		}
     }
 
     @Override

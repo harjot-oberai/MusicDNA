@@ -81,6 +81,8 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
     implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.11.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
+    //implementation 'com.squareup.picasso3:picasso:3.0.0-SNAPSHOT'
+    // ^ add https://oss.sonatype.org/content/repositories/snapshots/ to build.gradle for this
 
 	// github
 	implementation 'com.github.bumptech.glide:glide:4.8.0'

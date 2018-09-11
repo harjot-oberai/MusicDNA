@@ -18,10 +18,10 @@ public class MusicDNAApplication extends Application {
 		return application.refWatcher;
 	}
 
-	@Override
+	/*@Override
 	public void onCreate() {
 		super.onCreate();
-		//Fabric.with(this, new Crashlytics());
+		Fabric.with(this, new Crashlytics());
 		refWatcher = LeakCanary.install(this);
-	}
+	}*/
 }

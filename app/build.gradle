@@ -28,6 +28,7 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable true
         }
         debug {
             zipAlignEnabled true
@@ -39,13 +40,13 @@ android {
         playstore {
             dimension "flavor"
             buildConfigField "boolean", "USE_CRASHLYTICS", "true"
-            ext.enableCrashlytics = true
+            //ext.enableCrashlytics = true
         }
 
         fdroid {
             dimension "flavor"
             buildConfigField "boolean", "USE_CRASHLYTICS", "false"
-            ext.enableCrashlytics = false
+            //ext.enableCrashlytics = false
         }
     }
 

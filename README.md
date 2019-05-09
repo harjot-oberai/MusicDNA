@@ -4,7 +4,7 @@
 [<img src="https://f-droid.org/badge/get-it-on.png"
       alt="Get it on F-Droid"
       width="200">](https://android.izzysoft.de/repo/apk/com.sdsmdg.harjot.MusicDNA)<br>
-A Music Player for android that makes use of the Visualzer Class for rendering a beautiful **DNA** (***Visualization***) of the currently playing music.
+A Music Player for android that makes use of the Visualizer Class for rendering a beautiful **DNA** (***Visualization***) of the currently playing music.
 
 ## Background
 The Music Player draws inspiration from [paullewis's music-dna](https://github.com/paullewis/music-dna/).

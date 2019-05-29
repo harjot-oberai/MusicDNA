@@ -204,7 +204,7 @@ public final class AudioStreamChunk extends StreamChunk {
     }
 
     /**
-     * This mehtod returns whether the audio stream data is error concealed. <br>
+     * This method returns whether the audio stream data is error concealed. <br>
      * For now only interleaved concealment is known. <br>
      * 
      * @return <code>true</code> if error concealment is used.

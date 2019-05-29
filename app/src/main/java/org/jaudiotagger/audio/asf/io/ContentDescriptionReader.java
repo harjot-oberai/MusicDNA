@@ -91,7 +91,7 @@ public class ContentDescriptionReader implements ChunkReader {
         final int[] stringSizes = getStringSizes(stream);
 
         /*
-         * Now we know the String length of each occuring String.
+         * Now we know the String length of each occurring String.
          */
         final String[] strings = new String[stringSizes.length];
         for (int i = 0; i < strings.length; i++) {

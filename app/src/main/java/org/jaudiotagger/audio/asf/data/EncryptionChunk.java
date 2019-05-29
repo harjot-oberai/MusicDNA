@@ -78,7 +78,7 @@ public class EncryptionChunk extends Chunk {
     }
 
     /**
-     * This method returns a collection of all {@link String}s which were addid
+     * This method returns a collection of all {@link String}s which were added
      * due {@link #addString(String)}.
      * 
      * @return Inserted Strings.

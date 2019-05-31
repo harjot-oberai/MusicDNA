@@ -59,7 +59,7 @@ public class FileHeader extends Chunk {
     private final long maxPackageSize;
 
     /**
-     * Minimun size of stream packages. <br>
+     * Minimum size of stream packages. <br>
      * <b>Warning: </b> must be same size as {@link #maxPackageSize}. Its not
      * known how to handle deviating values.
      */

@@ -43,7 +43,7 @@ public class StreamBitratePropertiesReader implements ChunkReader {
      * Should not be used for now.
      */
     protected StreamBitratePropertiesReader() {
-        // NOTHING toDo
+        // Nothing to Do
     }
 
     /**

@@ -96,7 +96,7 @@ public class MetadataDescriptor implements Comparable<MetadataDescriptor>,
     public final static int TYPE_GUID = 6;
 
     /**
-     * Constant for the metadata descriptor-type for QWORD (64-bit unsinged). <br>
+     * Constant for the metadata descriptor-type for QWORD (64-bit unsigned). <br>
      */
     public final static int TYPE_QWORD = 4;
 
